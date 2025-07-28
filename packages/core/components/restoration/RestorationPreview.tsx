@@ -32,34 +32,30 @@ import {
   CONFLICT_DESCRIPTIONS,
   RESOLUTION_STRATEGY_DESCRIPTIONS
 } from '../../types/restoration';
-
 const { TabPane } = Tabs;
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 const { Option } = Select;
-
 interface RestorationPreviewProps {
   preview: RestorationPreviewResponse;
   config: RestorationConfig;
   onConflictResolve: (conflictId: string, strategy: ResolutionStrategy) => void;
 }
 
-export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
+export const RestorationPreview: React.FC<RestorationPreviewProps> = ({)
   preview,
   config,
   onConflictResolve
 }) => {
   const [activeTab, setActiveTab] = useState('changes');
   const [conflictResolutions, setConflictResolutions] = useState<Record<string, ResolutionStrategy>>({});
-
   const handleConflictResolution = (conflictId: string, strategy: ResolutionStrategy) => {
-    setConflictResolutions(prev => ({
+    setConflictResolutions(prev => ({)
       ...prev,
       [conflictId]: strategy
     }));
     onConflictResolve(conflictId, strategy);
   };
-
   const getChangeIcon = (type: string) => {
     switch (type) {
     case 'add':
@@ -72,7 +68,6 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       return <InfoCircleOutlined />;
     }
   };
-
   const getChangeColor = (type: string) => {
     switch (type) {
     case 'add':
@@ -85,7 +80,6 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       return 'default';
     }
   };
-
   const getRiskLevelColor = (level: string) => {
     switch (level) {
     case 'low':
@@ -98,14 +92,13 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       return 'default';
     }
   };
-
-  const nodeColumns = [
+  const nodeColumns = [;
     {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
       width: 80,
-      render: (action: string) => (
+      render: (action: string) => ()
         <Tag color={getChangeColor(action) as any} icon={getChangeIcon(action)}>
           {action.toUpperCase()}
         </Tag>
@@ -116,7 +109,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       dataIndex: 'id',
       key: 'id',
       width: 200,
-      render: (id: string) => (
+      render: (id: string) => ()
         <Text code style={{ fontSize: '12px' }}>
           {id}
         </Text>
@@ -126,7 +119,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
-      width: 120
+      width: 120,
     },
     {
       title: 'Label',
@@ -138,21 +131,20 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       title: 'Properties',
       dataIndex: 'properties',
       key: 'properties',
-      render: (properties: unknown) => (
+      render: (properties: unknown) => ()
         <Text type="secondary">
           {properties ? Object.keys(properties).length : 0} properties
         </Text>
       )
     }
   ];
-
-  const edgeColumns = [
+  const edgeColumns = [;
     {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
       width: 80,
-      render: (action: string) => (
+      render: (action: string) => ()
         <Tag color={getChangeColor(action) as any} icon={getChangeIcon(action)}>
           {action.toUpperCase()}
         </Tag>
@@ -163,7 +155,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       dataIndex: 'id',
       key: 'id',
       width: 200,
-      render: (id: string) => (
+      render: (id: string) => ()
         <Text code style={{ fontSize: '12px' }}>
           {id}
         </Text>
@@ -174,7 +166,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       dataIndex: 'source',
       key: 'source',
       width: 150,
-      render: (source: string) => (
+      render: (source: string) => ()
         <Text code style={{ fontSize: '12px' }}>
           {source}
         </Text>
@@ -185,7 +177,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       dataIndex: 'target',
       key: 'target',
       width: 150,
-      render: (target: string) => (
+      render: (target: string) => ()
         <Text code style={{ fontSize: '12px' }}>
           {target}
         </Text>
@@ -195,17 +187,16 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
-      width: 120
+      width: 120,
     }
   ];
-
-  const conflictColumns = [
+  const conflictColumns = [;
     {
       title: 'Conflict',
       dataIndex: 'conflictType',
       key: 'conflictType',
       width: 150,
-      render: (type: string) => (
+      render: (type: string) => ()
         <Tooltip title={CONFLICT_DESCRIPTIONS[type as keyof typeof CONFLICT_DESCRIPTIONS]}>
           <Tag color="warning" icon={<WarningOutlined />}>
             {type.replace('_', ' ').toUpperCase()}
@@ -218,7 +209,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       dataIndex: 'resourceId',
       key: 'resourceId',
       width: 200,
-      render: (resourceId: string, record: RestorationConflict) => (
+      render: (resourceId: string, record: RestorationConflict) => ()
         <div>
           <Text code style={{ fontSize: '12px' }}>
             {resourceId}
@@ -241,14 +232,14 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       dataIndex: 'id',
       key: 'resolution',
       width: 200,
-      render: (conflictId: string) => (
+      render: (conflictId: string) => ()
         <Select
           placeholder="Choose resolution"
           style={{ width: '100%' }}
           value={conflictResolutions[conflictId]}
           onChange={(value) => handleConflictResolution(conflictId, value)}
         >
-          {Object.entries(RESOLUTION_STRATEGY_DESCRIPTIONS).map(([key, description]) => (
+          {Object.entries(RESOLUTION_STRATEGY_DESCRIPTIONS).map(([key, description]) => ()
             <Option key={key} value={key}>
               <Tooltip title={description}>
                 {key.replace('_', ' ').toUpperCase()}
@@ -259,24 +250,20 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       )
     }
   ];
-
-  const allNodeChanges = [
+  const allNodeChanges = [;
     ...preview.preview.nodesToAdd.map((node: Error) => ({ ...node, action: 'add' })),
     ...preview.preview.nodesToUpdate.map((node: Error) => ({ ...node, action: 'update' })),
     ...preview.preview.nodesToDelete.map((id: string) => ({ id, action: 'delete' }))
   ];
-
-  const allEdgeChanges = [
+  const allEdgeChanges = [;
     ...preview.preview.edgesToAdd.map((edge: Error) => ({ ...edge, action: 'add' })),
     ...preview.preview.edgesToUpdate.map((edge: Error) => ({ ...edge, action: 'update' })),
     ...preview.preview.edgesToDelete.map((id: string) => ({ id, action: 'delete' }))
   ];
-
-  const unresolvedConflicts = preview.conflicts.filter(
+  const unresolvedConflicts = preview.conflicts.filter(;)
     conflict => !conflictResolutions[conflict.id]
   );
-
-  return (
+  return ()
     <div>
       {/* Summary Cards */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
@@ -320,9 +307,8 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
           </Card>
         </Col>
       </Row>
-
       {/* Conflicts Alert */}
-      {preview.summary.totalConflicts > 0 && (
+      {preview.summary.totalConflicts > 0 && ()
         <Alert
           type="warning"
           message="Conflicts Detected"
@@ -331,7 +317,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
               <Text>
                 {preview.summary.totalConflicts} conflicts were detected that require resolution.
               </Text>
-              {unresolvedConflicts.length > 0 && (
+              {unresolvedConflicts.length > 0 && ()
                 <Text type="secondary">
                   {' '}({unresolvedConflicts.length} unresolved)
                 </Text>
@@ -342,7 +328,6 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
           style={{ marginBottom: '16px' }}
         />
       )}
-
       {/* Main Content Tabs */}
       <Tabs activeKey={activeTab} onChange={setActiveTab}>
         <TabPane
@@ -392,7 +377,6 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
             </Panel>
           </Collapse>
         </TabPane>
-
         <TabPane
           tab={
             <Badge count={preview.summary.totalConflicts} offset={[10, 0]}>
@@ -401,7 +385,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
           }
           key="conflicts"
         >
-          {preview.summary.totalConflicts > 0 ? (
+          {preview.summary.totalConflicts > 0 ? ()
             <Table
               columns={conflictColumns}
               dataSource={preview.conflicts}
@@ -410,7 +394,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
               pagination={{ pageSize: 10 }}
               scroll={{ y: 400 }}
             />
-          ) : (
+          ) : ()
             <div style={{ textAlign: 'center', padding: '40px' }}>
               <Text type="secondary">
                 No conflicts detected. The restoration can proceed without manual intervention.
@@ -418,7 +402,6 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
             </div>
           )}
         </TabPane>
-
         <TabPane tab="Configuration" key="config">
           <Card>
             <Row gutter={16}>

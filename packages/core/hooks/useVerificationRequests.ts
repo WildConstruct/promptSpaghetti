@@ -4,30 +4,25 @@
  * React hook for managing verification requests and status.
  * Provides methods for submitting requests, tracking status, and managing documents.
  */
-
 import { useState, useCallback, useEffect } from 'react';
 import { IdentityValidationType, IdentityValidationData, ValidationStatus } from '../auth/IdentityValidation';
-
 interface VerificationRequestsHook {
   // State
   isLoading: boolean;
   isSubmitting: boolean;
   error: string | null;
-  
   // Data
   verifications: VerificationSummary | null;
   trustScore: TrustScore | null;
-  
   // Actions
-  submitVerificationRequest: (
+  submitVerificationRequest: (),
     type: IdentityValidationType,
-    data: Partial<IdentityValidationData>
+    data: Partial<IdentityValidationData>,
   ) => Promise<{ requestId: string; status: string }>;
   refreshStatus: () => Promise<void>;
   uploadDocuments: (requestId: string, files: File[]) => Promise<void>;
   getVerificationTypes: () => Promise<VerificationType[]>;
 }
-
 interface VerificationSummary {
   totalRequests: number;
   approvedCount: number;
@@ -38,23 +33,21 @@ interface VerificationSummary {
   missingValidations: IdentityValidationType[];
   requests: VerificationRequest[];
 }
-
 interface VerificationRequest {
   requestId: string;
   type: IdentityValidationType;
   status: ValidationStatus;
   timestamp: number;
-  metadata: {
+  metadata: {,
     ipAddress: string;
     userAgent: string;
     sessionId: string;
     requestSource: string;
   };
 }
-
 interface TrustScore {
   overall: number;
-  components: {
+  components: {,
     identity: number;
     professional: number;
     community: number;
@@ -64,7 +57,6 @@ interface TrustScore {
   badges: string[];
   lastUpdated: number;
 }
-
 interface VerificationType {
   type: IdentityValidationType;
   title: string;
@@ -76,7 +68,6 @@ interface VerificationType {
   acceptedDocuments?: string[];
   supportedPlatforms?: string[];
 }
-
 const API_BASE_URL = '/api/verification';
 
 export function useVerificationRequests(userId: string): VerificationRequestsHook {
@@ -85,7 +76,6 @@ export function useVerificationRequests(userId: string): VerificationRequestsHoo
   const [error, setError] = useState<string | null>(null);
   const [verifications, setVerifications] = useState<VerificationSummary | null>(null);
   const [trustScore, setTrustScore] = useState<TrustScore | null>(null);
-
   const handleApiError = useCallback((error: any): string => {
     if (error.response?.data?.message) {
       return error.response.data.message;
@@ -95,32 +85,26 @@ export function useVerificationRequests(userId: string): VerificationRequestsHoo
     }
     return 'An unexpected error occurred';
   }, []);
-
   const fetchVerificationStatus = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
-
-      const response = await fetch(`${API_BASE_URL}/status/${userId}`, {
+      const response = await fetch(`${API_BASE_URL}/status/${userId}`, {)}
         method: 'GET',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         }
       });
-
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);}
       }
-
       const result = await response.json();
-      
       if (result.success) {
         setVerifications(result.data.summary);
         setTrustScore(result.data.trustScore);
       } else {
         throw new Error(result.message || 'Failed to fetch verification status');
       }
-
     } catch (err) {
       console.error('Error fetching verification status:', err);
       setError(handleApiError(err));
@@ -128,53 +112,46 @@ export function useVerificationRequests(userId: string): VerificationRequestsHoo
       setIsLoading(false);
     }
   }, [userId, handleApiError]);
-
-  const submitVerificationRequest = useCallback(async (
+  const submitVerificationRequest = useCallback(async (;)
     type: IdentityValidationType,
-    data: Partial<IdentityValidationData>
+    data: Partial<IdentityValidationData>,
   ): Promise<{ requestId: string; status: string }> => {
     try {
       setIsSubmitting(true);
       setError(null);
-
       const requestBody = {
         userId,
         verificationType: type,
         data,
-        metadata: {
+        metadata: {,
           requestSource: 'manual_request',
-          sessionId: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          sessionId: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,}
           ipAddress: 'client-ip', // Would be set by middleware in real app
-          userAgent: navigator.userAgent
+          userAgent: navigator.userAgent,
         }
       };
-
-      const response = await fetch(`${API_BASE_URL}/submit`, {
+      const response = await fetch(`${API_BASE_URL}/submit`, {)}
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(requestBody),
       });
-
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+        throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);}
       }
-
       const result = await response.json();
-      
       if (result.success) {
         // Refresh status after successful submission
         await fetchVerificationStatus();
         return {
           requestId: result.data.requestId,
-          status: result.data.status
+          status: result.data.status,
         };
       } else {
         throw new Error(result.message || 'Failed to submit verification request');
       }
-
     } catch (err) {
       console.error('Error submitting verification request:', err);
       const errorMessage = handleApiError(err);
@@ -184,53 +161,44 @@ export function useVerificationRequests(userId: string): VerificationRequestsHoo
       setIsSubmitting(false);
     }
   }, [userId, handleApiError, fetchVerificationStatus]);
-
   const uploadDocuments = useCallback(async (requestId: string, files: File[]): Promise<void> => {
     try {
       setIsSubmitting(true);
       setError(null);
-
       // Convert files to base64 for upload
-      const filePromises = files.map(file => {
+      const filePromises = files.map(file => {)
         return new Promise<{ name: string; type: string; data: string }>((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = () => {
             const result = reader.result as string;
-            resolve({
+            resolve({)
               name: file.name,
               type: file.type,
-              data: result
+              data: result,
             });
           };
           reader.onerror = reject;
           reader.readAsDataURL(file);
         });
       });
-
       const uploadFiles = await Promise.all(filePromises);
-
-      const response = await fetch(`${API_BASE_URL}/upload/${requestId}`, {
+      const response = await fetch(`${API_BASE_URL}/upload/${requestId}`, {)}
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ files: uploadFiles })
       });
-
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+        throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);}
       }
-
       const result = await response.json();
-      
       if (!result.success) {
         throw new Error(result.message || 'Failed to upload documents');
       }
-
       // Refresh status after successful upload
       await fetchVerificationStatus();
-
     } catch (err) {
       console.error('Error uploading documents:', err);
       const errorMessage = handleApiError(err);
@@ -240,55 +208,45 @@ export function useVerificationRequests(userId: string): VerificationRequestsHoo
       setIsSubmitting(false);
     }
   }, [handleApiError, fetchVerificationStatus]);
-
   const getVerificationTypes = useCallback(async (): Promise<VerificationType[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/types`, {
+      const response = await fetch(`${API_BASE_URL}/types`, {)}
         method: 'GET',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         }
       });
-
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);}
       }
-
       const result = await response.json();
-      
       if (result.success) {
         return result.data;
       } else {
         throw new Error(result.message || 'Failed to fetch verification types');
       }
-
     } catch (err) {
       console.error('Error fetching verification types:', err);
       throw new Error(handleApiError(err));
     }
   }, [handleApiError]);
-
   const refreshStatus = useCallback(async (): Promise<void> => {
     await fetchVerificationStatus();
   }, [fetchVerificationStatus]);
-
   // Load verification status on mount
   useEffect(() => {
     if (userId) {
       fetchVerificationStatus();
     }
   }, [userId, fetchVerificationStatus]);
-
   return {
     // State
     isLoading,
     isSubmitting,
     error,
-    
     // Data
     verifications,
     trustScore,
-    
     // Actions
     submitVerificationRequest,
     refreshStatus,

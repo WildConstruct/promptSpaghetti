@@ -30,7 +30,7 @@ export interface TTSRequestOptions {
     normalize_audio?: boolean;
 }
 export interface TTSGenerationResult {
-    audio: {
+    audio: {,
         data: ArrayBuffer | string;
         format: string;
         duration: number;
@@ -38,7 +38,7 @@ export interface TTSGenerationResult {
         channels: number;
         bitrate?: number;
     };
-    metadata: {
+    metadata: {,
         voice: string;
         model: string;
         text_length: number;
@@ -47,7 +47,7 @@ export interface TTSGenerationResult {
         response_format: string;
         generation_time: number;
     };
-    usage: {
+    usage: {,
         characters: number;
         cost: number;
     };

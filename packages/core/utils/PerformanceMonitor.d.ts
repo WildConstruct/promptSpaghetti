@@ -15,12 +15,12 @@ export interface PerformanceMetric {
     };
 }
 export interface PerformanceReport {
-    period: {
+    period: {,
         start: number;
         end: number;
         duration: number;
     };
-    metrics: {
+    metrics: {,
         [key: string]: {
             count: number;
             average: number;
@@ -113,12 +113,12 @@ export declare class PerformanceMonitor {
      * Get current performance dashboard data
      */
     getDashboardData(): {
-        overview: {
+        overview: {,
             totalMetrics: number;
             activeAlerts: number;
             healthScore: number;
         };
-        keyMetrics: {
+        keyMetrics: {,
             name: string;
             current: number;
             average: number;

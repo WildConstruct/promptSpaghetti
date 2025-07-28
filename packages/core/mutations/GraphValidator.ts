@@ -4,7 +4,6 @@
  * Comprehensive validation system for graph operations and states.
  * Supports schema validation, structural validation, and custom validation rules.
  */
-
 import { EventEmitter } from 'events';
 import { Node, Edge } from 'reactflow';
 import {
@@ -27,25 +26,21 @@ import {
 } from './types';
 import { nodeSchemas } from '../nodeSchemas';
 import { validateGraph } from '../validation';
-
 /**
  * Comprehensive graph validation system
  */
 export class GraphValidator extends EventEmitter {
   private customValidators: ValidationFunction[] = [];
-  
   constructor(private config: ValidationConfig) {
     super();
     this.customValidators = config.customValidators || [];
   }
-  
   /**
    * Add custom validation function
    */
   addValidator(validator: ValidationFunction): void {
     this.customValidators.push(validator);
   }
-  
   /**
    * Remove custom validation function
    */
@@ -55,671 +50,579 @@ export class GraphValidator extends EventEmitter {
       this.customValidators.splice(index, 1);
     }
   }
-  
   /**
    * Validate operation before execution
    */
   async validate(operation: GraphOperation, currentState: GraphState): Promise<ValidationResult> {
     const errors: ValidationError[] = [];
     const warnings: ValidationError[] = [];
-    
     try {
       // Basic operation validation
       const basicErrors = await this.validateBasicOperation(operation);
       errors.push(...basicErrors);
-      
       // Operation-specific validation
       const specificErrors = await this.validateSpecificOperation(operation, currentState);
       errors.push(...specificErrors);
-      
       // Schema validation
       if (this.config.enableSchemaValidation) {
         const schemaErrors = await this.validateOperationSchema(operation, currentState);
         errors.push(...schemaErrors);
       }
-      
       // Structural validation
       if (this.config.enableStructuralValidation) {
         const structuralErrors = await this.validateStructuralConstraints(operation, currentState);
         errors.push(...structuralErrors);
       }
-      
       // Custom validation
       for (const validator of this.customValidators) {
         try {
           const customErrors = await validator(operation, currentState);
           errors.push(...customErrors);
         } catch (error) {
-          warnings.push({
+          warnings.push({)
             type: 'CUSTOM_VALIDATOR_ERROR',
-            message: `Custom validator failed: ${error}`,
-            severity: 'warning'
+            message: `Custom validator failed: ${error}`,}
+            severity: 'warning',
           });
         }
       }
-      
       // Emit validation events
       if (errors.length > 0) {
         this.emit('validation_error', { operation, errors });
       }
-      
       return {
         valid: errors.filter(e => e.severity === 'error').length === 0,
         errors: errors.filter(e => e.severity === 'error'),
         warnings: [...warnings, ...errors.filter(e => e.severity === 'warning')],
         info: errors.filter(e => e.severity === 'info')
       };
-      
     } catch (error) {
       const validationError: ValidationError = {
         type: 'VALIDATION_SYSTEM_ERROR',
-        message: `Validation system error: ${error}`,
-        severity: 'error'
+        message: `Validation system error: ${error}`,}
+        severity: 'error',
       };
-      
       return {
         valid: false,
         errors: [validationError],
-        warnings: []
+        warnings: [],
       };
     }
   }
-  
   /**
    * Validate entire graph state
    */
   async validateState(state: GraphState): Promise<ValidationResult> {
     const errors: ValidationError[] = [];
-    
     try {
       // Use existing validation logic
       const graphErrors = validateGraph(state.nodes, state.edges);
-      errors.push(...graphErrors.map(error => ({
+      errors.push(...graphErrors.map(error => ({)
         type: 'GRAPH_VALIDATION_ERROR',
         message: error.message,
         severity: 'error' as const,
         nodeId: error.nodeId,
-        edgeId: error.edgeId
+        edgeId: error.edgeId,
       })));
-      
       // Additional state validation
       const stateErrors = await this.validateGraphState(state);
       errors.push(...stateErrors);
-      
       return {
         valid: errors.length === 0,
         errors,
-        warnings: []
+        warnings: [],
       };
-      
     } catch (error) {
       return {
         valid: false,
-        errors: [{
+        errors: [{,
           type: 'STATE_VALIDATION_ERROR',
-          message: `State validation failed: ${error}`,
-          severity: 'error'
+          message: `State validation failed: ${error}`,}
+          severity: 'error',
         }],
-        warnings: []
+        warnings: [],
       };
     }
   }
-  
   // PRIVATE VALIDATION METHODS
-  
   private async validateBasicOperation(operation: GraphOperation): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
-    
     // Check required fields
     if (!operation.id || operation.id.trim() === '') {
-      errors.push({
+      errors.push({)
         type: 'MISSING_OPERATION_ID',
         message: 'Operation ID is required',
-        severity: 'error'
+        severity: 'error',
       });
     }
-    
     if (!operation.type) {
-      errors.push({
+      errors.push({)
         type: 'MISSING_OPERATION_TYPE',
         message: 'Operation type is required',
-        severity: 'error'
+        severity: 'error',
       });
     }
-    
     if (!operation.timestamp) {
-      errors.push({
+      errors.push({)
         type: 'MISSING_TIMESTAMP',
         message: 'Operation timestamp is required',
-        severity: 'error'
+        severity: 'error',
       });
     }
-    
     // Validate timestamp
     if (operation.timestamp && isNaN(operation.timestamp.getTime())) {
-      errors.push({
+      errors.push({)
         type: 'INVALID_TIMESTAMP',
         message: 'Operation timestamp is invalid',
-        severity: 'error'
+        severity: 'error',
       });
     }
-    
     // Check for dangerous operations
     if (!this.config.allowDangerousOperations) {
       if (operation.type === OperationType.GRAPH_CLEAR) {
-        errors.push({
+        errors.push({)
           type: 'DANGEROUS_OPERATION',
           message: 'Graph clear operation is not allowed',
-          severity: 'error'
+          severity: 'error',
         });
       }
     }
-    
     return errors;
   }
-  
-  private async validateSpecificOperation(
+  private async validateSpecificOperation()
     operation: GraphOperation,
-    currentState: GraphState
+    currentState: GraphState,
   ): Promise<ValidationError[]> {
     switch (operation.type) {
     case OperationType.NODE_ADD:
       return this.validateNodeAdd(operation as NodeAddOperation, currentState);
-        
     case OperationType.NODE_DELETE:
       return this.validateNodeDelete(operation as NodeDeleteOperation, currentState);
-        
     case OperationType.NODE_UPDATE:
       return this.validateNodeUpdate(operation as NodeUpdateOperation, currentState);
-        
     case OperationType.EDGE_ADD:
       return this.validateEdgeAdd(operation as EdgeAddOperation, currentState);
-        
     case OperationType.EDGE_DELETE:
       return this.validateEdgeDelete(operation as EdgeDeleteOperation, currentState);
-        
     case OperationType.VARIATION_ADD:
       return this.validateVariationAdd(operation as VariationAddOperation, currentState);
-        
     case OperationType.VARIATION_DELETE:
       return this.validateVariationDelete(operation as VariationDeleteOperation, currentState);
-        
     case OperationType.VARIATION_UPDATE:
       return this.validateVariationUpdate(operation as VariationUpdateOperation, currentState);
-        
     case OperationType.VARIATION_REORDER:
       return this.validateVariationReorder(operation as VariationReorderOperation, currentState);
-        
     default:
       return [{
         type: 'UNSUPPORTED_OPERATION',
-        message: `Operation type ${operation.type} is not supported`,
-        severity: 'error'
+        message: `Operation type ${operation.type} is not supported`,}
+        severity: 'error',
       }];
     }
   }
-  
-  private async validateNodeAdd(
+  private async validateNodeAdd()
     operation: NodeAddOperation,
-    state: GraphState
+    state: GraphState,
   ): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
     const { node, position } = operation.payload;
-    
     // Check for duplicate IDs
     if (state.nodes.some(n => n.id === node.id)) {
-      errors.push({
+      errors.push({)
         type: 'DUPLICATE_NODE_ID',
-        message: `Node with ID ${node.id} already exists`,
+        message: `Node with ID ${node.id} already exists`,}
         severity: 'error',
-        nodeId: node.id
+        nodeId: node.id,
       });
     }
-    
     // Validate node structure
     if (!node.id || node.id.trim() === '') {
-      errors.push({
+      errors.push({)
         type: 'INVALID_NODE_ID',
         message: 'Node ID is required and cannot be empty',
-        severity: 'error'
+        severity: 'error',
       });
     }
-    
     if (!node.data) {
-      errors.push({
+      errors.push({)
         type: 'MISSING_NODE_DATA',
         message: 'Node data is required',
         severity: 'error',
-        nodeId: node.id
+        nodeId: node.id,
       });
     }
-    
     // Validate position
     if (!this.isValidPosition(position)) {
-      errors.push({
+      errors.push({)
         type: 'INVALID_POSITION',
         message: 'Node position is invalid or outside allowed bounds',
         severity: 'warning',
-        nodeId: node.id
+        nodeId: node.id,
       });
     }
-    
     return errors;
   }
-  
-  private async validateNodeDelete(
+  private async validateNodeDelete()
     operation: NodeDeleteOperation,
-    state: GraphState
+    state: GraphState,
   ): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
     const { nodeId } = operation.payload;
-    
     // Check if node exists
     const nodeExists = state.nodes.some(n => n.id === nodeId);
     if (!nodeExists) {
-      errors.push({
+      errors.push({)
         type: 'NODE_NOT_FOUND',
-        message: `Node with ID ${nodeId} does not exist`,
+        message: `Node with ID ${nodeId} does not exist`,}
         severity: 'error',
         nodeId
       });
     }
-    
     // Check for connected edges (warning)
-    const connectedEdges = state.edges.filter(
+    const connectedEdges = state.edges.filter(;)
       e => e.source === nodeId || e.target === nodeId
     );
     if (connectedEdges.length > 0) {
-      errors.push({
+      errors.push({)
         type: 'NODE_HAS_CONNECTIONS',
-        message: `Node has ${connectedEdges.length} connected edges that will be removed`,
+        message: `Node has ${connectedEdges.length} connected edges that will be removed`,}
         severity: 'warning',
         nodeId
       });
     }
-    
     return errors;
   }
-  
-  private async validateNodeUpdate(
+  private async validateNodeUpdate()
     operation: NodeUpdateOperation,
-    state: GraphState
+    state: GraphState,
   ): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
     const { nodeId, updates } = operation.payload;
-    
     // Check if node exists
     const node = state.nodes.find(n => n.id === nodeId);
     if (!node) {
-      errors.push({
+      errors.push({)
         type: 'NODE_NOT_FOUND',
-        message: `Node with ID ${nodeId} does not exist`,
+        message: `Node with ID ${nodeId} does not exist`,}
         severity: 'error',
         nodeId
       });
       return errors;
     }
-    
     // Validate updates object
     if (!updates || typeof updates !== 'object') {
-      errors.push({
+      errors.push({)
         type: 'INVALID_UPDATES',
         message: 'Updates must be a valid object',
         severity: 'error',
         nodeId
       });
     }
-    
     // Check for protected fields
     const protectedFields = ['id', 'type'];
     for (const field of protectedFields) {
       if (field in updates) {
-        errors.push({
+        errors.push({)
           type: 'PROTECTED_FIELD_UPDATE',
-          message: `Cannot update protected field: ${field}`,
+          message: `Cannot update protected field: ${field}`,}
           severity: 'error',
           nodeId,
           field
         });
       }
     }
-    
     return errors;
   }
-  
-  private async validateEdgeAdd(
+  private async validateEdgeAdd()
     operation: EdgeAddOperation,
-    state: GraphState
+    state: GraphState,
   ): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
     const { edge } = operation.payload;
-    
     // Check for self-loops
     if (edge.source === edge.target) {
-      errors.push({
+      errors.push({)
         type: 'SELF_LOOP_DETECTED',
         message: 'Self-loops are not allowed',
         severity: 'error',
-        edgeId: edge.id
+        edgeId: edge.id,
       });
     }
-    
     // Check for duplicate edges
-    const isDuplicate = state.edges.some(e => 
+    const isDuplicate = state.edges.some(e => ;)
       e.source === edge.source && 
       e.target === edge.target &&
       e.sourceHandle === edge.sourceHandle &&
       e.targetHandle === edge.targetHandle
     );
-    
     if (isDuplicate) {
-      errors.push({
+      errors.push({)
         type: 'DUPLICATE_EDGE',
         message: 'Edge already exists between these nodes',
         severity: 'error',
-        edgeId: edge.id
+        edgeId: edge.id,
       });
     }
-    
     // Validate source and target nodes exist
     const sourceExists = state.nodes.some(n => n.id === edge.source);
     const targetExists = state.nodes.some(n => n.id === edge.target);
-    
     if (!sourceExists) {
-      errors.push({
+      errors.push({)
         type: 'SOURCE_NODE_NOT_FOUND',
-        message: `Source node ${edge.source} does not exist`,
+        message: `Source node ${edge.source} does not exist`,}
         severity: 'error',
         edgeId: edge.id,
-        nodeId: edge.source
+        nodeId: edge.source,
       });
     }
-    
     if (!targetExists) {
-      errors.push({
+      errors.push({)
         type: 'TARGET_NODE_NOT_FOUND',
-        message: `Target node ${edge.target} does not exist`,
+        message: `Target node ${edge.target} does not exist`,}
         severity: 'error',
         edgeId: edge.id,
-        nodeId: edge.target
+        nodeId: edge.target,
       });
     }
-    
     return errors;
   }
-  
-  private async validateEdgeDelete(
+  private async validateEdgeDelete()
     operation: EdgeDeleteOperation,
-    state: GraphState
+    state: GraphState,
   ): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
     const { edgeId } = operation.payload;
-    
     // Check if edge exists
     const edgeExists = state.edges.some(e => e.id === edgeId);
     if (!edgeExists) {
-      errors.push({
+      errors.push({)
         type: 'EDGE_NOT_FOUND',
-        message: `Edge with ID ${edgeId} does not exist`,
+        message: `Edge with ID ${edgeId} does not exist`,}
         severity: 'error',
         edgeId
       });
     }
-    
     return errors;
   }
-  
-  private async validateVariationAdd(
+  private async validateVariationAdd()
     operation: VariationAddOperation,
-    state: GraphState
+    state: GraphState,
   ): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
     const { nodeId, variation } = operation.payload;
-    
     // Check if node exists
     const node = state.nodes.find(n => n.id === nodeId);
     if (!node) {
-      errors.push({
+      errors.push({)
         type: 'NODE_NOT_FOUND',
-        message: `Node with ID ${nodeId} does not exist`,
+        message: `Node with ID ${nodeId} does not exist`,}
         severity: 'error',
         nodeId
       });
       return errors;
     }
-    
     // Validate variation content
     if (!variation || variation.trim() === '') {
-      errors.push({
+      errors.push({)
         type: 'EMPTY_VARIATION',
         message: 'Variation cannot be empty',
         severity: 'error',
         nodeId
       });
     }
-    
     // Check variation length
     if (variation.length > 1000) {
-      errors.push({
+      errors.push({)
         type: 'VARIATION_TOO_LONG',
         message: 'Variation exceeds maximum length of 1000 characters',
         severity: 'error',
         nodeId
       });
     }
-    
     return errors;
   }
-  
-  private async validateVariationDelete(
+  private async validateVariationDelete()
     operation: VariationDeleteOperation,
-    state: GraphState
+    state: GraphState,
   ): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
     const { nodeId, index } = operation.payload;
-    
     // Check if node exists
     const node = state.nodes.find(n => n.id === nodeId);
     if (!node) {
-      errors.push({
+      errors.push({)
         type: 'NODE_NOT_FOUND',
-        message: `Node with ID ${nodeId} does not exist`,
+        message: `Node with ID ${nodeId} does not exist`,}
         severity: 'error',
         nodeId
       });
       return errors;
     }
-    
     // Check if variation exists
     const variations = (node.data as any).variations || [];
     if (index < 0 || index >= variations.length) {
-      errors.push({
+      errors.push({)
         type: 'VARIATION_INDEX_OUT_OF_BOUNDS',
-        message: `Variation index ${index} is out of bounds`,
+        message: `Variation index ${index} is out of bounds`,}
         severity: 'error',
         nodeId
       });
     }
-    
     return errors;
   }
-  
-  private async validateVariationUpdate(
+  private async validateVariationUpdate()
     operation: VariationUpdateOperation,
-    state: GraphState
+    state: GraphState,
   ): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
     const { nodeId, index, newValue } = operation.payload;
-    
     // Check if node exists
     const node = state.nodes.find(n => n.id === nodeId);
     if (!node) {
-      errors.push({
+      errors.push({)
         type: 'NODE_NOT_FOUND',
-        message: `Node with ID ${nodeId} does not exist`,
+        message: `Node with ID ${nodeId} does not exist`,}
         severity: 'error',
         nodeId
       });
       return errors;
     }
-    
     // Check if variation exists
     const variations = (node.data as any).variations || [];
     if (index < 0 || index >= variations.length) {
-      errors.push({
+      errors.push({)
         type: 'VARIATION_INDEX_OUT_OF_BOUNDS',
-        message: `Variation index ${index} is out of bounds`,
+        message: `Variation index ${index} is out of bounds`,}
         severity: 'error',
         nodeId
       });
     }
-    
     // Validate new value
     if (!newValue || newValue.trim() === '') {
-      errors.push({
+      errors.push({)
         type: 'EMPTY_VARIATION',
         message: 'Variation cannot be empty',
         severity: 'error',
         nodeId
       });
     }
-    
     return errors;
   }
-  
-  private async validateVariationReorder(
+  private async validateVariationReorder()
     operation: VariationReorderOperation,
-    state: GraphState
+    state: GraphState,
   ): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
     const { nodeId, fromIndex, toIndex } = operation.payload;
-    
     // Check if node exists
     const node = state.nodes.find(n => n.id === nodeId);
     if (!node) {
-      errors.push({
+      errors.push({)
         type: 'NODE_NOT_FOUND',
-        message: `Node with ID ${nodeId} does not exist`,
+        message: `Node with ID ${nodeId} does not exist`,}
         severity: 'error',
         nodeId
       });
       return errors;
     }
-    
     // Check indices
     const variations = (node.data as any).variations || [];
     if (fromIndex < 0 || fromIndex >= variations.length) {
-      errors.push({
+      errors.push({)
         type: 'FROM_INDEX_OUT_OF_BOUNDS',
-        message: `From index ${fromIndex} is out of bounds`,
+        message: `From index ${fromIndex} is out of bounds`,}
         severity: 'error',
         nodeId
       });
     }
-    
     if (toIndex < 0 || toIndex >= variations.length) {
-      errors.push({
+      errors.push({)
         type: 'TO_INDEX_OUT_OF_BOUNDS',
-        message: `To index ${toIndex} is out of bounds`,
+        message: `To index ${toIndex} is out of bounds`,}
         severity: 'error',
         nodeId
       });
     }
-    
     return errors;
   }
-  
-  private async validateOperationSchema(
+  private async validateOperationSchema()
     operation: GraphOperation,
-    state: GraphState
+    state: GraphState,
   ): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
-    
     // For node operations, validate against node schemas
     if (operation.type === OperationType.NODE_ADD) {
       const nodeOp = operation as NodeAddOperation;
       const nodeType = (nodeOp.payload.node.data as any).nodeType;
-      
       if (nodeType && nodeSchemas[nodeType]) {
         try {
           nodeSchemas[nodeType].parse(nodeOp.payload.node.data);
         } catch (schemaError: any) {
-          errors.push({
+          errors.push({)
             type: 'SCHEMA_VALIDATION_FAILED',
-            message: `Node schema validation failed: ${schemaError.message}`,
+            message: `Node schema validation failed: ${schemaError.message}`,}
             severity: 'error',
-            nodeId: nodeOp.payload.node.id
+            nodeId: nodeOp.payload.node.id,
           });
         }
       }
     }
-    
     return errors;
   }
-  
-  private async validateStructuralConstraints(
+  private async validateStructuralConstraints()
     operation: GraphOperation,
-    state: GraphState
+    state: GraphState,
   ): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
-    
     // Simulate the operation and validate resulting structure
     const simulatedState = this.simulateOperation(operation, state);
-    
     // Check for cycles
     if (this.hasCycles(simulatedState)) {
-      errors.push({
+      errors.push({)
         type: 'CYCLE_DETECTED',
         message: 'Operation would create a cycle in the graph',
-        severity: 'error'
+        severity: 'error',
       });
     }
-    
     // Check for orphaned nodes (if strict mode)
     if (this.config.strictMode) {
       const orphanedNodes = this.findOrphanedNodes(simulatedState);
       if (orphanedNodes.length > 0) {
-        errors.push({
+        errors.push({)
           type: 'ORPHANED_NODES',
-          message: `Found ${orphanedNodes.length} orphaned nodes`,
-          severity: 'warning'
+          message: `Found ${orphanedNodes.length} orphaned nodes`,}
+          severity: 'warning',
         });
       }
     }
-    
     return errors;
   }
-  
   private async validateGraphState(state: GraphState): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
-    
     // Check for duplicate node IDs
     const nodeIds = state.nodes.map(n => n.id);
     const duplicateIds = nodeIds.filter((id, index) => nodeIds.indexOf(id) !== index);
     if (duplicateIds.length > 0) {
-      errors.push({
+      errors.push({)
         type: 'DUPLICATE_NODE_IDS',
-        message: `Duplicate node IDs found: ${duplicateIds.join(', ')}`,
-        severity: 'error'
+        message: `Duplicate node IDs found: ${duplicateIds.join(', ')}`,}
+        severity: 'error',
       });
     }
-    
     // Check for duplicate edge IDs
     const edgeIds = state.edges.map(e => e.id);
     const duplicateEdgeIds = edgeIds.filter((id, index) => edgeIds.indexOf(id) !== index);
     if (duplicateEdgeIds.length > 0) {
-      errors.push({
+      errors.push({)
         type: 'DUPLICATE_EDGE_IDS',
-        message: `Duplicate edge IDs found: ${duplicateEdgeIds.join(', ')}`,
-        severity: 'error'
+        message: `Duplicate edge IDs found: ${duplicateEdgeIds.join(', ')}`,}
+        severity: 'error',
       });
     }
-    
     return errors;
   }
-  
   private isValidPosition(position: { x: number; y: number }): boolean {
-    return (
+    return ()
       typeof position.x === 'number' &&
       typeof position.y === 'number' &&
       !isNaN(position.x) &&
@@ -730,36 +633,29 @@ export class GraphValidator extends EventEmitter {
       position.y <= 10000
     );
   }
-  
   private simulateOperation(operation: GraphOperation, state: GraphState): GraphState {
     // Create a copy and simulate the operation
     const simulatedState: GraphState = {
       nodes: [...state.nodes],
-      edges: [...state.edges]
+      edges: [...state.edges],
     };
-    
     switch (operation.type) {
     case OperationType.NODE_ADD:
       const nodeOp = operation as NodeAddOperation;
       simulatedState.nodes.push(nodeOp.payload.node);
       break;
-        
     case OperationType.EDGE_ADD:
       const edgeOp = operation as EdgeAddOperation;
       simulatedState.edges.push(edgeOp.payload.edge);
       break;
-        
       // Add other operation simulations as needed
     }
-    
     return simulatedState;
   }
-  
   private hasCycles(state: GraphState): boolean {
     // Simple cycle detection using DFS
     const visited = new Set<string>();
     const recursionStack = new Set<string>();
-    
     const dfs = (nodeId: string): boolean => {
       if (recursionStack.has(nodeId)) {
         return true; // Cycle found
@@ -767,39 +663,31 @@ export class GraphValidator extends EventEmitter {
       if (visited.has(nodeId)) {
         return false;
       }
-      
       visited.add(nodeId);
       recursionStack.add(nodeId);
-      
       const outgoingEdges = state.edges.filter(e => e.source === nodeId);
       for (const edge of outgoingEdges) {
         if (dfs(edge.target)) {
           return true;
         }
       }
-      
       recursionStack.delete(nodeId);
       return false;
     };
-    
     for (const node of state.nodes) {
       if (!visited.has(node.id) && dfs(node.id)) {
         return true;
       }
     }
-    
     return false;
   }
-  
   private findOrphanedNodes(state: GraphState): Node[] {
     const connectedNodes = new Set<string>();
-    
     // Add all nodes that are part of edges
     for (const edge of state.edges) {
       connectedNodes.add(edge.source);
       connectedNodes.add(edge.target);
     }
-    
     // Find nodes not in any edge
     return state.nodes.filter(node => !connectedNodes.has(node.id));
   }

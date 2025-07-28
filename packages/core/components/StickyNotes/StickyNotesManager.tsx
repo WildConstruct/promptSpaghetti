@@ -9,20 +9,18 @@
  * - Context menus
  * - Professional UI matching Cinema 4D standards
  */
-
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useReactFlow, useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
 import { StickyNotesLayer } from '../Annotations/StickyNotesLayer';
 import { StickyNote as StickyNoteType } from '../../types/CollaborationTypes';
-
 interface StickyNotesManagerProps {
   disabled?: boolean;
   readonly?: boolean;
   author?: string;
 }
 
-export const StickyNotesManager: React.FC<StickyNotesManagerProps> = ({
+export const StickyNotesManager: React.FC<StickyNotesManagerProps> = ({)
   disabled = false,
   readonly = false,
   author = 'Anonymous'
@@ -31,31 +29,25 @@ export const StickyNotesManager: React.FC<StickyNotesManagerProps> = ({
     stickyNotes, 
     setStickyNotes
   } = useGraphStore();
-  
     const viewport = useViewport();
-
   // Handle notes changes from the layer
   const handleNotesChange = useCallback((notes: StickyNoteType[]) => {
     setStickyNotes(notes);
   }, [setStickyNotes]);
-
   // Get canvas size and offset from ReactFlow
   const canvasSize = {
     width: 5000, // Large canvas size for sticky notes
-    height: 5000
+    height: 5000,
   };
-
   const canvasOffset = {
     x: viewport.x,
-    y: viewport.y
+    y: viewport.y,
   };
-
   // Don't render if disabled
   if (disabled) {
     return null;
   }
-
-  return (
+  return ()
     <StickyNotesLayer
       notes={stickyNotes}
       onNotesChange={handleNotesChange}

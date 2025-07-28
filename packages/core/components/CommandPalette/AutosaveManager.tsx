@@ -4,7 +4,6 @@
  * 
  * Cinema 4D-inspired autosave with conflict resolution and recovery
  */
-
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 
@@ -14,7 +13,7 @@ export interface AutosaveState {
   timestamp: number;
   version: number;
   checksum: string;
-  metadata: {
+  metadata: {,
     nodeCount: number;
     edgeCount: number;
     lastModified: string;
@@ -38,13 +37,11 @@ export class AutosaveSystem {
   private storageKey: string;
   private maxVersions: number;
   private listeners: Set<(status: AutosaveStatus) => void> = new Set();
-
   constructor(projectId: string = 'default', maxVersions: number = 10) {
-    this.sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    this.storageKey = `autosave_${projectId}`;
+    this.sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
+    this.storageKey = `autosave_${projectId}`;}
     this.maxVersions = maxVersions;
   }
-
   // Generate checksum for data integrity
   private generateChecksum(nodes: Node[], edges: Edge[]): string {
     const data = JSON.stringify({ nodes, edges });
@@ -56,35 +53,30 @@ export class AutosaveSystem {
     }
     return hash.toString(36);
   }
-
   // Save current state
   save(nodes: Node[], edges: Edge[]): AutosaveState {
     const timestamp = Date.now();
     const checksum = this.generateChecksum(nodes, edges);
-    
     const state: AutosaveState = {
       nodes: JSON.parse(JSON.stringify(nodes)), // Deep clone
       edges: JSON.parse(JSON.stringify(edges)), // Deep clone
       timestamp,
       version: this.getNextVersion(),
       checksum,
-      metadata: {
+      metadata: {,
         nodeCount: nodes.length,
         edgeCount: edges.length,
         lastModified: new Date().toISOString(),
-        sessionId: this.sessionId
+        sessionId: this.sessionId,
       }
     };
-
     // Get existing autosaves
     const existingData = this.getStoredData();
     existingData.push(state);
-
     // Limit number of versions
     if (existingData.length > this.maxVersions) {
       existingData.splice(0, existingData.length - this.maxVersions);
     }
-
     // Save to localStorage
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(existingData));
@@ -93,10 +85,8 @@ export class AutosaveSystem {
       console.error('Failed to save autosave data:', error);
       this.notifyListeners({ type: 'error', error: 'Failed to save' });
     }
-
     return state;
   }
-
   // Get all stored autosave states
   getStoredData(): AutosaveState[] {
     try {
@@ -107,23 +97,19 @@ export class AutosaveSystem {
       return [];
     }
   }
-
   // Get the latest autosave
   getLatest(): AutosaveState | null {
     const data = this.getStoredData();
     return data.length > 0 ? data[data.length - 1] : null;
   }
-
   // Check if there's a conflict (different session modified the data)
   hasConflict(): boolean {
     const latest = this.getLatest();
     return latest ? latest.metadata.sessionId !== this.sessionId : false;
   }
-
   // Restore from autosave
   restore(version?: number): AutosaveState | null {
     const data = this.getStoredData();
-    
     if (version !== undefined) {
       const state = data.find(s => s.version === version);
       if (state) {
@@ -131,7 +117,6 @@ export class AutosaveSystem {
         return state;
       }
     }
-
     // Return latest if no specific version requested
     const latest = this.getLatest();
     if (latest) {
@@ -139,7 +124,6 @@ export class AutosaveSystem {
     }
     return latest;
   }
-
   // Clear all autosaves
   clear(): void {
     try {
@@ -149,23 +133,19 @@ export class AutosaveSystem {
       console.error('Failed to clear autosave data:', error);
     }
   }
-
   // Get next version number
   private getNextVersion(): number {
     const data = this.getStoredData();
     return data.length > 0 ? Math.max(...data.map(s => s.version)) + 1 : 1;
   }
-
   // Subscribe to autosave events
   subscribe(callback: (status: AutosaveStatus) => void): () => void {
     this.listeners.add(callback);
     return () => this.listeners.delete(callback);
   }
-
   private notifyListeners(status: AutosaveStatus): void {
     this.listeners.forEach(listener => listener(status));
   }
-
   // Validate data integrity
   validateChecksum(state: AutosaveState): boolean {
     const currentChecksum = this.generateChecksum(state.nodes, state.edges);
@@ -180,7 +160,7 @@ export interface AutosaveStatus {
   error?: string;
 }
 
-export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
+export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
   nodes,
   edges,
   interval = 30000, // 30 seconds default
@@ -195,10 +175,8 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
   const [status, setStatus] = useState<AutosaveStatus | null>(null);
   const [showRecovery, setShowRecovery] = useState(false);
   const [availableVersions, setAvailableVersions] = useState<AutosaveState[]>([]);
-  
   const lastDataRef = useRef<string>('');
   const intervalRef = useRef<NodeJS.Timeout>();
-
   // Subscribe to autosave events
   useEffect(() => {
     const unsubscribe = autosaveSystem.subscribe((newStatus) => {
@@ -207,28 +185,22 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
         setLastSave(Date.now());
       }
     });
-
     return unsubscribe;
   }, [autosaveSystem]);
-
   // Check for existing autosaves on mount
   useEffect(() => {
     const versions = autosaveSystem.getStoredData();
     setAvailableVersions(versions);
-
     // Check for conflicts
     if (autosaveSystem.hasConflict() && versions.length > 0) {
       setShowRecovery(true);
     }
   }, [autosaveSystem]);
-
   // Autosave logic
   useEffect(() => {
     if (disabled) return;
-
     const saveIfChanged = () => {
       const currentData = JSON.stringify({ nodes, edges });
-      
       // Only save if data has changed
       if (currentData !== lastDataRef.current && nodes.length > 0) {
         autosaveSystem.save(nodes, edges);
@@ -236,26 +208,21 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
         setAvailableVersions(autosaveSystem.getStoredData());
       }
     };
-
     // Initial save
     saveIfChanged();
-
     // Set up interval
     intervalRef.current = setInterval(saveIfChanged, interval);
-
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
   }, [nodes, edges, interval, disabled, autosaveSystem]);
-
   // Manual save
   const handleManualSave = useCallback(() => {
     autosaveSystem.save(nodes, edges);
     setAvailableVersions(autosaveSystem.getStoredData());
   }, [nodes, edges, autosaveSystem]);
-
   // Restore from version
   const handleRestore = useCallback((version?: number) => {
     const state = autosaveSystem.restore(version);
@@ -264,7 +231,6 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
       setShowRecovery(false);
     }
   }, [autosaveSystem, onRestore]);
-
   // Clear autosaves
   const handleClear = useCallback(() => {
     if (confirm('Clear all autosave data? This cannot be undone.')) {
@@ -273,11 +239,10 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
       setShowRecovery(false);
     }
   }, [autosaveSystem]);
-
   // Theme styles
   const getThemeStyles = () => {
     const themes = {
-      light: {
+      light: {,
         background: '#ffffff',
         secondary: '#f8fafc',
         border: '#e5e7eb',
@@ -286,9 +251,9 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
         accent: '#3b82f6',
         success: '#10b981',
         warning: '#f59e0b',
-        error: '#ef4444'
+        error: '#ef4444',
       },
-      dark: {
+      dark: {,
         background: '#1f2937',
         secondary: '#111827',
         border: '#4b5563',
@@ -297,9 +262,9 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
         accent: '#60a5fa',
         success: '#34d399',
         warning: '#fbbf24',
-        error: '#f87171'
+        error: '#f87171',
       },
-      cinema: {
+      cinema: {,
         background: 'var(--color-bg-secondary)',
         secondary: 'var(--color-bg-tertiary)',
         border: 'var(--color-ui-border)',
@@ -308,14 +273,12 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
         accent: 'var(--color-accent-orange)',
         success: 'var(--color-accent-green)',
         warning: 'var(--color-accent-orange)',
-        error: 'var(--color-accent-red)'
+        error: 'var(--color-accent-red)',
       }
     };
     return themes[theme];
   };
-
   const styles = getThemeStyles();
-
   const getStatusColor = () => {
     if (!status) return styles.textSecondary;
     switch (status.type) {
@@ -324,7 +287,6 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
       default: return styles.textSecondary;
     }
   };
-
   const getStatusText = () => {
     if (!status) return 'Ready';
     switch (status.type) {
@@ -335,18 +297,15 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
       default: return 'Ready';
     }
   };
-
   const formatTime = (timestamp: number) => {
     const now = Date.now();
     const diff = now - timestamp;
-    
     if (diff < 60000) return 'Just now';
-    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
-    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;}
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;}
     return new Date(timestamp).toLocaleDateString();
   };
-
-  return (
+  return ()
     <>
       {/* Autosave Status Indicator */}
       <div
@@ -355,7 +314,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
           top: '20px',
           right: '20px',
           background: styles.background,
-          border: `1px solid ${styles.border}`,
+          border: `1px solid ${styles.border}`,}
           borderRadius: '6px',
           padding: '8px 12px',
           display: 'flex',
@@ -364,7 +323,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
           fontSize: '12px',
           fontFamily: 'var(--font-family-primary)',
           boxShadow: 'var(--shadow-sm)',
-          zIndex: 1000
+          zIndex: 1000,
         }}
       >
         <div
@@ -379,12 +338,11 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
         <span style={{ color: styles.text, fontWeight: '500' }}>
           {getStatusText()}
         </span>
-        {lastSave && (
+        {lastSave && ()
           <span style={{ color: styles.textSecondary }}>
             {formatTime(lastSave)}
           </span>
         )}
-        
         {/* Actions */}
         <div style={{ display: 'flex', gap: '4px', marginLeft: '8px' }}>
           <button
@@ -417,9 +375,8 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
           </button>
         </div>
       </div>
-
       {/* Recovery Panel */}
-      {showRecovery && (
+      {showRecovery && ()
         <div
           style={{
             position: 'fixed',
@@ -431,21 +388,21 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 10000
+            zIndex: 10000,
           }}
           onClick={() => setShowRecovery(false)}
         >
           <div
             style={{
               background: styles.background,
-              border: `1px solid ${styles.border}`,
+              border: `1px solid ${styles.border}`,}
               borderRadius: '12px',
               width: '90%',
               maxWidth: '600px',
               maxHeight: '80%',
               overflow: 'hidden',
               fontFamily: 'var(--font-family-primary)',
-              boxShadow: 'var(--shadow-xl)'
+              boxShadow: 'var(--shadow-xl)',
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -453,20 +410,20 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
             <div
               style={{
                 padding: '20px',
-                borderBottom: `1px solid ${styles.border}`,
-                background: styles.secondary
+                borderBottom: `1px solid ${styles.border}`,}
+                background: styles.secondary,
               }}
             >
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
               }}>
                 <h2 style={{
                   margin: 0,
                   fontSize: '18px',
                   fontWeight: '600',
-                  color: styles.text
+                  color: styles.text,
                 }}>
                   💾 Autosave Recovery
                 </h2>
@@ -477,7 +434,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
                     border: 'none',
                     color: styles.textSecondary,
                     fontSize: '24px',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 >
                   ×
@@ -486,38 +443,36 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
               <p style={{
                 margin: '8px 0 0 0',
                 color: styles.textSecondary,
-                fontSize: '14px'
+                fontSize: '14px',
               }}>
                 Restore your graph from an autosaved version. Recent changes are automatically saved.
               </p>
             </div>
-
             {/* Version List */}
             <div style={{
               padding: '20px',
               maxHeight: '400px',
-              overflowY: 'auto'
+              overflowY: 'auto',
             }}>
-              {availableVersions.length === 0 ? (
+              {availableVersions.length === 0 ? ()
                 <div style={{
                   textAlign: 'center',
                   padding: '40px',
-                  color: styles.textSecondary
+                  color: styles.textSecondary,
                 }}>
                   <div style={{ fontSize: '48px', marginBottom: '16px' }}>📄</div>
                   <div>No autosaved versions available</div>
                 </div>
-              ) : (
+              ) : ()
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {availableVersions.slice().reverse().map((version, index) => {
                     const isLatest = index === 0;
-                    
-                    return (
+                    return ()
                       <div
                         key={version.version}
                         style={{
                           background: isLatest ? styles.accent + '10' : styles.secondary,
-                          border: `1px solid ${isLatest ? styles.accent : styles.border}`,
+                          border: `1px solid ${isLatest ? styles.accent : styles.border}`,}
                           borderRadius: '8px',
                           padding: '16px',
                           cursor: 'pointer',
@@ -529,43 +484,41 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          marginBottom: '8px'
+                          marginBottom: '8px',
                         }}>
                           <div style={{
                             color: styles.text,
                             fontSize: '14px',
-                            fontWeight: '600'
+                            fontWeight: '600',
                           }}>
                             Version {version.version} {isLatest && '(Latest)'}
                           </div>
                           <div style={{
                             color: styles.textSecondary,
-                            fontSize: '12px'
+                            fontSize: '12px',
                           }}>
                             {formatTime(version.timestamp)}
                           </div>
                         </div>
-                        
                         <div style={{
                           display: 'flex',
                           gap: '16px',
                           color: styles.textSecondary,
-                          fontSize: '12px'
+                          fontSize: '12px',
                         }}>
                           <span>{version.metadata.nodeCount} nodes</span>
                           <span>{version.metadata.edgeCount} edges</span>
                           <span>Modified: {new Date(version.metadata.lastModified).toLocaleString()}</span>
                         </div>
-                        
-                        {version.metadata.sessionId !== autosaveSystem['sessionId'] && (
+                        {version.metadata.sessionId !== autosaveSystem['sessionId'] && ()
                           <div style={{
                             marginTop: '8px',
                             padding: '6px 8px',
                             background: styles.warning + '20',
-                            border: `1px solid ${styles.warning}`,
+                            border: `1px solid ${styles.warning}`,}
                             borderRadius: '4px',
                             color: styles.warning,
-                            fontSize: '11px'
+                            fontSize: '11px',
                           }}>
                             ⚠️ Modified in different session
                           </div>
@@ -576,34 +529,32 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
                 </div>
               )}
             </div>
-
             {/* Footer */}
             <div style={{
               padding: '16px 20px',
-              borderTop: `1px solid ${styles.border}`,
+              borderTop: `1px solid ${styles.border}`,}
               background: styles.secondary,
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
             }}>
               <div style={{
                 fontSize: '12px',
-                color: styles.textSecondary
+                color: styles.textSecondary,
               }}>
                 Autosaves every {Math.floor(interval / 1000)}s • Max {maxVersions} versions
               </div>
-              
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button
                   onClick={handleClear}
                   style={{
                     padding: '8px 12px',
                     background: 'transparent',
-                    border: `1px solid ${styles.border}`,
+                    border: `1px solid ${styles.border}`,}
                     borderRadius: '4px',
                     color: styles.text,
                     fontSize: '12px',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 >
                   Clear All
@@ -618,7 +569,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
                     color: styles.background,
                     fontSize: '12px',
                     fontWeight: '500',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 >
                   Close

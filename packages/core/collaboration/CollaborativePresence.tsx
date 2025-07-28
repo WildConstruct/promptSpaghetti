@@ -2,17 +2,14 @@
  * Collaborative Presence Overlay - Epic 9.1.2
  * Shows user cursors, selections, and presence indicators
  */
-
 import React from 'react';
 import { useReactFlow } from 'reactflow';
 import { UserPresence } from './collaborativeGraphStore';
-
 interface UserCursorProps {
   user: UserPresence;
   position: { x: number; y: number };
   nodeId?: string;
 }
-
 /**
  * Individual user cursor component
  */
@@ -25,8 +22,7 @@ const UserCursor: React.FC<UserCursorProps> = ({ user, position, nodeId }) => {
     zIndex: 1000,
     transform: 'translate(-2px, -2px)'
   };
-
-  return (
+  return ()
     <div style={cursorStyle}>
       {/* Cursor pointer */}
       <svg width="16" height="16" viewBox="0 0 16 16">
@@ -37,7 +33,6 @@ const UserCursor: React.FC<UserCursorProps> = ({ user, position, nodeId }) => {
           strokeWidth="1"
         />
       </svg>
-      
       {/* User name label */}
       <div
         style={{
@@ -58,7 +53,6 @@ const UserCursor: React.FC<UserCursorProps> = ({ user, position, nodeId }) => {
     </div>
   );
 };
-
 interface NodeSelectionOverlayProps {
   nodeId: string;
   users: UserPresence[];
@@ -66,33 +60,30 @@ interface NodeSelectionOverlayProps {
   nodeWidth: number;
   nodeHeight: number;
 }
-
 /**
  * Selection overlay for nodes being edited by other users
  */
-const NodeSelectionOverlay: React.FC<NodeSelectionOverlayProps> = ({
+const NodeSelectionOverlay: React.FC<NodeSelectionOverlayProps> = ({)
   nodeId,
   users,
   nodePosition,
   nodeWidth,
   nodeHeight
 }) => {
-  const primaryUser = users[0]; // Use first user's color
-  
+  const primaryUser = users[0]; // Use first user's color;
   const overlayStyle: React.CSSProperties = {
     position: 'absolute',
     left: nodePosition.x - 2,
     top: nodePosition.y - 2,
     width: nodeWidth + 4,
     height: nodeHeight + 4,
-    border: `2px solid ${primaryUser.color}`,
+    border: `2px solid ${primaryUser.color}`,}
     borderRadius: 6,
     pointerEvents: 'none',
     zIndex: 999,
-    backgroundColor: `${primaryUser.color}20`, // 20% opacity
-    boxShadow: `0 0 0 1px ${primaryUser.color}40`
+    backgroundColor: `${primaryUser.color}20`, // 20% opacity}
+    boxShadow: `0 0 0 1px ${primaryUser.color}40`}
   };
-
   const labelStyle: React.CSSProperties = {
     position: 'absolute',
     top: -24,
@@ -106,11 +97,9 @@ const NodeSelectionOverlay: React.FC<NodeSelectionOverlayProps> = ({
     whiteSpace: 'nowrap',
     boxShadow: '0 1px 3px rgba(0,0,0,0.3)'
   };
-
   const userNames = users.map(u => u.name).join(', ');
   const isMultiple = users.length > 1;
-
-  return (
+  return ()
     <div style={overlayStyle}>
       <div style={labelStyle}>
         {isMultiple ? `${users.length} users` : userNames}
@@ -118,9 +107,8 @@ const NodeSelectionOverlay: React.FC<NodeSelectionOverlayProps> = ({
     </div>
   );
 };
-
 interface CollaborativePresenceProps {
-  userCursors: Array<{
+  userCursors: Array<{,
     userId: string;
     user: UserPresence;
     position: { x: number; y: number };
@@ -129,22 +117,19 @@ interface CollaborativePresenceProps {
   remoteSelections: Map<string, UserPresence[]>;
   className?: string;
 }
-
 /**
  * Main collaborative presence overlay component
  */
-export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({
+export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({)
   userCursors,
   remoteSelections,
   className
 }) => {
   const reactFlow = useReactFlow();
-
   // Get node positions for selection overlays
   const getNodeRect = (nodeId: string) => {
     const node = reactFlow.getNode(nodeId);
     if (!node) return null;
-
     return {
       x: node.position.x,
       y: node.position.y,
@@ -152,8 +137,7 @@ export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({
       height: node.height || 100 // Default height
     };
   };
-
-  return (
+  return ()
     <div 
       className={className}
       style={{
@@ -163,24 +147,22 @@ export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({
         right: 0,
         bottom: 0,
         pointerEvents: 'none',
-        zIndex: 1000
+        zIndex: 1000,
       }}
     >
       {/* Render user cursors */}
-      {userCursors.map(({ userId, user, position }) => (
+      {userCursors.map(({ userId, user, position }) => ()
         <UserCursor
           key={userId}
           user={user}
           position={position}
         />
       ))}
-
       {/* Render node selection overlays */}
       {Array.from(remoteSelections.entries()).map(([nodeId, users]) => {
         const nodeRect = getNodeRect(nodeId);
         if (!nodeRect) return null;
-
-        return (
+        return ()
           <NodeSelectionOverlay
             key={nodeId}
             nodeId={nodeId}
@@ -194,25 +176,22 @@ export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({
     </div>
   );
 };
-
 interface CollaborationStatusProps {
   isCollaborative: boolean;
   connectionStatus: 'connecting' | 'connected' | 'disconnected' | 'error';
   connectedUserCount: number;
   className?: string;
 }
-
 /**
  * Connection status indicator component
  */
-export const CollaborationStatus: React.FC<CollaborationStatusProps> = ({
+export const CollaborationStatus: React.FC<CollaborationStatusProps> = ({)
   isCollaborative,
   connectionStatus,
   connectedUserCount,
   className
 }) => {
   if (!isCollaborative) return null;
-
   const getStatusColor = () => {
     switch (connectionStatus) {
     case 'connected': return '#10b981';
@@ -222,17 +201,15 @@ export const CollaborationStatus: React.FC<CollaborationStatusProps> = ({
     default: return '#6b7280';
     }
   };
-
   const getStatusText = () => {
     switch (connectionStatus) {
-    case 'connected': return `Connected • ${connectedUserCount} user${connectedUserCount !== 1 ? 's' : ''}`;
+    case 'connected': return `Connected • ${connectedUserCount} user${connectedUserCount !== 1 ? 's' : ''}`;}
     case 'connecting': return 'Connecting...';
     case 'disconnected': return 'Disconnected';
     case 'error': return 'Connection error';
     default: return 'Unknown';
     }
   };
-
   const statusStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
@@ -245,56 +222,48 @@ export const CollaborationStatus: React.FC<CollaborationStatusProps> = ({
     fontWeight: 500,
     border: '1px solid #374151'
   };
-
   const dotStyle: React.CSSProperties = {
     width: '8px',
     height: '8px',
     borderRadius: '50%',
     backgroundColor: getStatusColor(),
-    ...(connectionStatus === 'connecting' && {
+    ...(connectionStatus === 'connecting' && {)
       animation: 'pulse 2s infinite'
     })
   };
-
-  return (
+  return ()
     <div className={className} style={statusStyle}>
       <div style={dotStyle} />
       <span>{getStatusText()}</span>
     </div>
   );
 };
-
 interface UserAvatarsProps {
   connectedUsers: Map<string, UserPresence>;
   localUserId?: string;
   maxVisible?: number;
   className?: string;
 }
-
 /**
  * Connected users avatar list
  */
-export const UserAvatars: React.FC<UserAvatarsProps> = ({
+export const UserAvatars: React.FC<UserAvatarsProps> = ({)
   connectedUsers,
   localUserId,
   maxVisible = 5,
   className
 }) => {
-  const users = Array.from(connectedUsers.values())
+  const users = Array.from(connectedUsers.values());
     .filter(user => user.userId !== localUserId)
     .slice(0, maxVisible);
-
-  const extraCount = Math.max(0, connectedUsers.size - maxVisible - 1); // -1 for local user
-
+  const extraCount = Math.max(0, connectedUsers.size - maxVisible - 1); // -1 for local user;
   if (users.length === 0) return null;
-
   const containerStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
-    gap: '4px'
+    gap: '4px',
   };
-
-  const avatarStyle = (color: string): React.CSSProperties => ({
+  const avatarStyle = (color: string): React.CSSProperties => ({)
     width: '24px',
     height: '24px',
     borderRadius: '50%',
@@ -308,7 +277,6 @@ export const UserAvatars: React.FC<UserAvatarsProps> = ({
     border: '2px solid white',
     boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
   });
-
   const getInitials = (name: string) => {
     return name.split(' ')
       .map(word => word[0])
@@ -316,10 +284,9 @@ export const UserAvatars: React.FC<UserAvatarsProps> = ({
       .toUpperCase()
       .slice(0, 2);
   };
-
-  return (
+  return ()
     <div className={className} style={containerStyle}>
-      {users.map(user => (
+      {users.map(user => ()
         <div
           key={user.userId}
           style={avatarStyle(user.color)}
@@ -328,8 +295,7 @@ export const UserAvatars: React.FC<UserAvatarsProps> = ({
           {getInitials(user.name)}
         </div>
       ))}
-      
-      {extraCount > 0 && (
+      {extraCount > 0 && ()
         <div
           style={avatarStyle('#6b7280')}
           title={`${extraCount} more user${extraCount !== 1 ? 's' : ''}`}

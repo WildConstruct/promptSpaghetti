@@ -43,7 +43,7 @@ export declare class ErrorFactory {
     /**
      * Create a graph validation error with detailed validation context
      */
-    static createGraphValidationError(validationErrors: Array<{
+    static createGraphValidationError(validationErrors: Array<{)
         field: string;
         value: any;
         expected: string;
@@ -51,7 +51,7 @@ export declare class ErrorFactory {
     /**
      * Create a graph execution error with node context
      */
-    static createGraphExecutionError(
+    static createGraphExecutionError()
       message: string,
       cause?: Error,
       options?: ErrorFactoryOptions
@@ -59,7 +59,7 @@ export declare class ErrorFactory {
     /**
      * Create a node execution error with specific node context
      */
-    static createNodeExecutionError(
+    static createNodeExecutionError()
       nodeId: string,
       operation: string,
       message: string,
@@ -69,7 +69,7 @@ export declare class ErrorFactory {
     /**
      * Create a database connection error with retry logic
      */
-    static createDatabaseConnectionError(
+    static createDatabaseConnectionError()
       message: string,
       cause?: Error,
       options?: ErrorFactoryOptions
@@ -89,7 +89,7 @@ export declare class ErrorFactory {
     /**
      * Create MFA configuration errors
      */
-    static createMFAConfigurationError(
+    static createMFAConfigurationError()
       type: 'already_configured' | 'invalid_email' | 'unsuitable_email' | 'invalid_config',
       details?: string,
       options?: ErrorFactoryOptions
@@ -97,14 +97,14 @@ export declare class ErrorFactory {
     /**
      * Create MFA verification errors
      */
-    static createMFAVerificationError(
+    static createMFAVerificationError()
       type: 'expired' | 'invalid_code' | 'too_many_attempts' | 'method_not_active' | 'rate_limit',
       options?: ErrorFactoryOptions
     ): MFAError;
     /**
      * Create project locked error with lock context
      */
-    static createProjectLockedError(
+    static createProjectLockedError()
       projectId?: string,
       lockedBy?: string,
       options?: ErrorFactoryOptions
@@ -112,7 +112,7 @@ export declare class ErrorFactory {
     /**
      * Create permission denied errors
      */
-    static createPermissionDeniedError(
+    static createPermissionDeniedError()
       resource: string,
       action: string,
       options?: ErrorFactoryOptions
@@ -120,7 +120,7 @@ export declare class ErrorFactory {
     /**
      * Create workflow state transition errors
      */
-    static createWorkflowStateError(
+    static createWorkflowStateError()
       message?: string,
       fromState?: string,
       toState?: string,
@@ -129,7 +129,7 @@ export declare class ErrorFactory {
     /**
      * Create API errors from HTTP responses
      */
-    static createAPIError(
+    static createAPIError()
       statusCode: number,
       message: string,
       endpoint?: string,
@@ -139,7 +139,7 @@ export declare class ErrorFactory {
     /**
      * Create network/fetch errors
      */
-    static createNetworkError(
+    static createNetworkError()
       message: string,
       endpoint?: string,
       cause?: Error,
@@ -148,7 +148,7 @@ export declare class ErrorFactory {
     /**
      * Create validation errors for fields
      */
-    static createValidationError(
+    static createValidationError()
       field: string,
       value: any,
       expected: string,
@@ -161,7 +161,7 @@ export declare class ErrorFactory {
     /**
      * Create configuration errors
      */
-    static createConfigurationError(
+    static createConfigurationError()
       message: string,
       configKey?: string,
       options?: ErrorFactoryOptions
@@ -173,10 +173,10 @@ export declare class ErrorFactory {
     /**
      * Create errors with recovery actions
      */
-    static createRecoverableError(
+    static createRecoverableError()
       message: string,
       operation: string,
-      recoveryFn?: (
+      recoveryFn?: ()
     ) => Promise<void>, options?: ErrorFactoryOptions): GraphExecutionError;
 }
 //# sourceMappingURL=ErrorFactory.d.ts.map

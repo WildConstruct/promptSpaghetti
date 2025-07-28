@@ -2,7 +2,6 @@
  * Extension Manager Panel - Epic 8.4 Story 8.4.5
  * Main UI component for managing extensions
  */
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { useExtensionManagerStore } from './ExtensionManagerStore';
@@ -19,7 +18,7 @@ export interface ExtensionManagerPanelProps {
   initialView?: 'installed' | 'marketplace' | 'settings';
 }
 
-export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
+export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({)
   className = '',
   onClose,
   initialView = 'installed'
@@ -29,12 +28,11 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
   const [showInstallDialog, setShowInstallDialog] = useState(false);
   const [showConfigPanel, setShowConfigPanel] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterOptions, setFilterOptions] = useState({
+  const [filterOptions, setFilterOptions] = useState({)
     status: 'all' as 'all' | 'enabled' | 'disabled',
     type: 'all' as 'all' | 'node' | 'ui' | 'transform' | 'storage',
     sortBy: 'name' as 'name' | 'version' | 'lastUpdated' | 'size'
   });
-
   const {
     installedExtensions,
     availableExtensions,
@@ -49,7 +47,6 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
     updateExtension,
     getExtensionStatus
   } = useExtensionManagerStore();
-
   // Load extensions on mount
   useEffect(() => {
     loadInstalledExtensions();
@@ -57,12 +54,10 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
       loadAvailableExtensions();
     }
   }, [currentView, loadInstalledExtensions, loadAvailableExtensions]);
-
   // Filter and search extensions
   const filteredExtensions = useMemo(() => {
     const extensions = currentView === 'marketplace' ? availableExtensions : installedExtensions;
-    
-    const filtered = extensions.filter(ext => {
+    const filtered = extensions.filter(ext => {)
       // Search query filter
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
@@ -72,22 +67,18 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
           return false;
         }
       }
-
       // Type filter
       if (filterOptions.type !== 'all' && ext.extension_type !== filterOptions.type) {
         return false;
       }
-
       // Status filter (only for installed extensions)
       if (currentView === 'installed' && filterOptions.status !== 'all') {
         const status = getExtensionStatus(ext.id);
         if (filterOptions.status === 'enabled' && !status.enabled) return false;
         if (filterOptions.status === 'disabled' && status.enabled) return false;
       }
-
       return true;
     });
-
     // Sort extensions
     filtered.sort((a, b) => {
       switch (filterOptions.sortBy) {
@@ -105,7 +96,6 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
         return 0;
       }
     });
-
     return filtered;
   }, [
     installedExtensions,
@@ -115,11 +105,9 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
     filterOptions,
     getExtensionStatus
   ]);
-
   const handleExtensionSelect = (extension: ExtensionManifest) => {
     setSelectedExtension(extension);
   };
-
   const handleInstallExtension = async (extension: ExtensionManifest) => {
     try {
       await installExtension(extension);
@@ -128,7 +116,6 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
       console.error('Failed to install extension:', error);
     }
   };
-
   const handleUninstallExtension = async (extensionId: string) => {
     try {
       await uninstallExtension(extensionId);
@@ -139,7 +126,6 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
       console.error('Failed to uninstall extension:', error);
     }
   };
-
   const handleToggleExtension = async (extensionId: string) => {
     try {
       const status = getExtensionStatus(extensionId);
@@ -152,7 +138,6 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
       console.error('Failed to toggle extension:', error);
     }
   };
-
   const handleUpdateExtension = async (extensionId: string) => {
     try {
       await updateExtension(extensionId);
@@ -160,14 +145,12 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
       console.error('Failed to update extension:', error);
     }
   };
-
   const handleConfigureExtension = (extension: ExtensionManifest) => {
     setSelectedExtension(extension);
     setShowConfigPanel(true);
   };
-
-  return (
-    <div className={`extension-manager-panel ${className}`}>
+  return ()
+    <div className={`extension-manager-panel ${className}`}>}
       {/* Header */}
       <div className="extension-manager-header">
         <div className="header-left">
@@ -194,7 +177,7 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
           </div>
         </div>
         <div className="header-right">
-          {currentView === 'marketplace' && (
+          {currentView === 'marketplace' && ()
             <button
               className="install-from-file-btn"
               onClick={() => setShowInstallDialog(true)}
@@ -202,17 +185,16 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
               Install from File
             </button>
           )}
-          {onClose && (
+          {onClose && ()
             <button className="close-btn" onClick={onClose}>
               ✕
             </button>
           )}
         </div>
       </div>
-
       {/* Content */}
       <div className="extension-manager-content">
-        {error && (
+        {error && ()
           <div className="error-banner">
             <span className="error-icon">⚠️</span>
             <span className="error-message">{error}</span>
@@ -224,8 +206,7 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
             </button>
           </div>
         )}
-
-        {currentView === 'settings' ? (
+        {currentView === 'settings' ? ()
           <div className="extension-settings">
             <h3>Extension System Settings</h3>
             <div className="settings-section">
@@ -243,7 +224,7 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
               </label>
             </div>
           </div>
-        ) : (
+        ) : ()
           <div className="extension-browser">
             {/* Search and Filter */}
             <ExtensionSearchFilter
@@ -253,24 +234,23 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
               onFilterChange={setFilterOptions}
               viewMode={currentView}
             />
-
             {/* Main Content Area */}
             <div className="extension-content-area">
               {/* Extension List */}
               <div className="extension-list-container">
-                {isLoading ? (
+                {isLoading ? ()
                   <div className="loading-spinner">
                     <div className="spinner"></div>
                     <span>Loading extensions...</span>
                   </div>
-                ) : currentView === 'marketplace' ? (
+                ) : currentView === 'marketplace' ? ()
                   <ExtensionMarketplace
                     extensions={filteredExtensions}
                     onExtensionSelect={handleExtensionSelect}
                     onInstallExtension={handleInstallExtension}
                     selectedExtension={selectedExtension}
                   />
-                ) : (
+                ) : ()
                   <ExtensionListView
                     extensions={filteredExtensions}
                     onExtensionSelect={handleExtensionSelect}
@@ -283,9 +263,8 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
                   />
                 )}
               </div>
-
               {/* Extension Detail */}
-              {selectedExtension && (
+              {selectedExtension && ()
                 <div className="extension-detail-container">
                   <ExtensionDetailView
                     extension={selectedExtension}
@@ -303,16 +282,14 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
           </div>
         )}
       </div>
-
       {/* Dialogs */}
-      {showInstallDialog && (
+      {showInstallDialog && ()
         <ExtensionInstallDialog
           onInstall={handleInstallExtension}
           onCancel={() => setShowInstallDialog(false)}
         />
       )}
-
-      {showConfigPanel && selectedExtension && (
+      {showConfigPanel && selectedExtension && ()
         <ExtensionConfigurationPanel
           extension={selectedExtension}
           onSave={() => setShowConfigPanel(false)}

@@ -11,7 +11,6 @@
  * - Preventive security recommendations
  * - Risk level assessment
  */
-
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
@@ -123,24 +122,21 @@ export interface UserSecurityProfile {
   securityScore: number;
   recommendations: SecurityRecommendation[];
 }
-
 /**
  * Comprehensive password guidance and security recommendation service
  */
 export class PasswordGuidanceService extends EventEmitter {
   private sessions: Map<string, GuidanceSession> = new Map();
   private userProfiles: Map<string, UserSecurityProfile> = new Map();
-  
   /**
    * Assess password compromise risk and generate guidance
    */
-  public async assessPasswordCompromise(
+  public async assessPasswordCompromise()
     userId: string,
-    indicators: CompromiseIndicator[]
+    indicators: CompromiseIndicator[],
   ): Promise<GuidanceSession> {
     const riskLevel = this.calculateRiskLevel(indicators);
     const recommendations = await this.generateRecommendations(indicators, riskLevel);
-    
     const session: GuidanceSession = {
       id: this.generateSessionId(),
       userId,
@@ -151,27 +147,21 @@ export class PasswordGuidanceService extends EventEmitter {
       createdAt: new Date(),
       lastUpdated: new Date(),
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-      status: 'active'
+      status: 'active',
     };
-    
     this.sessions.set(session.id, session);
-    
     // Update user security profile
     await this.updateUserSecurityProfile(userId, indicators);
-    
     this.emit('guidanceSessionCreated', session);
-    
     return session;
   }
-  
   /**
    * Get immediate actions for compromised password
    */
   public getImmediateActions(compromiseType: CompromiseType): SecurityRecommendation[] {
     const immediateActions: SecurityRecommendation[] = [];
-    
     // Change password immediately
-    immediateActions.push({
+    immediateActions.push({)
       id: 'change-password-immediate',
       title: 'Change Your Password Immediately',
       description: 'Your password has been compromised and must be changed right now to secure your account.',
@@ -179,7 +169,7 @@ export class PasswordGuidanceService extends EventEmitter {
       priority: ActionPriority.IMMEDIATE,
       estimatedTime: '5-10 minutes',
       difficulty: 'easy',
-      steps: [
+      steps: [,
         {
           stepNumber: 1,
           title: 'Access Account Settings',
@@ -188,7 +178,7 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'You should see the password change form',
           helpResources: ['/help/change-password', 'support@company.com'],
           timeEstimate: '1 minute',
-          required: true
+          required: true,
         },
         {
           stepNumber: 2,
@@ -198,7 +188,7 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'Password strength indicator shows "Strong" or "Very Strong"',
           helpResources: ['/help/password-strength', '/tools/password-generator'],
           timeEstimate: '3 minutes',
-          required: true
+          required: true,
         },
         {
           stepNumber: 3,
@@ -208,22 +198,21 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'You receive confirmation that password was changed',
           helpResources: ['/help/password-confirmation'],
           timeEstimate: '2 minutes',
-          required: true
+          required: true,
         }
       ],
-      benefits: [
+      benefits: [,
         'Immediately secures your account from unauthorized access',
         'Prevents further damage from the compromise',
         'Blocks ongoing attacks using your old password'
       ],
-      risks: [
+      risks: [,
         'Temporary account lockout if you forget the new password',
         'Need to update password in other applications'
       ]
     });
-    
     // Check for unauthorized access
-    immediateActions.push({
+    immediateActions.push({)
       id: 'check-account-activity',
       title: 'Review Account Activity',
       description: 'Check for any unauthorized access or suspicious activity in your account.',
@@ -231,7 +220,7 @@ export class PasswordGuidanceService extends EventEmitter {
       priority: ActionPriority.IMMEDIATE,
       estimatedTime: '10-15 minutes',
       difficulty: 'easy',
-      steps: [
+      steps: [,
         {
           stepNumber: 1,
           title: 'Review Login History',
@@ -240,7 +229,7 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'All login locations and times look familiar to you',
           helpResources: ['/help/login-history'],
           timeEstimate: '3 minutes',
-          required: true
+          required: true,
         },
         {
           stepNumber: 2,
@@ -250,7 +239,7 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'All changes were made by you',
           helpResources: ['/help/account-audit'],
           timeEstimate: '5 minutes',
-          required: true
+          required: true,
         },
         {
           stepNumber: 3,
@@ -260,24 +249,23 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'Only your current session remains active',
           helpResources: ['/help/session-management'],
           timeEstimate: '2 minutes',
-          required: true
+          required: true,
         }
       ],
-      benefits: [
+      benefits: [,
         'Identifies if attacker gained access to your account',
         'Helps assess the scope of the compromise',
         'Provides evidence for further security measures'
       ],
-      risks: [
+      risks: [,
         'May reveal additional compromised information',
         'Could indicate need for more extensive security measures'
       ]
     });
-    
     // Secure other accounts
-    if (compromiseType === CompromiseType.DATA_BREACH || 
+    if (compromiseType === CompromiseType.DATA_BREACH || )
         compromiseType === CompromiseType.CREDENTIAL_STUFFING) {
-      immediateActions.push({
+      immediateActions.push({)
         id: 'secure-other-accounts',
         title: 'Secure Other Accounts Using Same Password',
         description: 'Change passwords on all other accounts that used the same or similar password.',
@@ -285,7 +273,7 @@ export class PasswordGuidanceService extends EventEmitter {
         priority: ActionPriority.URGENT,
         estimatedTime: '30-60 minutes',
         difficulty: 'medium',
-        steps: [
+        steps: [,
           {
             stepNumber: 1,
             title: 'Identify Accounts with Same Password',
@@ -294,7 +282,7 @@ export class PasswordGuidanceService extends EventEmitter {
             verification: 'You have a complete list of potentially affected accounts',
             helpResources: ['/help/password-audit'],
             timeEstimate: '10 minutes',
-            required: true
+            required: true,
           },
           {
             stepNumber: 2,
@@ -304,7 +292,7 @@ export class PasswordGuidanceService extends EventEmitter {
             verification: 'Critical accounts have new, unique passwords',
             helpResources: ['/help/account-prioritization'],
             timeEstimate: '20 minutes',
-            required: true
+            required: true,
           },
           {
             stepNumber: 3,
@@ -314,55 +302,46 @@ export class PasswordGuidanceService extends EventEmitter {
             verification: 'All accounts have new, unique passwords',
             helpResources: ['/help/bulk-password-update'],
             timeEstimate: '30 minutes',
-            required: true
+            required: true,
           }
         ],
-        benefits: [
+        benefits: [,
           'Prevents credential stuffing attacks on other accounts',
           'Limits the scope of the security incident',
           'Protects your digital identity across platforms'
         ],
-        risks: [
+        risks: [,
           'Time-consuming process',
           'Risk of account lockouts if done too quickly',
           'May forget to update some accounts'
         ]
       });
     }
-    
     return immediateActions;
   }
-  
   /**
    * Generate comprehensive security recommendations
    */
-  private async generateRecommendations(
+  private async generateRecommendations()
     indicators: CompromiseIndicator[],
-    riskLevel: RiskLevel
+    riskLevel: RiskLevel,
   ): Promise<SecurityRecommendation[]> {
     const recommendations: SecurityRecommendation[] = [];
-    
     // Get immediate actions
     const compromiseTypes = [...new Set(indicators.map(i => i.type))];
     for (const type of compromiseTypes) {
       recommendations.push(...this.getImmediateActions(type));
     }
-    
     // Add MFA recommendation
     recommendations.push(this.getMFARecommendation());
-    
     // Add password manager recommendation
     recommendations.push(this.getPasswordManagerRecommendation());
-    
     // Add monitoring recommendations
     recommendations.push(...this.getMonitoringRecommendations(riskLevel));
-    
     // Add prevention recommendations
     recommendations.push(...this.getPreventionRecommendations());
-    
     return this.prioritizeRecommendations(recommendations, riskLevel);
   }
-  
   /**
    * Get MFA setup recommendation
    */
@@ -375,7 +354,7 @@ export class PasswordGuidanceService extends EventEmitter {
       priority: ActionPriority.URGENT,
       estimatedTime: '10-15 minutes',
       difficulty: 'medium',
-      steps: [
+      steps: [,
         {
           stepNumber: 1,
           title: 'Choose MFA Method',
@@ -384,7 +363,7 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'MFA setup wizard opens',
           helpResources: ['/help/mfa-methods', '/help/authenticator-apps'],
           timeEstimate: '2 minutes',
-          required: true
+          required: true,
         },
         {
           stepNumber: 2,
@@ -394,7 +373,7 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'App installed and QR code scanner ready',
           helpResources: ['/help/authenticator-setup'],
           timeEstimate: '5 minutes',
-          required: true
+          required: true,
         },
         {
           stepNumber: 3,
@@ -404,22 +383,21 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'MFA successfully enabled and backup codes saved',
           helpResources: ['/help/mfa-verification', '/help/backup-codes'],
           timeEstimate: '5 minutes',
-          required: true
+          required: true,
         }
       ],
-      benefits: [
+      benefits: [,
         'Prevents account access even with compromised password',
         'Meets modern security standards',
         'Protects against most common attacks'
       ],
-      risks: [
+      risks: [,
         'Risk of lockout if phone is lost',
         'Slightly more time to log in',
         'Need to keep backup codes secure'
       ]
     };
   }
-  
   /**
    * Get password manager recommendation
    */
@@ -432,7 +410,7 @@ export class PasswordGuidanceService extends EventEmitter {
       priority: ActionPriority.HIGH,
       estimatedTime: '30-45 minutes',
       difficulty: 'medium',
-      steps: [
+      steps: [,
         {
           stepNumber: 1,
           title: 'Choose Password Manager',
@@ -441,7 +419,7 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'Password manager account created',
           helpResources: ['/help/password-manager-comparison'],
           timeEstimate: '10 minutes',
-          required: true
+          required: true,
         },
         {
           stepNumber: 2,
@@ -451,7 +429,7 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'Extension installed and logged in',
           helpResources: ['/help/browser-extensions'],
           timeEstimate: '5 minutes',
-          required: true
+          required: true,
         },
         {
           stepNumber: 3,
@@ -461,7 +439,7 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'All passwords successfully imported',
           helpResources: ['/help/password-import'],
           timeEstimate: '15 minutes',
-          required: false
+          required: false,
         },
         {
           stepNumber: 4,
@@ -471,31 +449,29 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'Critical accounts have new, unique passwords',
           helpResources: ['/help/password-generation'],
           timeEstimate: '15 minutes',
-          required: true
+          required: true,
         }
       ],
-      benefits: [
+      benefits: [,
         'Eliminates password reuse across accounts',
         'Generates strong, unique passwords automatically',
         'Simplifies login process with auto-fill',
         'Provides secure storage for all credentials'
       ],
-      risks: [
+      risks: [,
         'Single point of failure if master password is compromised',
         'Dependency on password manager service availability',
         'Learning curve for new workflow'
       ]
     };
   }
-  
   /**
    * Get monitoring recommendations based on risk level
    */
   private getMonitoringRecommendations(riskLevel: RiskLevel): SecurityRecommendation[] {
     const recommendations: SecurityRecommendation[] = [];
-    
     // Basic monitoring for all risk levels
-    recommendations.push({
+    recommendations.push({)
       id: 'enable-security-alerts',
       title: 'Enable Security Alerts',
       description: 'Set up notifications for suspicious account activity and login attempts.',
@@ -503,7 +479,7 @@ export class PasswordGuidanceService extends EventEmitter {
       priority: ActionPriority.HIGH,
       estimatedTime: '10 minutes',
       difficulty: 'easy',
-      steps: [
+      steps: [,
         {
           stepNumber: 1,
           title: 'Enable Login Alerts',
@@ -512,7 +488,7 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'Login alert notifications enabled',
           helpResources: ['/help/security-notifications'],
           timeEstimate: '3 minutes',
-          required: true
+          required: true,
         },
         {
           stepNumber: 2,
@@ -522,7 +498,7 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'Activity alert notifications enabled',
           helpResources: ['/help/activity-monitoring'],
           timeEstimate: '3 minutes',
-          required: true
+          required: true,
         },
         {
           stepNumber: 3,
@@ -532,23 +508,22 @@ export class PasswordGuidanceService extends EventEmitter {
           verification: 'Contact information up to date and verified',
           helpResources: ['/help/contact-verification'],
           timeEstimate: '4 minutes',
-          required: true
+          required: true,
         }
       ],
-      benefits: [
+      benefits: [,
         'Early warning of account compromise attempts',
         'Real-time awareness of account activity',
         'Faster response to security incidents'
       ],
-      risks: [
+      risks: [,
         'Potential for alert fatigue',
         'False positives may cause unnecessary concern'
       ]
     });
-    
     // Enhanced monitoring for high/critical risk
     if (riskLevel === RiskLevel.HIGH || riskLevel === RiskLevel.CRITICAL) {
-      recommendations.push({
+      recommendations.push({)
         id: 'credit-monitoring',
         title: 'Set Up Credit Monitoring',
         description: 'Monitor your credit reports for signs of identity theft.',
@@ -556,7 +531,7 @@ export class PasswordGuidanceService extends EventEmitter {
         priority: ActionPriority.HIGH,
         estimatedTime: '20 minutes',
         difficulty: 'medium',
-        steps: [
+        steps: [,
           {
             stepNumber: 1,
             title: 'Check Credit Reports',
@@ -565,7 +540,7 @@ export class PasswordGuidanceService extends EventEmitter {
             verification: 'All three credit reports reviewed',
             helpResources: ['/help/credit-reports'],
             timeEstimate: '15 minutes',
-            required: true
+            required: true,
           },
           {
             stepNumber: 2,
@@ -575,24 +550,22 @@ export class PasswordGuidanceService extends EventEmitter {
             verification: 'Credit monitoring active',
             helpResources: ['/help/credit-monitoring'],
             timeEstimate: '10 minutes',
-            required: true
+            required: true,
           }
         ],
-        benefits: [
+        benefits: [,
           'Early detection of identity theft',
           'Protection of credit score and financial health',
           'Peace of mind regarding financial security'
         ],
-        risks: [
+        risks: [,
           'May cost money for comprehensive monitoring',
           'Potential for false alarms'
         ]
       });
     }
-    
     return recommendations;
   }
-  
   /**
    * Get prevention recommendations
    */
@@ -606,7 +579,7 @@ export class PasswordGuidanceService extends EventEmitter {
         priority: ActionPriority.MEDIUM,
         estimatedTime: '30 minutes',
         difficulty: 'easy',
-        steps: [
+        steps: [,
           {
             stepNumber: 1,
             title: 'Learn About Phishing',
@@ -615,7 +588,7 @@ export class PasswordGuidanceService extends EventEmitter {
             verification: 'Completed phishing awareness training',
             helpResources: ['/training/phishing-awareness'],
             timeEstimate: '15 minutes',
-            required: true
+            required: true,
           },
           {
             stepNumber: 2,
@@ -625,15 +598,15 @@ export class PasswordGuidanceService extends EventEmitter {
             verification: 'Completed social engineering training',
             helpResources: ['/training/social-engineering'],
             timeEstimate: '15 minutes',
-            required: true
+            required: true,
           }
         ],
-        benefits: [
+        benefits: [,
           'Reduces likelihood of future compromises',
           'Improves overall security awareness',
           'Helps protect others by recognizing threats'
         ],
-        risks: [
+        risks: [,
           'Time investment required',
           'Information may become outdated'
         ]
@@ -646,7 +619,7 @@ export class PasswordGuidanceService extends EventEmitter {
         priority: ActionPriority.LOW,
         estimatedTime: '15 minutes monthly',
         difficulty: 'easy',
-        steps: [
+        steps: [,
           {
             stepNumber: 1,
             title: 'Monthly Password Review',
@@ -655,7 +628,7 @@ export class PasswordGuidanceService extends EventEmitter {
             verification: 'All passwords are strong and unique',
             helpResources: ['/help/password-audit'],
             timeEstimate: '10 minutes',
-            required: true
+            required: true,
           },
           {
             stepNumber: 2,
@@ -665,34 +638,30 @@ export class PasswordGuidanceService extends EventEmitter {
             verification: 'No suspicious activity detected',
             helpResources: ['/help/security-review'],
             timeEstimate: '15 minutes',
-            required: true
+            required: true,
           }
         ],
-        benefits: [
+        benefits: [,
           'Proactive identification of security issues',
           'Maintains strong security posture over time',
           'Builds good security habits'
         ],
-        risks: [
+        risks: [,
           'Requires ongoing time commitment',
           'May become routine and less effective'
         ]
       }
     ];
   }
-  
   /**
    * Calculate overall risk level from indicators
    */
   private calculateRiskLevel(indicators: CompromiseIndicator[]): RiskLevel {
     if (indicators.length === 0) return RiskLevel.LOW;
-    
     let totalRisk = 0;
     let weightedSum = 0;
-    
     for (const indicator of indicators) {
       let riskWeight = 0;
-      
       switch (indicator.type) {
       case CompromiseType.DATA_BREACH:
         riskWeight = indicator.confidence >= 80 ? 4 : 3;
@@ -719,15 +688,12 @@ export class PasswordGuidanceService extends EventEmitter {
         riskWeight = 3;
         break;
       }
-      
       totalRisk += riskWeight * (indicator.confidence / 100);
       weightedSum += riskWeight;
     }
-    
     // Calculate max risk instead of average - if any single indicator is critical, treat as critical
     const maxRisk = indicators.reduce((max, indicator) => {
       let riskWeight = 0;
-      
       switch (indicator.type) {
       case CompromiseType.DATA_BREACH:
         riskWeight = indicator.confidence >= 80 ? 4 : 3;
@@ -746,23 +712,20 @@ export class PasswordGuidanceService extends EventEmitter {
         riskWeight = 2;
         break;
       }
-      
       const adjustedRisk = riskWeight * (indicator.confidence / 100);
       return Math.max(max, adjustedRisk);
     }, 0);
-    
     if (maxRisk >= 3.5) return RiskLevel.CRITICAL;
     if (maxRisk >= 2.5) return RiskLevel.HIGH;
     if (maxRisk >= 1.5) return RiskLevel.MEDIUM;
     return RiskLevel.LOW;
   }
-  
   /**
    * Prioritize recommendations based on risk level and dependencies
    */
-  private prioritizeRecommendations(
+  private prioritizeRecommendations()
     recommendations: SecurityRecommendation[],
-    riskLevel: RiskLevel
+    riskLevel: RiskLevel,
   ): SecurityRecommendation[] {
     // Sort by priority, then by category importance
     const priorityOrder = {
@@ -772,7 +735,6 @@ export class PasswordGuidanceService extends EventEmitter {
       [ActionPriority.MEDIUM]: 3,
       [ActionPriority.LOW]: 4
     };
-    
     const categoryOrder = {
       [GuidanceCategory.IMMEDIATE_ACTIONS]: 0,
       [GuidanceCategory.ACCOUNT_SECURITY]: 1,
@@ -782,38 +744,31 @@ export class PasswordGuidanceService extends EventEmitter {
       [GuidanceCategory.RECOVERY]: 5,
       [GuidanceCategory.PREVENTION]: 6
     };
-    
     return recommendations.sort((a, b) => {
       // First sort by priority
       const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
       if (priorityDiff !== 0) return priorityDiff;
-      
       // Then by category
       return categoryOrder[a.category] - categoryOrder[b.category];
     });
   }
-  
   /**
    * Mark action as completed
    */
   public markActionCompleted(sessionId: string, actionId: string): boolean {
     const session = this.sessions.get(sessionId);
     if (!session) return false;
-    
     if (!session.completedActions.includes(actionId)) {
       session.completedActions.push(actionId);
       session.lastUpdated = new Date();
-      
-      this.emit('actionCompleted', {
+      this.emit('actionCompleted', {)
         sessionId,
         actionId,
-        progress: this.calculateProgress(session)
+        progress: this.calculateProgress(session),
       });
     }
-    
     return true;
   }
-  
   /**
    * Get guidance session progress
    */
@@ -825,10 +780,8 @@ export class PasswordGuidanceService extends EventEmitter {
   } | null {
     const session = this.sessions.get(sessionId);
     if (!session) return null;
-    
     return this.calculateProgress(session);
   }
-  
   /**
    * Calculate session progress
    */
@@ -841,32 +794,27 @@ export class PasswordGuidanceService extends EventEmitter {
     const total = session.recommendations.length;
     const completed = session.completedActions.length;
     const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
-    
-    const remainingCritical = session.recommendations
-      .filter(r => 
+    const remainingCritical = session.recommendations;
+      .filter(r => )
         (r.priority === ActionPriority.IMMEDIATE || r.priority === ActionPriority.URGENT) &&
         !session.completedActions.includes(r.id)
       ).length;
-    
     return { total, completed, percentage, remainingCritical };
   }
-  
   /**
    * Generate session ID
    */
   private generateSessionId(): string {
-    return `PWD-${Date.now()}-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+    return `PWD-${Date.now()}-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;}
   }
-  
   /**
    * Update user security profile
    */
-  private async updateUserSecurityProfile(
+  private async updateUserSecurityProfile()
     userId: string,
-    indicators: CompromiseIndicator[]
+    indicators: CompromiseIndicator[],
   ): Promise<void> {
     let profile = this.userProfiles.get(userId);
-    
     if (!profile) {
       profile = {
         userId,
@@ -875,54 +823,44 @@ export class PasswordGuidanceService extends EventEmitter {
         passwordLastChanged: new Date(),
         recentBreaches: [],
         securityScore: 50,
-        recommendations: []
+        recommendations: [],
       };
     }
-    
     // Update recent breaches
     profile.recentBreaches = [
       ...indicators,
-      ...profile.recentBreaches.filter(
-        existing => !indicators.some(
+      ...profile.recentBreaches.filter()
+        existing => !indicators.some()
           indicator => indicator.type === existing.type && 
                       indicator.source === existing.source
         )
       )
     ].slice(0, 10); // Keep last 10 breaches
-    
     // Recalculate risk score
     profile.riskScore = this.calculateUserRiskScore(profile);
-    
     this.userProfiles.set(userId, profile);
-    
     this.emit('userProfileUpdated', profile);
   }
-  
   /**
    * Calculate user risk score
    */
   private calculateUserRiskScore(profile: UserSecurityProfile): number {
     let riskScore = 0;
-    
     // Recent breaches increase risk
-    const recentBreaches = profile.recentBreaches.filter(
+    const recentBreaches = profile.recentBreaches.filter(;)
       breach => (Date.now() - breach.detectedAt.getTime()) < (30 * 24 * 60 * 60 * 1000) // 30 days
     );
     riskScore += recentBreaches.length * 15;
-    
     // No MFA increases risk
     if (!profile.mfaEnabled) {
       riskScore += 25;
     }
-    
     // Old password increases risk
     const passwordAge = (Date.now() - profile.passwordLastChanged.getTime()) / (24 * 60 * 60 * 1000);
     if (passwordAge > 365) riskScore += 20; // 1+ years
     else if (passwordAge > 180) riskScore += 10; // 6+ months
-    
     return Math.min(100, riskScore);
   }
-  
   /**
    * Get user security dashboard
    */
@@ -933,14 +871,11 @@ export class PasswordGuidanceService extends EventEmitter {
     securityTips: string[];
   } {
     const profile = this.userProfiles.get(userId) || null;
-    const activeSessions = Array.from(this.sessions.values())
+    const activeSessions = Array.from(this.sessions.values());
       .filter(session => session.userId === userId && session.status === 'active');
-    
-    const recommendedActions = profile ? 
+    const recommendedActions = profile ? ;
       this.getPersonalizedRecommendations(profile) : [];
-    
     const securityTips = this.getSecurityTips(profile?.riskScore || 50);
-    
     return {
       profile,
       activeSessions,
@@ -948,29 +883,24 @@ export class PasswordGuidanceService extends EventEmitter {
       securityTips
     };
   }
-  
   /**
    * Get personalized security recommendations
    */
   private getPersonalizedRecommendations(profile: UserSecurityProfile): SecurityRecommendation[] {
     const recommendations: SecurityRecommendation[] = [];
-    
     if (!profile.mfaEnabled) {
       recommendations.push(this.getMFARecommendation());
     }
-    
     if (profile.riskScore > 75) {
       recommendations.push(...this.getMonitoringRecommendations(RiskLevel.HIGH));
     }
-    
     return recommendations;
   }
-  
   /**
    * Get contextual security tips
    */
   private getSecurityTips(riskScore: number): string[] {
-    const tips = [
+    const tips = [;
       'Use unique passwords for every account',
       'Enable two-factor authentication wherever possible',
       'Keep your software and browsers updated',
@@ -978,14 +908,12 @@ export class PasswordGuidanceService extends EventEmitter {
       'Use a reputable password manager',
       'Regularly review your account activity'
     ];
-    
     if (riskScore > 50) {
-      tips.unshift(
+      tips.unshift()
         'Your security risk is elevated - consider changing passwords',
         'Review recent account activity for suspicious behavior'
       );
     }
-    
     return tips;
   }
 }

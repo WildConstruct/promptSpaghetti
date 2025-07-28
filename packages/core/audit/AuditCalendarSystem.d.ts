@@ -65,7 +65,7 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     actual_end: z.ZodOptional<z.ZodDate>;
     estimated_duration: z.ZodNumber;
     recurrence_pattern: z.ZodNativeEnum<typeof RecurrencePattern>;
-    recurrence_config: z.ZodOptional<z.ZodObject<{
+    recurrence_config: z.ZodOptional<z.ZodObject<{,
         interval: z.ZodOptional<z.ZodNumber>;
         end_date: z.ZodOptional<z.ZodDate>;
         max_occurrences: z.ZodOptional<z.ZodNumber>;
@@ -95,7 +95,7 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     regulatory_deadline: z.ZodOptional<z.ZodDate>;
     mandatory: z.ZodDefault<z.ZodBoolean>;
     dependencies: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    prerequisites: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    prerequisites: z.ZodDefault<z.ZodArray<z.ZodObject<{,
         type: z.ZodEnum<["task_completion", "document_approval", "system_ready"]>;
         description: z.ZodString;
         completed: z.ZodDefault<z.ZodBoolean>;
@@ -108,7 +108,7 @@ export declare const AuditScheduleSchema: z.ZodObject<{
         type: "task_completion" | "document_approval" | "system_ready";
         completed?: boolean | undefined;
     }>, "many">>;
-    notifications: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    notifications: z.ZodDefault<z.ZodArray<z.ZodObject<{,
         timing: z.ZodNativeEnum<typeof NotificationTiming>;
         recipients: z.ZodArray<z.ZodString, "many">;
         message_template: z.ZodOptional<z.ZodString>;
@@ -124,7 +124,7 @@ export declare const AuditScheduleSchema: z.ZodObject<{
         recipients: string[];
         message_template?: string | undefined;
     }>, "many">>;
-    deliverables: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    deliverables: z.ZodDefault<z.ZodArray<z.ZodObject<{,
         name: z.ZodString;
         type: z.ZodEnum<["report", "documentation", "certificate", "assessment"]>;
         due_date: z.ZodOptional<z.ZodDate>;
@@ -143,7 +143,7 @@ export declare const AuditScheduleSchema: z.ZodObject<{
         due_date?: Date | undefined;
         file_path?: string | undefined;
     }>, "many">>;
-    resources: z.ZodOptional<z.ZodObject<{
+    resources: z.ZodOptional<z.ZodObject<{,
         personnel_count: z.ZodOptional<z.ZodNumber>;
         tools_required: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         external_vendors: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -159,9 +159,9 @@ export declare const AuditScheduleSchema: z.ZodObject<{
         external_vendors?: string[] | undefined;
         budget_allocated?: number | undefined;
     }>>;
-    progress: z.ZodOptional<z.ZodObject<{
+    progress: z.ZodOptional<z.ZodObject<{,
         completion_percentage: z.ZodDefault<z.ZodNumber>;
-        milestones: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        milestones: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             name: z.ZodString;
             due_date: z.ZodDate;
             completed: z.ZodDefault<z.ZodBoolean>;
@@ -177,7 +177,7 @@ export declare const AuditScheduleSchema: z.ZodObject<{
             completed?: boolean | undefined;
             completion_date?: Date | undefined;
         }>, "many">>;
-        notes: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        notes: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             timestamp: z.ZodDate;
             author: z.ZodString;
             content: z.ZodString;
@@ -191,13 +191,13 @@ export declare const AuditScheduleSchema: z.ZodObject<{
             timestamp: Date;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        notes: {
+        notes: {,
             author: string;
             content: string;
             timestamp: Date;
         }[];
         completion_percentage: number;
-        milestones: {
+        milestones: {,
             name: string;
             completed: boolean;
             due_date: Date;
@@ -233,7 +233,7 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     tags: string[];
     title: string;
     mandatory: boolean;
-    notifications: {
+    notifications: {,
         channels: ("email" | "sms" | "slack" | "dashboard")[];
         timing: NotificationTiming;
         recipients: string[];
@@ -249,12 +249,12 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     estimated_duration: number;
     recurrence_pattern: RecurrencePattern;
     compliance_frameworks: string[];
-    prerequisites: {
+    prerequisites: {,
         description: string;
         type: "task_completion" | "document_approval" | "system_ready";
         completed: boolean;
     }[];
-    deliverables: {
+    deliverables: {,
         name: string;
         type: "documentation" | "assessment" | "report" | "certificate";
         completed: boolean;
@@ -266,13 +266,13 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     updated_by: string;
     metadata?: Record<string, unknown> | undefined;
     progress?: {
-        notes: {
+        notes: {,
             author: string;
             content: string;
             timestamp: Date;
         }[];
         completion_percentage: number;
-        milestones: {
+        milestones: {,
             name: string;
             completed: boolean;
             due_date: Date;
@@ -381,7 +381,7 @@ export declare const CalendarViewConfigSchema: z.ZodObject<{
     view_type: z.ZodEnum<["month", "week", "day", "agenda", "timeline"]>;
     start_date: z.ZodDate;
     end_date: z.ZodDate;
-    filters: z.ZodOptional<z.ZodObject<{
+    filters: z.ZodOptional<z.ZodObject<{,
         activity_types: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof AuditActivityType>, "many">>;
         priorities: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof SchedulePriority>, "many">>;
         statuses: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof ScheduleStatus>, "many">>;
@@ -403,7 +403,7 @@ export declare const CalendarViewConfigSchema: z.ZodObject<{
         assignees?: string[] | undefined;
         mandatory_only?: boolean | undefined;
     }>>;
-    display_options: z.ZodOptional<z.ZodObject<{
+    display_options: z.ZodOptional<z.ZodObject<{,
         show_completed: z.ZodDefault<z.ZodBoolean>;
         show_cancelled: z.ZodDefault<z.ZodBoolean>;
         color_by: z.ZodDefault<z.ZodEnum<["priority", "status", "activity_type", "assignee"]>>;
@@ -525,7 +525,7 @@ export declare class AuditCalendarSystem {
     /**
      * Complete a schedule and update progress
      */
-    completeSchedule(scheduleId: string, completionData: {
+    completeSchedule(scheduleId: string, completionData: {)
         actual_end?: Date;
         completion_notes?: string;
         deliverables_completed?: string[];
@@ -535,7 +535,7 @@ export declare class AuditCalendarSystem {
      * Generate calendar view data
      */
     generateCalendarView(config: CalendarViewConfig): {
-        events: Array<{
+        events: Array<{,
             id: string;
             title: string;
             start: Date;
@@ -547,7 +547,7 @@ export declare class AuditCalendarSystem {
             color: string;
             description?: string;
         }>;
-        summary: {
+        summary: {,
             total_events: number;
             by_status: Record<ScheduleStatus, number>;
             by_priority: Record<SchedulePriority, number>;
@@ -571,7 +571,7 @@ export declare class AuditCalendarSystem {
      * Automated schedule monitoring and alerts
      */
     processScheduleMonitoring(): {
-        alerts: Array<{
+        alerts: Array<{,
             type: 'overdue' | 'upcoming' | 'dependency' | 'resource';
             schedule_id: string;
             message: string;
@@ -584,11 +584,11 @@ export declare class AuditCalendarSystem {
     /**
      * Generate audit schedule analytics
      */
-    generateScheduleAnalytics(dateRange: {
+    generateScheduleAnalytics(dateRange: {)
         start: Date;
         end: Date;
     }): {
-        summary: {
+        summary: {,
             total_schedules: number;
             completed_schedules: number;
             overdue_schedules: number;
@@ -597,13 +597,13 @@ export declare class AuditCalendarSystem {
         };
         activity_breakdown: Record<AuditActivityType, number>;
         priority_distribution: Record<SchedulePriority, number>;
-        timeline_analysis: Array<{
+        timeline_analysis: Array<{,
             date: string;
             scheduled: number;
             completed: number;
             overdue: number;
         }>;
-        resource_utilization: {
+        resource_utilization: {,
             by_assignee: Record<string, number>;
             by_activity_type: Record<AuditActivityType, number>;
         };
@@ -638,7 +638,7 @@ export declare         title: string;
         color: string;
         description?: string;
     }>;
-    summary: {
+    summary: {,
         total_events: number;
         by_status: Record<ScheduleStatus, number>;
         by_priority: Record<SchedulePriority, number>;

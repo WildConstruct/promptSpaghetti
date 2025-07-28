@@ -4,7 +4,6 @@
  * Comprehensive progress tracking system for template marketplace user engagement.
  * Tracks discovery, usage, contributions, achievements, and learning milestones.
  */
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -54,25 +53,21 @@ export interface EngagementMetrics {
   searchesPerformed: number;
   categoriesExplored: number;
   filtersUsed: number;
-  
   // Usage metrics
   templatesDownloaded: number;
   templatesPurchased: number;
   templatesImplemented: number;
   projectsCompleted: number;
-  
   // Contribution metrics
   templatesCreated: number;
   templatesPublished: number;
   templatesShared: number;
   reviewsWritten: number;
-  
   // Social metrics
   likesReceived: number;
   sharesReceived: number;
   followersGained: number;
   collaborationsJoined: number;
-  
   // Learning metrics
   tutorialsCompleted: number;
   skillsLearned: string[];
@@ -106,7 +101,7 @@ export interface ProgressTrackerProps {
   className?: string;
 }
 
-export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
+export const ProgressTracker: React.FC<ProgressTrackerProps> = ({)
   userId,
   variant = 'full',
   showDetailedMetrics = true,
@@ -121,7 +116,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
   const [recentAchievements, setRecentAchievements] = useState<Milestone[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-
   // Mock data initialization
   useEffect(() => {
     const mockUserProgress: UserProgress = {
@@ -133,9 +127,8 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
       joinDate: new Date('2024-01-15'),
       lastActivity: new Date(),
       streakDays: 7,
-      longestStreak: 21
+      longestStreak: 21,
     };
-
     const mockMetrics: EngagementMetrics = {
       templatesViewed: 156,
       searchesPerformed: 89,
@@ -156,9 +149,8 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
       tutorialsCompleted: 14,
       skillsLearned: ['Advanced Prompting', 'Template Design', 'API Integration', 'Data Analysis'],
       certificationsEarned: 3,
-      learningPathsCompleted: 2
+      learningPathsCompleted: 2,
     };
-
     const mockMilestones: Milestone[] = [
       {
         id: 'first-download',
@@ -173,7 +165,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         badgeReward: 'first-download-badge',
         icon: '📥',
         tier: 'bronze',
-        rarity: 'common'
+        rarity: 'common',
       },
       {
         id: 'template-creator',
@@ -188,7 +180,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         badgeReward: 'creator-badge',
         icon: '🎨',
         tier: 'gold',
-        rarity: 'rare'
+        rarity: 'rare',
       },
       {
         id: 'community-contributor',
@@ -203,7 +195,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         badgeReward: 'contributor-badge',
         icon: '❤️',
         tier: 'platinum',
-        rarity: 'epic'
+        rarity: 'epic',
       },
       {
         id: 'learning-enthusiast',
@@ -216,7 +208,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         xpReward: 300,
         icon: '📚',
         tier: 'silver',
-        rarity: 'uncommon'
+        rarity: 'uncommon',
       },
       {
         id: 'marketplace-explorer',
@@ -229,7 +221,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         xpReward: 200,
         icon: '🗺️',
         tier: 'silver',
-        rarity: 'uncommon'
+        rarity: 'uncommon',
       },
       {
         id: 'streak-master',
@@ -243,17 +235,15 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         badgeReward: 'streak-master-badge',
         icon: '🔥',
         tier: 'diamond',
-        rarity: 'legendary'
+        rarity: 'legendary',
       }
     ];
-
     setUserProgress(mockUserProgress);
     setMetrics(mockMetrics);
     setMilestones(mockMilestones);
     setRecentAchievements(mockMilestones.filter(m => m.completed).slice(-3));
     setIsLoading(false);
   }, [userId]);
-
   const getMilestoneIcon = (iconString: string) => {
     const iconMap: Record<string, React.ReactNode> = {
       '📥': <Download className="w-5 h-5" />,
@@ -269,7 +259,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
     };
     return iconMap[iconString] || <Award className="w-5 h-5" />;
   };
-
   const getTierColor = (tier: string) => {
     switch (tier) {
     case 'diamond': return 'text-purple-600 bg-purple-100';
@@ -280,7 +269,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-
   const getCategoryIcon = (category: string) => {
     switch (category) {
     case 'discovery': return <Eye className="w-4 h-4" />;
@@ -292,20 +280,17 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
     default: return <Target className="w-4 h-4" />;
     }
   };
-
   const getProgressPercentage = () => {
     if (!userProgress) return 0;
     const currentProgress = userProgress.totalXP - userProgress.currentLevelXP;
     const levelRange = userProgress.nextLevelXP - userProgress.currentLevelXP;
     return (currentProgress / levelRange) * 100;
   };
-
   const getFilteredMilestones = () => {
     if (selectedCategory === 'all') return milestones;
     return milestones.filter(milestone => milestone.category === selectedCategory);
   };
-
-  const renderOverview = () => (
+  const renderOverview = () => (;)
     <div className="space-y-6">
       {/* Level Progress */}
       <Card>
@@ -337,7 +322,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
           </div>
         </CardContent>
       </Card>
-
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
@@ -353,7 +337,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -367,7 +350,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -381,7 +363,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -396,9 +377,8 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
           </CardContent>
         </Card>
       </div>
-
       {/* Recent Achievements */}
-      {recentAchievements.length > 0 && (
+      {recentAchievements.length > 0 && ()
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -408,7 +388,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {recentAchievements.map((achievement) => (
+              {recentAchievements.map((achievement) => ()
                 <div key={achievement.id} className="flex items-center gap-3 p-3 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg border-l-4 border-yellow-500">
                   <div className="flex-shrink-0">
                     {getMilestoneIcon(achievement.icon)}
@@ -431,7 +411,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
           </CardContent>
         </Card>
       )}
-
       {/* Activity Streak */}
       <Card>
         <CardHeader>
@@ -455,8 +434,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
       </Card>
     </div>
   );
-
-  const renderMilestones = () => (
+  const renderMilestones = () => (;)
     <div className="space-y-4">
       {/* Category Filter */}
       <div className="flex flex-wrap gap-2">
@@ -467,7 +445,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         >
           All Milestones
         </Button>
-        {['discovery', 'usage', 'creation', 'social', 'learning', 'special'].map((category) => (
+        {['discovery', 'usage', 'creation', 'social', 'learning', 'special'].map((category) => ()
           <Button
             key={category}
             variant={selectedCategory === category ? 'default' : 'outline'}
@@ -480,14 +458,13 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
           </Button>
         ))}
       </div>
-
       {/* Milestone List */}
       <div className="space-y-3">
-        {getFilteredMilestones().map((milestone) => (
+        {getFilteredMilestones().map((milestone) => ()
           <Card key={milestone.id} className={milestone.completed ? 'bg-green-50 border-green-200' : ''}>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${milestone.completed ? 'bg-green-200 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                <div className={`p-2 rounded-lg ${milestone.completed ? 'bg-green-200 text-green-700' : 'bg-gray-100 text-gray-600'}`}>}
                   {getMilestoneIcon(milestone.icon)}
                 </div>
                 <div className="flex-1">
@@ -496,7 +473,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
                     <Badge className={getTierColor(milestone.tier)}>
                       {milestone.tier}
                     </Badge>
-                    {milestone.completed && (
+                    {milestone.completed && ()
                       <CheckCircle className="w-4 h-4 text-green-600" />
                     )}
                   </div>
@@ -518,7 +495,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
                     </div>
                     <div className="text-right">
                       <div className="text-sm font-medium">+{milestone.xpReward} XP</div>
-                      {milestone.completedAt && (
+                      {milestone.completedAt && ()
                         <div className="text-xs text-gray-500">
                           {milestone.completedAt.toLocaleDateString()}
                         </div>
@@ -533,8 +510,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
       </div>
     </div>
   );
-
-  const renderDetailedMetrics = () => (
+  const renderDetailedMetrics = () => (;)
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {/* Discovery Metrics */}
       <Card>
@@ -563,7 +539,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
           </div>
         </CardContent>
       </Card>
-
       {/* Usage Metrics */}
       <Card>
         <CardHeader>
@@ -591,7 +566,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
           </div>
         </CardContent>
       </Card>
-
       {/* Creation Metrics */}
       <Card>
         <CardHeader>
@@ -619,7 +593,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
           </div>
         </CardContent>
       </Card>
-
       {/* Social Metrics */}
       <Card>
         <CardHeader>
@@ -647,7 +620,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
           </div>
         </CardContent>
       </Card>
-
       {/* Learning Metrics */}
       <Card>
         <CardHeader>
@@ -675,7 +647,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
           </div>
         </CardContent>
       </Card>
-
       {/* Skills */}
       <Card>
         <CardHeader>
@@ -686,7 +657,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-2">
-            {metrics?.skillsLearned.map((skill) => (
+            {metrics?.skillsLearned.map((skill) => ()
               <Badge key={skill} variant="outline" className="text-xs">
                 {skill}
               </Badge>
@@ -696,9 +667,8 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
       </Card>
     </div>
   );
-
   if (isLoading) {
-    return (
+    return ()
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -707,9 +677,8 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
       </div>
     );
   }
-
   if (variant === 'compact') {
-    return (
+    return ()
       <Card className={className}>
         <CardHeader>
           <CardTitle className="text-lg">Progress Overview</CardTitle>
@@ -736,10 +705,9 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
       </Card>
     );
   }
-
   if (variant === 'dashboard') {
-    return (
-      <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${className}`}>
+    return ()
+      <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${className}`}>}
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -751,7 +719,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
             </div>
           </CardContent>
         </Card>
-        
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -763,7 +730,6 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -778,14 +744,12 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`max-w-6xl mx-auto p-6 ${className}`}>
+  return ()
+    <div className={`max-w-6xl mx-auto p-6 ${className}`}>}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Your Progress</h1>
         <p className="text-gray-600">Track your journey through the template marketplace and unlock new achievements.</p>
       </div>
-
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="grid grid-cols-4 w-full max-w-md">
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -793,19 +757,15 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
           <TabsTrigger value="metrics">Metrics</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview">
           {renderOverview()}
         </TabsContent>
-
         <TabsContent value="milestones">
           {renderMilestones()}
         </TabsContent>
-
         <TabsContent value="metrics">
           {showDetailedMetrics && renderDetailedMetrics()}
         </TabsContent>
-
         <TabsContent value="timeline">
           <Card>
             <CardHeader>

@@ -26,7 +26,7 @@ export interface ClaudeGenerationResult {
     warnings?: string[];
     attempts: number;
     reasoning?: string;
-    metadata: {
+    metadata: {,
         model: string;
         temperature: number;
         tokenCount: number;
@@ -69,7 +69,7 @@ export declare const defaultAnthropicConfig: AnthropicAgentConfig;
 /**
  * Utility function to create and use Anthropic agent
  */
-export declare function generateGraphWithClaude(
+export declare function generateGraphWithClaude()
   request: ClaudeGenerationRequest,
   config?: Partial<AnthropicAgentConfig>
 ): Promise<ClaudeGenerationResult>;

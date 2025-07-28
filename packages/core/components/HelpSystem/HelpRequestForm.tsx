@@ -4,7 +4,6 @@
  * Intelligent help request submission form with auto-suggestions,
  * knowledge base integration, and smart categorization.
  */
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   HelpRequest,
@@ -15,7 +14,6 @@ import {
   KnowledgeBaseArticle,
   RequestContext
 } from '../../services/Epic16HelpRequestService';
-
 interface HelpRequestFormProps {
   helpService: Epic16HelpRequestService;
   userId: string;
@@ -25,7 +23,6 @@ interface HelpRequestFormProps {
   onSubmitted?: (request: HelpRequest) => void;
   onCancel?: () => void;
 }
-
 interface FormData {
   type: HelpRequestType;
   category: HelpCategory;
@@ -36,7 +33,6 @@ interface FormData {
   tags: string[];
   attachments: File[];
 }
-
 const categorySubcategories: Record<HelpCategory, string[]> = {
   [HelpCategory.GETTING_STARTED]: ['account_setup', 'first_purchase', 'navigation', 'basic_features'],
   [HelpCategory.TEMPLATES]: ['submission', 'approval', 'licensing', 'customization', 'downloads'],
@@ -50,7 +46,7 @@ const categorySubcategories: Record<HelpCategory, string[]> = {
   [HelpCategory.GENERAL]: ['feedback', 'feature_request', 'other']
 };
 
-export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
+export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
   helpService,
   userId,
   userType,
@@ -60,7 +56,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
   onCancel
 }) => {
   // Form state
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<FormData>({)
     type: HelpRequestType.QUESTION,
     category: HelpCategory.GENERAL,
     subcategory: 'other',
@@ -68,9 +64,8 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
     title: '',
     description: '',
     tags: [],
-    attachments: []
+    attachments: [],
   });
-
   // UI state
   const [step, setStep] = useState<'category' | 'details' | 'suggestions' | 'review'>('category');
   const [loading, setLoading] = useState(false);
@@ -78,50 +73,43 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
   const [suggestedArticles, setSuggestedArticles] = useState<KnowledgeBaseArticle[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<KnowledgeBaseArticle | null>(null);
   const [showArticlePreview, setShowArticlePreview] = useState(false);
-
   // Auto-suggestions and validation
   const [titleSuggestions, setTitleSuggestions] = useState<string[]>([]);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-
   // Get available subcategories for selected category
   const availableSubcategories = useMemo(() => {
     return categorySubcategories[formData.category] || [];
   }, [formData.category]);
-
   // Auto-update subcategory when category changes
   useEffect(() => {
     if (availableSubcategories.length > 0 && !availableSubcategories.includes(formData.subcategory)) {
       setFormData(prev => ({ ...prev, subcategory: availableSubcategories[0] }));
     }
   }, [formData.category, availableSubcategories, formData.subcategory]);
-
   // Search for suggestions when title/description changes
   const searchSuggestions = useCallback(async (query: string) => {
     if (query.length < 3) {
       setSuggestedArticles([]);
       return;
     }
-
     try {
-      const articles = await helpService.searchKnowledgeBase({
+      const articles = await helpService.searchKnowledgeBase({)
         query,
         categories: [formData.category],
-        limit: 5
+        limit: 5,
       });
       setSuggestedArticles(articles);
     } catch (err) {
       console.error('Failed to search suggestions:', err);
     }
   }, [helpService, formData.category]);
-
   useEffect(() => {
-    const searchQuery = `${formData.title} ${formData.description}`.trim();
+    const searchQuery = `${formData.title} ${formData.description}`.trim();}
     if (searchQuery.length >= 3) {
       const timer = setTimeout(() => searchSuggestions(searchQuery), 500);
       return () => clearTimeout(timer);
     }
   }, [formData.title, formData.description, searchSuggestions]);
-
   // Generate title suggestions based on category and type
   const generateTitleSuggestions = useCallback(() => {
     const suggestions: Record<string, string[]> = {
@@ -150,54 +138,45 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
         'Request: Better...'
       ]
     };
-
     setTitleSuggestions(suggestions[formData.type] || []);
   }, [formData.type]);
-
   useEffect(() => {
     generateTitleSuggestions();
   }, [generateTitleSuggestions]);
-
   // Form validation
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
-
     if (!formData.title.trim()) {
       errors.title = 'Title is required';
     } else if (formData.title.length < 5) {
       errors.title = 'Title must be at least 5 characters';
     }
-
     if (!formData.description.trim()) {
       errors.description = 'Description is required';
     } else if (formData.description.length < 20) {
       errors.description = 'Description must be at least 20 characters';
     }
-
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
-
   // Handle form submission
   const handleSubmit = async () => {
     if (!validateForm()) {
       setError('Please fix the validation errors before submitting.');
       return;
     }
-
     setLoading(true);
     setError(null);
-
     try {
       const requestContext: RequestContext = {
         userAgent: navigator.userAgent,
         ipAddress: '0.0.0.0', // Would be filled by backend
-        location: {
+        location: {,
           country: 'US', // Would be detected
           region: 'CA',
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         },
-        sessionId: `session_${Date.now()}`,
+        sessionId: `session_${Date.now()}`,}
         pageUrl: window.location.href,
         referrer: document.referrer,
         userJourney: [], // Would be tracked
@@ -205,12 +184,12 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
         section: context?.section || 'help_center',
         templateId: context?.templateId,
         marketplaceListingId: context?.marketplaceListingId,
-        browserInfo: {
+        browserInfo: {,
           name: 'Chrome', // Would be detected
           version: '120.0',
-          platform: navigator.platform
+          platform: navigator.platform,
         },
-        screenResolution: `${screen.width}x${screen.height}`,
+        screenResolution: `${screen.width}x${screen.height}`,}
         errorLogs: context?.errorLogs,
         subscriptionPlan: userTier,
         accountAge: 30, // Would be calculated
@@ -218,8 +197,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
         successfulTransactions: 0, // Would be queried
         ...context
       };
-
-      const helpRequest = await helpService.submitHelpRequest({
+      const helpRequest = await helpService.submitHelpRequest({)
         type: formData.type,
         category: formData.category,
         subcategory: formData.subcategory,
@@ -230,20 +208,19 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
         userId,
         userType,
         userTier,
-        routingDecision: {
+        routingDecision: {,
           strategy: 'support_agent',
           confidence: 0.5,
           reasoning: 'Initial submission',
-          estimatedResolutionTime: 240
+          estimatedResolutionTime: 240,
         },
         escalationLevel: 0,
         suggestedArticles: [],
         responses: [],
         tags: formData.tags,
         attachments: [], // Would handle file uploads
-        relatedRequests: []
+        relatedRequests: [],
       });
-
       onSubmitted?.(helpRequest);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit help request');
@@ -251,65 +228,55 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
       setLoading(false);
     }
   };
-
   // Handle article selection
   const handleArticleSelect = (article: KnowledgeBaseArticle) => {
     setSelectedArticle(article);
     setShowArticlePreview(true);
   };
-
   // Handle file upload
   const handleFileUpload = (files: FileList | null) => {
     if (!files) return;
-    
-    const newFiles = Array.from(files).filter(file => {
+    const newFiles = Array.from(files).filter(file => {)
       // Validate file type and size
       const allowedTypes = ['image/', 'text/', 'application/pdf'];
-      const maxSize = 10 * 1024 * 1024; // 10MB
-      
+      const maxSize = 10 * 1024 * 1024; // 10MB;
       return allowedTypes.some(type => file.type.startsWith(type)) && file.size <= maxSize;
     });
-
-    setFormData(prev => ({
+    setFormData(prev => ({)
       ...prev,
       attachments: [...prev.attachments, ...newFiles]
     }));
   };
-
   // Remove attachment
   const removeAttachment = (index: number) => {
-    setFormData(prev => ({
+    setFormData(prev => ({)
       ...prev,
       attachments: prev.attachments.filter((_, i) => i !== index)
     }));
   };
-
   // Add tag
   const addTag = (tag: string) => {
     if (tag && !formData.tags.includes(tag)) {
-      setFormData(prev => ({
+      setFormData(prev => ({)
         ...prev,
         tags: [...prev.tags, tag]
       }));
     }
   };
-
   // Remove tag
   const removeTag = (tag: string) => {
-    setFormData(prev => ({
+    setFormData(prev => ({)
       ...prev,
       tags: prev.tags.filter(t => t !== tag)
     }));
   };
-
   // Render category selection step
-  const renderCategoryStep = () => (
+  const renderCategoryStep = () => (;)
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">What do you need help with?</h3>
-        
         <div className="grid grid-cols-2 gap-4">
-          {Object.values(HelpRequestType).map((type) => (
+          {Object.values(HelpRequestType).map((type) => ()
             <label
               key={type}
               className={`relative flex cursor-pointer rounded-lg border p-4 ${
@@ -342,7 +309,6 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
           ))}
         </div>
       </div>
-
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
         <select
@@ -350,14 +316,13 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
           onChange={(e) => setFormData({ ...formData, category: e.target.value as HelpCategory })}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
         >
-          {Object.values(HelpCategory).map((category) => (
+          {Object.values(HelpCategory).map((category) => ()
             <option key={category} value={category}>
               {category.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}
             </option>
           ))}
         </select>
       </div>
-
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Subcategory</label>
         <select
@@ -365,14 +330,13 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
           onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
         >
-          {availableSubcategories.map((subcategory) => (
+          {availableSubcategories.map((subcategory) => ()
             <option key={subcategory} value={subcategory}>
               {subcategory.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}
             </option>
           ))}
         </select>
       </div>
-
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Priority</label>
         <select
@@ -380,7 +344,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
           onChange={(e) => setFormData({ ...formData, priority: e.target.value as HelpPriority })}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
         >
-          {Object.values(HelpPriority).map((priority) => (
+          {Object.values(HelpPriority).map((priority) => ()
             <option key={priority} value={priority}>
               {priority.charAt(0).toUpperCase() + priority.slice(1)}
             </option>
@@ -389,9 +353,8 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
       </div>
     </div>
   );
-
   // Render details step
-  const renderDetailsStep = () => (
+  const renderDetailsStep = () => (;)
     <div className="space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -406,15 +369,14 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
             validationErrors.title ? 'border-red-300' : 'border-gray-300'
           }`}
         />
-        {validationErrors.title && (
+        {validationErrors.title && ()
           <p className="mt-1 text-sm text-red-600">{validationErrors.title}</p>
         )}
-
-        {titleSuggestions.length > 0 && (
+        {titleSuggestions.length > 0 && ()
           <div className="mt-2">
             <p className="text-xs text-gray-500 mb-1">Suggested formats:</p>
             <div className="flex flex-wrap gap-1">
-              {titleSuggestions.map((suggestion, index) => (
+              {titleSuggestions.map((suggestion, index) => ()
                 <button
                   key={index}
                   type="button"
@@ -428,7 +390,6 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
           </div>
         )}
       </div>
-
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Description <span className="text-red-500">*</span>
@@ -442,14 +403,13 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
             validationErrors.description ? 'border-red-300' : 'border-gray-300'
           }`}
         />
-        {validationErrors.description && (
+        {validationErrors.description && ()
           <p className="mt-1 text-sm text-red-600">{validationErrors.description}</p>
         )}
         <p className="mt-1 text-xs text-gray-500">
           {formData.description.length} characters (minimum 20 required)
         </p>
       </div>
-
       {/* File attachments */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Attachments</label>
@@ -477,10 +437,9 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
             </span>
           </label>
         </div>
-
-        {formData.attachments.length > 0 && (
+        {formData.attachments.length > 0 && ()
           <div className="mt-3 space-y-2">
-            {formData.attachments.map((file, index) => (
+            {formData.attachments.map((file, index) => ()
               <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
                 <span className="text-sm text-gray-700">{file.name}</span>
                 <button
@@ -495,12 +454,11 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
           </div>
         )}
       </div>
-
       {/* Tags */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Tags (optional)</label>
         <div className="flex flex-wrap gap-2 mb-2">
-          {formData.tags.map((tag) => (
+          {formData.tags.map((tag) => ()
             <span
               key={tag}
               className="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-full flex items-center"
@@ -532,11 +490,10 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
       </div>
     </div>
   );
-
   // Render suggestions step
-  const renderSuggestionsStep = () => (
+  const renderSuggestionsStep = () => (;)
     <div className="space-y-6">
-      {suggestedArticles.length > 0 ? (
+      {suggestedArticles.length > 0 ? ()
         <>
           <div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -546,9 +503,8 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
               Please review these before submitting your request. They might resolve your issue immediately.
             </p>
           </div>
-
           <div className="space-y-3">
-            {suggestedArticles.map((article) => (
+            {suggestedArticles.map((article) => ()
               <div
                 key={article.id}
                 className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer"
@@ -571,7 +527,6 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
               </div>
             ))}
           </div>
-
           <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
             <div className="flex">
               <div className="flex-shrink-0">
@@ -588,7 +543,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
             </div>
           </div>
         </>
-      ) : (
+      ) : ()
         <div className="text-center py-8">
           <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a9 9 0 117.072 0l-.548.547A3.374 3.374 0 0014.846 21H9.154a3.374 3.374 0 00-2.322-1.1l-.548-.547z" />
@@ -601,13 +556,11 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
       )}
     </div>
   );
-
   // Render review step
-  const renderReviewStep = () => (
+  const renderReviewStep = () => (;)
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Review your request</h3>
-        
         <div className="bg-gray-50 rounded-lg p-4 space-y-4">
           <div>
             <span className="text-sm font-medium text-gray-700">Type:</span>
@@ -615,7 +568,6 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
               {formData.type.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}
             </span>
           </div>
-          
           <div>
             <span className="text-sm font-medium text-gray-700">Category:</span>
             <span className="ml-2 text-sm text-gray-900">
@@ -623,27 +575,23 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
               {formData.subcategory.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}
             </span>
           </div>
-          
           <div>
             <span className="text-sm font-medium text-gray-700">Priority:</span>
             <span className="ml-2 text-sm text-gray-900 capitalize">{formData.priority}</span>
           </div>
-          
           <div>
             <span className="text-sm font-medium text-gray-700">Title:</span>
             <p className="text-sm text-gray-900 mt-1">{formData.title}</p>
           </div>
-          
           <div>
             <span className="text-sm font-medium text-gray-700">Description:</span>
             <p className="text-sm text-gray-900 mt-1 whitespace-pre-wrap">{formData.description}</p>
           </div>
-          
-          {formData.tags.length > 0 && (
+          {formData.tags.length > 0 && ()
             <div>
               <span className="text-sm font-medium text-gray-700">Tags:</span>
               <div className="flex flex-wrap gap-1 mt-1">
-                {formData.tags.map((tag) => (
+                {formData.tags.map((tag) => ()
                   <span key={tag} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
                     {tag}
                   </span>
@@ -651,12 +599,11 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
               </div>
             </div>
           )}
-          
-          {formData.attachments.length > 0 && (
+          {formData.attachments.length > 0 && ()
             <div>
               <span className="text-sm font-medium text-gray-700">Attachments:</span>
               <ul className="text-sm text-gray-900 mt-1">
-                {formData.attachments.map((file, index) => (
+                {formData.attachments.map((file, index) => ()
                   <li key={index}>• {file.name}</li>
                 ))}
               </ul>
@@ -664,7 +611,6 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
           )}
         </div>
       </div>
-
       <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
         <div className="flex">
           <div className="flex-shrink-0">
@@ -687,13 +633,12 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
       </div>
     </div>
   );
-
-  return (
+  return ()
     <div className="help-request-form max-w-2xl mx-auto">
       {/* Progress indicator */}
       <div className="mb-8">
         <div className="flex items-center">
-          {['category', 'details', 'suggestions', 'review'].map((stepName, index) => (
+          {['category', 'details', 'suggestions', 'review'].map((stepName, index) => ()
             <React.Fragment key={stepName}>
               <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
                 step === stepName 
@@ -702,15 +647,15 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
                     ? 'bg-green-600 border-green-600 text-white'
                     : 'border-gray-300 text-gray-500'
               }`}>
-                {index < ['category', 'details', 'suggestions', 'review'].indexOf(step) ? (
+                {index < ['category', 'details', 'suggestions', 'review'].indexOf(step) ? ()
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                ) : (
+                ) : ()
                   index + 1
                 )}
               </div>
-              {index < 3 && (
+              {index < 3 && ()
                 <div className={`flex-1 h-0.5 mx-2 ${
                   index < ['category', 'details', 'suggestions', 'review'].indexOf(step) ? 'bg-green-600' : 'bg-gray-300'
                 }`} />
@@ -725,7 +670,6 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
           <span>Review</span>
         </div>
       </div>
-
       {/* Form content */}
       <div className="bg-white">
         {step === 'category' && renderCategoryStep()}
@@ -733,9 +677,8 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
         {step === 'suggestions' && renderSuggestionsStep()}
         {step === 'review' && renderReviewStep()}
       </div>
-
       {/* Error message */}
-      {error && (
+      {error && ()
         <div className="mt-6 bg-red-50 border border-red-200 rounded-md p-4">
           <div className="flex">
             <div className="flex-shrink-0">
@@ -749,11 +692,10 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
           </div>
         </div>
       )}
-
       {/* Navigation buttons */}
       <div className="mt-8 flex items-center justify-between">
         <div>
-          {step !== 'category' && (
+          {step !== 'category' && ()
             <button
               type="button"
               onClick={() => {
@@ -769,9 +711,8 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
             </button>
           )}
         </div>
-
         <div className="flex items-center space-x-3">
-          {onCancel && (
+          {onCancel && ()
             <button
               type="button"
               onClick={onCancel}
@@ -780,8 +721,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
               Cancel
             </button>
           )}
-          
-          {step === 'review' ? (
+          {step === 'review' ? ()
             <button
               type="button"
               onClick={handleSubmit}
@@ -790,14 +730,13 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
             >
               {loading ? 'Submitting...' : 'Submit Request'}
             </button>
-          ) : (
+          ) : ()
             <button
               type="button"
               onClick={() => {
                 if (step === 'details' && !validateForm()) {
                   return;
                 }
-                
                 const steps = ['category', 'details', 'suggestions', 'review'];
                 const currentIndex = steps.indexOf(step);
                 if (currentIndex < steps.length - 1) {
@@ -811,9 +750,8 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
           )}
         </div>
       </div>
-
       {/* Article preview modal */}
-      {showArticlePreview && selectedArticle && (
+      {showArticlePreview && selectedArticle && ()
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-gray-200">
@@ -829,13 +767,11 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({
                 </button>
               </div>
             </div>
-            
             <div className="p-6">
               <div className="prose max-w-none">
                 <p className="text-gray-600 mb-4">{selectedArticle.summary}</p>
                 <div className="whitespace-pre-wrap">{selectedArticle.content}</div>
               </div>
-              
               <div className="mt-6 flex items-center justify-between">
                 <div className="text-sm text-gray-500">
                   Rating: {selectedArticle.helpfulnessRating}/5 • {selectedArticle.viewCount} views

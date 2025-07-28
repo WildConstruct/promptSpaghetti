@@ -10,7 +10,7 @@ export interface SliderProps {
   disabled?: boolean;
 }
 
-export const Slider: React.FC<SliderProps> = ({
+export const Slider: React.FC<SliderProps> = ({)
   value = [0],
   onValueChange,
   max = 100,
@@ -23,8 +23,7 @@ export const Slider: React.FC<SliderProps> = ({
     const newValue = parseFloat(e.target.value);
     onValueChange?.([newValue]);
   };
-
-  return (
+  return ()
     <input
       type="range"
       value={value[0] || 0}
@@ -40,8 +39,8 @@ export const Slider: React.FC<SliderProps> = ({
         background: '#4a5568',
         outline: 'none',
         borderRadius: '2px',
-        ...(!disabled && {
-          cursor: 'pointer'
+        ...(!disabled && {)
+          cursor: 'pointer',
         })
       }}
     />

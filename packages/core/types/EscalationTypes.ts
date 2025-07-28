@@ -6,7 +6,6 @@
  * enums, interfaces, and validation schemas for all escalation-related
  * data structures and API contracts.
  */
-
 import { z } from 'zod';
 
 // =============================================================================
@@ -84,7 +83,7 @@ export enum AssignmentType {
 // Validation Schemas
 // =============================================================================
 
-export const EscalationConditionSchema = z.object({
+export const EscalationConditionSchema = z.object({)
   conditionId: z.string(),
   type: z.enum(['value', 'time', 'count', 'percentage', 'custom']),
   field: z.string(),
@@ -93,24 +92,24 @@ export const EscalationConditionSchema = z.object({
   logicalOperator: z.enum(['AND', 'OR']).optional()
 });
 
-export const NotificationMethodSchema = z.object({
+export const NotificationMethodSchema = z.object({)
   type: z.nativeEnum(NotificationType),
   address: z.string(),
   priority: z.nativeEnum(EscalationPriority),
   immediateDelivery: z.boolean(),
   retryCount: z.number().min(0).max(10).optional(),
-  retryInterval: z.number().min(1).optional()
+  retryInterval: z.number().min(1).optional(),
 });
 
-export const EscalationActionSchema = z.object({
+export const EscalationActionSchema = z.object({)
   actionId: z.string(),
   type: z.nativeEnum(EscalationActionType),
   configuration: z.record(z.unknown()),
   executeImmediately: z.boolean(),
-  rollbackable: z.boolean()
+  rollbackable: z.boolean(),
 });
 
-export const EscalationLevelSchema = z.object({
+export const EscalationLevelSchema = z.object({)
   levelId: z.string(),
   level: z.number().min(0),
   name: z.string().min(1).max(100),
@@ -123,10 +122,10 @@ export const EscalationLevelSchema = z.object({
   resolutionTimeLimit: z.number().min(1),
   automaticActions: z.array(EscalationActionSchema).optional(),
   requiredActions: z.array(z.string()).optional(),
-  escalationCriteria: z.array(EscalationConditionSchema).optional()
+  escalationCriteria: z.array(EscalationConditionSchema).optional(),
 });
 
-export const EscalationRuleSchema = z.object({
+export const EscalationRuleSchema = z.object({)
   ruleId: z.string(),
   name: z.string().min(1).max(255),
   description: z.string().max(1000),
@@ -144,7 +143,7 @@ export const EscalationRuleSchema = z.object({
   createdBy: z.string(),
   createdAt: z.date(),
   lastModified: z.date(),
-  version: z.number().min(1)
+  version: z.number().min(1),
 });
 
 // =============================================================================
@@ -273,17 +272,14 @@ export interface EscalationCase {
   category: EscalationCategory;
   priority: EscalationPriority;
   status: EscalationStatus;
-  
   // Source information
   sourceType: string;
   sourceId: string;
   sourceData: Record<string, any>;
-  
   // Current escalation state
   currentLevel: number;
   currentAssignee?: string;
   currentAssigneeType?: 'user' | 'group' | 'role';
-  
   // Timing
   createdAt: Date;
   updatedAt: Date;
@@ -291,17 +287,14 @@ export interface EscalationCase {
   responseDeadline?: Date;
   resolutionDeadline?: Date;
   resolvedAt?: Date;
-  
   // Tracking
   escalationPath: EscalationPathStep[];
   notifications: EscalationNotification[];
   actions: EscalationActionLog[];
-  
   // Resolution
   resolution?: EscalationResolution;
   resolutionNotes?: string;
   followUpRequired?: boolean;
-  
   // Metadata
   tags: string[];
   metadata: Record<string, any>;
@@ -397,24 +390,21 @@ export interface CategoryBreakdown {
 }
 
 export interface EscalationDashboard {
-  overview: {
+  overview: {,
     activeCases: number;
     criticalCases: number;
     overdueResponses: number;
     overdueResolutions: number;
     averageWaitTime: number;
   };
-  
   recentEscalations: EscalationCase[];
   urgentCases: EscalationCase[];
-  
-  performance: {
+  performance: {,
     slaCompliance: number;
     firstCallResolution: number;
     customerSatisfaction: number;
     averageHandleTime: number;
   };
-  
   workloadDistribution: WorkloadAssignment[];
   categoryBreakdown: CategoryBreakdown[];
   alerts: EscalationAlert[];
@@ -523,7 +513,7 @@ export interface EscalationAPIResponse<T = any> {
 
 export interface PaginatedResponse<T> {
   items: T[];
-  pagination: {
+  pagination: {,
     page: number;
     limit: number;
     total: number;
@@ -537,7 +527,7 @@ export interface EscalationRuleTestResult {
   wouldTrigger: boolean;
   matchedConditions: string[];
   suggestedLevel: number;
-  estimatedEscalationPath: {
+  estimatedEscalationPath: {,
     level: number;
     assignee: string;
     estimatedTime: number;
@@ -547,7 +537,7 @@ export interface EscalationRuleTestResult {
 
 export interface AssigneePerformance {
   assignee: string;
-  period: {
+  period: {,
     startDate: Date;
     endDate: Date;
   };
@@ -606,24 +596,24 @@ export interface EscalationEvent {
 
 export interface EscalationServiceConfig {
   defaultTimezone: string;
-  businessHours: {
+  businessHours: {,
     startTime: string; // HH:MM format
     endTime: string;   // HH:MM format
     daysOfWeek: number[]; // 0-6, Sunday = 0
   };
-  notifications: {
+  notifications: {,
     retryAttempts: number;
     retryInterval: number; // minutes
     enableBatching: boolean;
     batchSize: number;
     batchInterval: number; // minutes
   };
-  performance: {
+  performance: {,
     metricsRetentionDays: number;
     autoCleanupExpiredCases: boolean;
     maxConcurrentEscalations: number;
   };
-  integrations: {
+  integrations: {,
     enableWebhooks: boolean;
     webhookTimeout: number; // seconds
     enableSlackNotifications: boolean;
@@ -641,7 +631,6 @@ export default {
   EscalationActionType,
   AssignmentType,
   EscalationEventType,
-  
   // Export all schemas
   EscalationConditionSchema,
   NotificationMethodSchema,

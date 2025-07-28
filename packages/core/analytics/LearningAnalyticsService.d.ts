@@ -41,24 +41,24 @@ export declare class LearningAnalyticsServiceImpl implements LearningAnalyticsSe
     private apiClient;
     private skillAssessmentEngine;
     private tutorialService;
-    constructor(
+    constructor()
       apiClient: unknown,
       skillAssessmentEngine: SkillAssessmentEngine,
-      tutorialService: MarketplaceTutorialSystemService
+      tutorialService: MarketplaceTutorialSystemService,
     );
     trackLearningEvent(event: LearningAnalyticsEvent): Promise<void>;
     trackTutorialEvent(event: TutorialAnalyticsEvent): Promise<void>;
     trackKnowledgeBaseEvent(event: KnowledgeBaseAnalyticsEvent): Promise<void>;
     trackCommunityEvent(event: CommunityAnalyticsEvent): Promise<void>;
-    generateLearningEffectivenessMetrics(
+    generateLearningEffectivenessMetrics()
       contentId: string,
-      timeRange: TimeRange
+      timeRange: TimeRange,
     ): Promise<LearningEffectivenessMetrics>;
     generateUserLearningAnalytics(userId: string, timeRange: TimeRange): Promise<UserLearningAnalytics>;
     generateCommunityKnowledgeMetrics(communityId: string, timeRange: TimeRange): Promise<CommunityKnowledgeMetrics>;
-    generateKnowledgeBaseUsageMetrics(
+    generateKnowledgeBaseUsageMetrics()
       knowledgeBaseId: string,
-      timeRange: TimeRange
+      timeRange: TimeRange,
     ): Promise<KnowledgeBaseUsageMetrics>;
     identifyLearningTrends(timeRange: TimeRange): Promise<LearningTrend[]>;
     detectContentPerformanceAnomalies(contentType: ContentType, threshold: number): Promise<PerformanceAnomaly[]>;

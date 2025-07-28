@@ -71,7 +71,7 @@ export declare class SecureCodeGenerator extends EventEmitter {
     /**
      * Create a complete verification code record with secure hashing
      */
-    createVerificationCode(code: string, userId: string, purpose: string, options?: {
+    createVerificationCode(code: string, userId: string, purpose: string, options?: {)
         expirationMinutes?: number;
         maxAttempts?: number;
         metadata?: Record<string, any>;
@@ -79,7 +79,7 @@ export declare class SecureCodeGenerator extends EventEmitter {
     /**
      * Validate a verification code with timing attack protection
      */
-    validateCode(
+    validateCode()
       inputCode: string,
       storedCode: VerificationCodeData,
       options?: Partial<CodeValidationOptions>
@@ -167,7 +167,7 @@ declare const _default: {
     VerificationCodeFactory: typeof VerificationCodeFactory;
     codeGenerator: SecureCodeGenerator;
     verificationCodeFactory: VerificationCodeFactory;
-    CodeUtils: {
+    CodeUtils: {,
         /**
          * Format a code for display (add hyphens, spaces, etc.)
          */

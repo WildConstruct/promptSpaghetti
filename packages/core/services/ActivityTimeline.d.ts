@@ -153,11 +153,11 @@ export interface ActivityStats {
     byImpact: Record<ActivityImpact, number>;
     eventsPerHour: Record<string, number>;
     eventsPerDay: Record<string, number>;
-    peakActivity: {
+    peakActivity: {,
         hour: number;
         count: number;
     };
-    mostActiveUsers: Array<{
+    mostActiveUsers: Array<{,
         userId: string;
         displayName: string;
         eventCount: number;
@@ -208,7 +208,7 @@ export declare class ActivityTimelineService {
     /**
      * Track a graph operation
      */
-    trackGraphOperation(action: string, details: Partial<ActivityDetails> & {
+    trackGraphOperation(action: string, details: Partial<ActivityDetails> & {)
         nodeChanges?: NodeChange[];
         connectionChanges?: ConnectionChange[];
         variableChanges?: VariableChange[];
@@ -256,7 +256,7 @@ export declare class ActivityTimelineService {
     /**
      * Start a new user session
      */
-    startSession(userId: string, clientInfo: ClientInfo, context?: {
+    startSession(userId: string, clientInfo: ClientInfo, context?: {)
         workspaceId?: string;
         projectId?: string;
         location?: GeolocationInfo;
@@ -286,7 +286,7 @@ export declare class ActivityTimelineService {
 }
 export declare const activityTimeline: ActivityTimelineService;
 export declare const trackActivity: (event: Partial<ActivityEvent>) => Promise<ActivityEvent>;
-export declare const trackGraphOperation: (action: string, details: Partial<ActivityDetails>, userId: string, context?: {
+export declare const trackGraphOperation: (action: string, details: Partial<ActivityDetails>, userId: string, context?: {)
     workspaceId?: string;
     projectId?: string;
     graphId?: string;

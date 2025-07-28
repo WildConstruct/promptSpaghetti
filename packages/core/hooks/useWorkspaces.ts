@@ -2,12 +2,9 @@
  * Epic 9.2.1 - useWorkspaces Hook
  * React hook for workspace management operations
  */
-
 import { useState, useEffect, useCallback } from 'react';
 import { WorkspaceWithMembership, CreateWorkspace, UpdateWorkspace } from '../types/workspace';
-
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000/api';
-
 interface UseWorkspacesOptions {
   autoRefresh?: boolean;
   refreshInterval?: number;
@@ -15,28 +12,23 @@ interface UseWorkspacesOptions {
 
 export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}) {
   const { autoRefresh = false, refreshInterval = 30000 } = options;
-  
   const [workspaces, setWorkspaces] = useState<WorkspaceWithMembership[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   // Fetch workspaces from API
   const fetchWorkspaces = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
-      const response = await fetch(`${API_BASE}/workspaces`, {
-        headers: {
+      const response = await fetch(`${API_BASE}/workspaces`, {)}
+        headers: {,
           'Content-Type': 'application/json',
           'X-User-Id': userId // Mock auth header
         }
       });
-
       if (!response.ok) {
-        throw new Error(`Failed to fetch workspaces: ${response.statusText}`);
+        throw new Error(`Failed to fetch workspaces: ${response.statusText}`);}
       }
-
       const data = await response.json();
       setWorkspaces(data.data || []);
     } catch (err) {
@@ -47,120 +39,100 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
       setLoading(false);
     }
   }, [userId]);
-
   // Create new workspace
   const createWorkspace = useCallback(async (data: CreateWorkspace): Promise<WorkspaceWithMembership> => {
-    const response = await fetch(`${API_BASE}/workspaces`, {
+    const response = await fetch(`${API_BASE}/workspaces`, {)}
       method: 'POST',
-      headers: {
+      headers: {,
         'Content-Type': 'application/json',
         'X-User-Id': userId
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
-
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to create workspace: ${response.statusText}`);
+      throw new Error(errorData.message || `Failed to create workspace: ${response.statusText}`);}
     }
-
     const newWorkspace = await response.json();
-    
     // Add to local state
     setWorkspaces(prev => [newWorkspace, ...prev]);
-    
     return newWorkspace;
   }, [userId]);
-
   // Update existing workspace
-  const updateWorkspace = useCallback(async (
+  const updateWorkspace = useCallback(async (;)
     workspaceId: string,
-    data: UpdateWorkspace
+    data: UpdateWorkspace,
   ): Promise<WorkspaceWithMembership> => {
-    const response = await fetch(`${API_BASE}/workspaces/${workspaceId}`, {
+    const response = await fetch(`${API_BASE}/workspaces/${workspaceId}`, {)}
       method: 'PUT',
-      headers: {
+      headers: {,
         'Content-Type': 'application/json',
         'X-User-Id': userId
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
-
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to update workspace: ${response.statusText}`);
+      throw new Error(errorData.message || `Failed to update workspace: ${response.statusText}`);}
     }
-
     const updatedWorkspace = await response.json();
-    
     // Update local state
-    setWorkspaces(prev =>
+    setWorkspaces(prev =>)
       prev.map(ws => ws.id === workspaceId ? updatedWorkspace : ws)
     );
-    
     return updatedWorkspace;
   }, [userId]);
-
   // Archive workspace
   const archiveWorkspace = useCallback(async (workspaceId: string): Promise<void> => {
-    const response = await fetch(`${API_BASE}/workspaces/${workspaceId}`, {
+    const response = await fetch(`${API_BASE}/workspaces/${workspaceId}`, {)}
       method: 'DELETE',
-      headers: {
+      headers: {,
         'X-User-Id': userId
       }
     });
-
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to archive workspace: ${response.statusText}`);
+      throw new Error(errorData.message || `Failed to archive workspace: ${response.statusText}`);}
     }
-
     // Remove from local state
     setWorkspaces(prev => prev.filter(ws => ws.id !== workspaceId));
   }, [userId]);
-
   // Invite user to workspace
-  const inviteUser = useCallback(async (
+  const inviteUser = useCallback(async (;)
     workspaceId: string,
     userIdToInvite: string,
-    role: string
+    role: string,
   ): Promise<void> => {
-    const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/invite`, {
+    const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/invite`, {)}
       method: 'POST',
-      headers: {
+      headers: {,
         'Content-Type': 'application/json',
         'X-User-Id': userId
       },
-      body: JSON.stringify({
+      body: JSON.stringify({),
         user_id: userIdToInvite,
         role
       })
     });
-
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to invite user: ${response.statusText}`);
+      throw new Error(errorData.message || `Failed to invite user: ${response.statusText}`);}
     }
   }, [userId]);
-
   // Refresh workspaces
   const refreshWorkspaces = useCallback(() => {
     fetchWorkspaces();
   }, [fetchWorkspaces]);
-
   // Initial fetch
   useEffect(() => {
     fetchWorkspaces();
   }, [fetchWorkspaces]);
-
   // Auto-refresh interval
   useEffect(() => {
     if (!autoRefresh) return;
-
     const interval = setInterval(fetchWorkspaces, refreshInterval);
     return () => clearInterval(interval);
   }, [autoRefresh, refreshInterval, fetchWorkspaces]);
-
   return {
     workspaces,
     loading,

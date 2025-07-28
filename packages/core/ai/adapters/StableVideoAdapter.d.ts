@@ -36,13 +36,13 @@ export interface StableVideoRequestOptions {
     loop_video?: boolean;
 }
 export interface StableVideoGenerationResult {
-    video: {
+    video: {,
         frames: string[];
         url?: string;
         data?: ArrayBuffer;
         format: string;
         duration: number;
-        resolution: {
+        resolution: {,
             width: number;
             height: number;
         };
@@ -50,7 +50,7 @@ export interface StableVideoGenerationResult {
         frame_count: number;
         size: number;
     };
-    metadata: {
+    metadata: {,
         model: string;
         input_image: string;
         motion_bucket_id: number;
@@ -61,7 +61,7 @@ export interface StableVideoGenerationResult {
         generation_time: number;
         memory_usage?: number;
     };
-    usage: {
+    usage: {,
         compute_units: number;
         estimated_cost: number;
         processing_time: number;

@@ -208,18 +208,18 @@ export interface ComplianceMonitoringConfiguration {
     metricsCollection: boolean;
 }
 export interface PerformanceConfiguration {
-    monitoring: {
+    monitoring: {,
         enabled: boolean;
         metricsCollectionInterval: number;
         alertThresholds: PerformanceThreshold[];
     };
-    optimization: {
+    optimization: {,
         asyncLogging: boolean;
         batchProcessing: boolean;
         caching: CacheConfiguration;
         compression: boolean;
     };
-    scaling: {
+    scaling: {,
         autoScaling: boolean;
         maxConcurrentEvents: number;
         queueMaxSize: number;

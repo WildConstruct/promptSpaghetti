@@ -3,7 +3,6 @@
  * Provides historically accurate medieval content integration for UTDG
  * Connects with external medieval databases and content sources
  */
-
 import { NodeMetadataManager, HistoricalEra, Genre, Style } from '../historical/NodeMetadataManager';
 import { DataSourceManager } from '../external-data/DataSourceManager';
 
@@ -15,7 +14,7 @@ export interface MedievalClothing {
   gender: 'male' | 'female' | 'unisex';
   materials: string[];
   colors: string[];
-  period: {
+  period: {,
     start: number; // Year
     end: number;   // Year
   };
@@ -74,7 +73,7 @@ export interface MedievalScene {
   title: string;
   setting: MedievalLocation;
   characters: MedievalCharacter[];
-  timeContext: {
+  timeContext: {,
     season: string;
     timeOfDay: string;
     weather?: string;
@@ -82,7 +81,7 @@ export interface MedievalScene {
   activities: string[];
   socialDynamics: string[];
   historicalElements: string[];
-  sensoryDetails: {
+  sensoryDetails: {,
     sights: string[];
     sounds: string[];
     smells: string[];
@@ -99,13 +98,11 @@ export class MedievalDemo {
   private locationDatabase: Map<string, MedievalLocation> = new Map();
   private characterDatabase: Map<string, MedievalCharacter> = new Map();
   private sceneDatabase: Map<string, MedievalScene> = new Map();
-
   constructor() {
     this.metadataManager = new NodeMetadataManager();
     this.dataSourceManager = new DataSourceManager();
     this.initializeMedievalDatabases();
   }
-
   /**
    * Initialize medieval content databases with historically accurate data
    */
@@ -116,7 +113,6 @@ export class MedievalDemo {
     await this.loadCharacterDatabase();
     await this.loadSceneDatabase();
   }
-
   /**
    * Load medieval clothing database
    */
@@ -183,12 +179,10 @@ export class MedievalDemo {
         sources: ['Monastic rules', 'Religious artwork']
       }
     ];
-
-    clothingData.forEach(clothing => {
+    clothingData.forEach(clothing => {)
       this.clothingDatabase.set(clothing.id, clothing);
     });
   }
-
   /**
    * Load medieval materials database
    */
@@ -243,12 +237,10 @@ export class MedievalDemo {
         historicalNotes: 'Superior to iron, mark of quality craftsmanship'
       }
     ];
-
-    materialData.forEach(material => {
+    materialData.forEach(material => {)
       this.materialDatabase.set(material.id, material);
     });
   }
-
   /**
    * Load medieval locations database
    */
@@ -294,12 +286,10 @@ export class MedievalDemo {
         politicalContext: 'Religious institution'
       }
     ];
-
-    locationData.forEach(location => {
+    locationData.forEach(location => {)
       this.locationDatabase.set(location.id, location);
     });
   }
-
   /**
    * Load medieval characters database
    */
@@ -349,12 +339,10 @@ export class MedievalDemo {
         historicalContext: 'Preserves ancient knowledge in monastery'
       }
     ];
-
-    characterData.forEach(character => {
+    characterData.forEach(character => {)
       this.characterDatabase.set(character.id, character);
     });
   }
-
   /**
    * Load medieval scenes database
    */
@@ -364,11 +352,11 @@ export class MedievalDemo {
         id: 'feast_preparation',
         title: 'Great Hall Feast Preparation',
         setting: this.locationDatabase.get('castle_great_hall')!,
-        characters: [
+        characters: [,
           this.characterDatabase.get('sir_gareth')!,
           this.characterDatabase.get('elena_weaver')!
         ],
-        timeContext: {
+        timeContext: {,
           season: 'autumn',
           timeOfDay: 'afternoon',
           weather: 'crisp and clear'
@@ -376,7 +364,7 @@ export class MedievalDemo {
         activities: ['setting tables', 'arranging tapestries', 'preparing entertainment'],
         socialDynamics: ['noble-servant hierarchy', 'guest protocols', 'honor displays'],
         historicalElements: ['feudal obligations', 'seasonal harvest celebration', 'alliance building'],
-        sensoryDetails: {
+        sensoryDetails: {,
           sights: ['colorful banners', 'polished armor', 'golden candlelight'],
           sounds: ['bustling servants', 'clanking metal', 'minstrel practice'],
           smells: ['roasting meat', 'wood smoke', 'fresh rushes'],
@@ -389,7 +377,7 @@ export class MedievalDemo {
         title: 'Dawn Prayer in Monastery',
         setting: this.locationDatabase.get('monastery_scriptorium')!,
         characters: [this.characterDatabase.get('brother_aldric')!],
-        timeContext: {
+        timeContext: {,
           season: 'winter',
           timeOfDay: 'dawn',
           weather: 'frost on windows'
@@ -397,7 +385,7 @@ export class MedievalDemo {
         activities: ['morning prayers', 'manuscript copying', 'contemplation'],
         socialDynamics: ['religious hierarchy', 'scholarly pursuit', 'spiritual discipline'],
         historicalElements: ['preservation of knowledge', 'religious devotion', 'intellectual tradition'],
-        sensoryDetails: {
+        sensoryDetails: {,
           sights: ['candlelit pages', 'frost patterns', 'illuminated letters'],
           sounds: ['chanted prayers', 'scratching quills', 'turning pages'],
           smells: ['incense', 'parchment', 'cold stone'],
@@ -406,16 +394,14 @@ export class MedievalDemo {
         narrativeHooks: ['ancient text discovery', 'visiting scholar', 'theological debate']
       }
     ];
-
-    sceneData.forEach(scene => {
+    sceneData.forEach(scene => {)
       this.sceneDatabase.set(scene.id, scene);
     });
   }
-
   /**
    * Generate historically accurate medieval scene
    */
-  public generateMedievalScene(options: {
+  public generateMedievalScene(options: {)
     socialClass?: string;
     location?: string;
     timeOfDay?: string;
@@ -423,9 +409,8 @@ export class MedievalDemo {
     theme?: string;
   } = {}): MedievalScene | null {
     const availableScenes = Array.from(this.sceneDatabase.values());
-    
-    let filteredScenes = availableScenes.filter(scene => {
-      if (options.socialClass && !scene.characters.some(char => 
+    let filteredScenes = availableScenes.filter(scene => {)
+      if (options.socialClass && !scene.characters.some(char => )
         char.socialClass === options.socialClass)) {
         return false;
       }
@@ -440,55 +425,46 @@ export class MedievalDemo {
       }
       return true;
     });
-
     if (filteredScenes.length === 0) {
       filteredScenes = availableScenes;
     }
-
     const randomIndex = Math.floor(Math.random() * filteredScenes.length);
     return filteredScenes[randomIndex];
   }
-
   /**
    * Get clothing appropriate for character and context
    */
-  public getAppropriateClothing(character: MedievalCharacter, context: {
+  public getAppropriateClothing(character: MedievalCharacter, context: {)
     occasion?: string;
     season?: string;
     socialSetting?: string;
   }): MedievalClothing[] {
     const availableClothing = Array.from(this.clothingDatabase.values());
-    
-    return availableClothing.filter(clothing => {
+    return availableClothing.filter(clothing => {)
       // Match social class
       if (clothing.socialClass !== character.socialClass && clothing.socialClass !== 'peasant') {
         return false;
       }
-      
       // Match gender
       if (clothing.gender !== 'unisex' && clothing.gender !== character.gender) {
         return false;
       }
-      
       // Match season if specified
-      if (context.season && clothing.seasonality !== 'all' && 
+      if (context.season && clothing.seasonality !== 'all' && )
           clothing.seasonality !== context.season) {
         return false;
       }
-      
       // Match occasion if specified
       if (context.occasion && !clothing.occasions.includes(context.occasion)) {
         return false;
       }
-      
       return true;
     });
   }
-
   /**
    * Validate medieval content for historical accuracy
    */
-  public validateHistoricalAccuracy(content: {
+  public validateHistoricalAccuracy(content: {)
     era?: string;
     materials?: string[];
     socialClasses?: string[];
@@ -500,79 +476,68 @@ export class MedievalDemo {
   } {
     const violations: string[] = [];
     const suggestions: string[] = [];
-
     // Validate materials for time period
     if (content.materials) {
-      content.materials.forEach(material => {
+      content.materials.forEach(material => {)
         const materialData = this.materialDatabase.get(material);
         if (!materialData) {
-          violations.push(`Unknown material: ${material}`);
+          violations.push(`Unknown material: ${material}`);}
           suggestions.push(`Consider using common medieval materials like wool, linen, or leather`);
         }
       });
     }
-
     // Validate social class interactions
     if (content.socialClasses) {
       const hasRoyal = content.socialClasses.includes('royal');
       const hasPeasant = content.socialClasses.includes('peasant');
-      
       if (hasRoyal && hasPeasant) {
         violations.push('Direct royal-peasant interaction unlikely without intermediaries');
         suggestions.push('Add noble or clergy intermediary for historical accuracy');
       }
     }
-
     // Validate activities for historical context
     if (content.activities) {
       const modernActivities = ['printing', 'banking', 'university'];
-      content.activities.forEach(activity => {
+      content.activities.forEach(activity => {)
         if (modernActivities.includes(activity)) {
-          violations.push(`Activity "${activity}" may be anachronistic for early medieval period`);
+          violations.push(`Activity "${activity}" may be anachronistic for early medieval period`);}
           suggestions.push('Consider period-appropriate alternatives like manuscript copying or monastery schools');
         }
       });
     }
-
     return {
       isValid: violations.length === 0,
       violations,
       suggestions
     };
   }
-
   /**
    * Generate authentic medieval prompt elements
    */
   public generatePromptElements(category: 'character' | 'setting' | 'object' | 'activity'): string[] {
     switch (category) {
       case 'character':
-        return Array.from(this.characterDatabase.values()).map(char => 
-          `${char.name}, ${char.profession} (${char.socialClass}): ${char.description}`
+        return Array.from(this.characterDatabase.values()).map(char => )
+          `${char.name}, ${char.profession} (${char.socialClass}): ${char.description}`}
         );
-      
       case 'setting':
-        return Array.from(this.locationDatabase.values()).map(loc => 
-          `${loc.name}: ${loc.description} - ${loc.socialContext}`
+        return Array.from(this.locationDatabase.values()).map(loc => )
+          `${loc.name}: ${loc.description} - ${loc.socialContext}`}
         );
-      
       case 'object':
-        return Array.from(this.clothingDatabase.values()).map(clothing => 
-          `${clothing.name}: ${clothing.description} (${clothing.socialClass})`
+        return Array.from(this.clothingDatabase.values()).map(clothing => )
+          `${clothing.name}: ${clothing.description} (${clothing.socialClass})`}
         );
-      
       case 'activity':
         const activities: string[] = [];
-        this.sceneDatabase.forEach(scene => {
+        this.sceneDatabase.forEach(scene => {)
           activities.push(...scene.activities);
         });
         return [...new Set(activities)]; // Remove duplicates
-      
       default:
         return [];
     }
   }
-
   /**
    * Create demo scenario with full medieval context
    */
@@ -586,23 +551,19 @@ export class MedievalDemo {
   } {
     const scene = this.generateMedievalScene({ theme }) || Array.from(this.sceneDatabase.values())[0];
     const characters = scene.characters;
-    
     const clothing: MedievalClothing[] = [];
-    characters.forEach(character => {
-      const charClothing = this.getAppropriateClothing(character, {
+    characters.forEach(character => {)
+      const charClothing = this.getAppropriateClothing(character, {)
         season: scene.timeContext.season,
-        socialSetting: scene.setting.type
+        socialSetting: scene.setting.type,
       });
       clothing.push(...charClothing);
     });
-
-    const materials = Array.from(this.materialDatabase.values()).filter(material => 
+    const materials = Array.from(this.materialDatabase.values()).filter(material => ;)
       clothing.some(c => c.materials.includes(material.name))
     );
-
     const historicalContext = this.generateHistoricalContext(scene);
     const promptSuggestions = this.generatePromptSuggestions(scene);
-
     return {
       scene,
       characters,
@@ -612,57 +573,46 @@ export class MedievalDemo {
       promptSuggestions
     };
   }
-
   /**
    * Generate historical context explanation
    */
   private generateHistoricalContext(scene: MedievalScene): string {
     return `
-Medieval Context (${scene.timeContext.season} ${scene.timeContext.timeOfDay}):
-
+Medieval Context (${scene.timeContext.season} ${scene.timeContext.timeOfDay}):}
 Setting: ${scene.setting.name} - ${scene.setting.description}
 Political Context: ${scene.setting.politicalContext}
 Social Dynamics: ${scene.socialDynamics.join(', ')}
 Historical Elements: ${scene.historicalElements.join(', ')}
-
 This scene represents authentic medieval life, incorporating period-appropriate social hierarchies, 
 material culture, and daily activities based on historical evidence from archaeological finds, 
 manuscript illustrations, and documented practices of the time.
     `.trim();
   }
-
   /**
    * Generate writing prompt suggestions
    */
   private generatePromptSuggestions(scene: MedievalScene): string[] {
     return [
-      `Write a scene set in ${scene.setting.name} during ${scene.timeContext.season} ${scene.timeContext.timeOfDay}, featuring ${scene.characters.map(c => c.name).join(' and ')}.`,
-      
-      `Describe the sensory experience of ${scene.title}: the ${scene.sensoryDetails.sights.join(
+      `Write a scene set in ${scene.setting.name} during ${scene.timeContext.season} ${scene.timeContext.timeOfDay}, featuring ${scene.characters.map(c => c.name).join(' and ')}.`,}
+      `Describe the sensory experience of ${scene.title}: the ${scene.sensoryDetails.sights.join()}
         ',
         '
-      )}, sounds of ${scene.sensoryDetails.sounds.join(', ')}, and scents of ${scene.sensoryDetails.smells.join(', ')}.`,
-      
-      `Explore the social dynamics when ${scene.characters[0]?.name} (${scene.characters[0]?.socialClass}) interacts with others in ${scene.setting.name}.`,
-      
-      `Create dialogue that reveals the historical context of ${scene.historicalElements.join(' and ')} through character interactions.`,
-      
-      `Develop one of these narrative hooks: ${scene.narrativeHooks.join(' OR ')}.`
+      )}, sounds of ${scene.sensoryDetails.sounds.join(', ')}, and scents of ${scene.sensoryDetails.smells.join(', ')}.`,}
+      `Explore the social dynamics when ${scene.characters[0]?.name} (${scene.characters[0]?.socialClass}) interacts with others in ${scene.setting.name}.`,}
+      `Create dialogue that reveals the historical context of ${scene.historicalElements.join(' and ')} through character interactions.`,}
+      `Develop one of these narrative hooks: ${scene.narrativeHooks.join(' OR ')}.`}
     ];
   }
-
   /**
    * Integration with Node Metadata Manager
    */
   public async integrateWithMetadata(nodeId: string, sceneId: string): Promise<void> {
     const scene = this.sceneDatabase.get(sceneId);
     if (!scene) return;
-
     // Apply medieval era metadata
     await this.metadataManager.setNodeEra(nodeId, 'medieval');
-    
     // Add appropriate tags
-    const tags = [
+    const tags = [;
       'medieval',
       scene.setting.type,
       scene.timeContext.season,
@@ -670,9 +620,7 @@ manuscript illustrations, and documented practices of the time.
       ...scene.characters.map(c => c.socialClass),
       ...scene.activities.map(a => a.replace(/ /g, '_'))
     ];
-    
     await this.metadataManager.addNodeTags(nodeId, tags);
-    
     // Set genre based on scene content
     if (scene.narrativeHooks.some(hook => hook.includes('romance'))) {
       await this.metadataManager.setNodeGenre(nodeId, 'romance');
@@ -682,7 +630,6 @@ manuscript illustrations, and documented practices of the time.
       await this.metadataManager.setNodeGenre(nodeId, 'historical_fiction');
     }
   }
-
   /**
    * Get all medieval content for external use
    */
@@ -698,7 +645,7 @@ manuscript illustrations, and documented practices of the time.
       materials: Array.from(this.materialDatabase.values()),
       locations: Array.from(this.locationDatabase.values()),
       characters: Array.from(this.characterDatabase.values()),
-      scenes: Array.from(this.sceneDatabase.values())
+      scenes: Array.from(this.sceneDatabase.values()),
     };
   }
 }

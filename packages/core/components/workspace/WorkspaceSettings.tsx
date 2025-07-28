@@ -2,10 +2,8 @@
  * Epic 9.2.1 - Workspace Settings Component
  * Settings modal for workspace configuration
  */
-
 import React, { useState } from 'react';
 import { WorkspaceWithMembership } from '../../types/workspace';
-
 interface WorkspaceSettingsProps {
   workspace: WorkspaceWithMembership;
   onUpdate: (updates: { name?: string; description?: string }) => void;
@@ -14,7 +12,7 @@ interface WorkspaceSettingsProps {
   canArchive: boolean;
 }
 
-export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
+export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({)
   workspace,
   onUpdate,
   onArchive,
@@ -22,17 +20,15 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
   canArchive
 }) => {
   const [activeTab, setActiveTab] = useState<'general' | 'members' | 'danger'>('general');
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({)
     name: workspace.name,
     description: workspace.description || ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showArchiveConfirm, setShowArchiveConfirm] = useState(false);
-
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-
     if (!formData.name.trim()) {
       newErrors.name = 'Workspace name is required';
     } else if (formData.name.length < 3) {
@@ -40,35 +36,28 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
     } else if (formData.name.length > 50) {
       newErrors.name = 'Workspace name must be less than 50 characters';
     }
-
     if (formData.description && formData.description.length > 200) {
       newErrors.description = 'Description must be less than 200 characters';
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateForm()) {
       return;
     }
-
     // Check if there are any changes
-    const hasChanges = 
+    const hasChanges = ;
       formData.name !== workspace.name ||
       formData.description !== (workspace.description || '');
-
     if (!hasChanges) {
       onCancel();
       return;
     }
-
     setIsSubmitting(true);
     try {
-      await onUpdate({
+      await onUpdate({)
         name: formData.name.trim(),
         description: formData.description.trim() || undefined
       });
@@ -78,7 +67,6 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
       setIsSubmitting(false);
     }
   };
-
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
@@ -86,7 +74,6 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
-
   const handleArchive = async () => {
     setIsSubmitting(true);
     try {
@@ -98,8 +85,7 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
       setShowArchiveConfirm(false);
     }
   };
-
-  return (
+  return ()
     <div className="modal-overlay">
       <div className="modal modal--large">
         <div className="modal__header">
@@ -112,7 +98,6 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
             ×
           </button>
         </div>
-
         <div className="modal__content">
           <div className="settings-tabs">
             <button
@@ -127,7 +112,7 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
             >
               Members
             </button>
-            {canArchive && (
+            {canArchive && ()
               <button
                 className={`settings-tab ${activeTab === 'danger' ? 'settings-tab--active' : ''}`}
                 onClick={() => setActiveTab('danger')}
@@ -136,9 +121,8 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
               </button>
             )}
           </div>
-
           <div className="settings-content">
-            {activeTab === 'general' && (
+            {activeTab === 'general' && ()
               <form onSubmit={handleSubmit} className="settings-form">
                 <div className="form-group">
                   <label htmlFor="workspace-name" className="form-label">
@@ -154,11 +138,10 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
                     maxLength={50}
                     disabled={isSubmitting}
                   />
-                  {errors.name && (
+                  {errors.name && ()
                     <div className="form-error">{errors.name}</div>
                   )}
                 </div>
-
                 <div className="form-group">
                   <label htmlFor="workspace-description" className="form-label">
                     Description (Optional)
@@ -173,14 +156,13 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
                     maxLength={200}
                     disabled={isSubmitting}
                   />
-                  {errors.description && (
+                  {errors.description && ()
                     <div className="form-error">{errors.description}</div>
                   )}
                   <div className="form-hint">
                     {formData.description.length}/200 characters
                   </div>
                 </div>
-
                 <div className="workspace-info">
                   <h3>Workspace Information</h3>
                   <div className="info-grid">
@@ -200,14 +182,12 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
                 </div>
               </form>
             )}
-
-            {activeTab === 'members' && (
+            {activeTab === 'members' && ()
               <div className="members-tab">
                 <div className="members-header">
                   <h3>Workspace Members</h3>
                   <p>Manage who has access to this workspace and their permissions.</p>
                 </div>
-
                 <div className="members-list">
                   <div className="member-item">
                     <div className="member-avatar">
@@ -221,7 +201,6 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
                       <span className="badge badge--owner">Owner</span>
                     </div>
                   </div>
-                  
                   {/* TODO: Add actual member list from API */}
                   <div className="members-empty">
                     <p>No other members yet. Use the "Invite Users" button to add collaborators.</p>
@@ -229,8 +208,7 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
                 </div>
               </div>
             )}
-
-            {activeTab === 'danger' && canArchive && (
+            {activeTab === 'danger' && canArchive && ()
               <div className="danger-tab">
                 <div className="danger-section">
                   <h3>Archive Workspace</h3>
@@ -238,8 +216,7 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
                     Archiving this workspace will make it read-only and hide it from the main workspace list.
                     All projects and data will be preserved but no new content can be created.
                   </p>
-                  
-                  {!showArchiveConfirm ? (
+                  {!showArchiveConfirm ? ()
                     <button
                       type="button"
                       className="btn btn--danger"
@@ -248,7 +225,7 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
                     >
                       Archive Workspace
                     </button>
-                  ) : (
+                  ) : ()
                     <div className="confirm-action">
                       <p><strong>Are you sure you want to archive "{workspace.name}"?</strong></p>
                       <p>This action cannot be easily undone.</p>
@@ -277,7 +254,6 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
             )}
           </div>
         </div>
-
         <div className="modal__footer">
           <button
             type="button"
@@ -287,7 +263,7 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
           >
             Cancel
           </button>
-          {activeTab === 'general' && (
+          {activeTab === 'general' && ()
             <button
               type="submit"
               className="btn btn--primary"

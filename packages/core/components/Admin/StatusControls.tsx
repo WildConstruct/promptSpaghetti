@@ -7,7 +7,6 @@
  * Task: E17-1753114397016-18BAC3 - Implement status controls
  * Epic: 17 - Backstage Admin Controls
  */
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -107,35 +106,33 @@ export interface StatusControlsProps {
   onServiceAction?: (serviceId: string, action: string) => void;
   onSystemAction?: (action: string) => void;
 }
-
 const SERVICE_STATUS_CONFIG = {
-  running: { 
+  running: { ,
     color: 'text-green-600 bg-green-100', 
     icon: CheckCircle, 
     actions: ['stop', 'restart', 'pause'] 
   },
-  stopped: { 
+  stopped: { ,
     color: 'text-gray-600 bg-gray-100', 
     icon: StopCircle, 
-    actions: ['start'] 
+    actions: ['start'] ,
   },
-  error: { 
+  error: { ,
     color: 'text-red-600 bg-red-100', 
     icon: XCircle, 
     actions: ['restart', 'stop'] 
   },
-  starting: { 
+  starting: { ,
     color: 'text-yellow-600 bg-yellow-100', 
     icon: PlayCircle, 
-    actions: [] 
+    actions: [] ,
   },
-  stopping: { 
+  stopping: { ,
     color: 'text-orange-600 bg-orange-100', 
     icon: PauseCircle, 
-    actions: [] 
+    actions: [] ,
   }
 };
-
 const SYSTEM_STATUS_CONFIG = {
   operational: { color: 'text-green-600 bg-green-100', icon: CheckCircle },
   degraded: { color: 'text-yellow-600 bg-yellow-100', icon: AlertTriangle },
@@ -143,7 +140,7 @@ const SYSTEM_STATUS_CONFIG = {
   maintenance: { color: 'text-blue-600 bg-blue-100', icon: Settings }
 };
 
-export const StatusControls: React.FC<StatusControlsProps> = ({
+export const StatusControls: React.FC<StatusControlsProps> = ({)
   className = '',
   adminLevel = 'admin',
   onServiceAction,
@@ -155,24 +152,19 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
   const [selectedService, setSelectedService] = useState<SystemService | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [_____refreshInterval, setRefreshInterval] = useState<number | null>(null);
-
   // Mock data - in real implementation, this would come from system APIs
   useEffect(() => {
     loadSystemData();
-    
     // Set up auto-refresh
     const interval = setInterval(loadSystemData, 5000);
     setRefreshInterval(interval as any);
-    
     return () => {
       if (interval) clearInterval(interval);
     };
   }, []);
-
   const loadSystemData = async () => {
     try {
       setIsLoading(true);
-
       // Mock system overview
       const overview: SystemOverview = {
         overallStatus: 'operational',
@@ -185,10 +177,9 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
         networkLatency: 23,
         uptime: 7 * 24 * 60 * 60 * 1000, // 7 days
         activeUsers: 142,
-        backgroundJobs: 3
+        backgroundJobs: 3,
       };
       setSystemOverview(overview);
-
       // Mock services
       const mockServices: SystemService[] = [
         {
@@ -205,13 +196,13 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           port: 80,
           url: 'http://localhost',
           logs: [],
-          metrics: {
+          metrics: {,
             cpuUsage: 5.2,
             memoryUsage: 128,
             requestCount: 1250,
             errorRate: 0.02,
             responseTime: 45,
-            throughput: 850
+            throughput: 850,
           }
         },
         {
@@ -228,13 +219,13 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           port: 8000,
           url: 'http://localhost:8000',
           logs: [],
-          metrics: {
+          metrics: {,
             cpuUsage: 12.8,
             memoryUsage: 256,
             requestCount: 2840,
             errorRate: 0.05,
             responseTime: 125,
-            throughput: 420
+            throughput: 420,
           }
         },
         {
@@ -250,13 +241,13 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           dependencies: [],
           port: 5432,
           logs: [],
-          metrics: {
+          metrics: {,
             cpuUsage: 8.5,
             memoryUsage: 512,
             requestCount: 5600,
             errorRate: 0.01,
             responseTime: 15,
-            throughput: 1200
+            throughput: 1200,
           }
         },
         {
@@ -272,29 +263,26 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           dependencies: [],
           port: 6379,
           logs: [],
-          metrics: {
+          metrics: {,
             cpuUsage: 0,
             memoryUsage: 0,
             requestCount: 0,
             errorRate: 1,
             responseTime: 0,
-            throughput: 0
+            throughput: 0,
           }
         }
       ];
-      
       setServices(mockServices);
-
     } catch (error) {
       console.error('Failed to load system data:', error);
     } finally {
       setIsLoading(false);
     }
   };
-
   const handleServiceAction = async (serviceId: string, action: string) => {
     try {
-      setServices(prev => prev.map(service => 
+      setServices(prev => prev.map(service => )
         service.id === serviceId 
           ? { 
             ...service, 
@@ -305,10 +293,9 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           }
           : service
       ));
-
       // Simulate action delay
       setTimeout(() => {
-        setServices(prev => prev.map(service => 
+        setServices(prev => prev.map(service => )
           service.id === serviceId 
             ? { 
               ...service, 
@@ -319,28 +306,23 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
             : service
         ));
       }, 2000);
-
       onServiceAction?.(serviceId, action);
     } catch (error) {
-      console.error(`Failed to ${action} service ${serviceId}:`, error);
+      console.error(`Failed to ${action} service ${serviceId}:`, error);}
     }
   };
-
   const handleSystemAction = async (action: string) => {
     try {
       onSystemAction?.(action);
     } catch (error) {
-      console.error(`Failed to execute system action ${action}:`, error);
+      console.error(`Failed to execute system action ${action}:`, error);}
     }
   };
-
   const renderOverview = () => {
     if (!systemOverview) return <div>Loading overview...</div>;
-
     const statusConfig = SYSTEM_STATUS_CONFIG[systemOverview.overallStatus];
     const StatusIcon = statusConfig.icon;
-
-    return (
+    return ()
       <div className="overview-section">
         <div className="system-status-card">
           <Card>
@@ -370,7 +352,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
                     size="sm"
                     disabled={isLoading}
                   >
-                    <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />}
                     Refresh
                   </Button>
                 </div>
@@ -378,7 +360,6 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
             </CardContent>
           </Card>
         </div>
-
         <div className="metrics-grid">
           <Card>
             <CardContent className="p-4">
@@ -396,7 +377,6 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="metric-item">
@@ -416,7 +396,6 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="metric-item">
@@ -436,7 +415,6 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="metric-item">
@@ -452,7 +430,6 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
             </CardContent>
           </Card>
         </div>
-
         <div className="alerts-section">
           <Card>
             <CardHeader>
@@ -460,7 +437,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
             </CardHeader>
             <CardContent>
               <div className="alerts-list">
-                {systemOverview.erroredServices > 0 && (
+                {systemOverview.erroredServices > 0 && ()
                   <div className="alert-item error">
                     <AlertTriangle className="w-4 h-4" />
                     <span>{systemOverview.erroredServices} service(s) in error state</span>
@@ -469,8 +446,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
                     </Button>
                   </div>
                 )}
-                
-                {systemOverview.memoryUsage > 0.8 && (
+                {systemOverview.memoryUsage > 0.8 && ()
                   <div className="alert-item warning">
                     <AlertTriangle className="w-4 h-4" />
                     <span>High memory usage detected ({(systemOverview.memoryUsage * 100).toFixed(1)}%)</span>
@@ -479,8 +455,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
                     </Button>
                   </div>
                 )}
-                
-                {systemOverview.backgroundJobs > 5 && (
+                {systemOverview.backgroundJobs > 5 && ()
                   <div className="alert-item info">
                     <Activity className="w-4 h-4" />
                     <span>{systemOverview.backgroundJobs} background jobs running</span>
@@ -489,10 +464,9 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
                     </Button>
                   </div>
                 )}
-
                 {systemOverview.erroredServices === 0 && 
                  systemOverview.memoryUsage <= 0.8 && 
-                 systemOverview.backgroundJobs <= 5 && (
+                 systemOverview.backgroundJobs <= 5 && ()
                   <div className="alert-item success">
                     <CheckCircle className="w-4 h-4" />
                     <span>All systems operating normally</span>
@@ -505,8 +479,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
       </div>
     );
   };
-
-  const renderServices = () => (
+  const renderServices = () => (;)
     <div className="services-section">
       <div className="services-header">
         <h3>System Services</h3>
@@ -522,9 +495,8 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           </Button>
         </div>
       </div>
-
       <div className="services-grid">
-        {services.map(service => (
+        {services.map(service => ()
           <ServiceCard
             key={service.id}
             service={service}
@@ -536,8 +508,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
       </div>
     </div>
   );
-
-  const renderProcesses = () => (
+  const renderProcesses = () => (;)
     <div className="processes-section">
       <Card>
         <CardHeader>
@@ -565,7 +536,6 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
                 </Button>
               </div>
             </div>
-
             <div className="process-item">
               <div className="process-info">
                 <div className="process-name">Email Queue</div>
@@ -586,7 +556,6 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
                 </Button>
               </div>
             </div>
-
             <div className="process-item">
               <div className="process-info">
                 <div className="process-name">Cache Cleanup</div>
@@ -612,17 +581,15 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
       </Card>
     </div>
   );
-
-  return (
-    <div className={`status-controls ${className}`}>
+  return ()
+    <div className={`status-controls ${className}`}>}
       <div className="controls-header">
         <div className="header-info">
           <h2>Status Controls</h2>
           <p>Monitor and control system services, processes, and operations</p>
         </div>
-        
         <div className="header-badges">
-          <Badge className={`${SYSTEM_STATUS_CONFIG[systemOverview?.overallStatus || 'operational'].color} text-sm`}>
+          <Badge className={`${SYSTEM_STATUS_CONFIG[systemOverview?.overallStatus || 'operational'].color} text-sm`}>}
             System {systemOverview?.overallStatus || 'Unknown'}
           </Badge>
           <Badge className="bg-blue-100 text-blue-800 text-sm">
@@ -630,7 +597,6 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           </Badge>
         </div>
       </div>
-
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid grid-cols-4 w-full">
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -643,19 +609,15 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           <TabsTrigger value="processes">Processes</TabsTrigger>
           <TabsTrigger value="logs">System Logs</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview" className="tab-content">
           {renderOverview()}
         </TabsContent>
-
         <TabsContent value="services" className="tab-content">
           {renderServices()}
         </TabsContent>
-
         <TabsContent value="processes" className="tab-content">
           {renderProcesses()}
         </TabsContent>
-
         <TabsContent value="logs" className="tab-content">
           <Card>
             <CardHeader>
@@ -667,9 +629,8 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           </Card>
         </TabsContent>
       </Tabs>
-
       {/* Service Detail Modal */}
-      {selectedService && (
+      {selectedService && ()
         <ServiceDetailModal
           service={selectedService}
           onClose={() => setSelectedService(null)}
@@ -677,7 +638,6 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           adminLevel={adminLevel}
         />
       )}
-
       <style>{`
         .status-controls {
           max-width: 1400px;
@@ -687,102 +647,84 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .controls-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           gap: 1rem;
         }
-
         .header-info h2 {
           font-size: 1.875rem;
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 0.5rem;
         }
-
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
         }
-
         .header-badges {
           display: flex;
           gap: 0.5rem;
           align-items: center;
         }
-
         .overview-section {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .system-status-card {
           margin-bottom: 1rem;
         }
-
         .system-status-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-
         .status-title {
           font-size: 1.25rem;
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 0.5rem;
         }
-
         .system-actions {
           display: flex;
           gap: 0.5rem;
         }
-
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 1rem;
         }
-
         .metric-item {
           display: flex;
           align-items: flex-start;
           gap: 0.75rem;
         }
-
         .metric-info {
           flex: 1;
         }
-
         .metric-label {
           font-size: 0.875rem;
           color: #6b7280;
           margin-bottom: 0.25rem;
         }
-
         .metric-value {
           font-size: 1.5rem;
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 0.25rem;
         }
-
         .metric-status {
           font-size: 0.75rem;
           color: #6b7280;
         }
-
         .metric-status.running {
           color: #059669;
         }
-
         .metric-status.active {
           color: #3b82f6;
         }
-
         .load-bar,
         .memory-bar {
           height: 4px;
@@ -791,29 +733,24 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           overflow: hidden;
           margin-top: 0.25rem;
         }
-
         .load-fill {
           height: 100%;
           background: #059669;
           transition: width 0.3s ease;
         }
-
         .memory-fill {
           height: 100%;
           background: #8b5cf6;
           transition: width 0.3s ease;
         }
-
         .alerts-section {
           margin-top: 1rem;
         }
-
         .alerts-list {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
         }
-
         .alert-item {
           display: flex;
           align-items: center;
@@ -822,72 +759,60 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           border-radius: 6px;
           font-size: 0.875rem;
         }
-
         .alert-item.error {
           background: #fef2f2;
           color: #991b1b;
           border: 1px solid #fecaca;
         }
-
         .alert-item.warning {
           background: #fffbeb;
           color: #92400e;
           border: 1px solid #fed7aa;
         }
-
         .alert-item.info {
           background: #eff6ff;
           color: #1e40af;
           border: 1px solid #bfdbfe;
         }
-
         .alert-item.success {
           background: #f0fdf4;
           color: #166534;
           border: 1px solid #bbf7d0;
         }
-
         .services-section {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .services-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-
         .services-header h3 {
           font-size: 1.25rem;
           font-weight: 600;
           color: #1f2937;
         }
-
         .services-actions {
           display: flex;
           gap: 0.5rem;
         }
-
         .services-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
           gap: 1rem;
         }
-
         .processes-section {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .processes-list {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
         }
-
         .process-item {
           display: flex;
           align-items: center;
@@ -896,54 +821,44 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
           border: 1px solid #e5e7eb;
           border-radius: 6px;
         }
-
         .process-info {
           flex: 1;
         }
-
         .process-name {
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 0.25rem;
         }
-
         .process-description {
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .process-actions {
           display: flex;
           gap: 0.25rem;
         }
-
         @media (max-width: 768px) {
           .controls-header {
             flex-direction: column;
             align-items: stretch;
           }
-
           .system-status-header {
             flex-direction: column;
             gap: 1rem;
             align-items: stretch;
           }
-
           .metrics-grid {
             grid-template-columns: repeat(2, 1fr);
           }
-
           .services-grid {
             grid-template-columns: 1fr;
           }
-
           .process-item {
             flex-direction: column;
             align-items: stretch;
             gap: 0.75rem;
           }
         }
-
         @media (max-width: 480px) {
           .metrics-grid {
             grid-template-columns: 1fr;
@@ -961,8 +876,7 @@ interface ServiceCardProps {
   onSelect: (service: SystemService) => void;
   adminLevel: string;
 }
-
-const ServiceCard: React.FC<ServiceCardProps> = ({ 
+const ServiceCard: React.FC<ServiceCardProps> = ({ )
   service, 
   onAction, 
   onSelect, 
@@ -971,24 +885,20 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   const statusConfig = SERVICE_STATUS_CONFIG[service.status];
   const StatusIcon = statusConfig.icon;
   const canControl = adminLevel === 'super_admin' || adminLevel === 'admin';
-
   const getHealthColor = (health: number) => {
     if (health >= 90) return 'text-green-600';
     if (health >= 70) return 'text-yellow-600';
     if (health >= 50) return 'text-orange-600';
     return 'text-red-600';
   };
-
   const formatUptime = (uptime: number) => {
     const days = Math.floor(uptime / (24 * 60 * 60 * 1000));
     const hours = Math.floor((uptime % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-    
-    if (days > 0) return `${days}d ${hours}h`;
-    if (hours > 0) return `${hours}h`;
+    if (days > 0) return `${days}d ${hours}h`;}
+    if (hours > 0) return `${hours}h`;}
     return '< 1h';
   };
-
-  return (
+  return ()
     <Card className="service-card">
       <CardContent className="p-4">
         <div className="service-header">
@@ -1003,11 +913,10 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             </Badge>
           </div>
         </div>
-
         <div className="service-metrics">
           <div className="metric-row">
             <span>Health:</span>
-            <span className={`font-semibold ${getHealthColor(service.health)}`}>
+            <span className={`font-semibold ${getHealthColor(service.health)}`}>}
               {service.health}%
             </span>
           </div>
@@ -1015,7 +924,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             <span>Uptime:</span>
             <span>{formatUptime(service.uptime)}</span>
           </div>
-          {service.port && (
+          {service.port && ()
             <div className="metric-row">
               <span>Port:</span>
               <span>{service.port}</span>
@@ -1030,7 +939,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             <span>{service.metrics.memoryUsage}MB</span>
           </div>
         </div>
-
         <div className="service-actions">
           <Button
             onClick={() => onSelect(service)}
@@ -1040,8 +948,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             <Eye className="w-4 h-4 mr-1" />
             Details
           </Button>
-          
-          {canControl && statusConfig.actions.map(action => (
+          {canControl && statusConfig.actions.map(action => ()
             <Button
               key={action}
               onClick={() => onAction(service.id, action)}
@@ -1058,35 +965,29 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           ))}
         </div>
       </CardContent>
-
       <style>{`
         .service-card {
           transition: box-shadow 0.2s ease;
         }
-
         .service-card:hover {
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-
         .service-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
         }
-
         .service-name {
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 0.25rem;
         }
-
         .service-description {
           font-size: 0.875rem;
           color: #6b7280;
           line-height: 1.4;
         }
-
         .service-metrics {
           display: flex;
           flex-direction: column;
@@ -1096,22 +997,18 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           background: #f9fafb;
           border-radius: 6px;
         }
-
         .metric-row {
           display: flex;
           justify-content: space-between;
           font-size: 0.875rem;
         }
-
         .metric-row span:first-child {
           color: #6b7280;
         }
-
         .metric-row span:last-child {
           color: #1f2937;
           font-weight: 500;
         }
-
         .service-actions {
           display: flex;
           gap: 0.5rem;
@@ -1129,8 +1026,7 @@ interface ServiceDetailModalProps {
   onAction: (serviceId: string, action: string) => void;
   adminLevel: string;
 }
-
-const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
+const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({)
   service,
   onClose,
   onAction,
@@ -1139,8 +1035,7 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
   const statusConfig = SERVICE_STATUS_CONFIG[service.status];
   const StatusIcon = statusConfig.icon;
   const canControl = adminLevel === 'super_admin' || adminLevel === 'admin';
-
-  return (
+  return ()
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
@@ -1155,7 +1050,6 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
             ✕
           </Button>
         </div>
-
         <div className="modal-body">
           <div className="service-details-grid">
             <div className="detail-section">
@@ -1183,7 +1077,6 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
                 </Badge>
               </div>
             </div>
-
             <div className="detail-section">
               <h3>Performance Metrics</h3>
               <div className="detail-item">
@@ -1212,12 +1105,11 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
               </div>
             </div>
           </div>
-
-          {service.dependencies.length > 0 && (
+          {service.dependencies.length > 0 && ()
             <div className="dependencies-section">
               <h3>Dependencies</h3>
               <div className="dependencies-list">
-                {service.dependencies.map(dep => (
+                {service.dependencies.map(dep => ()
                   <Badge key={dep} variant="outline">
                     {dep}
                   </Badge>
@@ -1226,12 +1118,11 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
             </div>
           )}
         </div>
-
         <div className="modal-footer">
           <Button onClick={onClose} variant="outline">
             Close
           </Button>
-          {canControl && statusConfig.actions.map(action => (
+          {canControl && statusConfig.actions.map(action => ()
             <Button
               key={action}
               onClick={() => {
@@ -1245,7 +1136,6 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           ))}
         </div>
       </div>
-
       <style>{`
         .modal-overlay {
           position: fixed;
@@ -1256,7 +1146,6 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           justify-content: center;
           z-index: 1000;
         }
-
         .modal-content {
           background: white;
           border-radius: 8px;
@@ -1265,7 +1154,6 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           max-height: 80vh;
           overflow: auto;
         }
-
         .modal-header {
           display: flex;
           justify-content: space-between;
@@ -1273,30 +1161,25 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
         }
-
         .modal-title {
           display: flex;
           align-items: center;
           gap: 1rem;
         }
-
         .modal-title h2 {
           font-size: 1.25rem;
           font-weight: 600;
           color: #1f2937;
         }
-
         .modal-body {
           padding: 1.5rem;
         }
-
         .service-details-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1.5rem;
           margin-bottom: 1.5rem;
         }
-
         .detail-section h3 {
           font-size: 1rem;
           font-weight: 600;
@@ -1305,7 +1188,6 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           border-bottom: 1px solid #e5e7eb;
           padding-bottom: 0.5rem;
         }
-
         .detail-item {
           display: flex;
           justify-content: space-between;
@@ -1313,29 +1195,24 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           margin-bottom: 0.75rem;
           font-size: 0.875rem;
         }
-
         .detail-item label {
           color: #6b7280;
           font-weight: 500;
         }
-
         .detail-item span {
           color: #1f2937;
         }
-
         .dependencies-section h3 {
           font-size: 1rem;
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 0.75rem;
         }
-
         .dependencies-list {
           display: flex;
           flex-wrap: wrap;
           gap: 0.5rem;
         }
-
         .modal-footer {
           display: flex;
           justify-content: flex-end;
@@ -1343,12 +1220,10 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;
         }
-
         @media (max-width: 768px) {
           .service-details-grid {
             grid-template-columns: 1fr;
           }
-
           .modal-content {
             width: 95vw;
             max-height: 90vh;

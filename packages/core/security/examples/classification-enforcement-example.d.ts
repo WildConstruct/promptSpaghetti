@@ -7,13 +7,13 @@
 import { ClassificationEnforcer } from '../ClassificationEnforcer';
 declare const app: any;
 declare const enforcer: ClassificationEnforcer;
-declare function processDataOperation(
+declare function processDataOperation()
   userId: string,
   dataId: string,
   operation: 'read' | 'write' | 'delete',
   classification: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED'
 ): Promise<void>;
-declare function batchProcessData(userId: string, dataItems: Array<{
+declare function batchProcessData(userId: string, dataItems: Array<{)
     id: string;
     classification: any;
     value: any;

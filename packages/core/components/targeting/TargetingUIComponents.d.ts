@@ -53,13 +53,13 @@ export interface TargetingPreview {
     totalUsers: number;
     matchedUsers: number;
     matchPercentage: number;
-    sampleUsers: Array<{
+    sampleUsers: Array<{,
         id: string;
         email: string;
         attributes: Record<string, any>;
         matchReasons: string[];
     }>;
-    demographics: {
+    demographics: {,
         age: Record<string, number>;
         location: Record<string, number>;
         userType: Record<string, number>;

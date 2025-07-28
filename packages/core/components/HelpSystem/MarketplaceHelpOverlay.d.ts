@@ -18,7 +18,7 @@ import { HelpContentManager } from '../ContextualHelp/HelpContentManager';
 export type MarketplaceHelpContentType = 'marketplace-discovery' | 'template-browsing' | 'purchase-flow' | 'template-preview' | 'rating-system' | 'creator-onboarding' | 'community-features' | 'profile-management' | 'monetization' | 'marketplace-navigation';
 export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> {
     type: HelpContentType | MarketplaceHelpContentType;
-    marketplaceContext: {
+    marketplaceContext: {,
         page?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
         userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
         templateCategory?: string;
@@ -48,7 +48,7 @@ export interface MarketplaceHelpOverlayProps {
     coreHelpManager?: HelpContentManager;
     onHelpInteraction?: (action: string, context: Record<string, any>) => void;
     onTourCompleted?: (tourId: string) => void;
-    onFeedbackSubmitted?: (feedback: {
+    onFeedbackSubmitted?: (feedback: {)
         rating: number;
         comment: string;
         context: string;

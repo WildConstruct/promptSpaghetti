@@ -21,11 +21,11 @@ interface StickyNoteProps {
     onStartEdit: () => void;
     onStopEdit: () => void;
     onDelete: () => void;
-    onMove: (position: {
+    onMove: (position: {)
         x: number;
         y: number;
     }) => void;
-    onResize: (size: {
+    onResize: (size: {)
         width: number;
         height: number;
     }) => void;

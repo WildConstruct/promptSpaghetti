@@ -8,7 +8,6 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-
 import { 
   DataClassificationLevel, 
   OperationContext,
@@ -24,7 +23,6 @@ export interface AccessControlModel {
   policies: ClassificationAccessPolicy[];
   decisionEngine: AccessDecisionEngine;
 }
-
 /**
  * Role-Based Access Control (RBAC) Model
  */
@@ -45,7 +43,7 @@ export interface DataClassificationRole {
   constraints: RoleConstraint[];
   parentRoles: string[];
   isActive: boolean;
-  metadata: {
+  metadata: {,
     createdBy: string;
     createdAt: Date;
     lastModified: Date;
@@ -117,7 +115,6 @@ export interface RoleApproval {
   comments?: string;
   approvalLevel: 'MANAGER' | 'DATA_OWNER' | 'SECURITY_OFFICER' | 'ADMIN';
 }
-
 /**
  * Attribute-Based Access Control (ABAC) Model
  */
@@ -316,7 +313,6 @@ export interface PolicyMetadata {
   complianceFrameworks: string[];
   riskAssessment: string;
 }
-
 /**
  * Classification-Specific Access Policies
  */
@@ -452,7 +448,6 @@ export interface ViolationAction {
   parameters: Record<string, any>;
   conditions: AccessCondition[];
 }
-
 /**
  * Access Decision Engine
  */
@@ -508,7 +503,6 @@ export interface DecisionMetadata {
   cacheHit: boolean;
   version: string;
 }
-
 /**
  * Operation and Resource Types
  */
@@ -546,7 +540,6 @@ export type ResourceType =
   | 'LOG'
   | 'BACKUP'
   | 'METADATA';
-
 /**
  * Standard Classification Roles
  */

@@ -57,10 +57,10 @@ export interface CommunityComponentEvents {
 }
 export declare     calculateOverallScore: (dimensions: Record<string, number>) => number;
     calculateGrade: (score: number) => "A+" | "A" | "B+" | "B" | "C+" | "C" | "D" | "F";
-    validateWorkflowTransition: (
+    validateWorkflowTransition: (),
       currentStage: WorkflowStage,
       targetStage: WorkflowStage,
-      userRole: ContentVersionControlMode
+      userRole: ContentVersionControlMode,
     ) => boolean;
 };
 //# sourceMappingURL=index.d.ts.map

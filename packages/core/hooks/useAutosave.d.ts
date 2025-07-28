@@ -7,12 +7,12 @@ interface UseAutosaveProps {
 }
 interface UseAutosaveReturn {
     showRestorePrompt: boolean;
-    restoreDraft: {
+    restoreDraft: {,
         nodes: Node[];
         edges: Edge[];
     } | null;
     setShowRestorePrompt: (show: boolean) => void;
-    setRestoreDraft: (draft: {
+    setRestoreDraft: (draft: {)
         nodes: Node[];
         edges: Edge[];
     } | null) => void;

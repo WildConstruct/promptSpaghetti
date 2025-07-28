@@ -247,7 +247,7 @@ export declare const CreateRestorationAttemptRequestSchema: z.ZodObject<{
     projectId: z.ZodString;
     sourceSnapshotId: z.ZodString;
     targetSnapshotId: z.ZodOptional<z.ZodString>;
-    config: z.ZodObject<{
+    config: z.ZodObject<{,
         restorationType: z.ZodEnum<["full", "partial", "selective"]>;
         restorationStrategy: z.ZodEnum<["replace", "merge", "selective"]>;
         selectedNodes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -276,7 +276,7 @@ export declare const CreateRestorationAttemptRequestSchema: z.ZodObject<{
         notifyOnCompletion?: boolean | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
-    config: {
+    config: {,
         createBackup: boolean;
         restorationType: "full" | "partial" | "selective";
         restorationStrategy: "replace" | "merge" | "selective";
@@ -290,7 +290,7 @@ export declare const CreateRestorationAttemptRequestSchema: z.ZodObject<{
     sourceSnapshotId: string;
     targetSnapshotId?: string | undefined;
 }, {
-    config: {
+    config: {,
         restorationType: "full" | "partial" | "selective";
         restorationStrategy: "replace" | "merge" | "selective";
         createBackup?: boolean | undefined;
@@ -308,7 +308,7 @@ export declare const RestorationPreviewRequestSchema: z.ZodObject<{
     projectId: z.ZodString;
     sourceSnapshotId: z.ZodString;
     targetSnapshotId: z.ZodOptional<z.ZodString>;
-    config: z.ZodObject<{
+    config: z.ZodObject<{,
         restorationType: z.ZodEnum<["full", "partial", "selective"]>;
         restorationStrategy: z.ZodEnum<["replace", "merge", "selective"]>;
         selectedNodes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -337,7 +337,7 @@ export declare const RestorationPreviewRequestSchema: z.ZodObject<{
         notifyOnCompletion?: boolean | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
-    config: {
+    config: {,
         createBackup: boolean;
         restorationType: "full" | "partial" | "selective";
         restorationStrategy: "replace" | "merge" | "selective";
@@ -351,7 +351,7 @@ export declare const RestorationPreviewRequestSchema: z.ZodObject<{
     sourceSnapshotId: string;
     targetSnapshotId?: string | undefined;
 }, {
-    config: {
+    config: {,
         restorationType: "full" | "partial" | "selective";
         restorationStrategy: "replace" | "merge" | "selective";
         createBackup?: boolean | undefined;
@@ -387,7 +387,7 @@ export declare const RestorationBookmarkRequestSchema: z.ZodObject<{
     description: z.ZodOptional<z.ZodString>;
     sourceSnapshotId: z.ZodString;
     targetSnapshotId: z.ZodOptional<z.ZodString>;
-    restorationConfig: z.ZodObject<{
+    restorationConfig: z.ZodObject<{,
         restorationType: z.ZodEnum<["full", "partial", "selective"]>;
         restorationStrategy: z.ZodEnum<["replace", "merge", "selective"]>;
         selectedNodes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -419,7 +419,7 @@ export declare const RestorationBookmarkRequestSchema: z.ZodObject<{
     name: string;
     projectId: string;
     sourceSnapshotId: string;
-    restorationConfig: {
+    restorationConfig: {,
         createBackup: boolean;
         restorationType: "full" | "partial" | "selective";
         restorationStrategy: "replace" | "merge" | "selective";
@@ -435,7 +435,7 @@ export declare const RestorationBookmarkRequestSchema: z.ZodObject<{
     name: string;
     projectId: string;
     sourceSnapshotId: string;
-    restorationConfig: {
+    restorationConfig: {,
         restorationType: "full" | "partial" | "selective";
         restorationStrategy: "replace" | "merge" | "selective";
         createBackup?: boolean | undefined;
@@ -454,7 +454,7 @@ export type ConflictResolutionRequest = z.infer<typeof ConflictResolutionRequest
 export type RestorationBookmarkRequest = z.infer<typeof RestorationBookmarkRequestSchema>;
 export declare const RestorationPreviewResponseSchema: z.ZodObject<{
     sessionId: z.ZodString;
-    preview: z.ZodObject<{
+    preview: z.ZodObject<{,
         nodesToAdd: z.ZodArray<z.ZodRecord<z.ZodString, z.ZodUnknown>, "many">;
         nodesToUpdate: z.ZodArray<z.ZodRecord<z.ZodString, z.ZodUnknown>, "many">;
         nodesToDelete: z.ZodArray<z.ZodString, "many">;
@@ -476,7 +476,7 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
         edgesToUpdate: Record<string, unknown>[];
         edgesToDelete: string[];
     }>;
-    conflicts: z.ZodArray<z.ZodObject<{
+    conflicts: z.ZodArray<z.ZodObject<{,
         id: z.ZodString;
         restorationAttemptId: z.ZodString;
         conflictType: z.ZodEnum<["node_modified", "edge_modified", "node_deleted", "edge_deleted", "position_conflict", "property_conflict"]>;
@@ -522,7 +522,7 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
         sourceValue?: Record<string, unknown> | undefined;
         resolvedValue?: Record<string, unknown> | undefined;
     }>, "many">;
-    summary: z.ZodObject<{
+    summary: z.ZodObject<{,
         totalChanges: z.ZodNumber;
         totalConflicts: z.ZodNumber;
         estimatedDuration: z.ZodNumber;
@@ -540,13 +540,13 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
     }>;
     expiresAt: z.ZodDate;
 }, "strip", z.ZodTypeAny, {
-    summary: {
+    summary: {,
         riskLevel: "low" | "medium" | "high";
         estimatedDuration: number;
         totalChanges: number;
         totalConflicts: number;
     };
-    preview: {
+    preview: {,
         nodesToAdd: Record<string, unknown>[];
         nodesToUpdate: Record<string, unknown>[];
         nodesToDelete: string[];
@@ -556,7 +556,7 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
     };
     sessionId: string;
     expiresAt: Date;
-    conflicts: {
+    conflicts: {,
         id: string;
         createdAt: Date;
         resourceId: string;
@@ -573,13 +573,13 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
         resolvedValue?: Record<string, unknown> | undefined;
     }[];
 }, {
-    summary: {
+    summary: {,
         riskLevel: "low" | "medium" | "high";
         estimatedDuration: number;
         totalChanges: number;
         totalConflicts: number;
     };
-    preview: {
+    preview: {,
         nodesToAdd: Record<string, unknown>[];
         nodesToUpdate: Record<string, unknown>[];
         nodesToDelete: string[];
@@ -589,7 +589,7 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
     };
     sessionId: string;
     expiresAt: Date;
-    conflicts: {
+    conflicts: {,
         id: string;
         createdAt: Date;
         resourceId: string;
@@ -645,7 +645,7 @@ export declare const RestorationStatsResponseSchema: z.ZodObject<{
     successfulAttempts: z.ZodNumber;
     failedAttempts: z.ZodNumber;
     averageDuration: z.ZodNumber;
-    mostCommonConflicts: z.ZodArray<z.ZodObject<{
+    mostCommonConflicts: z.ZodArray<z.ZodObject<{,
         conflictType: z.ZodEnum<["node_modified", "edge_modified", "node_deleted", "edge_deleted", "position_conflict", "property_conflict"]>;
         count: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
@@ -655,7 +655,7 @@ export declare const RestorationStatsResponseSchema: z.ZodObject<{
         count: number;
         conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
     }>, "many">;
-    recentAttempts: z.ZodArray<z.ZodObject<{
+    recentAttempts: z.ZodArray<z.ZodObject<{,
         id: z.ZodString;
         projectId: z.ZodString;
         sourceSnapshotId: z.ZodString;
@@ -706,11 +706,11 @@ export declare const RestorationStatsResponseSchema: z.ZodObject<{
     totalAttempts: number;
     successfulAttempts: number;
     averageDuration: number;
-    mostCommonConflicts: {
+    mostCommonConflicts: {,
         count: number;
         conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
     }[];
-    recentAttempts: {
+    recentAttempts: {,
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -731,11 +731,11 @@ export declare const RestorationStatsResponseSchema: z.ZodObject<{
     totalAttempts: number;
     successfulAttempts: number;
     averageDuration: number;
-    mostCommonConflicts: {
+    mostCommonConflicts: {,
         count: number;
         conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
     }[];
-    recentAttempts: {
+    recentAttempts: {,
         id: string;
         createdAt: Date;
         updatedAt: Date;

@@ -1,5 +1,4 @@
 import React from 'react';
-
 /**
  * Epic 8.4 Task 2 - Visual Hierarchy Design System
  * 
@@ -9,41 +8,41 @@ import React from 'react';
 
 // Typography scale for visual hierarchy
 export const TypographyScale = {
-  primary: {
+  primary: {,
     fontSize: 16,
     fontWeight: 600,
     lineHeight: 1.4,
-    letterSpacing: '-0.01em'
+    letterSpacing: '-0.01em',
   },
-  secondary: {
+  secondary: {,
     fontSize: 14,
     fontWeight: 500,
     lineHeight: 1.4,
-    letterSpacing: '0em'
+    letterSpacing: '0em',
   },
-  tertiary: {
+  tertiary: {,
     fontSize: 12,
     fontWeight: 500,
     lineHeight: 1.3,
-    letterSpacing: '0.01em'
+    letterSpacing: '0.01em',
   },
-  caption: {
+  caption: {,
     fontSize: 11,
     fontWeight: 400,
     lineHeight: 1.2,
-    letterSpacing: '0.02em'
+    letterSpacing: '0.02em',
   },
-  micro: {
+  micro: {,
     fontSize: 10,
     fontWeight: 400,
     lineHeight: 1.2,
-    letterSpacing: '0.03em'
+    letterSpacing: '0.03em',
   }
 };
 
 // Color system for progressive disclosure levels
 export const HierarchyColors = {
-  basic: {
+  basic: {,
     primary: '#4ade80',    // Green - Essential/Primary
     secondary: '#22c55e',   // Darker green
     background: '#1e2a3a',  // Slightly lighter background
@@ -51,7 +50,7 @@ export const HierarchyColors = {
     text: '#e2e8f0',       // High contrast text
     accent: '#065f46'      // Dark green accent
   },
-  advanced: {
+  advanced: {,
     primary: '#60a5fa',     // Blue - Advanced features
     secondary: '#3b82f6',   // Darker blue
     background: '#1a202c',  // Standard background
@@ -59,7 +58,7 @@ export const HierarchyColors = {
     text: '#90cdf4',       // Blue-tinted text
     accent: '#1e3a8a'     // Dark blue accent
   },
-  debug: {
+  debug: {,
     primary: '#c4b5fd',     // Purple - Technical/Debug
     secondary: '#a78bfa',   // Darker purple
     background: '#2d1b69',  // Purple-tinted background
@@ -67,7 +66,7 @@ export const HierarchyColors = {
     text: '#c4b5fd',       // Light purple text
     accent: '#581c87'     // Dark purple accent
   },
-  neutral: {
+  neutral: {,
     primary: '#e2e8f0',     // Neutral text
     secondary: '#a0aec0',   // Muted text
     background: '#1a202c',  // Standard background
@@ -85,55 +84,55 @@ export const SpacingScale = {
   lg: 16,
   xl: 20,
   xxl: 24,
-  xxxl: 32
+  xxxl: 32,
 };
 
 // Component sizes for consistent proportions
 export const ComponentSizes = {
-  field: {
+  field: {,
     height: 36,
-    padding: `${SpacingScale.sm}px ${SpacingScale.md}px`
+    padding: `${SpacingScale.sm}px ${SpacingScale.md}px`}
   },
-  section: {
-    padding: `${SpacingScale.md}px`,
-    marginBottom: SpacingScale.md
+  section: {,
+    padding: `${SpacingScale.md}px`,}
+    marginBottom: SpacingScale.md,
   },
-  header: {
+  header: {,
     height: 32,
-    padding: `${SpacingScale.sm}px ${SpacingScale.md}px`
+    padding: `${SpacingScale.sm}px ${SpacingScale.md}px`}
   }
 };
 
 // Visual weight indicators for field importance
 export const FieldImportanceStyles = {
-  critical: {
+  critical: {,
     borderLeftWidth: 4,
     borderLeftStyle: 'solid' as const,
     borderLeftColor: HierarchyColors.basic.primary,
-    backgroundColor: `${HierarchyColors.basic.primary}15`, // 15% opacity
+    backgroundColor: `${HierarchyColors.basic.primary}15`, // 15% opacity}
     ...TypographyScale.secondary
   },
-  important: {
+  important: {,
     borderLeftWidth: 3,
     borderLeftStyle: 'solid' as const,
     borderLeftColor: HierarchyColors.advanced.primary,
-    backgroundColor: `${HierarchyColors.advanced.primary}10`, // 10% opacity
+    backgroundColor: `${HierarchyColors.advanced.primary}10`, // 10% opacity}
     ...TypographyScale.tertiary
   },
-  standard: {
+  standard: {,
     borderLeftWidth: 2,
     borderLeftStyle: 'solid' as const,
     borderLeftColor: HierarchyColors.neutral.border,
     backgroundColor: 'transparent',
     ...TypographyScale.tertiary
   },
-  supplementary: {
+  supplementary: {,
     borderLeftWidth: 1,
     borderLeftStyle: 'solid' as const,
     borderLeftColor: HierarchyColors.neutral.secondary,
     backgroundColor: 'transparent',
     ...TypographyScale.caption,
-    opacity: 0.8
+    opacity: 0.8,
   }
 };
 
@@ -143,7 +142,6 @@ export type FieldPriority = 'critical' | 'important' | 'standard' | 'supplementa
 export const classifyFieldPriority = (fieldName: string, nodeType = 'generic'): FieldPriority => {
   const lowerName = fieldName.toLowerCase();
   const lowerNodeType = nodeType.toLowerCase();
-  
   // Node-type specific critical fields
   const nodeTypeCriticalFields: Record<string, string[]> = {
     'weightedchoice': ['choices', 'weights', 'name'],
@@ -154,31 +152,26 @@ export const classifyFieldPriority = (fieldName: string, nodeType = 'generic'): 
     'setvariable': ['variablename', 'value', 'name'],
     'getvariable': ['variablename', 'name'],
   };
-  
   // Check node-type specific critical fields first
   const nodeSpecificCritical = nodeTypeCriticalFields[lowerNodeType];
   if (nodeSpecificCritical && nodeSpecificCritical.some(field => lowerName.includes(field))) {
     return 'critical';
   }
-  
   // General critical fields - always essential for node function
   const criticalPatterns = ['template', 'text', 'content', 'name', 'choices', 'output'];
   if (criticalPatterns.some(pattern => lowerName.includes(pattern))) {
     return 'critical';
   }
-  
   // Important fields - commonly used advanced features
   const importantPatterns = ['weight', 'probability', 'seed', 'variable', 'count', 'condition'];
   if (importantPatterns.some(pattern => lowerName.includes(pattern))) {
     return 'important';
   }
-  
   // Supplementary fields - technical or rarely used
   const supplementaryPatterns = ['id', 'config', 'debug', 'internal', 'metadata', 'raw'];
   if (supplementaryPatterns.some(pattern => lowerName.includes(pattern))) {
     return 'supplementary';
   }
-  
   // Default to standard
   return 'standard';
 };
@@ -196,7 +189,7 @@ export interface HierarchyHeaderProps {
   children?: React.ReactNode;
 }
 
-export const HierarchyHeader: React.FC<HierarchyHeaderProps> = ({
+export const HierarchyHeader: React.FC<HierarchyHeaderProps> = ({)
   title,
   level,
   priority = 'standard',
@@ -209,8 +202,7 @@ export const HierarchyHeader: React.FC<HierarchyHeaderProps> = ({
 }) => {
   const colors = HierarchyColors[level];
   const typography = priority === 'critical' ? TypographyScale.secondary : TypographyScale.tertiary;
-  
-  return (
+  return ()
     <div
       style={{
         display: 'flex',
@@ -218,7 +210,7 @@ export const HierarchyHeader: React.FC<HierarchyHeaderProps> = ({
         justifyContent: 'space-between',
         ...ComponentSizes.header,
         backgroundColor: colors.background,
-        borderBottom: `1px solid ${colors.border}`,
+        borderBottom: `1px solid ${colors.border}`,}
         cursor: isCollapsible ? 'pointer' : 'default',
         transition: 'all 0.2s ease-in-out',
         ...typography
@@ -234,7 +226,7 @@ export const HierarchyHeader: React.FC<HierarchyHeaderProps> = ({
       } : undefined}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: SpacingScale.sm }}>
-        {icon && (
+        {icon && ()
           <span style={{ fontSize: typography.fontSize, opacity: 0.8 }}>
             {icon}
           </span>
@@ -242,13 +234,13 @@ export const HierarchyHeader: React.FC<HierarchyHeaderProps> = ({
         <span style={{ color: colors.text, fontWeight: typography.fontWeight }}>
           {title}
         </span>
-        {description && (
+        {description && ()
           <span
             style={{
               ...TypographyScale.caption,
               color: colors.secondary,
               fontStyle: 'italic',
-              marginLeft: SpacingScale.xs
+              marginLeft: SpacingScale.xs,
             }}
             title={description}
           >
@@ -256,10 +248,9 @@ export const HierarchyHeader: React.FC<HierarchyHeaderProps> = ({
           </span>
         )}
       </div>
-      
       <div style={{ display: 'flex', alignItems: 'center', gap: SpacingScale.xs }}>
         {children}
-        {isCollapsible && (
+        {isCollapsible && ()
           <span
             style={{
               fontSize: TypographyScale.caption.fontSize,
@@ -288,7 +279,7 @@ export interface HierarchyFieldProps {
   className?: string;
 }
 
-export const HierarchyField: React.FC<HierarchyFieldProps> = ({
+export const HierarchyField: React.FC<HierarchyFieldProps> = ({)
   priority,
   level,
   children,
@@ -300,8 +291,7 @@ export const HierarchyField: React.FC<HierarchyFieldProps> = ({
 }) => {
   const colors = HierarchyColors[level];
   const fieldStyles = FieldImportanceStyles[priority];
-  
-  return (
+  return ()
     <div
       className={className}
       style={{
@@ -312,13 +302,13 @@ export const HierarchyField: React.FC<HierarchyFieldProps> = ({
         transition: 'all 0.2s ease-in-out'
       }}
     >
-      {label && (
+      {label && ()
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             marginBottom: SpacingScale.xs,
-            gap: SpacingScale.xs
+            gap: SpacingScale.xs,
           }}
         >
           <label
@@ -327,37 +317,34 @@ export const HierarchyField: React.FC<HierarchyFieldProps> = ({
               color: colors.text,
               fontWeight: 500,
               textTransform: 'uppercase',
-              letterSpacing: '0.05em'
+              letterSpacing: '0.05em',
             }}
           >
             {label}
           </label>
-          {required && (
+          {required && ()
             <span style={{ color: '#ef4444', fontSize: TypographyScale.caption.fontSize }}>
               *
             </span>
           )}
         </div>
       )}
-      
       <div style={{ marginBottom: description ? SpacingScale.xs : 0 }}>
         {children}
       </div>
-      
-      {description && (
+      {description && ()
         <div
           style={{
             ...TypographyScale.micro,
             color: colors.secondary,
             fontStyle: 'italic',
-            marginTop: SpacingScale.xs
+            marginTop: SpacingScale.xs,
           }}
         >
           {description}
         </div>
       )}
-      
-      {error && (
+      {error && ()
         <div
           style={{
             ...TypographyScale.micro,
@@ -365,7 +352,7 @@ export const HierarchyField: React.FC<HierarchyFieldProps> = ({
             marginTop: SpacingScale.xs,
             display: 'flex',
             alignItems: 'center',
-            gap: SpacingScale.xs
+            gap: SpacingScale.xs,
           }}
         >
           <span>❌</span>
@@ -383,7 +370,7 @@ export interface ComplexityIndicatorProps {
   size?: 'small' | 'medium' | 'large';
 }
 
-export const ComplexityIndicator: React.FC<ComplexityIndicatorProps> = ({
+export const ComplexityIndicator: React.FC<ComplexityIndicatorProps> = ({)
   level,
   showLabel = true,
   size = 'medium'
@@ -392,22 +379,19 @@ export const ComplexityIndicator: React.FC<ComplexityIndicatorProps> = ({
   const icons = {
     basic: '🎯',
     advanced: '⚡',
-    debug: '🔧'
+    debug: '🔧',
   };
-  
   const labels = {
     basic: 'Essential',
     advanced: 'Advanced',
-    debug: 'Technical'
+    debug: 'Technical',
   };
-  
   const sizes = {
     small: { fontSize: 10, padding: '2px 6px' },
     medium: { fontSize: 11, padding: '4px 8px' },
     large: { fontSize: 12, padding: '6px 10px' }
   };
-  
-  return (
+  return ()
     <div
       style={{
         display: 'inline-flex',
@@ -419,7 +403,7 @@ export const ComplexityIndicator: React.FC<ComplexityIndicatorProps> = ({
         ...sizes[size],
         fontWeight: 500,
         textTransform: 'uppercase',
-        letterSpacing: '0.05em'
+        letterSpacing: '0.05em',
       }}
     >
       <span>{icons[level]}</span>
@@ -437,9 +421,8 @@ export const AccessibilityUtils = {
       advanced: 'Advanced option',
       debug: 'Technical detail'
     };
-    return `${levelDescriptions[level]}: ${title}`;
+    return `${levelDescriptions[level]}: ${title}`;}
   },
-  
   // Generate ARIA descriptions for field priorities
   getAriaDescription: (priority: FieldPriority): string => {
     const priorityDescriptions = {
@@ -450,7 +433,6 @@ export const AccessibilityUtils = {
     };
     return priorityDescriptions[priority];
   },
-  
   // Focus management utilities
   getFocusableElements: (container: HTMLElement): HTMLElement[] => {
     const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';

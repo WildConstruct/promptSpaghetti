@@ -8,63 +8,63 @@ import { PerformanceMonitor } from './PerformanceMonitor';
 import { EventEmitter } from 'events';
 export interface PerformanceReport {
     generatedAt: number;
-    timeRange: {
+    timeRange: {,
         start: number;
         end: number;
     };
-    summary: {
+    summary: {,
         totalExecutions: number;
         averagePerformance: number;
         reliabilityScore: number;
         efficiencyScore: number;
         recommendation: 'excellent' | 'good' | 'needs_attention' | 'critical';
     };
-    performance: {
+    performance: {,
         averageExecutionTime: number;
         p50ExecutionTime: number;
         p95ExecutionTime: number;
         p99ExecutionTime: number;
-        slowestNodes: Array<{
+        slowestNodes: Array<{,
             nodeId: string;
             nodeType: string;
             averageDuration: number;
             executionCount: number;
         }>;
     };
-    reliability: {
+    reliability: {,
         successRate: number;
         errorRate: number;
         mostReliableTypes: string[];
         leastReliableTypes: string[];
-        errorPatterns: Array<{
+        errorPatterns: Array<{,
             pattern: string;
             frequency: number;
             affectedNodes: string[];
         }>;
     };
-    efficiency: {
+    efficiency: {,
         memoryEfficiency: number;
         cacheHitRate: number;
         contextOptimization: number;
         resourceWaste: number;
         optimizationOpportunities: string[];
     };
-    trends: {
+    trends: {,
         performanceTrend: 'improving' | 'stable' | 'degrading';
         trendConfidence: number;
         projectedImprovement: number;
-        seasonalPatterns: Array<{
+        seasonalPatterns: Array<{,
             period: string;
             impact: number;
             description: string;
         }>;
     };
-    alerts: {
+    alerts: {,
         critical: number;
         high: number;
         medium: number;
         low: number;
-        topAlertTypes: Array<{
+        topAlertTypes: Array<{,
             type: string;
             frequency: number;
             severity: string;
@@ -73,13 +73,13 @@ export interface PerformanceReport {
 }
 export interface PerformanceBenchmark {
     nodeType: string;
-    target: {
+    target: {,
         averageExecutionTime: number;
         maxExecutionTime: number;
         successRate: number;
         memoryUsage: number;
     };
-    current: {
+    current: {,
         averageExecutionTime: number;
         maxExecutionTime: number;
         successRate: number;
@@ -113,7 +113,7 @@ export declare class PerformanceAnalytics extends EventEmitter {
     /**
      * Generate comprehensive performance report
      */
-    generateReport(timeRange?: {
+    generateReport(timeRange?: {)
         start: number;
         end: number;
     }): PerformanceReport;
@@ -146,7 +146,7 @@ export declare class PerformanceAnalytics extends EventEmitter {
     exportData(): {
         insights: PerformanceInsight[];
         benchmarks: PerformanceBenchmark[];
-        reports: Array<{
+        reports: Array<{,
             timestamp: number;
             report: PerformanceReport;
         }>;

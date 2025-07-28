@@ -6,7 +6,6 @@
  * group creation, selection, drag-to-select, and ensuring proper
  * integration with the node system and collaboration features.
  */
-
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Node } from 'reactflow';
 import { RegionGroup } from './RegionGroup';
@@ -18,7 +17,6 @@ import {
   DEFAULT_REGION_GROUP_PREFERENCES,
   REGION_GROUP_COLORS
 } from '../../types/CollaborationTypes';
-
 interface RegionGroupsLayerProps {
   nodes: Node[];
   regionGroups: RegionGroupType[];
@@ -32,7 +30,7 @@ interface RegionGroupsLayerProps {
   zoom?: number;
 }
 
-export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
+export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
   nodes,
   regionGroups,
   onRegionGroupsChange,
@@ -47,22 +45,19 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
   const [isDragSelecting, setIsDragSelecting] = useState(false);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; groupId?: string } | null>(null);
   const layerRef = useRef<HTMLDivElement>(null);
-
   // Generate unique ID for new groups
   const generateGroupId = useCallback((): string => {
-    return `group_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `group_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }, []);
-
   // Get nodes within bounds
   const getNodesInBounds = useCallback((bounds: { x: number; y: number; width: number; height: number }) => {
-    return nodes.filter(node => {
+    return nodes.filter(node => {)
       const nodeX = node.position.x;
       const nodeY = node.position.y;
       const nodeWidth = node.width || 180;
       const nodeHeight = node.height || 90;
-      
       // Check if node intersects with bounds
-      return !(
+      return !()
         nodeX + nodeWidth < bounds.x ||
         nodeX > bounds.x + bounds.width ||
         nodeY + nodeHeight < bounds.y ||
@@ -70,24 +65,19 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
       );
     });
   }, [nodes]);
-
   // Calculate bounds that encompass all nodes
   const calculateGroupBounds = useCallback((nodeIds: string[], padding: number = groupPreferences.defaultPadding) => {
     const groupNodes = nodes.filter(node => nodeIds.includes(node.id));
     if (groupNodes.length === 0) return { x: 0, y: 0, width: 100, height: 80 };
-
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-
-    groupNodes.forEach(node => {
+    groupNodes.forEach(node => {)
       const nodeWidth = node.width || 180;
       const nodeHeight = node.height || 90;
-      
       minX = Math.min(minX, node.position.x);
       minY = Math.min(minY, node.position.y);
       maxX = Math.max(maxX, node.position.x + nodeWidth);
       maxY = Math.max(maxY, node.position.y + nodeHeight);
     });
-
     return {
       x: minX - padding,
       y: minY - padding,
@@ -96,25 +86,21 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
       padding
     };
   }, [nodes, groupPreferences.defaultPadding]);
-
   // Create region group
-  const createRegionGroup = useCallback(
-    (bounds: { x: number; y: number; width: number; height: number },
+  const createRegionGroup = useCallback(;)
+    (bounds: { x: number; y: number; width: number; height: number },)
     nodeIds?: string[]
   ) => {
     const selectedNodes = nodeIds || getNodesInBounds(bounds).map(node => node.id);
-    
     if (selectedNodes.length === 0) return;
-
     const groupBounds = nodeIds ? calculateGroupBounds(nodeIds) : bounds;
     const colorKeys = Object.keys(REGION_GROUP_COLORS);
     const defaultColorKey = colorKeys[regionGroups.length % colorKeys.length];
     const defaultColor = REGION_GROUP_COLORS[defaultColorKey as keyof typeof REGION_GROUP_COLORS];
-
     const newGroup: RegionGroupType = {
       id: generateGroupId(),
-      label: `Group ${regionGroups.length + 1}`,
-      description: `Contains ${selectedNodes.length} node${selectedNodes.length !== 1 ? 's' : ''}`,
+      label: `Group ${regionGroups.length + 1}`,}
+      description: `Contains ${selectedNodes.length} node${selectedNodes.length !== 1 ? 's' : ''}`,}
       color: groupPreferences.defaultColor || defaultColor.primary,
       backgroundColor: groupPreferences.defaultBackgroundColor || defaultColor.background,
       opacity: groupPreferences.defaultOpacity,
@@ -133,7 +119,6 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
       timestamp: new Date().toISOString(),
       lastModified: new Date().toISOString()
     };
-
     onRegionGroupsChange([...regionGroups, newGroup]);
   }, [
     getNodesInBounds, 
@@ -144,12 +129,10 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
     onRegionGroupsChange, 
     generateGroupId
   ]);
-
   // Handle region group actions
   const handleGroupAction = useCallback((action: RegionGroupAction) => {
     const updatedGroups = [...regionGroups];
     const groupIndex = updatedGroups.findIndex(g => g.id === action.groupId);
-
     switch (action.type) {
       case 'create':
         if (action.group) {
@@ -163,7 +146,6 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
           updatedGroups.push(newGroup);
         }
         break;
-
       case 'update':
         if (groupIndex >= 0 && action.group) {
           updatedGroups[groupIndex] = {
@@ -173,27 +155,24 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
           };
         }
         break;
-
       case 'delete':
         if (groupIndex >= 0) {
           updatedGroups.splice(groupIndex, 1);
         }
         break;
-
       case 'move':
         if (groupIndex >= 0 && action.position) {
           updatedGroups[groupIndex] = {
             ...updatedGroups[groupIndex],
-            bounds: {
+            bounds: {,
               ...updatedGroups[groupIndex].bounds,
               x: action.position.x,
-              y: action.position.y
+              y: action.position.y,
             },
             lastModified: new Date().toISOString()
           };
         }
         break;
-
       case 'resize':
         if (groupIndex >= 0 && action.bounds) {
           updatedGroups[groupIndex] = {
@@ -203,7 +182,6 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
           };
         }
         break;
-
       case 'collapse':
         if (groupIndex >= 0) {
           updatedGroups[groupIndex] = {
@@ -213,7 +191,6 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
           };
         }
         break;
-
       case 'expand':
         if (groupIndex >= 0) {
           updatedGroups[groupIndex] = {
@@ -223,7 +200,6 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
           };
         }
         break;
-
       case 'addNodes':
         if (groupIndex >= 0 && action.nodeIds) {
           const existingNodeIds = updatedGroups[groupIndex].nodeIds;
@@ -236,13 +212,11 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
           };
         }
         break;
-
       case 'removeNodes':
         if (groupIndex >= 0 && action.nodeIds) {
-          const remainingNodeIds = updatedGroups[groupIndex].nodeIds.filter(
+          const remainingNodeIds = updatedGroups[groupIndex].nodeIds.filter(;)
             id => !action.nodeIds!.includes(id)
           );
-          
           if (remainingNodeIds.length === 0) {
             // Remove empty group
             updatedGroups.splice(groupIndex, 1);
@@ -257,51 +231,41 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
         }
         break;
     }
-
     onRegionGroupsChange(updatedGroups);
   }, [regionGroups, onRegionGroupsChange, author, generateGroupId, calculateGroupBounds]);
-
   // Handle drag selection completion
   const handleSelectionComplete = useCallback((bounds: { x: number; y: number; width: number; height: number }) => {
     setIsDragSelecting(false);
     createRegionGroup(bounds);
   }, [createRegionGroup]);
-
   // Handle drag selection cancel
   const handleSelectionCancel = useCallback(() => {
     setIsDragSelecting(false);
   }, []);
-
   // Handle context menu
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     if (readOnly) return;
-
     e.preventDefault();
     e.stopPropagation();
-
-    setContextMenu({
+    setContextMenu({)
       x: e.clientX,
-      y: e.clientY
+      y: e.clientY,
     });
   }, [readOnly]);
-
   // Close context menu on outside click
   useEffect(() => {
     const handleClickOutside = () => {
       setContextMenu(null);
     };
-
     if (contextMenu) {
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
     }
   }, [contextMenu]);
-
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (readOnly) return;
-
       // G key to start group selection
       if (e.key === 'g' || e.key === 'G') {
         if (!e.ctrlKey && !e.metaKey && !e.altKey && !isDragSelecting) {
@@ -309,24 +273,20 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
           setIsDragSelecting(true);
         }
       }
-
       // Escape to cancel selection
       if (e.key === 'Escape' && isDragSelecting) {
         setIsDragSelecting(false);
       }
     };
-
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [readOnly, isDragSelecting]);
-
   // Get node count for a group
   const getNodeCountForGroup = useCallback((groupId: string) => {
     const group = regionGroups.find(g => g.id === groupId);
     return group ? group.nodeIds.length : 0;
   }, [regionGroups]);
-
-  return (
+  return ()
     <>
       <div
         ref={layerRef}
@@ -339,12 +299,12 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
           height: '100%',
           pointerEvents: 'none', // Allow graph interactions to pass through
           zIndex: 500, // Below sticky notes and node labels
-          overflow: 'visible'
+          overflow: 'visible',
         }}
         onContextMenu={handleContextMenu}
       >
         {/* Render region groups */}
-        {regionGroups.map(group => (
+        {regionGroups.map(group => ()
           <RegionGroup
             key={group.id}
             group={group}
@@ -359,9 +319,8 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
             zoom={zoom}
           />
         ))}
-
         {/* Instructions overlay when no groups exist */}
-        {regionGroups.length === 0 && !readOnly && !isDragSelecting && (
+        {regionGroups.length === 0 && !readOnly && !isDragSelecting && ()
           <div
             style={{
               position: 'fixed',
@@ -390,7 +349,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
               🎯 Region Groups
             </div>
             <div style={{ lineHeight: 1.4 }}>
-              • Press <kbd style={{ background: 'rgba(
+              • Press <kbd style={{ background: 'rgba()
                 255,
                 255,
                 255,
@@ -404,9 +363,8 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
           </div>
         )}
       </div>
-
       {/* Context menu */}
-      {contextMenu && !readOnly && (
+      {contextMenu && !readOnly && ()
         <div
           style={{
             position: 'fixed',
@@ -437,7 +395,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
               fontSize: '13px',
               display: 'flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '8px',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = '#f3f4f6';
@@ -450,7 +408,6 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({
           </button>
         </div>
       )}
-
       {/* Drag selection overlay */}
       <DragSelectBox
         isActive={isDragSelecting}

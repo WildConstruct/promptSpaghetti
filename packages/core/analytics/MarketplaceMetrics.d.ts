@@ -23,7 +23,7 @@ export interface MarketplaceEvent {
     entityType?: 'template' | 'creator' | 'category' | 'collection';
     value?: number;
     properties: Record<string, any>;
-    metadata: {
+    metadata: {,
         userAgent: string;
         referrer: string;
         location?: string;
@@ -37,32 +37,32 @@ export interface TemplateMetrics {
     name: string;
     creatorId: string;
     category: string;
-    metrics: {
+    metrics: {,
         views: number;
         previews: number;
         downloads: number;
         purchases: number;
         favorites: number;
         shares: number;
-        ratings: {
+        ratings: {,
             average: number;
             count: number;
-            distribution: {
+            distribution: {,
                 [stars: number]: number;
             };
         };
-        revenue: {
+        revenue: {,
             total: number;
             monthly: number;
             weekly: number;
         };
-        conversionRates: {
+        conversionRates: {,
             viewToPreview: number;
             previewToDownload: number;
             viewToFavorite: number;
         };
     };
-    trends: {
+    trends: {,
         viewsGrowth: number;
         revenueGrowth: number;
         ratingTrend: 'improving' | 'stable' | 'declining';
@@ -71,32 +71,32 @@ export interface TemplateMetrics {
 export interface CreatorMetrics {
     creatorId: string;
     name: string;
-    metrics: {
+    metrics: {,
         totalTemplates: number;
         totalRevenue: number;
         totalDownloads: number;
         averageRating: number;
         followers: number;
-        topPerformingTemplate: {
+        topPerformingTemplate: {,
             id: string;
             name: string;
             revenue: number;
         };
-        recentPerformance: {
+        recentPerformance: {,
             period: string;
             revenue: number;
             downloads: number;
             newFollowers: number;
         };
     };
-    trends: {
+    trends: {,
         revenueGrowth: number;
         followerGrowth: number;
         templatePerformance: 'improving' | 'stable' | 'declining';
     };
 }
 export interface MarketplaceDashboardData {
-    overview: {
+    overview: {,
         totalRevenue: number;
         totalTransactions: number;
         activeTemplates: number;
@@ -104,32 +104,32 @@ export interface MarketplaceDashboardData {
         averageRating: number;
         conversionRate: number;
     };
-    trends: {
+    trends: {,
         revenueGrowth: number;
         transactionGrowth: number;
         userGrowth: number;
-        topCategories: Array<{
+        topCategories: Array<{,
             category: string;
             revenue: number;
             growth: number;
         }>;
     };
-    recommendations: {
+    recommendations: {,
         shown: number;
         clicked: number;
         converted: number;
         ctr: number;
         conversionRate: number;
     };
-    searchAnalytics: {
+    searchAnalytics: {,
         totalSearches: number;
-        topQueries: Array<{
+        topQueries: Array<{,
             query: string;
             count: number;
             resultsFound: number;
             ctr: number;
         }>;
-        zeroResultQueries: Array<{
+        zeroResultQueries: Array<{,
             query: string;
             count: number;
         }>;
@@ -146,7 +146,7 @@ export declare class MarketplaceMetrics {
     /**
      * Track marketplace event
      */
-    trackEvent(
+    trackEvent()
       type: MarketplaceEventType,
       properties?: Record<string,
       any>,
@@ -160,7 +160,7 @@ export declare class MarketplaceMetrics {
     /**
      * Get marketplace dashboard data
      */
-    getDashboardData(timeRange?: {
+    getDashboardData(timeRange?: {)
         startTime: number;
         endTime: number;
     }): MarketplaceDashboardData;
@@ -182,12 +182,12 @@ export declare class MarketplaceMetrics {
      * Get search analytics
      */
     getSearchAnalytics(): {
-        topQueries: Array<{
+        topQueries: Array<{,
             query: string;
             count: number;
             ctr: number;
         }>;
-        zeroResultQueries: Array<{
+        zeroResultQueries: Array<{,
             query: string;
             count: number;
         }>;

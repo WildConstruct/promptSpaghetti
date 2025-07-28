@@ -5,7 +5,6 @@
  * Comprehensive marketplace leaderboard display with templates, creators,
  * categories, and user engagement rankings with real-time updates.
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Trophy,
@@ -35,7 +34,6 @@ export interface MarketplaceLeaderboardsProps {
   onCategoryClick?: (categoryId: string) => void;
   className?: string;
 }
-
 interface LeaderboardEntry {
   id: string;
   name: string;
@@ -45,21 +43,19 @@ interface LeaderboardEntry {
   metadata: Record<string, any>;
   lastUpdated: Date;
 }
-
 interface LeaderboardResponse {
   success: boolean;
   leaderboard: LeaderboardEntry[];
   totalEntries: number;
   lastUpdated: Date;
   timeframe: string;
-  metadata: {
+  metadata: {,
     averageScore: number;
     topScore: number;
     totalParticipants: number;
     updateFrequency: string;
   };
 }
-
 interface LeaderboardFilter {
   timeframe: '24h' | '7d' | '30d' | '90d' | 'all';
   category?: string;
@@ -70,7 +66,7 @@ interface LeaderboardFilter {
 // Marketplace Leaderboards Component
 // =============================================================================
 
-export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = ({
+export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = ({)
   defaultTab = 'templates',
   onTemplateClick,
   onCreatorClick,
@@ -80,48 +76,40 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   // State management
   const [activeTab, setActiveTab] = useState<string>(defaultTab);
   const [activeMetric, setActiveMetric] = useState<string>('revenue');
-  const [filter, setFilter] = useState<LeaderboardFilter>({
+  const [filter, setFilter] = useState<LeaderboardFilter>({)
     timeframe: 'all',
-    limit: 25
+    limit: 25,
   });
   const [leaderboard, setLeaderboard] = useState<LeaderboardResponse | null>(null);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
-
   // =============================================================================
   // Data Loading
   // =============================================================================
-
   const fetchLeaderboard = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
-      const params = new URLSearchParams({
+      const params = new URLSearchParams({)
         timeframe: filter.timeframe,
         limit: filter.limit.toString(),
-        offset: '0'
+        offset: '0',
       });
-
       if (filter.category) {
         params.append('category', filter.category);
       }
-
       const endpoint = getLeaderboardEndpoint(activeTab, activeMetric);
-      const response = await fetch(`${endpoint}?${params}`, {
-        headers: {
-          'Authorization': `Bearer ${getAuthToken()}`
+      const response = await fetch(`${endpoint}?${params}`, {)}
+        headers: {,
+          'Authorization': `Bearer ${getAuthToken()}`}
         }
       });
-
       if (!response.ok) {
         throw new Error('Failed to load leaderboard');
       }
-
       const data = await response.json();
-      
       if (data.success) {
         setLeaderboard(data);
         setLastRefresh(new Date());
@@ -135,11 +123,10 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       setLoading(false);
     }
   }, [activeTab, activeMetric, filter]);
-
   const fetchCategories = useCallback(async () => {
     try {
       // Mock categories - would fetch from API
-      setCategories([
+      setCategories([)
         { id: 'writing', name: 'Writing & Content' },
         { id: 'business', name: 'Business & Marketing' },
         { id: 'education', name: 'Education & Training' },
@@ -151,45 +138,35 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       console.error('Failed to fetch categories:', error);
     }
   }, []);
-
   useEffect(() => {
     fetchLeaderboard();
   }, [fetchLeaderboard]);
-
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
-
   // Auto-refresh every 10 minutes
   useEffect(() => {
     const interval = setInterval(() => {
       fetchLeaderboard();
     }, 10 * 60 * 1000);
-
     return () => clearInterval(interval);
   }, [fetchLeaderboard]);
-
   // =============================================================================
   // Event Handlers
   // =============================================================================
-
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     setActiveMetric(getDefaultMetric(tab));
   };
-
   const handleMetricChange = (metric: string) => {
     setActiveMetric(metric);
   };
-
   const handleFilterChange = (newFilter: Partial<LeaderboardFilter>) => {
     setFilter(prev => ({ ...prev, ...newFilter }));
   };
-
   const handleRefresh = () => {
     fetchLeaderboard();
   };
-
   const handleEntryClick = (entry: LeaderboardEntry) => {
     switch (activeTab) {
     case 'templates':
@@ -203,23 +180,20 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       break;
     }
   };
-
   // =============================================================================
   // UI Rendering Methods
   // =============================================================================
-
   const renderTabNavigation = () => {
-    const tabs = [
+    const tabs = [;
       { id: 'templates', label: 'Templates', icon: FileText },
       { id: 'creators', label: 'Creators', icon: Users },
       { id: 'categories', label: 'Categories', icon: Award },
       { id: 'engagement', label: 'Community', icon: Trophy }
     ];
-
-    return (
+    return ()
       <div className="border-b border-gray-200 mb-6">
         <nav className="-mb-px flex space-x-8">
-          {tabs.map((tab) => (
+          {tabs.map((tab) => ()
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
@@ -237,13 +211,11 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       </div>
     );
   };
-
   const renderMetricSelector = () => {
     const metrics = getMetricsForTab(activeTab);
-
-    return (
+    return ()
       <div className="flex flex-wrap gap-2">
-        {metrics.map((metric) => (
+        {metrics.map((metric) => ()
           <button
             key={metric.id}
             onClick={() => handleMetricChange(metric.id)}
@@ -259,17 +231,15 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       </div>
     );
   };
-
   const renderFilters = () => {
-    const timeframes = [
+    const timeframes = [;
       { id: '24h', label: '24 Hours' },
       { id: '7d', label: '7 Days' },
       { id: '30d', label: '30 Days' },
       { id: '90d', label: '90 Days' },
       { id: 'all', label: 'All Time' }
     ];
-
-    return (
+    return ()
       <div className="flex flex-wrap items-center gap-4">
         {/* Timeframe Filter */}
         <div className="flex items-center space-x-2">
@@ -279,16 +249,15 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
             onChange={(e) => handleFilterChange({ timeframe: e.target.value as any })}
             className="text-sm border border-gray-300 rounded-md px-2 py-1 bg-white"
           >
-            {timeframes.map((timeframe) => (
+            {timeframes.map((timeframe) => ()
               <option key={timeframe.id} value={timeframe.id}>
                 {timeframe.label}
               </option>
             ))}
           </select>
         </div>
-
         {/* Category Filter (for templates) */}
-        {activeTab === 'templates' && (
+        {activeTab === 'templates' && ()
           <div className="flex items-center space-x-2">
             <Filter className="w-4 h-4 text-gray-500" />
             <select
@@ -297,7 +266,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
               className="text-sm border border-gray-300 rounded-md px-2 py-1 bg-white"
             >
               <option value="">All Categories</option>
-              {categories.map((category) => (
+              {categories.map((category) => ()
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
@@ -305,24 +274,21 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
             </select>
           </div>
         )}
-
         {/* Refresh Button */}
         <button
           onClick={handleRefresh}
           disabled={loading}
           className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-800 disabled:opacity-50"
         >
-          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
           <span>Refresh</span>
         </button>
       </div>
     );
   };
-
   const renderLeaderboardHeader = () => {
     if (!leaderboard) return null;
-
-    return (
+    return ()
       <div className="bg-blue-50 rounded-lg p-4 mb-6">
         <div className="flex items-center justify-between">
           <div>
@@ -343,12 +309,10 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       </div>
     );
   };
-
   const renderLeaderboardEntry = (entry: LeaderboardEntry, index: number) => {
     const isTopThree = index < 3;
     const rankIcon = getRankIcon(index + 1);
-
-    return (
+    return ()
       <div
         key={entry.id}
         onClick={() => handleEntryClick(entry)}
@@ -360,13 +324,12 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       >
         {/* Rank */}
         <div className="flex-shrink-0 w-12 text-center">
-          {rankIcon ? (
+          {rankIcon ? ()
             <div className="flex justify-center">{rankIcon}</div>
-          ) : (
+          ) : ()
             <span className="text-lg font-bold text-gray-600">#{entry.rank}</span>
           )}
         </div>
-
         {/* Main Content */}
         <div className="flex-1 ml-4">
           <div className="flex items-center justify-between">
@@ -380,7 +343,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
               <div className="text-lg font-bold text-gray-900">
                 {formatScore(entry.score, activeMetric)}
               </div>
-              {entry.change !== 0 && (
+              {entry.change !== 0 && ()
                 <div className={`flex items-center text-sm ${
                   entry.change > 0 ? 'text-green-600' : 'text-red-600'
                 }`}>
@@ -391,7 +354,6 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
             </div>
           </div>
         </div>
-
         {/* Action Icon */}
         <div className="flex-shrink-0 ml-4">
           <ExternalLink className="w-4 h-4 text-gray-400" />
@@ -399,12 +361,11 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       </div>
     );
   };
-
   const renderEntryDetails = (entry: LeaderboardEntry) => {
     switch (activeTab) {
     case 'templates':
       const templateData = entry.metadata as any;
-      return (
+      return ()
         <div className="flex items-center space-x-4 text-xs">
           <span>by {templateData.creatorName}</span>
           <span className="flex items-center">
@@ -419,14 +380,14 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       );
     case 'creators':
       const creatorData = entry.metadata as any;
-      return (
+      return ()
         <div className="flex items-center space-x-4 text-xs">
           <span>{creatorData.templateCount} templates</span>
           <span className="flex items-center">
             <Star className="w-3 h-3 mr-1" />
             {creatorData.averageRating?.toFixed(1) || 'N/A'}
           </span>
-          {creatorData.verificationBadges?.length > 0 && (
+          {creatorData.verificationBadges?.length > 0 && ()
             <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs">
                 Verified
             </span>
@@ -435,7 +396,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       );
     case 'categories':
       const categoryData = entry.metadata as any;
-      return (
+      return ()
         <div className="flex items-center space-x-4 text-xs">
           <span>{categoryData.templateCount} templates</span>
           <span>Growth: {categoryData.growthRate?.toFixed(1)}%</span>
@@ -443,7 +404,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       );
     case 'engagement':
       const engagementData = entry.metadata as any;
-      return (
+      return ()
         <div className="flex items-center space-x-4 text-xs">
           <span>{engagementData.badgeCount} badges</span>
           <span>Level {engagementData.level}</span>
@@ -454,19 +415,17 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       return null;
     }
   };
-
   const renderLeaderboard = () => {
     if (loading) {
-      return (
+      return ()
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           <span className="ml-3 text-gray-600">Loading leaderboard...</span>
         </div>
       );
     }
-
     if (error) {
-      return (
+      return ()
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
           <div className="text-red-600 mb-2">Failed to load leaderboard</div>
           <div className="text-sm text-red-500 mb-4">{error}</div>
@@ -479,9 +438,8 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
         </div>
       );
     }
-
     if (!leaderboard || leaderboard.leaderboard.length === 0) {
-      return (
+      return ()
         <div className="text-center py-12">
           <Trophy className="mx-auto w-16 h-16 text-gray-400" />
           <h3 className="mt-4 text-lg font-medium text-gray-900">No entries found</h3>
@@ -491,8 +449,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
         </div>
       );
     }
-
-    return (
+    return ()
       <div className="space-y-3">
         {leaderboard.leaderboard.map((entry, index) => 
           renderLeaderboardEntry(entry, index)
@@ -500,31 +457,25 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       </div>
     );
   };
-
   // =============================================================================
   // Main Render
   // =============================================================================
-
-  return (
-    <div className={`marketplace-leaderboards ${className}`}>
+  return ()
+    <div className={`marketplace-leaderboards ${className}`}>}
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Marketplace Leaderboards</h1>
         <p className="text-gray-600">Discover top performers across the marketplace</p>
       </div>
-
       {/* Tab Navigation */}
       {renderTabNavigation()}
-
       {/* Controls */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
         {renderMetricSelector()}
         {renderFilters()}
       </div>
-
       {/* Leaderboard Header */}
       {renderLeaderboardHeader()}
-
       {/* Leaderboard Content */}
       {renderLeaderboard()}
     </div>
@@ -534,23 +485,21 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
 // =============================================================================
 // Helper Functions
 // =============================================================================
-
 function getLeaderboardEndpoint(tab: string, metric: string): string {
   const baseUrl = '/api/leaderboards';
   switch (tab) {
   case 'templates':
-    return `${baseUrl}/templates/${metric}`;
+    return `${baseUrl}/templates/${metric}`;}
   case 'creators':
-    return `${baseUrl}/creators/${metric}`;
+    return `${baseUrl}/creators/${metric}`;}
   case 'categories':
-    return `${baseUrl}/categories/${metric}`;
+    return `${baseUrl}/categories/${metric}`;}
   case 'engagement':
-    return `${baseUrl}/engagement/${metric}`;
+    return `${baseUrl}/engagement/${metric}`;}
   default:
-    return `${baseUrl}/templates/revenue`;
+    return `${baseUrl}/templates/revenue`;}
   }
 }
-
 function getDefaultMetric(tab: string): string {
   switch (tab) {
   case 'templates':
@@ -565,7 +514,6 @@ function getDefaultMetric(tab: string): string {
     return 'revenue';
   }
 }
-
 function getMetricsForTab(tab: string): Array<{ id: string; label: string }> {
   switch (tab) {
   case 'templates':
@@ -599,7 +547,6 @@ function getMetricsForTab(tab: string): Array<{ id: string; label: string }> {
     return [{ id: 'revenue', label: 'Revenue' }];
   }
 }
-
 function getLeaderboardTitle(tab: string, metric: string): string {
   const metricLabels: Record<string, string> = {
     revenue: 'Top Revenue',
@@ -613,30 +560,26 @@ function getLeaderboardTitle(tab: string, metric: string): string {
     reviews: 'Most Reviews',
     contributions: 'Top Contributors'
   };
-
   const tabLabels: Record<string, string> = {
     templates: 'Templates',
     creators: 'Creators',
     categories: 'Categories',
-    engagement: 'Community'
+    engagement: 'Community',
   };
-
-  return `${metricLabels[metric]} ${tabLabels[tab]}`;
+  return `${metricLabels[metric]} ${tabLabels[tab]}`;}
 }
-
 function formatScore(score: number, metric: string): string {
   switch (metric) {
   case 'revenue':
-    return `$${(score / 100).toFixed(2)}`;
+    return `$${(score / 100).toFixed(2)}`;}
   case 'rating':
-    return `${score.toFixed(1)} ★`;
+    return `${score.toFixed(1)} ★`;}
   case 'growth':
-    return `${score.toFixed(1)}%`;
+    return `${score.toFixed(1)}%`;}
   default:
     return score.toLocaleString();
   }
 }
-
 function getRankIcon(rank: number): React.ReactNode | null {
   switch (rank) {
   case 1:
@@ -649,22 +592,17 @@ function getRankIcon(rank: number): React.ReactNode | null {
     return null;
   }
 }
-
 function formatTimeAgo(date: Date): string {
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMinutes = Math.floor(diffMs / (1000 * 60));
-
   if (diffMinutes < 1) return 'just now';
-  if (diffMinutes < 60) return `${diffMinutes}m ago`;
-  
+  if (diffMinutes < 60) return `${diffMinutes}m ago`;}
   const diffHours = Math.floor(diffMinutes / 60);
-  if (diffHours < 24) return `${diffHours}h ago`;
-  
+  if (diffHours < 24) return `${diffHours}h ago`;}
   const diffDays = Math.floor(diffHours / 24);
-  return `${diffDays}d ago`;
+  return `${diffDays}d ago`;}
 }
-
 function getAuthToken(): string {
   return localStorage.getItem('authToken') || '';
 }

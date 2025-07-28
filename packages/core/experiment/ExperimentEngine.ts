@@ -2,7 +2,6 @@
  * Epic 14 - A/B Testing Framework
  * Core Experiment Engine for managing experiments and assignments
  */
-
 import crypto from 'crypto';
 import {
   Experiment,
@@ -36,37 +35,32 @@ export class ExperimentEngine {
   private allocationConfig: AllocationServiceConfig;
   private storage: ExperimentStorage;
   private metrics: ExperimentMetrics;
-
-  constructor(
+  constructor()
     config: ABTestingConfig,
     allocationConfig: AllocationServiceConfig,
     storage: ExperimentStorage,
-    metrics: ExperimentMetrics
+    metrics: ExperimentMetrics,
   ) {
     this.config = config;
     this.allocationConfig = allocationConfig;
     this.storage = storage;
     this.metrics = metrics;
   }
-
   /**
    * Create a new experiment
    */
   async createExperiment(experiment: Omit<Experiment, 'id' | 'createdAt' | 'updatedAt'>): Promise<Experiment> {
     // Validate experiment configuration
     this.validateExperiment(experiment);
-
     const newExperiment: Experiment = {
       ...experiment,
       id: crypto.randomUUID(),
       createdAt: new Date(),
       updatedAt: new Date()
     };
-
     await this.storage.saveExperiment(newExperiment);
     return newExperiment;
   }
-
   /**
    * Update an existing experiment
    */
@@ -75,27 +69,23 @@ export class ExperimentEngine {
     if (!experiment) {
       throw new ExperimentError('Experiment not found', 'NOT_FOUND', id);
     }
-
     // Prevent updates to running experiments that could invalidate results
     if (experiment.status === 'running' && this.hasSignificantChanges(updates)) {
-      throw new ExperimentError(
+      throw new ExperimentError()
         'Cannot modify running experiment in ways that would invalidate results',
         'INVALID_UPDATE',
         id
       );
     }
-
     const updatedExperiment = {
       ...experiment,
       ...updates,
       updatedAt: new Date()
     };
-
     this.validateExperiment(updatedExperiment);
     await this.storage.saveExperiment(updatedExperiment);
     return updatedExperiment;
   }
-
   /**
    * Start an experiment
    */
@@ -104,29 +94,24 @@ export class ExperimentEngine {
     if (!experiment) {
       throw new ExperimentError('Experiment not found', 'NOT_FOUND', id);
     }
-
     if (experiment.status !== 'draft') {
-      throw new ExperimentError(
-        `Cannot start experiment in status: ${experiment.status}`,
+      throw new ExperimentError()
+        `Cannot start experiment in status: ${experiment.status}`,}
         'INVALID_STATUS',
         id
       );
     }
-
     // Validate experiment is ready to start
     this.validateExperimentReadiness(experiment);
-
-    const updatedExperiment = await this.updateExperiment(id, {
+    const updatedExperiment = await this.updateExperiment(id, {)
       status: 'running' as ExperimentStatus,
-      schedule: {
+      schedule: {,
         ...experiment.schedule,
         startAt: new Date()
       }
     });
-
     return updatedExperiment;
   }
-
   /**
    * Stop an experiment
    */
@@ -135,85 +120,70 @@ export class ExperimentEngine {
     if (!experiment) {
       throw new ExperimentError('Experiment not found', 'NOT_FOUND', id);
     }
-
     if (experiment.status !== 'running' && experiment.status !== 'paused') {
-      throw new ExperimentError(
-        `Cannot stop experiment in status: ${experiment.status}`,
+      throw new ExperimentError()
+        `Cannot stop experiment in status: ${experiment.status}`,}
         'INVALID_STATUS',
         id
       );
     }
-
-    const updatedExperiment = await this.updateExperiment(id, {
+    const updatedExperiment = await this.updateExperiment(id, {)
       status: 'completed' as ExperimentStatus,
-      schedule: {
+      schedule: {,
         ...experiment.schedule,
         endAt: new Date()
       }
     });
-
     return updatedExperiment;
   }
-
   /**
    * Assign a user to an experiment variant
    */
   async assignUser(request: AssignmentRequest): Promise<AssignmentResponse> {
     try {
       // Check for existing assignment first
-      const existingAssignment = await this.storage.getUserAssignment(
+      const existingAssignment = await this.storage.getUserAssignment(;)
         request.userId,
         request.experimentId
       );
-
       if (existingAssignment) {
         const experiment = await this.storage.getExperiment(request.experimentId);
         if (!experiment) {
           throw new AllocationError('Experiment not found', 'NOT_FOUND', request.userId, request.experimentId);
         }
-
         const variant = experiment.variants.find(v => v.id === existingAssignment.variantId);
         if (!variant) {
           throw new AllocationError('Variant not found', 'VARIANT_NOT_FOUND', request.userId, request.experimentId);
         }
-
         return {
           variantId: existingAssignment.variantId,
           variant,
           assigned: true,
-          reason: 'existing_assignment'
+          reason: 'existing_assignment',
         };
       }
-
       // Handle override for debugging
       if (request.overrideVariant) {
         return await this.assignOverride(request);
       }
-
       // Get experiment
       const experiment = await this.storage.getExperiment(request.experimentId);
       if (!experiment) {
         throw new AllocationError('Experiment not found', 'NOT_FOUND', request.userId, request.experimentId);
       }
-
       // Check if experiment is running
       if (experiment.status !== 'running') {
         return this.getDefaultAssignment(experiment, 'experiment_not_running');
       }
-
       // Check if user is excluded
       if (this.isUserExcluded(request.userId, experiment)) {
         return this.getDefaultAssignment(experiment, 'user_excluded');
       }
-
       // Perform deterministic assignment
       const assignment = await this.performAssignment(request, experiment);
-      
       // Record the assignment
       await this.metrics.recordAssignment(assignment);
-
       const variant = experiment.variants.find(v => v.id === assignment.variantId)!;
-      
       return {
         variantId: assignment.variantId,
         variant,
@@ -222,31 +192,27 @@ export class ExperimentEngine {
         debugInfo: request.debugMode ? {
           hash: this.generateHash(request.userId, request.experimentId),
           bucket: this.getBucket(request.userId, request.experimentId),
-          allocation: experiment.trafficAllocation
+          allocation: experiment.trafficAllocation,
         } : undefined
       };
-
     } catch (error) {
       if (error instanceof AllocationError) {
         throw error;
       }
-      
-      throw new AllocationError(
-        `Assignment failed: ${error.message}`,
+      throw new AllocationError()
+        `Assignment failed: ${error.message}`,}
         'ASSIGNMENT_FAILED',
         request.userId,
         request.experimentId
       );
     }
   }
-
   /**
    * Get all active experiments for an organization
    */
   async getActiveExperiments(organizationId?: string): Promise<Experiment[]> {
     return await this.storage.getActiveExperiments(organizationId);
   }
-
   /**
    * Validate experiment configuration
    */
@@ -254,47 +220,40 @@ export class ExperimentEngine {
     if (!experiment.name || experiment.name.trim().length === 0) {
       throw new ExperimentError('Experiment name is required', 'VALIDATION_ERROR');
     }
-
     if (!experiment.variants || experiment.variants.length < 2) {
       throw new ExperimentError('At least 2 variants are required', 'VALIDATION_ERROR');
     }
-
     if (experiment.variants.length > this.config.maxVariants) {
-      throw new ExperimentError(
-        `Maximum ${this.config.maxVariants} variants allowed`,
+      throw new ExperimentError()
+        `Maximum ${this.config.maxVariants} variants allowed`,}
         'VALIDATION_ERROR'
       );
     }
-
     // Validate traffic allocation
     if (experiment.trafficAllocation) {
       const totalAllocation = Object.values(experiment.trafficAllocation).reduce((sum, pct) => sum + pct, 0);
       if (Math.abs(totalAllocation - 100) > 0.1) {
         throw new ExperimentError('Traffic allocation must sum to 100%', 'VALIDATION_ERROR');
       }
-
       // Ensure all variants have allocation
       for (const variant of experiment.variants) {
         if (!(variant.id in experiment.trafficAllocation)) {
-          throw new ExperimentError(
-            `Variant ${variant.id} missing traffic allocation`,
+          throw new ExperimentError()
+            `Variant ${variant.id} missing traffic allocation`,}
             'VALIDATION_ERROR'
           );
         }
       }
     }
-
     // Validate metrics
     if (!experiment.metrics || experiment.metrics.length === 0) {
       throw new ExperimentError('At least one success metric is required', 'VALIDATION_ERROR');
     }
-
     const primaryMetrics = experiment.metrics.filter(m => m.isPrimary);
     if (primaryMetrics.length !== 1) {
       throw new ExperimentError('Exactly one primary metric is required', 'VALIDATION_ERROR');
     }
   }
-
   /**
    * Validate experiment is ready to start
    */
@@ -302,22 +261,20 @@ export class ExperimentEngine {
     // Check that all variants have valid configuration
     for (const variant of experiment.variants) {
       if (!variant.name || variant.name.trim().length === 0) {
-        throw new ExperimentError(`Variant ${variant.id} missing name`, 'VALIDATION_ERROR');
+        throw new ExperimentError(`Variant ${variant.id} missing name`, 'VALIDATION_ERROR');}
       }
     }
-
     // Check that traffic allocation is valid
     const totalAllocation = Object.values(experiment.trafficAllocation).reduce((sum, pct) => sum + pct, 0);
     if (Math.abs(totalAllocation - 100) > 0.1) {
       throw new ExperimentError('Traffic allocation must sum to 100%', 'VALIDATION_ERROR');
     }
   }
-
   /**
    * Check if updates would invalidate a running experiment
    */
   private hasSignificantChanges(updates: Partial<Experiment>): boolean {
-    return !!(
+    return !!()
       updates.variants ||
       updates.trafficAllocation ||
       updates.metrics ||
@@ -325,29 +282,24 @@ export class ExperimentEngine {
       updates.exclusionRules
     );
   }
-
   /**
    * Check if user is excluded from experiment
    */
   private isUserExcluded(userId: string, experiment: Experiment): boolean {
     if (!experiment.exclusionRules) return false;
-
     for (const rule of experiment.exclusionRules) {
       if (rule.type === 'user' && rule.identifiers.includes(userId)) {
         return true;
       }
     }
-
     return false;
   }
-
   /**
    * Perform deterministic user assignment
    */
   private async performAssignment(request: AssignmentRequest, experiment: Experiment): Promise<UserAssignment> {
     const bucket = this.getBucket(request.userId, experiment.id);
     const variantId = this.getVariantFromBucket(bucket, experiment.trafficAllocation);
-
     const assignment: UserAssignment = {
       userId: request.userId,
       experimentId: experiment.id,
@@ -355,13 +307,11 @@ export class ExperimentEngine {
       assignedAt: new Date(),
       sessionId: request.sessionId,
       sticky: true,
-      salt: this.allocationConfig.saltStorage.currentSalt
+      salt: this.allocationConfig.saltStorage.currentSalt,
     };
-
     await this.storage.saveUserAssignment(assignment);
     return assignment;
   }
-
   /**
    * Generate deterministic hash for user and experiment
    */
@@ -369,10 +319,9 @@ export class ExperimentEngine {
     const salt = this.allocationConfig.saltStorage.currentSalt;
     return crypto
       .createHash('sha256')
-      .update(`${salt}${userId}${experimentId}`)
+      .update(`${salt}${userId}${experimentId}`)}
       .digest('hex');
   }
-
   /**
    * Get bucket (0-999) from user hash
    */
@@ -383,25 +332,21 @@ export class ExperimentEngine {
     const int = parseInt(hex, 16);
     return int % 1000;
   }
-
   /**
    * Get variant ID from bucket and traffic allocation
    */
   private getVariantFromBucket(bucket: number, allocation: TrafficAllocation): string {
     let cumulative = 0;
-    const bucketPercentile = bucket / 10; // Convert 0-999 to 0-99.9
-
+    const bucketPercentile = bucket / 10; // Convert 0-999 to 0-99.9;
     for (const [variantId, percentage] of Object.entries(allocation)) {
       cumulative += percentage;
       if (bucketPercentile < cumulative) {
         return variantId;
       }
     }
-
     // Fallback to first variant if rounding issues
     return Object.keys(allocation)[0];
   }
-
   /**
    * Handle override assignment for debugging
    */
@@ -410,17 +355,15 @@ export class ExperimentEngine {
     if (!experiment) {
       throw new AllocationError('Experiment not found', 'NOT_FOUND', request.userId, request.experimentId);
     }
-
     const variant = experiment.variants.find(v => v.id === request.overrideVariant);
     if (!variant) {
-      throw new AllocationError(
+      throw new AllocationError()
         'Override variant not found',
         'VARIANT_NOT_FOUND',
         request.userId,
         request.experimentId
       );
     }
-
     const assignment: UserAssignment = {
       userId: request.userId,
       experimentId: experiment.id,
@@ -428,27 +371,23 @@ export class ExperimentEngine {
       assignedAt: new Date(),
       sessionId: request.sessionId,
       sticky: false, // Overrides are not sticky
-      salt: 'override'
+      salt: 'override',
     };
-
     await this.storage.saveUserAssignment(assignment);
     await this.metrics.recordAssignment(assignment);
-
     return {
       variantId: request.overrideVariant!,
       variant,
       assigned: true,
-      reason: 'override'
+      reason: 'override',
     };
   }
-
   /**
    * Get default assignment when user cannot be assigned
    */
   private getDefaultAssignment(experiment: Experiment, reason: string): AssignmentResponse {
     // Return control variant (first variant) as default
     const controlVariant = experiment.variants[0];
-    
     return {
       variantId: controlVariant.id,
       variant: controlVariant,
@@ -457,11 +396,10 @@ export class ExperimentEngine {
     };
   }
 }
-
 /**
  * Factory function to create experiment engine with default configuration
  */
-export function createExperimentEngine(
+export function createExperimentEngine()
   storage: ExperimentStorage,
   metrics: ExperimentMetrics,
   config?: Partial<ABTestingConfig>,
@@ -478,18 +416,16 @@ export function createExperimentEngine(
     enableFactorial: true,
     ...config
   };
-
   const defaultAllocationConfig: AllocationServiceConfig = {
     redisUrl: process.env.REDIS_URL || 'redis://localhost:6379',
     cacheTtl: 30,
     maxAssignmentLatency: 20,
     enableDebugMode: process.env.NODE_ENV !== 'production',
-    saltStorage: {
+    saltStorage: {,
       currentSalt: process.env.AB_SALT || crypto.randomBytes(32).toString('hex'),
-      previousSalts: []
+      previousSalts: [],
     },
     ...allocationConfig
   };
-
   return new ExperimentEngine(defaultConfig, defaultAllocationConfig, storage, metrics);
 }

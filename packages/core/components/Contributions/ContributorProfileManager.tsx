@@ -5,7 +5,6 @@
  * Interface for managing contributor profiles, achievements, badges,
  * and notification preferences.
  */
-
 import React, { useState, useEffect } from 'react';
 import { 
   ContributorProfile, 
@@ -20,7 +19,7 @@ export interface ContributorProfileManagerProps {
   className?: string;
 }
 
-export const ContributorProfileManager: React.FC<ContributorProfileManagerProps> = ({
+export const ContributorProfileManager: React.FC<ContributorProfileManagerProps> = ({)
   profile,
   onProfileUpdate,
   readOnly = false,
@@ -31,43 +30,35 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'profile' | 'achievements' | 'preferences'>('profile');
-
   useEffect(() => {
     setFormData(profile);
   }, [profile]);
-
   // Update form data
   const updateFormData = (updates: Partial<ContributorProfile>) => {
     setFormData(prev => ({ ...prev, ...updates }));
     // Clear errors for updated fields
     const updatedFields = Object.keys(updates);
-    setErrors(prev => {
+    setErrors(prev => {)
       const newErrors = { ...prev };
       updatedFields.forEach(field => delete newErrors[field]);
       return newErrors;
     });
   };
-
   // Validate form
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
-
     if (!formData.displayName?.trim()) {
       newErrors.displayName = 'Display name is required';
     }
-
     if (formData.bio && formData.bio.length > 500) {
       newErrors.bio = 'Bio must be less than 500 characters';
     }
-
     if (formData.website && !isValidUrl(formData.website)) {
       newErrors.website = 'Please enter a valid URL';
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   // Check if URL is valid
   const isValidUrl = (url: string): boolean => {
     try {
@@ -77,81 +68,69 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
       return false;
     }
   };
-
   // Handle save
   const handleSave = async () => {
     if (!validateForm()) return;
-
     setSaving(true);
     try {
       // Validate with Zod
-            
       // API call would go here
-      const response = await fetch(`/api/marketplace/contributors/${profile.id}`, {
+      const response = await fetch(`/api/marketplace/contributors/${profile.id}`, {)}
         method: 'PUT',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
-
       if (!response.ok) {
         throw new Error('Failed to update profile');
       }
-
       const updatedProfile = await response.json();
       onProfileUpdate(updatedProfile);
       setEditMode(false);
-      
     } catch (err) {
-      setErrors({ 
+      setErrors({ )
         save: err instanceof Error ? err.message : 'Failed to save profile' 
       });
     } finally {
       setSaving(false);
     }
   };
-
   // Handle cancel
   const handleCancel = () => {
     setFormData(profile);
     setErrors({});
     setEditMode(false);
   };
-
   // Add skill
   const addSkill = (skill: string) => {
     if (skill.trim() && !formData.skills?.includes(skill.trim())) {
-      updateFormData({ 
+      updateFormData({ )
         skills: [...(formData.skills || []), skill.trim()]
       });
     }
   };
-
   // Remove skill
   const removeSkill = (index: number) => {
-    updateFormData({
+    updateFormData({)
       skills: formData.skills?.filter((_, i) => i !== index) || []
     });
   };
-
   // Add expertise
   const addExpertise = (expertise: string) => {
     if (expertise.trim() && !formData.expertise?.includes(expertise.trim())) {
-      updateFormData({ 
+      updateFormData({ )
         expertise: [...(formData.expertise || []), expertise.trim()]
       });
     }
   };
-
   // Remove expertise
   const removeExpertise = (index: number) => {
-    updateFormData({
+    updateFormData({)
       expertise: formData.expertise?.filter((_, i) => i !== index) || []
     });
   };
-
   // Get level badge styling
   const getLevelBadgeStyle = (level: ContributorLevel) => {
     const styles = {
@@ -164,11 +143,9 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
     };
     return styles[level] || styles.newcomer;
   };
-
   const levelStyle = getLevelBadgeStyle(profile.level);
-
-  return (
-    <div className={`contributor-profile-manager ${className}`}>
+  return ()
+    <div className={`contributor-profile-manager ${className}`}>}
       {/* Profile Header */}
       <div className="profile-header">
         <div className="header-main">
@@ -178,17 +155,16 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
             </div>
             <div className="level-badge" style={{
               backgroundColor: levelStyle.bg,
-              color: levelStyle.color
+              color: levelStyle.color,
             }}>
               <span className="level-icon">{levelStyle.icon}</span>
               <span className="level-text">{profile.level}</span>
             </div>
           </div>
-          
           <div className="profile-info">
             <h2>{profile.displayName}</h2>
             {profile.bio && <p className="bio">{profile.bio}</p>}
-            {profile.location && (
+            {profile.location && ()
               <div className="location">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1Z" stroke="currentColor" strokeWidth="1.5"/>
@@ -199,10 +175,9 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
             )}
           </div>
         </div>
-
-        {!readOnly && (
+        {!readOnly && ()
           <div className="header-actions">
-            {editMode ? (
+            {editMode ? ()
               <div className="edit-actions">
                 <button
                   onClick={handleCancel}
@@ -219,7 +194,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                   {saving ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
-            ) : (
+            ) : ()
               <button
                 onClick={() => setEditMode(true)}
                 className="btn-outline"
@@ -230,7 +205,6 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           </div>
         )}
       </div>
-
       {/* Stats Grid */}
       <div className="stats-grid">
         <div className="stat-item">
@@ -258,7 +232,6 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           <div className="stat-label">Badges Earned</div>
         </div>
       </div>
-
       {/* Navigation Tabs */}
       <div className="profile-tabs">
         <button
@@ -280,12 +253,11 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           Preferences
         </button>
       </div>
-
       {/* Tab Content */}
       <div className="tab-content">
-        {activeTab === 'profile' && (
+        {activeTab === 'profile' && ()
           <div className="profile-details">
-            {editMode ? (
+            {editMode ? ()
               <div className="edit-form">
                 <div className="form-group">
                   <label htmlFor="displayName">Display Name *</label>
@@ -298,7 +270,6 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                   />
                   {errors.displayName && <div className="error-message">{errors.displayName}</div>}
                 </div>
-
                 <div className="form-group">
                   <label htmlFor="bio">Bio</label>
                   <textarea
@@ -312,7 +283,6 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                   <div className="char-count">{formData.bio?.length || 0} / 500 characters</div>
                   {errors.bio && <div className="error-message">{errors.bio}</div>}
                 </div>
-
                 <div className="form-group">
                   <label htmlFor="location">Location</label>
                   <input
@@ -323,7 +293,6 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     placeholder="City, Country"
                   />
                 </div>
-
                 <div className="form-group">
                   <label htmlFor="website">Website</label>
                   <input
@@ -336,14 +305,13 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                   />
                   {errors.website && <div className="error-message">{errors.website}</div>}
                 </div>
-
                 <div className="form-group">
                   <label>Social Links</label>
                   <div className="social-inputs">
                     <input
                       type="text"
                       value={formData.social?.twitter || ''}
-                      onChange={(e) => updateFormData({ 
+                      onChange={(e) => updateFormData({ )
                         social: { ...formData.social, twitter: e.target.value } 
                       })}
                       placeholder="Twitter username"
@@ -351,7 +319,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     <input
                       type="text"
                       value={formData.social?.linkedin || ''}
-                      onChange={(e) => updateFormData({ 
+                      onChange={(e) => updateFormData({ )
                         social: { ...formData.social, linkedin: e.target.value } 
                       })}
                       placeholder="LinkedIn profile"
@@ -359,14 +327,13 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     <input
                       type="text"
                       value={formData.social?.github || ''}
-                      onChange={(e) => updateFormData({ 
+                      onChange={(e) => updateFormData({ )
                         social: { ...formData.social, github: e.target.value } 
                       })}
                       placeholder="GitHub username"
                     />
                   </div>
                 </div>
-
                 <div className="form-group">
                   <label>Areas of Expertise</label>
                   <div className="tags-input">
@@ -382,7 +349,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                       }}
                     />
                     <div className="tags-list">
-                      {formData.expertise?.map((area, index) => (
+                      {formData.expertise?.map((area, index) => ()
                         <span key={index} className="tag">
                           {area}
                           <button
@@ -397,7 +364,6 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     </div>
                   </div>
                 </div>
-
                 <div className="form-group">
                   <label>Skills</label>
                   <div className="tags-input">
@@ -413,7 +379,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                       }}
                     />
                     <div className="tags-list">
-                      {formData.skills?.map((skill, index) => (
+                      {formData.skills?.map((skill, index) => ()
                         <span key={index} className="tag">
                           {skill}
                           <button
@@ -428,63 +394,59 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     </div>
                   </div>
                 </div>
-
                 {errors.save && <div className="error-message">{errors.save}</div>}
               </div>
-            ) : (
+            ) : ()
               <div className="profile-display">
                 <div className="detail-section">
                   <h4>About</h4>
                   <p>{profile.bio || 'No bio provided'}</p>
                 </div>
-
                 <div className="detail-section">
                   <h4>Areas of Expertise</h4>
                   <div className="tags-display">
-                    {profile.expertise.length > 0 ? (
-                      profile.expertise.map((area, index) => (
+                    {profile.expertise.length > 0 ? ()
+                      profile.expertise.map((area, index) => ()
                         <span key={index} className="tag">{area}</span>
                       ))
-                    ) : (
+                    ) : ()
                       <p className="empty-text">No expertise areas specified</p>
                     )}
                   </div>
                 </div>
-
                 <div className="detail-section">
                   <h4>Skills</h4>
                   <div className="tags-display">
-                    {profile.skills.length > 0 ? (
-                      profile.skills.map((skill, index) => (
+                    {profile.skills.length > 0 ? ()
+                      profile.skills.map((skill, index) => ()
                         <span key={index} className="tag">{skill}</span>
                       ))
-                    ) : (
+                    ) : ()
                       <p className="empty-text">No skills specified</p>
                     )}
                   </div>
                 </div>
-
-                {(profile.website || profile.social) && (
+                {(profile.website || profile.social) && ()
                   <div className="detail-section">
                     <h4>Links</h4>
                     <div className="links-list">
-                      {profile.website && (
+                      {profile.website && ()
                         <a href={profile.website} target="_blank" rel="noopener noreferrer" className="link-item">
                           🌐 Website
                         </a>
                       )}
-                      {profile.social?.twitter && (
-                        <a href={`https://twitter.com/${profile.social.twitter}`} target="_blank" rel="noopener noreferrer" className="link-item">
+                      {profile.social?.twitter && ()
+                        <a href={`https://twitter.com/${profile.social.twitter}`} target="_blank" rel="noopener noreferrer" className="link-item">}
                           🐦 Twitter
                         </a>
                       )}
-                      {profile.social?.linkedin && (
+                      {profile.social?.linkedin && ()
                         <a href={profile.social.linkedin} target="_blank" rel="noopener noreferrer" className="link-item">
                           💼 LinkedIn
                         </a>
                       )}
-                      {profile.social?.github && (
-                        <a href={`https://github.com/${profile.social.github}`} target="_blank" rel="noopener noreferrer" className="link-item">
+                      {profile.social?.github && ()
+                        <a href={`https://github.com/${profile.social.github}`} target="_blank" rel="noopener noreferrer" className="link-item">}
                           💻 GitHub
                         </a>
                       )}
@@ -495,13 +457,12 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
             )}
           </div>
         )}
-
-        {activeTab === 'achievements' && (
+        {activeTab === 'achievements' && ()
           <div className="achievements-content">
             <div className="badges-section">
               <h4>Badges ({profile.badges.length})</h4>
               <div className="badges-grid">
-                {profile.badges.map((badge) => (
+                {profile.badges.map((badge) => ()
                   <div key={badge.id} className="badge-item">
                     <img src={badge.iconUrl} alt={badge.name} className="badge-icon" />
                     <div className="badge-info">
@@ -513,16 +474,15 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     </div>
                   </div>
                 ))}
-                {profile.badges.length === 0 && (
+                {profile.badges.length === 0 && ()
                   <p className="empty-text">No badges earned yet</p>
                 )}
               </div>
             </div>
-
             <div className="achievements-section">
               <h4>Achievements ({profile.achievements.length})</h4>
               <div className="achievements-list">
-                {profile.achievements.map((achievement) => (
+                {profile.achievements.map((achievement) => ()
                   <div key={achievement.id} className="achievement-item">
                     <div className="achievement-info">
                       <h5>{achievement.name}</h5>
@@ -539,15 +499,14 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     </div>
                   </div>
                 ))}
-                {profile.achievements.length === 0 && (
+                {profile.achievements.length === 0 && ()
                   <p className="empty-text">No achievements in progress</p>
                 )}
               </div>
             </div>
           </div>
         )}
-
-        {activeTab === 'preferences' && (
+        {activeTab === 'preferences' && ()
           <div className="preferences-content">
             <div className="preferences-section">
               <h4>Notification Preferences</h4>
@@ -556,10 +515,10 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                   <input
                     type="checkbox"
                     checked={formData.notificationPreferences?.emailOnComment ?? true}
-                    onChange={(e) => updateFormData({
-                      notificationPreferences: {
+                    onChange={(e) => updateFormData({)
+                      notificationPreferences: {,
                         ...formData.notificationPreferences,
-                        emailOnComment: e.target.checked
+                        emailOnComment: e.target.checked,
                       }
                     })}
                     disabled={!editMode && !readOnly}
@@ -567,16 +526,15 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                   Email when someone comments on my contributions
                 </label>
               </div>
-              
               <div className="preference-item">
                 <label className="preference-label">
                   <input
                     type="checkbox"
                     checked={formData.notificationPreferences?.emailOnLike ?? false}
-                    onChange={(e) => updateFormData({
-                      notificationPreferences: {
+                    onChange={(e) => updateFormData({)
+                      notificationPreferences: {,
                         ...formData.notificationPreferences,
-                        emailOnLike: e.target.checked
+                        emailOnLike: e.target.checked,
                       }
                     })}
                     disabled={!editMode && !readOnly}
@@ -584,16 +542,15 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                   Email when someone likes my contributions
                 </label>
               </div>
-              
               <div className="preference-item">
                 <label className="preference-label">
                   <input
                     type="checkbox"
                     checked={formData.notificationPreferences?.emailOnFeature ?? true}
-                    onChange={(e) => updateFormData({
-                      notificationPreferences: {
+                    onChange={(e) => updateFormData({)
+                      notificationPreferences: {,
                         ...formData.notificationPreferences,
-                        emailOnFeature: e.target.checked
+                        emailOnFeature: e.target.checked,
                       }
                     })}
                     disabled={!editMode && !readOnly}
@@ -601,16 +558,15 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                   Email when my contributions are featured
                 </label>
               </div>
-              
               <div className="preference-item">
                 <label className="preference-label">
                   <input
                     type="checkbox"
                     checked={formData.notificationPreferences?.weeklyDigest ?? true}
-                    onChange={(e) => updateFormData({
-                      notificationPreferences: {
+                    onChange={(e) => updateFormData({)
+                      notificationPreferences: {,
                         ...formData.notificationPreferences,
-                        weeklyDigest: e.target.checked
+                        weeklyDigest: e.target.checked,
                       }
                     })}
                     disabled={!editMode && !readOnly}
@@ -622,7 +578,6 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           </div>
         )}
       </div>
-
       <style>{`
         .contributor-profile-manager {
           background: #ffffff;
@@ -630,7 +585,6 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           border-radius: 12px;
           overflow: hidden;
         }
-
         .profile-header {
           padding: 24px;
           border-bottom: 1px solid #e5e7eb;
@@ -639,20 +593,17 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           align-items: flex-start;
           gap: 20px;
         }
-
         .header-main {
           display: flex;
           gap: 20px;
           flex: 1;
         }
-
         .avatar-section {
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 8px;
         }
-
         .avatar {
           width: 80px;
           height: 80px;
@@ -665,7 +616,6 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           font-size: 32px;
           font-weight: 700;
         }
-
         .level-badge {
           padding: 4px 8px;
           border-radius: 12px;
@@ -676,24 +626,20 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           gap: 4px;
           text-transform: capitalize;
         }
-
         .profile-info {
           flex: 1;
         }
-
         .profile-info h2 {
           margin: 0 0 8px 0;
           font-size: 28px;
           font-weight: 700;
           color: #1f2937;
         }
-
         .bio {
           margin: 0 0 12px 0;
           color: #6b7280;
           line-height: 1.5;
         }
-
         .location {
           display: flex;
           align-items: center;
@@ -701,44 +647,37 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           color: #6b7280;
           font-size: 14px;
         }
-
         .edit-actions {
           display: flex;
           gap: 12px;
         }
-
         .stats-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
           gap: 1px;
           background: #e5e7eb;
         }
-
         .stat-item {
           background: #ffffff;
           padding: 16px;
           text-align: center;
         }
-
         .stat-value {
           font-size: 24px;
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 4px;
         }
-
         .stat-label {
           font-size: 12px;
           color: #6b7280;
           font-weight: 500;
         }
-
         .profile-tabs {
           display: flex;
           border-bottom: 1px solid #e5e7eb;
           background: #f8fafc;
         }
-
         .tab-btn {
           background: none;
           border: none;
@@ -749,33 +688,27 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           border-bottom: 3px solid transparent;
           transition: all 0.2s ease;
         }
-
         .tab-btn:hover {
           color: #3b82f6;
           background: #f1f5f9;
         }
-
         .tab-btn.active {
           color: #3b82f6;
           border-bottom-color: #3b82f6;
           background: #ffffff;
         }
-
         .tab-content {
           padding: 24px;
         }
-
         .form-group {
           margin-bottom: 20px;
         }
-
         .form-group label {
           display: block;
           margin-bottom: 6px;
           font-weight: 500;
           color: #374151;
         }
-
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -786,43 +719,36 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           font-size: 14px;
           transition: border-color 0.2s ease;
         }
-
         .form-group input:focus,
         .form-group textarea:focus {
           outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
-
         .form-group input.error,
         .form-group textarea.error {
           border-color: #ef4444;
         }
-
         .char-count {
           text-align: right;
           font-size: 12px;
           color: #9ca3af;
           margin-top: 4px;
         }
-
         .social-inputs {
           display: flex;
           flex-direction: column;
           gap: 8px;
         }
-
         .tags-input input {
           margin-bottom: 8px;
         }
-
         .tags-list,
         .tags-display {
           display: flex;
           flex-wrap: wrap;
           gap: 6px;
         }
-
         .tag {
           background: #3b82f6;
           color: #ffffff;
@@ -834,12 +760,10 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           align-items: center;
           gap: 4px;
         }
-
         .tags-display .tag {
           background: #e5e7eb;
           color: #4b5563;
         }
-
         .tag-remove {
           background: none;
           border: none;
@@ -855,34 +779,28 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           align-items: center;
           justify-content: center;
         }
-
         .tag-remove:hover {
           background: rgba(255, 255, 255, 0.2);
         }
-
         .detail-section {
           margin-bottom: 24px;
         }
-
         .detail-section h4 {
           margin: 0 0 12px 0;
           font-size: 16px;
           font-weight: 600;
           color: #1f2937;
         }
-
         .detail-section p {
           margin: 0;
           color: #6b7280;
           line-height: 1.5;
         }
-
         .links-list {
           display: flex;
           flex-direction: column;
           gap: 8px;
         }
-
         .link-item {
           color: #3b82f6;
           text-decoration: none;
@@ -891,17 +809,14 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           align-items: center;
           gap: 8px;
         }
-
         .link-item:hover {
           text-decoration: underline;
         }
-
         .badges-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 16px;
         }
-
         .badge-item {
           border: 1px solid #e5e7eb;
           border-radius: 8px;
@@ -909,37 +824,31 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           display: flex;
           gap: 12px;
         }
-
         .badge-icon {
           width: 48px;
           height: 48px;
           border-radius: 8px;
         }
-
         .badge-info h5 {
           margin: 0 0 4px 0;
           font-size: 14px;
           font-weight: 600;
           color: #1f2937;
         }
-
         .badge-info p {
           margin: 0 0 4px 0;
           font-size: 12px;
           color: #6b7280;
         }
-
         .earned-date {
           font-size: 11px;
           color: #9ca3af;
         }
-
         .achievements-list {
           display: flex;
           flex-direction: column;
           gap: 16px;
         }
-
         .achievement-item {
           border: 1px solid #e5e7eb;
           border-radius: 8px;
@@ -949,27 +858,23 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           align-items: center;
           gap: 16px;
         }
-
         .achievement-info h5 {
           margin: 0 0 4px 0;
           font-size: 14px;
           font-weight: 600;
           color: #1f2937;
         }
-
         .achievement-info p {
           margin: 0;
           font-size: 12px;
           color: #6b7280;
         }
-
         .achievement-progress {
           display: flex;
           align-items: center;
           gap: 8px;
           min-width: 120px;
         }
-
         .progress-bar {
           flex: 1;
           height: 8px;
@@ -977,24 +882,20 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           border-radius: 4px;
           overflow: hidden;
         }
-
         .progress-fill {
           height: 100%;
           background: #3b82f6;
           transition: width 0.3s ease;
         }
-
         .progress-text {
           font-size: 12px;
           color: #6b7280;
           font-weight: 500;
           min-width: 32px;
         }
-
         .preference-item {
           margin-bottom: 16px;
         }
-
         .preference-label {
           display: flex;
           align-items: center;
@@ -1003,19 +904,16 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           font-size: 14px;
           color: #374151;
         }
-
         .empty-text {
           color: #9ca3af;
           font-style: italic;
           margin: 0;
         }
-
         .error-message {
           color: #ef4444;
           font-size: 12px;
           margin-top: 4px;
         }
-
         .btn-primary,
         .btn-secondary,
         .btn-outline {
@@ -1026,69 +924,55 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           transition: all 0.2s ease;
           border: 1px solid transparent;
         }
-
         .btn-primary {
           background: #3b82f6;
           color: #ffffff;
         }
-
         .btn-primary:hover:not(:disabled) {
           background: #2563eb;
         }
-
         .btn-secondary {
           background: #f3f4f6;
           color: #374151;
           border-color: #d1d5db;
         }
-
         .btn-secondary:hover {
           background: #e5e7eb;
         }
-
         .btn-outline {
           background: #ffffff;
           color: #374151;
           border-color: #d1d5db;
         }
-
         .btn-outline:hover {
           background: #f9fafb;
         }
-
         .btn-primary:disabled {
           opacity: 0.5;
           cursor: not-allowed;
         }
-
         @media (max-width: 768px) {
           .profile-header {
             flex-direction: column;
             align-items: stretch;
           }
-
           .header-main {
             flex-direction: column;
             align-items: center;
             text-align: center;
           }
-
           .stats-grid {
             grid-template-columns: repeat(2, 1fr);
           }
-
           .profile-tabs {
             overflow-x: auto;
           }
-
           .tab-btn {
             white-space: nowrap;
           }
-
           .badges-grid {
             grid-template-columns: 1fr;
           }
-
           .achievement-item {
             flex-direction: column;
             align-items: stretch;

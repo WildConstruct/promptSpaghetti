@@ -137,7 +137,7 @@ export declare const EscalationLevelSchema: z.ZodObject<{
     description: z.ZodString;
     assignmentType: z.ZodNativeEnum<typeof AssignmentType>;
     assignmentTarget: z.ZodString;
-    notificationMethods: z.ZodArray<z.ZodObject<{
+    notificationMethods: z.ZodArray<z.ZodObject<{,
         type: z.ZodNativeEnum<typeof NotificationType>;
         address: z.ZodString;
         priority: z.ZodNativeEnum<typeof EscalationPriority>;
@@ -162,7 +162,7 @@ export declare const EscalationLevelSchema: z.ZodObject<{
     notificationTemplate: z.ZodOptional<z.ZodString>;
     responseTimeLimit: z.ZodNumber;
     resolutionTimeLimit: z.ZodNumber;
-    automaticActions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+    automaticActions: z.ZodOptional<z.ZodArray<z.ZodObject<{,
         actionId: z.ZodString;
         type: z.ZodNativeEnum<typeof EscalationActionType>;
         configuration: z.ZodRecord<z.ZodString, z.ZodAny>;
@@ -182,7 +182,7 @@ export declare const EscalationLevelSchema: z.ZodObject<{
         rollbackable: boolean;
     }>, "many">>;
     requiredActions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    escalationCriteria: z.ZodOptional<z.ZodArray<z.ZodObject<{
+    escalationCriteria: z.ZodOptional<z.ZodArray<z.ZodObject<{,
         conditionId: z.ZodString;
         type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
         field: z.ZodString;
@@ -211,7 +211,7 @@ export declare const EscalationLevelSchema: z.ZodObject<{
     levelId: string;
     assignmentType: AssignmentType;
     assignmentTarget: string;
-    notificationMethods: {
+    notificationMethods: {,
         priority: EscalationPriority;
         type: NotificationType;
         address: string;
@@ -245,7 +245,7 @@ export declare const EscalationLevelSchema: z.ZodObject<{
     levelId: string;
     assignmentType: AssignmentType;
     assignmentTarget: string;
-    notificationMethods: {
+    notificationMethods: {,
         priority: EscalationPriority;
         type: NotificationType;
         address: string;
@@ -280,7 +280,7 @@ export declare const EscalationRuleSchema: z.ZodObject<{
     category: z.ZodNativeEnum<typeof EscalationCategory>;
     enabled: z.ZodBoolean;
     triggerType: z.ZodNativeEnum<typeof EscalationTriggerType>;
-    conditions: z.ZodArray<z.ZodObject<{
+    conditions: z.ZodArray<z.ZodObject<{,
         conditionId: z.ZodString;
         type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
         field: z.ZodString;
@@ -302,14 +302,14 @@ export declare const EscalationRuleSchema: z.ZodObject<{
         conditionId: string;
         logicalOperator?: "AND" | "OR" | undefined;
     }>, "many">;
-    escalationPath: z.ZodArray<z.ZodObject<{
+    escalationPath: z.ZodArray<z.ZodObject<{,
         levelId: z.ZodString;
         level: z.ZodNumber;
         name: z.ZodString;
         description: z.ZodString;
         assignmentType: z.ZodNativeEnum<typeof AssignmentType>;
         assignmentTarget: z.ZodString;
-        notificationMethods: z.ZodArray<z.ZodObject<{
+        notificationMethods: z.ZodArray<z.ZodObject<{,
             type: z.ZodNativeEnum<typeof NotificationType>;
             address: z.ZodString;
             priority: z.ZodNativeEnum<typeof EscalationPriority>;
@@ -334,7 +334,7 @@ export declare const EscalationRuleSchema: z.ZodObject<{
         notificationTemplate: z.ZodOptional<z.ZodString>;
         responseTimeLimit: z.ZodNumber;
         resolutionTimeLimit: z.ZodNumber;
-        automaticActions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        automaticActions: z.ZodOptional<z.ZodArray<z.ZodObject<{,
             actionId: z.ZodString;
             type: z.ZodNativeEnum<typeof EscalationActionType>;
             configuration: z.ZodRecord<z.ZodString, z.ZodAny>;
@@ -354,7 +354,7 @@ export declare const EscalationRuleSchema: z.ZodObject<{
             rollbackable: boolean;
         }>, "many">>;
         requiredActions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        escalationCriteria: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        escalationCriteria: z.ZodOptional<z.ZodArray<z.ZodObject<{,
             conditionId: z.ZodString;
             type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
             field: z.ZodString;
@@ -383,7 +383,7 @@ export declare const EscalationRuleSchema: z.ZodObject<{
         levelId: string;
         assignmentType: AssignmentType;
         assignmentTarget: string;
-        notificationMethods: {
+        notificationMethods: {,
             priority: EscalationPriority;
             type: NotificationType;
             address: string;
@@ -417,7 +417,7 @@ export declare const EscalationRuleSchema: z.ZodObject<{
         levelId: string;
         assignmentType: AssignmentType;
         assignmentTarget: string;
-        notificationMethods: {
+        notificationMethods: {,
             priority: EscalationPriority;
             type: NotificationType;
             address: string;
@@ -463,7 +463,7 @@ export declare const EscalationRuleSchema: z.ZodObject<{
     version: number;
     lastModified: Date;
     enabled: boolean;
-    conditions: {
+    conditions: {,
         value: string | number | boolean;
         type: "value" | "custom" | "time" | "count" | "percentage";
         operator: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
@@ -474,14 +474,14 @@ export declare const EscalationRuleSchema: z.ZodObject<{
     ruleId: string;
     createdBy: string;
     triggerType: EscalationTriggerType;
-    escalationPath: {
+    escalationPath: {,
         name: string;
         description: string;
         level: number;
         levelId: string;
         assignmentType: AssignmentType;
         assignmentTarget: string;
-        notificationMethods: {
+        notificationMethods: {,
             priority: EscalationPriority;
             type: NotificationType;
             address: string;
@@ -523,7 +523,7 @@ export declare const EscalationRuleSchema: z.ZodObject<{
     version: number;
     lastModified: Date;
     enabled: boolean;
-    conditions: {
+    conditions: {,
         value: string | number | boolean;
         type: "value" | "custom" | "time" | "count" | "percentage";
         operator: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
@@ -534,14 +534,14 @@ export declare const EscalationRuleSchema: z.ZodObject<{
     ruleId: string;
     createdBy: string;
     triggerType: EscalationTriggerType;
-    escalationPath: {
+    escalationPath: {,
         name: string;
         description: string;
         level: number;
         levelId: string;
         assignmentType: AssignmentType;
         assignmentTarget: string;
-        notificationMethods: {
+        notificationMethods: {,
             priority: EscalationPriority;
             type: NotificationType;
             address: string;
@@ -780,7 +780,7 @@ export interface CategoryBreakdown {
     trend: 'up' | 'down' | 'stable';
 }
 export interface EscalationDashboard {
-    overview: {
+    overview: {,
         activeCases: number;
         criticalCases: number;
         overdueResponses: number;
@@ -789,7 +789,7 @@ export interface EscalationDashboard {
     };
     recentEscalations: EscalationCase[];
     urgentCases: EscalationCase[];
-    performance: {
+    performance: {,
         slaCompliance: number;
         firstCallResolution: number;
         customerSatisfaction: number;
@@ -884,7 +884,7 @@ export interface EscalationAPIResponse<T = any> {
 }
 export interface PaginatedResponse<T> {
     items: T[];
-    pagination: {
+    pagination: {,
         page: number;
         limit: number;
         total: number;
@@ -897,7 +897,7 @@ export interface EscalationRuleTestResult {
     wouldTrigger: boolean;
     matchedConditions: string[];
     suggestedLevel: number;
-    estimatedEscalationPath: {
+    estimatedEscalationPath: {,
         level: number;
         assignee: string;
         estimatedTime: number;
@@ -906,7 +906,7 @@ export interface EscalationRuleTestResult {
 }
 export interface AssigneePerformance {
     assignee: string;
-    period: {
+    period: {,
         startDate: Date;
         endDate: Date;
     };
@@ -953,24 +953,24 @@ export interface EscalationEvent {
 }
 export interface EscalationServiceConfig {
     defaultTimezone: string;
-    businessHours: {
+    businessHours: {,
         startTime: string;
         endTime: string;
         daysOfWeek: number[];
     };
-    notifications: {
+    notifications: {,
         retryAttempts: number;
         retryInterval: number;
         enableBatching: boolean;
         batchSize: number;
         batchInterval: number;
     };
-    performance: {
+    performance: {,
         metricsRetentionDays: number;
         autoCleanupExpiredCases: boolean;
         maxConcurrentEscalations: number;
     };
-    integrations: {
+    integrations: {,
         enableWebhooks: boolean;
         webhookTimeout: number;
         enableSlackNotifications: boolean;
@@ -986,7 +986,7 @@ declare const _default: {
     EscalationActionType: typeof EscalationActionType;
     AssignmentType: typeof AssignmentType;
     EscalationEventType: typeof EscalationEventType;
-    EscalationConditionSchema: z.ZodObject<{
+    EscalationConditionSchema: z.ZodObject<{,
         conditionId: z.ZodString;
         type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
         field: z.ZodString;
@@ -1008,7 +1008,7 @@ declare const _default: {
         conditionId: string;
         logicalOperator?: "AND" | "OR" | undefined;
     }>;
-    NotificationMethodSchema: z.ZodObject<{
+    NotificationMethodSchema: z.ZodObject<{,
         type: z.ZodNativeEnum<typeof NotificationType>;
         address: z.ZodString;
         priority: z.ZodNativeEnum<typeof EscalationPriority>;
@@ -1030,7 +1030,7 @@ declare const _default: {
         retryCount?: number | undefined;
         retryInterval?: number | undefined;
     }>;
-    EscalationActionSchema: z.ZodObject<{
+    EscalationActionSchema: z.ZodObject<{,
         actionId: z.ZodString;
         type: z.ZodNativeEnum<typeof EscalationActionType>;
         configuration: z.ZodRecord<z.ZodString, z.ZodAny>;
@@ -1049,14 +1049,14 @@ declare const _default: {
         executeImmediately: boolean;
         rollbackable: boolean;
     }>;
-    EscalationLevelSchema: z.ZodObject<{
+    EscalationLevelSchema: z.ZodObject<{,
         levelId: z.ZodString;
         level: z.ZodNumber;
         name: z.ZodString;
         description: z.ZodString;
         assignmentType: z.ZodNativeEnum<typeof AssignmentType>;
         assignmentTarget: z.ZodString;
-        notificationMethods: z.ZodArray<z.ZodObject<{
+        notificationMethods: z.ZodArray<z.ZodObject<{,
             type: z.ZodNativeEnum<typeof NotificationType>;
             address: z.ZodString;
             priority: z.ZodNativeEnum<typeof EscalationPriority>;
@@ -1081,7 +1081,7 @@ declare const _default: {
         notificationTemplate: z.ZodOptional<z.ZodString>;
         responseTimeLimit: z.ZodNumber;
         resolutionTimeLimit: z.ZodNumber;
-        automaticActions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        automaticActions: z.ZodOptional<z.ZodArray<z.ZodObject<{,
             actionId: z.ZodString;
             type: z.ZodNativeEnum<typeof EscalationActionType>;
             configuration: z.ZodRecord<z.ZodString, z.ZodAny>;
@@ -1101,7 +1101,7 @@ declare const _default: {
             rollbackable: boolean;
         }>, "many">>;
         requiredActions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        escalationCriteria: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        escalationCriteria: z.ZodOptional<z.ZodArray<z.ZodObject<{,
             conditionId: z.ZodString;
             type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
             field: z.ZodString;
@@ -1130,7 +1130,7 @@ declare const _default: {
         levelId: string;
         assignmentType: AssignmentType;
         assignmentTarget: string;
-        notificationMethods: {
+        notificationMethods: {,
             priority: EscalationPriority;
             type: NotificationType;
             address: string;
@@ -1164,7 +1164,7 @@ declare const _default: {
         levelId: string;
         assignmentType: AssignmentType;
         assignmentTarget: string;
-        notificationMethods: {
+        notificationMethods: {,
             priority: EscalationPriority;
             type: NotificationType;
             address: string;
@@ -1192,14 +1192,14 @@ declare const _default: {
             rollbackable: boolean;
         }[] | undefined;
     }>;
-    EscalationRuleSchema: z.ZodObject<{
+    EscalationRuleSchema: z.ZodObject<{,
         ruleId: z.ZodString;
         name: z.ZodString;
         description: z.ZodString;
         category: z.ZodNativeEnum<typeof EscalationCategory>;
         enabled: z.ZodBoolean;
         triggerType: z.ZodNativeEnum<typeof EscalationTriggerType>;
-        conditions: z.ZodArray<z.ZodObject<{
+        conditions: z.ZodArray<z.ZodObject<{,
             conditionId: z.ZodString;
             type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
             field: z.ZodString;
@@ -1221,14 +1221,14 @@ declare const _default: {
             conditionId: string;
             logicalOperator?: "AND" | "OR" | undefined;
         }>, "many">;
-        escalationPath: z.ZodArray<z.ZodObject<{
+        escalationPath: z.ZodArray<z.ZodObject<{,
             levelId: z.ZodString;
             level: z.ZodNumber;
             name: z.ZodString;
             description: z.ZodString;
             assignmentType: z.ZodNativeEnum<typeof AssignmentType>;
             assignmentTarget: z.ZodString;
-            notificationMethods: z.ZodArray<z.ZodObject<{
+            notificationMethods: z.ZodArray<z.ZodObject<{,
                 type: z.ZodNativeEnum<typeof NotificationType>;
                 address: z.ZodString;
                 priority: z.ZodNativeEnum<typeof EscalationPriority>;
@@ -1253,7 +1253,7 @@ declare const _default: {
             notificationTemplate: z.ZodOptional<z.ZodString>;
             responseTimeLimit: z.ZodNumber;
             resolutionTimeLimit: z.ZodNumber;
-            automaticActions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            automaticActions: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 actionId: z.ZodString;
                 type: z.ZodNativeEnum<typeof EscalationActionType>;
                 configuration: z.ZodRecord<z.ZodString, z.ZodAny>;
@@ -1273,7 +1273,7 @@ declare const _default: {
                 rollbackable: boolean;
             }>, "many">>;
             requiredActions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            escalationCriteria: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            escalationCriteria: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 conditionId: z.ZodString;
                 type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
                 field: z.ZodString;
@@ -1302,7 +1302,7 @@ declare const _default: {
             levelId: string;
             assignmentType: AssignmentType;
             assignmentTarget: string;
-            notificationMethods: {
+            notificationMethods: {,
                 priority: EscalationPriority;
                 type: NotificationType;
                 address: string;
@@ -1336,7 +1336,7 @@ declare const _default: {
             levelId: string;
             assignmentType: AssignmentType;
             assignmentTarget: string;
-            notificationMethods: {
+            notificationMethods: {,
                 priority: EscalationPriority;
                 type: NotificationType;
                 address: string;
@@ -1382,7 +1382,7 @@ declare const _default: {
         version: number;
         lastModified: Date;
         enabled: boolean;
-        conditions: {
+        conditions: {,
             value: string | number | boolean;
             type: "value" | "custom" | "time" | "count" | "percentage";
             operator: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
@@ -1393,14 +1393,14 @@ declare const _default: {
         ruleId: string;
         createdBy: string;
         triggerType: EscalationTriggerType;
-        escalationPath: {
+        escalationPath: {,
             name: string;
             description: string;
             level: number;
             levelId: string;
             assignmentType: AssignmentType;
             assignmentTarget: string;
-            notificationMethods: {
+            notificationMethods: {,
                 priority: EscalationPriority;
                 type: NotificationType;
                 address: string;
@@ -1442,7 +1442,7 @@ declare const _default: {
         version: number;
         lastModified: Date;
         enabled: boolean;
-        conditions: {
+        conditions: {,
             value: string | number | boolean;
             type: "value" | "custom" | "time" | "count" | "percentage";
             operator: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
@@ -1453,14 +1453,14 @@ declare const _default: {
         ruleId: string;
         createdBy: string;
         triggerType: EscalationTriggerType;
-        escalationPath: {
+        escalationPath: {,
             name: string;
             description: string;
             level: number;
             levelId: string;
             assignmentType: AssignmentType;
             assignmentTarget: string;
-            notificationMethods: {
+            notificationMethods: {,
                 priority: EscalationPriority;
                 type: NotificationType;
                 address: string;

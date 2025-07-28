@@ -5,7 +5,6 @@
  * Multi-step form for creating new contributions with type-specific
  * fields, validation, and preview capabilities.
  */
-
 import React, { useState } from 'react';
 import { 
   CreateContributionRequest, 
@@ -20,13 +19,11 @@ export interface ContributionSubmissionFormProps {
   initialData?: Partial<CreateContributionRequest>;
   className?: string;
 }
-
 interface FormStep {
   id: string;
   title: string;
   description: string;
 }
-
 const FORM_STEPS: FormStep[] = [
   {
     id: 'type',
@@ -50,14 +47,14 @@ const FORM_STEPS: FormStep[] = [
   }
 ];
 
-export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProps> = ({
+export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProps> = ({)
   onSubmit,
   onCancel,
   initialData = {},
   className = ''
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<Partial<CreateContributionRequest>>({
+  const [formData, setFormData] = useState<Partial<CreateContributionRequest>>({)
     type: 'template',
     title: '',
     description: '',
@@ -70,7 +67,6 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   // Available categories by type
   const getCategoriesByType = (type: ContributionType): string[] => {
     const categories = {
@@ -85,46 +81,40 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
     };
     return categories[type] || [];
   };
-
   // Update form data
   const updateFormData = (updates: Partial<CreateContributionRequest>) => {
     setFormData(prev => ({ ...prev, ...updates }));
     // Clear errors for updated fields
     const updatedFields = Object.keys(updates);
-    setErrors(prev => {
+    setErrors(prev => {)
       const newErrors = { ...prev };
       updatedFields.forEach(field => delete newErrors[field]);
       return newErrors;
     });
   };
-
   // Add tag
   const addTag = (tag: string) => {
     if (tag.trim() && !formData.tags?.includes(tag.trim())) {
-      updateFormData({ 
+      updateFormData({ )
         tags: [...(formData.tags || []), tag.trim()]
       });
     }
   };
-
   // Remove tag
   const removeTag = (index: number) => {
-    updateFormData({
+    updateFormData({)
       tags: formData.tags?.filter((_, i) => i !== index) || []
     });
   };
-
   // Validate current step
   const validateStep = (step: number): boolean => {
     const newErrors: Record<string, string> = {};
-
     switch (step) {
     case 0: // Type selection
       if (!formData.type) {
         newErrors.type = 'Please select a contribution type';
       }
       break;
-
     case 1: // Basic information
       if (!formData.title?.trim()) {
         newErrors.title = 'Title is required';
@@ -133,7 +123,6 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
       } else if (formData.title.length > 200) {
         newErrors.title = 'Title must be less than 200 characters';
       }
-
       if (!formData.description?.trim()) {
         newErrors.description = 'Description is required';
       } else if (formData.description.length < 20) {
@@ -141,68 +130,58 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
       } else if (formData.description.length > 2000) {
         newErrors.description = 'Description must be less than 2000 characters';
       }
-
       if (!formData.category?.trim()) {
         newErrors.category = 'Category is required';
       }
       break;
-
     case 2: // Content details
       if (!formData.content || Object.keys(formData.content).length === 0) {
         newErrors.content = 'Content details are required';
       }
       break;
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   // Handle next step
   const handleNext = () => {
     if (validateStep(currentStep)) {
       setCurrentStep(prev => Math.min(prev + 1, FORM_STEPS.length - 1));
     }
   };
-
   // Handle previous step
   const handlePrevious = () => {
     setCurrentStep(prev => Math.max(prev - 1, 0));
   };
-
   // Handle form submission
   const handleSubmit = async (saveAsDraft: boolean = false) => {
     if (!validateStep(currentStep)) return;
-
     setIsSubmitting(true);
     try {
       const submissionData = {
         ...formData,
         saveAsDraft
       } as CreateContributionRequest;
-
       // Validate with Zod
       validateCreateContributionRequest(submissionData);
-      
       await onSubmit(submissionData);
     } catch (err) {
-      setErrors({ 
+      setErrors({ )
         submit: err instanceof Error ? err.message : 'Failed to submit contribution' 
       });
     } finally {
       setIsSubmitting(false);
     }
   };
-
   // Render step content
   const renderStepContent = () => {
     switch (currentStep) {
     case 0:
-      return (
+      return ()
         <div className="step-content">
           <h3>What type of contribution are you creating?</h3>
           <div className="type-grid">
-            {Object.entries(CONTRIBUTION_TYPE_DESCRIPTIONS).map(([type, description]) => (
+            {Object.entries(CONTRIBUTION_TYPE_DESCRIPTIONS).map(([type, description]) => ()
               <div
                 key={type}
                 className={`type-option ${formData.type === type ? 'selected' : ''}`}
@@ -220,12 +199,10 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           {errors.type && <div className="error-message">{errors.type}</div>}
         </div>
       );
-
     case 1:
-      return (
+      return ()
         <div className="step-content">
           <h3>Basic Information</h3>
-            
           <div className="form-group">
             <label htmlFor="title">Title *</label>
             <input
@@ -238,7 +215,6 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
             />
             {errors.title && <div className="error-message">{errors.title}</div>}
           </div>
-
           <div className="form-group">
             <label htmlFor="description">Description *</label>
             <textarea
@@ -254,7 +230,6 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
             </div>
             {errors.description && <div className="error-message">{errors.description}</div>}
           </div>
-
           <div className="form-group">
             <label htmlFor="category">Category *</label>
             <select
@@ -264,13 +239,12 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
               className={errors.category ? 'error' : ''}
             >
               <option value="">Select a category...</option>
-              {getCategoriesByType(formData.type as ContributionType).map((category) => (
+              {getCategoriesByType(formData.type as ContributionType).map((category) => ()
                 <option key={category} value={category}>{category}</option>
               ))}
             </select>
             {errors.category && <div className="error-message">{errors.category}</div>}
           </div>
-
           <div className="form-group">
             <label>Tags (optional)</label>
             <div className="tags-input">
@@ -286,7 +260,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
                 }}
               />
               <div className="tags-list">
-                {formData.tags?.map((tag, index) => (
+                {formData.tags?.map((tag, index) => ()
                   <span key={index} className="tag">
                     {tag}
                     <button
@@ -303,18 +277,16 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           </div>
         </div>
       );
-
     case 2:
-      return (
+      return ()
         <div className="step-content">
           <h3>Content Details</h3>
           {renderContentFields()}
           {errors.content && <div className="error-message">{errors.content}</div>}
         </div>
       );
-
     case 3:
-      return (
+      return ()
         <div className="step-content">
           <h3>Review Your Submission</h3>
           <div className="review-section">
@@ -331,11 +303,11 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
               <strong>Description:</strong>
               <div className="description-preview">{formData.description}</div>
             </div>
-            {formData.tags && formData.tags.length > 0 && (
+            {formData.tags && formData.tags.length > 0 && ()
               <div className="review-item">
                 <strong>Tags:</strong>
                 <div className="tags-preview">
-                  {formData.tags.map((tag, index) => (
+                  {formData.tags.map((tag, index) => ()
                     <span key={index} className="tag">{tag}</span>
                   ))}
                 </div>
@@ -345,12 +317,10 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           {errors.submit && <div className="error-message">{errors.submit}</div>}
         </div>
       );
-
     default:
       return null;
     }
   };
-
   // Get detailed type description
   const getTypeDescription = (type: ContributionType): string => {
     const descriptions = {
@@ -365,12 +335,11 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
     };
     return descriptions[type] || '';
   };
-
   // Render content fields based on type
   const renderContentFields = () => {
     switch (formData.type) {
     case 'template':
-      return (
+      return ()
         <div className="content-fields">
           <div className="form-group">
             <label>Graph JSON *</label>
@@ -379,12 +348,12 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
               onChange={(e) => {
                 try {
                   const graphJson = JSON.parse(e.target.value);
-                  updateFormData({ 
+                  updateFormData({ )
                     content: { ...formData.content, graphJson } 
                   });
                 } catch (err) {
                   // Invalid JSON, but still update to show error
-                  updateFormData({ 
+                  updateFormData({ )
                     content: { ...formData.content, graphJson: e.target.value } 
                   });
                 }
@@ -393,12 +362,11 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
               rows={8}
             />
           </div>
-            
           <div className="form-group">
             <label>Claude Model</label>
             <select
               value={formData.content?.claudeModel || 'claude-3-sonnet'}
-              onChange={(e) => updateFormData({ 
+              onChange={(e) => updateFormData({ )
                 content: { ...formData.content, claudeModel: e.target.value } 
               })}
             >
@@ -407,16 +375,15 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
               <option value="claude-3-haiku">Claude 3 Haiku</option>
             </select>
           </div>
-
           <div className="form-group">
             <label>Pricing</label>
             <div className="pricing-group">
               <select
                 value={formData.content?.pricing?.type || 'free'}
-                onChange={(e) => updateFormData({ 
-                  content: { 
+                onChange={(e) => updateFormData({ )
+                  content: { ,
                     ...formData.content, 
-                    pricing: { 
+                    pricing: { ,
                       ...formData.content?.pricing, 
                       type: e.target.value as 'free' | 'paid' 
                     } 
@@ -426,16 +393,15 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
                 <option value="free">Free</option>
                 <option value="paid">Paid</option>
               </select>
-                
-              {formData.content?.pricing?.type === 'paid' && (
+              {formData.content?.pricing?.type === 'paid' && ()
                 <input
                   type="number"
                   placeholder="Price in cents"
                   value={formData.content?.pricing?.priceInCents || ''}
-                  onChange={(e) => updateFormData({ 
-                    content: { 
+                  onChange={(e) => updateFormData({ )
+                    content: { ,
                       ...formData.content, 
-                      pricing: { 
+                      pricing: { ,
                         ...formData.content?.pricing, 
                         priceInCents: parseInt(e.target.value) || 0 
                       } 
@@ -447,28 +413,26 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           </div>
         </div>
       );
-
     case 'knowledge_article':
     case 'tutorial':
-      return (
+      return ()
         <div className="content-fields">
           <div className="form-group">
             <label>Article/Tutorial Content *</label>
             <textarea
               value={formData.content?.body || ''}
-              onChange={(e) => updateFormData({ 
+              onChange={(e) => updateFormData({ )
                 content: { ...formData.content, body: e.target.value } 
               })}
               placeholder="Write your content here..."
               rows={10}
             />
           </div>
-            
           <div className="form-group">
             <label>Difficulty Level</label>
             <select
               value={formData.content?.difficulty || 'beginner'}
-              onChange={(e) => updateFormData({ 
+              onChange={(e) => updateFormData({ )
                 content: { ...formData.content, difficulty: e.target.value } 
               })}
             >
@@ -480,15 +444,14 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           </div>
         </div>
       );
-
     default:
-      return (
+      return ()
         <div className="content-fields">
           <div className="form-group">
             <label>Content *</label>
             <textarea
               value={formData.content?.body || ''}
-              onChange={(e) => updateFormData({ 
+              onChange={(e) => updateFormData({ )
                 content: { ...formData.content, body: e.target.value } 
               })}
               placeholder="Enter your content here..."
@@ -499,12 +462,11 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
       );
     }
   };
-
-  return (
-    <div className={`contribution-submission-form ${className}`}>
+  return ()
+    <div className={`contribution-submission-form ${className}`}>}
       {/* Progress Indicator */}
       <div className="progress-indicator">
-        {FORM_STEPS.map((step, index) => (
+        {FORM_STEPS.map((step, index) => ()
           <div
             key={step.id}
             className={`progress-step ${index <= currentStep ? 'active' : ''} ${index === currentStep ? 'current' : ''}`}
@@ -517,12 +479,10 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           </div>
         ))}
       </div>
-
       {/* Form Content */}
       <div className="form-content">
         {renderStepContent()}
       </div>
-
       {/* Form Actions */}
       <div className="form-actions">
         <div className="action-group">
@@ -533,8 +493,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           >
             Cancel
           </button>
-          
-          {currentStep > 0 && (
+          {currentStep > 0 && ()
             <button
               type="button"
               onClick={handlePrevious}
@@ -544,9 +503,8 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
             </button>
           )}
         </div>
-
         <div className="action-group">
-          {currentStep === FORM_STEPS.length - 1 ? (
+          {currentStep === FORM_STEPS.length - 1 ? ()
             <>
               <button
                 type="button"
@@ -565,7 +523,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
                 {isSubmitting ? 'Submitting...' : 'Submit for Review'}
               </button>
             </>
-          ) : (
+          ) : ()
             <button
               type="button"
               onClick={handleNext}
@@ -576,21 +534,18 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           )}
         </div>
       </div>
-
       <style>{`
         .contribution-submission-form {
           padding: 24px;
           max-height: 80vh;
           overflow-y: auto;
         }
-
         .progress-indicator {
           display: flex;
           margin-bottom: 32px;
           overflow-x: auto;
           padding-bottom: 8px;
         }
-
         .progress-step {
           display: flex;
           align-items: center;
@@ -600,15 +555,12 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           transition: opacity 0.2s ease;
           min-width: 200px;
         }
-
         .progress-step.active {
           opacity: 1;
         }
-
         .progress-step.current {
           opacity: 1;
         }
-
         .step-number {
           width: 32px;
           height: 32px;
@@ -622,45 +574,37 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           font-size: 14px;
           flex-shrink: 0;
         }
-
         .progress-step.active .step-number {
           background: #3b82f6;
           color: #ffffff;
         }
-
         .step-info {
           flex: 1;
         }
-
         .step-title {
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 2px;
         }
-
         .step-description {
           font-size: 12px;
           color: #6b7280;
         }
-
         .form-content {
           margin-bottom: 32px;
         }
-
         .step-content h3 {
           margin: 0 0 24px 0;
           font-size: 24px;
           font-weight: 700;
           color: #1f2937;
         }
-
         .type-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 16px;
           margin-bottom: 16px;
         }
-
         .type-option {
           border: 2px solid #e5e7eb;
           border-radius: 8px;
@@ -668,41 +612,34 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           cursor: pointer;
           transition: all 0.2s ease;
         }
-
         .type-option:hover {
           border-color: #3b82f6;
         }
-
         .type-option.selected {
           border-color: #3b82f6;
           background: #eff6ff;
         }
-
         .type-header h4 {
           margin: 0 0 8px 0;
           font-size: 16px;
           font-weight: 600;
           color: #1f2937;
         }
-
         .type-description {
           margin: 0;
           font-size: 14px;
           color: #6b7280;
           line-height: 1.5;
         }
-
         .form-group {
           margin-bottom: 20px;
         }
-
         .form-group label {
           display: block;
           margin-bottom: 6px;
           font-weight: 500;
           color: #374151;
         }
-
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -713,7 +650,6 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           font-size: 14px;
           transition: border-color 0.2s ease;
         }
-
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
@@ -721,30 +657,25 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
-
         .form-group input.error,
         .form-group textarea.error,
         .form-group select.error {
           border-color: #ef4444;
         }
-
         .char-count {
           text-align: right;
           font-size: 12px;
           color: #9ca3af;
           margin-top: 4px;
         }
-
         .tags-input input {
           margin-bottom: 8px;
         }
-
         .tags-list {
           display: flex;
           flex-wrap: wrap;
           gap: 6px;
         }
-
         .tag {
           background: #3b82f6;
           color: #ffffff;
@@ -756,7 +687,6 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           align-items: center;
           gap: 4px;
         }
-
         .tag-remove {
           background: none;
           border: none;
@@ -772,46 +702,37 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           align-items: center;
           justify-content: center;
         }
-
         .tag-remove:hover {
           background: rgba(255, 255, 255, 0.2);
         }
-
         .pricing-group {
           display: flex;
           gap: 12px;
           align-items: center;
         }
-
         .pricing-group select {
           flex: 1;
         }
-
         .pricing-group input {
           flex: 1;
         }
-
         .review-section {
           background: #f8fafc;
           border: 1px solid #e5e7eb;
           border-radius: 8px;
           padding: 20px;
         }
-
         .review-item {
           margin-bottom: 16px;
         }
-
         .review-item:last-child {
           margin-bottom: 0;
         }
-
         .review-item strong {
           display: block;
           margin-bottom: 4px;
           color: #374151;
         }
-
         .description-preview {
           background: #ffffff;
           border: 1px solid #e5e7eb;
@@ -821,24 +742,20 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           color: #6b7280;
           white-space: pre-wrap;
         }
-
         .tags-preview {
           display: flex;
           flex-wrap: wrap;
           gap: 6px;
         }
-
         .tags-preview .tag {
           background: #e5e7eb;
           color: #4b5563;
         }
-
         .error-message {
           color: #ef4444;
           font-size: 12px;
           margin-top: 4px;
         }
-
         .form-actions {
           display: flex;
           justify-content: space-between;
@@ -846,12 +763,10 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           padding-top: 24px;
           border-top: 1px solid #e5e7eb;
         }
-
         .action-group {
           display: flex;
           gap: 12px;
         }
-
         .btn-primary, .btn-secondary, .btn-outline {
           padding: 10px 20px;
           border-radius: 6px;
@@ -860,70 +775,56 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           transition: all 0.2s ease;
           border: 1px solid transparent;
         }
-
         .btn-primary {
           background: #3b82f6;
           color: #ffffff;
         }
-
         .btn-primary:hover:not(:disabled) {
           background: #2563eb;
         }
-
         .btn-secondary {
           background: #f3f4f6;
           color: #374151;
           border-color: #d1d5db;
         }
-
         .btn-secondary:hover {
           background: #e5e7eb;
         }
-
         .btn-outline {
           background: #ffffff;
           color: #374151;
           border-color: #d1d5db;
         }
-
         .btn-outline:hover {
           background: #f9fafb;
         }
-
         .btn-primary:disabled {
           opacity: 0.5;
           cursor: not-allowed;
         }
-
         @media (max-width: 768px) {
           .contribution-submission-form {
             padding: 16px;
           }
-
           .progress-indicator {
             flex-direction: column;
             gap: 12px;
           }
-
           .progress-step {
             min-width: auto;
             padding-right: 0;
           }
-
           .type-grid {
             grid-template-columns: 1fr;
           }
-
           .form-actions {
             flex-direction: column;
             gap: 16px;
           }
-
           .action-group {
             width: 100%;
             justify-content: center;
           }
-
           .pricing-group {
             flex-direction: column;
           }

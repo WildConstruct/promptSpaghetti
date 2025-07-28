@@ -17,7 +17,7 @@ export interface Edge {
 export interface Graph {
   nodes: Node[];
   edges: Edge[];
-  meta: {
+  meta: {,
     version: string;
   };
 }

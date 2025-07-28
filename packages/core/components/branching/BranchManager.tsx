@@ -58,11 +58,9 @@ import {
 } from '../../types/branching';
 import { useBranching } from '../../hooks/useBranching';
 import { MergeRequestPanel } from './MergeRequestPanel';
-
 const { Title, Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
-
 interface BranchManagerProps {
   projectId: string;
   currentBranchId?: string;
@@ -71,7 +69,6 @@ interface BranchManagerProps {
   onBranchUpdate?: (branch: ProjectBranch) => void;
   onBranchDelete?: (branchId: string) => void;
 }
-
 interface BranchNodeProps {
   branch: ProjectBranch;
   onEdit: (branch: ProjectBranch) => void;
@@ -80,8 +77,7 @@ interface BranchNodeProps {
   onSelect: (branchId: string) => void;
   isSelected: boolean;
 }
-
-const BranchNode: React.FC<BranchNodeProps> = ({ 
+const BranchNode: React.FC<BranchNodeProps> = ({ )
   branch, 
   onEdit, 
   onDelete, 
@@ -105,7 +101,6 @@ const BranchNode: React.FC<BranchNodeProps> = ({
       return 'default';
     }
   };
-
   const getBranchStatusColor = (status: BranchStatus) => {
     switch (status) {
     case 'active':
@@ -120,7 +115,6 @@ const BranchNode: React.FC<BranchNodeProps> = ({
       return 'default';
     }
   };
-
   const getProtectionIcon = (level: ProtectionLevel) => {
     switch (level) {
     case 'locked':
@@ -131,20 +125,17 @@ const BranchNode: React.FC<BranchNodeProps> = ({
       return <UnlockOutlined style={{ color: '#52c41a' }} />;
     }
   };
-
   const formatLastActivity = (date: Date) => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    
     if (days === 0) return 'Today';
     if (days === 1) return 'Yesterday';
-    if (days < 7) return `${days} days ago`;
-    if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
-    return `${Math.floor(days / 30)} months ago`;
+    if (days < 7) return `${days} days ago`;}
+    if (days < 30) return `${Math.floor(days / 7)} weeks ago`;}
+    return `${Math.floor(days / 30)} months ago`;}
   };
-
-  const menu = (
+  const menu = (;)
     <Menu>
       <Menu.Item key="select" icon={<EyeOutlined />} onClick={() => onSelect(branch.id)}>
         Switch to Branch
@@ -167,8 +158,7 @@ const BranchNode: React.FC<BranchNodeProps> = ({
       </Menu.Item>
     </Menu>
   );
-
-  return (
+  return ()
     <div 
       style={{ 
         padding: '8px 12px', 
@@ -176,7 +166,7 @@ const BranchNode: React.FC<BranchNodeProps> = ({
         backgroundColor: isSelected ? '#e6f7ff' : 'transparent',
         border: isSelected ? '1px solid #1890ff' : '1px solid transparent',
         marginBottom: '4px',
-        cursor: 'pointer'
+        cursor: 'pointer',
       }}
       onClick={() => onSelect(branch.id)}
     >
@@ -209,19 +199,17 @@ const BranchNode: React.FC<BranchNodeProps> = ({
             </div>
           </div>
         </div>
-        
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          {branch.requiresReview && (
+          {branch.requiresReview && ()
             <Tooltip title="Requires review">
               <CheckCircleOutlined style={{ color: '#fa8c16' }} />
             </Tooltip>
           )}
-          {branch.autoMergeEnabled && (
+          {branch.autoMergeEnabled && ()
             <Tooltip title="Auto-merge enabled">
               <MergeOutlined style={{ color: '#52c41a' }} />
             </Tooltip>
           )}
-          
           <Dropdown overlay={menu} trigger={['click']}>
             <Button type="text" size="small" icon={<MoreOutlined />} />
           </Dropdown>
@@ -231,7 +219,7 @@ const BranchNode: React.FC<BranchNodeProps> = ({
   );
 };
 
-export const BranchManager: React.FC<BranchManagerProps> = ({
+export const BranchManager: React.FC<BranchManagerProps> = ({)
   projectId,
   currentBranchId,
   onBranchSelect,
@@ -248,7 +236,6 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
   const [editingBranch, setEditingBranch] = useState<ProjectBranch | null>(null);
   const [parentBranchId, setParentBranchId] = useState<string | null>(null);
   const [form] = Form.useForm();
-
   const {
     createBranch,
     updateBranch,
@@ -258,14 +245,12 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
     loading,
     error
   } = useBranching();
-
   useEffect(() => {
     loadBranchData();
   }, [projectId]);
-
   const loadBranchData = async () => {
     try {
-      const [hierarchyData, statsData] = await Promise.all([
+      const [hierarchyData, statsData] = await Promise.all([)
         getBranchHierarchy(projectId),
         getBranchStats(projectId)
       ]);
@@ -275,7 +260,6 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
       console.error('Failed to load branch data:', error);
     }
   };
-
   const handleCreateBranch = async (values: unknown) => {
     try {
       const request: CreateBranchRequest = {
@@ -290,7 +274,6 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
         allowForcePush: values.allowForcePush || false,
         deleteOnMerge: values.deleteOnMerge || false
       };
-
       const branch = await createBranch(request);
       setShowCreateModal(false);
       form.resetFields();
@@ -301,10 +284,8 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
       console.error('Failed to create branch:', error);
     }
   };
-
   const handleUpdateBranch = async (values: unknown) => {
     if (!editingBranch) return;
-
     try {
       const request: UpdateBranchRequest = {
         displayName: values.displayName,
@@ -313,9 +294,8 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
         autoMergeEnabled: values.autoMergeEnabled,
         requiresReview: values.requiresReview,
         allowForcePush: values.allowForcePush,
-        deleteOnMerge: values.deleteOnMerge
+        deleteOnMerge: values.deleteOnMerge,
       };
-
       const branch = await updateBranch(editingBranch.id, request);
       setShowEditModal(false);
       setEditingBranch(null);
@@ -326,7 +306,6 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
       console.error('Failed to update branch:', error);
     }
   };
-
   const handleDeleteBranch = async (branchId: string) => {
     try {
       await deleteBranch(branchId);
@@ -336,32 +315,28 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
       console.error('Failed to delete branch:', error);
     }
   };
-
   const handleBranchSelect = (branchId: string) => {
     const branch = findBranchById(branchId);
     setSelectedBranch(branch);
     onBranchSelect?.(branchId);
   };
-
   const handleEditBranch = (branch: ProjectBranch) => {
     setEditingBranch(branch);
-    form.setFieldsValue({
+    form.setFieldsValue({)
       displayName: branch.displayName,
       description: branch.description,
       protectionLevel: branch.protectionLevel,
       autoMergeEnabled: branch.autoMergeEnabled,
       requiresReview: branch.requiresReview,
       allowForcePush: branch.allowForcePush,
-      deleteOnMerge: branch.deleteOnMerge
+      deleteOnMerge: branch.deleteOnMerge,
     });
     setShowEditModal(true);
   };
-
   const handleCreateChild = (parentId: string) => {
     setParentBranchId(parentId);
     setShowCreateModal(true);
   };
-
   const findBranchById = (branchId: string): ProjectBranch | null => {
     const searchInHierarchy = (nodes: BranchHierarchy[]): ProjectBranch | null => {
       for (const node of nodes) {
@@ -375,10 +350,9 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
     };
     return searchInHierarchy(hierarchy);
   };
-
   const renderBranchHierarchy = (nodes: BranchHierarchy[]) => {
-    return nodes.map((node) => (
-      <div key={node.branch.id} style={{ marginLeft: `${node.depth * 20}px` }}>
+    return nodes.map((node) => ()
+      <div key={node.branch.id} style={{ marginLeft: `${node.depth * 20}px` }}>}
         <BranchNode
           branch={node.branch}
           onEdit={handleEditBranch}
@@ -391,8 +365,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
       </div>
     ));
   };
-
-  return (
+  return ()
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
       <div style={{ padding: '16px', borderBottom: '1px solid #f0f0f0' }}>
@@ -416,9 +389,8 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
             </Button>
           </Space>
         </div>
-
         {/* Statistics */}
-        {stats && (
+        {stats && ()
           <Row gutter={16} style={{ marginTop: '16px' }}>
             <Col span={6}>
               <Statistic 
@@ -454,10 +426,9 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
           </Row>
         )}
       </div>
-
       {/* Branch List */}
       <div style={{ flex: 1, padding: '16px', overflowY: 'auto' }}>
-        {error && (
+        {error && ()
           <Alert
             message="Error"
             description={error}
@@ -467,16 +438,14 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
             style={{ marginBottom: '16px' }}
           />
         )}
-
-        {hierarchy.length > 0 ? (
+        {hierarchy.length > 0 ? ()
           <div>{renderBranchHierarchy(hierarchy)}</div>
-        ) : (
+        ) : ()
           <div style={{ textAlign: 'center', padding: '40px' }}>
             <Text type="secondary">No branches found</Text>
           </div>
         )}
       </div>
-
       {/* Create Branch Modal */}
       <Modal
         title="Create New Branch"
@@ -498,7 +467,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
             autoMergeEnabled: false,
             requiresReview: false,
             allowForcePush: false,
-            deleteOnMerge: false
+            deleteOnMerge: false,
           }}
         >
           <Form.Item
@@ -508,43 +477,34 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
           >
             <Input placeholder="e.g., feature/user-authentication" />
           </Form.Item>
-
           <Form.Item name="displayName" label="Display Name">
             <Input placeholder="e.g., User Authentication Feature" />
           </Form.Item>
-
           <Form.Item name="description" label="Description">
             <TextArea rows={3} placeholder="Describe the purpose of this branch..." />
           </Form.Item>
-
           <Form.Item name="branchType" label="Branch Type">
             <Select>
-              {Object.entries(BRANCH_TYPE_DESCRIPTIONS).map(([key, description]) => (
+              {Object.entries(BRANCH_TYPE_DESCRIPTIONS).map(([key, description]) => ()
                 <Option key={key} value={key}>
                   {key.charAt(0).toUpperCase() + key.slice(1)} - {description}
                 </Option>
               ))}
             </Select>
           </Form.Item>
-
           <Divider />
-
           <Form.Item name="autoMergeEnabled" valuePropName="checked">
             <Switch /> Auto-merge when approved
           </Form.Item>
-
           <Form.Item name="requiresReview" valuePropName="checked">
             <Switch /> Require review before merge
           </Form.Item>
-
           <Form.Item name="allowForcePush" valuePropName="checked">
             <Switch /> Allow force push
           </Form.Item>
-
           <Form.Item name="deleteOnMerge" valuePropName="checked">
             <Switch /> Delete branch after merge
           </Form.Item>
-
           <div style={{ textAlign: 'right', marginTop: '24px' }}>
             <Space>
               <Button onClick={() => setShowCreateModal(false)}>
@@ -557,7 +517,6 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
           </div>
         </Form>
       </Modal>
-
       {/* Edit Branch Modal */}
       <Modal
         title="Edit Branch Settings"
@@ -570,7 +529,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
         footer={null}
         width={600}
       >
-        {editingBranch && (
+        {editingBranch && ()
           <Form
             form={form}
             layout="vertical"
@@ -579,39 +538,31 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
             <Form.Item name="displayName" label="Display Name">
               <Input placeholder="e.g., User Authentication Feature" />
             </Form.Item>
-
             <Form.Item name="description" label="Description">
               <TextArea rows={3} placeholder="Describe the purpose of this branch..." />
             </Form.Item>
-
             <Form.Item name="protectionLevel" label="Protection Level">
               <Select>
-                {Object.entries(PROTECTION_LEVEL_DESCRIPTIONS).map(([key, description]) => (
+                {Object.entries(PROTECTION_LEVEL_DESCRIPTIONS).map(([key, description]) => ()
                   <Option key={key} value={key}>
                     {key.charAt(0).toUpperCase() + key.slice(1)} - {description}
                   </Option>
                 ))}
               </Select>
             </Form.Item>
-
             <Divider />
-
             <Form.Item name="autoMergeEnabled" valuePropName="checked">
               <Switch /> Auto-merge when approved
             </Form.Item>
-
             <Form.Item name="requiresReview" valuePropName="checked">
               <Switch /> Require review before merge
             </Form.Item>
-
             <Form.Item name="allowForcePush" valuePropName="checked">
               <Switch /> Allow force push
             </Form.Item>
-
             <Form.Item name="deleteOnMerge" valuePropName="checked">
               <Switch /> Delete branch after merge
             </Form.Item>
-
             <div style={{ textAlign: 'right', marginTop: '24px' }}>
               <Space>
                 <Button onClick={() => setShowEditModal(false)}>
@@ -625,7 +576,6 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
           </Form>
         )}
       </Modal>
-
       {/* Merge Request Panel */}
       <Drawer
         title="Merge Requests"

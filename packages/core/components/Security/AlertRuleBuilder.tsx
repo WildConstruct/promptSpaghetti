@@ -4,7 +4,6 @@
  * Advanced visual interface for creating and managing security alert rules.
  * Provides drag-and-drop rule building, condition chaining, and action configuration.
  */
-
 import React, { useState } from 'react';
 import {
   SecurityEventType,
@@ -21,7 +20,6 @@ import { Select } from '../ui/Select';
 import { Checkbox } from '../ui/Checkbox';
 import { Textarea } from '../ui/Textarea';
 import './AlertRuleBuilder.css';
-
 interface AlertRule {
   id: string;
   name: string;
@@ -36,7 +34,6 @@ interface AlertRule {
   created_at: Date;
   updated_at: Date;
 }
-
 interface AlertCondition {
   id: string;
   field: string;
@@ -44,7 +41,6 @@ interface AlertCondition {
   value: Error;
   logic_operator?: 'and' | 'or';
 }
-
 interface AlertAction {
   id: string;
   type: 'notification' | 'containment' | 'escalation' | 'logging' | 'webhook';
@@ -53,7 +49,6 @@ interface AlertAction {
   enabled: boolean;
   delay_seconds?: number;
 }
-
 interface NotificationChannel {
   id: string;
   name: string;
@@ -61,15 +56,13 @@ interface NotificationChannel {
   config: Record<string, any>;
   enabled: boolean;
 }
-
 interface EscalationConfig {
   enabled: boolean;
   escalation_delay_minutes: number;
   escalation_targets: string[];
   max_escalations: number;
 }
-
-const AVAILABLE_FIELDS = [
+const AVAILABLE_FIELDS = [;
   { value: 'event_type', label: 'Event Type', type: 'enum' },
   { value: 'severity', label: 'Severity', type: 'enum' },
   { value: 'source_ip', label: 'Source IP', type: 'string' },
@@ -83,47 +76,44 @@ const AVAILABLE_FIELDS = [
   { value: 'data_volume', label: 'Data Volume', type: 'number' },
   { value: 'response_time', label: 'Response Time', type: 'number' }
 ];
-
 const OPERATORS_BY_TYPE = {
   string: ['eq', 'ne', 'contains', 'regex'],
   number: ['eq', 'ne', 'gt', 'lt', 'gte', 'lte'],
   enum: ['eq', 'ne', 'in', 'not_in'],
   array: ['contains', 'in', 'not_in']
 };
-
-const ACTION_TYPES = [
+const ACTION_TYPES = [;
   {
     type: 'notification',
     name: 'Send Notification',
     description: 'Send alert notification to configured channels',
-    icon: '📢'
+    icon: '📢',
   },
   {
     type: 'containment',
     name: 'Automated Containment',
     description: 'Automatically block IPs, lock accounts, or isolate systems',
-    icon: '🛡️'
+    icon: '🛡️',
   },
   {
     type: 'escalation',
     name: 'Escalate Alert',
     description: 'Escalate to security team or management',
-    icon: '🚨'
+    icon: '🚨',
   },
   {
     type: 'logging',
     name: 'Enhanced Logging',
     description: 'Capture additional forensic data',
-    icon: '📝'
+    icon: '📝',
   },
   {
     type: 'webhook',
     name: 'Webhook Call',
     description: 'Call external webhook with alert data',
-    icon: '🔗'
+    icon: '🔗',
   }
 ];
-
 /**
  * Main Alert Rule Builder Component
  */
@@ -135,7 +125,6 @@ export const AlertRuleBuilder: React.FC<{
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<string | null>(null);
   const [editingRule, setEditingRule] = useState<AlertRule | null>(null);
-
   const handleCreateRule = () => {
     const newRule: AlertRule = {
       id: crypto.randomUUID(),
@@ -153,37 +142,31 @@ export const AlertRuleBuilder: React.FC<{
     setEditingRule(newRule);
     setShowCreateDialog(true);
   };
-
   const handleSaveRule = (rule: AlertRule) => {
     const isNew = !alertRules.find(r => r.id === rule.id);
     const updatedRule = { ...rule, updated_at: new Date() };
-    
     if (isNew) {
       onRulesChange([...alertRules, updatedRule]);
     } else {
       onRulesChange(alertRules.map(r => r.id === rule.id ? updatedRule : r));
     }
-    
     setEditingRule(null);
     setShowCreateDialog(false);
   };
-
   const handleDeleteRule = (ruleId: string) => {
     onRulesChange(alertRules.filter(r => r.id !== ruleId));
     setShowDeleteDialog(null);
   };
-
   const handleToggleRule = (ruleId: string) => {
-    onRulesChange(
-      alertRules.map(rule => 
+    onRulesChange()
+      alertRules.map(rule => )
         rule.id === ruleId 
           ? { ...rule, enabled: !rule.enabled, updated_at: new Date() }
           : rule
       )
     );
   };
-
-  return (
+  return ()
     <div className="alert-rule-builder">
       <div className="builder-header">
         <div className="header-content">
@@ -194,7 +177,6 @@ export const AlertRuleBuilder: React.FC<{
           Create Alert Rule
         </Button>
       </div>
-
       <div className="rules-overview">
         <div className="overview-stats">
           <div className="stat-card">
@@ -211,9 +193,8 @@ export const AlertRuleBuilder: React.FC<{
           </div>
         </div>
       </div>
-
       <div className="rules-grid">
-        {alertRules.map(rule => (
+        {alertRules.map(rule => ()
           <RuleCard
             key={rule.id}
             rule={rule}
@@ -227,8 +208,7 @@ export const AlertRuleBuilder: React.FC<{
           />
         ))}
       </div>
-
-      {alertRules.length === 0 && (
+      {alertRules.length === 0 && ()
         <div className="empty-state">
           <div className="empty-icon">🚨</div>
           <h3>No Alert Rules Configured</h3>
@@ -238,9 +218,8 @@ export const AlertRuleBuilder: React.FC<{
           </Button>
         </div>
       )}
-
       {/* Create/Edit Rule Dialog */}
-      {showCreateDialog && editingRule && (
+      {showCreateDialog && editingRule && ()
         <RuleEditDialog
           rule={editingRule}
           open={showCreateDialog}
@@ -251,9 +230,8 @@ export const AlertRuleBuilder: React.FC<{
           onSave={handleSaveRule}
         />
       )}
-
       {/* Delete Confirmation Dialog */}
-      {showDeleteDialog && (
+      {showDeleteDialog && ()
         <Dialog
           open={!!showDeleteDialog}
           onOpenChange={() => setShowDeleteDialog(null)}
@@ -276,7 +254,6 @@ export const AlertRuleBuilder: React.FC<{
     </div>
   );
 };
-
 /**
  * Individual Alert Rule Card Component
  */
@@ -287,8 +264,8 @@ const RuleCard: React.FC<{
   onDelete: () => void;
   onSelect: () => void;
 }> = ({ rule, onEdit, onToggle, onDelete, onSelect }) => {
-  return (
-    <Card className={`rule-card ${!rule.enabled ? 'disabled' : ''}`}>
+  return ()
+    <Card className={`rule-card ${!rule.enabled ? 'disabled' : ''}`}>}
       <div className="rule-header">
         <div className="rule-info">
           <h3 className="rule-name">{rule.name}</h3>
@@ -300,13 +277,12 @@ const RuleCard: React.FC<{
           </Badge>
         </div>
       </div>
-
       <div className="rule-details">
         <div className="detail-row">
           <span className="detail-label">Event Types:</span>
           <span className="detail-value">
             {rule.event_types.length > 0 
-              ? `${rule.event_types.length} types`
+              ? `${rule.event_types.length} types`}
               : 'All types'
             }
           </span>
@@ -326,7 +302,6 @@ const RuleCard: React.FC<{
           <span className="detail-value">{rule.actions.length} actions</span>
         </div>
       </div>
-
       <div className="rule-actions">
         <Button variant="outline" size="sm" onClick={onEdit}>
           Edit
@@ -345,7 +320,6 @@ const RuleCard: React.FC<{
     </Card>
   );
 };
-
 /**
  * Rule Edit Dialog Component
  */
@@ -358,23 +332,19 @@ const RuleEditDialog: React.FC<{
   const [editedRule, setEditedRule] = useState<AlertRule>({ ...rule });
   const [activeTab, setActiveTab] = useState<'basic' | 'conditions' | 'actions' | 'notifications'>('basic');
   const [errors, setErrors] = useState<string[]>([]);
-
   const handleSave = () => {
     const validationErrors = validateRule(editedRule);
     if (validationErrors.length > 0) {
       setErrors(validationErrors);
       return;
     }
-
     setErrors([]);
     onSave(editedRule);
   };
-
   const updateRule = (updates: Partial<AlertRule>) => {
     setEditedRule(prev => ({ ...prev, ...updates }));
   };
-
-  return (
+  return ()
     <Dialog
       open={open}
       onOpenChange={onClose}
@@ -382,20 +352,19 @@ const RuleEditDialog: React.FC<{
       className="rule-edit-dialog"
     >
       <div className="dialog-content">
-        {errors.length > 0 && (
+        {errors.length > 0 && ()
           <Alert variant="error" className="mb-4">
             <strong>Validation Errors:</strong>
             <ul>
-              {errors.map((error, index) => (
+              {errors.map((error, index) => ()
                 <li key={index}>{error}</li>
               ))}
             </ul>
           </Alert>
         )}
-
         <div className="edit-tabs">
           <div className="tabs-list">
-            {['basic', 'conditions', 'actions', 'notifications'].map(tab => (
+            {['basic', 'conditions', 'actions', 'notifications'].map(tab => ()
               <button
                 key={tab}
                 className={`tab-trigger ${activeTab === tab ? 'active' : ''}`}
@@ -405,23 +374,21 @@ const RuleEditDialog: React.FC<{
               </button>
             ))}
           </div>
-
           <div className="tab-content">
-            {activeTab === 'basic' && (
+            {activeTab === 'basic' && ()
               <BasicRuleSettings rule={editedRule} onUpdate={updateRule} />
             )}
-            {activeTab === 'conditions' && (
+            {activeTab === 'conditions' && ()
               <ConditionBuilder rule={editedRule} onUpdate={updateRule} />
             )}
-            {activeTab === 'actions' && (
+            {activeTab === 'actions' && ()
               <ActionBuilder rule={editedRule} onUpdate={updateRule} />
             )}
-            {activeTab === 'notifications' && (
+            {activeTab === 'notifications' && ()
               <NotificationSettings rule={editedRule} onUpdate={updateRule} />
             )}
           </div>
         </div>
-
         <div className="dialog-actions">
           <Button variant="outline" onClick={onClose}>
             Cancel
@@ -434,7 +401,6 @@ const RuleEditDialog: React.FC<{
     </Dialog>
   );
 };
-
 /**
  * Basic Rule Settings Tab
  */
@@ -442,7 +408,7 @@ const BasicRuleSettings: React.FC<{
   rule: AlertRule;
   onUpdate: (updates: Partial<AlertRule>) => void;
 }> = ({ rule, onUpdate }) => {
-  return (
+  return ()
     <div className="basic-settings">
       <div className="form-group">
         <label htmlFor="ruleName">Rule Name</label>
@@ -453,7 +419,6 @@ const BasicRuleSettings: React.FC<{
           placeholder="Enter rule name"
         />
       </div>
-
       <div className="form-group">
         <label htmlFor="ruleDescription">Description</label>
         <Textarea
@@ -464,7 +429,6 @@ const BasicRuleSettings: React.FC<{
           rows={3}
         />
       </div>
-
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="severityThreshold">Minimum Severity</label>
@@ -473,14 +437,13 @@ const BasicRuleSettings: React.FC<{
             value={rule.severity_threshold}
             onValueChange={(value) => onUpdate({ severity_threshold: value as SecurityEventSeverity })}
           >
-            {Object.values(SecurityEventSeverity).map(severity => (
+            {Object.values(SecurityEventSeverity).map(severity => ()
               <option key={severity} value={severity}>
                 {severity.toUpperCase()}
               </option>
             ))}
           </Select>
         </div>
-
         <div className="form-group">
           <label>
             <Checkbox
@@ -491,16 +454,15 @@ const BasicRuleSettings: React.FC<{
           </label>
         </div>
       </div>
-
       <div className="form-group">
         <label>Event Types to Monitor</label>
         <div className="event-types-selector">
-          {Object.values(SecurityEventType).map(eventType => (
+          {Object.values(SecurityEventType).map(eventType => ()
             <label key={eventType} className="event-type-checkbox">
               <Checkbox
                 checked={rule.event_types.includes(eventType)}
                 onChange={(checked) => {
-                  const updatedTypes = checked
+                  const updatedTypes = checked;
                     ? [...rule.event_types, eventType]
                     : rule.event_types.filter(t => t !== eventType);
                   onUpdate({ event_types: updatedTypes });
@@ -514,7 +476,6 @@ const BasicRuleSettings: React.FC<{
     </div>
   );
 };
-
 /**
  * Condition Builder Tab
  */
@@ -532,19 +493,16 @@ const ConditionBuilder: React.FC<{
     };
     onUpdate({ conditions: [...rule.conditions, newCondition] });
   };
-
   const updateCondition = (id: string, updates: Partial<AlertCondition>) => {
-    const updatedConditions = rule.conditions.map(condition =>
+    const updatedConditions = rule.conditions.map(condition =>;)
       condition.id === id ? { ...condition, ...updates } : condition
     );
     onUpdate({ conditions: updatedConditions });
   };
-
   const removeCondition = (id: string) => {
     onUpdate({ conditions: rule.conditions.filter(c => c.id !== id) });
   };
-
-  return (
+  return ()
     <div className="condition-builder">
       <div className="builder-header">
         <p>Define conditions that must be met to trigger this alert rule.</p>
@@ -552,10 +510,9 @@ const ConditionBuilder: React.FC<{
           Add Condition
         </Button>
       </div>
-
-      {rule.conditions.map((condition, index) => (
+      {rule.conditions.map((condition, index) => ()
         <div key={condition.id} className="condition-item">
-          {index > 0 && (
+          {index > 0 && ()
             <div className="logic-operator">
               <Select
                 value={condition.logic_operator || 'and'}
@@ -566,36 +523,32 @@ const ConditionBuilder: React.FC<{
               </Select>
             </div>
           )}
-          
           <div className="condition-config">
             <Select
               value={condition.field}
               onValueChange={(value) => updateCondition(condition.id, { field: value })}
             >
-              {AVAILABLE_FIELDS.map(field => (
+              {AVAILABLE_FIELDS.map(field => ()
                 <option key={field.value} value={field.value}>
                   {field.label}
                 </option>
               ))}
             </Select>
-
             <Select
               value={condition.operator}
               onValueChange={(value) => updateCondition(condition.id, { operator: value as any })}
             >
-              {getOperatorsForField(condition.field).map(op => (
+              {getOperatorsForField(condition.field).map(op => ()
                 <option key={op} value={op}>
                   {getOperatorLabel(op)}
                 </option>
               ))}
             </Select>
-
             <Input
               value={condition.value}
               onChange={(e) => updateCondition(condition.id, { value: e.target.value })}
               placeholder="Value"
             />
-
             <Button
               variant="outline"
               size="sm"
@@ -606,8 +559,7 @@ const ConditionBuilder: React.FC<{
           </div>
         </div>
       ))}
-
-      {rule.conditions.length === 0 && (
+      {rule.conditions.length === 0 && ()
         <div className="empty-conditions">
           <p>No conditions defined. Add conditions to specify when this rule should trigger.</p>
         </div>
@@ -615,7 +567,6 @@ const ConditionBuilder: React.FC<{
     </div>
   );
 };
-
 /**
  * Action Builder Tab
  */
@@ -629,28 +580,25 @@ const ActionBuilder: React.FC<{
       type: actionType as any,
       name: ACTION_TYPES.find(t => t.type === actionType)?.name || actionType,
       config: {},
-      enabled: true
+      enabled: true,
     };
     onUpdate({ actions: [...rule.actions, newAction] });
   };
-
   const updateAction = (id: string, updates: Partial<AlertAction>) => {
-    const updatedActions = rule.actions.map(action =>
+    const updatedActions = rule.actions.map(action =>;)
       action.id === id ? { ...action, ...updates } : action
     );
     onUpdate({ actions: updatedActions });
   };
-
   const removeAction = (id: string) => {
     onUpdate({ actions: rule.actions.filter(a => a.id !== id) });
   };
-
-  return (
+  return ()
     <div className="action-builder">
       <div className="builder-header">
         <p>Configure actions to take when this alert rule is triggered.</p>
         <div className="action-types">
-          {ACTION_TYPES.map(actionType => (
+          {ACTION_TYPES.map(actionType => ()
             <Button
               key={actionType.type}
               variant="outline"
@@ -662,9 +610,8 @@ const ActionBuilder: React.FC<{
           ))}
         </div>
       </div>
-
       <div className="actions-list">
-        {rule.actions.map(action => (
+        {rule.actions.map(action => ()
           <Card key={action.id} className="action-card">
             <div className="action-header">
               <div className="action-info">
@@ -690,15 +637,13 @@ const ActionBuilder: React.FC<{
                 </Button>
               </div>
             </div>
-            
             <div className="action-config">
               <ActionConfigForm action={action} onUpdate={(updates) => updateAction(action.id, updates)} />
             </div>
           </Card>
         ))}
       </div>
-
-      {rule.actions.length === 0 && (
+      {rule.actions.length === 0 && ()
         <div className="empty-actions">
           <p>No actions defined. Add actions to specify what should happen when this rule triggers.</p>
         </div>
@@ -706,7 +651,6 @@ const ActionBuilder: React.FC<{
     </div>
   );
 };
-
 /**
  * Action Configuration Form
  */
@@ -715,14 +659,13 @@ const ActionConfigForm: React.FC<{
   onUpdate: (updates: Partial<AlertAction>) => void;
 }> = ({ action, onUpdate }) => {
   const updateConfig = (key: string, value: Error) => {
-    onUpdate({
+    onUpdate({)
       config: { ...action.config, [key]: value }
     });
   };
-
   switch (action.type) {
   case 'notification':
-    return (
+    return ()
       <div className="config-form">
         <div className="form-group">
           <label>Message Template</label>
@@ -734,9 +677,8 @@ const ActionConfigForm: React.FC<{
         </div>
       </div>
     );
-
   case 'containment':
-    return (
+    return ()
       <div className="config-form">
         <div className="form-group">
           <label>Containment Actions</label>
@@ -766,9 +708,8 @@ const ActionConfigForm: React.FC<{
         </div>
       </div>
     );
-
   case 'webhook':
-    return (
+    return ()
       <div className="config-form">
         <div className="form-group">
           <label>Webhook URL</label>
@@ -791,12 +732,10 @@ const ActionConfigForm: React.FC<{
         </div>
       </div>
     );
-
   default:
     return null;
   }
 };
-
 /**
  * Notification Settings Tab
  */
@@ -804,7 +743,7 @@ const NotificationSettings: React.FC<{
   rule: AlertRule;
   onUpdate: (updates: Partial<AlertRule>) => void;
 }> = ({ rule, onUpdate }) => {
-  return (
+  return ()
     <div className="notification-settings">
       <p>Configure notification channels for this alert rule.</p>
       <div className="placeholder-content">
@@ -817,27 +756,21 @@ const NotificationSettings: React.FC<{
 // Utility functions
 function validateRule(rule: AlertRule): string[] {
   const errors: string[] = [];
-
   if (!rule.name.trim()) {
     errors.push('Rule name is required');
   }
-
   if (rule.conditions.length === 0) {
     errors.push('At least one condition must be defined');
   }
-
   if (rule.actions.length === 0) {
     errors.push('At least one action must be defined');
   }
-
   return errors;
 }
-
 function getOperatorsForField(field: string): string[] {
   const fieldType = AVAILABLE_FIELDS.find(f => f.value === field)?.type || 'string';
   return OPERATORS_BY_TYPE[fieldType as keyof typeof OPERATORS_BY_TYPE] || [];
 }
-
 function getOperatorLabel(operator: string): string {
   const labels: Record<string, string> = {
     eq: 'equals',

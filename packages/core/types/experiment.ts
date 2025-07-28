@@ -66,7 +66,6 @@ export interface Experiment {
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;
-  
   // Advanced configuration
   targetSegments?: ExperimentSegment[];
   exclusionRules?: ExperimentExclusion[];
@@ -184,14 +183,14 @@ export interface MetricResult {
 }
 
 export interface StatisticalResults {
-  primaryMetric: {
+  primaryMetric: {,
     winningVariant?: string;
     pValue: number;
     statisticalSignificance: boolean;
     practicalSignificance: boolean;
     confidenceLevel: number;
   };
-  guardrailMetrics: {
+  guardrailMetrics: {,
     metricId: string;
     passed: boolean;
     threshold: number;
@@ -267,7 +266,7 @@ export interface AllocationServiceConfig {
   cacheTtl: number; // seconds
   maxAssignmentLatency: number; // ms
   enableDebugMode: boolean;
-  saltStorage: {
+  saltStorage: {,
     currentSalt: string;
     previousSalts: { salt: string; rotatedAt: Date }[];
   };
@@ -275,7 +274,7 @@ export interface AllocationServiceConfig {
 
 // Error types
 export class ExperimentError extends Error {
-  constructor(
+  constructor()
     message: string,
     public code: string,
     public experimentId?: string,
@@ -287,7 +286,7 @@ export class ExperimentError extends Error {
 }
 
 export class AllocationError extends Error {
-  constructor(
+  constructor()
     message: string,
     public code: string,
     public userId?: string,

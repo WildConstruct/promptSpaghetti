@@ -19,11 +19,9 @@ import {
   RestorationProgressResponse
 } from '../../types/restoration';
 import { useRestoration } from '../../hooks/useRestoration';
-
 const { Step } = Steps;
 const { Title, Text } = Typography;
 const { Option } = Select;
-
 interface RestorationWizardProps {
   visible: boolean;
   onClose: () => void;
@@ -33,13 +31,11 @@ interface RestorationWizardProps {
   onSuccess?: (attempt: RestorationAttempt) => void;
   onError?: (error: string) => void;
 }
-
 interface WizardStep {
   title: string;
   description: string;
   icon: React.ReactNode;
 }
-
 const wizardSteps: WizardStep[] = [
   {
     title: 'Configure',
@@ -63,7 +59,7 @@ const wizardSteps: WizardStep[] = [
   }
 ];
 
-export const RestorationWizard: React.FC<RestorationWizardProps> = ({
+export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
   visible,
   onClose,
   projectId,
@@ -74,36 +70,34 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
-  const [config, setConfig] = useState<RestorationConfig>({
+  const [config, setConfig] = useState<RestorationConfig>({)
     restorationType: 'full',
     restorationStrategy: 'replace',
     preserveCurrentChanges: false,
     createBackup: true,
-    notifyOnCompletion: true
+    notifyOnCompletion: true,
   });
   const [preview, setPreview] = useState<RestorationPreviewResponse | null>(null);
   const [restorationAttempt, setRestorationAttempt] = useState<RestorationAttempt | null>(null);
   const [progress, setProgress] = useState<RestorationProgressResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const { 
     generatePreview, 
     createRestoration, 
     getProgress, 
     cancelRestoration 
   } = useRestoration();
-
   // Reset state when modal opens/closes
   useEffect(() => {
     if (visible) {
       setCurrentStep(0);
-      setConfig({
+      setConfig({)
         restorationType: 'full',
         restorationStrategy: 'replace',
         preserveCurrentChanges: false,
         createBackup: true,
-        notifyOnCompletion: true
+        notifyOnCompletion: true,
       });
       setPreview(null);
       setRestorationAttempt(null);
@@ -112,17 +106,14 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
       form.resetFields();
     }
   }, [visible, form]);
-
   // Poll for progress updates
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
     if (restorationAttempt && currentStep === 3) {
       interval = setInterval(async () => {
         try {
           const progressData = await getProgress(restorationAttempt.id);
           setProgress(progressData);
-          
           if (progressData.status === 'completed') {
             clearInterval(interval);
             onSuccess?.(restorationAttempt);
@@ -136,12 +127,10 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
         }
       }, 1000);
     }
-    
     return () => {
       if (interval) clearInterval(interval);
     };
   }, [restorationAttempt, currentStep, getProgress, onSuccess, onError]);
-
   const handleNext = async () => {
     if (currentStep === 0) {
       // Configuration step - validate and generate preview
@@ -149,13 +138,12 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
         const values = await form.validateFields();
         const updatedConfig = { ...config, ...values };
         setConfig(updatedConfig);
-        
         setLoading(true);
-        const previewData = await generatePreview({
+        const previewData = await generatePreview({)
           projectId,
           sourceSnapshotId,
           targetSnapshotId,
-          config: updatedConfig
+          config: updatedConfig,
         });
         setPreview(previewData);
         setCurrentStep(1);
@@ -172,7 +160,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
       // Confirmation step - start restoration
       try {
         setLoading(true);
-        const attempt = await createRestoration({
+        const attempt = await createRestoration({)
           projectId,
           sourceSnapshotId,
           targetSnapshotId,
@@ -188,12 +176,10 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
       }
     }
   };
-
   const handlePrevious = () => {
     setCurrentStep(Math.max(0, currentStep - 1));
     setError(null);
   };
-
   const handleCancel = async () => {
     if (restorationAttempt && currentStep === 3) {
       try {
@@ -204,22 +190,19 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
     }
     onClose();
   };
-
   const canGoNext = () => {
     if (currentStep === 0) return true;
     if (currentStep === 1) return preview !== null;
     if (currentStep === 2) return true;
     return false;
   };
-
   const canGoPrevious = () => {
     return currentStep > 0 && currentStep < 3;
   };
-
   const renderStepContent = () => {
     switch (currentStep) {
     case 0:
-      return (
+      return ()
         <Form
           form={form}
           layout="vertical"
@@ -239,7 +222,6 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
               <Option value="selective">Selective Restoration</Option>
             </Select>
           </Form.Item>
-
           <Form.Item
             name="restorationStrategy"
             label="Restoration Strategy"
@@ -251,19 +233,16 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
               <Option value="selective">Selective Merge</Option>
             </Select>
           </Form.Item>
-
           <Form.Item name="preserveCurrentChanges" valuePropName="checked">
             <Checkbox>
                 Preserve current changes where possible
             </Checkbox>
           </Form.Item>
-
           <Form.Item name="createBackup" valuePropName="checked">
             <Checkbox>
                 Create backup before restoration
             </Checkbox>
           </Form.Item>
-
           <Form.Item name="notifyOnCompletion" valuePropName="checked">
             <Checkbox>
                 Notify when restoration completes
@@ -271,9 +250,8 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
           </Form.Item>
         </Form>
       );
-
     case 1:
-      return preview ? (
+      return preview ? ()
         <RestorationPreview
           preview={preview}
           config={config}
@@ -282,7 +260,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
             console.log('Resolving conflict:', conflictId, strategy);
           }}
         />
-      ) : (
+      ) : ()
         <div style={{ textAlign: 'center', padding: '40px' }}>
           <LoadingOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
           <Title level={4}>Generating Preview...</Title>
@@ -291,9 +269,8 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
           </Text>
         </div>
       );
-
     case 2:
-      return preview ? (
+      return preview ? ()
         <RestorationConfirmation
           preview={preview}
           config={config}
@@ -301,15 +278,14 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
           onCancel={() => handlePrevious()}
         />
       ) : null;
-
     case 3:
-      return progress ? (
+      return progress ? ()
         <RestoreProgressPanel
           progress={progress}
           onCancel={() => handleCancel()}
           showDetails={true}
         />
-      ) : (
+      ) : ()
         <div style={{ textAlign: 'center', padding: '40px' }}>
           <LoadingOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
           <Title level={4}>Starting Restoration...</Title>
@@ -318,14 +294,12 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
           </Text>
         </div>
       );
-
     default:
       return null;
     }
   };
-
   const getModalTitle = () => {
-    const stepTitles = [
+    const stepTitles = [;
       'Configure Restoration',
       'Preview Changes',
       'Confirm Restoration',
@@ -333,7 +307,6 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
     ];
     return stepTitles[currentStep] || 'Version Restoration';
   };
-
   const getModalWidth = () => {
     switch (currentStep) {
     case 1:
@@ -345,8 +318,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
       return 600;
     }
   };
-
-  return (
+  return ()
     <Modal
       title={getModalTitle()}
       visible={visible}
@@ -358,7 +330,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
     >
       <div style={{ marginBottom: '24px' }}>
         <Steps current={currentStep} size="small">
-          {wizardSteps.map((step, index) => (
+          {wizardSteps.map((step, index) => ()
             <Step
               key={index}
               title={step.title}
@@ -368,8 +340,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
           ))}
         </Steps>
       </div>
-
-      {error && (
+      {error && ()
         <Alert
           type="error"
           message="Error"
@@ -380,12 +351,10 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
           style={{ marginBottom: '16px' }}
         />
       )}
-
       <div style={{ minHeight: '400px' }}>
         {renderStepContent()}
       </div>
-
-      {currentStep < 3 && (
+      {currentStep < 3 && ()
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '24px' }}>
           <Button
             onClick={handlePrevious}
@@ -393,7 +362,6 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
           >
             Previous
           </Button>
-          
           <div>
             <Button
               onClick={handleCancel}

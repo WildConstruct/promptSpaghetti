@@ -90,7 +90,7 @@ export interface NavigationSearchOptions {
     userId?: string;
 }
 export interface NavigationSearchResult {
-    item: {
+    item: {,
         id: string;
         label: string;
         description: string;

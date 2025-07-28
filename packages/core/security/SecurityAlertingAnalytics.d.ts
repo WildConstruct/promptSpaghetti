@@ -477,7 +477,7 @@ export interface MLModel {
 }
 export interface TrainingDataInfo {
     size: number;
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };

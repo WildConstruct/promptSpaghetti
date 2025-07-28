@@ -1,6 +1,5 @@
 // Epic 9.4.5 - API Integration Manager Component
 // UI component for managing external API integrations, keys, and webhooks
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   KeyIcon,
@@ -19,7 +18,6 @@ import {
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 // import { useWorkflowStore } from '../stores/workflowStore';
-
 interface ApiKey {
   id: string;
   name: string;
@@ -32,7 +30,6 @@ interface ApiKey {
   expires_at?: Date;
   is_active: boolean;
 }
-
 interface Webhook {
   id: string;
   name: string;
@@ -45,15 +42,13 @@ interface Webhook {
   failure_count: number;
   is_active: boolean;
 }
-
 interface ApiIntegrationManagerProps {
   workspaceId: string;
   onClose?: () => void;
 }
-
 type TabType = 'api_keys' | 'webhooks' | 'usage' | 'documentation';
 
-export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
+export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
   workspaceId,
   onClose
 }) => {
@@ -66,13 +61,11 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
   const [showCreateWebhook, setShowCreateWebhook] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
   const [visibleKeys, setVisibleKeys] = useState<Set<string>>(new Set());
-
   // Load API keys and webhooks
   useEffect(() => {
     loadApiKeys();
     loadWebhooks();
   }, [workspaceId]);
-
   const loadApiKeys = async () => {
     setLoading(true);
     try {
@@ -87,7 +80,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           last_used: new Date('2024-01-20'),
           usage_count: 1250,
           rate_limit: 1000,
-          is_active: true
+          is_active: true,
         },
         {
           id: '2',
@@ -99,7 +92,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           usage_count: 45,
           rate_limit: 100,
           expires_at: new Date('2024-12-31'),
-          is_active: true
+          is_active: true,
         }
       ];
       setApiKeys(mockApiKeys);
@@ -109,7 +102,6 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
       setLoading(false);
     }
   };
-
   const loadWebhooks = async () => {
     try {
       // Mock API call - replace with actual API
@@ -124,7 +116,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           last_triggered: new Date('2024-01-20'),
           success_count: 89,
           failure_count: 2,
-          is_active: true
+          is_active: true,
         },
         {
           id: '2',
@@ -136,7 +128,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           last_triggered: new Date('2024-01-19'),
           success_count: 156,
           failure_count: 8,
-          is_active: false
+          is_active: false,
         }
       ];
       setWebhooks(mockWebhooks);
@@ -144,20 +136,19 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
       setError('Failed to load webhooks');
     }
   };
-
   const handleCreateApiKey = async (keyData: Partial<ApiKey>) => {
     try {
       // Mock API call - replace with actual API
       const newKey: ApiKey = {
         id: Date.now().toString(),
         name: keyData.name || 'New API Key',
-        key: `pk_${Date.now().toString(36)}`,
+        key: `pk_${Date.now().toString(36)}`,}
         permissions: keyData.permissions || ['read'],
         created_at: new Date(),
         usage_count: 0,
         rate_limit: keyData.rate_limit || 1000,
         expires_at: keyData.expires_at,
-        is_active: true
+        is_active: true,
       };
       setApiKeys(prev => [...prev, newKey]);
       setShowCreateApiKey(false);
@@ -165,7 +156,6 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
       setError('Failed to create API key');
     }
   };
-
   const handleCreateWebhook = async (webhookData: Partial<Webhook>) => {
     try {
       // Mock API call - replace with actual API
@@ -174,11 +164,11 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
         name: webhookData.name || 'New Webhook',
         url: webhookData.url || '',
         events: webhookData.events || [],
-        secret: `whsec_${Date.now().toString(36)}`,
+        secret: `whsec_${Date.now().toString(36)}`,}
         created_at: new Date(),
         success_count: 0,
         failure_count: 0,
-        is_active: true
+        is_active: true,
       };
       setWebhooks(prev => [...prev, newWebhook]);
       setShowCreateWebhook(false);
@@ -186,7 +176,6 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
       setError('Failed to create webhook');
     }
   };
-
   const handleDeleteApiKey = async (keyId: string) => {
     try {
       // Mock API call - replace with actual API
@@ -196,7 +185,6 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
       setError('Failed to delete API key');
     }
   };
-
   const handleDeleteWebhook = async (webhookId: string) => {
     try {
       // Mock API call - replace with actual API
@@ -206,9 +194,8 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
       setError('Failed to delete webhook');
     }
   };
-
   const toggleKeyVisibility = (keyId: string) => {
-    setVisibleKeys(prev => {
+    setVisibleKeys(prev => {)
       const newSet = new Set(prev);
       if (newSet.has(keyId)) {
         newSet.delete(keyId);
@@ -218,44 +205,36 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
       return newSet;
     });
   };
-
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     // Show toast notification
   };
-
   const formatKey = (key: string, isVisible: boolean) => {
     if (isVisible) return key;
     return key.slice(0, 8) + '••••••••' + key.slice(-4);
   };
-
   const getStatusColor = (isActive: boolean) => {
     return isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
   };
-
   const _____getStatusIcon = (isActive: boolean) => {
-    return isActive ? (
+    return isActive ? ()
       <CheckCircleIcon className="h-4 w-4 text-green-600" />
-    ) : (
+    ) : ()
       <XCircleIcon className="h-4 w-4 text-gray-600" />
     );
   };
-
   const totalApiUsage = useMemo(() => {
     return apiKeys.reduce((sum, key) => sum + key.usage_count, 0);
   }, [apiKeys]);
-
   const totalWebhookCalls = useMemo(() => {
     return webhooks.reduce((sum, webhook) => sum + webhook.success_count + webhook.failure_count, 0);
   }, [webhooks]);
-
   const webhookSuccessRate = useMemo(() => {
     const total = totalWebhookCalls;
     const successful = webhooks.reduce((sum, webhook) => sum + webhook.success_count, 0);
     return total > 0 ? (successful / total * 100).toFixed(1) : '0';
   }, [webhooks, totalWebhookCalls]);
-
-  const availableEvents = [
+  const availableEvents = [;
     'approval_requested',
     'approval_completed',
     'state_changed',
@@ -264,8 +243,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
     'workflow_completed',
     'schedule_executed'
   ];
-
-  const renderApiKeysTab = () => (
+  const renderApiKeysTab = () => (;)
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">API Keys</h3>
@@ -277,15 +255,14 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           <span>Create API Key</span>
         </button>
       </div>
-
       <div className="space-y-3">
-        {apiKeys.map(key => (
+        {apiKeys.map(key => ()
           <div key={key.id} className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-3">
                   <h4 className="font-medium text-gray-900">{key.name}</h4>
-                  <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(key.is_active)}`}>
+                  <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(key.is_active)}`}>}
                     {key.is_active ? 'Active' : 'Inactive'}
                   </span>
                 </div>
@@ -299,9 +276,9 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
                       onClick={() => toggleKeyVisibility(key.id)}
                       className="text-gray-400 hover:text-gray-600"
                     >
-                      {visibleKeys.has(key.id) ? (
+                      {visibleKeys.has(key.id) ? ()
                         <EyeSlashIcon className="h-4 w-4" />
-                      ) : (
+                      ) : ()
                         <EyeIcon className="h-4 w-4" />
                       )}
                     </button>
@@ -317,12 +294,12 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
                   <span>Usage: {key.usage_count.toLocaleString()}</span>
                   <span>Rate limit: {key.rate_limit}/hour</span>
                   <span>Last used: {key.last_used?.toLocaleDateString() || 'Never'}</span>
-                  {key.expires_at && (
+                  {key.expires_at && ()
                     <span>Expires: {key.expires_at.toLocaleDateString()}</span>
                   )}
                 </div>
                 <div className="mt-2 flex items-center space-x-2">
-                  {key.permissions.map(permission => (
+                  {key.permissions.map(permission => ()
                     <span
                       key={permission}
                       className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded"
@@ -344,8 +321,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           </div>
         ))}
       </div>
-
-      {apiKeys.length === 0 && (
+      {apiKeys.length === 0 && ()
         <div className="text-center py-8 text-gray-500">
           <KeyIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
           <p>No API keys found. Create your first API key to get started.</p>
@@ -353,8 +329,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
       )}
     </div>
   );
-
-  const renderWebhooksTab = () => (
+  const renderWebhooksTab = () => (;)
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Webhooks</h3>
@@ -366,15 +341,14 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           <span>Create Webhook</span>
         </button>
       </div>
-
       <div className="space-y-3">
-        {webhooks.map(webhook => (
+        {webhooks.map(webhook => ()
           <div key={webhook.id} className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-3">
                   <h4 className="font-medium text-gray-900">{webhook.name}</h4>
-                  <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(webhook.is_active)}`}>
+                  <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(webhook.is_active)}`}>}
                     {webhook.is_active ? 'Active' : 'Inactive'}
                   </span>
                 </div>
@@ -390,7 +364,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
                   <span>Last triggered: {webhook.last_triggered?.toLocaleDateString() || 'Never'}</span>
                 </div>
                 <div className="mt-2 flex items-center space-x-2">
-                  {webhook.events.map(event => (
+                  {webhook.events.map(event => ()
                     <span
                       key={event}
                       className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded"
@@ -412,8 +386,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           </div>
         ))}
       </div>
-
-      {webhooks.length === 0 && (
+      {webhooks.length === 0 && ()
         <div className="text-center py-8 text-gray-500">
           <BellIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
           <p>No webhooks configured. Create your first webhook to receive notifications.</p>
@@ -421,11 +394,9 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
       )}
     </div>
   );
-
-  const renderUsageTab = () => (
+  const renderUsageTab = () => (;)
     <div className="space-y-6">
       <h3 className="text-lg font-semibold">Usage Statistics</h3>
-      
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white border border-gray-200 rounded-lg p-4">
           <div className="flex items-center">
@@ -438,7 +409,6 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
             </div>
           </div>
         </div>
-
         <div className="bg-white border border-gray-200 rounded-lg p-4">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -450,7 +420,6 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
             </div>
           </div>
         </div>
-
         <div className="bg-white border border-gray-200 rounded-lg p-4">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -463,7 +432,6 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           </div>
         </div>
       </div>
-
       <div className="bg-white border border-gray-200 rounded-lg p-4">
         <h4 className="font-medium mb-4">Recent Activity</h4>
         <div className="space-y-2 text-sm">
@@ -483,11 +451,9 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
       </div>
     </div>
   );
-
-  const renderDocumentationTab = () => (
+  const renderDocumentationTab = () => (;)
     <div className="space-y-6">
       <h3 className="text-lg font-semibold">API Documentation</h3>
-      
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <h4 className="font-medium mb-4">Authentication</h4>
         <p className="text-sm text-gray-600 mb-4">
@@ -497,7 +463,6 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           Authorization: Bearer YOUR_API_KEY
         </code>
       </div>
-
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <h4 className="font-medium mb-4">Workflow Operations</h4>
         <div className="space-y-4">
@@ -511,7 +476,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
             <h5 className="font-medium text-sm">Transition State</h5>
             <code className="block bg-gray-100 p-3 rounded text-sm mt-2">
               POST /api/workflow/transition
-              {JSON.stringify({
+              {JSON.stringify({)
                 resource_id: 'resource_uuid',
                 to_state_id: 'state_uuid',
                 comment: 'Transition comment'
@@ -522,46 +487,43 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
             <h5 className="font-medium text-sm">Create Approval</h5>
             <code className="block bg-gray-100 p-3 rounded text-sm mt-2">
               POST /api/workflow/approvals
-              {JSON.stringify({
+              {JSON.stringify({)
                 resource_id: 'resource_uuid',
                 transition_id: 'transition_uuid',
-                requester_id: 'user_id'
+                requester_id: 'user_id',
               }, null, 2)}
             </code>
           </div>
         </div>
       </div>
-
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <h4 className="font-medium mb-4">Webhook Events</h4>
         <p className="text-sm text-gray-600 mb-4">
           Your webhook endpoint will receive POST requests with the following structure:
         </p>
         <code className="block bg-gray-100 p-3 rounded text-sm">
-          {JSON.stringify({
+          {JSON.stringify({)
             event: 'state_changed',
             timestamp: '2024-01-20T10:30:00Z',
             workspace_id: 'workspace_uuid',
             resource_id: 'resource_uuid',
-            data: {
+            data: {,
               previous_state: 'draft',
               new_state: 'approved',
-              actor_id: 'user_id'
+              actor_id: 'user_id',
             }
           }, null, 2)}
         </code>
       </div>
     </div>
   );
-
-  const tabs = [
+  const tabs = [;
     { id: 'api_keys', label: 'API Keys', icon: KeyIcon },
     { id: 'webhooks', label: 'Webhooks', icon: BellIcon },
     { id: 'usage', label: 'Usage', icon: ChartBarIcon },
     { id: 'documentation', label: 'Documentation', icon: GlobeAltIcon }
   ];
-
-  return (
+  return ()
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
@@ -575,7 +537,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
               </p>
             </div>
           </div>
-          {onClose && (
+          {onClose && ()
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -585,11 +547,10 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           )}
         </div>
       </div>
-
       {/* Tab navigation */}
       <div className="border-b border-gray-200">
         <nav className="flex space-x-8 px-4">
-          {tabs.map(tab => (
+          {tabs.map(tab => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as TabType)}
@@ -605,10 +566,9 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           ))}
         </nav>
       </div>
-
       {/* Tab content */}
       <div className="p-4">
-        {error && (
+        {error && ()
           <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
             <div className="flex items-center">
               <ExclamationTriangleIcon className="h-5 w-5 text-red-600 mr-2" />
@@ -616,12 +576,11 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
             </div>
           </div>
         )}
-
-        {loading ? (
+        {loading ? ()
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
-        ) : (
+        ) : ()
           <>
             {activeTab === 'api_keys' && renderApiKeysTab()}
             {activeTab === 'webhooks' && renderWebhooksTab()}
@@ -630,26 +589,23 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
           </>
         )}
       </div>
-
       {/* Create API Key Modal */}
-      {showCreateApiKey && (
+      {showCreateApiKey && ()
         <CreateApiKeyModal
           onClose={() => setShowCreateApiKey(false)}
           onSubmit={handleCreateApiKey}
         />
       )}
-
       {/* Create Webhook Modal */}
-      {showCreateWebhook && (
+      {showCreateWebhook && ()
         <CreateWebhookModal
           onClose={() => setShowCreateWebhook(false)}
           onSubmit={handleCreateWebhook}
           availableEvents={availableEvents}
         />
       )}
-
       {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
+      {showDeleteConfirm && ()
         <DeleteConfirmationModal
           onClose={() => setShowDeleteConfirm(null)}
           onConfirm={() => {
@@ -672,22 +628,20 @@ const CreateApiKeyModal: React.FC<{
   onClose: () => void;
   onSubmit: (data: Partial<ApiKey>) => void;
 }> = ({ onClose, onSubmit }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({)
     name: '',
     permissions: ['read'],
     rate_limit: 1000,
-    expires_at: ''
+    expires_at: '',
   });
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({
+    onSubmit({)
       ...formData,
       expires_at: formData.expires_at ? new Date(formData.expires_at) : undefined
     });
   };
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Create API Key</h3>
@@ -704,25 +658,24 @@ const CreateApiKeyModal: React.FC<{
               required
             />
           </div>
-          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Permissions
             </label>
             <div className="space-y-2">
-              {['read', 'write', 'admin'].map(permission => (
+              {['read', 'write', 'admin'].map(permission => ()
                 <label key={permission} className="flex items-center">
                   <input
                     type="checkbox"
                     checked={formData.permissions.includes(permission)}
                     onChange={(e) => {
                       if (e.target.checked) {
-                        setFormData(prev => ({
+                        setFormData(prev => ({)
                           ...prev,
                           permissions: [...prev.permissions, permission]
                         }));
                       } else {
-                        setFormData(prev => ({
+                        setFormData(prev => ({)
                           ...prev,
                           permissions: prev.permissions.filter(p => p !== permission)
                         }));
@@ -735,7 +688,6 @@ const CreateApiKeyModal: React.FC<{
               ))}
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Rate Limit (per hour)
@@ -749,7 +701,6 @@ const CreateApiKeyModal: React.FC<{
               required
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Expires At (optional)
@@ -761,7 +712,6 @@ const CreateApiKeyModal: React.FC<{
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
-
           <div className="flex justify-end space-x-2">
             <button
               type="button"
@@ -782,24 +732,21 @@ const CreateApiKeyModal: React.FC<{
     </div>
   );
 };
-
 const CreateWebhookModal: React.FC<{
   onClose: () => void;
   onSubmit: (data: Partial<Webhook>) => void;
   availableEvents: string[];
 }> = ({ onClose, onSubmit, availableEvents }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({)
     name: '',
     url: '',
     events: [] as string[]
   });
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
   };
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Create Webhook</h3>
@@ -816,7 +763,6 @@ const CreateWebhookModal: React.FC<{
               required
             />
           </div>
-          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               URL
@@ -829,25 +775,24 @@ const CreateWebhookModal: React.FC<{
               required
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Events
             </label>
             <div className="space-y-2 max-h-40 overflow-y-auto">
-              {availableEvents.map(event => (
+              {availableEvents.map(event => ()
                 <label key={event} className="flex items-center">
                   <input
                     type="checkbox"
                     checked={formData.events.includes(event)}
                     onChange={(e) => {
                       if (e.target.checked) {
-                        setFormData(prev => ({
+                        setFormData(prev => ({)
                           ...prev,
                           events: [...prev.events, event]
                         }));
                       } else {
-                        setFormData(prev => ({
+                        setFormData(prev => ({)
                           ...prev,
                           events: prev.events.filter(e => e !== event)
                         }));
@@ -860,7 +805,6 @@ const CreateWebhookModal: React.FC<{
               ))}
             </div>
           </div>
-
           <div className="flex justify-end space-x-2">
             <button
               type="button"
@@ -881,13 +825,12 @@ const CreateWebhookModal: React.FC<{
     </div>
   );
 };
-
 const DeleteConfirmationModal: React.FC<{
   onClose: () => void;
   onConfirm: () => void;
   itemType: string;
 }> = ({ onClose, onConfirm, itemType }) => {
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Delete {itemType}</h3>

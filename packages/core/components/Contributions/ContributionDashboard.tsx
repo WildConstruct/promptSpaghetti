@@ -5,7 +5,6 @@
  * Main dashboard for managing all types of contributions including
  * templates, knowledge articles, tutorials, case studies, and community content.
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Contribution, 
@@ -29,7 +28,7 @@ export interface ContributionDashboardProps {
   className?: string;
 }
 
-export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
+export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
   userId,
   showCreateForm = true,
   initialFilter = {},
@@ -46,20 +45,16 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
   const [activeTab, setActiveTab] = useState<'my-contributions' | 'drafts' | 'published' | 'under-review' | 'create' | 'profile'>('my-contributions');
   const [searchQuery, setSearchQuery] = useState('');
   const [showSubmissionForm, setShowSubmissionForm] = useState(false);
-
   // Load contributions and profile
   const loadContributions = useCallback(async () => {
     setLoading(true);
     setError(null);
-
     try {
       const params = new URLSearchParams();
-      
       // Add user filter if provided
       if (userId) {
         params.append('contributorId', userId);
       }
-      
       // Add status filter based on active tab
       if (activeTab === 'drafts') {
         params.append('status', 'draft');
@@ -68,34 +63,27 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
       } else if (activeTab === 'under-review') {
         params.append('status', 'under_review');
       }
-      
       // Add other filters
       if (filter.type) {
         params.append('type', filter.type);
       }
-      
       if (filter.search || searchQuery) {
         params.append('search', filter.search || searchQuery);
       }
-      
       // Add sorting
       params.append('sortBy', filter.sortBy || 'created_at');
       params.append('sortOrder', filter.sortOrder || 'desc');
       params.append('limit', (filter.limit || 20).toString());
-
-      const response = await fetch(`/api/marketplace/contributions?${params}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+      const response = await fetch(`/api/marketplace/contributions?${params}`, {)}
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
         }
       });
-
       if (!response.ok) {
-        throw new Error(`Failed to load contributions: ${response.statusText}`);
+        throw new Error(`Failed to load contributions: ${response.statusText}`);}
       }
-
       const data = await response.json();
       setContributions(data.contributions || []);
-      
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load contributions');
       setContributions([]);
@@ -103,17 +91,14 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
       setLoading(false);
     }
   }, [userId, activeTab, filter, searchQuery]);
-
   const loadContributorProfile = useCallback(async () => {
     if (!userId) return;
-
     try {
-      const response = await fetch(`/api/marketplace/contributors/${userId}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+      const response = await fetch(`/api/marketplace/contributors/${userId}`, {)}
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
         }
       });
-
       if (response.ok) {
         const profile = await response.json();
         setContributorProfile(profile);
@@ -122,52 +107,44 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
       console.error('Failed to load contributor profile:', err);
     }
   }, [userId]);
-
   useEffect(() => {
     loadContributions();
     loadContributorProfile();
   }, [loadContributions, loadContributorProfile]);
-
   // Handle contribution submission
   const handleContributionSubmit = async (data: CreateContributionRequest) => {
     try {
-      const response = await fetch('/api/marketplace/contributions', {
+      const response = await fetch('/api/marketplace/contributions', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
-
       if (!response.ok) {
         throw new Error('Failed to create contribution');
       }
-
       const newContribution = await response.json();
       setContributions([newContribution, ...contributions]);
       setShowSubmissionForm(false);
       setActiveTab('my-contributions');
-      
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create contribution');
     }
   };
-
   // Handle contribution deletion
   const handleDelete = async (contributionId: string) => {
     if (!confirm('Are you sure you want to delete this contribution?')) {
       return;
     }
-
     try {
-      const response = await fetch(`/api/marketplace/contributions/${contributionId}`, {
+      const response = await fetch(`/api/marketplace/contributions/${contributionId}`, {)}
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
         }
       });
-
       if (response.ok) {
         setContributions(contributions.filter(c => c.id !== contributionId));
         onContributionDelete?.(contributionId);
@@ -176,7 +153,6 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
       console.error('Failed to delete contribution:', err);
     }
   };
-
   // Filter contributions by tab
   const getFilteredContributions = () => {
     switch (activeTab) {
@@ -190,18 +166,16 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
       return contributions;
     }
   };
-
   const filteredContributions = getFilteredContributions();
-
   // Get stats for dashboard
   const stats = {
     total: contributions.length,
     drafts: contributions.filter(c => c.status === 'draft').length,
     published: contributions.filter(c => c.status === 'published').length,
-    underReview: contributions.filter(
+    underReview: contributions.filter(),
       c => ['submitted',
       'under_review',
-      'revision_requested'].includes(c.status
+      'revision_requested'].includes(c.status)
     )).length,
     totalViews: contributions.reduce((sum, c) => sum + c.views, 0),
     totalLikes: contributions.reduce((sum, c) => sum + c.likes, 0),
@@ -209,17 +183,15 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
       ? Math.round(contributions.reduce((sum, c) => sum + c.qualityScore, 0) / contributions.length) 
       : 0
   };
-
-  return (
-    <div className={`contribution-dashboard ${className}`}>
+  return ()
+    <div className={`contribution-dashboard ${className}`}>}
       {/* Dashboard Header */}
       <div className="dashboard-header">
         <div className="header-main">
           <h1>Contribution Dashboard</h1>
           <p>Manage your templates, articles, tutorials, and community content</p>
         </div>
-        
-        {showCreateForm && (
+        {showCreateForm && ()
           <button 
             onClick={() => setShowSubmissionForm(true)}
             className="btn-primary create-btn"
@@ -228,9 +200,8 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           </button>
         )}
       </div>
-
       {/* Stats Overview */}
-      {contributorProfile && (
+      {contributorProfile && ()
         <div className="stats-overview">
           <div className="stat-card">
             <div className="stat-value">{stats.total}</div>
@@ -266,7 +237,6 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           </div>
         </div>
       )}
-
       {/* Navigation Tabs */}
       <div className="dashboard-tabs">
         <button
@@ -293,7 +263,7 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
         >
           Under Review ({stats.underReview})
         </button>
-        {contributorProfile && (
+        {contributorProfile && ()
           <button
             onClick={() => setActiveTab('profile')}
             className={`tab-btn ${activeTab === 'profile' ? 'active' : ''}`}
@@ -302,9 +272,8 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           </button>
         )}
       </div>
-
       {/* Search and Filters */}
-      {activeTab !== 'profile' && activeTab !== 'create' && (
+      {activeTab !== 'profile' && activeTab !== 'create' && ()
         <div className="dashboard-controls">
           <div className="search-input">
             <svg width="16" height="16" viewBox="0 0 16 16" className="search-icon">
@@ -318,10 +287,9 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-
           <select
             value={filter.type || ''}
-            onChange={(e) => setFilter(prev => ({ 
+            onChange={(e) => setFilter(prev => ({ )
               ...prev, 
               type: e.target.value ? e.target.value as ContributionType : undefined 
             }))}
@@ -335,10 +303,9 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
             <option value="pattern_library">Pattern Libraries</option>
             <option value="community_post">Community Posts</option>
           </select>
-
           <select
             value={filter.sortBy || 'created_at'}
-            onChange={(e) => setFilter(prev => ({ 
+            onChange={(e) => setFilter(prev => ({ )
               ...prev, 
               sortBy: e.target.value as any 
             }))}
@@ -352,20 +319,19 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           </select>
         </div>
       )}
-
       {/* Content Area */}
       <div className="dashboard-content">
-        {activeTab === 'profile' && contributorProfile ? (
+        {activeTab === 'profile' && contributorProfile ? ()
           <ContributorProfileManager 
             profile={contributorProfile}
             onProfileUpdate={(updatedProfile) => setContributorProfile(updatedProfile)}
           />
-        ) : loading ? (
+        ) : loading ? ()
           <div className="loading-state">
             <div className="loading-spinner"></div>
             <p>Loading contributions...</p>
           </div>
-        ) : error ? (
+        ) : error ? ()
           <div className="error-state">
             <h3>Failed to load contributions</h3>
             <p>{error}</p>
@@ -373,16 +339,16 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
               Try again
             </button>
           </div>
-        ) : filteredContributions.length === 0 ? (
+        ) : filteredContributions.length === 0 ? ()
           <div className="empty-state">
             <h3>No contributions found</h3>
             <p>
               {activeTab === 'my-contributions' 
                 ? 'You haven\'t created any contributions yet.' 
-                : `No ${activeTab.replace('-', ' ')} found.`
+                : `No ${activeTab.replace('-', ' ')} found.`}
               }
             </p>
-            {showCreateForm && (
+            {showCreateForm && ()
               <button 
                 onClick={() => setShowSubmissionForm(true)}
                 className="btn-primary"
@@ -391,9 +357,9 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
               </button>
             )}
           </div>
-        ) : (
+        ) : ()
           <div className="contributions-grid">
-            {filteredContributions.map((contribution) => (
+            {filteredContributions.map((contribution) => ()
               <ContributionCard
                 key={contribution.id}
                 contribution={contribution}
@@ -406,9 +372,8 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           </div>
         )}
       </div>
-
       {/* Submission Form Modal */}
-      {showSubmissionForm && (
+      {showSubmissionForm && ()
         <div className="modal-overlay" onClick={() => setShowSubmissionForm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
@@ -427,34 +392,29 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           </div>
         </div>
       )}
-
       <style>{`
         .contribution-dashboard {
           padding: 24px;
           max-width: 1400px;
           margin: 0 auto;
         }
-
         .dashboard-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 32px;
         }
-
         .header-main h1 {
           margin: 0 0 8px 0;
           font-size: 32px;
           font-weight: 700;
           color: #1f2937;
         }
-
         .header-main p {
           margin: 0;
           font-size: 16px;
           color: #6b7280;
         }
-
         .create-btn {
           background: #3b82f6;
           color: #ffffff;
@@ -465,18 +425,15 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           cursor: pointer;
           transition: background 0.2s ease;
         }
-
         .create-btn:hover {
           background: #2563eb;
         }
-
         .stats-overview {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
           gap: 16px;
           margin-bottom: 32px;
         }
-
         .stat-card {
           background: #ffffff;
           border: 1px solid #e5e7eb;
@@ -484,27 +441,23 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           padding: 20px;
           text-align: center;
         }
-
         .stat-value {
           font-size: 28px;
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 4px;
         }
-
         .stat-label {
           font-size: 14px;
           color: #6b7280;
           font-weight: 500;
         }
-
         .dashboard-tabs {
           display: flex;
           border-bottom: 1px solid #e5e7eb;
           margin-bottom: 24px;
           overflow-x: auto;
         }
-
         .tab-btn {
           background: none;
           border: none;
@@ -516,29 +469,24 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           transition: all 0.2s ease;
           white-space: nowrap;
         }
-
         .tab-btn:hover {
           color: #3b82f6;
         }
-
         .tab-btn.active {
           color: #3b82f6;
           border-bottom-color: #3b82f6;
         }
-
         .dashboard-controls {
           display: flex;
           gap: 16px;
           margin-bottom: 24px;
           flex-wrap: wrap;
         }
-
         .search-input {
           position: relative;
           flex: 1;
           min-width: 300px;
         }
-
         .search-icon {
           position: absolute;
           left: 12px;
@@ -546,7 +494,6 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           transform: translateY(-50%);
           color: #9ca3af;
         }
-
         .search-input input {
           width: 100%;
           padding: 10px 12px 10px 36px;
@@ -554,7 +501,6 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           border-radius: 6px;
           font-size: 14px;
         }
-
         .filter-select, .sort-select {
           padding: 10px 12px;
           border: 1px solid #d1d5db;
@@ -564,17 +510,14 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           cursor: pointer;
           min-width: 150px;
         }
-
         .dashboard-content {
           min-height: 400px;
         }
-
         .contributions-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
           gap: 24px;
         }
-
         .loading-state, .error-state, .empty-state {
           display: flex;
           flex-direction: column;
@@ -583,7 +526,6 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           padding: 80px 20px;
           text-align: center;
         }
-
         .loading-spinner {
           width: 40px;
           height: 40px;
@@ -593,22 +535,18 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           animation: spin 1s linear infinite;
           margin-bottom: 16px;
         }
-
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-
         .error-state h3, .empty-state h3 {
           margin: 0 0 8px 0;
           color: #1f2937;
         }
-
         .error-state p, .empty-state p {
           margin: 0 0 16px 0;
           color: #6b7280;
         }
-
         .retry-button {
           background: #3b82f6;
           color: #ffffff;
@@ -618,11 +556,9 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           cursor: pointer;
           transition: background 0.2s ease;
         }
-
         .retry-button:hover {
           background: #2563eb;
         }
-
         .modal-overlay {
           position: fixed;
           top: 0;
@@ -636,7 +572,6 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           z-index: 1000;
           padding: 20px;
         }
-
         .modal-content {
           background: #ffffff;
           border-radius: 12px;
@@ -646,7 +581,6 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           overflow-y: auto;
           position: relative;
         }
-
         .modal-header {
           display: flex;
           justify-content: space-between;
@@ -655,14 +589,12 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           border-bottom: 1px solid #e5e7eb;
           margin-bottom: 24px;
         }
-
         .modal-header h2 {
           margin: 0;
           font-size: 24px;
           font-weight: 700;
           color: #1f2937;
         }
-
         .modal-close {
           background: none;
           border: none;
@@ -672,40 +604,32 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
           padding: 4px;
           margin: -4px;
         }
-
         .modal-close:hover {
           color: #1f2937;
         }
-
         @media (max-width: 768px) {
           .contribution-dashboard {
             padding: 16px;
           }
-
           .dashboard-header {
             flex-direction: column;
             align-items: stretch;
             gap: 16px;
           }
-
           .stats-overview {
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
           }
-
           .dashboard-controls {
             flex-direction: column;
           }
-
           .search-input {
             min-width: auto;
           }
-
           .contributions-grid {
             grid-template-columns: 1fr;
             gap: 16px;
           }
-
           .modal-content {
             margin: 0;
             border-radius: 0;

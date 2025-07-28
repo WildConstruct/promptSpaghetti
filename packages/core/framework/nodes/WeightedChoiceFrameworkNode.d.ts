@@ -37,7 +37,7 @@ export declare class WeightedChoiceFrameworkNode extends FrameworkNode {
         totalChoices: number;
         totalWeight: number;
         averageWeight: number;
-        choiceDistribution: Array<{
+        choiceDistribution: Array<{,
             choice: string;
             weight: number;
             normalizedWeight: number;
@@ -50,7 +50,7 @@ export declare class WeightedChoiceFrameworkNode extends FrameworkNode {
     simulate(iterations: number, seed?: number): {
         results: Record<string, number>;
         percentages: Record<string, number>;
-        expectedVsActual: Array<{
+        expectedVsActual: Array<{,
             choice: string;
             expected: number;
             actual: number;

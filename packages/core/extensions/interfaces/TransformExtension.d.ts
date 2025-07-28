@@ -225,12 +225,12 @@ export interface TransformContext {
     executionId: string;
     timestamp: Date;
     extensionContext: ExtensionContext;
-    performance: {
+    performance: {,
         startTime: number;
         endTime?: number;
         memoryUsage?: number;
     };
-    metadata: {
+    metadata: {,
         inputSize?: number;
         outputSize?: number;
         transformVersion: string;

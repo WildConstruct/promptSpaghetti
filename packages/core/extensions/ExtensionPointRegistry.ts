@@ -2,7 +2,6 @@
  * Extension Point Registry - Epic 8.4 Story 8.4.1
  * Central registry for all extension points in the Prompt Spaghetti system
  */
-
 import { z } from 'zod';
 
 // Extension Point Categories
@@ -34,7 +33,7 @@ export enum ExtensionPointPriority {
 }
 
 // Extension Point Definition Schema
-export const ExtensionPointSchema = z.object({
+export const ExtensionPointSchema = z.object({)
   id: z.string(),
   name: z.string(),
   description: z.string(),
@@ -42,51 +41,50 @@ export const ExtensionPointSchema = z.object({
   priority: z.nativeEnum(ExtensionPointPriority),
   lifecycle: z.nativeEnum(ExtensionPointLifecycle),
   version: z.string(),
-  location: z.object({
+  location: z.object({),
     file: z.string(),
     line: z.number().optional(),
-    function: z.string().optional()
+    function: z.string().optional(),
   }),
-  interfaces: z.array(z.object({
+  interfaces: z.array(z.object({),
     name: z.string(),
     description: z.string(),
-    parameters: z.array(z.object({
+    parameters: z.array(z.object({),
       name: z.string(),
       type: z.string(),
       required: z.boolean(),
       description: z.string(),
-      defaultValue: z.any().optional()
+      defaultValue: z.any().optional(),
     })),
     returnType: z.string(),
-    examples: z.array(z.string()).optional()
+    examples: z.array(z.string()).optional(),
   })),
   dependencies: z.array(z.string()).optional(),
-  examples: z.array(z.object({
+  examples: z.array(z.object({),
     name: z.string(),
     description: z.string(),
     code: z.string(),
-    language: z.string()
+    language: z.string(),
   })).optional(),
-  constraints: z.object({
-    performance: z.object({
+  constraints: z.object({),
+    performance: z.object({),
       maxExecutionTime: z.number().optional(),
-      maxMemoryUsage: z.number().optional()
+      maxMemoryUsage: z.number().optional(),
     }).optional(),
-    security: z.object({
+    security: z.object({),
       permissions: z.array(z.string()).optional(),
-      sandboxed: z.boolean().optional()
+      sandboxed: z.boolean().optional(),
     }).optional()
   }).optional(),
-  metadata: z.object({
+  metadata: z.object({),
     addedIn: z.string(),
     deprecatedIn: z.string().optional(),
     removedIn: z.string().optional(),
-    replacedBy: z.string().optional()
+    replacedBy: z.string().optional(),
   })
 });
 
 export type ExtensionPoint = z.infer<typeof ExtensionPointSchema>;
-
 /**
  * Extension Point Registry - manages all extension points
  */
@@ -95,55 +93,46 @@ export class ExtensionPointRegistry {
   private extensionPoints: Map<string, ExtensionPoint> = new Map();
   private categoryIndex: Map<ExtensionPointCategory, Set<string>> = new Map();
   private locationIndex: Map<string, Set<string>> = new Map();
-
   private constructor() {
     this.initializeRegistry();
   }
-
   public static getInstance(): ExtensionPointRegistry {
     if (!ExtensionPointRegistry.instance) {
       ExtensionPointRegistry.instance = new ExtensionPointRegistry();
     }
     return ExtensionPointRegistry.instance;
   }
-
   /**
    * Register an extension point
    */
   public register(extensionPoint: ExtensionPoint): void {
     // Validate extension point
     const validated = ExtensionPointSchema.parse(extensionPoint);
-    
     // Store in main registry
     this.extensionPoints.set(validated.id, validated);
-    
     // Update category index
     if (!this.categoryIndex.has(validated.category)) {
       this.categoryIndex.set(validated.category, new Set());
     }
     this.categoryIndex.get(validated.category)!.add(validated.id);
-    
     // Update location index
     if (!this.locationIndex.has(validated.location.file)) {
       this.locationIndex.set(validated.location.file, new Set());
     }
     this.locationIndex.get(validated.location.file)!.add(validated.id);
   }
-
   /**
    * Get extension point by ID
    */
   public get(id: string): ExtensionPoint | undefined {
     return this.extensionPoints.get(id);
   }
-
   /**
    * Get all extension points
    */
   public getAll(): ExtensionPoint[] {
     return Array.from(this.extensionPoints.values());
   }
-
   /**
    * Get extension points by category
    */
@@ -151,21 +140,18 @@ export class ExtensionPointRegistry {
     const ids = this.categoryIndex.get(category) || new Set();
     return Array.from(ids).map(id => this.extensionPoints.get(id)!);
   }
-
   /**
    * Get extension points by priority
    */
   public getByPriority(priority: ExtensionPointPriority): ExtensionPoint[] {
     return this.getAll().filter(ep => ep.priority === priority);
   }
-
   /**
    * Get extension points by lifecycle status
    */
   public getByLifecycle(lifecycle: ExtensionPointLifecycle): ExtensionPoint[] {
     return this.getAll().filter(ep => ep.lifecycle === lifecycle);
   }
-
   /**
    * Get extension points by file location
    */
@@ -173,19 +159,17 @@ export class ExtensionPointRegistry {
     const ids = this.locationIndex.get(file) || new Set();
     return Array.from(ids).map(id => this.extensionPoints.get(id)!);
   }
-
   /**
    * Search extension points
    */
   public search(query: string): ExtensionPoint[] {
     const lowercaseQuery = query.toLowerCase();
-    return this.getAll().filter(ep => 
+    return this.getAll().filter(ep => )
       ep.name.toLowerCase().includes(lowercaseQuery) ||
       ep.description.toLowerCase().includes(lowercaseQuery) ||
       ep.id.toLowerCase().includes(lowercaseQuery)
     );
   }
-
   /**
    * Get extension point statistics
    */
@@ -201,28 +185,24 @@ export class ExtensionPointRegistry {
       byPriority: {} as Record<ExtensionPointPriority, number>,
       byLifecycle: {} as Record<ExtensionPointLifecycle, number>
     };
-
     // Initialize counters
-    Object.values(ExtensionPointCategory).forEach(cat => {
+    Object.values(ExtensionPointCategory).forEach(cat => {)
       stats.byCategory[cat] = 0;
     });
-    Object.values(ExtensionPointPriority).forEach(pri => {
+    Object.values(ExtensionPointPriority).forEach(pri => {)
       stats.byPriority[pri] = 0;
     });
-    Object.values(ExtensionPointLifecycle).forEach(lc => {
+    Object.values(ExtensionPointLifecycle).forEach(lc => {)
       stats.byLifecycle[lc] = 0;
     });
-
     // Count
-    this.getAll().forEach(ep => {
+    this.getAll().forEach(ep => {)
       stats.byCategory[ep.category]++;
       stats.byPriority[ep.priority]++;
       stats.byLifecycle[ep.lifecycle]++;
     });
-
     return stats;
   }
-
   /**
    * Validate extension point compatibility
    */
@@ -236,43 +216,37 @@ export class ExtensionPointRegistry {
       return {
         compatible: false,
         warnings: [],
-        errors: [`Extension point ${extensionPointId} not found`]
+        errors: [`Extension point ${extensionPointId} not found`]}
       };
     }
-
     const warnings: string[] = [];
     const errors: string[] = [];
-
     // Check lifecycle status
     if (extensionPoint.lifecycle === ExtensionPointLifecycle.DEPRECATED) {
-      warnings.push(`Extension point ${extensionPointId} is deprecated`);
+      warnings.push(`Extension point ${extensionPointId} is deprecated`);}
       if (extensionPoint.metadata.replacedBy) {
-        warnings.push(`Consider using ${extensionPoint.metadata.replacedBy} instead`);
+        warnings.push(`Consider using ${extensionPoint.metadata.replacedBy} instead`);}
       }
     }
-
     if (extensionPoint.lifecycle === ExtensionPointLifecycle.REMOVED) {
-      errors.push(`Extension point ${extensionPointId} has been removed`);
+      errors.push(`Extension point ${extensionPointId} has been removed`);}
     }
-
     // Check version compatibility
     if (extensionPoint.metadata.removedIn && this.compareVersions(version, extensionPoint.metadata.removedIn) >= 0) {
-      errors.push(`Extension point ${extensionPointId} is not available in version ${version}`);
+      errors.push(`Extension point ${extensionPointId} is not available in version ${version}`);}
     }
-
     return {
       compatible: errors.length === 0,
       warnings,
       errors
     };
   }
-
   /**
    * Initialize the registry with core extension points
    */
   private initializeRegistry(): void {
     // Runtime Extension Points
-    this.register({
+    this.register({)
       id: 'runtime.node.custom',
       name: 'Custom Runtime Node',
       description: 'Create custom node types with custom execution logic',
@@ -280,15 +254,15 @@ export class ExtensionPointRegistry {
       priority: ExtensionPointPriority.CRITICAL,
       lifecycle: ExtensionPointLifecycle.STABLE,
       version: '1.0.0',
-      location: {
+      location: {,
         file: 'packages/core/runtime/index.ts',
         line: 12,
-        function: 'RuntimeNode'
+        function: 'RuntimeNode',
       },
-      interfaces: [{
+      interfaces: [{,
         name: 'RuntimeNode',
         description: 'Base class for all runtime nodes',
-        parameters: [
+        parameters: [,
           {
             name: 'id',
             type: 'string',
@@ -297,42 +271,40 @@ export class ExtensionPointRegistry {
           }
         ],
         returnType: 'TOutput',
-        examples: [
+        examples: [,
           'class CustomNode extends RuntimeNode<string> { ... }'
         ]
       }],
       dependencies: ['runtime.context'],
-      examples: [{
+      examples: [{,
         name: 'Basic Custom Node',
         description: 'Simple custom node implementation',
-        code: `
+        code: `,
 class CustomNode extends RuntimeNode<string> {
   constructor(id: string, private customData: string) {
     super(id);
   }
-
   run(ctx: ExecutionContext): string {
     return this.customData + ' processed';
   }
 }`,
-        language: 'typescript'
+        language: 'typescript',
       }],
-      constraints: {
-        performance: {
+      constraints: {,
+        performance: {,
           maxExecutionTime: 5000,
           maxMemoryUsage: 100 * 1024 * 1024
         },
-        security: {
+        security: {,
           permissions: ['runtime.execute'],
-          sandboxed: true
+          sandboxed: true,
         }
       },
-      metadata: {
-        addedIn: '1.0.0'
+      metadata: {,
+        addedIn: '1.0.0',
       }
     });
-
-    this.register({
+    this.register({)
       id: 'runtime.node.advanced',
       name: 'Advanced Runtime Node',
       description: 'Create advanced nodes with state management and caching',
@@ -340,15 +312,15 @@ class CustomNode extends RuntimeNode<string> {
       priority: ExtensionPointPriority.HIGH,
       lifecycle: ExtensionPointLifecycle.STABLE,
       version: '1.0.0',
-      location: {
+      location: {,
         file: 'packages/core/runtime/advanced.ts',
         line: 61,
-        function: 'AdvancedRuntimeNode'
+        function: 'AdvancedRuntimeNode',
       },
-      interfaces: [{
+      interfaces: [{,
         name: 'AdvancedRuntimeNode',
         description: 'Advanced base class with state management',
-        parameters: [
+        parameters: [,
           {
             name: 'id',
             type: 'string',
@@ -363,18 +335,17 @@ class CustomNode extends RuntimeNode<string> {
           }
         ],
         returnType: 'TOutput',
-        examples: [
+        examples: [,
           'class AdvancedCustomNode extends AdvancedRuntimeNode<string> { ... }'
         ]
       }],
       dependencies: ['runtime.context.advanced', 'runtime.validation'],
-      metadata: {
-        addedIn: '1.0.0'
+      metadata: {,
+        addedIn: '1.0.0',
       }
     });
-
     // UI Extension Points
-    this.register({
+    this.register({)
       id: 'ui.inspector.editor',
       name: 'Inspector Node Editor',
       description: 'Create custom editors for node configuration',
@@ -382,15 +353,15 @@ class CustomNode extends RuntimeNode<string> {
       priority: ExtensionPointPriority.HIGH,
       lifecycle: ExtensionPointLifecycle.STABLE,
       version: '1.0.0',
-      location: {
+      location: {,
         file: 'packages/core/components/Inspector/BaseNodeEditor.tsx',
         line: 1,
-        function: 'BaseNodeEditor'
+        function: 'BaseNodeEditor',
       },
-      interfaces: [{
+      interfaces: [{,
         name: 'BaseNodeEditor',
         description: 'Base component for node editors',
-        parameters: [
+        parameters: [,
           {
             name: 'node',
             type: 'any',
@@ -405,18 +376,17 @@ class CustomNode extends RuntimeNode<string> {
           }
         ],
         returnType: 'React.ReactElement',
-        examples: [
+        examples: [,
           'export const CustomEditor: React.FC<BaseNodeEditorProps> = (props) => { ... }'
         ]
       }],
       dependencies: ['ui.inspector.context'],
-      metadata: {
-        addedIn: '1.0.0'
+      metadata: {,
+        addedIn: '1.0.0',
       }
     });
-
     // Schema Extension Points
-    this.register({
+    this.register({)
       id: 'schema.node.validation',
       name: 'Node Schema Validation',
       description: 'Add validation schemas for new node types',
@@ -424,15 +394,15 @@ class CustomNode extends RuntimeNode<string> {
       priority: ExtensionPointPriority.HIGH,
       lifecycle: ExtensionPointLifecycle.STABLE,
       version: '1.0.0',
-      location: {
+      location: {,
         file: 'packages/core/graphSchema.ts',
         line: 7,
-        function: 'NodeTypeEnum'
+        function: 'NodeTypeEnum',
       },
-      interfaces: [{
+      interfaces: [{,
         name: 'NodeSchema',
         description: 'Zod schema for node validation',
-        parameters: [
+        parameters: [,
           {
             name: 'type',
             type: 'z.literal',
@@ -441,18 +411,17 @@ class CustomNode extends RuntimeNode<string> {
           }
         ],
         returnType: 'ZodSchema',
-        examples: [
+        examples: [,
           'export const CustomNodeSchema = BaseNode.extend({ ... })'
         ]
       }],
       dependencies: ['schema.base'],
-      metadata: {
-        addedIn: '1.0.0'
+      metadata: {,
+        addedIn: '1.0.0',
       }
     });
-
     // API Extension Points
-    this.register({
+    this.register({)
       id: 'api.endpoint.custom',
       name: 'Custom API Endpoint',
       description: 'Add new API endpoints to the server',
@@ -460,15 +429,15 @@ class CustomNode extends RuntimeNode<string> {
       priority: ExtensionPointPriority.MEDIUM,
       lifecycle: ExtensionPointLifecycle.STABLE,
       version: '1.0.0',
-      location: {
+      location: {,
         file: 'server/src/index.ts',
         line: 1,
-        function: 'app'
+        function: 'app',
       },
-      interfaces: [{
+      interfaces: [{,
         name: 'APIEndpoint',
         description: 'Fastify route handler',
-        parameters: [
+        parameters: [,
           {
             name: 'request',
             type: 'FastifyRequest',
@@ -483,32 +452,28 @@ class CustomNode extends RuntimeNode<string> {
           }
         ],
         returnType: 'Promise<void>',
-        examples: [
+        examples: [,
           'app.post("/api/custom", async (req, reply) => { ... })'
         ]
       }],
       dependencies: ['api.authentication'],
-      metadata: {
-        addedIn: '1.0.0'
+      metadata: {,
+        addedIn: '1.0.0',
       }
     });
   }
-
   /**
    * Compare version strings
    */
   private compareVersions(version1: string, version2: string): number {
     const v1parts = version1.split('.').map(Number);
     const v2parts = version2.split('.').map(Number);
-    
     for (let i = 0; i < Math.max(v1parts.length, v2parts.length); i++) {
       const v1part = v1parts[i] || 0;
       const v2part = v2parts[i] || 0;
-      
       if (v1part < v2part) return -1;
       if (v1part > v2part) return 1;
     }
-    
     return 0;
   }
 }

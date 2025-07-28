@@ -80,19 +80,19 @@ export interface RetryPolicy {
 }
 export interface UserNotificationPreferences {
     userId: string;
-    channels: {
+    channels: {,
         email: boolean;
         sms: boolean;
         push: boolean;
     };
     language: string;
     timezone: string;
-    quietHours: {
+    quietHours: {,
         enabled: boolean;
         start: string;
         end: string;
     };
-    frequency: {
+    frequency: {,
         immediate: boolean;
         digest: boolean;
         digestFrequency: 'daily' | 'weekly';
@@ -118,7 +118,7 @@ export interface NotificationDelivery {
     recipient: string;
     status: NotificationStatus;
     attempts: number;
-    content: {
+    content: {,
         subject?: string;
         body: string;
         html?: string;
@@ -132,11 +132,11 @@ export interface NotificationDelivery {
 }
 export interface AdminNotificationRule {
     id: string;
-    trigger: {
+    trigger: {,
         event: string;
         conditions: Record<string, any>;
     };
-    recipients: {
+    recipients: {,
         roles: AdminRole[];
         emails: string[];
         slackChannels?: string[];
@@ -170,7 +170,7 @@ export declare class LockoutNotificationService extends EventEmitter {
     /**
      * Send admin notification for approval required
      */
-    sendAdminNotification(
+    sendAdminNotification()
       type: NotificationType,
       lockout: AccountLockout,
       adminRoles: AdminRole[],
@@ -187,7 +187,7 @@ export declare class LockoutNotificationService extends EventEmitter {
     getNotificationStatus(notificationId: string): {
         request: NotificationRequest | null;
         deliveries: NotificationDelivery[];
-        summary: {
+        summary: {,
             totalDeliveries: number;
             successful: number;
             failed: number;
@@ -205,16 +205,16 @@ export declare class LockoutNotificationService extends EventEmitter {
     /**
      * Test notification delivery
      */
-    testNotification(
+    testNotification()
       recipient: string,
       channel: NotificationChannel,
       templateId: string,
-      variables: TemplateVariables
+      variables: TemplateVariables,
     ): Promise<string>;
     /**
      * Get notification statistics
      */
-    getNotificationStatistics(dateRange?: {
+    getNotificationStatistics(dateRange?: {)
         start: Date;
         end: Date;
     }): {
@@ -224,7 +224,7 @@ export declare class LockoutNotificationService extends EventEmitter {
         byStatus: Record<NotificationStatus, number>;
         deliveryRate: number;
         averageDeliveryTime: number;
-        failureReasons: Array<{
+        failureReasons: Array<{,
             reason: string;
             count: number;
         }>;

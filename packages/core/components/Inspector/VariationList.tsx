@@ -13,7 +13,7 @@ export interface VariationListProps {
   allowQuickEntry?: boolean;
 }
 
-export const VariationList: React.FC<VariationListProps> = ({
+export const VariationList: React.FC<VariationListProps> = ({)
   nodeId,
   variations,
   onAdd,
@@ -31,30 +31,24 @@ export const VariationList: React.FC<VariationListProps> = ({
   const [quickEntryText, setQuickEntryText] = useState('');
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-  
   const { addVariation, removeVariation, updateVariation, reorderVariations } = useGraphStore();
   const inputRef = useRef<HTMLInputElement>(null);
   const editInputRef = useRef<HTMLInputElement>(null);
-
   useEffect(() => {
     if (editingIndex !== null && editInputRef.current) {
       editInputRef.current.focus();
       editInputRef.current.select();
     }
   }, [editingIndex]);
-
   const handleAdd = () => {
     if (!newVariation.trim()) return;
-    
     if (onAdd) {
       onAdd(newVariation.trim());
     } else {
       addVariation(nodeId, newVariation.trim());
     }
-    
     setNewVariation('');
   };
-
   const handleRemove = (index: number) => {
     if (onRemove) {
       onRemove(index);
@@ -62,7 +56,6 @@ export const VariationList: React.FC<VariationListProps> = ({
       removeVariation(nodeId, index);
     }
   };
-
   const handleUpdate = (index: number, newValue: string) => {
     if (onUpdate) {
       onUpdate(index, newValue);
@@ -70,7 +63,6 @@ export const VariationList: React.FC<VariationListProps> = ({
       updateVariation(nodeId, index, newValue);
     }
   };
-
   const handleReorder = (fromIndex: number, toIndex: number) => {
     if (onReorder) {
       onReorder(fromIndex, toIndex);
@@ -78,12 +70,10 @@ export const VariationList: React.FC<VariationListProps> = ({
       reorderVariations(nodeId, fromIndex, toIndex);
     }
   };
-
   const startEdit = (index: number) => {
     setEditingIndex(index);
     setEditingValue(variations[index]);
   };
-
   const commitEdit = () => {
     if (editingIndex !== null && editingValue.trim()) {
       handleUpdate(editingIndex, editingValue.trim());
@@ -91,38 +81,31 @@ export const VariationList: React.FC<VariationListProps> = ({
     setEditingIndex(null);
     setEditingValue('');
   };
-
   const cancelEdit = () => {
     setEditingIndex(null);
     setEditingValue('');
   };
-
   const handleQuickEntry = () => {
-    const entries = quickEntryText
+    const entries = quickEntryText;
       .split(',')
       .map(s => s.trim())
       .filter(s => s.length > 0);
-    
-    entries.forEach(entry => {
+    entries.forEach(entry => {)
       addVariation(nodeId, entry);
     });
-    
     setQuickEntryText('');
     setQuickEntryMode(false);
   };
-
   const handleDragStart = (e: React.DragEvent, index: number) => {
     setDraggedIndex(index);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', index.toString());
   };
-
   const handleDragOver = (e: React.DragEvent, index: number) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
     setDragOverIndex(index);
   };
-
   const handleDrop = (e: React.DragEvent, index: number) => {
     e.preventDefault();
     if (draggedIndex !== null && draggedIndex !== index) {
@@ -131,23 +114,22 @@ export const VariationList: React.FC<VariationListProps> = ({
     setDraggedIndex(null);
     setDragOverIndex(null);
   };
-
-  return (
+  return ()
     <div style={{ marginBottom: 16 }}>
       <div style={{ 
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'space-between',
-        marginBottom: 12 
+        marginBottom: 12 ,
       }}>
         <label style={{ 
           fontSize: 12, 
           fontWeight: 600, 
-          color: '#e2e8f0' 
+          color: '#e2e8f0' ,
         }}>
           Variations ({variations.length})
         </label>
-        {allowQuickEntry && (
+        {allowQuickEntry && ()
           <button
             onClick={() => setQuickEntryMode(!quickEntryMode)}
             style={{
@@ -157,7 +139,7 @@ export const VariationList: React.FC<VariationListProps> = ({
               padding: '2px 8px',
               fontSize: 11,
               cursor: 'pointer',
-              color: '#6b7280'
+              color: '#6b7280',
             }}
             title="Quick entry (comma-separated)"
           >
@@ -165,8 +147,7 @@ export const VariationList: React.FC<VariationListProps> = ({
           </button>
         )}
       </div>
-
-      {quickEntryMode ? (
+      {quickEntryMode ? ()
         <div style={{ marginBottom: 12 }}>
           <textarea
             value={quickEntryText}
@@ -182,13 +163,13 @@ export const VariationList: React.FC<VariationListProps> = ({
               resize: 'vertical',
               background: '#2d3748',
               color: '#e2e8f0',
-              fontFamily: 'inherit'
+              fontFamily: 'inherit',
             }}
           />
           <div style={{ 
             display: 'flex', 
             gap: 8, 
-            marginTop: 8 
+            marginTop: 8 ,
           }}>
             <button
               onClick={handleQuickEntry}
@@ -217,19 +198,19 @@ export const VariationList: React.FC<VariationListProps> = ({
                 padding: '6px 12px',
                 fontSize: 12,
                 color: '#e2e8f0',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Cancel
             </button>
           </div>
         </div>
-      ) : (
+      ) : ()
         <>
           <div style={{ 
             display: 'flex', 
             gap: 8, 
-            marginBottom: 12 
+            marginBottom: 12 ,
           }}>
             <input
               ref={inputRef}
@@ -252,7 +233,7 @@ export const VariationList: React.FC<VariationListProps> = ({
                 fontSize: 14,
                 outline: 'none',
                 background: '#2d3748',
-                color: '#e2e8f0'
+                color: '#e2e8f0',
               }}
             />
             <button
@@ -273,26 +254,25 @@ export const VariationList: React.FC<VariationListProps> = ({
           </div>
         </>
       )}
-
       <div style={{ 
         maxHeight: 200, 
         overflowY: 'auto',
         border: '1px solid #4a5568',
         borderRadius: 6,
-        background: '#2d3748'
+        background: '#2d3748',
       }}>
-        {variations.length === 0 ? (
+        {variations.length === 0 ? ()
           <div style={{
             padding: 20,
             textAlign: 'center',
             color: '#9ca3af',
             fontStyle: 'italic',
-            fontSize: 13
+            fontSize: 13,
           }}>
             No variations yet. Add some above.
           </div>
-        ) : (
-          variations.map((variation, index) => (
+        ) : ()
+          variations.map((variation, index) => ()
             <div
               key={index}
               draggable
@@ -306,7 +286,7 @@ export const VariationList: React.FC<VariationListProps> = ({
                 borderBottom: index < variations.length - 1 ? '1px solid #4a5568' : 'none',
                 background: dragOverIndex === index ? '#4a5568' : 'transparent',
                 opacity: draggedIndex === index ? 0.5 : 1,
-                cursor: 'move'
+                cursor: 'move',
               }}
             >
               <div
@@ -319,12 +299,12 @@ export const VariationList: React.FC<VariationListProps> = ({
                   fontSize: 12,
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
                 }}
               >
                 ⋮⋮
               </div>
-              {editingIndex === index ? (
+              {editingIndex === index ? ()
                 <input
                   ref={editInputRef}
                   type="text"
@@ -345,17 +325,17 @@ export const VariationList: React.FC<VariationListProps> = ({
                     border: '1px solid #3b82f6',
                     borderRadius: 4,
                     fontSize: 14,
-                    outline: 'none'
+                    outline: 'none',
                   }}
                 />
-              ) : (
+              ) : ()
                 <span
                   onClick={() => startEdit(index)}
                   style={{
                     flex: 1,
                     cursor: 'pointer',
                     fontSize: 14,
-                    color: '#374151'
+                    color: '#374151',
                   }}
                   title="Click to edit"
                 >
@@ -371,7 +351,7 @@ export const VariationList: React.FC<VariationListProps> = ({
                   cursor: 'pointer',
                   fontSize: 14,
                   marginLeft: 8,
-                  padding: 4
+                  padding: 4,
                 }}
                 title="Remove variation"
               >
@@ -381,13 +361,12 @@ export const VariationList: React.FC<VariationListProps> = ({
           ))
         )}
       </div>
-
-      {variations.length >= maxVariations && (
+      {variations.length >= maxVariations && ()
         <div style={{
           marginTop: 8,
           fontSize: 12,
           color: '#ef4444',
-          textAlign: 'center'
+          textAlign: 'center',
         }}>
           Maximum {maxVariations} variations reached
         </div>

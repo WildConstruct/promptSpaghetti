@@ -232,7 +232,7 @@ export interface GraphAnnotations {
   labelPreferences: NodeLabelPreferences;
   regionGroupPreferences: RegionGroupPreferences;
   connectionAnnotationPreferences: ConnectionAnnotationPreferences;
-  metadata: {
+  metadata: {,
     author: string;
     created: string;
     modified: string;

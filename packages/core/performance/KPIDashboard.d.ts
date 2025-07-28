@@ -27,7 +27,7 @@ export interface DashboardLayout {
     refreshInterval: number;
 }
 export interface DashboardMetrics {
-    overview: {
+    overview: {,
         totalKPIs: number;
         monitoredKPIs: number;
         healthyKPIs: number;
@@ -45,7 +45,7 @@ export interface DashboardMetrics {
         critical: number;
         averageScore: number;
     }>;
-    alerts: {
+    alerts: {,
         total: number;
         critical: number;
         high: number;
@@ -53,7 +53,7 @@ export interface DashboardMetrics {
         low: number;
         acknowledged: number;
     };
-    trends: {
+    trends: {,
         improving: KPITrendAnalysis[];
         degrading: KPITrendAnalysis[];
         stable: KPITrendAnalysis[];
@@ -63,30 +63,30 @@ export interface DashboardReport {
     id: string;
     timestamp: number;
     type: 'summary' | 'detailed' | 'trend' | 'alert';
-    period: {
+    period: {,
         start: number;
         end: number;
         duration: string;
     };
     metrics: DashboardMetrics;
-    insights: {
+    insights: {,
         keyFindings: string[];
         recommendations: string[];
         riskAreas: string[];
         improvements: string[];
     };
-    charts: {
-        performanceScore: Array<{
+    charts: {,
+        performanceScore: Array<{,
             timestamp: number;
             score: number;
         }>;
         categoryBreakdown: Record<string, number>;
-        alertsOverTime: Array<{
+        alertsOverTime: Array<{,
             timestamp: number;
             count: number;
             severity: string;
         }>;
-        topKPIs: Array<{
+        topKPIs: Array<{,
             kpiId: string;
             name: string;
             score: number;
@@ -105,7 +105,7 @@ export declare class KPIDashboard extends EventEmitter {
     private reports;
     private config;
     private refreshIntervals;
-    constructor(
+    constructor()
       monitoringService: KPIMonitoringService,
       baseline: PerformanceBaseline,
       config?: PerformanceTargetConfig

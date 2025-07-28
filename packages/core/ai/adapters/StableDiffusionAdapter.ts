@@ -4,7 +4,6 @@
  * 
  * Adapter for Stable Diffusion models (local and hosted)
  */
-
 import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 
 export interface StableDiffusionConfig {
@@ -20,30 +19,25 @@ export interface StableDiffusionRequestOptions {
   // Core parameters
   prompt: string;
   negative_prompt?: string;
-  
   // Sampling parameters
   sampler_name?: string;
   scheduler?: string;
   steps?: number;
   cfg_scale?: number;
   seed?: number;
-  
   // Image parameters
   width?: number;
   height?: number;
   batch_size?: number;
   n_iter?: number;
-  
   // Model and style
   model?: string;
   style_preset?: string;
-  
   // Advanced parameters
   denoising_strength?: number;
   init_image?: string;
   mask?: string;
   inpaint_full_res?: boolean;
-  
   // LoRA and ControlNet
   lora_models?: Array<{
     name: string;
@@ -56,7 +50,6 @@ export interface StableDiffusionRequestOptions {
     guidance_start?: number;
     guidance_end?: number;
   }>;
-  
   // Quality and post-processing
   restore_faces?: boolean;
   tiling?: boolean;
@@ -75,11 +68,11 @@ export interface StableDiffusionResponse {
 }
 
 export interface StableDiffusionGenerationResult {
-  images: Array<{
+  images: Array<{,
     base64: string;
     url?: string;
     seed: number;
-    metadata: {
+    metadata: {,
       model: string;
       sampler: string;
       steps: number;
@@ -91,7 +84,7 @@ export interface StableDiffusionGenerationResult {
   negativePrompt?: string;
   parameters: Record<string, any>;
   generationTime: number;
-  usage: {
+  usage: {,
     computeUnits: number;
     estimatedCost: number;
   };
@@ -110,25 +103,23 @@ export class StableDiffusionAdapter extends BaseAIModel {
   private config: StableDiffusionConfig;
   private availableModels: ModelInfo[] = [];
   private availableSamplers: string[] = [];
-
   constructor(id: string, config: StableDiffusionConfig) {
     const metadata: ModelMetadata = {
       name: config.defaultModel || 'stable-diffusion-xl',
       version: '1.0',
-      description: `Stable Diffusion via ${config.apiType}`,
+      description: `Stable Diffusion via ${config.apiType}`,}
       provider: config.apiType === 'stability-ai' ? AIModelProvider.STABILITY_AI : AIModelProvider.LOCAL,
       type: AIModelType.IMAGE,
       costPerRequest: StableDiffusionAdapter.getEstimatedCost(config.apiType),
       averageLatency: StableDiffusionAdapter.getEstimatedLatency(config.apiType),
       maxConcurrency: config.apiType === 'stability-ai' ? 10 : 3,
-      rateLimit: {
+      rateLimit: {,
         requestsPerMinute: config.apiType === 'stability-ai' ? 150 : 30,
-        tokensPerMinute: 5000
+        tokensPerMinute: 5000,
       },
       tags: ['image-generation', 'stable-diffusion', 'customizable', 'open-source'],
       lastUpdated: new Date()
     };
-
     const capabilities: ModelCapabilities = {
       inputTypes: ['text', 'image'],
       outputTypes: ['image', 'base64'],
@@ -137,7 +128,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       supportsBatch: true,
       supportsStreaming: false,
       supportsAsync: true,
-      customParameters: {
+      customParameters: {,
         steps: { type: 'number', min: 1, max: 150, default: 20 },
         cfg_scale: { type: 'number', min: 1, max: 30, default: 7 },
         width: { type: 'number', min: 64, max: 2048, default: 512, step: 64 },
@@ -146,24 +137,19 @@ export class StableDiffusionAdapter extends BaseAIModel {
         denoising_strength: { type: 'number', min: 0, max: 1, default: 0.75 }
       }
     };
-
     super(id, metadata, capabilities);
     this.config = config;
   }
-
   async initialize(): Promise<void> {
     try {
       this._status = AIModelStatus.INITIALIZING;
-      
       if (!this.config.endpoint) {
         throw new Error('Stable Diffusion endpoint is required');
       }
-
       // Test connectivity and load available models/samplers
       await this._testConnection();
       await this._loadAvailableModels();
       await this._loadAvailableSamplers();
-      
       this._status = AIModelStatus.READY;
       this._lastActivity = new Date();
     } catch (error) {
@@ -171,85 +157,68 @@ export class StableDiffusionAdapter extends BaseAIModel {
       throw new ModelInitializationError(this._id, error instanceof Error ? error.message : 'Unknown error');
     }
   }
-
   async process(input: any, options?: StableDiffusionRequestOptions): Promise<StableDiffusionGenerationResult> {
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
       }
-
       const startTime = Date.now();
-      
       // Extract and prepare prompt
       const prompt = this._extractPrompt(input);
       const processedOptions = this._processOptions(options, prompt);
-      
       // Generate images based on API type
       const response = await this._generateImages(processedOptions);
       const generationTime = Date.now() - startTime;
-      
       return this._processGenerationResponse(response, prompt, processedOptions, generationTime);
-
     } catch (error) {
       throw new ModelProcessingError(this._id, error instanceof Error ? error.message : 'Unknown error');
     }
   }
-
   async cleanup(): Promise<void> {
     this._status = AIModelStatus.OFFLINE;
     this._activeRequests.clear();
     this._requestQueue = [];
   }
-
   async estimate(input: any, options?: StableDiffusionRequestOptions): Promise<CostEstimate> {
     const steps = options?.steps || 20;
     const batchSize = options?.batch_size || 1;
     const iterations = options?.n_iter || 1;
     const enableHR = options?.enable_hr || false;
-    
     const baseCost = this._metadata.costPerRequest || 0;
-    
     // Calculate cost based on computational complexity
     let computeUnits = steps * batchSize * iterations;
     if (enableHR) computeUnits *= 1.5; // High-res pass increases cost
-    
-    const estimatedCost = (computeUnits / 100) * baseCost; // Normalize to reasonable cost
-    
+    const estimatedCost = (computeUnits / 100) * baseCost; // Normalize to reasonable cost;
     return {
       estimatedCost,
       currency: 'USD',
       confidence: 0.7,
-      breakdown: {
+      breakdown: {,
         inputCost: 0,
         outputCost: estimatedCost,
-        processingCost: 0
+        processingCost: 0,
       }
     };
   }
-
   // Stable Diffusion specific methods
   async getAvailableModels(): Promise<ModelInfo[]> {
     return [...this.availableModels];
   }
-
   async getAvailableSamplers(): Promise<string[]> {
     return [...this.availableSamplers];
   }
-
   async switchModel(modelName: string): Promise<void> {
     if (this.config.apiType === 'automatic1111') {
-      await this._makeRequest('/sdapi/v1/options', 'POST', {
-        sd_model_checkpoint: modelName
+      await this._makeRequest('/sdapi/v1/options', 'POST', {)
+        sd_model_checkpoint: modelName,
       });
-      
       // Update metadata
       this.updateConfiguration({ name: modelName });
     } else {
-      throw new Error(`Model switching not supported for ${this.config.apiType}`);
+      throw new Error(`Model switching not supported for ${this.config.apiType}`);}
     }
   }
-
-  async img2img(
+  async img2img()
     initImage: string,
     prompt: string,
     options?: Partial<StableDiffusionRequestOptions>
@@ -260,11 +229,9 @@ export class StableDiffusionAdapter extends BaseAIModel {
       denoising_strength: options?.denoising_strength || 0.75,
       ...options
     };
-
     return this.process(prompt, img2imgOptions);
   }
-
-  async inpaint(
+  async inpaint()
     initImage: string,
     mask: string,
     prompt: string,
@@ -278,11 +245,9 @@ export class StableDiffusionAdapter extends BaseAIModel {
       inpaint_full_res: options?.inpaint_full_res || false,
       ...options
     };
-
     return this.process(prompt, inpaintOptions);
   }
-
-  async upscale(
+  async upscale()
     image: string,
     upscaler: string = 'ESRGAN_4x',
     scale: number = 2
@@ -290,7 +255,6 @@ export class StableDiffusionAdapter extends BaseAIModel {
     if (this.config.apiType !== 'automatic1111') {
       throw new Error('Upscaling only supported with Automatic1111');
     }
-
     const payload = {
       resize_mode: 0,
       show_extras_results: true,
@@ -305,33 +269,30 @@ export class StableDiffusionAdapter extends BaseAIModel {
       upscaler_2: 'None',
       extras_upscaler_2_visibility: 0,
       upscale_first: false,
-      image: image
+      image: image,
     };
-
     const response = await this._makeRequest('/sdapi/v1/extra-single-image', 'POST', payload);
-    
     return {
-      images: [{
+      images: [{,
         base64: response.image,
         seed: 0,
-        metadata: {
+        metadata: {,
           model: upscaler,
           sampler: 'upscale',
           steps: 0,
           cfg_scale: 0,
-          size: `${scale}x upscaled`
+          size: `${scale}x upscaled`}
         }
       }],
       originalPrompt: 'Upscale',
       parameters: payload,
       generationTime: 0,
-      usage: {
+      usage: {,
         computeUnits: scale * 10,
         estimatedCost: 0.01 * scale
       }
     };
   }
-
   // Static helper methods
   static getEstimatedCost(apiType: string): number {
     const costs: Record<string, number> = {
@@ -343,7 +304,6 @@ export class StableDiffusionAdapter extends BaseAIModel {
     };
     return costs[apiType] || 0.02;
   }
-
   static getEstimatedLatency(apiType: string): number {
     const latencies: Record<string, number> = {
       'automatic1111': 15000, // 15 seconds for local
@@ -354,12 +314,10 @@ export class StableDiffusionAdapter extends BaseAIModel {
     };
     return latencies[apiType] || 15000;
   }
-
   // Private helper methods
   private async _testConnection(): Promise<void> {
     try {
       let testEndpoint = '/';
-      
       switch (this.config.apiType) {
         case 'automatic1111':
           testEndpoint = '/sdapi/v1/options';
@@ -373,83 +331,68 @@ export class StableDiffusionAdapter extends BaseAIModel {
         default:
           testEndpoint = '/health';
       }
-
-      const response = await fetch(`${this.config.endpoint}${testEndpoint}`, {
+      const response = await fetch(`${this.config.endpoint}${testEndpoint}`, {)}
         headers: this._buildHeaders(),
         signal: AbortSignal.timeout(this.config.timeout || 10000)
       });
-
       if (!response.ok && response.status !== 405) { // 405 Method Not Allowed is OK for some endpoints
-        throw new Error(`Connection test failed: ${response.status} ${response.statusText}`);
+        throw new Error(`Connection test failed: ${response.status} ${response.statusText}`);}
       }
     } catch (error) {
-      throw new Error(`Failed to connect to Stable Diffusion API: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(`Failed to connect to Stable Diffusion API: ${error instanceof Error ? error.message : 'Unknown error'}`);}
     }
   }
-
   private _buildHeaders(): Record<string, string> {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json'
     };
-
     if (this.config.apiKey) {
       if (this.config.apiType === 'stability-ai') {
-        headers['Authorization'] = `Bearer ${this.config.apiKey}`;
+        headers['Authorization'] = `Bearer ${this.config.apiKey}`;}
       } else {
-        headers['Authorization'] = `Bearer ${this.config.apiKey}`;
+        headers['Authorization'] = `Bearer ${this.config.apiKey}`;}
       }
     }
-
     return headers;
   }
-
   private async _makeRequest(endpoint: string, method: 'GET' | 'POST' = 'POST', payload?: any): Promise<any> {
-    const url = `${this.config.endpoint}${endpoint}`;
-    
+    const url = `${this.config.endpoint}${endpoint}`;}
     const options: RequestInit = {
       method,
       headers: this._buildHeaders(),
       signal: AbortSignal.timeout(this.config.timeout || 120000)
     };
-
     if (method === 'POST' && payload) {
       options.body = JSON.stringify(payload);
     }
-
     let lastError: Error | null = null;
     const maxRetries = this.config.maxRetries ?? 3;
-
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         const response = await fetch(url, options);
-        
         if (!response.ok) {
           const errorText = await response.text().catch(() => '');
-          throw new Error(`Stable Diffusion API request failed: ${response.status} ${response.statusText} - ${errorText}`);
+          throw new Error(`Stable Diffusion API request failed: ${response.status} ${response.statusText} - ${errorText}`);}
         }
-
         return response.json();
       } catch (error) {
         lastError = error instanceof Error ? error : new Error('Unknown error');
-        
         if (attempt < maxRetries) {
           await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
         }
       }
     }
-
     throw lastError || new Error('All retry attempts failed');
   }
-
   private async _loadAvailableModels(): Promise<void> {
     try {
       if (this.config.apiType === 'automatic1111') {
         const response = await this._makeRequest('/sdapi/v1/sd-models', 'GET');
-        this.availableModels = response.map((model: any) => ({
+        this.availableModels = response.map((model: any) => ({)
           name: model.title,
           filename: model.filename,
           type: 'checkpoint' as const,
-          description: model.model_name
+          description: model.model_name,
         }));
       } else if (this.config.apiType === 'stability-ai') {
         // Stability AI has predefined models
@@ -462,7 +405,6 @@ export class StableDiffusionAdapter extends BaseAIModel {
       console.warn('Failed to load available models:', error);
     }
   }
-
   private async _loadAvailableSamplers(): Promise<void> {
     try {
       if (this.config.apiType === 'automatic1111') {
@@ -482,21 +424,17 @@ export class StableDiffusionAdapter extends BaseAIModel {
       this.availableSamplers = ['Euler a', 'DPM++ 2M Karras'];
     }
   }
-
   private _extractPrompt(input: any): string {
     if (typeof input === 'string') {
       return input;
     }
-    
     if (input && typeof input === 'object') {
       if (input.prompt) return input.prompt;
       if (input.description) return input.description;
       if (input.text) return input.text;
     }
-    
     return JSON.stringify(input);
   }
-
   private _processOptions(options?: StableDiffusionRequestOptions, prompt?: string): StableDiffusionRequestOptions {
     const defaultOptions: StableDiffusionRequestOptions = {
       prompt: prompt || '',
@@ -509,33 +447,26 @@ export class StableDiffusionAdapter extends BaseAIModel {
       sampler_name: this.availableSamplers[0] || 'Euler a',
       seed: -1 // Random seed
     };
-
     return { ...defaultOptions, ...options };
   }
-
   private async _generateImages(options: StableDiffusionRequestOptions): Promise<StableDiffusionResponse> {
     let endpoint: string;
     let payload: any;
-
     switch (this.config.apiType) {
       case 'automatic1111':
         endpoint = options.init_image ? '/sdapi/v1/img2img' : '/sdapi/v1/txt2img';
         payload = this._buildAutomatic1111Payload(options);
         break;
-        
       case 'stability-ai':
         endpoint = '/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image';
         payload = this._buildStabilityAIPayload(options);
         break;
-        
       default:
         endpoint = '/generate';
         payload = this._buildGenericPayload(options);
     }
-
     return this._makeRequest(endpoint, 'POST', payload);
   }
-
   private _buildAutomatic1111Payload(options: StableDiffusionRequestOptions): any {
     const payload: any = {
       prompt: options.prompt,
@@ -552,36 +483,31 @@ export class StableDiffusionAdapter extends BaseAIModel {
       tiling: options.tiling || false,
       enable_hr: options.enable_hr || false
     };
-
     if (options.init_image) {
       payload.init_images = [options.init_image];
       payload.denoising_strength = options.denoising_strength || 0.75;
     }
-
     if (options.mask) {
       payload.mask = options.mask;
       payload.inpaint_full_res = options.inpaint_full_res || false;
     }
-
     if (options.enable_hr) {
       payload.hr_scale = options.hr_scale || 2;
       payload.hr_upscaler = options.hr_upscaler || 'Latent';
       payload.hr_second_pass_steps = options.hr_second_pass_steps || 0;
     }
-
     return payload;
   }
-
   private _buildStabilityAIPayload(options: StableDiffusionRequestOptions): any {
     return {
-      text_prompts: [
+      text_prompts: [,
         {
           text: options.prompt,
-          weight: 1
+          weight: 1,
         },
-        ...(options.negative_prompt ? [{
+        ...(options.negative_prompt ? [{)
           text: options.negative_prompt,
-          weight: -1
+          weight: -1,
         }] : [])
       ],
       cfg_scale: options.cfg_scale,
@@ -592,7 +518,6 @@ export class StableDiffusionAdapter extends BaseAIModel {
       seed: options.seed && options.seed >= 0 ? options.seed : undefined
     };
   }
-
   private _buildGenericPayload(options: StableDiffusionRequestOptions): any {
     return {
       prompt: options.prompt,
@@ -602,43 +527,39 @@ export class StableDiffusionAdapter extends BaseAIModel {
       steps: options.steps,
       cfg_scale: options.cfg_scale,
       seed: options.seed,
-      batch_size: options.batch_size
+      batch_size: options.batch_size,
     };
   }
-
-  private _processGenerationResponse(
+  private _processGenerationResponse()
     response: StableDiffusionResponse,
     prompt: string,
     options: StableDiffusionRequestOptions,
-    generationTime: number
+    generationTime: number,
   ): StableDiffusionGenerationResult {
-    const images = response.images.map((base64, index) => ({
+    const images = response.images.map((base64, index) => ({)
       base64,
       seed: this._extractSeedFromResponse(response, index),
-      metadata: {
+      metadata: {,
         model: this.config.defaultModel || 'stable-diffusion',
         sampler: options.sampler_name || 'Unknown',
         steps: options.steps || 20,
         cfg_scale: options.cfg_scale || 7,
-        size: `${options.width}x${options.height}`
+        size: `${options.width}x${options.height}`}
       }
     }));
-
     const computeUnits = (options.steps || 20) * (options.batch_size || 1) * (options.n_iter || 1);
-    
     return {
       images,
       originalPrompt: prompt,
       negativePrompt: options.negative_prompt,
       parameters: response.parameters || options,
       generationTime,
-      usage: {
+      usage: {,
         computeUnits,
         estimatedCost: (computeUnits / 100) * (this._metadata.costPerRequest || 0.01)
       }
     };
   }
-
   private _extractSeedFromResponse(response: StableDiffusionResponse, index: number): number {
     // Try to extract seed from response info
     try {
@@ -651,7 +572,6 @@ export class StableDiffusionAdapter extends BaseAIModel {
     }
     return Math.floor(Math.random() * 2147483647);
   }
-
   protected async _performHealthCheck(): Promise<void> {
     await this._testConnection();
   }

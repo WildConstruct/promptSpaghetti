@@ -16,7 +16,6 @@ import {
 export interface VariableEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   nodeType: 'SetVariable' | 'GetVariable';
 }
-
 const VARIABLE_TYPES: SelectOption[] = [
   { value: 'string', label: 'Text (String)' },
   { value: 'number', label: 'Number' },
@@ -25,7 +24,6 @@ const VARIABLE_TYPES: SelectOption[] = [
   { value: 'object', label: 'Object/JSON' },
   { value: 'auto', label: 'Auto-detect type' }
 ];
-
 const SCOPE_OPTIONS: SelectOption[] = [
   { value: 'global', label: 'Global (entire execution)' },
   { value: 'local', label: 'Local (current branch)' },
@@ -34,47 +32,41 @@ const SCOPE_OPTIONS: SelectOption[] = [
 
 export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nodeData, onChange }) => {
   const { debugMode } = useUISettingsStore();
-  
   // Simplified fields - focus on template-based workflow
   const label = (nodeData.label as string) || '';
   const template = (nodeData.template as string) || '';
   const variableName = (nodeData.variableName as string) || '';
-  const value = (nodeData.value as string) || ''; // For SetVariable
-  
+  const value = (nodeData.value as string) || ''; // For SetVariable;
   // Advanced fields only shown in debug mode
   const variableType = (nodeData.variableType as string) || 'auto';
   const defaultValue = (nodeData.defaultValue as string) || '';
   const scope = (nodeData.scope as string) || 'global';
   const _____persistent = (nodeData._____persistent as boolean) ?? false;
-  const allowOverwrite = (nodeData.allowOverwrite as boolean) ?? true; // For SetVariable
-  const required = (nodeData.required as boolean) ?? false; // For GetVariable
-
+  const allowOverwrite = (nodeData.allowOverwrite as boolean) ?? true; // For SetVariable;
+  const required = (nodeData.required as boolean) ?? false; // For GetVariable;
   const handleFieldChange = (field: string, value: unknown) => {
     onChange({ [field]: value });
   };
-
   const isSetVariable = nodeType === 'SetVariable';
   const isGetVariable = nodeType === 'GetVariable';
-
   // Contextual help for variable name field
-  const { wrapWithHelp: wrapVariableNameHelp } = useContextualHelp({
+  const { wrapWithHelp: wrapVariableNameHelp } = useContextualHelp({)
     id: 'variable-name-field',
     title: isSetVariable ? 'Store As' : 'Retrieve Variable',
-    description: isSetVariable 
+    description: isSetVariable ,
       ? 'Choose a name for storing this value so you can reference it later in your workflow.'
       : 'Enter the name of the variable you want to retrieve from storage.',
     category: 'basic',
     trigger: 'focus',
     position: 'right',
     showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
-    examples: isSetVariable 
+    examples: isSetVariable ,
       ? ['character_name', 'scene_location', 'dialogue_style']
       : ['stored_character', 'current_mood', 'plot_point'],
-    priority: 'high'
+    priority: 'high',
   });
-
   // Contextual help for template editor
-  const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({
+  const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({)
     id: 'variable-template-field',
     title: 'Value Template',
     description: 'Define what value to store using templates. Use {variable} syntax to reference other stored values.',
@@ -84,10 +76,9 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
     showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
     examples: ['Character: {character_name}', '{mood} character in {location}'],
     relatedFeatures: ['variable-system', 'template-engine'],
-    priority: 'medium'
+    priority: 'medium',
   });
-
-  return (
+  return ()
     <div className="variable-editor">
       {/* BASIC LEVEL: Simplified variable workflow */}
       <ProgressiveDisclosureSection
@@ -98,7 +89,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
         priority="critical"
         fieldName={isSetVariable ? 'value' : 'variableName'}
       >
-        {wrapVariableNameHelp(
+        {wrapVariableNameHelp()
           <TextFieldEditor
             label={isSetVariable ? 'Store As' : 'Retrieve Variable'}
             value={variableName || label}
@@ -108,15 +99,14 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
             placeholder={isSetVariable ? 'Name for this stored value...' : 'Variable name to retrieve...'}
           />
         )}
-
-        {isSetVariable && wrapTemplateHelp(
+        {isSetVariable && wrapTemplateHelp()
           <div style={{ marginBottom: 16 }}>
             <label style={{
               display: 'block',
               fontSize: 12,
               fontWeight: 500,
               color: '#e2e8f0',
-              marginBottom: 6
+              marginBottom: 6,
             }}>
               Value Template
             </label>
@@ -147,13 +137,12 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
             <div style={{
               fontSize: 10,
               color: '#a0aec0',
-              marginTop: 4
+              marginTop: 4,
             }}>
               Use natural language with {'{variable}'} syntax. Variables become input ports.
             </div>
-            
             {/* Show type inference information (backward compatible) */}
-            {(nodeData.extractedVariables as string[])?.length > 0 && (
+            {(nodeData.extractedVariables as string[])?.length > 0 && ()
               <div style={{
                 fontSize: 10,
                 color: '#4299e1',
@@ -164,8 +153,8 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
                 border: '1px solid rgba(66, 153, 225, 0.3)'
               }}>
                 <strong>🤖 Auto-detected:</strong> {' '}
-                {(nodeData.extractedVariables as string[])?.map((v: unknown, idx: number) => (
-                  <span key={v.name || `var_${idx}`}>
+                {(nodeData.extractedVariables as string[])?.map((v: unknown, idx: number) => ()
+                  <span key={v.name || `var_${idx}`}>}
                     {v.name || 'variable'} ({v.inferredType || 'auto'})
                     {v.defaultValue && ` = "${v.defaultValue}"`}
                     {idx < (nodeData.extractedVariables as string[]).length - 1 ? ', ' : ''}
@@ -175,8 +164,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
             )}
           </div>
         )}
-
-        {isGetVariable && (
+        {isGetVariable && ()
           <div style={{
             fontSize: 12,
             color: '#a0aec0',
@@ -190,9 +178,8 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
           </div>
         )}
       </ProgressiveDisclosureSection>
-
       {/* ADVANCED LEVEL: Technical settings (debug mode only) */}
-      {debugMode && (
+      {debugMode && ()
         <ProgressiveDisclosureSection
           title="Advanced Settings"
           level="advanced"
@@ -209,7 +196,6 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
             onChange={(value) => handleFieldChange('variableName', value)}
             placeholder="Internal variable identifier..."
           />
-
           <SelectEditor
             label="Variable Type"
             value={variableType}
@@ -218,8 +204,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
             zodType={null}
             onChange={(value) => handleFieldChange('variableType', value)}
           />
-
-          {isSetVariable && (
+          {isSetVariable && ()
             <>
               <div style={{ marginBottom: 16 }}>
                 <label style={{
@@ -228,7 +213,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
                   gap: 8,
                   fontSize: 12,
                   color: '#e2e8f0',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}>
                   <input
                     type="checkbox"
@@ -237,13 +222,12 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
                     style={{
                       width: 14,
                       height: 14,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   />
                   Allow overwriting existing variable
                 </label>
               </div>
-
               <SelectEditor
                 label="Scope"
                 value={scope}
@@ -254,8 +238,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
               />
             </>
           )}
-
-          {isGetVariable && (
+          {isGetVariable && ()
             <>
               <div style={{ marginBottom: 16 }}>
                 <label style={{
@@ -264,7 +247,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
                   gap: 8,
                   fontSize: 12,
                   color: '#e2e8f0',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}>
                   <input
                     type="checkbox"
@@ -273,13 +256,12 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
                     style={{
                       width: 14,
                       height: 14,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   />
                   Variable is required
                 </label>
               </div>
-
               <TextFieldEditor
                 label="Default Value"
                 value={defaultValue}
@@ -292,7 +274,6 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
           )}
         </ProgressiveDisclosureSection>
       )}
-
     </div>
   );
 };

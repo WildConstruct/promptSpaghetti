@@ -99,7 +99,7 @@ export declare class MarkovNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating Markov nodes
  */
-export declare function createMarkovNode(
+export declare function createMarkovNode()
   id: string,
   states: string[],
   transitions: Record<string,
@@ -111,7 +111,7 @@ export declare function createMarkovNode(
 /**
  * Helper function to create transition matrix from simple configuration
  */
-export declare function createTransitionMatrix(config: {
+export declare function createTransitionMatrix(config: {)
     states: string[];
     transitions: Record<string, Record<string, number>>;
     initialState?: string;

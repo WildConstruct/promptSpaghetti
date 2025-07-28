@@ -99,7 +99,7 @@ export declare class ClassificationEncryptionPolicyService {
     /**
      * Validate encryption compliance for data
      */
-    validateEncryptionCompliance(dataId: string, classification: DataClassificationLevel, encryptionStatus: {
+    validateEncryptionCompliance(dataId: string, classification: DataClassificationLevel, encryptionStatus: {)
         encrypted: boolean;
         algorithm?: string;
         keyLength?: number;

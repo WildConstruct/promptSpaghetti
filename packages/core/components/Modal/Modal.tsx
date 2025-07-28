@@ -1,6 +1,5 @@
 // packages/core/components/Modal/Modal.tsx
 // Reusable Modal component for Epic 7.3 Advanced Settings Modal
-
 import React, { useEffect, useRef, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { FiX } from 'react-icons/fi';
@@ -9,19 +8,19 @@ import { uiColors } from '../../styles/professional-design-system';
 // Enhanced color palette for better UI consistency
 const uiColors = {
   ...uiColors,
-  accent: {
+  accent: {,
     ...uiColors.accent,
     primary: uiColors.accent.orange,
-    secondary: uiColors.accent.blue
+    secondary: uiColors.accent.blue,
   },
-  ui: {
+  ui: {,
     ...uiColors.ui,
     selected: '#353535',
-    disabled: '#6b7280'
+    disabled: '#6b7280',
   },
-  text: {
+  text: {,
     ...uiColors.text,
-    disabled: '#6b7280'
+    disabled: '#6b7280',
   }
 };
 
@@ -40,7 +39,6 @@ export interface ModalProps {
   'aria-labelledby'?: string;
   'aria-describedby'?: string;
 }
-
 /**
  * Professional modal component with accessibility features
  * - Focus management and keyboard navigation
@@ -49,7 +47,7 @@ export interface ModalProps {
  * - Multiple size options
  * - Portal rendering for z-index management
  */
-export const Modal: React.FC<ModalProps> = ({
+export const Modal: React.FC<ModalProps> = ({)
   isOpen,
   onClose,
   title,
@@ -66,7 +64,6 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
-
   // Size configurations
   const sizeStyles = {
     small: { maxWidth: '400px', width: '90vw' },
@@ -74,20 +71,17 @@ export const Modal: React.FC<ModalProps> = ({
     large: { maxWidth: '800px', width: '95vw' },
     xlarge: { maxWidth: '1200px', width: '95vw' }
   };
-
   // Focus management
   useEffect(() => {
     if (isOpen) {
       // Store previously focused element
       previousActiveElement.current = document.activeElement as HTMLElement;
-      
       // Focus modal after animation
       const timer = setTimeout(() => {
         if (modalRef.current) {
-          const firstFocusable = modalRef.current.querySelector(
+          const firstFocusable = modalRef.current.querySelector(;)
             'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
           ) as HTMLElement;
-          
           if (firstFocusable) {
             firstFocusable.focus();
           } else {
@@ -95,7 +89,6 @@ export const Modal: React.FC<ModalProps> = ({
           }
         }
       }, 150);
-
       return () => clearTimeout(timer);
     } else {
       // Restore focus when modal closes
@@ -104,11 +97,9 @@ export const Modal: React.FC<ModalProps> = ({
       }
     }
   }, [isOpen]);
-
   // Keyboard event handling
   useEffect(() => {
     if (!isOpen) return;
-
     const handleKeyDown = (event: KeyboardEvent) => {
       // Close on Escape
       if (closeOnEscape && event.key === 'Escape') {
@@ -116,16 +107,13 @@ export const Modal: React.FC<ModalProps> = ({
         onClose();
         return;
       }
-
       // Tab navigation containment
       if (event.key === 'Tab' && modalRef.current) {
-        const focusableElements = modalRef.current.querySelectorAll(
+        const focusableElements = modalRef.current.querySelectorAll(;)
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
-        
         const firstElement = focusableElements[0] as HTMLElement;
         const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-
         if (event.shiftKey) {
           // Shift + Tab
           if (document.activeElement === firstElement) {
@@ -141,11 +129,9 @@ export const Modal: React.FC<ModalProps> = ({
         }
       }
     };
-
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, closeOnEscape, onClose]);
-
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen && !preventScrollClose) {
@@ -156,17 +142,14 @@ export const Modal: React.FC<ModalProps> = ({
       };
     }
   }, [isOpen, preventScrollClose]);
-
   // Handle overlay click
   const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (closeOnOverlayClick && event.target === event.currentTarget) {
       onClose();
     }
   };
-
   if (!isOpen) return null;
-
-  const modalContent = (
+  const modalContent = (;)
     <div 
       className={`modal-overlay ${overlayClassName}`}
       style={{
@@ -183,7 +166,7 @@ export const Modal: React.FC<ModalProps> = ({
         padding: '20px',
         opacity: isOpen ? 1 : 0,
         transition: 'opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-        backdropFilter: 'blur(4px)'
+        backdropFilter: 'blur(4px)',
       }}
       onClick={handleOverlayClick}
       role="presentation"
@@ -202,13 +185,13 @@ export const Modal: React.FC<ModalProps> = ({
           backgroundColor: uiColors.background.primary,
           borderRadius: '12px',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)',
-          border: `1px solid ${uiColors.ui.border}`,
+          border: `1px solid ${uiColors.ui.border}`,}
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
           transform: isOpen ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-10px)',
           transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-          outline: 'none'
+          outline: 'none',
         }}
       >
         {/* Modal Header */}
@@ -218,7 +201,7 @@ export const Modal: React.FC<ModalProps> = ({
           justifyContent: 'space-between',
           padding: '24px 24px 0',
           borderBottom: 'none',
-          minHeight: '60px'
+          minHeight: '60px',
         }}>
           <h2 
             id={ariaLabelledBy || 'modal-title'}
@@ -227,13 +210,12 @@ export const Modal: React.FC<ModalProps> = ({
               fontSize: '20px',
               fontWeight: 600,
               color: uiColors.text.primary,
-              lineHeight: 1.3
+              lineHeight: 1.3,
             }}
           >
             {title}
           </h2>
-          
-          {showCloseButton && (
+          {showCloseButton && ()
             <button
               onClick={onClose}
               aria-label="Close modal"
@@ -249,7 +231,7 @@ export const Modal: React.FC<ModalProps> = ({
                 borderRadius: '6px',
                 marginLeft: '16px',
                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                outline: 'none'
+                outline: 'none',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = uiColors.ui.hover;
@@ -260,7 +242,7 @@ export const Modal: React.FC<ModalProps> = ({
                 e.currentTarget.style.color = uiColors.text.secondary;
               }}
               onFocus={(e) => {
-                e.currentTarget.style.boxShadow = `0 0 0 2px ${uiColors.accent.primary}`;
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${uiColors.accent.primary}`;}
               }}
               onBlur={(e) => {
                 e.currentTarget.style.boxShadow = 'none';
@@ -270,20 +252,18 @@ export const Modal: React.FC<ModalProps> = ({
             </button>
           )}
         </div>
-
         {/* Modal Body */}
         <div style={{
           flex: 1,
           overflow: 'auto',
           padding: '24px',
-          color: uiColors.text.primary
+          color: uiColors.text.primary,
         }}>
           {children}
         </div>
       </div>
     </div>
   );
-
   // Render modal in portal
   const modalRoot = document.getElementById('modal-root') || document.body;
   return createPortal(modalContent, modalRoot);

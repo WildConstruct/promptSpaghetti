@@ -63,7 +63,7 @@ export interface CommandPaletteProps {
     edges: Edge[];
     selectedNodes: Node[];
     onGenerationStart: (flow: GenerationFlow, params: Record<string, any>) => Promise<void>;
-    onNodeCreate: (nodeType: string, position: {
+    onNodeCreate: (nodeType: string, position: {)
         x: number;
         y: number;
     }, data?: any) => void;

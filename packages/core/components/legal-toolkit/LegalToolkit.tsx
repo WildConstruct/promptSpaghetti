@@ -5,7 +5,6 @@
  * Comprehensive legal document processing toolkit with integrated workflow
  * for document parsing, analysis, compliance checking, and citation management
  */
-
 import React, { useState, useCallback } from 'react';
 import { LegalDocumentParser } from './LegalDocumentParser';
 import { ContractAnalyzer } from './ContractAnalyzer';
@@ -20,13 +19,11 @@ import {
   Citation,
   TermValidationResult 
 } from './types';
-
 interface LegalToolkitProps {
   className?: string;
   initialDocument?: LegalDocument;
   onWorkflowComplete?: (results: LegalToolkitResults) => void;
 }
-
 interface LegalToolkitResults {
   document: LegalDocument;
   analysis?: ContractAnalysis;
@@ -34,10 +31,9 @@ interface LegalToolkitResults {
   citations: Citation[];
   terminologyResults?: TermValidationResult[];
 }
-
 type ToolkitView = 'upload' | 'analyze' | 'compliance' | 'citations' | 'terminology' | 'summary';
 
-export const LegalToolkit: React.FC<LegalToolkitProps> = ({
+export const LegalToolkit: React.FC<LegalToolkitProps> = ({)
   className = '',
   initialDocument,
   onWorkflowComplete
@@ -49,55 +45,43 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
   const [citations, setCitations] = useState<Citation[]>([]);
   const [terminologyResults, setTerminologyResults] = useState<TermValidationResult[]>([]);
   const [workflowProgress, setWorkflowProgress] = useState(0);
-
   const calculateProgress = useCallback(() => {
     let completed = 0;
-    const total = 5; // upload, analyze, compliance, citations, terminology
-
+    const total = 5; // upload, analyze, compliance, citations, terminology;
     if (document) completed++;
     if (analysis) completed++;
     if (complianceResults.length > 0) completed++;
     if (citations.length > 0) completed++;
     if (terminologyResults.length > 0) completed++;
-
     const progress = (completed / total) * 100;
     setWorkflowProgress(progress);
     return progress;
   }, [document, analysis, complianceResults, citations, terminologyResults]);
-
   React.useEffect(() => {
     calculateProgress();
   }, [calculateProgress]);
-
   const handleDocumentParsed = (parsedDocument: LegalDocument) => {
     setDocument(parsedDocument);
     setCurrentView('analyze');
   };
-
   const handleAnalysisComplete = (contractAnalysis: ContractAnalysis) => {
     setAnalysis(contractAnalysis);
   };
-
   const handleComplianceResults = (results: ComplianceCheck[]) => {
     setComplianceResults(results);
   };
-
   const handleCitationAdd = (citation: Citation) => {
     setCitations(prev => [...prev, citation]);
   };
-
   const handleCitationEdit = (id: string, updatedCitation: Citation) => {
     setCitations(prev => prev.map(c => c.id === id ? updatedCitation : c));
   };
-
   const handleCitationDelete = (id: string) => {
     setCitations(prev => prev.filter(c => c.id !== id));
   };
-
   const handleTerminologyResults = (results: TermValidationResult[]) => {
     setTerminologyResults(results);
   };
-
   const handleCompleteWorkflow = () => {
     if (document && onWorkflowComplete) {
       const results: LegalToolkitResults = {
@@ -110,7 +94,6 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
       onWorkflowComplete(results);
     }
   };
-
   const getViewIcon = (view: ToolkitView) => {
     switch (view) {
     case 'upload': return '📄';
@@ -122,7 +105,6 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
     default: return '📄';
     }
   };
-
   const getViewTitle = (view: ToolkitView) => {
     switch (view) {
     case 'upload': return 'Upload Document';
@@ -134,7 +116,6 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
     default: return 'Legal Toolkit';
     }
   };
-
   const getHeaderTitle = (view: ToolkitView) => {
     switch (view) {
     case 'upload': return 'Document Upload & Parsing';
@@ -146,7 +127,6 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
     default: return 'Legal Toolkit';
     }
   };
-
   const isViewEnabled = (view: ToolkitView) => {
     switch (view) {
     case 'upload': return true;
@@ -158,7 +138,6 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
     default: return false;
     }
   };
-
   const getViewCompletionStatus = (view: ToolkitView) => {
     switch (view) {
     case 'upload': return !!document;
@@ -170,9 +149,8 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
     default: return false;
     }
   };
-
-  return (
-    <div className={`legal-toolkit ${className}`}>
+  return ()
+    <div className={`legal-toolkit ${className}`}>}
       <style>
         {`
           .legal-toolkit {
@@ -184,50 +162,42 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
             display: flex;
             flex-direction: column;
           }
-
           .toolkit-header {
             background: linear-gradient(135deg, #1e3a8a, #3b82f6);
             color: white;
             padding: 2rem;
             text-align: center;
           }
-
           .toolkit-title {
             font-size: 2rem;
             font-weight: 700;
             margin: 0 0 0.5rem 0;
           }
-
           .toolkit-subtitle {
             font-size: 1.1rem;
             opacity: 0.9;
             margin: 0;
           }
-
           .progress-section {
             background: #f8fafc;
             padding: 1rem 2rem;
             border-bottom: 1px solid #e2e8f0;
           }
-
           .progress-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 0.5rem;
           }
-
           .progress-label {
             font-size: 0.9rem;
             font-weight: 600;
             color: #374151;
           }
-
           .progress-percentage {
             font-size: 0.9rem;
             color: #4b5563;
           }
-
           .progress-bar {
             width: 100%;
             height: 8px;
@@ -235,21 +205,18 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
             border-radius: 4px;
             overflow: hidden;
           }
-
           .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, #10b981, #34d399);
             border-radius: 4px;
             transition: width 0.5s ease;
           }
-
           .toolkit-navigation {
             display: flex;
             background: #f9fafb;
             border-bottom: 1px solid #e5e7eb;
             overflow-x: auto;
           }
-
           .nav-item {
             display: flex;
             align-items: center;
@@ -264,33 +231,27 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
             white-space: nowrap;
             position: relative;
           }
-
           .nav-item:hover {
             background: #f3f4f6;
             color: #374151;
           }
-
           .nav-item.active {
             background: white;
             color: #1e40af;
             font-weight: 600;
             border-bottom: 3px solid #3b82f6;
           }
-
           .nav-item.disabled {
             opacity: 0.5;
             cursor: not-allowed;
           }
-
           .nav-item.disabled:hover {
             background: transparent;
             color: #6b7280;
           }
-
           .nav-icon {
             font-size: 1.1rem;
           }
-
           .nav-status {
             position: absolute;
             top: 0.5rem;
@@ -300,23 +261,19 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
             border-radius: 50%;
             background: #10b981;
           }
-
           .nav-status.incomplete {
             background: #e5e7eb;
           }
-
           .toolkit-content {
             flex: 1;
             display: flex;
             flex-direction: column;
           }
-
           .view-header {
             background: #fefefe;
             padding: 1.5rem 2rem;
             border-bottom: 1px solid #e5e7eb;
           }
-
           .view-title {
             font-size: 1.5rem;
             font-weight: 600;
@@ -326,37 +283,31 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
             align-items: center;
             gap: 0.75rem;
           }
-
           .view-description {
             color: #6b7280;
             font-size: 0.95rem;
             margin: 0;
           }
-
           .view-content {
             flex: 1;
             padding: 0;
             overflow: auto;
           }
-
           .summary-view {
             padding: 2rem;
           }
-
           .summary-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-bottom: 2rem;
           }
-
           .summary-card {
             background: #f8fafc;
             padding: 1.5rem;
             border-radius: 8px;
             border: 1px solid #e5e7eb;
           }
-
           .summary-card-title {
             font-size: 1.1rem;
             font-weight: 600;
@@ -366,29 +317,24 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
             align-items: center;
             gap: 0.5rem;
           }
-
           .summary-items {
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
           }
-
           .summary-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 0.9rem;
           }
-
           .summary-label {
             color: #374151;
           }
-
           .summary-value {
             font-weight: 600;
             color: #1f2937;
           }
-
           .workflow-actions {
             background: #f9fafb;
             padding: 1.5rem 2rem;
@@ -397,17 +343,14 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
             justify-content: space-between;
             align-items: center;
           }
-
           .workflow-info {
             font-size: 0.9rem;
             color: #6b7280;
           }
-
           .workflow-buttons {
             display: flex;
             gap: 1rem;
           }
-
           .workflow-btn {
             padding: 0.75rem 1.5rem;
             border-radius: 6px;
@@ -416,54 +359,44 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
             transition: all 0.2s;
             border: none;
           }
-
           .workflow-btn.primary {
             background: #3b82f6;
             color: white;
           }
-
           .workflow-btn.primary:hover {
             background: #2563eb;
           }
-
           .workflow-btn.secondary {
             background: #e5e7eb;
             color: #374151;
           }
-
           .workflow-btn.secondary:hover {
             background: #d1d5db;
           }
-
           @media (max-width: 768px) {
             .toolkit-navigation {
               flex-wrap: wrap;
             }
-            
             .summary-grid {
               grid-template-columns: 1fr;
             }
-            
             .workflow-actions {
               flex-direction: column;
               gap: 1rem;
               align-items: stretch;
             }
-            
             .workflow-buttons {
               justify-content: center;
             }
           }
         `}
       </style>
-
       <div className="toolkit-header">
         <h1 className="toolkit-title">Legal & Regulatory Toolkit</h1>
         <p className="toolkit-subtitle">
           Comprehensive document analysis, compliance checking, and legal workflow management
         </p>
       </div>
-
       <div className="progress-section">
         <div className="progress-header">
           <div className="progress-label">Workflow Progress</div>
@@ -476,9 +409,8 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
           ></div>
         </div>
       </div>
-
       <nav className="toolkit-navigation">
-        {(['upload', 'analyze', 'compliance', 'citations', 'terminology', 'summary'] as ToolkitView[]).map(view => (
+        {(['upload', 'analyze', 'compliance', 'citations', 'terminology', 'summary'] as ToolkitView[]).map(view => ()
           <button
             key={view}
             className={`nav-item ${currentView === view ? 'active' : ''} ${!isViewEnabled(view) ? 'disabled' : ''}`}
@@ -487,15 +419,14 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
             data-testid={`nav-${view}-tab`}
           >
             <span className="nav-icon">{getViewIcon(view)}</span>
-            <span data-testid={`nav-${view}-title`}>{getViewTitle(view)}</span>
-            <div className={`nav-status ${getViewCompletionStatus(view) ? '' : 'incomplete'}`}></div>
+            <span data-testid={`nav-${view}-title`}>{getViewTitle(view)}</span>}
+            <div className={`nav-status ${getViewCompletionStatus(view) ? '' : 'incomplete'}`}></div>}
           </button>
         ))}
       </nav>
-
       <div className="toolkit-content">
         <div className="view-header">
-          <h2 className="view-title" data-testid={`header-${currentView}-title`}>
+          <h2 className="view-title" data-testid={`header-${currentView}-title`}>}
             <span>{getViewIcon(currentView)}</span>
             {getHeaderTitle(currentView)}
           </h2>
@@ -508,16 +439,14 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
             {currentView === 'summary' && 'Review complete analysis and export results'}
           </p>
         </div>
-
         <div className="view-content">
-          {currentView === 'upload' && (
+          {currentView === 'upload' && ()
             <LegalDocumentParser
               onDocumentParsed={handleDocumentParsed}
               supportedTypes={['contract', 'policy', 'regulation', 'agreement', 'statute']}
             />
           )}
-
-          {currentView === 'analyze' && document && (
+          {currentView === 'analyze' && document && ()
             <ContractAnalyzer
               document={document}
               onClauseIdentified={(_____clauses: ContractClause[]) => {}}
@@ -525,8 +454,7 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
               analysisType="comprehensive"
             />
           )}
-
-          {currentView === 'compliance' && document && (
+          {currentView === 'compliance' && document && ()
             <ComplianceChecker
               document={document}
               regulations={['gdpr', 'ccpa']}
@@ -534,8 +462,7 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
               autoCheck={true}
             />
           )}
-
-          {currentView === 'citations' && (
+          {currentView === 'citations' && ()
             <CitationManager
               citations={citations}
               onCitationAdd={handleCitationAdd}
@@ -544,8 +471,7 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
               citationStyle="bluebook"
             />
           )}
-
-          {currentView === 'terminology' && document && (
+          {currentView === 'terminology' && document && ()
             <TerminologyValidator
               text={document.content}
               onValidationResults={handleTerminologyResults}
@@ -554,8 +480,7 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
               autoValidate={true}
             />
           )}
-
-          {currentView === 'summary' && document && (
+          {currentView === 'summary' && document && ()
             <div className="summary-view">
               <div className="summary-grid">
                 <div className="summary-card">
@@ -579,8 +504,7 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
                     </div>
                   </div>
                 </div>
-
-                {analysis && (
+                {analysis && ()
                   <div className="summary-card">
                     <h3 className="summary-card-title">🔍 Analysis Results</h3>
                     <div className="summary-items">
@@ -603,7 +527,6 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
                     </div>
                   </div>
                 )}
-
                 <div className="summary-card">
                   <h3 className="summary-card-title">✅ Compliance Status</h3>
                   <div className="summary-items">
@@ -625,7 +548,6 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
                     </div>
                   </div>
                 </div>
-
                 <div className="summary-card">
                   <h3 className="summary-card-title">📚 Citations & Terminology</h3>
                   <div className="summary-items">
@@ -653,7 +575,6 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
           )}
         </div>
       </div>
-
       <div className="workflow-actions">
         <div className="workflow-info">
           {workflowProgress < 100 
@@ -662,7 +583,7 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
           }
         </div>
         <div className="workflow-buttons">
-          {workflowProgress >= 100 && (
+          {workflowProgress >= 100 && ()
             <button 
               className="workflow-btn primary"
               onClick={handleCompleteWorkflow}

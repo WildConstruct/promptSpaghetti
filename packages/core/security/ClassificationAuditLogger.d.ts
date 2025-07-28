@@ -40,39 +40,39 @@ export interface AuditLogEntry {
     id: string;
     timestamp: Date;
     eventType: AuditEventType;
-    actor: {
+    actor: {,
         userId?: string;
         systemId?: string;
         ipAddress: string;
         userAgent?: string;
         sessionId?: string;
     };
-    target: {
+    target: {,
         dataId?: string;
         resourceType: string;
         resourceId: string;
         classification?: ClassificationResult;
     };
-    action: {
+    action: {,
         operation: string;
         result: 'success' | 'failure';
         reason?: string;
         duration?: number;
     };
-    context: {
+    context: {,
         environment: string;
         applicationVersion: string;
         correlationId?: string;
         parentEventId?: string;
         metadata: Record<string, any>;
     };
-    compliance: {
+    compliance: {,
         frameworks: ComplianceFramework[];
         dataCategory?: DataCategory;
         retentionRequired: boolean;
         encryptionApplied: boolean;
     };
-    integrity: {
+    integrity: {,
         hash: string;
         previousHash: string;
         signature?: string;
@@ -94,23 +94,23 @@ export interface AuditQueryFilter {
 }
 export interface ComplianceReport {
     framework: ComplianceFramework;
-    reportPeriod: {
+    reportPeriod: {,
         start: Date;
         end: Date;
     };
-    summary: {
+    summary: {,
         totalEvents: number;
         compliantEvents: number;
         violations: number;
         complianceRate: number;
     };
-    dataProcessing: {
+    dataProcessing: {,
         classified: number;
         accessed: number;
         exported: number;
         deleted: number;
     };
-    violationDetails: Array<{
+    violationDetails: Array<{,
         timestamp: Date;
         eventId: string;
         description: string;
@@ -173,26 +173,26 @@ export declare class ClassificationAuditLogger extends EventEmitter {
     /**
      * Log a classification event
      */
-    logClassification(
+    logClassification()
       dataElement: DataElement,
       result: ClassificationResult,
       actor: AuditLogEntry['actor'],
-      duration: number
+      duration: number,
     ): Promise<string>;
     /**
      * Log a classification update
      */
-    logClassificationUpdate(
+    logClassificationUpdate()
       dataId: string,
       oldLevel: ClassificationLevel,
       newLevel: ClassificationLevel,
       reason: string,
-      actor: AuditLogEntry['actor']
+      actor: AuditLogEntry['actor'],
     ): Promise<string>;
     /**
      * Log a policy violation
      */
-    logPolicyViolation(violation: {
+    logPolicyViolation(violation: {)
         dataId: string;
         policyId: string;
         description: string;
@@ -202,7 +202,7 @@ export declare class ClassificationAuditLogger extends EventEmitter {
     /**
      * Log data access event
      */
-    logDataAccess(
+    logDataAccess()
       dataId: string,
       accessGranted: boolean,
       reason: string,
@@ -226,7 +226,7 @@ export declare class ClassificationAuditLogger extends EventEmitter {
      */
     verifyIntegrity(startId?: string, endId?: string): Promise<{
         valid: boolean;
-        errors: Array<{
+        errors: Array<{,
             logId: string;
             error: string;
         }>;

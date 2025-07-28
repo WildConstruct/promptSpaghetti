@@ -20,7 +20,7 @@ import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAna
 export interface DropoffHeatmapProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
-    timeRange: {
+    timeRange: {,
         start: number;
         end: number;
     };
@@ -71,7 +71,7 @@ export interface TransitionDropoffAnalysis {
 export interface TemporalDropoffPattern {
     period: 'hour' | 'day' | 'week' | 'month';
     periodValue: number;
-    dropOffRates: Array<{
+    dropOffRates: Array<{,
         stepId: string;
         stepName: string;
         dropOffRate: number;
@@ -83,7 +83,7 @@ export interface SegmentDropoffAnalysis {
     segmentId: string;
     segmentName: string;
     overallDropOffRate: number;
-    stepDropOffRates: Array<{
+    stepDropOffRates: Array<{,
         stepId: string;
         stepName: string;
         dropOffRate: number;
@@ -237,18 +237,18 @@ export interface DropoffPointAnalysis {
 export interface DropoffExportData {
     heatmapMode: HeatmapMode;
     data: DropoffAnalysisData;
-    visualizations: {
+    visualizations: {,
         heatmap: string;
         flowDiagram: string;
         trends: string;
     };
-    recommendations: {
+    recommendations: {,
         quick: QuickWin[];
         strategic: StrategicInitiative[];
     };
-    metadata: {
+    metadata: {,
         exportedAt: number;
-        timeRange: {
+        timeRange: {,
             start: number;
             end: number;
         };

@@ -29,11 +29,11 @@ export declare class AllocationService {
     private cache;
     private storage;
     private metrics;
-    constructor(
+    constructor()
       config: AllocationServiceConfig,
       cache: AllocationCache,
       storage: AssignmentStorage,
-      metrics: AssignmentMetrics
+      metrics: AssignmentMetrics,
     );
     /**
      * Assign a user to an experiment variant
@@ -42,7 +42,7 @@ export declare class AllocationService {
     /**
      * Get assignments for multiple experiments
      */
-    bulkAssignUser(
+    bulkAssignUser()
       userId: string,
       experimentIds: string[],
       sessionId?: string,
@@ -51,7 +51,7 @@ export declare class AllocationService {
     /**
      * Force assign a user to a specific variant (for debugging/testing)
      */
-    forceAssignUser(
+    forceAssignUser()
       userId: string,
       experimentId: string,
       variantId: string,
@@ -89,7 +89,7 @@ export declare class AllocationService {
 /**
  * Factory function to create allocation service with Redis cache
  */
-export declare function createAllocationService(
+export declare function createAllocationService()
   config: AllocationServiceConfig,
   storage: AssignmentStorage,
   metrics: AssignmentMetrics,

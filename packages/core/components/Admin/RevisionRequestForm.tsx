@@ -6,7 +6,6 @@
  * 
  * Following patterns from DocumentReviewInterface and ApprovalWorkflowManager.
  */
-
 import React, { useState, useCallback, useMemo } from 'react';
 import {
   RevisionRequestFormData,
@@ -16,7 +15,6 @@ import {
   RevisionEvidenceType,
   DEFAULT_REVISION_REQUEST_CONFIG
 } from '../../types/RevisionRequestTypes';
-
 interface RevisionRequestFormProps {
   initialData?: Partial<RevisionRequestFormData>;
   contentType?: RevisionContentType;
@@ -27,11 +25,9 @@ interface RevisionRequestFormProps {
   isSubmitting?: boolean;
   className?: string;
 }
-
 interface ValidationErrors {
   [key: string]: string;
 }
-
 interface EvidenceItem {
   id: string;
   type: RevisionEvidenceType;
@@ -41,7 +37,7 @@ interface EvidenceItem {
   preview?: string;
 }
 
-export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
+export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
   initialData = {},
   contentType: initialContentType,
   contentId: initialContentId,
@@ -52,7 +48,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
   className = ''
 }) => {
   // Form state
-  const [formData, setFormData] = useState<RevisionRequestFormData>({
+  const [formData, setFormData] = useState<RevisionRequestFormData>({)
     title: initialData.title || '',
     description: initialData.description || '',
     requestedChanges: initialData.requestedChanges || '',
@@ -66,24 +62,19 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
     tags: initialData.tags || [],
     evidence: initialData.evidence || []
   });
-
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
   const [evidenceItems, setEvidenceItems] = useState<EvidenceItem[]>([]);
   const [newTag, setNewTag] = useState<string>('');
   const [_____showAdvanced, _____setShowAdvanced] = useState<boolean>(false);
-
   const totalSteps = 4;
-
   // Memoized content title for display
   const displayContentTitle = useMemo(() => {
     return initialContentTitle || formData.contentId || 'Unknown Content';
   }, [initialContentTitle, formData.contentId]);
-
   // Validation logic
   const validateStep = useCallback((step: number): ValidationErrors => {
     const errors: ValidationErrors = {};
-
     switch (step) {
     case 1: // Basic Information
       if (!formData.title.trim()) {
@@ -91,95 +82,78 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
       } else if (formData.title.length > 500) {
         errors.title = 'Title must be less than 500 characters';
       }
-
       if (!formData.description.trim()) {
         errors.description = 'Description is required';
       } else if (formData.description.length < 10) {
         errors.description = 'Description must be at least 10 characters';
       }
-
       if (!formData.contentType) {
         errors.contentType = 'Content type is required';
       }
-
       if (!formData.contentId.trim()) {
         errors.contentId = 'Content ID is required';
       }
       break;
-
     case 2: // Request Details
       if (!formData.requestedChanges.trim()) {
         errors.requestedChanges = 'Requested changes are required';
       } else if (formData.requestedChanges.length < 10) {
         errors.requestedChanges = 'Requested changes must be at least 10 characters';
       }
-
       if (!formData.businessJustification.trim()) {
         errors.businessJustification = 'Business justification is required';
       } else if (formData.businessJustification.length < 10) {
         errors.businessJustification = 'Business justification must be at least 10 characters';
       }
-
       if (!formData.type) {
         errors.type = 'Request type is required';
       }
-
       if (!formData.priority) {
         errors.priority = 'Priority is required';
       }
       break;
-
     case 3: // Timeline & Estimation (optional)
       if (formData.estimatedHours && formData.estimatedHours < 0) {
         errors.estimatedHours = 'Estimated hours must be positive';
       }
-
       if (formData.dueDate && formData.dueDate < new Date()) {
         errors.dueDate = 'Due date cannot be in the past';
       }
       break;
-
     case 4: // Evidence & Review (optional)
       // No required validations for evidence
       break;
     }
-
     return errors;
   }, [formData]);
-
   // Form handlers
   const handleInputChange = useCallback((field: keyof RevisionRequestFormData, value: Error) => {
-    setFormData(prev => ({
+    setFormData(prev => ({)
       ...prev,
       [field]: value
     }));
-
     // Clear validation error for this field
     if (validationErrors[field]) {
-      setValidationErrors(prev => {
+      setValidationErrors(prev => {)
         const newErrors = { ...prev };
         delete newErrors[field];
         return newErrors;
       });
     }
   }, [validationErrors]);
-
   const handleNext = useCallback(() => {
     const errors = validateStep(currentStep);
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
       return;
     }
-
     setValidationErrors({});
     setCurrentStep(prev => Math.min(prev + 1, totalSteps));
   }, [currentStep, validateStep]);
-
   const handleBack = useCallback(() => {
     setCurrentStep(prev => Math.max(prev - 1, 1));
     setValidationErrors({});
   }, []);
-
   const handleSubmit = useCallback(async () => {
     // Validate all steps
     let allErrors: ValidationErrors = {};
@@ -187,54 +161,47 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
       const stepErrors = validateStep(step);
       allErrors = { ...allErrors, ...stepErrors };
     }
-
     if (Object.keys(allErrors).length > 0) {
       setValidationErrors(allErrors);
       setCurrentStep(1); // Go to first step with errors
       return;
     }
-
     // Prepare final form data
     const finalFormData: RevisionRequestFormData = {
       ...formData,
       evidence: evidenceItems.map(item => item.file).filter(Boolean) as File[]
     };
-
     try {
       await onSubmit(finalFormData);
     } catch (error) {
       console.error('Failed to submit revision request:', error);
-      setValidationErrors({
+      setValidationErrors({)
         submit: error instanceof Error ? error.message : 'Failed to submit revision request'
       });
     }
   }, [formData, evidenceItems, validateStep, onSubmit]);
-
   // Evidence handlers
   const handleAddEvidence = useCallback(() => {
     const newEvidence: EvidenceItem = {
-      id: `evidence_${Date.now()}`,
+      id: `evidence_${Date.now()}`,}
       type: RevisionEvidenceType.SCREENSHOT,
       title: '',
-      description: ''
+      description: '',
     };
     setEvidenceItems(prev => [...prev, newEvidence]);
   }, []);
-
   const handleRemoveEvidence = useCallback((evidenceId: string) => {
     setEvidenceItems(prev => prev.filter(item => item.id !== evidenceId));
   }, []);
-
   const handleEvidenceChange = useCallback((evidenceId: string, field: keyof EvidenceItem, value: Error) => {
-    setEvidenceItems(prev => prev.map(item => 
+    setEvidenceItems(prev => prev.map(item => )
       item.id === evidenceId ? { ...item, [field]: value } : item
     ));
   }, []);
-
   const handleFileUpload = useCallback((evidenceId: string, file: File) => {
-    setEvidenceItems(prev => prev.map(item => {
+    setEvidenceItems(prev => prev.map(item => {)
       if (item.id === evidenceId) {
-        const preview = file.type.startsWith('image/') 
+        const preview = file.type.startsWith('image/') ;
           ? URL.createObjectURL(file)
           : undefined;
         return { ...item, file, preview };
@@ -242,7 +209,6 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
       return item;
     }));
   }, []);
-
   // Tag handlers
   const handleAddTag = useCallback(() => {
     if (newTag.trim() && !formData.tags.includes(newTag.trim())) {
@@ -250,11 +216,9 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
       setNewTag('');
     }
   }, [newTag, formData.tags, handleInputChange]);
-
   const handleRemoveTag = useCallback((tagToRemove: string) => {
     handleInputChange('tags', formData.tags.filter(tag => tag !== tagToRemove));
   }, [formData.tags, handleInputChange]);
-
   // Priority color mapping
   const getPriorityColor = (priority: RevisionRequestPriority): string => {
     switch (priority) {
@@ -265,25 +229,23 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
     case RevisionRequestPriority.LOW: return 'text-gray-800 bg-gray-100';
     }
   };
-
-  const renderStepIndicator = () => (
+  const renderStepIndicator = () => (;)
     <div className="flex items-center justify-center mb-8">
       {Array.from({ length: totalSteps }, (_, index) => {
         const stepNumber = index + 1;
         const isActive = stepNumber === currentStep;
         const isCompleted = stepNumber < currentStep;
-        
-        return (
+        return ()
           <React.Fragment key={stepNumber}>
             <div className={`
               flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-semibold
-              ${isActive ? 'border-blue-500 bg-blue-500 text-white' : 
+              ${isActive ? 'border-blue-500 bg-blue-500 text-white' : }
             isCompleted ? 'border-green-500 bg-green-500 text-white' : 
               'border-gray-300 bg-white text-gray-500'}
             `}>
               {isCompleted ? '✓' : stepNumber}
             </div>
-            {stepNumber < totalSteps && (
+            {stepNumber < totalSteps && ()
               <div className={`
                 flex-1 h-0.5 mx-2
                 ${isCompleted ? 'bg-green-500' : 'bg-gray-300'}
@@ -294,11 +256,9 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
       })}
     </div>
   );
-
-  const renderStep1 = () => (
+  const renderStep1 = () => (;)
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900">Basic Information</h3>
-      
       {/* Title */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -314,11 +274,10 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
           placeholder="Brief, descriptive title for your revision request"
           maxLength={500}
         />
-        {validationErrors.title && (
+        {validationErrors.title && ()
           <p className="mt-1 text-sm text-red-600">{validationErrors.title}</p>
         )}
       </div>
-
       {/* Description */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -333,11 +292,10 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
           }`}
           placeholder="Provide a detailed description of what needs to be revised and why"
         />
-        {validationErrors.description && (
+        {validationErrors.description && ()
           <p className="mt-1 text-sm text-red-600">{validationErrors.description}</p>
         )}
       </div>
-
       {/* Content Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -351,17 +309,16 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
               validationErrors.contentType ? 'border-red-500' : 'border-gray-300'
             }`}
           >
-            {Object.values(RevisionContentType).map((type) => (
+            {Object.values(RevisionContentType).map((type) => ()
               <option key={type} value={type}>
                 {type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </option>
             ))}
           </select>
-          {validationErrors.contentType && (
+          {validationErrors.contentType && ()
             <p className="mt-1 text-sm text-red-600">{validationErrors.contentType}</p>
           )}
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Content ID *
@@ -375,14 +332,13 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
             }`}
             placeholder="ID of the content to be revised"
           />
-          {validationErrors.contentId && (
+          {validationErrors.contentId && ()
             <p className="mt-1 text-sm text-red-600">{validationErrors.contentId}</p>
           )}
         </div>
       </div>
-
       {/* Content Preview */}
-      {displayContentTitle && (
+      {displayContentTitle && ()
         <div className="bg-gray-50 p-4 rounded-md border">
           <h4 className="text-sm font-medium text-gray-700 mb-1">Content to be Revised:</h4>
           <p className="text-sm text-gray-900">{displayContentTitle}</p>
@@ -390,11 +346,9 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
       )}
     </div>
   );
-
-  const renderStep2 = () => (
+  const renderStep2 = () => (;)
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900">Request Details</h3>
-
       {/* Requested Changes */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -409,11 +363,10 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
           }`}
           placeholder="Describe exactly what changes you want made"
         />
-        {validationErrors.requestedChanges && (
+        {validationErrors.requestedChanges && ()
           <p className="mt-1 text-sm text-red-600">{validationErrors.requestedChanges}</p>
         )}
       </div>
-
       {/* Business Justification */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -428,11 +381,10 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
           }`}
           placeholder="Explain why these changes are needed from a business perspective"
         />
-        {validationErrors.businessJustification && (
+        {validationErrors.businessJustification && ()
           <p className="mt-1 text-sm text-red-600">{validationErrors.businessJustification}</p>
         )}
       </div>
-
       {/* Request Type and Priority */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -446,17 +398,16 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
               validationErrors.type ? 'border-red-500' : 'border-gray-300'
             }`}
           >
-            {Object.values(RevisionRequestType).map((type) => (
+            {Object.values(RevisionRequestType).map((type) => ()
               <option key={type} value={type}>
                 {type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </option>
             ))}
           </select>
-          {validationErrors.type && (
+          {validationErrors.type && ()
             <p className="mt-1 text-sm text-red-600">{validationErrors.type}</p>
           )}
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Priority *
@@ -468,32 +419,29 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
               validationErrors.priority ? 'border-red-500' : 'border-gray-300'
             }`}
           >
-            {Object.values(RevisionRequestPriority).map((priority) => (
+            {Object.values(RevisionRequestPriority).map((priority) => ()
               <option key={priority} value={priority}>
                 {priority.charAt(0).toUpperCase() + priority.slice(1)}
               </option>
             ))}
           </select>
-          {validationErrors.priority && (
+          {validationErrors.priority && ()
             <p className="mt-1 text-sm text-red-600">{validationErrors.priority}</p>
           )}
-          
           {/* Priority indicator */}
-          <div className={`mt-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(formData.priority)}`}>
+          <div className={`mt-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(formData.priority)}`}>}
             Priority: {formData.priority.charAt(0).toUpperCase() + formData.priority.slice(1)}
           </div>
         </div>
       </div>
     </div>
   );
-
-  const renderStep3 = () => (
+  const renderStep3 = () => (;)
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900">Timeline & Estimation</h3>
       <p className="text-sm text-gray-600">
         This information helps with planning and assignment (optional).
       </p>
-
       {/* Due Date and Estimated Hours */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -508,11 +456,10 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
               validationErrors.dueDate ? 'border-red-500' : 'border-gray-300'
             }`}
           />
-          {validationErrors.dueDate && (
+          {validationErrors.dueDate && ()
             <p className="mt-1 text-sm text-red-600">{validationErrors.dueDate}</p>
           )}
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Estimated Hours
@@ -528,19 +475,18 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
             }`}
             placeholder="How many hours do you estimate this will take?"
           />
-          {validationErrors.estimatedHours && (
+          {validationErrors.estimatedHours && ()
             <p className="mt-1 text-sm text-red-600">{validationErrors.estimatedHours}</p>
           )}
         </div>
       </div>
-
       {/* Tags */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Tags
         </label>
         <div className="flex flex-wrap gap-2 mb-2">
-          {formData.tags.map((tag) => (
+          {formData.tags.map((tag) => ()
             <span
               key={tag}
               className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
@@ -576,17 +522,15 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
       </div>
     </div>
   );
-
-  const renderStep4 = () => (
+  const renderStep4 = () => (;)
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900">Evidence & Attachments</h3>
       <p className="text-sm text-gray-600">
         Add supporting evidence like screenshots, documents, or mockups to help explain your request.
       </p>
-
       {/* Evidence Items */}
       <div className="space-y-4">
-        {evidenceItems.map((evidence) => (
+        {evidenceItems.map((evidence) => ()
           <div key={evidence.id} className="border border-gray-300 rounded-md p-4 bg-gray-50">
             <div className="flex items-center justify-between mb-3">
               <h4 className="text-sm font-medium text-gray-900">Evidence Item</h4>
@@ -598,7 +542,6 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
                 Remove
               </button>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -609,14 +552,13 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
                   onChange={(e) => handleEvidenceChange(evidence.id, 'type', e.target.value as RevisionEvidenceType)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  {Object.values(RevisionEvidenceType).map((type) => (
+                  {Object.values(RevisionEvidenceType).map((type) => ()
                     <option key={type} value={type}>
                       {type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </option>
                   ))}
                 </select>
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Title
@@ -630,7 +572,6 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
                 />
               </div>
             </div>
-
             <div className="mt-3">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Description
@@ -643,7 +584,6 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
                 placeholder="Describe what this evidence shows"
               />
             </div>
-
             <div className="mt-3">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 File Upload
@@ -657,7 +597,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt,.md"
               />
-              {evidence.preview && (
+              {evidence.preview && ()
                 <div className="mt-2">
                   <img src={evidence.preview} alt="Preview" className="max-w-xs max-h-32 object-contain rounded-md border" />
                 </div>
@@ -665,7 +605,6 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
             </div>
           </div>
         ))}
-
         {/* Add Evidence Button */}
         <button
           type="button"
@@ -675,7 +614,6 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
           + Add Evidence
         </button>
       </div>
-
       {/* Summary */}
       <div className="bg-blue-50 p-4 rounded-md border border-blue-200">
         <h4 className="text-sm font-medium text-blue-900 mb-2">Request Summary</h4>
@@ -684,30 +622,28 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
           <p><strong>Type:</strong> {formData.type.replace(/_/g, ' ')}</p>
           <p><strong>Priority:</strong> {formData.priority}</p>
           <p><strong>Content:</strong> {displayContentTitle}</p>
-          {formData.dueDate && (
+          {formData.dueDate && ()
             <p><strong>Due Date:</strong> {formData.dueDate.toLocaleDateString()}</p>
           )}
-          {formData.estimatedHours && (
+          {formData.estimatedHours && ()
             <p><strong>Estimated Hours:</strong> {formData.estimatedHours}</p>
           )}
-          {formData.tags.length > 0 && (
+          {formData.tags.length > 0 && ()
             <p><strong>Tags:</strong> {formData.tags.join(', ')}</p>
           )}
           <p><strong>Evidence Items:</strong> {evidenceItems.length}</p>
         </div>
       </div>
-
       {/* Validation Errors */}
-      {validationErrors.submit && (
+      {validationErrors.submit && ()
         <div className="bg-red-50 p-4 rounded-md border border-red-200">
           <p className="text-sm text-red-800">{validationErrors.submit}</p>
         </div>
       )}
     </div>
   );
-
-  return (
-    <div className={`max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden ${className}`}>
+  return ()
+    <div className={`max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden ${className}`}>}
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
         <h2 className="text-xl font-semibold text-white">Create Revision Request</h2>
@@ -715,11 +651,9 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
           Step {currentStep} of {totalSteps}
         </p>
       </div>
-
       <div className="p-6">
         {/* Step Indicator */}
         {renderStepIndicator()}
-
         {/* Step Content */}
         <div className="min-h-96">
           {currentStep === 1 && renderStep1()}
@@ -727,11 +661,10 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
           {currentStep === 3 && renderStep3()}
           {currentStep === 4 && renderStep4()}
         </div>
-
         {/* Navigation */}
         <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
           <div>
-            {currentStep > 1 && (
+            {currentStep > 1 && ()
               <button
                 type="button"
                 onClick={handleBack}
@@ -742,7 +675,6 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
               </button>
             )}
           </div>
-
           <div className="flex gap-3">
             <button
               type="button"
@@ -752,8 +684,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
             >
               Cancel
             </button>
-
-            {currentStep < totalSteps ? (
+            {currentStep < totalSteps ? ()
               <button
                 type="button"
                 onClick={handleNext}
@@ -762,14 +693,14 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
               >
                 Next
               </button>
-            ) : (
+            ) : ()
               <button
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
                 className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 flex items-center gap-2"
               >
-                {isSubmitting && (
+                {isSubmitting && ()
                   <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v8H4z" />

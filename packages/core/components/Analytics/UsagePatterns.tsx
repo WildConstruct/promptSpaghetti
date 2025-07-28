@@ -8,7 +8,6 @@ import { Alert, AlertDescription } from '../ui/Alert';
 import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 import { Activity, Calendar, Clock, MousePointer, Route, Eye, Map } from 'lucide-react';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Area, AreaChart } from 'recharts';
-
 /**
  * Heat map component props
  */
@@ -17,49 +16,39 @@ interface HeatMapProps {
   width?: number;
   height?: number;
 }
-
 /**
  * Canvas heat map component
  */
 const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400 }) => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
-
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !data.length) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
-
     // Find max intensity for normalization
     const maxIntensity = Math.max(...data.map(d => d.intensity));
     const minIntensity = Math.min(...data.map(d => d.intensity));
-
     // Draw heat map points
-    data.forEach(point => {
+    data.forEach(point => {)
       const normalized = (point.intensity - minIntensity) / (maxIntensity - minIntensity);
       const alpha = Math.max(0.1, normalized);
-      
       // Create radial gradient for each point
-      const gradient = ctx.createRadialGradient(
+      const gradient = ctx.createRadialGradient(;)
         point.x, point.y, 0,
         point.x, point.y, 20
       );
-      
-      gradient.addColorStop(0, `rgba(59, 130, 246, ${alpha})`);
+      gradient.addColorStop(0, `rgba(59, 130, 246, ${alpha})`);}
       gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
-      
       ctx.fillStyle = gradient;
       ctx.beginPath();
       ctx.arc(point.x, point.y, 20, 0, 2 * Math.PI);
       ctx.fill();
     });
   }, [data, width, height]);
-
-  return (
+  return ()
     <div className="heat-map-container">
       <canvas
         ref={canvasRef}
@@ -81,23 +70,21 @@ const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400
     </div>
   );
 };
-
 /**
  * User journey flow component
  */
 const UserJourneyFlow: React.FC<{ journeyData: unknown[] }> = ({ journeyData }) => {
   if (!journeyData || journeyData.length === 0) {
-    return (
+    return ()
       <div className="text-center py-8 text-gray-500">
         No journey data available
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="journey-flow">
       <div className="space-y-4">
-        {journeyData.slice(0, 10).map((flow, index) => (
+        {journeyData.slice(0, 10).map((flow, index) => ()
           <div key={index} className="flow-item">
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
               <div className="flex items-center gap-3">
@@ -119,7 +106,6 @@ const UserJourneyFlow: React.FC<{ journeyData: unknown[] }> = ({ journeyData }) 
     </div>
   );
 };
-
 /**
  * Usage patterns props
  */
@@ -129,7 +115,6 @@ export interface UsagePatternsProps {
   userId?: number;
   organizationId?: number;
 }
-
 /**
  * Usage patterns state
  */
@@ -143,17 +128,16 @@ interface UsagePatternsState {
   journeyFlows: unknown[];
   selectedPattern: 'hourly' | 'daily' | 'weekly';
 }
-
 /**
  * Usage patterns component
  */
-export const UsagePatterns: React.FC<UsagePatternsProps> = ({
+export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
   analyticsClient,
   timeRange,
   userId,
   organizationId
 }) => {
-  const [state, setState] = useState<UsagePatternsState>({
+  const [state, setState] = useState<UsagePatternsState>({)
     loading: true,
     error: null,
     heatMapData: [],
@@ -161,29 +145,25 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
     dailyPattern: null,
     weeklyPattern: null,
     journeyFlows: [],
-    selectedPattern: 'hourly'
+    selectedPattern: 'hourly',
   });
-
   /**
    * Load usage patterns data
    */
   const loadUsageData = useCallback(async () => {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
-
-      const [heatMapResponse, hourlyResponse, dailyResponse, weeklyResponse] = await Promise.all([
+      const [heatMapResponse, hourlyResponse, dailyResponse, weeklyResponse] = await Promise.all([)
         analyticsClient.getHeatMap(timeRange),
         analyticsClient.getUsagePatterns('hourly'),
         analyticsClient.getUsagePatterns('daily'),
         analyticsClient.getUsagePatterns('weekly')
       ]);
-
       if (!heatMapResponse.success) {
         throw new Error('Failed to load heat map data');
       }
-
       // Generate mock journey flows data
-      const mockJourneyFlows = [
+      const mockJourneyFlows = [;
         { sourceStep: 'Landing', targetStep: 'Node Creation', userCount: 150, percentage: 25.5, averageTime: 30000, successRate: 0.85 },
         { sourceStep: 'Node Creation', targetStep: 'Connection', userCount: 120, percentage: 20.4, averageTime: 45000, successRate: 0.92 },
         { sourceStep: 'Connection', targetStep: 'Execution', userCount: 110, percentage: 18.7, averageTime: 60000, successRate: 0.88 },
@@ -193,33 +173,30 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
         { sourceStep: 'Template', targetStep: 'Execution', userCount: 30, percentage: 5.1, averageTime: 35000, successRate: 0.87 },
         { sourceStep: 'Execution', targetStep: 'Save', userCount: 25, percentage: 4.3, averageTime: 12000, successRate: 0.96 }
       ];
-
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
         loading: false,
         heatMapData: heatMapResponse.data || [],
         hourlyPattern: hourlyResponse.success ? hourlyResponse.data : null,
         dailyPattern: dailyResponse.success ? dailyResponse.data : null,
         weeklyPattern: weeklyResponse.success ? weeklyResponse.data : null,
-        journeyFlows: mockJourneyFlows
+        journeyFlows: mockJourneyFlows,
       }));
     } catch (error) {
       console.error('Failed to load usage data:', error);
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
         loading: false,
         error: error instanceof Error ? error.message : 'Failed to load usage data'
       }));
     }
   }, [analyticsClient, timeRange]);
-
   /**
    * Handle pattern selection change
    */
   const handlePatternChange = useCallback((pattern: 'hourly' | 'daily' | 'weekly') => {
     setState(prev => ({ ...prev, selectedPattern: pattern }));
   }, []);
-
   /**
    * Get current pattern data
    */
@@ -235,49 +212,41 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
       return null;
     }
   }, [state.selectedPattern, state.hourlyPattern, state.dailyPattern, state.weeklyPattern]);
-
   /**
    * Format pattern data for charts
    */
   const formatPatternData = useCallback((patternData: unknown) => {
     if (!patternData || !patternData.data) return [];
-
-    return patternData.data.map((item: unknown) => ({
+    return patternData.data.map((item: unknown) => ({)
       period: new Date(item.period).toLocaleDateString(),
       value: item.value,
       timestamp: new Date(item.period).getTime()
     }));
   }, []);
-
   /**
    * Generate hourly distribution data
    */
   const generateHourlyDistribution = useCallback(() => {
     if (!state.hourlyPattern || !state.hourlyPattern.data) return [];
-
     const hourlyData = new Array(24).fill(0);
-    
     state.hourlyPattern.data.forEach((item: unknown) => {
       const hour = new Date(item.period).getHours();
       hourlyData[hour] += item.value;
     });
-
-    return hourlyData.map((value, hour) => ({
-      hour: `${hour.toString().padStart(2, '0')}:00`,
+    return hourlyData.map((value, hour) => ({)
+      hour: `${hour.toString().padStart(2, '0')}:00`,}
       value,
       percentage: (value / Math.max(...hourlyData)) * 100
     }));
   }, [state.hourlyPattern]);
-
   /**
    * Load data on mount
    */
   useEffect(() => {
     loadUsageData();
   }, [loadUsageData]);
-
   if (state.loading) {
-    return (
+    return ()
       <div className="usage-patterns">
         <div className="loading-container">
           <div className="loading-spinner"></div>
@@ -286,9 +255,8 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
       </div>
     );
   }
-
   if (state.error) {
-    return (
+    return ()
       <div className="usage-patterns">
         <Alert variant="destructive">
           <AlertDescription>
@@ -306,12 +274,10 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
       </div>
     );
   }
-
   const currentPattern = getCurrentPatternData();
   const patternChartData = formatPatternData(currentPattern);
   const hourlyDistribution = generateHourlyDistribution();
-
-  return (
+  return ()
     <div className="usage-patterns">
       <Tabs defaultValue="patterns" className="w-full">
         <TabsList className="grid grid-cols-4 w-full">
@@ -320,7 +286,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
           <TabsTrigger value="journeys">User Journeys</TabsTrigger>
           <TabsTrigger value="insights">Insights</TabsTrigger>
         </TabsList>
-
         <TabsContent value="patterns" className="space-y-6">
           {/* Pattern Selection */}
           <div className="flex justify-between items-center">
@@ -336,7 +301,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
               </SelectContent>
             </Select>
           </div>
-
           {/* Pattern Overview Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
@@ -352,7 +316,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-gray-600">Change Rate</CardTitle>
@@ -363,7 +326,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-gray-600">Data Points</CardTitle>
@@ -375,7 +337,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
               </CardContent>
             </Card>
           </div>
-
           {/* Pattern Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Time Series Chart */}
@@ -406,7 +367,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
                 </div>
               </CardContent>
             </Card>
-
             {/* Hourly Distribution */}
             <Card>
               <CardHeader>
@@ -431,7 +391,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
             </Card>
           </div>
         </TabsContent>
-
         <TabsContent value="heatmap" className="space-y-6">
           <Card>
             <CardHeader>
@@ -446,15 +405,13 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
                   Heat map shows areas of high user interaction on the canvas. 
                   Brighter areas indicate more frequent interactions.
                 </div>
-                
-                {state.heatMapData.length > 0 ? (
+                {state.heatMapData.length > 0 ? ()
                   <CanvasHeatMap data={state.heatMapData} />
-                ) : (
+                ) : ()
                   <div className="h-64 flex items-center justify-center text-gray-500 border border-gray-200 rounded">
                     No interaction data available for heat map
                   </div>
                 )}
-
                 {/* Heat Map Stats */}
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
@@ -483,7 +440,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="journeys" className="space-y-6">
           <Card>
             <CardHeader>
@@ -497,12 +453,10 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
                 <div className="text-sm text-gray-600">
                   Most common user flows through the application, showing how users navigate between different actions.
                 </div>
-                
                 <UserJourneyFlow journeyData={state.journeyFlows} />
               </div>
             </CardContent>
           </Card>
-
           {/* Journey Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
@@ -515,7 +469,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-gray-600">Most Common</CardTitle>
@@ -529,7 +482,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-gray-600">Avg Success Rate</CardTitle>
@@ -545,7 +497,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
             </Card>
           </div>
         </TabsContent>
-
         <TabsContent value="insights" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
@@ -563,14 +514,12 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
                       Most activity occurs between 9 AM - 11 AM and 2 PM - 4 PM
                     </div>
                   </div>
-                  
                   <div className="p-3 bg-green-50 rounded-lg">
                     <div className="font-medium text-green-900">User Flow Optimization</div>
                     <div className="text-sm text-green-700">
                       85% of users follow the standard creation → connection → execution flow
                     </div>
                   </div>
-                  
                   <div className="p-3 bg-yellow-50 rounded-lg">
                     <div className="font-medium text-yellow-900">Attention Needed</div>
                     <div className="text-sm text-yellow-700">
@@ -580,7 +529,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -596,14 +544,12 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
                       High interaction density in center areas suggests UI overcrowding
                     </div>
                   </div>
-                  
                   <div className="border-l-4 border-green-500 pl-4">
                     <div className="font-medium">Optimize for Peak Hours</div>
                     <div className="text-sm text-gray-600">
                       Scale resources during 9-11 AM and 2-4 PM peak periods
                     </div>
                   </div>
-                  
                   <div className="border-l-4 border-orange-500 pl-4">
                     <div className="font-medium">Improve Results Display</div>
                     <div className="text-sm text-gray-600">

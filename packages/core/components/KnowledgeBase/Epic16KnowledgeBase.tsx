@@ -5,7 +5,6 @@
  * search, article viewing, and management capabilities for Epic 16
  * Marketplace & Community features.
  */
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   KnowledgeBaseArticle,
@@ -15,7 +14,6 @@ import {
 } from '../../services/Epic16KnowledgeBaseService';
 import { KnowledgeBaseSearch } from './KnowledgeBaseSearch';
 import { KnowledgeBaseArticleViewer } from './KnowledgeBaseArticleViewer';
-
 interface Epic16KnowledgeBaseProps {
   userId: string;
   userRole: 'user' | 'creator' | 'admin';
@@ -23,7 +21,6 @@ interface Epic16KnowledgeBaseProps {
   initialArticleId?: string;
   onAnalytics?: (analytics: unknown) => void;
 }
-
 interface KnowledgeBaseState {
   currentView: 'search' | 'browse' | 'article';
   selectedArticle: KnowledgeBaseArticle | null;
@@ -35,7 +32,7 @@ interface KnowledgeBaseState {
   selectedCategory: KnowledgeCategory | null;
 }
 
-export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
+export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({)
   userId,
   userRole,
   initialView = 'search',
@@ -44,9 +41,8 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
 }) => {
   // Service initialization
   const knowledgeService = useMemo(() => new Epic16KnowledgeBaseService(), []);
-  
   // State management
-  const [kbState, setKbState] = useState<KnowledgeBaseState>({
+  const [kbState, setKbState] = useState<KnowledgeBaseState>({)
     currentView: initialView,
     selectedArticle: null,
     popularArticles: [],
@@ -54,133 +50,116 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
     loading: true,
     error: null,
     searchQuery: '',
-    selectedCategory: null
+    selectedCategory: null,
   });
-
   // Initialize knowledge base data
   useEffect(() => {
     const initializeKnowledgeBase = async () => {
       setKbState(prev => ({ ...prev, loading: true, error: null }));
-
       try {
         // Create sample articles for demonstration
         await createSampleArticles(knowledgeService);
-
         // Load popular and recent articles
-        const [popularArticles, recentArticles] = await Promise.all([
+        const [popularArticles, recentArticles] = await Promise.all([)
           knowledgeService.getPopularArticles(undefined, 6),
           knowledgeService.getRecentArticles(6)
         ]);
-
-        setKbState(prev => ({
+        setKbState(prev => ({)
           ...prev,
           popularArticles,
           recentArticles,
-          loading: false
+          loading: false,
         }));
-
         // Load initial article if specified
         if (initialArticleId) {
           const article = await knowledgeService.getArticle(initialArticleId, userId);
           if (article) {
-            setKbState(prev => ({
+            setKbState(prev => ({)
               ...prev,
               selectedArticle: article,
-              currentView: 'article'
+              currentView: 'article',
             }));
           }
         }
-
         // Set up analytics tracking
         knowledgeService.on('searchPerformed', (data) => {
-          onAnalytics?.({
+          onAnalytics?.({)
             type: 'knowledge_base_search',
             query: data.query,
             results: data.results,
-            userId: data.userId
+            userId: data.userId,
           });
         });
-
         knowledgeService.on('articleViewed', (data) => {
-          onAnalytics?.({
+          onAnalytics?.({)
             type: 'knowledge_base_article_view',
             articleId: data.articleId,
             userId: data.userId,
-            analytics: data.analytics
+            analytics: data.analytics,
           });
         });
-
       } catch (error) {
-        setKbState(prev => ({
+        setKbState(prev => ({)
           ...prev,
           error: error instanceof Error ? error.message : 'Failed to initialize knowledge base',
-          loading: false
+          loading: false,
         }));
       }
     };
-
     initializeKnowledgeBase();
-
     // Cleanup
     return () => {
       knowledgeService.removeAllListeners();
     };
   }, [knowledgeService, userId, initialArticleId, onAnalytics]);
-
   // Handle article selection
   const handleArticleSelect = useCallback(async (articleId: string) => {
     try {
       setKbState(prev => ({ ...prev, loading: true }));
-      
       const article = await knowledgeService.getArticle(articleId, userId);
       if (article) {
-        setKbState(prev => ({
+        setKbState(prev => ({)
           ...prev,
           selectedArticle: article,
           currentView: 'article',
-          loading: false
+          loading: false,
         }));
       } else {
-        setKbState(prev => ({
+        setKbState(prev => ({)
           ...prev,
           error: 'Article not found',
-          loading: false
+          loading: false,
         }));
       }
     } catch (error) {
-      setKbState(prev => ({
+      setKbState(prev => ({)
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to load article',
-        loading: false
+        loading: false,
       }));
     }
   }, [knowledgeService, userId]);
-
   // Handle search performed
   const handleSearchPerformed = useCallback((query: string, _____resultCount: number) => {
     setKbState(prev => ({ ...prev, searchQuery: query }));
   }, []);
-
   // Handle category selection
   const handleCategorySelect = useCallback((category: KnowledgeCategory) => {
     setKbState(prev => ({ ...prev, selectedCategory: category, currentView: 'browse' }));
   }, []);
-
   // Handle back to search
   const handleBackToSearch = useCallback(() => {
-    setKbState(prev => ({
+    setKbState(prev => ({)
       ...prev,
       currentView: 'search',
       selectedArticle: null,
-      selectedCategory: null
+      selectedCategory: null,
     }));
   }, []);
-
   // Format category name
   const formatCategoryName = useCallback((category: string) => {
     return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   }, []);
-
   // Get category icon
   const getCategoryIcon = useCallback((category: KnowledgeCategory) => {
     const icons: Record<KnowledgeCategory, string> = {
@@ -202,10 +181,9 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
     };
     return icons[category] || '📄';
   }, []);
-
   // Render loading state
   if (kbState.loading && !kbState.selectedArticle) {
-    return (
+    return ()
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -214,10 +192,9 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
       </div>
     );
   }
-
   // Render error state
   if (kbState.error && !kbState.selectedArticle) {
-    return (
+    return ()
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <div className="flex-shrink-0">
@@ -243,10 +220,9 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="epic16-knowledge-base h-full">
-      {kbState.currentView === 'search' && (
+      {kbState.currentView === 'search' && ()
         <div>
           <KnowledgeBaseSearch
             knowledgeService={knowledgeService}
@@ -254,14 +230,13 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
             onArticleSelect={handleArticleSelect}
             onSearchPerformed={handleSearchPerformed}
           />
-
           {/* Featured Content */}
           <div className="max-w-6xl mx-auto px-6 py-12">
             {/* Browse by Category */}
             <div className="mb-12">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Browse by Category</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                {Object.values(KnowledgeCategory).map(category => (
+                {Object.values(KnowledgeCategory).map(category => ()
                   <button
                     key={category}
                     onClick={() => handleCategorySelect(category)}
@@ -275,7 +250,6 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
                 ))}
               </div>
             </div>
-
             {/* Popular Articles */}
             <div className="mb-12">
               <div className="flex items-center justify-between mb-6">
@@ -287,9 +261,8 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
                   View All →
                 </button>
               </div>
-              
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {kbState.popularArticles.map(article => (
+                {kbState.popularArticles.map(article => ()
                   <div
                     key={article.id}
                     className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer"
@@ -301,24 +274,21 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
                       </span>
                       <span className="text-xs text-gray-500">{article.views} views</span>
                     </div>
-                    
                     <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
                       {article.title}
                     </h3>
-                    
                     <p className="text-gray-600 text-sm mb-4 line-clamp-3">
                       {article.excerpt || article.content.substring(0, 150) + '...'}
                     </p>
-                    
                     <div className="flex items-center justify-between text-sm text-gray-500">
                       <span>{article.estimatedReadTime} min read</span>
                       <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
+                        {[...Array(5)].map((_, i) => ()
                           <svg
                             key={i}
                             className={`w-4 h-4 ${
-                              i < Math.round(
-                                article.ratings.reduce((sum,
+                              i < Math.round()
+                                article.ratings.reduce((sum,)
                                 r
                               ) => sum + r.rating, 0) / article.ratings.length || 0)
                                 ? 'text-yellow-400'
@@ -336,12 +306,11 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
                 ))}
               </div>
             </div>
-
             {/* Recent Articles */}
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Recently Updated</h2>
               <div className="space-y-4">
-                {kbState.recentArticles.map(article => (
+                {kbState.recentArticles.map(article => ()
                   <div
                     key={article.id}
                     className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
@@ -366,15 +335,14 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
                           <span>Updated {new Date(article.lastUpdated).toLocaleDateString()}</span>
                         </div>
                       </div>
-                      
                       <div className="text-right">
                         <div className="flex items-center mb-1">
-                          {[...Array(5)].map((_, i) => (
+                          {[...Array(5)].map((_, i) => ()
                             <svg
                               key={i}
                               className={`w-4 h-4 ${
-                                i < Math.round(
-                                  article.ratings.reduce((sum,
+                                i < Math.round()
+                                  article.ratings.reduce((sum,)
                                   r
                                 ) => sum + r.rating, 0) / article.ratings.length || 0)
                                   ? 'text-yellow-400'
@@ -397,8 +365,7 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
           </div>
         </div>
       )}
-
-      {kbState.currentView === 'article' && kbState.selectedArticle && (
+      {kbState.currentView === 'article' && kbState.selectedArticle && ()
         <KnowledgeBaseArticleViewer
           article={kbState.selectedArticle}
           knowledgeService={knowledgeService}
@@ -407,14 +374,13 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
           onClose={handleBackToSearch}
         />
       )}
-
-      {kbState.currentView === 'browse' && (
+      {kbState.currentView === 'browse' && ()
         <div className="max-w-6xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
                 {kbState.selectedCategory 
-                  ? `${formatCategoryName(kbState.selectedCategory)} Articles`
+                  ? `${formatCategoryName(kbState.selectedCategory)} Articles`}
                   : 'Browse All Articles'
                 }
               </h1>
@@ -422,7 +388,6 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
                 Find comprehensive guides, tutorials, and documentation
               </p>
             </div>
-            
             <button
               onClick={handleBackToSearch}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200"
@@ -430,13 +395,12 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
               Back to Search
             </button>
           </div>
-
           {/* Articles grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(kbState.selectedCategory 
+            {(kbState.selectedCategory )
               ? [...kbState.popularArticles, ...kbState.recentArticles].filter(article => article.category === kbState.selectedCategory)
               : [...kbState.popularArticles, ...kbState.recentArticles]
-            ).map(article => (
+            ).map(article => ()
               <div
                 key={article.id}
                 className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer"
@@ -448,24 +412,21 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
                   </span>
                   <span className="text-xs text-gray-500">{article.views} views</span>
                 </div>
-                
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
                   {article.title}
                 </h3>
-                
                 <p className="text-gray-600 text-sm mb-4 line-clamp-3">
                   {article.excerpt || article.content.substring(0, 150) + '...'}
                 </p>
-                
                 <div className="flex items-center justify-between text-sm text-gray-500">
                   <span>{article.estimatedReadTime} min read</span>
                   <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
+                    {[...Array(5)].map((_, i) => ()
                       <svg
                         key={i}
                         className={`w-4 h-4 ${
-                          i < Math.round(
-                            article.ratings.reduce((sum,
+                          i < Math.round()
+                            article.ratings.reduce((sum,)
                             r
                           ) => sum + r.rating, 0) / article.ratings.length || 0)
                             ? 'text-yellow-400'
@@ -490,7 +451,7 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
 
 // Helper function to create sample articles
 async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService) {
-  const sampleArticles = [
+  const sampleArticles = [;
     {
       title: 'Getting Started with the Marketplace',
       slug: 'getting-started-marketplace',
@@ -501,7 +462,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       type: ArticleType.GUIDE,
       tags: ['marketplace', 'getting-started', 'beginner'],
       keywords: ['marketplace', 'templates', 'buying', 'selling'],
-      sections: [
+      sections: [,
         {
           id: 'section-1',
           title: 'Creating Your Account',
@@ -533,7 +494,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       lastUpdated: new Date(),
       status: 'published',
       views: 1250,
-      ratings: [
+      ratings: [,
         { userId: 'user-1', rating: 5, helpful: true, timestamp: new Date() },
         { userId: 'user-2', rating: 4, helpful: true, timestamp: new Date() }
       ],
@@ -550,7 +511,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       interactiveElements: [],
       codeExamples: [],
       videos: [],
-      images: []
+      images: [],
     },
     {
       title: 'How to Create and Sell Templates',
@@ -562,7 +523,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       type: ArticleType.TUTORIAL,
       tags: ['templates', 'creation', 'selling', 'design'],
       keywords: ['template', 'design', 'creation', 'selling', 'marketplace'],
-      sections: [
+      sections: [,
         {
           id: 'section-1',
           title: 'Design Principles',
@@ -594,7 +555,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       lastUpdated: new Date(),
       status: 'published',
       views: 890,
-      ratings: [
+      ratings: [,
         { userId: 'user-3', rating: 5, helpful: true, timestamp: new Date() },
         { userId: 'user-4', rating: 4, helpful: true, timestamp: new Date() },
         { userId: 'user-5', rating: 5, helpful: true, timestamp: new Date() }
@@ -610,21 +571,20 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       language: 'en',
       translations: {},
       interactiveElements: [],
-      codeExamples: [
+      codeExamples: [,
         {
           id: 'code-1',
           language: 'javascript',
           title: 'Template Validation',
           description: 'Basic validation for template files',
           code: 'function validateTemplate(template) {\n  return template.name && template.files.length > 0;\n}',
-          runnable: false
+          runnable: false,
         }
       ],
       videos: [],
-      images: []
+      images: [],
     }
   ];
-
   for (const articleData of sampleArticles) {
     await knowledgeService.createArticle(articleData);
   }

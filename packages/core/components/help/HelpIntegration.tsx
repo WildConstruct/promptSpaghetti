@@ -1,32 +1,28 @@
 // packages/core/components/Help/HelpIntegration.tsx
 // Help Integration Components for Story 8.4 Task 4
 // Provides easy integration of contextual help with existing components
-
 import React from 'react';
 import { ContextualTooltip, HelpContent } from './ContextualHelpSystem';
 import { useHelpSystem, useFieldHelp } from './HelpContentManager';
 import { useUISettingsStore } from '../../stores/uiSettingsStore';
 
 // HOC for adding help to any component
-export function withHelp<P extends object>(
+export function withHelp<P extends object>()
   WrappedComponent: React.ComponentType<P>,
-  helpContent: HelpContent
+  helpContent: HelpContent,
 ) {
   const WithHelpComponent = (props: P) => {
     const { showHelpHints } = useHelpSystem();
-    
     if (!showHelpHints) {
       return <WrappedComponent {...props} />;
     }
-    
-    return (
+    return ()
       <ContextualTooltip content={helpContent}>
         <WrappedComponent {...props} />
       </ContextualTooltip>
     );
   };
-  
-  WithHelpComponent.displayName = `withHelp(${WrappedComponent.displayName || WrappedComponent.name})`;
+  WithHelpComponent.displayName = `withHelp(${WrappedComponent.displayName || WrappedComponent.name})`;}
   return WithHelpComponent;
 }
 
@@ -42,7 +38,7 @@ export interface HelpfulInputProps extends React.InputHTMLAttributes<HTMLInputEl
   error?: string;
 }
 
-export const HelpfulInput: React.FC<HelpfulInputProps> = ({
+export const HelpfulInput: React.FC<HelpfulInputProps> = ({)
   helpId,
   helpTitle,
   helpDescription,
@@ -57,8 +53,7 @@ export const HelpfulInput: React.FC<HelpfulInputProps> = ({
 }) => {
   const { complexityLevel } = useUISettingsStore();
   const { showHelpHints } = useHelpSystem();
-  
-  const helpContent = useFieldHelp(helpId, {
+  const helpContent = useFieldHelp(helpId, {)
     title: helpTitle,
     description: helpDescription,
     category: helpCategory,
@@ -69,10 +64,9 @@ export const HelpfulInput: React.FC<HelpfulInputProps> = ({
     shortcut: helpShortcut,
     priority: helpCategory === 'basic' ? 'high' : 'medium'
   });
-
-  const inputElement = (
+  const inputElement = (;)
     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, ...style }}>
-      {label && (
+      {label && ()
         <label
           htmlFor={helpId}
           style={{
@@ -81,19 +75,18 @@ export const HelpfulInput: React.FC<HelpfulInputProps> = ({
             color: '#e2e8f0',
             display: 'flex',
             alignItems: 'center',
-            gap: 4
+            gap: 4,
           }}
         >
           {label}
-          {helpCategory === 'advanced' && (
+          {helpCategory === 'advanced' && ()
             <span style={{ fontSize: 10, color: '#4299e1' }}>⚙️</span>
           )}
-          {helpCategory === 'debug' && (
+          {helpCategory === 'debug' && ()
             <span style={{ fontSize: 10, color: '#9f7aea' }}>🔧</span>
           )}
         </label>
       )}
-      
       <input
         id={helpId}
         className={`helpful-input ${className}`}
@@ -110,26 +103,23 @@ export const HelpfulInput: React.FC<HelpfulInputProps> = ({
         }}
         {...inputProps}
       />
-      
-      {error && (
+      {error && ()
         <div style={{
           fontSize: 10,
           color: '#e53e3e',
           display: 'flex',
           alignItems: 'center',
-          gap: 4
+          gap: 4,
         }}>
           ⚠️ {error}
         </div>
       )}
     </div>
   );
-
   if (!showHelpHints || !helpContent) {
     return inputElement;
   }
-
-  return (
+  return ()
     <ContextualTooltip content={helpContent}>
       {inputElement}
     </ContextualTooltip>
@@ -148,7 +138,7 @@ export interface HelpfulButtonProps extends React.ButtonHTMLAttributes<HTMLButto
   size?: 'small' | 'medium' | 'large';
 }
 
-export const HelpfulButton: React.FC<HelpfulButtonProps> = ({
+export const HelpfulButton: React.FC<HelpfulButtonProps> = ({)
   helpId,
   helpTitle,
   helpDescription,
@@ -164,8 +154,7 @@ export const HelpfulButton: React.FC<HelpfulButtonProps> = ({
 }) => {
   const { complexityLevel } = useUISettingsStore();
   const { showHelpHints } = useHelpSystem();
-  
-  const helpContent = useFieldHelp(helpId, {
+  const helpContent = useFieldHelp(helpId, {)
     title: helpTitle,
     description: helpDescription,
     category: helpCategory,
@@ -176,20 +165,17 @@ export const HelpfulButton: React.FC<HelpfulButtonProps> = ({
     shortcut: helpShortcut,
     priority: helpCategory === 'basic' ? 'high' : 'medium'
   });
-
   const getButtonStyles = () => {
     const sizeStyles = {
       small: { padding: '4px 8px', fontSize: 10 },
       medium: { padding: '6px 12px', fontSize: 12 },
       large: { padding: '8px 16px', fontSize: 14 }
     };
-
     const variantStyles = {
       primary: { background: '#4299e1', color: 'white' },
       secondary: { background: '#4a5568', color: '#e2e8f0' },
       danger: { background: '#e53e3e', color: 'white' }
     };
-
     return {
       border: 'none',
       borderRadius: 4,
@@ -200,8 +186,7 @@ export const HelpfulButton: React.FC<HelpfulButtonProps> = ({
       ...variantStyles[variant]
     };
   };
-
-  const buttonElement = (
+  const buttonElement = (;)
     <button
       className={`helpful-button ${className}`}
       style={{
@@ -213,12 +198,10 @@ export const HelpfulButton: React.FC<HelpfulButtonProps> = ({
       {children}
     </button>
   );
-
   if (!showHelpHints || !helpContent) {
     return buttonElement;
   }
-
-  return (
+  return ()
     <ContextualTooltip content={helpContent}>
       {buttonElement}
     </ContextualTooltip>
@@ -240,7 +223,7 @@ export interface HelpfulSectionProps {
   style?: React.CSSProperties;
 }
 
-export const HelpfulSection: React.FC<HelpfulSectionProps> = ({
+export const HelpfulSection: React.FC<HelpfulSectionProps> = ({)
   helpId,
   helpTitle,
   helpDescription,
@@ -256,8 +239,7 @@ export const HelpfulSection: React.FC<HelpfulSectionProps> = ({
   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
   const { complexityLevel } = useUISettingsStore();
   const { showHelpHints } = useHelpSystem();
-  
-  const helpContent = useFieldHelp(helpId, {
+  const helpContent = useFieldHelp(helpId, {)
     title: helpTitle,
     description: helpDescription,
     category: helpCategory,
@@ -267,8 +249,7 @@ export const HelpfulSection: React.FC<HelpfulSectionProps> = ({
     examples: helpExamples,
     priority: helpCategory === 'basic' ? 'high' : 'medium'
   });
-
-  const headerElement = (
+  const headerElement = (;)
     <div
       style={{
         display: 'flex',
@@ -285,24 +266,23 @@ export const HelpfulSection: React.FC<HelpfulSectionProps> = ({
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        gap: 8
+        gap: 8,
       }}>
         <span style={{
           fontSize: 12,
           fontWeight: 600,
-          color: '#e2e8f0'
+          color: '#e2e8f0',
         }}>
           {title}
         </span>
-        {helpCategory === 'advanced' && (
+        {helpCategory === 'advanced' && ()
           <span style={{ fontSize: 10, color: '#4299e1' }}>⚙️</span>
         )}
-        {helpCategory === 'debug' && (
+        {helpCategory === 'debug' && ()
           <span style={{ fontSize: 10, color: '#9f7aea' }}>🔧</span>
         )}
       </div>
-      
-      {collapsible && (
+      {collapsible && ()
         <span style={{
           fontSize: 10,
           color: '#a0aec0',
@@ -314,21 +294,19 @@ export const HelpfulSection: React.FC<HelpfulSectionProps> = ({
       )}
     </div>
   );
-
-  const sectionElement = (
+  const sectionElement = (;)
     <div
       className={`helpful-section ${className}`}
       style={style}
     >
-      {showHelpHints && helpContent ? (
+      {showHelpHints && helpContent ? ()
         <ContextualTooltip content={helpContent}>
           {headerElement}
         </ContextualTooltip>
-      ) : (
+      ) : ()
         headerElement
       )}
-      
-      {(!collapsible || isExpanded) && (
+      {(!collapsible || isExpanded) && ()
         <div style={{
           padding: 12,
           background: '#1a202c',
@@ -341,28 +319,23 @@ export const HelpfulSection: React.FC<HelpfulSectionProps> = ({
       )}
     </div>
   );
-
   return sectionElement;
 };
 
 // Hook for adding help to any existing component
 export const useContextualHelp = (helpContent: HelpContent) => {
   const { showHelpHints, addHelpContent } = useHelpSystem();
-  
   React.useEffect(() => {
     addHelpContent(helpContent);
   }, [helpContent.id]);
-  
   const wrapWithHelp = (element: React.ReactElement) => {
     if (!showHelpHints) return element;
-    
-    return (
+    return ()
       <ContextualTooltip content={helpContent}>
         {element}
       </ContextualTooltip>
     );
   };
-  
   return { wrapWithHelp, showHelp: showHelpHints };
 };
 
@@ -372,8 +345,7 @@ export const OnboardingOverlay: React.FC<{
   children: React.ReactNode;
 }> = ({ isActive, children }) => {
   if (!isActive) return <>{children}</>;
-  
-  return (
+  return ()
     <div style={{ position: 'relative' }}>
       {/* Backdrop */}
       <div
@@ -388,7 +360,6 @@ export const OnboardingOverlay: React.FC<{
           pointerEvents: isActive ? 'all' : 'none'
         }}
       />
-      
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 1600 }}>
         {children}

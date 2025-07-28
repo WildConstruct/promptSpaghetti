@@ -4,13 +4,12 @@
  * 
  * Primary hook for accessing graph editor state
  */
-
 import { useCallback } from 'react';
 import { useGraphEditorStore } from '../stores/graphEditorStore';
 import { Graph, GraphEditorState } from '../types/GraphTypes';
 
 export const useGraphState = () => {
-  const state = useGraphEditorStore((store) => ({
+  const state = useGraphEditorStore((store) => ({)
     graph: store.graph,
     selectedNodeIds: store.selectedNodeIds,
     draggedNodeId: store.draggedNodeId,
@@ -20,37 +19,30 @@ export const useGraphState = () => {
     previewSeeds: store.previewSeeds,
     autosaveEnabled: store.autosaveEnabled,
     isDirty: store.isDirty,
-    config: store.config
+    config: store.config,
   }));
-
-  const actions = useGraphEditorStore((store) => ({
+  const actions = useGraphEditorStore((store) => ({)
     setGraph: store.setGraph,
     updateGraph: store.updateGraph,
     setDirty: store.setDirty,
     resetState: store.resetState,
-    updateConfig: store.updateConfig
+    updateConfig: store.updateConfig,
   }));
-
   const setGraph = useCallback((graph: Graph) => {
     actions.setGraph(graph);
   }, [actions]);
-
   const updateGraph = useCallback((updater: (graph: Graph) => Graph) => {
     actions.updateGraph(updater);
   }, [actions]);
-
   const markDirty = useCallback(() => {
     actions.setDirty(true);
   }, [actions]);
-
   const markClean = useCallback(() => {
     actions.setDirty(false);
   }, [actions]);
-
   return {
     // State
     ...state,
-    
     // Actions
     setGraph,
     updateGraph,
@@ -58,7 +50,6 @@ export const useGraphState = () => {
     markClean,
     resetState: actions.resetState,
     updateConfig: actions.updateConfig,
-    
     // Computed properties
     hasNodes: state.graph.nodes.length > 0,
     hasEdges: state.graph.edges.length > 0,

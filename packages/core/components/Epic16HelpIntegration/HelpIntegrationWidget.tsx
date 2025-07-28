@@ -5,7 +5,6 @@
  * Main help integration widget that provides contextual help for Epic 16
  * marketplace features with seamless transitions to Epic 8 graph editor help.
  */
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { 
   HelpCircle, 
@@ -35,12 +34,10 @@ export interface HelpIntegrationProps {
   templateId?: string;
   userId: string;
   userRole: 'buyer' | 'seller' | 'admin';
-  
   // Integration callbacks
   onTransitionToSystem?: (system: 'graph-editor' | 'marketplace') => void;
   onEscalateToSupport?: (reason: string, description: string) => void;
   onSessionUpdate?: (updates: Record<string, any>) => void;
-  
   // Customization
   theme?: 'light' | 'dark' | 'auto';
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'floating';
@@ -55,7 +52,7 @@ export interface HelpSession {
   totalSteps: number;
   content: HelpContent[];
   startTime: Date;
-  userProgress: {
+  userProgress: {,
     completedActions: string[];
     skippedContent: string[];
     ratings: Record<string, number>;
@@ -75,7 +72,7 @@ export interface TransitionContext {
 // Help Integration Widget Component
 // =============================================================================
 
-export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
+export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   currentSystem,
   currentView,
   templateId,
@@ -97,28 +94,23 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
   const [transitionContext, setTransitionContext] = useState<TransitionContext | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
   // UI state
   const [activeContentId, setActiveContentId] = useState<string | null>(null);
   const [showEscalation, setShowEscalation] = useState(false);
   const [escalationReason, setEscalationReason] = useState('');
   const [escalationDescription, setEscalationDescription] = useState('');
-  
   // Refs for DOM interaction
   const widgetRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-
   // =============================================================================
   // Effect Hooks and Lifecycle
   // =============================================================================
-
   // Initialize help session when context changes
   useEffect(() => {
     if (!hidden && (currentView || templateId)) {
       initializeHelpSession();
     }
   }, [currentSystem, currentView, templateId, userId, userRole]);
-
   // Handle transitions between systems
   useEffect(() => {
     if (transitionContext && transitionContext.bridgeContent) {
@@ -126,30 +118,26 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
       setTransitionContext(null);
     }
   }, [transitionContext]);
-
   // =============================================================================
   // Core Help Integration Methods
   // =============================================================================
-
   const initializeHelpSession = useCallback(async () => {
     setIsLoading(true);
     setError(null);
-
     try {
       // Determine session type based on current context
       const sessionType = determineSessionType(currentView, templateId, userRole);
-      
       // Request contextual help from API
-      const response = await fetch('/api/help-integration/contextual-help', {
+      const response = await fetch('/api/help-integration/contextual-help', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getAuthToken()}`
+          'Authorization': `Bearer ${getAuthToken()}`}
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           userId,
           sessionType,
-          context: {
+          context: {,
             currentView,
             templateId,
             userRole,
@@ -160,33 +148,30 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
               userRole
             } : undefined,
             graphContext: currentSystem === 'graph-editor' ? {
-              isEditing: true
+              isEditing: true,
             } : undefined
           }
         })
       });
-
       if (!response.ok) {
         throw new Error('Failed to load help content');
       }
-
       const data = await response.json();
-      
       if (data.success) {
         setHelpContent(data.content);
-        setCurrentSession({
+        setCurrentSession({)
           id: data.sessionId,
           sessionType,
           currentStep: 0,
           totalSteps: data.content.length,
           content: data.content,
           startTime: new Date(),
-          userProgress: {
+          userProgress: {,
             completedActions: [],
             skippedContent: [],
             ratings: {}
           },
-          escalationLevel: 0
+          escalationLevel: 0,
         });
       } else {
         throw new Error(data.error || 'Failed to initialize help session');
@@ -198,44 +183,39 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
       setIsLoading(false);
     }
   }, [currentView, templateId, userId, userRole, currentSystem]);
-
   const handleSystemTransition = useCallback(async (toSystem: 'graph-editor' | 'marketplace') => {
     if (!currentSession) return;
-
     try {
-      const response = await fetch('/api/help-integration/system-transition', {
+      const response = await fetch('/api/help-integration/system-transition', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getAuthToken()}`
+          'Authorization': `Bearer ${getAuthToken()}`}
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           userId,
           fromSystem: currentSystem,
           toSystem,
           preserveHelp: true,
           currentSessionId: currentSession.id,
-          transitionData: {
+          transitionData: {,
             currentStep: currentSession.currentStep,
             templateId,
             currentView
           }
         })
       });
-
       if (response.ok) {
         const data = await response.json();
-        
         if (data.bridgeContent) {
-          setTransitionContext({
+          setTransitionContext({)
             fromSystem: currentSystem,
             toSystem,
             reason: 'user-navigation',
             preserveHelp: true,
-            bridgeContent: data.bridgeContent
+            bridgeContent: data.bridgeContent,
           });
         }
-
         // Notify parent component of transition
         onTransitionToSystem?.(toSystem);
       }
@@ -243,23 +223,20 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
       console.error('Failed to handle system transition:', error);
     }
   }, [currentSession, currentSystem, userId, templateId, currentView, onTransitionToSystem]);
-
-  const handleContentInteraction = useCallback(async (
+  const handleContentInteraction = useCallback(async (;)
     contentId: string, 
     interactionType: 'viewed' | 'completed' | 'skipped' | 'rated',
     data?: Record<string, unknown>
   ) => {
     if (!currentSession) return;
-
     try {
       // Update local session state
       const updatedSession = { ...currentSession };
-      
       switch (interactionType) {
       case 'completed':
         if (!updatedSession.userProgress.completedActions.includes(contentId)) {
           updatedSession.userProgress.completedActions.push(contentId);
-          updatedSession.currentStep = Math.min(
+          updatedSession.currentStep = Math.min()
             updatedSession.currentStep + 1, 
             updatedSession.totalSteps
           );
@@ -276,80 +253,70 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
         }
         break;
       }
-
       setCurrentSession(updatedSession);
-
       // Update session via API
-      await fetch(`/api/help-integration/session/${currentSession.id}`, {
+      await fetch(`/api/help-integration/session/${currentSession.id}`, {)}
         method: 'PUT',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getAuthToken()}`
+          'Authorization': `Bearer ${getAuthToken()}`}
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           currentStep: updatedSession.currentStep,
           completedActions: updatedSession.userProgress.completedActions,
           skippedContent: updatedSession.userProgress.skippedContent,
           ...(data?.rating && { feedbackRating: data.rating })
         })
       });
-
       // Notify parent component
       onSessionUpdate?.(updatedSession.userProgress);
     } catch (error) {
       console.error('Failed to update content interaction:', error);
     }
   }, [currentSession, onSessionUpdate]);
-
   const handleSupportEscalation = useCallback(async () => {
     if (!currentSession || !escalationReason.trim() || !escalationDescription.trim()) {
       return;
     }
-
     try {
-      const response = await fetch('/api/help-integration/escalate-to-support', {
+      const response = await fetch('/api/help-integration/escalate-to-support', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getAuthToken()}`
+          'Authorization': `Bearer ${getAuthToken()}`}
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           sessionId: currentSession.id,
           userId,
           escalationReason,
           userDescription: escalationDescription,
           priority: 'medium',
-          additionalContext: {
+          additionalContext: {,
             currentView,
             templateId,
-            systemState: {
+            systemState: {,
               currentSystem,
               userRole,
-              sessionProgress: currentSession.userProgress
+              sessionProgress: currentSession.userProgress,
             }
           }
         })
       });
-
       if (response.ok) {
         const data = await response.json();
-        
         // Update session with escalation info
-        setCurrentSession(prev => prev ? {
+        setCurrentSession(prev => prev ? {)
           ...prev,
           escalationLevel: prev.escalationLevel + 1
         } : null);
-
         // Notify parent component
         onEscalateToSupport?.(escalationReason, escalationDescription);
-
         // Close escalation form
         setShowEscalation(false);
         setEscalationReason('');
         setEscalationDescription('');
-
         // Show success message
-        alert(`Support ticket created: ${data.ticketNumber}. Expected response: ${data.expectedResponse}`);
+        alert(`Support ticket created: ${data.ticketNumber}. Expected response: ${data.expectedResponse}`);}
       } else {
         throw new Error('Failed to escalate to support');
       }
@@ -358,23 +325,20 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
       alert('Failed to create support ticket. Please try again.');
     }
   }, [currentSession, userId, escalationReason, escalationDescription, currentView, templateId, currentSystem, userRole, onEscalateToSupport]);
-
   // =============================================================================
   // UI Rendering Methods
   // =============================================================================
-
   const renderHelpContent = () => {
     if (isLoading) {
-      return (
+      return ()
         <div className="help-loading">
           <div className="help-spinner" />
           <p>Loading contextual help...</p>
         </div>
       );
     }
-
     if (error) {
-      return (
+      return ()
         <div className="help-error">
           <AlertCircle size={24} />
           <p>{error}</p>
@@ -384,9 +348,8 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
         </div>
       );
     }
-
     if (helpContent.length === 0) {
-      return (
+      return ()
         <div className="help-empty">
           <HelpCircle size={24} />
           <p>No help content available for this context.</p>
@@ -396,10 +359,9 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
         </div>
       );
     }
-
-    return (
+    return ()
       <div className="help-content-list">
-        {helpContent.map((content, index) => (
+        {helpContent.map((content, index) => ()
           <HelpContentCard
             key={content.id}
             content={content}
@@ -419,11 +381,9 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
       </div>
     );
   };
-
   const renderTransitionPrompt = () => {
     if (!transitionContext || currentSystem === 'graph-editor') return null;
-
-    return (
+    return ()
       <div className="help-transition-prompt">
         <div className="transition-header">
           <ArrowRight size={16} />
@@ -439,11 +399,9 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
       </div>
     );
   };
-
   const renderEscalationForm = () => {
     if (!showEscalation) return null;
-
-    return (
+    return ()
       <div className="help-escalation-form">
         <div className="escalation-header">
           <MessageCircle size={20} />
@@ -455,7 +413,6 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
             <X size={16} />
           </button>
         </div>
-        
         <div className="escalation-content">
           <div className="form-group">
             <label>What do you need help with?</label>
@@ -473,7 +430,6 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
               <option value="other">Other</option>
             </select>
           </div>
-          
           <div className="form-group">
             <label>Please describe your issue:</label>
             <textarea
@@ -483,7 +439,6 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
               rows={4}
             />
           </div>
-          
           <div className="escalation-actions">
             <button 
               onClick={() => setShowEscalation(false)}
@@ -503,13 +458,10 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
       </div>
     );
   };
-
   const renderProgressIndicator = () => {
     if (!currentSession || currentSession.totalSteps === 0) return null;
-
     const progress = (currentSession.currentStep / currentSession.totalSteps) * 100;
-
-    return (
+    return ()
       <div className="help-progress">
         <div className="progress-bar">
           <div 
@@ -523,34 +475,30 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
       </div>
     );
   };
-
   // =============================================================================
   // Main Render
   // =============================================================================
-
   if (hidden) return null;
-
-  return (
+  return ()
     <div 
       ref={widgetRef}
       className={`help-integration-widget ${theme} ${position} ${minimized ? 'minimized' : ''} ${isOpen ? 'open' : ''}`}
     >
       {/* Widget trigger button */}
-      {!isOpen && (
+      {!isOpen && ()
         <button 
           className="help-trigger"
           onClick={() => setIsOpen(true)}
           title="Get contextual help"
         >
           <HelpCircle size={24} />
-          {currentSession && currentSession.escalationLevel > 0 && (
+          {currentSession && currentSession.escalationLevel > 0 && ()
             <div className="escalation-indicator" />
           )}
         </button>
       )}
-
       {/* Main help panel */}
-      {isOpen && (
+      {isOpen && ()
         <div className="help-panel" ref={contentRef}>
           {/* Header */}
           <div className="help-header">
@@ -559,7 +507,6 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
               <h2>Help & Guidance</h2>
               <span className="system-indicator">{currentSystem}</span>
             </div>
-            
             <div className="header-actions">
               <button 
                 onClick={() => setMinimized(!minimized)}
@@ -577,18 +524,15 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
               </button>
             </div>
           </div>
-
-          {!minimized && (
+          {!minimized && ()
             <>
               {/* Progress indicator */}
               {renderProgressIndicator()}
-
               {/* Help content area */}
               <div className="help-body">
                 {renderHelpContent()}
                 {renderTransitionPrompt()}
               </div>
-
               {/* Footer actions */}
               <div className="help-footer">
                 <button 
@@ -598,8 +542,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
                   <MessageCircle size={16} />
                   Need more help?
                 </button>
-                
-                {currentSystem === 'marketplace' && (
+                {currentSystem === 'marketplace' && ()
                   <button 
                     onClick={() => handleSystemTransition('graph-editor')}
                     className="transition-button"
@@ -611,7 +554,6 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
               </div>
             </>
           )}
-
           {/* Escalation overlay */}
           {renderEscalationForm()}
         </div>
@@ -623,7 +565,6 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
 // =============================================================================
 // Helper Components
 // =============================================================================
-
 interface HelpContentCardProps {
   content: HelpContent;
   isActive: boolean;
@@ -635,8 +576,7 @@ interface HelpContentCardProps {
   onSkip: () => void;
   onRate: (rating: number) => void;
 }
-
-const HelpContentCard: React.FC<HelpContentCardProps> = ({
+const HelpContentCard: React.FC<HelpContentCardProps> = ({)
   content,
   isActive,
   isCompleted,
@@ -649,8 +589,7 @@ const HelpContentCard: React.FC<HelpContentCardProps> = ({
 }) => {
   const [rating, setRating] = useState(0);
   const [_____showActions, _____setShowActions] = useState(false);
-
-  return (
+  return ()
     <div 
       className={`help-content-card ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}
       onClick={onView}
@@ -665,26 +604,22 @@ const HelpContentCard: React.FC<HelpContentCardProps> = ({
           <span>{Math.ceil((content as any).estimatedTime / 60)} min</span>
         </div>
       </div>
-      
       <div className="content-body">
         <p>{content.content}</p>
-        
-        {content.filmTerminology && (
+        {content.filmTerminology && ()
           <div className="film-terminology">
             <strong>Film industry context:</strong> {content.filmTerminology}
           </div>
         )}
-        
-        {content.actionItems && content.actionItems.length > 0 && (
+        {content.actionItems && content.actionItems.length > 0 && ()
           <ul className="action-items">
-            {content.actionItems.map((item, index) => (
+            {content.actionItems.map((item, index) => ()
               <li key={index}>{item}</li>
             ))}
           </ul>
         )}
       </div>
-      
-      {isActive && (
+      {isActive && ()
         <div className="content-actions">
           <button onClick={onComplete} className="complete-button">
             Mark Complete
@@ -692,10 +627,9 @@ const HelpContentCard: React.FC<HelpContentCardProps> = ({
           <button onClick={onSkip} className="skip-button">
             Skip
           </button>
-          
           <div className="rating-section">
             <span>Helpful?</span>
-            {[1, 2, 3, 4, 5].map((star) => (
+            {[1, 2, 3, 4, 5].map((star) => ()
               <button
                 key={star}
                 onClick={() => {
@@ -717,8 +651,7 @@ const HelpContentCard: React.FC<HelpContentCardProps> = ({
 // =============================================================================
 // Utility Functions
 // =============================================================================
-
-function determineSessionType(
+function determineSessionType()
   currentView: string, 
   templateId?: string, 
   userRole: string = 'buyer'
@@ -740,7 +673,6 @@ function determineSessionType(
   }
   return 'feature-discovery';
 }
-
 function getAuthToken(): string {
   // Implementation would get JWT token from app state or localStorage
   return localStorage.getItem('authToken') || '';

@@ -57,7 +57,7 @@ export declare class CanvasOptimizer {
     /**
      * Optimize node visibility based on viewport
      */
-    optimizeNodeVisibility(nodes: Node[], viewport: Viewport, canvasSize: {
+    optimizeNodeVisibility(nodes: Node[], viewport: Viewport, canvasSize: {)
         width: number;
         height: number;
     }): Node[];

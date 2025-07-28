@@ -28,14 +28,14 @@ export declare class SettingsManager {
     /**
      * Update settings with validation
      */
-    updateSettings(
+    updateSettings()
       newSettings: Partial<AdvancedSettings>,
       source?: 'user' | 'system' | 'import'
     ): SettingsValidationResult;
     /**
      * Update specific setting
      */
-    updateSetting<K extends keyof AdvancedSettings>(
+    updateSetting<K extends keyof AdvancedSettings>()
       key: K,
       value: AdvancedSettings[K],
       source?: 'user' | 'system' | 'import'

@@ -86,7 +86,7 @@ export interface SecurityEventStats {
     eventsBySeverity: Record<SecuritySeverity, number>;
     blockedOperations: number;
     uniqueExpressions: number;
-    topBlockedPatterns: Array<{
+    topBlockedPatterns: Array<{,
         pattern: string;
         count: number;
     }>;
@@ -121,7 +121,7 @@ export declare class SecurityAuditLogger {
     /**
      * Log a security event
      */
-    logEvent(
+    logEvent()
       severity: SecuritySeverity,
       category: SecurityEventCategory,
       message: string,
@@ -139,7 +139,7 @@ export declare class SecurityAuditLogger {
     /**
      * Get all events
      */
-    getEvents(filter?: {
+    getEvents(filter?: {)
         severity?: SecuritySeverity;
         category?: SecurityEventCategory;
         startTime?: number;
@@ -187,7 +187,7 @@ export declare const securityAudit: SecurityAuditLogger;
 /**
  * Decorator for automatic security logging
  */
-export declare function auditSecurityEvent(
+export declare function auditSecurityEvent()
   severity?: SecuritySeverity,
   category?: SecurityEventCategory
 ): MethodDecorator;

@@ -29,19 +29,19 @@ export interface SecurityEvent {
     source: string;
     userId?: string;
     sessionId?: string;
-    input: {
+    input: {,
         raw: string;
         sanitized?: string;
         size: number;
         type: string;
     };
-    analysis: {
+    analysis: {,
         riskScore: number;
         threatsDetected: string[];
         confidence: number;
         validationResult: boolean;
     };
-    context: {
+    context: {,
         userAgent?: string;
         ipAddress?: string;
         endpoint?: string;
@@ -52,7 +52,7 @@ export interface SecurityEvent {
 export interface AlertConfig {
     enabled: boolean;
     severityThreshold: SecurityEventSeverity;
-    rateThreshold: {
+    rateThreshold: {,
         events: number;
         timeWindowMs: number;
     };
@@ -68,11 +68,11 @@ export interface SecurityMonitoringStats {
     eventsByType: Record<SecurityEventType, number>;
     eventsBySeverity: Record<SecurityEventSeverity, number>;
     averageRiskScore: number;
-    topThreats: Array<{
+    topThreats: Array<{,
         threat: string;
         count: number;
     }>;
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };
@@ -90,14 +90,14 @@ export declare class SecurityEventMonitor extends EventEmitter {
     /**
      * Record a security event
      */
-    recordEvent(type: SecurityEventType, severity: SecurityEventSeverity, source: string, input: {
+    recordEvent(type: SecurityEventType, severity: SecurityEventSeverity, source: string, input: {)
         raw: string;
         type: string;
     }, analysis: SecurityAnalysisResult, context?: Partial<SecurityEvent['context']>, metadata?: Record<string, any>): SecurityEvent;
     /**
      * Record validation failure event
      */
-    recordValidationFailure(
+    recordValidationFailure()
       input: string,
       inputType: string,
       source: string,
@@ -107,7 +107,7 @@ export declare class SecurityEventMonitor extends EventEmitter {
     /**
      * Record injection attempt
      */
-    recordInjectionAttempt(
+    recordInjectionAttempt()
       input: string,
       inputType: string,
       source: string,
@@ -117,7 +117,7 @@ export declare class SecurityEventMonitor extends EventEmitter {
     /**
      * Record anomalous activity
      */
-    recordAnomaly(
+    recordAnomaly()
       description: string,
       source: string,
       riskScore: number,

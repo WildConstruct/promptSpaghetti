@@ -60,7 +60,7 @@ export interface ChallengeEvent {
     difficultyLevel: DifficultyLevel;
     attemptNumber: number;
     timeToComplete: number;
-    context: {
+    context: {,
         ipAddress: string;
         userAgent: string;
         userAgentType: UserAgentType;
@@ -74,7 +74,7 @@ export interface ChallengeEvent {
                 lon: number;
             };
         };
-        browserInfo: {
+        browserInfo: {,
             name: string;
             version: string;
             platform: string;
@@ -88,12 +88,12 @@ export interface ChallengeEvent {
             latency?: number;
         };
     };
-    challengeData: {
+    challengeData: {,
         variant?: string;
         parameters: Record<string, any>;
         metadata: Record<string, any>;
     };
-    userBehavior: {
+    userBehavior: {,
         mouseMovements?: number;
         keystrokes?: number;
         clickPatterns?: Array<{
@@ -108,7 +108,7 @@ export interface ChallengeEvent {
         typingSpeed?: number;
         mouseVelocity?: number;
     };
-    fraudIndicators: {
+    fraudIndicators: {,
         riskScore: number;
         indicators: string[];
         automationDetected: boolean;
@@ -116,7 +116,7 @@ export interface ChallengeEvent {
         vpnDetected?: boolean;
         proxyDetected?: boolean;
     };
-    accessibility: {
+    accessibility: {,
         screenReaderDetected: boolean;
         highContrastMode: boolean;
         assistiveTechUsed: string[];
@@ -125,11 +125,11 @@ export interface ChallengeEvent {
 }
 export interface ChallengeStatistics {
     challengeType: ChallengeType;
-    period: {
+    period: {,
         start: Date;
         end: Date;
     };
-    metrics: {
+    metrics: {,
         totalAttempts: number;
         successRate: number;
         averageCompletionTime: number;
@@ -147,18 +147,18 @@ export interface ChallengeStatistics {
         successRate: number;
         fraudScore: number;
     }>;
-    fraudDetection: {
+    fraudDetection: {,
         botAttempts: number;
         suspiciousActivities: number;
         preventedAttacks: number;
         falsePositives: number;
     };
-    accessibility: {
+    accessibility: {,
         assistedCompletions: number;
         accommodationUsage: Record<string, number>;
         accessibilitySuccessRate: number;
     };
-    optimization: {
+    optimization: {,
         recommendedDifficulty: DifficultyLevel;
         performanceScore: number;
         userExperienceScore: number;
@@ -187,7 +187,7 @@ export interface ABTestConfig {
     id: string;
     name: string;
     challengeType: ChallengeType;
-    variants: Array<{
+    variants: Array<{,
         id: string;
         name: string;
         parameters: Record<string, any>;
@@ -202,13 +202,13 @@ export interface FraudPattern {
     id: string;
     name: string;
     description: string;
-    conditions: Array<{
+    conditions: Array<{,
         field: string;
         operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in_range';
         value: any;
     }>;
     severity: 'low' | 'medium' | 'high' | 'critical';
-    actions: Array<{
+    actions: Array<{,
         type: 'block' | 'challenge' | 'monitor' | 'flag';
         parameters: Record<string, any>;
     }>;
@@ -233,15 +233,15 @@ export declare class ChallengeTelemetryService extends EventEmitter {
     /**
      * Start tracking a challenge session
      */
-    startChallengeSession(
+    startChallengeSession()
       sessionId: string,
       challengeType: ChallengeType,
-      context: Partial<ChallengeEvent['context']>
+      context: Partial<ChallengeEvent['context']>,
     ): void;
     /**
      * Record challenge completion
      */
-    recordChallengeCompletion(
+    recordChallengeCompletion()
       sessionId: string,
       challengeId: string,
       outcome: ChallengeOutcome,
@@ -283,7 +283,7 @@ export declare class ChallengeTelemetryService extends EventEmitter {
      */
     getABTestResults(testId: string): {
         test: ABTestConfig;
-        results: Array<{
+        results: Array<{,
             variantId: string;
             variantName: string;
             sampleSize: number;
@@ -299,7 +299,7 @@ export declare class ChallengeTelemetryService extends EventEmitter {
      * Get real-time dashboard data
      */
     getDashboardData(): {
-        overview: {
+        overview: {,
             totalChallenges: number;
             successRate: number;
             averageCompletionTime: number;
@@ -307,22 +307,22 @@ export declare class ChallengeTelemetryService extends EventEmitter {
             activeABTests: number;
         };
         recentActivity: ChallengeEvent[];
-        topChallengeTypes: Array<{
+        topChallengeTypes: Array<{,
             type: ChallengeType;
             count: number;
             successRate: number;
         }>;
-        fraudAlerts: Array<{
+        fraudAlerts: Array<{,
             level: string;
             description: string;
             timestamp: Date;
         }>;
-        performanceMetrics: Array<{
+        performanceMetrics: Array<{,
             metric: string;
             value: number;
             trend: 'up' | 'down' | 'stable';
         }>;
-        geographicDistribution: Array<{
+        geographicDistribution: Array<{,
             country: string;
             attempts: number;
             successRate: number;

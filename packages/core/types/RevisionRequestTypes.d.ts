@@ -192,7 +192,7 @@ export interface RevisionRequestSearchQuery {
 export type RevisionRequestSortField = 'created_at' | 'updated_at' | 'due_date' | 'priority' | 'urgency_score' | 'complexity_score' | 'title' | 'requester_name' | 'status';
 export interface RevisionRequestSearchResults {
     requests: RevisionRequest[];
-    pagination: {
+    pagination: {,
         page: number;
         pageSize: number;
         total: number;
@@ -206,7 +206,7 @@ export interface RevisionRequestAggregations {
     priorityBreakdown: Record<RevisionRequestPriority, number>;
     typeBreakdown: Record<RevisionRequestType, number>;
     contentTypeBreakdown: Record<RevisionContentType, number>;
-    assignmentStats: {
+    assignmentStats: {,
         assigned: number;
         unassigned: number;
         overdue: number;
@@ -214,12 +214,12 @@ export interface RevisionRequestAggregations {
         dueThisWeek: number;
     };
     averageCompletionTime: number;
-    topRequesters: Array<{
+    topRequesters: Array<{,
         requesterId: string;
         requesterName: string;
         count: number;
     }>;
-    topReviewers: Array<{
+    topReviewers: Array<{,
         reviewerId: string;
         reviewerName: string;
         count: number;
@@ -228,7 +228,7 @@ export interface RevisionRequestAggregations {
 }
 export interface AppliedFilters {
     count: number;
-    filters: Array<{
+    filters: Array<{,
         field: string;
         operator: string;
         value: any;
@@ -257,7 +257,7 @@ export interface RevisionRequestOverview {
     averageCompletionTime: number;
     completionRate: number;
     satisfactionScore: number;
-    growthMetrics: {
+    growthMetrics: {,
         requestGrowth: number;
         completionGrowth: number;
         averageTimeImprovement: number;
@@ -267,7 +267,7 @@ export interface RevisionRequestPerformance {
     reviewerPerformance: Record<string, ReviewerPerformance>;
     contentTypePerformance: Record<RevisionContentType, ContentTypePerformance>;
     priorityPerformance: Record<RevisionRequestPriority, PriorityPerformance>;
-    slaMetrics: {
+    slaMetrics: {,
         onTimeCompletionRate: number;
         averageResponseTime: number;
         escalationRate: number;
@@ -296,17 +296,17 @@ export interface PriorityPerformance {
     escalationRate: number;
 }
 export interface RevisionRequestTrends {
-    requestVolume: Array<{
+    requestVolume: Array<{,
         date: string;
         count: number;
         priority: Record<RevisionRequestPriority, number>;
     }>;
-    completionTrends: Array<{
+    completionTrends: Array<{,
         date: string;
         completed: number;
         averageTime: number;
     }>;
-    contentTypeTrends: Array<{
+    contentTypeTrends: Array<{,
         contentType: RevisionContentType;
         trend: 'increasing' | 'decreasing' | 'stable';
         changePercent: number;
@@ -328,7 +328,7 @@ export interface RevisionRequestRecommendation {
     title: string;
     description: string;
     expectedImpact: string;
-    implementation: {
+    implementation: {,
         complexity: 'low' | 'medium' | 'high';
         timeframe: string;
         requirements: string[];
@@ -353,7 +353,7 @@ export interface RevisionRequestConfig {
     multipleReviewersFor: RevisionRequestType[];
     enableEmailNotifications: boolean;
     enableSlackNotifications: boolean;
-    notificationSettings: {
+    notificationSettings: {,
         onAssignment: boolean;
         onStatusChange: boolean;
         onComment: boolean;

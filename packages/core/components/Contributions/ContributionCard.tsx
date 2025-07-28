@@ -5,7 +5,6 @@
  * Displays individual contributions in card format with type-specific
  * styling, status indicators, and engagement metrics.
  */
-
 import React from 'react';
 import { Contribution, ContributionType, ContributionStatus } from '../../types/contributions';
 
@@ -20,7 +19,7 @@ export interface ContributionCardProps {
   className?: string;
 }
 
-export const ContributionCard: React.FC<ContributionCardProps> = ({
+export const ContributionCard: React.FC<ContributionCardProps> = ({)
   contribution,
   variant = 'standard',
   showActions = false,
@@ -33,117 +32,113 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
   // Get type-specific styling and icons
   const getTypeConfig = (type: ContributionType) => {
     const configs = {
-      template: {
+      template: {,
         color: '#3b82f6',
         bgColor: '#eff6ff',
         icon: '📄',
-        label: 'Template'
+        label: 'Template',
       },
-      knowledge_article: {
+      knowledge_article: {,
         color: '#10b981',
         bgColor: '#ecfdf5',
         icon: '📚',
         label: 'Knowledge Article'
       },
-      tutorial: {
+      tutorial: {,
         color: '#f59e0b',
         bgColor: '#fffbeb',
         icon: '🎓',
-        label: 'Tutorial'
+        label: 'Tutorial',
       },
-      case_study: {
+      case_study: {,
         color: '#8b5cf6',
         bgColor: '#f3e8ff',
         icon: '📊',
         label: 'Case Study'
       },
-      pattern_library: {
+      pattern_library: {,
         color: '#ef4444',
         bgColor: '#fef2f2',
         icon: '🔧',
         label: 'Pattern Library'
       },
-      community_post: {
+      community_post: {,
         color: '#06b6d4',
         bgColor: '#ecfeff',
         icon: '💬',
         label: 'Community Post'
       },
-      documentation: {
+      documentation: {,
         color: '#6b7280',
         bgColor: '#f9fafb',
         icon: '📋',
-        label: 'Documentation'
+        label: 'Documentation',
       },
-      review: {
+      review: {,
         color: '#84cc16',
         bgColor: '#f7fee7',
         icon: '⭐',
-        label: 'Review'
+        label: 'Review',
       }
     };
     return configs[type] || configs.template;
   };
-
   // Get status styling
   const getStatusConfig = (status: ContributionStatus) => {
     const configs = {
-      draft: {
+      draft: {,
         color: '#6b7280',
         bgColor: '#f9fafb',
-        label: 'Draft'
+        label: 'Draft',
       },
-      submitted: {
+      submitted: {,
         color: '#3b82f6',
         bgColor: '#eff6ff',
-        label: 'Submitted'
+        label: 'Submitted',
       },
-      under_review: {
+      under_review: {,
         color: '#f59e0b',
         bgColor: '#fffbeb',
         label: 'Under Review'
       },
-      revision_requested: {
+      revision_requested: {,
         color: '#ef4444',
         bgColor: '#fef2f2',
         label: 'Needs Revision'
       },
-      approved: {
+      approved: {,
         color: '#10b981',
         bgColor: '#ecfdf5',
-        label: 'Approved'
+        label: 'Approved',
       },
-      published: {
+      published: {,
         color: '#10b981',
         bgColor: '#ecfdf5',
-        label: 'Published'
+        label: 'Published',
       },
-      rejected: {
+      rejected: {,
         color: '#ef4444',
         bgColor: '#fef2f2',
-        label: 'Rejected'
+        label: 'Rejected',
       },
-      archived: {
+      archived: {,
         color: '#6b7280',
         bgColor: '#f9fafb',
-        label: 'Archived'
+        label: 'Archived',
       }
     };
     return configs[status] || configs.draft;
   };
-
   const typeConfig = getTypeConfig(contribution.type);
   const statusConfig = getStatusConfig(contribution.status);
-
   // Format dates
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-US', {)
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
-
   // Format numbers
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
@@ -154,7 +149,6 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
     }
     return num.toString();
   };
-
   // Handle card click
   const handleCardClick = (e: React.MouseEvent) => {
     if (e.target instanceof HTMLElement && e.target.closest('.card-actions')) {
@@ -162,8 +156,7 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
     }
     onClick?.(contribution);
   };
-
-  return (
+  return ()
     <div 
       className={`contribution-card ${variant} ${className}`}
       onClick={handleCardClick}
@@ -173,42 +166,38 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
       <div className="card-header">
         <div className="type-badge" style={{ 
           color: typeConfig.color, 
-          backgroundColor: typeConfig.bgColor 
+          backgroundColor: typeConfig.bgColor ,
         }}>
           <span className="type-icon">{typeConfig.icon}</span>
           <span className="type-label">{typeConfig.label}</span>
         </div>
-        
         <div className="status-badge" style={{
           color: statusConfig.color,
-          backgroundColor: statusConfig.bgColor
+          backgroundColor: statusConfig.bgColor,
         }}>
           {statusConfig.label}
         </div>
       </div>
-
       {/* Card Content */}
       <div className="card-content">
         <h3 className="contribution-title">{contribution.title}</h3>
-        
-        {variant !== 'compact' && (
+        {variant !== 'compact' && ()
           <p className="contribution-description">
             {contribution.description.length > 120 
-              ? `${contribution.description.substring(0, 120)}...`
+              ? `${contribution.description.substring(0, 120)}...`}
               : contribution.description
             }
           </p>
         )}
-
         {/* Tags */}
-        {contribution.tags.length > 0 && (
+        {contribution.tags.length > 0 && ()
           <div className="tags-container">
-            {contribution.tags.slice(0, variant === 'compact' ? 2 : 4).map((tag, index) => (
+            {contribution.tags.slice(0, variant === 'compact' ? 2 : 4).map((tag, index) => ()
               <span key={index} className="tag">
                 {tag}
               </span>
             ))}
-            {contribution.tags.length > (variant === 'compact' ? 2 : 4) && (
+            {contribution.tags.length > (variant === 'compact' ? 2 : 4) && ()
               <span className="tag more-tags">
                 +{contribution.tags.length - (variant === 'compact' ? 2 : 4)}
               </span>
@@ -216,9 +205,8 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
           </div>
         )}
       </div>
-
       {/* Card Metrics */}
-      {variant !== 'compact' && (
+      {variant !== 'compact' && ()
         <div className="card-metrics">
           <div className="metric">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -227,22 +215,19 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
             </svg>
             <span>{formatNumber(contribution.views)}</span>
           </div>
-          
           <div className="metric">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M8 2l1.5 4.5L14 8l-4.5 1.5L8 14l-1.5-4.5L2 8l4.5-1.5L8 2z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
             </svg>
             <span>{formatNumber(contribution.likes)}</span>
           </div>
-          
           <div className="metric">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M14 6c0-2.2-1.8-4-4-4s-4 1.8-4 4v2H4c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-4c0-1.1-.9-2-2-2h-2V6z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
             </svg>
             <span>{contribution.qualityScore}%</span>
           </div>
-          
-          {contribution.comments > 0 && (
+          {contribution.comments > 0 && ()
             <div className="metric">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M14 10c0 1.1-.9 2-2 2H4l-2 2V4c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v6z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
@@ -252,18 +237,16 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
           )}
         </div>
       )}
-
       {/* Card Footer */}
       <div className="card-footer">
         <div className="footer-info">
           <span className="contributor-name">{contribution.contributorName}</span>
           <span className="date">{formatDate(contribution.createdAt.toString())}</span>
         </div>
-
         {/* Card Actions */}
-        {showActions && (
+        {showActions && ()
           <div className="card-actions">
-            {onView && (
+            {onView && ()
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -278,8 +261,7 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
                 </svg>
               </button>
             )}
-            
-            {onEdit && (
+            {onEdit && ()
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -294,8 +276,7 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
                 </svg>
               </button>
             )}
-            
-            {onDelete && contribution.status === 'draft' && (
+            {onDelete && contribution.status === 'draft' && ()
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -312,7 +293,6 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
           </div>
         )}
       </div>
-
       <style>{`
         .contribution-card {
           background: #ffffff;
@@ -324,24 +304,20 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
           flex-direction: column;
           gap: 16px;
         }
-
         .contribution-card:hover {
           border-color: #d1d5db;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-
         .contribution-card.compact {
           padding: 16px;
           gap: 12px;
         }
-
         .card-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           gap: 12px;
         }
-
         .type-badge {
           display: flex;
           align-items: center;
@@ -352,11 +328,9 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
           font-weight: 600;
           flex-shrink: 0;
         }
-
         .type-icon {
           font-size: 14px;
         }
-
         .status-badge {
           padding: 4px 8px;
           border-radius: 4px;
@@ -366,11 +340,9 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
           letter-spacing: 0.5px;
           flex-shrink: 0;
         }
-
         .card-content {
           flex: 1;
         }
-
         .contribution-title {
           margin: 0 0 8px 0;
           font-size: 18px;
@@ -378,25 +350,21 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
           color: #1f2937;
           line-height: 1.4;
         }
-
         .compact .contribution-title {
           font-size: 16px;
           margin-bottom: 4px;
         }
-
         .contribution-description {
           margin: 0 0 12px 0;
           font-size: 14px;
           color: #6b7280;
           line-height: 1.5;
         }
-
         .tags-container {
           display: flex;
           flex-wrap: wrap;
           gap: 6px;
         }
-
         .tag {
           background: #f3f4f6;
           color: #4b5563;
@@ -407,19 +375,16 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
           text-transform: uppercase;
           letter-spacing: 0.3px;
         }
-
         .more-tags {
           background: #e5e7eb;
           color: #6b7280;
         }
-
         .card-metrics {
           display: flex;
           gap: 16px;
           padding-top: 12px;
           border-top: 1px solid #f3f4f6;
         }
-
         .metric {
           display: flex;
           align-items: center;
@@ -427,7 +392,6 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
           font-size: 13px;
           color: #6b7280;
         }
-
         .card-footer {
           display: flex;
           justify-content: space-between;
@@ -436,7 +400,6 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
           padding-top: 12px;
           border-top: 1px solid #f3f4f6;
         }
-
         .footer-info {
           display: flex;
           flex-direction: column;
@@ -444,25 +407,21 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
           flex: 1;
           min-width: 0;
         }
-
         .contributor-name {
           font-size: 13px;
           font-weight: 500;
           color: #374151;
           truncate;
         }
-
         .date {
           font-size: 12px;
           color: #9ca3af;
         }
-
         .card-actions {
           display: flex;
           gap: 6px;
           flex-shrink: 0;
         }
-
         .action-btn {
           background: #f9fafb;
           border: 1px solid #e5e7eb;
@@ -475,57 +434,47 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
           align-items: center;
           justify-content: center;
         }
-
         .action-btn:hover {
           background: #f3f4f6;
           border-color: #d1d5db;
           color: #374151;
         }
-
         .edit-btn:hover {
           background: #eff6ff;
           border-color: #3b82f6;
           color: #3b82f6;
         }
-
         .delete-btn:hover {
           background: #fef2f2;
           border-color: #ef4444;
           color: #ef4444;
         }
-
         .view-btn:hover {
           background: #ecfdf5;
           border-color: #10b981;
           color: #10b981;
         }
-
         @media (max-width: 640px) {
           .contribution-card {
             padding: 16px;
             gap: 12px;
           }
-
           .card-header {
             flex-direction: column;
             align-items: stretch;
             gap: 8px;
           }
-
           .type-badge {
             align-self: flex-start;
           }
-
           .card-metrics {
             gap: 12px;
           }
-
           .card-footer {
             flex-direction: column;
             align-items: stretch;
             gap: 8px;
           }
-
           .card-actions {
             align-self: flex-end;
           }

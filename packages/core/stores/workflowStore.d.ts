@@ -74,19 +74,19 @@ export interface WorkflowStatistics {
     active_locks: number;
     scheduled_executions: number;
     resources_by_state: Record<string, number>;
-    approval_stats: {
+    approval_stats: {,
         pending: number;
         approved: number;
         rejected: number;
         cancelled: number;
         avg_approval_time_hours: number;
     };
-    lock_stats: {
+    lock_stats: {,
         total_active: number;
         by_type: Record<string, number>;
         avg_lock_duration_hours: number;
     };
-    schedule_stats: {
+    schedule_stats: {,
         total_active: number;
         by_type: Record<string, number>;
         successful_executions: number;
@@ -117,7 +117,7 @@ interface WorkflowStore {
     fetchTransitions: (workspaceId: string, fromStateId?: string) => Promise<void>;
     createTransition: (data: Partial<WorkflowTransition>) => Promise<WorkflowTransition>;
     deleteTransition: (id: string) => Promise<void>;
-    transitionResourceState: (resourceId: string, toStateId: string, actorId: string, options?: {
+    transitionResourceState: (resourceId: string, toStateId: string, actorId: string, options?: {)
         comment?: string;
         metadata?: Record<string, unknown>;
         force?: boolean;
@@ -128,7 +128,7 @@ interface WorkflowStore {
     approveWorkflow: (approvalId: string, approverId: string, comment?: string) => Promise<StateTransitionResult>;
     rejectWorkflow: (approvalId: string, rejectorId: string, reason: string) => Promise<boolean>;
     fetchLocks: (workspaceId: string, filters?: Record<string, string>) => Promise<void>;
-    acquireLock: (resourceId: string, userId: string, lockType?: 'edit' | 'state_change' | 'delete' | 'custom', options?: {
+    acquireLock: (resourceId: string, userId: string, lockType?: 'edit' | 'state_change' | 'delete' | 'custom', options?: {)
         reason?: string;
         duration?: number;
         metadata?: Record<string, unknown>;

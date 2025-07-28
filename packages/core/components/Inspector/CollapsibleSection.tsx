@@ -7,13 +7,13 @@ export interface CollapsibleSectionProps {
   children: React.ReactNode;
 }
 
-export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
+export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({)
   title,
   collapsed,
   onToggle,
   children
 }) => {
-  return (
+  return ()
     <div style={{ borderBottom: '1px solid #4a5568' }}>
       <button
         onClick={onToggle}
@@ -30,7 +30,7 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
           outline: 'none',
           fontSize: 13,
           fontWeight: 600,
-          color: '#e2e8f0'
+          color: '#e2e8f0',
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = '#4a5568';
@@ -45,13 +45,13 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
             transform: collapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
             transition: 'transform 0.2s ease',
             fontSize: 12,
-            color: '#a0aec0'
+            color: '#a0aec0',
           }}
         >
           ▼
         </span>
       </button>
-      {!collapsed && (
+      {!collapsed && ()
         <div
           style={{
             maxHeight: collapsed ? 0 : '1000px',

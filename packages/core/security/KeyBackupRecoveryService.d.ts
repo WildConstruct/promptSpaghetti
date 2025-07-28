@@ -243,7 +243,7 @@ export declare class KeyBackupRecoveryService extends EventEmitter {
     /**
      * Create a backup of keys
      */
-    createBackup(type: BackupType, options?: {
+    createBackup(type: BackupType, options?: {)
         tier?: BackupStorageTier;
         description?: string;
         specificKeys?: string[];
@@ -261,7 +261,7 @@ export declare class KeyBackupRecoveryService extends EventEmitter {
     /**
      * List available backups
      */
-    listBackups(filters?: {
+    listBackups(filters?: {)
         type?: BackupType;
         status?: BackupStatus;
         tier?: BackupStorageTier;

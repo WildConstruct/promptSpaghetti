@@ -6,11 +6,9 @@
  * 
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
-
 import React, { useState } from 'react';
 import { ShareableResourceType } from '../../types/sharingTypes';
 import { ShareModal } from './ShareModal';
-
 interface ShareButtonProps {
   resourceId: string;
   resourceType: ShareableResourceType;
@@ -22,7 +20,7 @@ interface ShareButtonProps {
   onShareCreated?: (shareResponse: Error) => void;
 }
 
-export const ShareButton: React.FC<ShareButtonProps> = ({
+export const ShareButton: React.FC<ShareButtonProps> = ({)
   resourceId,
   resourceType,
   resourceTitle,
@@ -33,22 +31,18 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
   onShareCreated
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const handleOpenModal = () => {
     if (!disabled) {
       setIsModalOpen(true);
     }
   };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
   const handleShareCreated = (shareResponse: Error) => {
     onShareCreated?.(shareResponse);
     // Keep modal open to show share results
   };
-
   const getButtonStyles = () => {
     const baseStyles = {
       display: 'flex',
@@ -61,46 +55,42 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
       transition: 'all 0.2s ease',
       opacity: disabled ? 0.5 : 1
     };
-
     const sizeStyles = {
       small: { padding: '4px 8px', fontSize: '12px' },
       medium: { padding: '8px 12px', fontSize: '14px' },
       large: { padding: '12px 16px', fontSize: '16px' }
     };
-
     const variantStyles = {
-      primary: {
+      primary: {,
         backgroundColor: '#3b82f6',
         color: 'white',
-        ...(!disabled && {
+        ...(!disabled && {)
           ':hover': { backgroundColor: '#2563eb' }
         })
       },
-      secondary: {
+      secondary: {,
         backgroundColor: 'white',
         color: '#374151',
         border: '1px solid #d1d5db',
-        ...(!disabled && {
+        ...(!disabled && {)
           ':hover': { backgroundColor: '#f9fafb' }
         })
       },
-      icon: {
+      icon: {,
         backgroundColor: 'transparent',
         color: '#6b7280',
         padding: size === 'small' ? '4px' : '8px',
-        ...(!disabled && {
+        ...(!disabled && {)
           ':hover': { color: '#374151', backgroundColor: '#f3f4f6' }
         })
       }
     };
-
     return {
       ...baseStyles,
       ...sizeStyles[size],
       ...variantStyles[variant]
     };
   };
-
   const getIconSize = () => {
     switch (size) {
     case 'small': return '14px';
@@ -108,8 +98,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
     default: return '16px';
     }
   };
-
-  const ShareIcon = () => (
+  const ShareIcon = () => (;)
     <svg
       width={getIconSize()}
       height={getIconSize()}
@@ -127,8 +116,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
       <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
     </svg>
   );
-
-  return (
+  return ()
     <>
       <button
         onClick={handleOpenModal}
@@ -139,7 +127,6 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
         <ShareIcon />
         {variant !== 'icon' && 'Share'}
       </button>
-
       <ShareModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}

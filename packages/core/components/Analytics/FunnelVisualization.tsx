@@ -12,7 +12,6 @@
  * - A/B testing comparison views
  * - Export and sharing capabilities
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   ConversionFunnelDefinition, 
@@ -117,11 +116,10 @@ export interface ComparisonInsight {
   description: string;
   recommendation?: string;
 }
-
 /**
  * Main Funnel Visualization Component
  */
-export const FunnelVisualization: React.FC<FunnelVisualizationProps> = ({
+export const FunnelVisualization: React.FC<FunnelVisualizationProps> = ({)
   funnelDefinition,
   analyticsInfrastructure,
   timeRange,
@@ -134,74 +132,65 @@ export const FunnelVisualization: React.FC<FunnelVisualizationProps> = ({
 }) => {
   const [funnelMetrics, setFunnelMetrics] = useState<FunnelMetrics | null>(null);
   const [comparisonData, setComparisonData] = useState<FunnelComparisonData | null>(null);
-  const [configuration, setConfiguration] = useState<FunnelConfiguration>({
+  const [configuration, setConfiguration] = useState<FunnelConfiguration>({)
     displayMode: 'standard',
     colorScheme: 'default',
     showMetrics: ['conversion_rate', 'user_count', 'drop_off_rate'],
     filterCriteria: [],
     grouping: { dimension: 'none' },
     refreshInterval: 30000,
-    animations: true
+    animations: true,
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   // Load funnel data
   const loadFunnelData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
       const query: ConversionMetricQuery = {
         funnelId: funnelDefinition.id,
         startDate: timeRange.start,
         endDate: timeRange.end,
         metrics: ['conversion_rate', 'user_count', 'revenue', 'drop_off_rate'],
         groupBy: configuration.grouping.dimension !== 'none' ? [configuration.grouping.dimension as any] : undefined,
-        filters: configuration.filterCriteria.map(filter => ({
+        filters: configuration.filterCriteria.map(filter => ({)
           field: getFilterField(filter.type),
           operator: filter.operator,
-          value: filter.value
+          value: filter.value,
         })),
-        aggregation: {
+        aggregation: {,
           interval: configuration.grouping.interval || 'day'
         }
       };
-
       const metricResults = await analyticsInfrastructure.queryMetrics(query);
       const processedMetrics = await processFunnelMetrics(metricResults, funnelDefinition);
       setFunnelMetrics(processedMetrics);
-
       // Load comparison data if needed
       if (comparisonMode !== 'none') {
         const comparisonMetrics = await loadComparisonData(query, comparisonMode);
         setComparisonData(comparisonMetrics);
       }
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load funnel data');
     } finally {
       setLoading(false);
     }
   }, [funnelDefinition, timeRange, configuration, comparisonMode, analyticsInfrastructure]);
-
   // Real-time updates
   useEffect(() => {
     loadFunnelData();
-
     if (realTimeUpdates && configuration.refreshInterval > 0) {
       const interval = setInterval(loadFunnelData, configuration.refreshInterval);
       return () => clearInterval(interval);
     }
   }, [loadFunnelData, realTimeUpdates, configuration.refreshInterval]);
-
   // Configuration change handler
   const handleConfigChange = useCallback((newConfig: Partial<FunnelConfiguration>) => {
     const updatedConfig = { ...configuration, ...newConfig };
     setConfiguration(updatedConfig);
     onConfigChange?.(updatedConfig);
   }, [configuration, onConfigChange]);
-
   // Step click handler
   const handleStepClick = useCallback((stepMetrics: StepMetrics) => {
     if (onStepClick) {
@@ -211,16 +200,13 @@ export const FunnelVisualization: React.FC<FunnelVisualizationProps> = ({
       }
     }
   }, [funnelDefinition.steps, onStepClick]);
-
   if (loading) {
     return <FunnelLoadingState />;
   }
-
   if (error || !funnelMetrics) {
     return <FunnelErrorState error={error || 'No data available'} onRetry={loadFunnelData} />;
   }
-
-  return (
+  return ()
     <div className="funnel-visualization">
       <FunnelHeader 
         funnelDefinition={funnelDefinition}
@@ -228,28 +214,24 @@ export const FunnelVisualization: React.FC<FunnelVisualizationProps> = ({
         configuration={configuration}
         onConfigChange={handleConfigChange}
       />
-      
       <FunnelFilters
         filters={configuration.filterCriteria}
         segments={segments}
         cohorts={cohorts}
         onFiltersChange={(filters) => handleConfigChange({ filterCriteria: filters })}
       />
-
       <div className="funnel-main-content">
-        {comparisonMode !== 'none' && comparisonData && (
+        {comparisonMode !== 'none' && comparisonData && ()
           <FunnelComparison
             comparisonData={comparisonData}
             configuration={configuration}
           />
         )}
-
         <FunnelChart
           metrics={funnelMetrics}
           configuration={configuration}
           onStepClick={handleStepClick}
         />
-
         <FunnelInsights
           metrics={funnelMetrics}
           comparisonData={comparisonData}
@@ -259,7 +241,6 @@ export const FunnelVisualization: React.FC<FunnelVisualizationProps> = ({
     </div>
   );
 };
-
 /**
  * Funnel Header with Summary Metrics
  */
@@ -269,20 +250,18 @@ interface FunnelHeaderProps {
   configuration: FunnelConfiguration;
   onConfigChange: (config: Partial<FunnelConfiguration>) => void;
 }
-
-const FunnelHeader: React.FC<FunnelHeaderProps> = ({
+const FunnelHeader: React.FC<FunnelHeaderProps> = ({)
   funnelDefinition,
   metrics,
   configuration,
   onConfigChange
 }) => {
-  return (
+  return ()
     <div className="funnel-header">
       <div className="funnel-title">
         <h2>{funnelDefinition.name}</h2>
         <p className="funnel-description">{funnelDefinition.description}</p>
       </div>
-
       <div className="funnel-summary-metrics">
         <SummaryMetric
           label="Total Entries"
@@ -310,7 +289,6 @@ const FunnelHeader: React.FC<FunnelHeaderProps> = ({
           change={0}
         />
       </div>
-
       <FunnelConfigurationControls
         configuration={configuration}
         onConfigChange={onConfigChange}
@@ -318,7 +296,6 @@ const FunnelHeader: React.FC<FunnelHeaderProps> = ({
     </div>
   );
 };
-
 /**
  * Summary Metric Display Component
  */
@@ -327,23 +304,20 @@ interface SummaryMetricProps {
   value: string;
   change: number;
 }
-
 const SummaryMetric: React.FC<SummaryMetricProps> = ({ label, value, change }) => {
   const changeDirection = change > 0 ? 'up' : change < 0 ? 'down' : 'neutral';
-  
-  return (
+  return ()
     <div className="summary-metric">
       <div className="metric-label">{label}</div>
       <div className="metric-value">{value}</div>
-      {change !== 0 && (
-        <div className={`metric-change ${changeDirection}`}>
+      {change !== 0 && ()
+        <div className={`metric-change ${changeDirection}`}>}
           {change > 0 ? '+' : ''}{change.toFixed(2)}%
         </div>
       )}
     </div>
   );
 };
-
 /**
  * Funnel Configuration Controls
  */
@@ -351,12 +325,11 @@ interface FunnelConfigurationControlsProps {
   configuration: FunnelConfiguration;
   onConfigChange: (config: Partial<FunnelConfiguration>) => void;
 }
-
-const FunnelConfigurationControls: React.FC<FunnelConfigurationControlsProps> = ({
+const FunnelConfigurationControls: React.FC<FunnelConfigurationControlsProps> = ({)
   configuration,
   onConfigChange
 }) => {
-  return (
+  return ()
     <div className="funnel-configuration-controls">
       <div className="control-group">
         <label>Display Mode</label>
@@ -370,7 +343,6 @@ const FunnelConfigurationControls: React.FC<FunnelConfigurationControlsProps> = 
           <option value="waterfall">Waterfall</option>
         </select>
       </div>
-
       <div className="control-group">
         <label>Color Scheme</label>
         <select
@@ -383,7 +355,6 @@ const FunnelConfigurationControls: React.FC<FunnelConfigurationControlsProps> = 
           <option value="value_focused">Value Focused</option>
         </select>
       </div>
-
       <div className="control-group">
         <label>Refresh Interval</label>
         <select
@@ -397,7 +368,6 @@ const FunnelConfigurationControls: React.FC<FunnelConfigurationControlsProps> = 
           <option value={300000}>5 minutes</option>
         </select>
       </div>
-
       <div className="control-group">
         <label>
           <input
@@ -411,7 +381,6 @@ const FunnelConfigurationControls: React.FC<FunnelConfigurationControlsProps> = 
     </div>
   );
 };
-
 /**
  * Funnel Filters Component
  */
@@ -421,8 +390,7 @@ interface FunnelFiltersProps {
   cohorts: ConversionCohort[];
   onFiltersChange: (filters: FunnelFilter[]) => void;
 }
-
-const FunnelFilters: React.FC<FunnelFiltersProps> = ({
+const FunnelFilters: React.FC<FunnelFiltersProps> = ({)
   filters,
   segments,
   cohorts,
@@ -431,28 +399,24 @@ const FunnelFilters: React.FC<FunnelFiltersProps> = ({
   const addFilter = useCallback((filter: FunnelFilter) => {
     onFiltersChange([...filters, filter]);
   }, [filters, onFiltersChange]);
-
   const removeFilter = useCallback((index: number) => {
     const newFilters = filters.filter((_, i) => i !== index);
     onFiltersChange(newFilters);
   }, [filters, onFiltersChange]);
-
   const updateFilter = useCallback((index: number, updates: Partial<FunnelFilter>) => {
-    const newFilters = filters.map((filter, i) => 
+    const newFilters = filters.map((filter, i) => ;
       i === index ? { ...filter, ...updates } : filter
     );
     onFiltersChange(newFilters);
   }, [filters, onFiltersChange]);
-
-  return (
+  return ()
     <div className="funnel-filters">
       <div className="filters-header">
         <h3>Filters</h3>
         <FilterDropdown onAddFilter={addFilter} segments={segments} cohorts={cohorts} />
       </div>
-
       <div className="active-filters">
-        {filters.map((filter, index) => (
+        {filters.map((filter, index) => ()
           <FilterTag
             key={index}
             filter={filter}
@@ -464,7 +428,6 @@ const FunnelFilters: React.FC<FunnelFiltersProps> = ({
     </div>
   );
 };
-
 /**
  * Filter Dropdown Component
  */
@@ -473,35 +436,31 @@ interface FilterDropdownProps {
   segments: UserSegment[];
   cohorts: ConversionCohort[];
 }
-
-const FilterDropdown: React.FC<FilterDropdownProps> = ({
+const FilterDropdown: React.FC<FilterDropdownProps> = ({)
   onAddFilter,
   segments,
   cohorts
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const handleFilterAdd = (type: FunnelFilter['type'], value?: string | number) => {
     const filter: FunnelFilter = {
       type,
       value: value || '',
-      operator: 'equals'
+      operator: 'equals',
     };
     onAddFilter(filter);
     setIsOpen(false);
   };
-
-  return (
+  return ()
     <div className="filter-dropdown">
       <button onClick={() => setIsOpen(!isOpen)}>
         Add Filter +
       </button>
-
-      {isOpen && (
+      {isOpen && ()
         <div className="filter-dropdown-menu">
           <div className="filter-category">
             <h4>Segments</h4>
-            {segments.map(segment => (
+            {segments.map(segment => ()
               <button
                 key={segment.id}
                 onClick={() => handleFilterAdd('segment', segment.id)}
@@ -510,10 +469,9 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
               </button>
             ))}
           </div>
-
           <div className="filter-category">
             <h4>Cohorts</h4>
-            {cohorts.map(cohort => (
+            {cohorts.map(cohort => ()
               <button
                 key={cohort.id}
                 onClick={() => handleFilterAdd('cohort', cohort.id)}
@@ -522,7 +480,6 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
               </button>
             ))}
           </div>
-
           <div className="filter-category">
             <h4>Other</h4>
             <button onClick={() => handleFilterAdd('device')}>Device Type</button>
@@ -534,7 +491,6 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
     </div>
   );
 };
-
 /**
  * Filter Tag Component
  */
@@ -543,9 +499,8 @@ interface FilterTagProps {
   onUpdate: (updates: Partial<FunnelFilter>) => void;
   onRemove: () => void;
 }
-
 const FilterTag: React.FC<FilterTagProps> = ({ filter, onUpdate, onRemove }) => {
-  return (
+  return ()
     <div className="filter-tag">
       <span className="filter-type">{filter.type}:</span>
       <input
@@ -568,7 +523,6 @@ const FilterTag: React.FC<FilterTagProps> = ({ filter, onUpdate, onRemove }) => 
     </div>
   );
 };
-
 /**
  * Main Funnel Chart Component
  */
@@ -577,8 +531,7 @@ interface FunnelChartProps {
   configuration: FunnelConfiguration;
   onStepClick: (stepMetrics: StepMetrics) => void;
 }
-
-const FunnelChart: React.FC<FunnelChartProps> = ({
+const FunnelChart: React.FC<FunnelChartProps> = ({)
   metrics,
   configuration,
   onStepClick
@@ -595,14 +548,12 @@ const FunnelChart: React.FC<FunnelChartProps> = ({
         return <StandardFunnelChart metrics={metrics} configuration={configuration} onStepClick={onStepClick} />;
     }
   }, [configuration.displayMode, metrics, configuration, onStepClick]);
-
-  return (
+  return ()
     <div className="funnel-chart-container">
       {chartComponent}
     </div>
   );
 };
-
 /**
  * Standard Funnel Chart (Vertical)
  */
@@ -611,21 +562,18 @@ interface StandardFunnelChartProps {
   configuration: FunnelConfiguration;
   onStepClick: (stepMetrics: StepMetrics) => void;
 }
-
-const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({
+const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({)
   metrics,
   configuration,
   onStepClick
 }) => {
   const maxUsers = Math.max(...metrics.stepMetrics.map(s => s.totalUsers));
-
-  return (
+  return ()
     <div className="standard-funnel-chart">
       {metrics.stepMetrics.map((stepMetric, index) => {
         const width = (stepMetric.totalUsers / maxUsers) * 100;
         const isLastStep = index === metrics.stepMetrics.length - 1;
-
-        return (
+        return ()
           <div key={stepMetric.stepId} className="funnel-step">
             <div
               className={`step-bar ${getStepColorClass(stepMetric, configuration.colorScheme)}`}
@@ -635,23 +583,22 @@ const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({
               <div className="step-content">
                 <div className="step-name">{stepMetric.name}</div>
                 <div className="step-metrics">
-                  {configuration.showMetrics.includes('user_count') && (
+                  {configuration.showMetrics.includes('user_count') && ()
                     <span className="metric">{stepMetric.totalUsers.toLocaleString()} users</span>
                   )}
-                  {configuration.showMetrics.includes('conversion_rate') && !isLastStep && (
+                  {configuration.showMetrics.includes('conversion_rate') && !isLastStep && ()
                     <span className="metric">{stepMetric.conversionRate.toFixed(1)}% convert</span>
                   )}
-                  {configuration.showMetrics.includes('drop_off_rate') && !isLastStep && (
+                  {configuration.showMetrics.includes('drop_off_rate') && !isLastStep && ()
                     <span className="metric">{stepMetric.dropOffRate.toFixed(1)}% drop off</span>
                   )}
-                  {configuration.showMetrics.includes('value_generated') && stepMetric.valueGenerated > 0 && (
-                    <span className="metric">${stepMetric.valueGenerated.toLocaleString()}</span>
+                  {configuration.showMetrics.includes('value_generated') && stepMetric.valueGenerated > 0 && ()
+                    <span className="metric">${stepMetric.valueGenerated.toLocaleString()}</span>}
                   )}
                 </div>
               </div>
             </div>
-
-            {!isLastStep && (
+            {!isLastStep && ()
               <div className="step-connector">
                 <div className="drop-off-indicator">
                   {stepMetric.dropOffRate.toFixed(1)}% drop off
@@ -669,15 +616,12 @@ const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({
 const HorizontalFunnelChart: React.FC<StandardFunnelChartProps> = (props) => {
   return <div>Horizontal Funnel Chart (TODO: Implement)</div>;
 };
-
 const SankeyFunnelChart: React.FC<StandardFunnelChartProps> = (props) => {
   return <div>Sankey Funnel Chart (TODO: Implement)</div>;
 };
-
 const WaterfallFunnelChart: React.FC<StandardFunnelChartProps> = (props) => {
   return <div>Waterfall Funnel Chart (TODO: Implement)</div>;
 };
-
 /**
  * Funnel Comparison Component
  */
@@ -685,12 +629,11 @@ interface FunnelComparisonProps {
   comparisonData: FunnelComparisonData;
   configuration: FunnelConfiguration;
 }
-
-const FunnelComparison: React.FC<FunnelComparisonProps> = ({
+const FunnelComparison: React.FC<FunnelComparisonProps> = ({)
   comparisonData,
   configuration
 }) => {
-  return (
+  return ()
     <div className="funnel-comparison">
       <h3>Comparison Analysis</h3>
       <div className="comparison-overview">
@@ -715,17 +658,15 @@ const FunnelComparison: React.FC<FunnelComparisonProps> = ({
           />
         </div>
       </div>
-
       <div className="comparison-insights">
         <h4>Key Insights</h4>
-        {comparisonData.insights.map((insight, index) => (
+        {comparisonData.insights.map((insight, index) => ()
           <InsightCard key={index} insight={insight} />
         ))}
       </div>
     </div>
   );
 };
-
 /**
  * Comparison Metric Component
  */
@@ -735,8 +676,7 @@ interface ComparisonMetricProps {
   comparison: number;
   format: 'number' | 'percentage' | 'duration' | 'currency';
 }
-
-const ComparisonMetric: React.FC<ComparisonMetricProps> = ({
+const ComparisonMetric: React.FC<ComparisonMetricProps> = ({)
   label,
   baseline,
   comparison,
@@ -744,21 +684,19 @@ const ComparisonMetric: React.FC<ComparisonMetricProps> = ({
 }) => {
   const change = ((comparison - baseline) / baseline) * 100;
   const changeDirection = change > 0 ? 'improvement' : change < 0 ? 'decline' : 'neutral';
-
   const formatValue = (value: number) => {
     switch (format) {
       case 'percentage':
-        return `${value.toFixed(2)}%`;
+        return `${value.toFixed(2)}%`;}
       case 'duration':
         return formatDuration(value);
       case 'currency':
-        return `$${value.toLocaleString()}`;
+        return `$${value.toLocaleString()}`;}
       default:
         return value.toLocaleString();
     }
   };
-
-  return (
+  return ()
     <div className="comparison-metric">
       <div className="metric-label">{label}</div>
       <div className="metric-values">
@@ -766,30 +704,28 @@ const ComparisonMetric: React.FC<ComparisonMetricProps> = ({
         <span className="arrow">→</span>
         <span className="comparison">{formatValue(comparison)}</span>
       </div>
-      <div className={`metric-change ${changeDirection}`}>
+      <div className={`metric-change ${changeDirection}`}>}
         {change > 0 ? '+' : ''}{change.toFixed(1)}%
       </div>
     </div>
   );
 };
-
 /**
  * Insight Card Component
  */
 interface InsightCardProps {
   insight: ComparisonInsight;
 }
-
 const InsightCard: React.FC<InsightCardProps> = ({ insight }) => {
-  return (
-    <div className={`insight-card ${insight.type}`}>
+  return ()
+    <div className={`insight-card ${insight.type}`}>}
       <div className="insight-header">
         <span className="insight-type">{insight.type}</span>
         {insight.stepId && <span className="insight-step">Step: {insight.stepId}</span>}
       </div>
       <div className="insight-content">
         <div className="insight-description">{insight.description}</div>
-        {insight.recommendation && (
+        {insight.recommendation && ()
           <div className="insight-recommendation">
             <strong>Recommendation:</strong> {insight.recommendation}
           </div>
@@ -802,7 +738,6 @@ const InsightCard: React.FC<InsightCardProps> = ({ insight }) => {
     </div>
   );
 };
-
 /**
  * Funnel Insights Component
  */
@@ -811,8 +746,7 @@ interface FunnelInsightsProps {
   comparisonData: FunnelComparisonData | null;
   funnelDefinition: ConversionFunnelDefinition;
 }
-
-const FunnelInsights: React.FC<FunnelInsightsProps> = ({
+const FunnelInsights: React.FC<FunnelInsightsProps> = ({)
   metrics,
   comparisonData,
   funnelDefinition
@@ -820,15 +754,13 @@ const FunnelInsights: React.FC<FunnelInsightsProps> = ({
   const insights = useMemo(() => {
     return generateFunnelInsights(metrics, comparisonData, funnelDefinition);
   }, [metrics, comparisonData, funnelDefinition]);
-
-  return (
+  return ()
     <div className="funnel-insights">
       <h3>Funnel Insights</h3>
-      
       <div className="insights-grid">
         <div className="insight-section">
           <h4>Biggest Drop-off Points</h4>
-          {insights.biggestDropOffs.map((dropOff, index) => (
+          {insights.biggestDropOffs.map((dropOff, index) => ()
             <div key={index} className="drop-off-insight">
               <span className="step-name">{dropOff.stepName}</span>
               <span className="drop-off-rate">{dropOff.dropOffRate.toFixed(1)}%</span>
@@ -836,10 +768,9 @@ const FunnelInsights: React.FC<FunnelInsightsProps> = ({
             </div>
           ))}
         </div>
-
         <div className="insight-section">
           <h4>Conversion Opportunities</h4>
-          {insights.opportunities.map((opportunity, index) => (
+          {insights.opportunities.map((opportunity, index) => ()
             <div key={index} className="opportunity-insight">
               <div className="opportunity-description">{opportunity.description}</div>
               <div className="opportunity-impact">
@@ -848,13 +779,12 @@ const FunnelInsights: React.FC<FunnelInsightsProps> = ({
             </div>
           ))}
         </div>
-
         <div className="insight-section">
           <h4>Performance Trends</h4>
-          {insights.trends.map((trend, index) => (
+          {insights.trends.map((trend, index) => ()
             <div key={index} className="trend-insight">
               <span className="trend-description">{trend.description}</span>
-              <span className={`trend-direction ${trend.direction}`}>
+              <span className={`trend-direction ${trend.direction}`}>}
                 {trend.direction === 'up' ? '↗' : trend.direction === 'down' ? '↘' : '→'}
               </span>
             </div>
@@ -866,19 +796,17 @@ const FunnelInsights: React.FC<FunnelInsightsProps> = ({
 };
 
 // Loading and Error States
-const FunnelLoadingState: React.FC = () => (
+const FunnelLoadingState: React.FC = () => ()
   <div className="funnel-loading">
     <div className="loading-spinner"></div>
     <p>Loading funnel data...</p>
   </div>
 );
-
 interface FunnelErrorStateProps {
   error: string;
   onRetry: () => void;
 }
-
-const FunnelErrorState: React.FC<FunnelErrorStateProps> = ({ error, onRetry }) => (
+const FunnelErrorState: React.FC<FunnelErrorStateProps> = ({ error, onRetry }) => ()
   <div className="funnel-error">
     <div className="error-message">
       <h3>Error Loading Funnel</h3>
@@ -896,13 +824,11 @@ function formatDuration(milliseconds: number): string {
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
-
-  if (days > 0) return `${days}d ${hours % 24}h`;
-  if (hours > 0) return `${hours}h ${minutes % 60}m`;
-  if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
-  return `${seconds}s`;
+  if (days > 0) return `${days}d ${hours % 24}h`;}
+  if (hours > 0) return `${hours}h ${minutes % 60}m`;}
+  if (minutes > 0) return `${minutes}m ${seconds % 60}s`;}
+  return `${seconds}s`;}
 }
-
 function getStepColorClass(stepMetric: StepMetrics, colorScheme: string): string {
   switch (colorScheme) {
     case 'conversion_focused':
@@ -918,7 +844,6 @@ function getStepColorClass(stepMetric: StepMetrics, colorScheme: string): string
       return 'default-step';
   }
 }
-
 function getFilterField(filterType: FunnelFilter['type']): string {
   const fieldMap = {
     segment: 'userContext.segmentIds',
@@ -926,20 +851,18 @@ function getFilterField(filterType: FunnelFilter['type']): string {
     time_range: 'timestamp',
     device: 'metadata.userAgent',
     location: 'sessionContext.locationData.country',
-    source: 'attributionData.primaryAttribution.touchpoint.source'
+    source: 'attributionData.primaryAttribution.touchpoint.source',
   };
   return fieldMap[filterType] || filterType;
 }
-
-async function processFunnelMetrics(
+async function processFunnelMetrics()
   metricResults: ConversionMetricResult[], 
-  funnelDefinition: ConversionFunnelDefinition
+  funnelDefinition: ConversionFunnelDefinition,
 ): Promise<FunnelMetrics> {
   // Simplified implementation - in production, this would process actual metric results
   const stepMetrics: StepMetrics[] = funnelDefinition.steps.map((step, index) => {
-    const baseUsers = 1000 - (index * 200); // Simulated data
+    const baseUsers = 1000 - (index * 200); // Simulated data;
     const converted = index < funnelDefinition.steps.length - 1 ? baseUsers * 0.7 : baseUsers;
-    
     return {
       stepId: step.id,
       name: step.name,
@@ -950,13 +873,12 @@ async function processFunnelMetrics(
       dropOffRate: index < funnelDefinition.steps.length - 1 ? 30 : 0,
       averageTimeSpent: 120000 + (index * 60000),
       valueGenerated: converted * 25,
-      topExitReasons: [
+      topExitReasons: [,
         { reason: 'Page load timeout', percentage: 15, count: Math.floor(baseUsers * 0.15), category: 'technical_issue' },
         { reason: 'Unclear navigation', percentage: 10, count: Math.floor(baseUsers * 0.10), category: 'design_friction' }
       ]
     };
   });
-
   return {
     funnelId: funnelDefinition.id,
     totalEntries: stepMetrics[0]?.totalUsers || 0,
@@ -968,42 +890,40 @@ async function processFunnelMetrics(
     stepMetrics
   };
 }
-
-async function loadComparisonData(
+async function loadComparisonData()
   query: ConversionMetricQuery, 
-  comparisonMode: string
+  comparisonMode: string,
 ): Promise<FunnelComparisonData | null> {
   // Simplified implementation - in production, this would load actual comparison data
   return null;
 }
-
-function generateFunnelInsights(
+function generateFunnelInsights()
   metrics: FunnelMetrics,
   comparisonData: FunnelComparisonData | null,
-  funnelDefinition: ConversionFunnelDefinition
+  funnelDefinition: ConversionFunnelDefinition,
 ) {
   // Simplified implementation
   return {
-    biggestDropOffs: metrics.stepMetrics
+    biggestDropOffs: metrics.stepMetrics,
       .filter(step => step.dropOffRate > 0)
       .sort((a, b) => b.dropOffRate - a.dropOffRate)
       .slice(0, 3)
-      .map(step => ({
+      .map(step => ({)
         stepName: step.name,
         dropOffRate: step.dropOffRate,
         affectedUsers: Math.floor(step.totalUsers * step.dropOffRate / 100)
       })),
-    opportunities: [
+    opportunities: [,
       {
         description: 'Optimize page load speed to reduce technical drop-offs',
-        potentialImpact: 5.2
+        potentialImpact: 5.2,
       },
       {
         description: 'Improve navigation clarity in step 2',
-        potentialImpact: 3.8
+        potentialImpact: 3.8,
       }
     ],
-    trends: [
+    trends: [,
       {
         description: 'Conversion rate trending upward over last 7 days',
         direction: 'up' as const

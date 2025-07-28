@@ -56,7 +56,7 @@ export declare class SecurityDashboardDataService {
     /**
      * Get active security alerts
      */
-    getActiveAlerts(filters?: {
+    getActiveAlerts(filters?: {)
         severity?: string[];
         category?: string[];
         status?: string[];

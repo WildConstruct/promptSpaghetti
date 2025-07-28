@@ -6,7 +6,6 @@
  * 
  * Part of Epic 17 - Backstage Admin Controls
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Card,
@@ -42,7 +41,6 @@ import {
   SettingOutlined
 } from '@ant-design/icons';
 import { useTemplatePreview } from '../../hooks/useTemplatePreview';
-
 const { Title, Text, _Paragraph } = Typography;
 const { TabPane } = Tabs;
 const { _Option } = Select;
@@ -57,9 +55,8 @@ interface PromotionSlot {
   traffic_allocation: number;
   priority: number;
 }
-
 interface PromotionPreviewData {
-  schedule: {
+  schedule: {,
     id: string;
     title: string;
     promotion_type: string;
@@ -68,7 +65,7 @@ interface PromotionPreviewData {
     end_date: Date;
     status: string;
   };
-  content: Array<{
+  content: Array<{,
     id: string;
     title: string;
     category: string;
@@ -77,13 +74,13 @@ interface PromotionPreviewData {
     downloads: number;
     performance_score: number;
   }>;
-  rotation_config: {
+  rotation_config: {,
     pattern: string;
     duration_per_content?: number;
     click_threshold?: number;
     performance_threshold?: number;
   };
-  predicted_performance: {
+  predicted_performance: {,
     estimated_impressions: number;
     estimated_ctr: number;
     estimated_conversions: number;
@@ -92,7 +89,7 @@ interface PromotionPreviewData {
   };
   ab_test_config?: {
     test_name: string;
-    variants: Array<{
+    variants: Array<{,
       id: string;
       name: string;
       traffic_split: number;
@@ -100,12 +97,11 @@ interface PromotionPreviewData {
     }>;
   };
 }
-
 interface PerformancePrediction {
   metric: string;
   predicted_value: number;
   confidence_range: [number, number];
-  factors: Array<{
+  factors: Array<{,
     name: string;
     impact: number;
     description: string;
@@ -121,7 +117,7 @@ export interface PromotionPreviewProps {
   className?: string;
 }
 
-export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
+export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
   promotionData,
   onUpdateRotation,
   onStartPreview,
@@ -136,48 +132,42 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
   const [rotationSpeed, setRotationSpeed] = useState(3); // seconds
   const [currentContentIndex, setCurrentContentIndex] = useState(0);
   const [isRotating, setIsRotating] = useState(false);
-
   // Template preview integration
   const {
     generateVariants,
     performance: previewPerformance,
     isGenerating
-  } = useTemplatePreview({
+  } = useTemplatePreview({)
     enablePerformanceTracking: true,
     maxVariants: 5,
-    autoRefresh: true
+    autoRefresh: true,
   });
-
   // Auto-rotation logic
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
     if (isRotating && previewMode === 'rotation' && promotionData?.content) {
       interval = setInterval(() => {
-        setCurrentContentIndex(prevIndex => 
+        setCurrentContentIndex(prevIndex => )
           (prevIndex + 1) % promotionData.content.length
         );
       }, rotationSpeed * 1000);
     }
-
     return () => {
       if (interval) clearInterval(interval);
     };
   }, [isRotating, previewMode, rotationSpeed, promotionData?.content?.length]);
-
   // Performance predictions
   const performancePredictions = useMemo<PerformancePrediction[]>(() => {
     if (!promotionData) return [];
-
     return [
       {
         metric: 'Impressions',
         predicted_value: promotionData.predicted_performance.estimated_impressions,
-        confidence_range: [
+        confidence_range: [,
           promotionData.predicted_performance.estimated_impressions * 0.8,
           promotionData.predicted_performance.estimated_impressions * 1.2
         ],
-        factors: [
+        factors: [,
           { name: 'Slot Position', impact: 0.35, description: 'Homepage hero position drives 35% of visibility' },
           { name: 'Content Quality', impact: 0.25, description: 'High-rated content increases engagement' },
           { name: 'Time of Day', impact: 0.20, description: 'Peak hours boost impressions' },
@@ -187,11 +177,11 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
       {
         metric: 'Click-Through Rate',
         predicted_value: promotionData.predicted_performance.estimated_ctr,
-        confidence_range: [
+        confidence_range: [,
           promotionData.predicted_performance.estimated_ctr * 0.7,
           promotionData.predicted_performance.estimated_ctr * 1.3
         ],
-        factors: [
+        factors: [,
           { name: 'Content Relevance', impact: 0.40, description: 'Matching user interests boosts CTR' },
           { name: 'Visual Appeal', impact: 0.30, description: 'High-quality thumbnails drive clicks' },
           { name: 'Promotional Timing', impact: 0.30, description: 'Weekend promotions see higher engagement' }
@@ -200,11 +190,11 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
       {
         metric: 'Conversions',
         predicted_value: promotionData.predicted_performance.estimated_conversions,
-        confidence_range: [
+        confidence_range: [,
           promotionData.predicted_performance.estimated_conversions * 0.6,
           promotionData.predicted_performance.estimated_conversions * 1.4
         ],
-        factors: [
+        factors: [,
           { name: 'Price Point', impact: 0.35, description: 'Competitive pricing increases conversion' },
           { name: 'Creator Reputation', impact: 0.25, description: 'Established creators convert better' },
           { name: 'Content Quality Score', impact: 0.25, description: 'High-quality content converts at 2.3x rate' },
@@ -213,15 +203,12 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
       }
     ];
   }, [promotionData]);
-
   // Render slot preview
   const renderSlotPreview = () => {
     if (!promotionData) return null;
-
     const { slot } = promotionData.schedule;
     const currentContent = promotionData.content[currentContentIndex] || promotionData.content[0];
-    
-    return (
+    return ()
       <div className="slot-preview">
         <div className="slot-header">
           <Title level={4}>
@@ -235,7 +222,6 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
             </Text>
           </Space>
         </div>
-
         <div 
           className="slot-mockup"
           style={{
@@ -251,13 +237,13 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
             margin: '20px 0'
           }}
         >
-          {previewMode === 'rotation' ? (
+          {previewMode === 'rotation' ? ()
             <Carousel 
               autoplay={isRotating} 
               autoplaySpeed={rotationSpeed * 1000}
               effect="fade"
             >
-              {promotionData.content.map((content, index) => (
+              {promotionData.content.map((content, index) => ()
                 <div key={content.id}>
                   <div className="content-preview-card">
                     <div className="content-thumbnail">
@@ -286,7 +272,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
                 </div>
               ))}
             </Carousel>
-          ) : (
+          ) : ()
             <div className="content-preview-card">
               <div className="content-thumbnail">
                 <img 
@@ -298,7 +284,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
               <div className="content-info">
                 <Title level={5}>{currentContent?.title || 'Featured Content'}</Title>
                 <Text type="secondary">{currentContent?.category || 'Category'}</Text>
-                {currentContent && (
+                {currentContent && ()
                   <div className="content-metrics">
                     <Space>
                       <span>⭐ {currentContent.rating.toFixed(1)}</span>
@@ -314,7 +300,6 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
               </div>
             </div>
           )}
-
           {/* Preview Controls */}
           <div className="preview-controls">
             <Space>
@@ -325,12 +310,11 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
               >
                 <Radio.Button value="static">Static</Radio.Button>
                 <Radio.Button value="rotation">Rotation</Radio.Button>
-                {promotionData.ab_test_config && (
+                {promotionData.ab_test_config && ()
                   <Radio.Button value="ab_test">A/B Test</Radio.Button>
                 )}
               </Radio.Group>
-              
-              {previewMode === 'rotation' && (
+              {previewMode === 'rotation' && ()
                 <>
                   <Button 
                     icon={isRotating ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
@@ -355,7 +339,6 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
             </Space>
           </div>
         </div>
-
         {/* Slot Statistics */}
         <Row gutter={[16, 16]}>
           <Col span={6}>
@@ -394,12 +377,11 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
       </div>
     );
   };
-
   // Render performance predictions
   const renderPerformancePredictions = () => {
-    return (
+    return ()
       <div className="performance-predictions">
-        {performancePredictions.map((prediction, index) => (
+        {performancePredictions.map((prediction, index) => ()
           <Card key={prediction.metric} className="prediction-card">
             <Row align="middle">
               <Col span={8}>
@@ -423,7 +405,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
               <Col span={8}>
                 <div className="impact-factors">
                   <Text strong>Top Factors</Text>
-                  {prediction.factors.slice(0, 2).map((factor, idx) => (
+                  {prediction.factors.slice(0, 2).map((factor, idx) => ()
                     <div key={idx} className="factor-item">
                       <Progress
                         percent={factor.impact * 100}
@@ -444,24 +426,20 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
       </div>
     );
   };
-
   // Render schedule timeline
   const renderScheduleTimeline = () => {
     if (!promotionData) return null;
-
     const schedule = promotionData.schedule;
     const now = new Date();
     const start = new Date(schedule.start_date);
     const end = new Date(schedule.end_date);
-    
     const totalDuration = end.getTime() - start.getTime();
     const elapsed = Math.max(0, now.getTime() - start.getTime());
     const progress = Math.min(100, (elapsed / totalDuration) * 100);
-
-    const timelineItems = [
+    const timelineItems = [;
       {
         color: progress > 0 ? 'green' : 'blue',
-        children: (
+        children: (),
           <div>
             <Text strong>Promotion Starts</Text>
             <br />
@@ -471,7 +449,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
       },
       {
         color: progress > 25 ? 'green' : 'gray',
-        children: (
+        children: (),
           <div>
             <Text strong>First Quarter</Text>
             <br />
@@ -481,7 +459,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
       },
       {
         color: progress > 50 ? 'green' : 'gray',
-        children: (
+        children: (),
           <div>
             <Text strong>Midpoint Review</Text>
             <br />
@@ -491,7 +469,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
       },
       {
         color: progress > 75 ? 'green' : 'gray',
-        children: (
+        children: (),
           <div>
             <Text strong>Final Quarter</Text>
             <br />
@@ -501,7 +479,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
       },
       {
         color: progress >= 100 ? 'green' : 'gray',
-        children: (
+        children: (),
           <div>
             <Text strong>Promotion Ends</Text>
             <br />
@@ -510,8 +488,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
         )
       }
     ];
-
-    return (
+    return ()
       <div className="schedule-timeline">
         <Row gutter={[16, 16]} style={{ marginBottom: '20px' }}>
           <Col span={12}>
@@ -536,19 +513,15 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
             </Card>
           </Col>
         </Row>
-
         <Timeline items={timelineItems} />
       </div>
     );
   };
-
   // Render A/B test preview
   const renderABTestPreview = () => {
     if (!promotionData?.ab_test_config) return null;
-
     const { ab_test_config } = promotionData;
-
-    return (
+    return ()
       <div className="ab-test-preview">
         <Alert
           message="A/B Test Configuration"
@@ -557,9 +530,8 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
           icon={<ExperimentOutlined />}
           style={{ marginBottom: '20px' }}
         />
-
         <Row gutter={[16, 16]}>
-          {ab_test_config.variants.map((variant, index) => (
+          {ab_test_config.variants.map((variant, index) => ()
             <Col span={8} key={variant.id}>
               <Card
                 title={
@@ -577,11 +549,10 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
                 <Text type="secondary">
                   {variant.content_ids.length} content items
                 </Text>
-                
                 <div className="variant-content">
-                  {variant.content_ids.slice(0, 3).map(contentId => {
+                  {variant.content_ids.slice(0, 3).map(contentId => {)
                     const content = promotionData.content.find(c => c.id === contentId);
-                    return content ? (
+                    return content ? ()
                       <div key={contentId} className="variant-content-item">
                         <img 
                           src={content.thumbnail || '/api/placeholder/50/50'} 
@@ -598,8 +569,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
                       </div>
                     ) : null;
                   })}
-                  
-                  {variant.content_ids.length > 3 && (
+                  {variant.content_ids.length > 3 && ()
                     <Text type="secondary" style={{ fontSize: '12px' }}>
                       +{variant.content_ids.length - 3} more
                     </Text>
@@ -612,17 +582,15 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
       </div>
     );
   };
-
   if (!promotionData) {
-    return (
+    return ()
       <div className="promotion-preview-empty">
         <Text type="secondary">No promotion data available for preview</Text>
       </div>
     );
   }
-
-  return (
-    <div className={`promotion-preview ${className}`}>
+  return ()
+    <div className={`promotion-preview ${className}`}>}
       <div className="preview-header">
         <Title level={3}>
           <ThunderboltOutlined /> Promotion Preview
@@ -637,57 +605,47 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
           <Button icon={<SettingOutlined />}>Settings</Button>
         </Space>
       </div>
-
       <Tabs activeKey={activeTab} onChange={setActiveTab}>
         <TabPane tab="Visual Preview" key="preview">
           {renderSlotPreview()}
         </TabPane>
-        
         <TabPane tab="Performance Prediction" key="performance">
           {renderPerformancePredictions()}
         </TabPane>
-        
         <TabPane tab="Schedule Timeline" key="timeline">
           {renderScheduleTimeline()}
         </TabPane>
-        
-        {promotionData.ab_test_config && (
+        {promotionData.ab_test_config && ()
           <TabPane tab="A/B Test Preview" key="ab_test">
             {renderABTestPreview()}
           </TabPane>
         )}
       </Tabs>
-
       <style>{`
         .promotion-preview {
           background: #fff;
           border-radius: 8px;
           padding: 24px;
         }
-
         .preview-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 24px;
         }
-
         .slot-preview {
           position: relative;
         }
-
         .slot-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 16px;
         }
-
         .slot-mockup {
           position: relative;
           margin: 20px 0;
         }
-
         .preview-controls {
           position: absolute;
           bottom: -40px;
@@ -698,7 +656,6 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
           border-radius: 6px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-
         .content-preview-card {
           display: flex;
           align-items: center;
@@ -708,63 +665,50 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
           border-radius: 8px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-
         .content-thumbnail img {
           border-radius: 6px;
         }
-
         .content-info {
           flex: 1;
         }
-
         .content-metrics {
           margin-top: 8px;
         }
-
         .prediction-card {
           margin-bottom: 16px;
         }
-
         .confidence-range {
           text-align: center;
         }
-
         .impact-factors .factor-item {
           margin-bottom: 8px;
         }
-
         .schedule-timeline {
           padding: 20px 0;
         }
-
         .ab-test-preview .variant-content {
           margin-top: 16px;
         }
-
         .variant-content-item {
           display: flex;
           align-items: center;
           margin-bottom: 8px;
         }
-
         .selected-variant {
           border-color: #1890ff;
           box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
         }
-
         .promotion-preview-empty {
           text-align: center;
           padding: 60px 20px;
           background: #fafafa;
           border-radius: 8px;
         }
-
         @media (max-width: 768px) {
           .slot-mockup {
             width: 100% !important;
             height: 300px !important;
           }
-
           .content-preview-card {
             flex-direction: column;
             text-align: center;

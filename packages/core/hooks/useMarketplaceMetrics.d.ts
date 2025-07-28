@@ -34,19 +34,19 @@ export declare const useMarketplaceMetrics: (config?: MarketplaceMetricsConfig) 
     getCreatorAnalytics: (creatorId: string) => CreatorMetrics | null;
     getTopPerformingTemplates: (metric?: "revenue" | "downloads" | "rating", limit?: number) => TemplateMetrics[];
     getSearchAnalytics: () => {
-        topQueries: Array<{
+        topQueries: Array<{,
             query: string;
             count: number;
             ctr: number;
         }>;
-        zeroResultQueries: Array<{
+        zeroResultQueries: Array<{,
             query: string;
             count: number;
         }>;
         averageCTR: number;
     };
     refreshData: () => Promise<void>;
-    trackCustomEvent: (
+    trackCustomEvent: (),
       eventType: MarketplaceEventType,
       properties?: Record<string,
       any>,

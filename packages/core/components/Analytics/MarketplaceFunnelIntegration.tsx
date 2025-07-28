@@ -14,7 +14,6 @@
  * - Performance impact indicators
  * - Revenue attribution displays
  */
-
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { 
   ConversionFunnelDefinition,
@@ -583,18 +582,15 @@ export interface MarketplaceIntegrationExportData {
 
 // Default widget configuration
 
-export   const [error, setError] = useState<string | null>(null);
+export const [error, setError] = useState<string | null>(null);
   const [activeWidget, setActiveWidget] = useState<WidgetType>(widgetConfig.widgets[0]);
   const [refreshing, setRefreshing] = useState(false);
-  
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
   // Load integration data
   const loadIntegrationData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
       const query: ConversionMetricQuery = {
         funnelId: funnelDefinition.id,
         timeRange: { start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() },
@@ -602,37 +598,32 @@ export   const [error, setError] = useState<string | null>(null);
         cohorts: [],
         metrics: ['marketplace_integration', 'template_performance', 'creator_optimization'],
         aggregation: 'marketplace',
-        filters: [
+        filters: [,
           { field: 'marketplace_id', operator: 'eq', value: marketplaceContext.marketplaceId },
           { field: 'user_role', operator: 'eq', value: userRole }
         ]
       };
-
       if (marketplaceContext.templateContext) {
-        query.filters?.push(
+        query.filters?.push()
           { field: 'template_id',
           operator: 'eq',
           value: marketplaceContext.templateContext.templateId }
         );
       }
-
       if (marketplaceContext.creatorContext) {
-        query.filters?.push(
+        query.filters?.push()
           { field: 'creator_id',
           operator: 'eq',
           value: marketplaceContext.creatorContext.creatorId }
         );
       }
-
       const result = await analyticsInfrastructure.executeQuery(query);
-      
       if (result.success && result.data) {
-        const processedData = await processIntegrationData(
+        const processedData = await processIntegrationData(;)
           result.data,
           marketplaceContext,
           userRole
         );
-        
         setIntegrationData(processedData);
       } else {
         setError(result.error || 'Failed to load marketplace integration data');
@@ -643,12 +634,11 @@ export   const [error, setError] = useState<string | null>(null);
       setLoading(false);
     }
   }, [funnelDefinition, analyticsInfrastructure, marketplaceContext, userRole]);
-
   // Process integration data
-  const processIntegrationData = async (
+  const processIntegrationData = async (;)
     rawData: unknown,
     context: MarketplaceContext,
-    role: UserRole
+    role: UserRole,
   ): Promise<MarketplaceIntegrationData> => {
     // Simulate comprehensive marketplace integration processing
     return {
@@ -658,10 +648,9 @@ export   const [error, setError] = useState<string | null>(null);
       marketplaceMetrics: generateMarketplaceMetrics(),
       recommendedActions: generateRecommendedActions(role),
       performanceAlerts: generatePerformanceAlerts(),
-      integrationHealth: generateIntegrationHealth()
+      integrationHealth: generateIntegrationHealth(),
     };
   };
-
   // Generate funnel summary
   const generateFunnelSummary = (): FunnelSummaryData => {
     return {
@@ -669,7 +658,7 @@ export   const [error, setError] = useState<string | null>(null);
       totalConversions: 2847,
       totalRevenue: 156780,
       averageOrderValue: 55.12,
-      topPerformingSteps: [
+      topPerformingSteps: [,
         {
           stepId: 'checkout',
           stepName: 'Checkout Process',
@@ -677,7 +666,7 @@ export   const [error, setError] = useState<string | null>(null);
           dropOffRate: 0.11,
           averageTimeSpent: 120,
           performanceRank: 1,
-          optimizationPotential: 0.05
+          optimizationPotential: 0.05,
         },
         {
           stepId: 'template_preview',
@@ -686,10 +675,10 @@ export   const [error, setError] = useState<string | null>(null);
           dropOffRate: 0.24,
           averageTimeSpent: 180,
           performanceRank: 2,
-          optimizationPotential: 0.12
+          optimizationPotential: 0.12,
         }
       ],
-      bottomleneckSteps: [
+      bottomleneckSteps: [,
         {
           stepId: 'registration',
           stepName: 'User Registration',
@@ -697,14 +686,13 @@ export   const [error, setError] = useState<string | null>(null);
           dropOffRate: 0.66,
           averageTimeSpent: 240,
           performanceRank: 1,
-          optimizationPotential: 0.35
+          optimizationPotential: 0.35,
         }
       ],
       trendDirection: 'improving',
-      lastUpdated: Date.now()
+      lastUpdated: Date.now(),
     };
   };
-
   // Generate template insights
   const generateTemplateInsights = (templateContext: TemplateContext): TemplateInsightData[] => {
     return [
@@ -712,15 +700,15 @@ export   const [error, setError] = useState<string | null>(null);
         templateId: templateContext.templateId,
         templateName: templateContext.templateName,
         creatorId: templateContext.creatorId,
-        conversionMetrics: {
+        conversionMetrics: {,
           viewToDownloadRate: 0.18,
           downloadToUseRate: 0.67,
           useToSubscribeRate: 0.23,
           overallConversionRate: 0.028,
           revenuePerView: 1.24,
-          userRetentionRate: 0.45
+          userRetentionRate: 0.45,
         },
-        performanceInsights: [
+        performanceInsights: [,
           {
             insightType: 'conversion_opportunity',
             title: 'High Drop-off at Download Stage',
@@ -728,7 +716,7 @@ export   const [error, setError] = useState<string | null>(null);
             impact: 'high',
             confidence: 0.87,
             actionable: true,
-            recommendations: [
+            recommendations: [,
               {
                 action: 'Improve preview quality and add more sample content',
                 expectedImpact: 0.25,
@@ -746,7 +734,7 @@ export   const [error, setError] = useState<string | null>(null);
             impact: 'medium',
             confidence: 0.73,
             actionable: true,
-            recommendations: [
+            recommendations: [,
               {
                 action: 'Consider A/B testing lower price points',
                 expectedImpact: 0.15,
@@ -758,13 +746,13 @@ export   const [error, setError] = useState<string | null>(null);
             ]
           }
         ],
-        optimizationOpportunities: [
+        optimizationOpportunities: [,
           {
             opportunity: 'Improve template preview experience',
             currentPerformance: 0.18,
             potentialPerformance: 0.27,
             improvementPercentage: 50,
-            implementationSteps: [
+            implementationSteps: [,
               {
                 step: 'Add interactive preview',
                 description: 'Implement live preview functionality',
@@ -777,52 +765,51 @@ export   const [error, setError] = useState<string | null>(null);
                 description: 'Add more sample data and use cases',
                 effort: 'medium',
                 timeline: 7,
-                dependencies: []
+                dependencies: [],
               }
             ],
-            successProbability: 0.78
+            successProbability: 0.78,
           }
         ],
-        competitivePosition: {
+        competitivePosition: {,
           categoryRank: 15,
           totalInCategory: 156,
           competitiveAdvantages: ['Unique design style', 'High quality assets'],
           competitiveWeaknesses: ['Limited customization options', 'Higher price point'],
           marketShare: 0.034,
-          trendDirection: 'gaining'
+          trendDirection: 'gaining',
         }
       }
     ];
   };
-
   // Generate creator optimizations
   const generateCreatorOptimizations = (creatorContext: CreatorContext): CreatorOptimizationData[] => {
     return [
       {
         creatorId: creatorContext.creatorId,
         creatorName: creatorContext.creatorName,
-        portfolioMetrics: {
+        portfolioMetrics: {,
           totalTemplates: creatorContext.totalTemplates,
           totalRevenue: creatorContext.totalRevenue,
           averageConversionRate: 0.156,
           averageRating: creatorContext.averageRating,
           topPerformingCategory: 'Web Design',
           portfolioDiversification: 0.67,
-          marketPenetration: 0.023
+          marketPenetration: 0.023,
         },
-        optimizationRecommendations: [
+        optimizationRecommendations: [,
           {
             recommendationType: 'template_optimization',
             title: 'Optimize Underperforming Templates',
             description: 'Focus on improving conversion rates for templates with high views but low downloads',
-            expectedImpact: {
+            expectedImpact: {,
               revenueIncrease: 2340,
               conversionImprovement: 0.045,
               userEngagementBoost: 0.23,
               timeToImpact: 21,
-              confidenceLevel: 0.82
+              confidenceLevel: 0.82,
             },
-            actionItems: [
+            actionItems: [,
               {
                 action: 'Update template previews',
                 instructions: 'Create high-quality preview images showing template in use',
@@ -840,20 +827,20 @@ export   const [error, setError] = useState<string | null>(null);
                 success_criteria: ['Time spent on template page increases', 'Conversion rate improves']
               }
             ],
-            priority: 'high'
+            priority: 'high',
           },
           {
             recommendationType: 'portfolio_expansion',
             title: 'Expand into Growing Categories',
             description: 'Mobile app design templates show high demand and growth potential',
-            expectedImpact: {
+            expectedImpact: {,
               revenueIncrease: 4560,
               conversionImprovement: 0.0,
               userEngagementBoost: 0.15,
               timeToImpact: 45,
-              confidenceLevel: 0.71
+              confidenceLevel: 0.71,
             },
-            actionItems: [
+            actionItems: [,
               {
                 action: 'Research mobile design trends',
                 instructions: 'Analyze top-performing mobile templates and identify opportunities',
@@ -871,17 +858,17 @@ export   const [error, setError] = useState<string | null>(null);
                 success_criteria: ['Launch 3 mobile templates', 'Achieve 4+ star average rating']
               }
             ],
-            priority: 'medium'
+            priority: 'medium',
           }
         ],
-        performanceTrends: [
+        performanceTrends: [,
           {
             metric: 'monthly_revenue',
             currentValue: 3450,
             trend: 'improving',
             changePercentage: 12.3,
             projectedValue: 3890,
-            factors: [
+            factors: [,
               {
                 factor: 'seasonal_demand_increase',
                 impact: 0.15,
@@ -897,7 +884,7 @@ export   const [error, setError] = useState<string | null>(null);
             ]
           }
         ],
-        growthOpportunities: [
+        growthOpportunities: [,
           {
             opportunity: 'Premium Template Tier',
             description: 'Launch premium templates with advanced features and customization',
@@ -905,27 +892,26 @@ export   const [error, setError] = useState<string | null>(null);
             competitionLevel: 'medium',
             skillRequirements: ['Advanced Design Skills', 'Interactive Elements'],
             investmentRequired: 2500,
-            expectedROI: 3.4
+            expectedROI: 3.4,
           }
         ]
       }
     ];
   };
-
   // Generate marketplace metrics
   const generateMarketplaceMetrics = (): MarketplaceMetricData => {
     return {
       totalConversions: 15678,
       totalRevenue: 892450,
       averageConversionRate: 0.167,
-      topPerformingCategories: [
+      topPerformingCategories: [,
         {
           category: 'Web Design',
           conversionRate: 0.189,
           revenue: 234560,
           templateCount: 1234,
           averageRating: 4.3,
-          growthRate: 0.156
+          growthRate: 0.156,
         },
         {
           category: 'Mobile Design',
@@ -933,84 +919,83 @@ export   const [error, setError] = useState<string | null>(null);
           revenue: 187390,
           templateCount: 856,
           averageRating: 4.5,
-          growthRate: 0.234
+          growthRate: 0.234,
         }
       ],
-      userAcquisitionMetrics: {
+      userAcquisitionMetrics: {,
         newUsersLastPeriod: 3456,
         acquisitionCost: 23.45,
-        acquisitionChannels: [
+        acquisitionChannels: [,
           {
             channel: 'Organic Search',
             users: 1456,
             cost: 0,
             conversionRate: 0.23,
-            quality: 0.89
+            quality: 0.89,
           },
           {
             channel: 'Social Media',
             users: 1123,
             cost: 15678,
             conversionRate: 0.18,
-            quality: 0.76
+            quality: 0.76,
           }
         ],
-        conversionByChannel: [
+        conversionByChannel: [,
           {
             channel: 'Organic Search',
             conversionRate: 0.23,
             averageValue: 67.89,
-            retentionRate: 0.78
+            retentionRate: 0.78,
           }
         ]
       },
-      retentionMetrics: {
+      retentionMetrics: {,
         overallRetentionRate: 0.67,
-        cohortRetention: [
+        cohortRetention: [,
           {
             cohort: 'Q1 2024',
             retentionRate: 0.72,
             averageLifetime: 456,
-            totalValue: 23450
+            totalValue: 23450,
           }
         ],
         churnRate: 0.08,
-        reactivationRate: 0.15
+        reactivationRate: 0.15,
       },
-      healthScore: {
+      healthScore: {,
         overallScore: 87,
-        components: [
+        components: [,
           {
             component: 'Conversion Performance',
             score: 89,
             weight: 0.3,
-            status: 'good'
+            status: 'good',
           },
           {
             component: 'User Satisfaction',
             score: 91,
             weight: 0.25,
-            status: 'excellent'
+            status: 'excellent',
           },
           {
             component: 'Revenue Growth',
             score: 84,
             weight: 0.25,
-            status: 'good'
+            status: 'good',
           },
           {
             component: 'Technical Performance',
             score: 78,
             weight: 0.2,
-            status: 'fair'
+            status: 'fair',
           }
         ],
         trend: 'improving',
-        criticalIssues: []
+        criticalIssues: [],
       }
     };
   };
-
   // Generate recommended actions
   const generateRecommendedActions = (role: UserRole): RecommendedAction[] => {
     return [
@@ -1021,21 +1006,21 @@ export   const [error, setError] = useState<string | null>(null);
         description: 'Registration has the highest drop-off rate and represents the biggest optimization opportunity',
         targetAudience: ['admin', 'manager'],
         priority: 'critical',
-        expectedImpact: {
+        expectedImpact: {,
           revenueImpact: 23450,
           conversionImpact: 0.15,
           userImpact: 1234,
           timeToImpact: 14,
-          confidenceLevel: 0.89
+          confidenceLevel: 0.89,
         },
-        implementation: {
-          steps: [
+        implementation: {,
+          steps: [,
             {
               step: 'Analyze registration drop-off points',
               description: 'Use heatmaps and user session recordings to identify friction points',
               owner: 'UX Team',
               duration: 3,
-              dependencies: []
+              dependencies: [],
             },
             {
               step: 'Simplify registration form',
@@ -1055,13 +1040,13 @@ export   const [error, setError] = useState<string | null>(null);
           resources: ['UX Designer', 'Frontend Developer', 'Product Analyst'],
           timeline: 21,
           cost: 8500,
-          riskLevel: 'low'
+          riskLevel: 'low',
         },
-        progress: {
+        progress: {,
           status: 'pending',
           completionPercentage: 0,
           completedSteps: [],
-          blockers: []
+          blockers: [],
         }
       },
       {
@@ -1071,38 +1056,37 @@ export   const [error, setError] = useState<string | null>(null);
         description: 'Improve template previews to increase download conversion rates',
         targetAudience: ['creator', 'admin'],
         priority: 'high',
-        expectedImpact: {
+        expectedImpact: {,
           revenueImpact: 15670,
           conversionImpact: 0.08,
           userImpact: 2340,
           timeToImpact: 10,
-          confidenceLevel: 0.76
+          confidenceLevel: 0.76,
         },
-        implementation: {
-          steps: [
+        implementation: {,
+          steps: [,
             {
               step: 'Implement interactive previews',
               description: 'Add ability to customize and interact with template previews',
               owner: 'Frontend Team',
               duration: 14,
-              dependencies: []
+              dependencies: [],
             }
           ],
           resources: ['Frontend Developer', 'UI Designer'],
           timeline: 14,
           cost: 5600,
-          riskLevel: 'medium'
+          riskLevel: 'medium',
         },
-        progress: {
+        progress: {,
           status: 'pending',
           completionPercentage: 0,
           completedSteps: [],
-          blockers: []
+          blockers: [],
         }
       }
     ];
   };
-
   // Generate performance alerts
   const generatePerformanceAlerts = (): PerformanceAlert[] => {
     return [
@@ -1112,19 +1096,19 @@ export   const [error, setError] = useState<string | null>(null);
         severity: 'high',
         title: 'Conversion Rate Drop Detected',
         description: 'Mobile template category showing 15% decrease in conversion rate over last 7 days',
-        affectedEntities: [
+        affectedEntities: [,
           {
             entityType: 'category',
             entityId: 'mobile-templates',
             entityName: 'Mobile Templates',
-            impactLevel: 0.15
+            impactLevel: 0.15,
           }
         ],
         detectedAt: Date.now() - 2 * 60 * 60 * 1000,
-        resolution: {
+        resolution: {,
           status: 'investigating',
           assignedTo: 'analytics-team',
-          resolutionSteps: [
+          resolutionSteps: [,
             {
               step: 'Analyze traffic sources',
               completedAt: Date.now() - 60 * 60 * 1000,
@@ -1140,7 +1124,6 @@ export   const [error, setError] = useState<string | null>(null);
       }
     ];
   };
-
   // Generate integration health
   const generateIntegrationHealth = (): IntegrationHealthData => {
     return {
@@ -1149,38 +1132,34 @@ export   const [error, setError] = useState<string | null>(null);
       syncFrequency: 300000, // 5 minutes
       dataQuality: 0.96,
       errors: [],
-      performance: {
+      performance: {,
         averageResponseTime: 145,
         throughput: 2340,
         errorRate: 0.003,
-        availability: 0.999
+        availability: 0.999,
       }
     };
   };
-
   // Handle refresh
   const handleRefresh = useCallback(() => {
     setRefreshing(true);
     loadIntegrationData().finally(() => setRefreshing(false));
   }, [loadIntegrationData]);
-
   // Handle optimization action
   const handleOptimizationAction = useCallback((actionType: string, details: Record<string, any>) => {
     const action: OptimizationAction = {
       actionType: actionType as any,
       details,
       userId: marketplaceContext.creatorContext?.creatorId || marketplaceContext.adminContext?.adminId || 'anonymous',
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
-
     if (onOptimizationAction) {
       onOptimizationAction(action);
     }
   }, [marketplaceContext, onOptimizationAction]);
-
   // Handle insight interaction
-  const handleInsightInteraction = useCallback(
-    (interactionType: string,
+  const handleInsightInteraction = useCallback(;)
+    (interactionType: string,)
     insightId: string,
     context: Record<string,
     any> = {}
@@ -1192,34 +1171,28 @@ export   const [error, setError] = useState<string | null>(null);
       timestamp: Date.now(),
       context
     };
-
     if (onInsightInteraction) {
       onInsightInteraction(interaction);
     }
   }, [marketplaceContext, onInsightInteraction]);
-
   // Setup auto-refresh
   useEffect(() => {
     if (widgetConfig.refreshInterval > 0) {
       intervalRef.current = setInterval(handleRefresh, widgetConfig.refreshInterval);
     }
-
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
   }, [widgetConfig.refreshInterval, handleRefresh]);
-
   // Initial data load
   useEffect(() => {
     loadIntegrationData();
   }, [loadIntegrationData]);
-
   // Handle export
   const handleExport = useCallback(() => {
     if (!integrationData || !onExport) return;
-    
     const exportData: MarketplaceIntegrationExportData = {
       funnelSummary: integrationData.funnelSummary,
       templateInsights: integrationData.templateInsights,
@@ -1227,23 +1200,20 @@ export   const [error, setError] = useState<string | null>(null);
       recommendedActions: integrationData.recommendedActions,
       performanceAlerts: integrationData.performanceAlerts,
       exportTimestamp: Date.now(),
-      userContext: marketplaceContext
+      userContext: marketplaceContext,
     };
-    
     onExport(exportData);
   }, [integrationData, marketplaceContext, onExport]);
-
   if (loading) {
-    return (
+    return ()
       <div className="marketplace-integration-loading">
         <div className="loading-spinner"></div>
         <p>Loading marketplace integration...</p>
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="marketplace-integration-error">
         <h3>Integration Error</h3>
         <p className="error-message">{error}</p>
@@ -1253,15 +1223,13 @@ export   const [error, setError] = useState<string | null>(null);
       </div>
     );
   }
-
   if (!integrationData) {
     return <div className="marketplace-integration-error">No data available</div>;
   }
-
   // Render based on integration mode
   switch (integrationMode) {
     case 'embedded_widget':
-      return (
+      return ()
         <div className="marketplace-funnel-integration embedded">
           <div className="integration-header">
             <h3>Funnel Analytics</h3>
@@ -1278,9 +1246,8 @@ export   const [error, setError] = useState<string | null>(null);
               </button>
             </div>
           </div>
-
           <div className="widget-selector">
-            {widgetConfig.widgets.map(widget => (
+            {widgetConfig.widgets.map(widget => ()
               <button
                 key={widget}
                 className={`widget-tab ${activeWidget === widget ? 'active' : ''}`}
@@ -1290,9 +1257,8 @@ export   const [error, setError] = useState<string | null>(null);
               </button>
             ))}
           </div>
-
           <div className="widget-content">
-            {activeWidget === 'conversion_summary' && (
+            {activeWidget === 'conversion_summary' && ()
               <div className="conversion-summary-widget">
                 <div className="summary-metrics">
                   <div className="metric-card">
@@ -1300,25 +1266,22 @@ export   const [error, setError] = useState<string | null>(null);
                     <span className="metric-value">
                       {Math.round(integrationData.funnelSummary.overallConversionRate * 100)}%
                     </span>
-                    <span className={`metric-trend ${integrationData.funnelSummary.trendDirection}`}>
+                    <span className={`metric-trend ${integrationData.funnelSummary.trendDirection}`}>}
                       {integrationData.funnelSummary.trendDirection}
                     </span>
                   </div>
-                  
                   <div className="metric-card">
                     <span className="metric-label">Total Revenue</span>
                     <span className="metric-value">
                       ${integrationData.funnelSummary.totalRevenue.toLocaleString()}
                     </span>
                   </div>
-                  
                   <div className="metric-card">
                     <span className="metric-label">Conversions</span>
                     <span className="metric-value">
                       {integrationData.funnelSummary.totalConversions.toLocaleString()}
                     </span>
                   </div>
-                  
                   <div className="metric-card">
                     <span className="metric-label">Avg Order Value</span>
                     <span className="metric-value">
@@ -1328,27 +1291,23 @@ export   const [error, setError] = useState<string | null>(null);
                 </div>
               </div>
             )}
-
-            {activeWidget === 'optimization_recommendations' && (
+            {activeWidget === 'optimization_recommendations' && ()
               <div className="recommendations-widget">
                 <h4>Recommended Actions</h4>
                 <div className="recommendation-list">
-                  {integrationData.recommendedActions.slice(0, 3).map(action => (
-                    <div key={action.actionId} className={`recommendation-item ${action.priority}`}>
+                  {integrationData.recommendedActions.slice(0, 3).map(action => ()
+                    <div key={action.actionId} className={`recommendation-item ${action.priority}`}>}
                       <div className="recommendation-header">
                         <h5>{action.title}</h5>
-                        <span className={`priority-badge ${action.priority}`}>
+                        <span className={`priority-badge ${action.priority}`}>}
                           {action.priority.toUpperCase()}
                         </span>
                       </div>
-                      
                       <p className="recommendation-description">{action.description}</p>
-                      
                       <div className="recommendation-impact">
-                        <span>Expected Revenue Impact: ${action.expectedImpact.revenueImpact.toLocaleString()}</span>
+                        <span>Expected Revenue Impact: ${action.expectedImpact.revenueImpact.toLocaleString()}</span>}
                         <span>Timeline: {action.implementation.timeline} days</span>
                       </div>
-                      
                       <div className="recommendation-actions">
                         <button
                           onClick={() => handleOptimizationAction('implement_recommendation', { actionId: action.actionId })}
@@ -1368,14 +1327,12 @@ export   const [error, setError] = useState<string | null>(null);
                 </div>
               </div>
             )}
-            
             {/* Add more widget content based on activeWidget */}
           </div>
         </div>
       );
-
     case 'full_dashboard':
-      return (
+      return ()
         <div className="marketplace-funnel-integration full-dashboard">
           {/* Full dashboard implementation */}
           <div className="dashboard-header">
@@ -1389,7 +1346,6 @@ export   const [error, setError] = useState<string | null>(null);
               </button>
             </div>
           </div>
-
           <div className="dashboard-grid">
             <div className="dashboard-section">
               <FunnelChart
@@ -1398,7 +1354,6 @@ export   const [error, setError] = useState<string | null>(null);
                 timeRange={{ start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() }}
               />
             </div>
-
             <div className="dashboard-section">
               <FunnelOptimizationEngine
                 funnelDefinition={funnelDefinition}
@@ -1406,7 +1361,7 @@ export   const [error, setError] = useState<string | null>(null);
                 timeRange={{ start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() }}
                 currentPerformance={{
                   overallConversionRate: integrationData.funnelSummary.overallConversionRate,
-                  stepPerformance: integrationData.funnelSummary.topPerformingSteps.map(step => ({
+                  stepPerformance: integrationData.funnelSummary.topPerformingSteps.map(step => ({)
                     stepId: step.stepId,
                     stepName: step.stepName,
                     conversionRate: step.conversionRate,
@@ -1414,41 +1369,40 @@ export   const [error, setError] = useState<string | null>(null);
                     averageTimeSpent: step.averageTimeSpent,
                     errorRate: 0.02,
                     userSatisfactionScore: 0.85,
-                    completionQuality: 0.92
+                    completionQuality: 0.92,
                   })),
-                  revenueMetrics: {
+                  revenueMetrics: {,
                     revenuePerVisitor: integrationData.funnelSummary.totalRevenue / integrationData.funnelSummary.totalConversions,
                     revenuePerConversion: integrationData.funnelSummary.averageOrderValue,
                     lifetimeValue: 450,
                     paybackPeriod: 90,
-                    marginPerConversion: 35
+                    marginPerConversion: 35,
                   },
-                  userExperienceMetrics: {
+                  userExperienceMetrics: {,
                     overallSatisfactionScore: 0.87,
                     easeOfUseScore: 0.82,
                     clarityScore: 0.89,
                     trustScore: 0.91,
                     mobileExperienceScore: 0.78,
-                    accessibilityScore: 0.85
+                    accessibilityScore: 0.85,
                   },
-                  technicalMetrics: {
+                  technicalMetrics: {,
                     averageLoadTime: 1.2,
                     errorRate: 0.008,
                     availabilityScore: 0.999,
                     performanceScore: 0.94,
                     securityScore: 0.96,
-                    compatibilityScore: 0.88
+                    compatibilityScore: 0.88,
                   },
-                  timestamp: Date.now()
+                  timestamp: Date.now(),
                 }}
               />
             </div>
           </div>
         </div>
       );
-
     default:
-      return (
+      return ()
         <div className="marketplace-funnel-integration">
           <p>Integration mode '{integrationMode}' not implemented yet.</p>
         </div>

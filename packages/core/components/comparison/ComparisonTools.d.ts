@@ -80,7 +80,7 @@ export interface ComparisonMetrics {
     complexity: number;
     impactScore: number;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
-    performanceImpact: {
+    performanceImpact: {,
         estimated: boolean;
         cpuDelta: number;
         memoryDelta: number;
@@ -94,14 +94,14 @@ export interface ComparisonReport {
     session: ComparisonSession;
     comparison: GraphComparison;
     metrics: ComparisonMetrics;
-    summary: {
+    summary: {,
         title: string;
         description: string;
         recommendations: string[];
         warnings: string[];
         errors: string[];
     };
-    timeline: Array<{
+    timeline: Array<{,
         timestamp: Date;
         event: string;
         impact: 'low' | 'medium' | 'high';

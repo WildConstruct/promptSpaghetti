@@ -4,7 +4,6 @@
  * Sample data for testing and demonstrating VFX Pipeline Visualizer components
  * with Wild Construct ecosystem integration.
  */
-
 import type { 
   VFXScene, 
   VFXCharacter, 
@@ -21,35 +20,31 @@ const medievalWoolMaterial: MaterialProperty = {
   name: 'Medieval Wool',
   type: 'diffuse',
   value: 0.8,
-  historicallyAccurate: true
+  historicallyAccurate: true,
 };
-
 const stoneTexture: MaterialProperty = {
   name: 'Limestone Texture',
   type: 'roughness',
   value: 0.9,
-  historicallyAccurate: true
+  historicallyAccurate: true,
 };
-
 const ironMetal: MaterialProperty = {
   name: 'Wrought Iron',
   type: 'metallic',
   value: 0.7,
-  historicallyAccurate: true
+  historicallyAccurate: true,
 };
-
 const oakWood: MaterialProperty = {
   name: 'Oak Wood',
   type: 'diffuse',
   value: 0.6,
-  historicallyAccurate: true
+  historicallyAccurate: true,
 };
-
 const thatchRoof: MaterialProperty = {
   name: 'Thatched Roofing',
   type: 'normal',
   value: 0.5,
-  historicallyAccurate: true
+  historicallyAccurate: true,
 };
 
 // Sample VFX Assets
@@ -62,7 +57,7 @@ const sampleAssets: VFXAsset[] = [
     region: 'England',
     accuracy: 95,
     materials: [stoneTexture, oakWood, ironMetal],
-    lod: 3
+    lod: 3,
   },
   {
     id: 'market-stall-001',
@@ -72,7 +67,7 @@ const sampleAssets: VFXAsset[] = [
     region: 'England',
     accuracy: 88,
     materials: [oakWood, thatchRoof],
-    lod: 2
+    lod: 2,
   },
   {
     id: 'stone-well-001',
@@ -82,7 +77,7 @@ const sampleAssets: VFXAsset[] = [
     region: 'England',
     accuracy: 92,
     materials: [stoneTexture, ironMetal],
-    lod: 2
+    lod: 2,
   },
   {
     id: 'castle-wall-001',
@@ -92,7 +87,7 @@ const sampleAssets: VFXAsset[] = [
     region: 'England',
     accuracy: 97,
     materials: [stoneTexture],
-    lod: 4
+    lod: 4,
   },
   {
     id: 'cobblestone-001',
@@ -102,7 +97,7 @@ const sampleAssets: VFXAsset[] = [
     region: 'England',
     accuracy: 85,
     materials: [stoneTexture],
-    lod: 1
+    lod: 1,
   },
   {
     id: 'oak-tree-001',
@@ -112,7 +107,7 @@ const sampleAssets: VFXAsset[] = [
     region: 'England',
     accuracy: 90,
     materials: [oakWood],
-    lod: 2
+    lod: 2,
   },
   {
     id: 'cart-wheel-001',
@@ -122,7 +117,7 @@ const sampleAssets: VFXAsset[] = [
     region: 'England',
     accuracy: 86,
     materials: [oakWood, ironMetal],
-    lod: 1
+    lod: 1,
   },
   {
     id: 'banner-fabric-001',
@@ -132,7 +127,7 @@ const sampleAssets: VFXAsset[] = [
     region: 'England',
     accuracy: 83,
     materials: [medievalWoolMaterial],
-    lod: 1
+    lod: 1,
   }
 ];
 
@@ -250,7 +245,7 @@ const sampleComposition: SceneComposition = {
   cameraPosition: { x: 0, y: 5, z: 20 },
   focalLength: 35,
   depth: 50,
-  layers: sampleSceneLayers
+  layers: sampleSceneLayers,
 };
 
 // Sample Accuracy Violations
@@ -280,7 +275,7 @@ const sampleAccuracyMetrics: HistoricalAccuracyMetrics = {
   culture: 93,
   timeline: 96,
   expertValidated: true,
-  violations: sampleViolations
+  violations: sampleViolations,
 };
 
 // Complete Sample VFX Scene
@@ -294,7 +289,7 @@ export const medievalCourtyard: VFXScene = {
   characters: sampleCharacters,
   assets: sampleAssets,
   composition: sampleComposition,
-  accuracy: sampleAccuracyMetrics
+  accuracy: sampleAccuracyMetrics,
 };
 
 // Additional sample scenes for timeline testing
@@ -305,23 +300,23 @@ export const vikingVillage: VFXScene = {
   region: 'Scandinavia',
   timeOfDay: 'evening',
   weather: 'Cold with snow flurries',
-  characters: sampleCharacters.slice(0, 4).map(char => ({
+  characters: sampleCharacters.slice(0, 4).map(char => ({)
     ...char,
     culture: 'Norse',
     period: 'Viking Age',
-    id: `viking-${char.id}`
+    id: `viking-${char.id}`}
   })),
-  assets: sampleAssets.slice(0, 5).map(asset => ({
+  assets: sampleAssets.slice(0, 5).map(asset => ({)
     ...asset,
     period: 'Viking Age',
     region: 'Scandinavia',
-    id: `viking-${asset.id}`
+    id: `viking-${asset.id}`}
   })),
   composition: sampleComposition,
-  accuracy: {
+  accuracy: {,
     ...sampleAccuracyMetrics,
     overall: 87,
-    expertValidated: false
+    expertValidated: false,
   }
 };
 
@@ -332,24 +327,24 @@ export const romanForum: VFXScene = {
   region: 'Italy',
   timeOfDay: 'noon',
   weather: 'Clear and warm',
-  characters: sampleCharacters.slice(0, 6).map(char => ({
+  characters: sampleCharacters.slice(0, 6).map(char => ({)
     ...char,
     culture: 'Roman',
     period: 'Imperial Rome',
-    id: `roman-${char.id}`
+    id: `roman-${char.id}`}
   })),
-  assets: sampleAssets.slice(0, 6).map(asset => ({
+  assets: sampleAssets.slice(0, 6).map(asset => ({)
     ...asset,
     period: 'Imperial Rome',
     region: 'Italy',
-    id: `roman-${asset.id}`
+    id: `roman-${asset.id}`}
   })),
   composition: sampleComposition,
-  accuracy: {
+  accuracy: {,
     ...sampleAccuracyMetrics,
     overall: 94,
     architecture: 98,
-    expertValidated: true
+    expertValidated: true,
   }
 };
 
@@ -372,7 +367,7 @@ export const generateRandomScene = (id: string, name: string, period: string): V
     characters: sampleCharacters.slice(0, Math.floor(Math.random() * 6) + 2),
     assets: sampleAssets.slice(0, Math.floor(Math.random() * 5) + 3),
     composition: sampleComposition,
-    accuracy: {
+    accuracy: {,
       overall: Math.floor(Math.random() * 20) + 80, // 80-99%
       architecture: Math.floor(Math.random() * 15) + 85,
       clothing: Math.floor(Math.random() * 15) + 85,

@@ -4,7 +4,6 @@
  * 
  * Cinema 4D and Substance Designer inspired loading animations
  */
-
 import React from 'react';
 import { 
   loadingAnimations, 
@@ -21,7 +20,7 @@ export interface ProfessionalSpinnerProps {
   progress?: number; // 0-100 for progress indicators
 }
 
-export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({
+export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
   size = 'medium',
   variant = 'primary',
   type = 'spinner',
@@ -37,25 +36,24 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({
     };
     return sizes[size];
   };
-
   const getColors = () => {
     const colors = {
-      primary: {
+      primary: {,
         main: '#3b82f6',
         light: 'rgba(59, 130, 246, 0.3)',
         gradient: 'linear-gradient(45deg, #3b82f6, #1d4ed8)'
       },
-      secondary: {
+      secondary: {,
         main: '#6b7280',
         light: 'rgba(107, 114, 128, 0.3)',
         gradient: 'linear-gradient(45deg, #6b7280, #374151)'
       },
-      accent: {
+      accent: {,
         main: '#10b981',
         light: 'rgba(16, 185, 129, 0.3)',
         gradient: 'linear-gradient(45deg, #10b981, #047857)'
       },
-      cinema4d: {
+      cinema4d: {,
         main: '#ff6b35',
         light: 'rgba(255, 107, 53, 0.3)',
         gradient: 'linear-gradient(45deg, #ff6b35, #e55039)'
@@ -63,29 +61,26 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({
     };
     return colors[variant];
   };
-
   const { spinner: spinnerSize, text: textSize, gap } = getSizeConfig();
   const colors = getColors();
-
   const containerStyle: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     gap: gap,
-    color: '#f3f4f6'
+    color: '#f3f4f6',
   };
-
   const renderSpinner = () => {
     switch (type) {
     case 'spinner':
-      return (
+      return ()
         <div
           style={{
             width: spinnerSize,
             height: spinnerSize,
-            border: `2px solid ${colors.light}`,
-            borderTop: `2px solid ${colors.main}`,
+            border: `2px solid ${colors.light}`,}
+            borderTop: `2px solid ${colors.main}`,}
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             ...createSmoothTransition(['border-color'])
@@ -93,14 +88,13 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({
           className="animate-loading-spinner"
         />
       );
-
     case 'dots':
-      return (
+      return ()
         <div 
           className="spinner-dots"
           style={{ gap: spinnerSize / 4 }}
         >
-          {[0, 1, 2].map((i) => (
+          {[0, 1, 2].map((i) => ()
             <div
               key={i}
               className="dot"
@@ -108,15 +102,14 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({
                 width: spinnerSize / 3,
                 height: spinnerSize / 3,
                 background: colors.main,
-                animationDelay: `${i * 0.16}s`
+                animationDelay: `${i * 0.16}s`}
               }}
             />
           ))}
         </div>
       );
-
     case 'pulse':
-      return (
+      return ()
         <div
           style={{
             width: spinnerSize,
@@ -129,18 +122,17 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({
           className="animate-loading-pulse"
         />
       );
-
     case 'bars':
-      return (
+      return ()
         <div
           style={{
             display: 'flex',
             gap: spinnerSize / 8,
             alignItems: 'flex-end',
-            height: spinnerSize
+            height: spinnerSize,
           }}
         >
-          {[0, 1, 2, 3].map((i) => (
+          {[0, 1, 2, 3].map((i) => ()
             <div
               key={i}
               style={{
@@ -148,22 +140,21 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({
                 background: colors.gradient,
                 borderRadius: spinnerSize / 12,
                 animation: 'bar-bounce 1.2s ease-in-out infinite',
-                animationDelay: `${i * 0.1}s`,
+                animationDelay: `${i * 0.1}s`,}
                 height: '100%',
-                transformOrigin: 'bottom'
+                transformOrigin: 'bottom',
               }}
             />
           ))}
         </div>
       );
-
     case 'ring':
-      return (
+      return ()
         <div
           style={{
             width: spinnerSize,
             height: spinnerSize,
-            border: `3px solid ${colors.light}`,
+            border: `3px solid ${colors.light}`,}
             borderRadius: '50%',
             position: 'relative',
             animation: 'spin 2s linear infinite'
@@ -177,24 +168,21 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({
               right: -3,
               bottom: -3,
               border: '3px solid transparent',
-              borderTop: `3px solid ${colors.main}`,
+              borderTop: `3px solid ${colors.main}`,}
               borderRadius: '50%',
               animation: 'spin 1s linear infinite reverse'
             }}
           />
         </div>
       );
-
     default:
       return null;
     }
   };
-
-  return (
+  return ()
     <div style={containerStyle}>
       {renderSpinner()}
-      
-      {message && (
+      {message && ()
         <div
           style={{
             fontSize: textSize,
@@ -208,8 +196,7 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({
           {message}
         </div>
       )}
-
-      {typeof progress === 'number' && (
+      {typeof progress === 'number' && ()
         <div
           style={{
             width: spinnerSize * 2,
@@ -217,12 +204,12 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({
             background: colors.light,
             borderRadius: 2,
             overflow: 'hidden',
-            position: 'relative'
+            position: 'relative',
           }}
         >
           <div
             style={{
-              width: `${progress}%`,
+              width: `${progress}%`,}
               height: '100%',
               background: colors.gradient,
               borderRadius: 2,
@@ -245,7 +232,6 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({
     </div>
   );
 };
-
 /**
  * Full-screen professional loading overlay
  */
@@ -258,7 +244,7 @@ export interface LoadingOverlayProps {
   onCancel?: () => void;
 }
 
-export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
+export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({)
   visible,
   message,
   progress,
@@ -267,7 +253,6 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   onCancel
 }) => {
   if (!visible) return null;
-
   const getBackdropStyle = (): React.CSSProperties => {
     const base: React.CSSProperties = {
       position: 'fixed',
@@ -281,13 +266,12 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
       zIndex: 9999,
       animation: 'fadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
     };
-
     switch (backdrop) {
     case 'blur':
       return {
         ...base,
         background: 'rgba(0, 0, 0, 0.5)',
-        backdropFilter: 'blur(8px)'
+        backdropFilter: 'blur(8px)',
       };
     case 'solid':
       return {
@@ -297,14 +281,13 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
     case 'transparent':
       return {
         ...base,
-        background: 'transparent'
+        background: 'transparent',
       };
     default:
       return base;
     }
   };
-
-  return (
+  return ()
     <div style={getBackdropStyle()}>
       <div
         style={{
@@ -316,7 +299,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
           boxShadow: '0 25px 50px rgba(0, 0, 0, 0.25)',
           animation: 'scaleIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
           minWidth: 200,
-          textAlign: 'center'
+          textAlign: 'center',
         }}
       >
         <ProfessionalSpinner
@@ -326,8 +309,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
           message={message}
           progress={progress}
         />
-        
-        {onCancel && (
+        {onCancel && ()
           <button
             onClick={onCancel}
             style={{
@@ -359,7 +341,6 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
     </div>
   );
 };
-
 /**
  * Inline loading state for smaller components
  */
@@ -370,7 +351,7 @@ export interface InlineLoaderProps {
   children: React.ReactNode;
 }
 
-export const InlineLoader: React.FC<InlineLoaderProps> = ({
+export const InlineLoader: React.FC<InlineLoaderProps> = ({)
   loading,
   size = 'medium',
   text,
@@ -379,8 +360,7 @@ export const InlineLoader: React.FC<InlineLoaderProps> = ({
   if (!loading) {
     return <>{children}</>;
   }
-
-  return (
+  return ()
     <div
       style={{
         position: 'relative',
@@ -388,7 +368,7 @@ export const InlineLoader: React.FC<InlineLoaderProps> = ({
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: size === 'small' ? 40 : 60,
-        color: '#9ca3af'
+        color: '#9ca3af',
       }}
     >
       <div
@@ -419,7 +399,7 @@ export const InlineLoader: React.FC<InlineLoaderProps> = ({
 };
 
 // Additional keyframes for bar animation
-const barBounceKeyframes = `
+const barBounceKeyframes = `;
   @keyframes bar-bounce {
     0%, 80%, 100% {
       transform: scaleY(0.6);

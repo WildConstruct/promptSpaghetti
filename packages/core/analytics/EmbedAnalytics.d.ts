@@ -68,7 +68,7 @@ export interface PageContext {
     path: string;
     domain: string;
     language: string;
-    viewport: {
+    viewport: {,
         width: number;
         height: number;
     };
@@ -118,7 +118,7 @@ export interface DeviceContext {
     osVersion: string;
     browser: string;
     browserVersion: string;
-    resolution: {
+    resolution: {,
         width: number;
         height: number;
     };
@@ -142,11 +142,11 @@ export interface EmbedContext {
     id: string;
     version: string;
     type: string;
-    size: {
+    size: {,
         width: number;
         height: number;
     };
-    position: {
+    position: {,
         x: number;
         y: number;
     };
@@ -301,7 +301,7 @@ export interface TimeSeriesData {
 }
 export interface BreakdownData {
     dimension: string;
-    values: Array<{
+    values: Array<{,
         name: string;
         value: number;
         percentage: number;
@@ -440,7 +440,7 @@ export declare class EmbedAnalytics extends EventEmitter {
     endSession(): void;
     getExperimentVariant(experimentId: string): string | null;
     trackExperimentGoal(experimentId: string, goalId: string, value?: number): void;
-    generateReport(
+    generateReport()
       type: ReportType,
       timeRange: TimeRange,
       filters?: ReportFilter[],

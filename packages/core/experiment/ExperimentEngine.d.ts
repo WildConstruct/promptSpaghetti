@@ -19,7 +19,7 @@ export interface ExperimentStorage {
 }
 export interface ExperimentMetrics {
     recordAssignment(assignment: UserAssignment): Promise<void>;
-    recordEvent(
+    recordEvent()
       experimentId: string,
       variantId: string,
       eventType: string,
@@ -32,11 +32,11 @@ export declare class ExperimentEngine {
     private allocationConfig;
     private storage;
     private metrics;
-    constructor(
+    constructor()
       config: ABTestingConfig,
       allocationConfig: AllocationServiceConfig,
       storage: ExperimentStorage,
-      metrics: ExperimentMetrics
+      metrics: ExperimentMetrics,
     );
     /**
      * Create a new experiment
@@ -106,7 +106,7 @@ export declare class ExperimentEngine {
 /**
  * Factory function to create experiment engine with default configuration
  */
-export declare function createExperimentEngine(
+export declare function createExperimentEngine()
   storage: ExperimentStorage,
   metrics: ExperimentMetrics,
   config?: Partial<ABTestingConfig>,

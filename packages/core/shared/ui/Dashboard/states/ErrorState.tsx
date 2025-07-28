@@ -4,7 +4,6 @@
  * 
  * Provides standardized error states with retry functionality
  */
-
 import React from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import './ErrorState.css';
@@ -20,7 +19,7 @@ export interface ErrorStateProps {
   className?: string;
 }
 
-export const ErrorState: React.FC<ErrorStateProps> = ({
+export const ErrorState: React.FC<ErrorStateProps> = ({)
   error,
   title = 'Something went wrong',
   description,
@@ -31,21 +30,19 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
   className = ''
 }) => {
   const errorMessage = error instanceof Error ? error.message : error;
-  
   const getDescription = () => {
     if (description) return description;
     if (errorMessage) return errorMessage;
     return 'An unexpected error occurred while loading the dashboard.';
   };
-
-  const renderMinimal = () => (
-    <div className={`error-state minimal ${className}`}>
+  const renderMinimal = () => (;)
+    <div className={`error-state minimal ${className}`}>}
       <div className="error-content">
         <div className="error-header">
           {showIcon && <AlertTriangle size={20} className="error-icon" />}
           <span className="error-title">{title}</span>
         </div>
-        {onRetry && (
+        {onRetry && ()
           <button onClick={onRetry} className="retry-btn minimal">
             <RefreshCw size={16} />
             {retryText}
@@ -54,22 +51,19 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       </div>
     </div>
   );
-
-  const renderDefault = () => (
-    <div className={`error-state default ${className}`}>
+  const renderDefault = () => (;)
+    <div className={`error-state default ${className}`}>}
       <div className="error-content">
-        {showIcon && (
+        {showIcon && ()
           <div className="error-icon-container">
             <AlertTriangle size={48} className="error-icon" />
           </div>
         )}
-        
         <div className="error-text">
           <h3 className="error-title">{title}</h3>
           <p className="error-description">{getDescription()}</p>
         </div>
-
-        {onRetry && (
+        {onRetry && ()
           <div className="error-actions">
             <button onClick={onRetry} className="retry-btn default">
               <RefreshCw size={16} />
@@ -80,30 +74,26 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       </div>
     </div>
   );
-
-  const renderDetailed = () => (
-    <div className={`error-state detailed ${className}`}>
+  const renderDetailed = () => (;)
+    <div className={`error-state detailed ${className}`}>}
       <div className="error-content">
-        {showIcon && (
+        {showIcon && ()
           <div className="error-icon-container">
             <AlertTriangle size={64} className="error-icon" />
           </div>
         )}
-        
         <div className="error-text">
           <h2 className="error-title">{title}</h2>
           <p className="error-description">{getDescription()}</p>
-          
-          {error instanceof Error && error.stack && (
+          {error instanceof Error && error.stack && ()
             <details className="error-details">
               <summary>Technical Details</summary>
               <pre className="error-stack">{error.stack}</pre>
             </details>
           )}
         </div>
-
         <div className="error-actions">
-          {onRetry && (
+          {onRetry && ()
             <button onClick={onRetry} className="retry-btn detailed">
               <RefreshCw size={18} />
               {retryText}
@@ -119,7 +109,6 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       </div>
     </div>
   );
-
   switch (variant) {
     case 'minimal':
       return renderMinimal();

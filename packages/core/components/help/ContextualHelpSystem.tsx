@@ -1,7 +1,6 @@
 // packages/core/components/Help/ContextualHelpSystem.tsx
 // Contextual Help System for Story 8.4 Task 4
 // Provides tooltip system explaining advanced feature usage and progressive onboarding
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useUISettingsStore } from '../../stores/uiSettingsStore';
 
@@ -39,7 +38,7 @@ export interface HelpSystemProps {
 // Built-in help content for common components
 export 
 // Individual tooltip component
-export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
+export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({)
   content,
   children,
   disabled = false,
@@ -49,41 +48,32 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [calculatedPosition, setCalculatedPosition] = useState<string>('top');
-  
   const containerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  
   const { complexityLevel } = useUISettingsStore();
-
   // Check if tooltip should be shown based on current disclosure level
-  const shouldShow = content.showOnDisclosureLevel 
+  const shouldShow = content.showOnDisclosureLevel ;
     ? content.showOnDisclosureLevel.includes(complexityLevel)
     : true;
-
   const showTooltip = useCallback((event?: React.MouseEvent) => {
     if (disabled || !shouldShow) return;
-
     // Clear any existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-
     // Calculate position
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
       const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-      
       let x = rect.left + scrollX + rect.width / 2;
       let y = rect.top + scrollY;
-      
       // Auto-position if needed
       let pos = content.position || 'auto';
       if (pos === 'auto') {
         const viewportHeight = window.innerHeight;
         const viewportWidth = window.innerWidth;
-        
         if (rect.top < viewportHeight / 2) {
           pos = 'bottom';
           y = rect.bottom + scrollY;
@@ -91,24 +81,20 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
           pos = 'top';
           y = rect.top + scrollY;
         }
-        
         if (rect.left < viewportWidth / 2) {
           x = rect.left + scrollX;
         } else {
           x = rect.right + scrollX;
         }
       }
-      
       setPosition({ x, y });
       setCalculatedPosition(pos);
     }
-
     // Show with delay
     timeoutRef.current = setTimeout(() => {
       setIsVisible(true);
     }, delay);
   }, [disabled, shouldShow, content.position, delay]);
-
   const hideTooltip = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -116,21 +102,19 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
     }
     setIsVisible(false);
   }, []);
-
   // Event handlers based on trigger type
   const getEventHandlers = () => {
     const trigger = content.trigger || 'hover';
-    
     switch (trigger) {
       case 'hover':
         return {
           onMouseEnter: showTooltip,
-          onMouseLeave: hideTooltip
+          onMouseLeave: hideTooltip,
         };
       case 'focus':
         return {
           onFocus: showTooltip,
-          onBlur: hideTooltip
+          onBlur: hideTooltip,
         };
       case 'click':
         return {
@@ -147,7 +131,6 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
         return {};
     }
   };
-
   // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
@@ -156,8 +139,7 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
       }
     };
   }, []);
-
-  return (
+  return ()
     <div
       ref={containerRef}
       className={`contextual-tooltip-container ${className}`}
@@ -165,8 +147,7 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
       {...getEventHandlers()}
     >
       {children}
-      
-      {isVisible && shouldShow && (
+      {isVisible && shouldShow && ()
         <div
           ref={tooltipRef}
           className="contextual-tooltip"
@@ -176,7 +157,7 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
             top: position.y,
             zIndex: 1000,
             pointerEvents: 'none',
-            transform: getTooltipTransform(calculatedPosition)
+            transform: getTooltipTransform(calculatedPosition),
           }}
         >
           <div
@@ -189,7 +170,7 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
               color: '#e2e8f0',
               fontSize: 12,
-              lineHeight: 1.4
+              lineHeight: 1.4,
             }}
           >
             {/* Title */}
@@ -199,32 +180,30 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
               color: getContentColor(content.category),
               display: 'flex',
               alignItems: 'center',
-              gap: 6
+              gap: 6,
             }}>
               {getCategoryIcon(content.category)}
               {content.title}
-              {content.priority === 'high' && (
+              {content.priority === 'high' && ()
                 <span style={{ fontSize: 10, color: '#f6ad55' }}>⭐</span>
               )}
             </div>
-            
             {/* Description */}
             <div style={{ marginBottom: 8 }}>
               {content.description}
             </div>
-            
             {/* Examples */}
-            {content.examples && content.examples.length > 0 && (
+            {content.examples && content.examples.length > 0 && ()
               <div style={{ marginBottom: 8 }}>
                 <div style={{ 
                   fontSize: 10, 
                   fontWeight: 600, 
                   color: '#a0aec0', 
-                  marginBottom: 4 
+                  marginBottom: 4 ,
                 }}>
                   Examples:
                 </div>
-                {content.examples.map((example, index) => (
+                {content.examples.map((example, index) => ()
                   <div
                     key={index}
                     style={{
@@ -234,7 +213,7 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
                       background: 'rgba(72, 187, 120, 0.1)',
                       padding: '2px 4px',
                       borderRadius: 2,
-                      marginBottom: 2
+                      marginBottom: 2,
                     }}
                   >
                     {example}
@@ -242,44 +221,41 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
                 ))}
               </div>
             )}
-            
             {/* Shortcut */}
-            {content.shortcut && (
+            {content.shortcut && ()
               <div style={{
                 fontSize: 10,
                 color: '#a0aec0',
                 marginBottom: 4,
                 display: 'flex',
                 alignItems: 'center',
-                gap: 4
+                gap: 4,
               }}>
                 <span>⌨️</span>
                 <span style={{ 
                   background: '#2d3748', 
                   padding: '1px 4px', 
                   borderRadius: 2,
-                  fontFamily: 'monospace'
+                  fontFamily: 'monospace',
                 }}>
                   {content.shortcut}
                 </span>
               </div>
             )}
-            
             {/* Related Features */}
-            {content.relatedFeatures && content.relatedFeatures.length > 0 && (
+            {content.relatedFeatures && content.relatedFeatures.length > 0 && ()
               <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid #4a5568' }}>
                 <div style={{ 
                   fontSize: 10, 
                   color: '#a0aec0', 
-                  marginBottom: 4 
+                  marginBottom: 4 ,
                 }}>
                   Related: {content.relatedFeatures.join(', ')}
                 </div>
               </div>
             )}
-            
             {/* Learn More Link */}
-            {content.learnMoreUrl && (
+            {content.learnMoreUrl && ()
               <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid #4a5568' }}>
                 <a
                   href={content.learnMoreUrl}
@@ -291,14 +267,13 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
                     textDecoration: 'none',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 4
+                    gap: 4,
                   }}
                 >
                   📖 Learn More
                 </a>
               </div>
             )}
-            
             {/* Tooltip Arrow */}
             <div
               style={{
@@ -323,10 +298,9 @@ interface ProgressiveOnboardingProps {
   onComplete: () => void;
 }
 
-export   
+export 
   if (!currentContent) return null;
-
-  return (
+  return ()
     <div
       style={{
         position: 'fixed',
@@ -347,19 +321,19 @@ export
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 16
+        marginBottom: 16,
       }}>
         <div style={{
           fontSize: 12,
-          color: '#a0aec0'
+          color: '#a0aec0',
         }}>
           Step {currentStep + 1} of {steps.length}
         </div>
         <div style={{
           display: 'flex',
-          gap: 4
+          gap: 4,
         }}>
-          {steps.map((_, index) => (
+          {steps.map((_, index) => ()
             <div
               key={index}
               style={{
@@ -372,32 +346,30 @@ export
           ))}
         </div>
       </div>
-      
       {/* Content */}
       <div style={{
         color: '#e2e8f0',
-        marginBottom: 20
+        marginBottom: 20,
       }}>
         <h3 style={{
           fontSize: 16,
           fontWeight: 600,
           marginBottom: 8,
-          color: '#4299e1'
+          color: '#4299e1',
         }}>
           {currentContent.title}
         </h3>
         <p style={{
           fontSize: 14,
           lineHeight: 1.5,
-          marginBottom: 12
+          marginBottom: 12,
         }}>
           {currentContent.description}
         </p>
-        
         {/* Examples */}
-        {currentContent.examples && (
+        {currentContent.examples && ()
           <div style={{ marginBottom: 12 }}>
-            {currentContent.examples.map((example, index) => (
+            {currentContent.examples.map((example, index) => ()
               <div
                 key={index}
                 style={{
@@ -407,7 +379,7 @@ export
                   background: 'rgba(72, 187, 120, 0.1)',
                   padding: '4px 8px',
                   borderRadius: 4,
-                  marginBottom: 4
+                  marginBottom: 4,
                 }}
               >
                 {example}
@@ -416,15 +388,14 @@ export
           </div>
         )}
       </div>
-      
       {/* Navigation */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
-        gap: 8
+        gap: 8,
       }}>
         <div style={{ display: 'flex', gap: 8 }}>
-          {currentStep > 0 && (
+          {currentStep > 0 && ()
             <button
               onClick={onPrevious}
               style={{
@@ -434,7 +405,7 @@ export
                 borderRadius: 4,
                 color: '#e2e8f0',
                 cursor: 'pointer',
-                fontSize: 12
+                fontSize: 12,
               }}
             >
               ← Previous
@@ -449,15 +420,14 @@ export
               borderRadius: 4,
               color: '#a0aec0',
               cursor: 'pointer',
-              fontSize: 12
+              fontSize: 12,
             }}
           >
             Skip Tour
           </button>
         </div>
-        
         <div>
-          {currentStep < steps.length - 1 ? (
+          {currentStep < steps.length - 1 ? ()
             <button
               onClick={onNext}
               style={{
@@ -468,12 +438,12 @@ export
                 color: 'white',
                 cursor: 'pointer',
                 fontSize: 12,
-                fontWeight: 600
+                fontWeight: 600,
               }}
             >
               Next →
             </button>
-          ) : (
+          ) : ()
             <button
               onClick={onComplete}
               style={{
@@ -484,7 +454,7 @@ export
                 color: 'white',
                 cursor: 'pointer',
                 fontSize: 12,
-                fontWeight: 600
+                fontWeight: 600,
               }}
             >
               Get Started! 🚀
@@ -511,14 +481,12 @@ function getTooltipTransform(position: string): string {
       return 'translate(-50%, -100%) translateY(-8px)';
   }
 }
-
 function getArrowStyle(position: string): React.CSSProperties {
   const baseStyle = {
     width: 0,
     height: 0,
     border: '6px solid transparent'
   };
-
   switch (position) {
     case 'top':
       return {
@@ -526,7 +494,7 @@ function getArrowStyle(position: string): React.CSSProperties {
         bottom: -12,
         left: '50%',
         marginLeft: -6,
-        borderTopColor: '#1a202c'
+        borderTopColor: '#1a202c',
       };
     case 'bottom':
       return {
@@ -534,7 +502,7 @@ function getArrowStyle(position: string): React.CSSProperties {
         top: -12,
         left: '50%',
         marginLeft: -6,
-        borderBottomColor: '#1a202c'
+        borderBottomColor: '#1a202c',
       };
     case 'left':
       return {
@@ -542,7 +510,7 @@ function getArrowStyle(position: string): React.CSSProperties {
         right: -12,
         top: '50%',
         marginTop: -6,
-        borderLeftColor: '#1a202c'
+        borderLeftColor: '#1a202c',
       };
     case 'right':
       return {
@@ -550,7 +518,7 @@ function getArrowStyle(position: string): React.CSSProperties {
         left: -12,
         top: '50%',
         marginTop: -6,
-        borderRightColor: '#1a202c'
+        borderRightColor: '#1a202c',
       };
     default:
       return {
@@ -558,11 +526,10 @@ function getArrowStyle(position: string): React.CSSProperties {
         bottom: -12,
         left: '50%',
         marginLeft: -6,
-        borderTopColor: '#1a202c'
+        borderTopColor: '#1a202c',
       };
   }
 }
-
 function getContentColor(category: string): string {
   switch (category) {
     case 'basic':
@@ -577,7 +544,6 @@ function getContentColor(category: string): string {
       return '#e2e8f0';      // Default gray
   }
 }
-
 function getCategoryIcon(category: string): string {
   switch (category) {
     case 'basic':

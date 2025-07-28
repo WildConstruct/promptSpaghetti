@@ -43,17 +43,17 @@ export interface Epic16ComponentTheme {
     accent: string;
     background: string;
     surface: string;
-    text: {
+    text: {,
         primary: string;
         secondary: string;
         disabled: string;
     };
-    border: {
+    border: {,
         light: string;
         medium: string;
         dark: string;
     };
-    state: {
+    state: {,
         success: string;
         warning: string;
         error: string;

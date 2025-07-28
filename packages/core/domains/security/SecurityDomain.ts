@@ -4,7 +4,6 @@
  * 
  * Main interface and export for the security domain
  */
-
 import React from 'react';
 import {
   User,
@@ -259,11 +258,10 @@ export interface RiskFactor {
 // Main domain interface
 export interface ISecurityDomain {
   // React Components
-  components: {
+  components: {,
     SecurityDashboard: React.ComponentType<SecurityDashboardProps>;
     AccessControl: React.ComponentType<AccessControlProps>;
     AuditLogViewer: React.ComponentType<AuditLogViewerProps>;
-    
     // Specific security components
     LoginForm: React.ComponentType<any>;
     PermissionGate: React.ComponentType<any>;
@@ -271,9 +269,8 @@ export interface ISecurityDomain {
     RoleManager: React.ComponentType<any>;
     PolicyEditor: React.ComponentType<any>;
   };
-
   // React Hooks
-  hooks: {
+  hooks: {,
     useAuth: () => {
       user: User | null;
       permissions: Permission[];
@@ -282,7 +279,6 @@ export interface ISecurityDomain {
       logout: () => Promise<void>;
       checkPermission: (resource: string, action: PermissionAction) => boolean;
     };
-    
     usePermissions: () => {
       permissions: Permission[];
       loading: boolean;
@@ -290,7 +286,6 @@ export interface ISecurityDomain {
       hasRole: (roleName: string) => boolean;
       refreshPermissions: () => Promise<void>;
     };
-    
     useAuditLogs: () => {
       logs: AuditLog[];
       loading: boolean;
@@ -298,7 +293,6 @@ export interface ISecurityDomain {
       fetchLogs: (filters?: AuditLogFilters) => Promise<void>;
       exportLogs: (format: string) => Promise<void>;
     };
-    
     useSecurityAlerts: () => {
       alerts: SecurityAlert[];
       unreadCount: number;
@@ -306,7 +300,6 @@ export interface ISecurityDomain {
       acknowledgeAlert: (alertId: string) => Promise<void>;
       resolveAlert: (alertId: string, resolution: string) => Promise<void>;
     };
-    
     useSecurityMetrics: () => {
       metrics: SecurityMetrics | null;
       loading: boolean;
@@ -314,9 +307,8 @@ export interface ISecurityDomain {
       getMetricsForPeriod: (period: string) => Promise<SecurityMetrics>;
     };
   };
-
   // Domain Services
-  services: {
+  services: {,
     authentication: IAuthenticationService;
     authorization: IAuthorizationService;
     audit: IAuditService;
@@ -325,15 +317,13 @@ export interface ISecurityDomain {
     dataClassification: IDataClassificationService;
     encryption: IEncryptionService;
   };
-
   // Event System
   events: SecurityDomainEvents & {
     subscribe: (event: keyof SecurityDomainEvents, callback: Function) => () => void;
     emit: (event: keyof SecurityDomainEvents, ...args: any[]) => void;
   };
-
   // Utilities
-  utils: {
+  utils: {,
     validatePassword: (password: string) => ValidationResult;
     generateSecurePassword: (length?: number) => string;
     calculateRiskScore: (factors: RiskFactor[]) => number;
@@ -350,22 +340,22 @@ export interface SecurityDomainFactory {
 }
 
 export interface SecurityDomainConfig {
-  encryption: {
+  encryption: {,
     algorithm: string;
     keySize: number;
     keyRotationInterval: number;
   };
-  authentication: {
+  authentication: {,
     sessionTimeout: number;
     maxFailedAttempts: number;
     passwordPolicy: PasswordPolicy;
   };
-  audit: {
+  audit: {,
     retentionPeriod: number;
     realTimeLogging: boolean;
     includeRequestBodies: boolean;
   };
-  monitoring: {
+  monitoring: {,
     alertThresholds: Record<string, number>;
     anomalyDetection: boolean;
     riskScoringEnabled: boolean;
@@ -397,7 +387,7 @@ export const SECURITY_DOMAIN_EVENTS = {
   RISK_SCORE_UPDATED: 'security:risk:score:updated',
   SESSION_EXPIRED: 'security:session:expired',
   MFA_REQUIRED: 'security:mfa:required',
-  ENCRYPTION_KEY_ROTATED: 'security:encryption:key:rotated'
+  ENCRYPTION_KEY_ROTATED: 'security:encryption:key:rotated',
 } as const;
 
 export type SecurityDomainEventType = typeof SECURITY_DOMAIN_EVENTS[keyof typeof SECURITY_DOMAIN_EVENTS];

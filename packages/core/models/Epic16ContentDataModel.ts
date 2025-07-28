@@ -4,7 +4,6 @@
  * Comprehensive data models for Epic 16 marketplace and community content
  * including templates, versions, purchases, reviews, forum posts, and analytics.
  */
-
 import { z } from 'zod';
 
 // =============================================================================
@@ -76,49 +75,42 @@ export enum PostStatus {
 // User and Profile Models
 // =============================================================================
 
-export const UserProfileSchema = z.object({
+export const UserProfileSchema = z.object({)
   id: z.string().uuid(),
   userId: z.string().uuid(),
-  
   // Profile information
   displayName: z.string().min(1).max(100),
   bio: z.string().max(500).optional(),
   avatar: z.string().url().optional(),
   location: z.string().max(100).optional(),
   website: z.string().url().optional(),
-  
   // Social links
   socialLinks: z.record(z.string().url()).optional(),
-  
   // Creator information
   isCreator: z.boolean().default(false),
   creatorTier: z.enum(['starter', 'pro', 'expert']).optional(),
   verifiedCreator: z.boolean().default(false),
-  
   // Marketplace stats
   templatesCreated: z.number().int().min(0).default(0),
   totalSales: z.number().int().min(0).default(0),
   averageRating: z.number().min(0).max(5).optional(),
   totalReviews: z.number().int().min(0).default(0),
-  
   // Community engagement
   forumPosts: z.number().int().min(0).default(0),
   helpfulVotes: z.number().int().min(0).default(0),
   reputation: z.number().int().min(0).default(0),
   badges: z.array(z.string()).default([]),
-  
   // Preferences
-  preferences: z.object({
+  preferences: z.object({),
     emailNotifications: z.boolean().default(true),
     marketingEmails: z.boolean().default(false),
     publicProfile: z.boolean().default(true),
-    showPurchases: z.boolean().default(false)
+    showPurchases: z.boolean().default(false),
   }).optional(),
-  
   // Timestamps
   createdAt: z.date(),
   updatedAt: z.date(),
-  lastActive: z.date().optional()
+  lastActive: z.date().optional(),
 });
 
 export type UserProfile = z.infer<typeof UserProfileSchema>;
@@ -127,119 +119,101 @@ export type UserProfile = z.infer<typeof UserProfileSchema>;
 // Template and Version Models
 // =============================================================================
 
-export const TemplateSchema = z.object({
+export const TemplateSchema = z.object({)
   id: z.string().uuid(),
   ownerId: z.string().uuid(),
-  
   // Basic information
   title: z.string().min(1).max(200),
   description: z.string().min(1).max(2000),
   shortDescription: z.string().max(300).optional(),
-  
   // Categorization
   tags: z.array(z.string().min(1).max(50)).max(20),
   category: z.string().min(1).max(50),
   subcategory: z.string().max(50).optional(),
-  
   // Pricing
   priceCents: z.number().int().min(0).max(100000), // $0 to $1000
   currency: z.string().length(3).default('USD'),
-  
   // Technical details
   claudeCompatibility: z.array(z.string()).min(1), // Supported Claude models
   isAiGenerated: z.boolean().default(false),
   complexity: z.enum(['beginner', 'intermediate', 'advanced']),
   estimatedTokens: z.number().int().min(0).optional(),
-  
   // Content and media
   thumbnailUrl: z.string().url().optional(),
   previewImages: z.array(z.string().url()).max(5).default([]),
   demoVideo: z.string().url().optional(),
-  
   // Status and lifecycle
   status: z.nativeEnum(TemplateStatus),
   featured: z.boolean().default(false),
   promoted: z.boolean().default(false),
-  
   // Statistics
-  stats: z.object({
+  stats: z.object({),
     views: z.number().int().min(0).default(0),
     downloads: z.number().int().min(0).default(0),
     purchases: z.number().int().min(0).default(0),
     likes: z.number().int().min(0).default(0),
     forks: z.number().int().min(0).default(0),
     avgRating: z.number().min(0).max(5).optional(),
-    ratingCount: z.number().int().min(0).default(0)
+    ratingCount: z.number().int().min(0).default(0),
   }),
-  
   // SEO and metadata
   seoKeywords: z.array(z.string()).max(10).default([]),
   metaDescription: z.string().max(160).optional(),
-  
   // Versioning
   currentVersionId: z.string().uuid().optional(),
   versionCount: z.number().int().min(0).default(0),
-  
   // Timestamps
   createdAt: z.date(),
   updatedAt: z.date(),
   publishedAt: z.date().optional(),
-  featuredAt: z.date().optional()
+  featuredAt: z.date().optional(),
 });
 
 export type Template = z.infer<typeof TemplateSchema>;
 
-export const TemplateVersionSchema = z.object({
+export const TemplateVersionSchema = z.object({)
   id: z.string().uuid(),
   templateId: z.string().uuid(),
-  
   // Version information
   versionNumber: z.string().min(1).max(20), // e.g., "1.0.0", "2.1.3"
   versionName: z.string().max(100).optional(), // Optional human-readable name
-  
   // Technical content
   claudeModel: z.string().min(1).max(50),
   graphJson: z.string(), // Serialized graph structure
   promptYaml: z.string().optional(), // Optional YAML configuration
-  
   // Documentation
   changelog: z.string().max(5000).optional(),
   documentation: z.string().max(10000).optional(),
-  examples: z.array(z.object({
+  examples: z.array(z.object({),
     title: z.string().max(100),
     input: z.string().max(1000),
-    expectedOutput: z.string().max(2000)
+    expectedOutput: z.string().max(2000),
   })).max(5).default([]),
-  
   // Validation and quality
   hash: z.string().length(64), // SHA-256 hash
   tokenPerRunEstimate: z.number().int().min(0),
   safetyScore: z.number().min(0).max(1),
-  testResults: z.object({
+  testResults: z.object({),
     passed: z.number().int().min(0),
     failed: z.number().int().min(0),
-    coverage: z.number().min(0).max(100).optional()
+    coverage: z.number().min(0).max(100).optional(),
   }).optional(),
-  
   // Performance metrics
   avgExecutionTime: z.number().min(0).optional(), // milliseconds
   successRate: z.number().min(0).max(100).optional(), // percentage
-  
   // Publishing information
   isPublic: z.boolean().default(true),
   releaseNotes: z.string().max(1000).optional(),
-  
   // Assets
-  assets: z.array(z.object({
+  assets: z.array(z.object({),
     name: z.string().max(255),
     url: z.string().url(),
     size: z.number().int().min(0),
-    type: z.string().max(50)
+    type: z.string().max(50),
   })).max(10).default([]),
-  
   // Timestamps
   createdAt: z.date(),
-  publishedAt: z.date().optional()
+  publishedAt: z.date().optional(),
 });
 
 export type TemplateVersion = z.infer<typeof TemplateVersionSchema>;
@@ -248,43 +222,36 @@ export type TemplateVersion = z.infer<typeof TemplateVersionSchema>;
 // Purchase and Transaction Models
 // =============================================================================
 
-export const PurchaseSchema = z.object({
+export const PurchaseSchema = z.object({)
   id: z.string().uuid(),
   buyerId: z.string().uuid(),
   templateId: z.string().uuid(),
   versionId: z.string().uuid(),
-  
   // Payment information
   stripePaymentIntentId: z.string().optional(),
   amount: z.number().int().min(0), // Amount in cents
   currency: z.string().length(3).default('USD'),
-  
   // Status and lifecycle
   status: z.nativeEnum(PurchaseStatus),
   refundReason: z.nativeEnum(RefundReason).optional(),
   refundAmount: z.number().int().min(0).optional(),
-  
   // Transaction details
   transactionId: z.string().optional(),
   paymentMethod: z.string().max(50).optional(),
-  
   // Licensing
   licenseType: z.enum(['personal', 'commercial', 'enterprise']).default('personal'),
   licenseTerms: z.string().max(1000).optional(),
-  
   // Usage tracking
   downloadCount: z.number().int().min(0).default(0),
   lastDownloaded: z.date().optional(),
-  
   // Support and satisfaction
   supportTicketId: z.string().uuid().optional(),
   satisfactionRating: z.number().int().min(1).max(5).optional(),
   satisfactionFeedback: z.string().max(1000).optional(),
-  
   // Timestamps
   createdAt: z.date(),
   completedAt: z.date().optional(),
-  refundedAt: z.date().optional()
+  refundedAt: z.date().optional(),
 });
 
 export type Purchase = z.infer<typeof PurchaseSchema>;
@@ -293,48 +260,41 @@ export type Purchase = z.infer<typeof PurchaseSchema>;
 // Review and Rating Models
 // =============================================================================
 
-export const ReviewSchema = z.object({
+export const ReviewSchema = z.object({)
   id: z.string().uuid(),
   templateId: z.string().uuid(),
   buyerId: z.string().uuid(),
   purchaseId: z.string().uuid().optional(),
-  
   // Review content
   rating: z.number().int().min(1).max(5),
   title: z.string().max(200).optional(),
   comment: z.string().max(2000),
-  
   // Review categorization
-  aspects: z.object({
+  aspects: z.object({),
     easeOfUse: z.number().int().min(1).max(5).optional(),
     documentation: z.number().int().min(1).max(5).optional(),
     valueForMoney: z.number().int().min(1).max(5).optional(),
     performance: z.number().int().min(1).max(5).optional(),
-    support: z.number().int().min(1).max(5).optional()
+    support: z.number().int().min(1).max(5).optional(),
   }).optional(),
-  
   // AI analysis
   sentimentAi: z.enum(['positive', 'neutral', 'negative']).optional(),
   helpfulnessScore: z.number().min(0).max(1).optional(),
-  
   // Verification and authenticity
   verifiedPurchase: z.boolean().default(false),
   helpfulVotes: z.number().int().min(0).default(0),
   unhelpfulVotes: z.number().int().min(0).default(0),
-  
   // Response from creator
   creatorResponse: z.string().max(1000).optional(),
   creatorResponseAt: z.date().optional(),
-  
   // Moderation
   flagged: z.boolean().default(false),
   flagReason: z.string().max(200).optional(),
   moderatedBy: z.string().uuid().optional(),
   moderatedAt: z.date().optional(),
-  
   // Timestamps
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
 });
 
 export type Review = z.infer<typeof ReviewSchema>;
@@ -343,32 +303,27 @@ export type Review = z.infer<typeof ReviewSchema>;
 // Community Forum Models
 // =============================================================================
 
-export const ForumPostSchema = z.object({
+export const ForumPostSchema = z.object({)
   id: z.string().uuid(),
   authorId: z.string().uuid(),
-  
   // Post content
   type: z.nativeEnum(ForumPostType),
   title: z.string().min(1).max(300),
   content: z.string().min(1).max(50000),
   contentHtml: z.string().optional(), // Rendered HTML
-  
   // Categorization
   category: z.string().min(1).max(50),
   tags: z.array(z.string().min(1).max(30)).max(10),
-  
   // Post properties
   isPinned: z.boolean().default(false),
   isLocked: z.boolean().default(false),
   isFeatured: z.boolean().default(false),
   allowComments: z.boolean().default(true),
-  
   // Status and moderation
   status: z.nativeEnum(PostStatus),
   moderationReason: z.string().max(500).optional(),
   moderatedBy: z.string().uuid().optional(),
   moderatedAt: z.date().optional(),
-  
   // Engagement metrics
   views: z.number().int().min(0).default(0),
   likes: z.number().int().min(0).default(0),
@@ -376,35 +331,30 @@ export const ForumPostSchema = z.object({
   replies: z.number().int().min(0).default(0),
   bookmarks: z.number().int().min(0).default(0),
   shares: z.number().int().min(0).default(0),
-  
   // SEO and discoverability
   slug: z.string().min(1).max(200),
   excerpt: z.string().max(300).optional(),
-  
   // Related content
   relatedTemplateIds: z.array(z.string().uuid()).max(5).default([]),
   relatedPostIds: z.array(z.string().uuid()).max(3).default([]),
-  
   // Attachments and media
-  attachments: z.array(z.object({
+  attachments: z.array(z.object({),
     id: z.string().uuid(),
     name: z.string().max(255),
     url: z.string().url(),
     size: z.number().int().min(0),
-    mimeType: z.string().max(100)
+    mimeType: z.string().max(100),
   })).max(5).default([]),
-  
   // Thread information
   parentId: z.string().uuid().optional(), // For replies
   threadId: z.string().uuid().optional(), // Top-level thread
   replyCount: z.number().int().min(0).default(0),
   lastReplyAt: z.date().optional(),
   lastReplyBy: z.string().uuid().optional(),
-  
   // Timestamps
   createdAt: z.date(),
   updatedAt: z.date(),
-  lastActivity: z.date()
+  lastActivity: z.date(),
 });
 
 export type ForumPost = z.infer<typeof ForumPostSchema>;
@@ -413,122 +363,104 @@ export type ForumPost = z.infer<typeof ForumPostSchema>;
 // Knowledge Base and Tutorial Models
 // =============================================================================
 
-export const KnowledgeArticleSchema = z.object({
+export const KnowledgeArticleSchema = z.object({)
   id: z.string().uuid(),
   authorId: z.string().uuid(),
-  
   // Article content
   title: z.string().min(1).max(300),
   content: z.string().min(1).max(100000),
   contentHtml: z.string().optional(),
   excerpt: z.string().max(500).optional(),
-  
   // Categorization
   category: z.string().min(1).max(50),
   subcategory: z.string().max(50).optional(),
   tags: z.array(z.string().min(1).max(30)).max(15),
   difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
-  
   // Content structure
-  tableOfContents: z.array(z.object({
+  tableOfContents: z.array(z.object({),
     id: z.string(),
     title: z.string().max(200),
     level: z.number().int().min(1).max(6),
-    anchor: z.string().max(100)
+    anchor: z.string().max(100),
   })).optional(),
-  
   // SEO and metadata
   slug: z.string().min(1).max(200),
   metaDescription: z.string().max(160).optional(),
   keywords: z.array(z.string()).max(10).default([]),
-  
   // Status and lifecycle
   status: z.enum(['draft', 'published', 'archived', 'under_review']),
   featured: z.boolean().default(false),
-  
   // Versioning
   version: z.string().default('1.0'),
   previousVersionId: z.string().uuid().optional(),
-  
   // Engagement
   views: z.number().int().min(0).default(0),
   likes: z.number().int().min(0).default(0),
   bookmarks: z.number().int().min(0).default(0),
   helpfulVotes: z.number().int().min(0).default(0),
-  
   // Related content
   relatedArticleIds: z.array(z.string().uuid()).max(5).default([]),
   relatedTemplateIds: z.array(z.string().uuid()).max(3).default([]),
-  
   // Timestamps
   createdAt: z.date(),
   updatedAt: z.date(),
   publishedAt: z.date().optional(),
-  lastReviewed: z.date().optional()
+  lastReviewed: z.date().optional(),
 });
 
 export type KnowledgeArticle = z.infer<typeof KnowledgeArticleSchema>;
 
-export const TutorialSchema = z.object({
+export const TutorialSchema = z.object({)
   id: z.string().uuid(),
   authorId: z.string().uuid(),
-  
   // Tutorial information
   title: z.string().min(1).max(300),
   description: z.string().min(1).max(2000),
   shortDescription: z.string().max(300).optional(),
-  
   // Content structure
-  steps: z.array(z.object({
+  steps: z.array(z.object({),
     id: z.string().uuid(),
     title: z.string().max(200),
     content: z.string().max(10000),
     order: z.number().int().min(0),
     estimatedDuration: z.number().int().min(0).optional(), // minutes
-    resources: z.array(z.object({
+    resources: z.array(z.object({),
       name: z.string().max(255),
       url: z.string().url(),
       type: z.enum(['video', 'article', 'template', 'download', 'external'])
     })).default([])
   })).min(1),
-  
   // Tutorial metadata
   category: z.string().min(1).max(50),
   difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
   estimatedDuration: z.number().int().min(0), // Total minutes
-  
   // Prerequisites and outcomes
   prerequisites: z.array(z.string().max(200)).default([]),
   learningOutcomes: z.array(z.string().max(300)).default([]),
-  
   // Media and assets
   thumbnailUrl: z.string().url().optional(),
   videoUrl: z.string().url().optional(),
-  assets: z.array(z.object({
+  assets: z.array(z.object({),
     name: z.string().max(255),
     url: z.string().url(),
-    description: z.string().max(500).optional()
+    description: z.string().max(500).optional(),
   })).default([]),
-  
   // Interactive elements
   hasQuiz: z.boolean().default(false),
   hasExercises: z.boolean().default(false),
   hasCertificate: z.boolean().default(false),
-  
   // Status and lifecycle
   status: z.enum(['draft', 'published', 'archived']),
   featured: z.boolean().default(false),
-  
   // Engagement metrics
   views: z.number().int().min(0).default(0),
   completions: z.number().int().min(0).default(0),
   averageRating: z.number().min(0).max(5).optional(),
   ratingCount: z.number().int().min(0).default(0),
-  
   // Timestamps
   createdAt: z.date(),
   updatedAt: z.date(),
-  publishedAt: z.date().optional()
+  publishedAt: z.date().optional(),
 });
 
 export type Tutorial = z.infer<typeof TutorialSchema>;
@@ -537,74 +469,64 @@ export type Tutorial = z.infer<typeof TutorialSchema>;
 // Analytics and Metrics Models
 // =============================================================================
 
-export const UserAnalyticsSchema = z.object({
+export const UserAnalyticsSchema = z.object({)
   id: z.string().uuid(),
   userId: z.string().uuid(),
   date: z.date(),
-  
   // Activity metrics
   sessionsCount: z.number().int().min(0).default(0),
   totalDuration: z.number().int().min(0).default(0), // seconds
   pageViews: z.number().int().min(0).default(0),
-  
   // Marketplace activity
   templatesViewed: z.number().int().min(0).default(0),
   templatesLiked: z.number().int().min(0).default(0),
   templatesPurchased: z.number().int().min(0).default(0),
   templatesDownloaded: z.number().int().min(0).default(0),
-  
   // Community activity
   postsCreated: z.number().int().min(0).default(0),
   postsViewed: z.number().int().min(0).default(0),
   commentsPosted: z.number().int().min(0).default(0),
   votesGiven: z.number().int().min(0).default(0),
-  
   // Learning activity
   tutorialsStarted: z.number().int().min(0).default(0),
   tutorialsCompleted: z.number().int().min(0).default(0),
   articlesRead: z.number().int().min(0).default(0),
-  
   // Creator activity (if applicable)
   templatesCreated: z.number().int().min(0).default(0),
   templatesUpdated: z.number().int().min(0).default(0),
   salesGenerated: z.number().int().min(0).default(0), // in cents
-  reviewsReceived: z.number().int().min(0).default(0)
+  reviewsReceived: z.number().int().min(0).default(0),
 });
 
 export type UserAnalytics = z.infer<typeof UserAnalyticsSchema>;
 
-export const ContentAnalyticsSchema = z.object({
+export const ContentAnalyticsSchema = z.object({)
   id: z.string().uuid(),
   contentId: z.string().uuid(),
   contentType: z.nativeEnum(ContentType),
   date: z.date(),
-  
   // View metrics
   views: z.number().int().min(0).default(0),
   uniqueViews: z.number().int().min(0).default(0),
   averageViewDuration: z.number().min(0).default(0), // seconds
   bounceRate: z.number().min(0).max(100).default(0), // percentage
-  
   // Engagement metrics
   likes: z.number().int().min(0).default(0),
   dislikes: z.number().int().min(0).default(0),
   shares: z.number().int().min(0).default(0),
   bookmarks: z.number().int().min(0).default(0),
   comments: z.number().int().min(0).default(0),
-  
   // Conversion metrics (for templates)
   previews: z.number().int().min(0).default(0),
   purchases: z.number().int().min(0).default(0),
   conversionRate: z.number().min(0).max(100).default(0), // percentage
-  
   // Geographic and demographic data
   topCountries: z.record(z.number().int().min(0)).optional(),
   topCities: z.record(z.number().int().min(0)).optional(),
   deviceTypes: z.record(z.number().int().min(0)).optional(),
-  
   // Referral sources
   referralSources: z.record(z.number().int().min(0)).optional(),
-  searchKeywords: z.record(z.number().int().min(0)).optional()
+  searchKeywords: z.record(z.number().int().min(0)).optional(),
 });
 
 export type ContentAnalytics = z.infer<typeof ContentAnalyticsSchema>;
@@ -613,35 +535,30 @@ export type ContentAnalytics = z.infer<typeof ContentAnalyticsSchema>;
 // Search and Discovery Models
 // =============================================================================
 
-export const SearchQuerySchema = z.object({
+export const SearchQuerySchema = z.object({)
   id: z.string().uuid(),
   userId: z.string().uuid().optional(),
-  
   // Query information
   query: z.string().min(1).max(500),
   normalizedQuery: z.string().max(500),
   filters: z.record(z.any()).optional(),
-  
   // Results and interaction
   resultsCount: z.number().int().min(0),
-  clickedResults: z.array(z.object({
+  clickedResults: z.array(z.object({),
     contentId: z.string().uuid(),
     contentType: z.nativeEnum(ContentType),
     position: z.number().int().min(0),
-    clickedAt: z.date()
+    clickedAt: z.date(),
   })).default([]),
-  
   // Search context
   sessionId: z.string().uuid().optional(),
   referrer: z.string().url().optional(),
   userAgent: z.string().max(500).optional(),
-  
   // Performance metrics
   responseTime: z.number().min(0).optional(), // milliseconds
   source: z.enum(['web', 'mobile', 'api']).default('web'),
-  
   // Timestamps
-  createdAt: z.date()
+  createdAt: z.date(),
 });
 
 export type SearchQuery = z.infer<typeof SearchQuerySchema>;
@@ -650,48 +567,41 @@ export type SearchQuery = z.infer<typeof SearchQuerySchema>;
 // Collections and Curation Models
 // =============================================================================
 
-export const CollectionSchema = z.object({
+export const CollectionSchema = z.object({)
   id: z.string().uuid(),
   ownerId: z.string().uuid(),
-  
   // Collection information
   name: z.string().min(1).max(200),
   description: z.string().max(1000).optional(),
   thumbnailUrl: z.string().url().optional(),
-  
   // Collection properties
   isPublic: z.boolean().default(false),
   isFeatured: z.boolean().default(false),
   allowCollaborators: z.boolean().default(false),
-  
   // Content
-  items: z.array(z.object({
+  items: z.array(z.object({),
     contentId: z.string().uuid(),
     contentType: z.nativeEnum(ContentType),
     addedAt: z.date(),
     order: z.number().int().min(0),
-    note: z.string().max(500).optional()
+    note: z.string().max(500).optional(),
   })).default([]),
-  
   // Categorization
   category: z.string().max(50).optional(),
   tags: z.array(z.string().min(1).max(30)).max(10).default([]),
-  
   // Collaboration
-  collaborators: z.array(z.object({
+  collaborators: z.array(z.object({),
     userId: z.string().uuid(),
     role: z.enum(['viewer', 'editor', 'admin']),
-    addedAt: z.date()
+    addedAt: z.date(),
   })).default([]),
-  
   // Engagement
   followers: z.number().int().min(0).default(0),
   likes: z.number().int().min(0).default(0),
   views: z.number().int().min(0).default(0),
-  
   // Timestamps
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
 });
 
 export type Collection = z.infer<typeof CollectionSchema>;
@@ -700,12 +610,11 @@ export type Collection = z.infer<typeof CollectionSchema>;
 // Notification and Communication Models
 // =============================================================================
 
-export const NotificationSchema = z.object({
+export const NotificationSchema = z.object({)
   id: z.string().uuid(),
   userId: z.string().uuid(),
-  
   // Notification content
-  type: z.enum([
+  type: z.enum([),
     'template_published', 'template_purchased', 'template_reviewed',
     'post_replied', 'post_liked', 'comment_replied',
     'follower_added', 'collection_shared',
@@ -713,26 +622,21 @@ export const NotificationSchema = z.object({
   ]),
   title: z.string().min(1).max(200),
   message: z.string().min(1).max(1000),
-  
   // Notification data
   data: z.record(z.any()).optional(),
   actionUrl: z.string().url().optional(),
-  
   // Status
   read: z.boolean().default(false),
   readAt: z.date().optional(),
-  
   // Delivery
   channels: z.array(z.enum(['in_app', 'email', 'push', 'sms'])).default(['in_app']),
   deliveryStatus: z.record(z.enum(['pending', 'sent', 'delivered', 'failed'])).optional(),
-  
   // Priority and scheduling
   priority: z.enum(['low', 'normal', 'high', 'urgent']).default('normal'),
   scheduledFor: z.date().optional(),
-  
   // Timestamps
   createdAt: z.date(),
-  sentAt: z.date().optional()
+  sentAt: z.date().optional(),
 });
 
 export type Notification = z.infer<typeof NotificationSchema>;
@@ -772,20 +676,20 @@ export const Epic16ContentSchemas = {
   ContentAnalytics: ContentAnalyticsSchema,
   SearchQuery: SearchQuerySchema,
   Collection: CollectionSchema,
-  Notification: NotificationSchema
+  Notification: NotificationSchema,
 };
 
 // Utility functions for validation
-export function validateContentModel<T extends keyof Epic16ContentModel>(
+export function validateContentModel<T extends keyof Epic16ContentModel>()
   type: T,
-  data: unknown
+  data: unknown,
 ): Epic16ContentModel[T] {
   return Epic16ContentSchemas[type].parse(data);
 }
 
-export function isValidContentModel<T extends keyof Epic16ContentModel>(
+export function isValidContentModel<T extends keyof Epic16ContentModel>()
   type: T,
-  data: unknown
+  data: unknown,
 ): data is Epic16ContentModel[T] {
   try {
     Epic16ContentSchemas[type].parse(data);
@@ -808,7 +712,7 @@ export const Epic16Relationships = {
   userToNotifications: 'one-to-many',
   forumPostToReplies: 'one-to-many',
   templateToAnalytics: 'one-to-many',
-  userToAnalytics: 'one-to-many'
+  userToAnalytics: 'one-to-many',
 } as const;
 
 export default Epic16ContentModel;

@@ -49,12 +49,12 @@ export interface ActivityStats {
   total: number;
   by_type: Record<ActivityEventType, number>;
   by_actor: Record<string, { name: string; count: number }>;
-  recent_activity: {
+  recent_activity: {,
     today: number;
     this_week: number;
     this_month: number;
   };
-  trends: {
+  trends: {,
     daily: Array<{ date: string; count: number }>;
     hourly: Array<{ hour: number; count: number }>;
   };
@@ -135,7 +135,6 @@ export interface UseActivityFeedReturn {
   stats: ActivityStats | null;
   actors: ActivityActor[] | null;
   realTimeConnection: ActivityRealTimeConnection | null;
-  
   // Actions
   refreshActivities: () => Promise<void>;
   loadMore: () => Promise<void>;

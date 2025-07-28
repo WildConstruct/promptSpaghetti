@@ -4,19 +4,16 @@
  * Main component for submitting verification requests.
  * Handles different verification types and guides users through the process.
  */
-
 import React, { useState, useCallback } from 'react';
 import { IdentityValidationType, IdentityValidationData } from '../../auth/IdentityValidation';
-
 interface VerificationRequestFormProps {
   userId: string;
-  onSubmit: (
+  onSubmit: (),
     type: IdentityValidationType,
-    data: Partial<IdentityValidationData>
+    data: Partial<IdentityValidationData>,
   ) => Promise<{ requestId: string; status: string }>;
   onCancel?: () => void;
 }
-
 interface FormStep {
   id: string;
   title: string;
@@ -24,46 +21,45 @@ interface FormStep {
   verificationType: IdentityValidationType;
   required: boolean;
 }
-
 const VERIFICATION_STEPS: FormStep[] = [
   {
     id: 'email',
     title: 'Email Verification',
     description: 'Verify your email address to establish basic identity',
     verificationType: 'email_verification',
-    required: true
+    required: true,
   },
   {
     id: 'phone',
     title: 'Phone Verification',
     description: 'Verify your phone number for additional security',
     verificationType: 'phone_verification',
-    required: false
+    required: false,
   },
   {
     id: 'identity',
     title: 'Government ID',
     description: 'Upload government-issued identification for identity verification',
     verificationType: 'government_id',
-    required: false
+    required: false,
   },
   {
     id: 'professional',
     title: 'Professional Credentials',
     description: 'Submit your professional credentials and portfolio',
     verificationType: 'professional_credentials',
-    required: false
+    required: false,
   },
   {
     id: 'social',
     title: 'Social Media',
     description: 'Link and verify your professional social media profiles',
     verificationType: 'social_media_verification',
-    required: false
+    required: false,
   }
 ];
 
-export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = ({
+export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = ({)
   userId,
   onSubmit,
   onCancel
@@ -72,55 +68,44 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
   const [formData, setFormData] = useState<Partial<IdentityValidationData>>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitErrors, setSubmitErrors] = useState<string[]>([]);
-
   const currentStepData = VERIFICATION_STEPS.find(step => step.id === currentStep);
-
   const handleStepSubmit = useCallback(async (stepData: Partial<IdentityValidationData>) => {
     if (!currentStepData) return;
-
     setIsSubmitting(true);
     setSubmitErrors([]);
-
     try {
-            
       // Update form data
       setFormData(prev => ({ ...prev, ...stepData }));
-      
       // Move to next step or complete
       const currentIndex = VERIFICATION_STEPS.findIndex(step => step.id === currentStep);
       if (currentIndex < VERIFICATION_STEPS.length - 1) {
         setCurrentStep(VERIFICATION_STEPS[currentIndex + 1].id);
       }
-      
     } catch (error) {
-      setSubmitErrors([`Failed to submit ${currentStepData.title}: ${error.message}`]);
+      setSubmitErrors([`Failed to submit ${currentStepData.title}: ${error.message}`]);}
     } finally {
       setIsSubmitting(false);
     }
   }, [currentStep, currentStepData, onSubmit]);
-
   const handleStepSelect = useCallback((stepId: string) => {
     setCurrentStep(stepId);
     setSubmitErrors([]);
   }, []);
-
   if (!currentStepData) {
     return <div className="verification-error">Invalid verification step</div>;
   }
-
-  return (
+  return ()
     <div className="verification-request-form">
       <div className="verification-header">
         <h2>Account Verification</h2>
         <p>Complete verification to build trust and unlock marketplace features</p>
       </div>
-
       {/* Progress Steps */}
       <div className="verification-steps">
-        {VERIFICATION_STEPS.map((step, index) => (
+        {VERIFICATION_STEPS.map((step, index) => ()
           <div
             key={step.id}
-            className={`step ${step.id === currentStep ? 'active' : ''} ${
+            className={`step ${step.id === currentStep ? 'active' : ''} ${}
               VERIFICATION_STEPS.findIndex(s => s.id === currentStep) > index ? 'completed' : ''
             }`}
             onClick={() => handleStepSelect(step.id)}
@@ -133,22 +118,19 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
           </div>
         ))}
       </div>
-
       {/* Current Step Content */}
       <div className="verification-content">
         <div className="step-header">
           <h3>{currentStepData.title}</h3>
           <p>{currentStepData.description}</p>
         </div>
-
-        {submitErrors.length > 0 && (
+        {submitErrors.length > 0 && ()
           <div className="error-messages">
-            {submitErrors.map((error, index) => (
+            {submitErrors.map((error, index) => ()
               <div key={index} className="error-message">{error}</div>
             ))}
           </div>
         )}
-
         <VerificationStepContent
           step={currentStepData}
           data={formData}
@@ -156,10 +138,9 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
           isSubmitting={isSubmitting}
         />
       </div>
-
       {/* Navigation */}
       <div className="verification-navigation">
-        {onCancel && (
+        {onCancel && ()
           <button
             type="button"
             className="btn btn-secondary"
@@ -169,12 +150,10 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
             Cancel
           </button>
         )}
-        
         <div className="nav-info">
           Step {VERIFICATION_STEPS.findIndex(s => s.id === currentStep) + 1} of {VERIFICATION_STEPS.length}
         </div>
       </div>
-
       <style>{`
         .verification-request-form {
           max-width: 800px;
@@ -184,32 +163,27 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
           border-radius: 8px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-
         .verification-header {
           text-align: center;
           margin-bottom: 32px;
         }
-
         .verification-header h2 {
           font-size: 28px;
           font-weight: 600;
           color: #1f2937;
           margin: 0 0 8px 0;
         }
-
         .verification-header p {
           color: #6b7280;
           font-size: 16px;
           margin: 0;
         }
-
         .verification-steps {
           display: flex;
           justify-content: space-between;
           margin-bottom: 40px;
           padding: 0 20px;
         }
-
         .step {
           display: flex;
           align-items: center;
@@ -219,21 +193,17 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
           transition: background-color 0.2s;
           min-width: 140px;
         }
-
         .step:hover {
           background-color: #f3f4f6;
         }
-
         .step.active {
           background-color: #dbeafe;
           border: 2px solid #3b82f6;
         }
-
         .step.completed .step-number {
           background-color: #10b981;
           color: white;
         }
-
         .step-number {
           width: 32px;
           height: 32px;
@@ -247,23 +217,19 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
           margin-right: 12px;
           flex-shrink: 0;
         }
-
         .step.active .step-number {
           background-color: #3b82f6;
           color: white;
         }
-
         .step-info {
           flex: 1;
         }
-
         .step-title {
           font-weight: 500;
           color: #1f2937;
           font-size: 14px;
           margin-bottom: 2px;
         }
-
         .required {
           background-color: #fef2f2;
           color: #dc2626;
@@ -272,32 +238,26 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
           border-radius: 4px;
           font-weight: 500;
         }
-
         .verification-content {
           margin-bottom: 32px;
         }
-
         .step-header {
           margin-bottom: 24px;
         }
-
         .step-header h3 {
           font-size: 20px;
           font-weight: 600;
           color: #1f2937;
           margin: 0 0 8px 0;
         }
-
         .step-header p {
           color: #6b7280;
           font-size: 14px;
           margin: 0;
         }
-
         .error-messages {
           margin-bottom: 20px;
         }
-
         .error-message {
           background-color: #fef2f2;
           color: #dc2626;
@@ -307,7 +267,6 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
           margin-bottom: 8px;
           font-size: 14px;
         }
-
         .verification-navigation {
           display: flex;
           justify-content: space-between;
@@ -315,12 +274,10 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
           padding-top: 24px;
           border-top: 1px solid #e5e7eb;
         }
-
         .nav-info {
           color: #6b7280;
           font-size: 14px;
         }
-
         .btn {
           padding: 8px 16px;
           border-radius: 6px;
@@ -329,37 +286,30 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
           border: none;
           transition: all 0.2s;
         }
-
         .btn-secondary {
           background-color: #f3f4f6;
           color: #374151;
         }
-
         .btn-secondary:hover:not(:disabled) {
           background-color: #e5e7eb;
         }
-
         .btn:disabled {
           opacity: 0.5;
           cursor: not-allowed;
         }
-
         .verification-error {
           text-align: center;
           color: #dc2626;
           padding: 40px;
         }
-
         @media (max-width: 768px) {
           .verification-request-form {
             padding: 16px;
           }
-
           .verification-steps {
             flex-direction: column;
             gap: 8px;
           }
-
           .step {
             width: 100%;
           }
@@ -376,27 +326,23 @@ interface VerificationStepContentProps {
   onSubmit: (data: Partial<IdentityValidationData>) => Promise<void>;
   isSubmitting: boolean;
 }
-
-const VerificationStepContent: React.FC<VerificationStepContentProps> = ({
+const VerificationStepContent: React.FC<VerificationStepContentProps> = ({)
   step,
   data,
   onSubmit,
   isSubmitting
 }) => {
   const [stepData, setStepData] = useState<Partial<IdentityValidationData>>(data);
-
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     await onSubmit(stepData);
   }, [stepData, onSubmit]);
-
   const updateStepData = useCallback((updates: Partial<IdentityValidationData>) => {
     setStepData(prev => ({ ...prev, ...updates }));
   }, []);
-
   switch (step.verificationType) {
   case 'email_verification':
-    return (
+    return ()
       <EmailVerificationStep
         data={stepData}
         onUpdate={updateStepData}
@@ -404,9 +350,8 @@ const VerificationStepContent: React.FC<VerificationStepContentProps> = ({
         isSubmitting={isSubmitting}
       />
     );
-    
   case 'phone_verification':
-    return (
+    return ()
       <PhoneVerificationStep
         data={stepData}
         onUpdate={updateStepData}
@@ -414,9 +359,8 @@ const VerificationStepContent: React.FC<VerificationStepContentProps> = ({
         isSubmitting={isSubmitting}
       />
     );
-    
   case 'government_id':
-    return (
+    return ()
       <GovernmentIdStep
         data={stepData}
         onUpdate={updateStepData}
@@ -424,9 +368,8 @@ const VerificationStepContent: React.FC<VerificationStepContentProps> = ({
         isSubmitting={isSubmitting}
       />
     );
-    
   case 'professional_credentials':
-    return (
+    return ()
       <ProfessionalCredentialsStep
         data={stepData}
         onUpdate={updateStepData}
@@ -434,9 +377,8 @@ const VerificationStepContent: React.FC<VerificationStepContentProps> = ({
         isSubmitting={isSubmitting}
       />
     );
-    
   case 'social_media_verification':
-    return (
+    return ()
       <SocialMediaStep
         data={stepData}
         onUpdate={updateStepData}
@@ -444,7 +386,6 @@ const VerificationStepContent: React.FC<VerificationStepContentProps> = ({
         isSubmitting={isSubmitting}
       />
     );
-    
   default:
     return <div>Unknown verification type</div>;
   }
@@ -457,7 +398,7 @@ const EmailVerificationStep: React.FC<{
   onSubmit: (e: React.FormEvent) => Promise<void>;
   isSubmitting: boolean;
 }> = ({ data, onUpdate, onSubmit, isSubmitting }) => {
-  return (
+  return ()
     <form onSubmit={onSubmit}>
       <div className="form-group">
         <label htmlFor="email">Email Address *</label>
@@ -473,23 +414,19 @@ const EmailVerificationStep: React.FC<{
           We'll send a verification email to confirm this address
         </div>
       </div>
-      
       <button type="submit" className="btn btn-primary" disabled={isSubmitting || !data.email}>
         {isSubmitting ? 'Sending...' : 'Send Verification Email'}
       </button>
-
       <style>{`
         .form-group {
           margin-bottom: 20px;
         }
-
         label {
           display: block;
           font-weight: 500;
           color: #374151;
           margin-bottom: 6px;
         }
-
         input {
           width: 100%;
           padding: 10px 12px;
@@ -497,24 +434,20 @@ const EmailVerificationStep: React.FC<{
           border-radius: 6px;
           font-size: 14px;
         }
-
         input:focus {
           outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
-
         .form-help {
           font-size: 12px;
           color: #6b7280;
           margin-top: 4px;
         }
-
         .btn-primary {
           background-color: #3b82f6;
           color: white;
         }
-
         .btn-primary:hover:not(:disabled) {
           background-color: #2563eb;
         }
@@ -522,14 +455,13 @@ const EmailVerificationStep: React.FC<{
     </form>
   );
 };
-
 const PhoneVerificationStep: React.FC<{
   data: Partial<IdentityValidationData>;
   onUpdate: (data: Partial<IdentityValidationData>) => void;
   onSubmit: (e: React.FormEvent) => Promise<void>;
   isSubmitting: boolean;
 }> = ({ data, onUpdate, onSubmit, isSubmitting }) => {
-  return (
+  return ()
     <form onSubmit={onSubmit}>
       <div className="form-group">
         <label htmlFor="phone">Phone Number *</label>
@@ -546,23 +478,19 @@ const PhoneVerificationStep: React.FC<{
           Include country code. We'll send a verification SMS
         </div>
       </div>
-      
       <button type="submit" className="btn btn-primary" disabled={isSubmitting || !data.phoneNumber}>
         {isSubmitting ? 'Sending...' : 'Send Verification SMS'}
       </button>
-
       <style>{`
         .form-group {
           margin-bottom: 20px;
         }
-
         label {
           display: block;
           font-weight: 500;
           color: #374151;
           margin-bottom: 6px;
         }
-
         input {
           width: 100%;
           padding: 10px 12px;
@@ -570,19 +498,16 @@ const PhoneVerificationStep: React.FC<{
           border-radius: 6px;
           font-size: 14px;
         }
-
         input:focus {
           outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
-
         .form-help {
           font-size: 12px;
           color: #6b7280;
           margin-top: 4px;
         }
-
         .btn-primary {
           background-color: #3b82f6;
           color: white;
@@ -592,11 +517,9 @@ const PhoneVerificationStep: React.FC<{
           font-weight: 500;
           cursor: pointer;
         }
-
         .btn-primary:hover:not(:disabled) {
           background-color: #2563eb;
         }
-
         .btn-primary:disabled {
           opacity: 0.5;
           cursor: not-allowed;
@@ -612,7 +535,7 @@ const GovernmentIdStep: React.FC<{
   onUpdate: (data: Partial<IdentityValidationData>) => void;
   onSubmit: (e: React.FormEvent) => Promise<void>;
   isSubmitting: boolean;
-}> = ({ onSubmit, isSubmitting }) => (
+}> = ({ onSubmit, isSubmitting }) => ()
   <div>
     <p>Government ID verification will be implemented in the next iteration.</p>
     <button type="button" onClick={(e) => onSubmit(e as any)} disabled={isSubmitting}>
@@ -620,13 +543,12 @@ const GovernmentIdStep: React.FC<{
     </button>
   </div>
 );
-
 const ProfessionalCredentialsStep: React.FC<{
   data: Partial<IdentityValidationData>;
   onUpdate: (data: Partial<IdentityValidationData>) => void;
   onSubmit: (e: React.FormEvent) => Promise<void>;
   isSubmitting: boolean;
-}> = ({ onSubmit, isSubmitting }) => (
+}> = ({ onSubmit, isSubmitting }) => ()
   <div>
     <p>Professional credentials verification will be implemented in the next iteration.</p>
     <button type="button" onClick={(e) => onSubmit(e as any)} disabled={isSubmitting}>
@@ -634,13 +556,12 @@ const ProfessionalCredentialsStep: React.FC<{
     </button>
   </div>
 );
-
 const SocialMediaStep: React.FC<{
   data: Partial<IdentityValidationData>;
   onUpdate: (data: Partial<IdentityValidationData>) => void;
   onSubmit: (e: React.FormEvent) => Promise<void>;
   isSubmitting: boolean;
-}> = ({ onSubmit, isSubmitting }) => (
+}> = ({ onSubmit, isSubmitting }) => ()
   <div>
     <p>Social media verification will be implemented in the next iteration.</p>
     <button type="button" onClick={(e) => onSubmit(e as any)} disabled={isSubmitting}>

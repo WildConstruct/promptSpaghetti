@@ -10,7 +10,6 @@
  * - Policy enforcement for data handling
  * - Integration with existing security middleware
  */
-
 import {
   DataClassificationLevel,
   HandlingRequirements,
@@ -19,48 +18,37 @@ import {
   ClassificationAuditEvent,
   ComplianceViolation
 } from '../types/DataClassification';
-
 import {
   DataSensitivityLevel,
   DataSensitivityUtils,
   DATA_SENSITIVITY_DEFINITIONS,
   type DataHandlingRequirements
 } from './DataSensitivityLevels';
-
 import {
   CLASSIFICATION_LEVEL_MAPPING,
   DataClassificationHelpers,
   type SecurityPolicyEnforcementResult
 } from './DataClassificationHelpers';
-
 import { SecurityValidation } from '../validation/security';
 import { createHash } from 'crypto';
-
 /**
  * Enforcement configuration
  */
 export interface ClassificationEnforcementConfig {
   /** Strict mode - blocks all non-compliant operations */
   strictMode: boolean;
-  
   /** Enable real-time monitoring of access attempts */
   realtimeMonitoring: boolean;
-  
   /** Block operations that violate classification policies */
   blockViolations: boolean;
-  
   /** Log all access attempts for audit purposes */
   auditLogging: boolean;
-  
   /** Alert on policy violations */
   alertingEnabled: boolean;
-  
   /** Grace period for legacy data (in days) */
   gracePeriodDays: number;
-  
   /** Custom policy overrides */
   policyOverrides?: Map<DataClassificationLevel, Partial<HandlingRequirements>>;
-  
   /** Exempted users or roles */
   exemptions?: {
     users?: string[];
@@ -68,7 +56,6 @@ export interface ClassificationEnforcementConfig {
     conditions?: string[];
   };
 }
-
 /**
  * Enforcement result
  */
@@ -82,7 +69,6 @@ export interface EnforcementResult {
   auditId: string;
   recommendations?: string[];
 }
-
 /**
  * Access decision
  */
@@ -94,7 +80,6 @@ export interface AccessDecision {
   conditions?: string[];
   expiresAt?: Date;
 }
-
 /**
  * Classification Enforcement Engine
  */
@@ -102,7 +87,6 @@ export class ClassificationEnforcer {
   private config: ClassificationEnforcementConfig;
   private auditLog: ClassificationAuditEvent[] = [];
   private violationCache: Map<string, ComplianceViolation[]> = new Map();
-  
   constructor(config: Partial<ClassificationEnforcementConfig> = {}) {
     this.config = {
       strictMode: false,
@@ -114,24 +98,21 @@ export class ClassificationEnforcer {
       ...config
     };
   }
-  
   /**
    * Enforce classification policies for an operation
    */
-  async enforceClassification(
+  async enforceClassification()
     classification: DataClassificationLevel,
     operation: OperationContext,
     currentControls: string[] = []
   ): Promise<EnforcementResult> {
     const auditId = this.generateAuditId(operation);
-        
     try {
       // Get handling requirements for the classification
       const requirements = this.getEffectiveRequirements(classification);
-      
       // Check if user is exempted
       if (this.isUserExempted(operation.userId)) {
-        return this.createEnforcementResult(
+        return this.createEnforcementResult()
           true,
           classification,
           [],
@@ -141,51 +122,44 @@ export class ClassificationEnforcer {
           auditId
         );
       }
-      
       // Validate access requirements
-      const accessViolations = await this.validateAccessRequirements(
+      const accessViolations = await this.validateAccessRequirements(;)
         requirements.access,
         operation,
         currentControls
       );
-      
       // Validate operation-specific requirements
-      const operationViolations = await this.validateOperationRequirements(
+      const operationViolations = await this.validateOperationRequirements(;)
         classification,
         operation,
         requirements,
         currentControls
       );
-      
       // Combine all violations
       const allViolations = [...accessViolations, ...operationViolations];
-      
       // Calculate risk score
-      const riskScore = this.calculateRiskScore(
+      const riskScore = this.calculateRiskScore(;)
         classification,
         operation,
         allViolations,
         currentControls
       );
-      
       // Determine if operation is allowed
-      const allowed = this.shouldAllowOperation(
+      const allowed = this.shouldAllowOperation(;)
         allViolations,
         riskScore,
         classification,
         operation
       );
-      
       // Get required controls
-      const requiredControls = this.getRequiredControls(
+      const requiredControls = this.getRequiredControls(;)
         classification,
         operation,
         requirements
       );
-      
       // Log the enforcement decision
       if (this.config.auditLogging) {
-        await this.logEnforcementDecision(
+        await this.logEnforcementDecision()
           auditId,
           operation,
           classification,
@@ -194,18 +168,16 @@ export class ClassificationEnforcer {
           riskScore
         );
       }
-      
       // Alert on violations if needed
       if (!allowed && this.config.alertingEnabled) {
-        await this.alertOnViolation(
+        await this.alertOnViolation()
           classification,
           operation,
           allViolations,
           riskScore
         );
       }
-      
-      return this.createEnforcementResult(
+      return this.createEnforcementResult()
         allowed,
         classification,
         allViolations,
@@ -215,14 +187,12 @@ export class ClassificationEnforcer {
         auditId,
         this.generateRecommendations(classification, allViolations)
       );
-      
     } catch (error) {
       // Log enforcement error
       console.error('Classification enforcement error:', error);
-      
       // In strict mode, deny on error
       if (this.config.strictMode) {
-        return this.createEnforcementResult(
+        return this.createEnforcementResult()
           false,
           classification,
           ['Enforcement system error'],
@@ -232,9 +202,8 @@ export class ClassificationEnforcer {
           auditId
         );
       }
-      
       // Otherwise, allow with high risk score
-      return this.createEnforcementResult(
+      return this.createEnforcementResult()
         true,
         classification,
         ['Enforcement system error - allowed with risk'],
@@ -245,16 +214,15 @@ export class ClassificationEnforcer {
       );
     }
   }
-  
   /**
    * Make an access control decision
    */
-  async makeAccessDecision(
+  async makeAccessDecision()
     userId: string,
     dataId: string,
     classification: DataClassificationLevel,
     operation: string,
-    context: Partial<OperationContext>
+    context: Partial<OperationContext>,
   ): Promise<AccessDecision> {
     // Build full operation context
     const fullContext: OperationContext = {
@@ -267,39 +235,33 @@ export class ClassificationEnforcer {
       source: context.source || 'api',
       requestId: context.requestId || this.generateRequestId()
     };
-    
     // Get handling requirements
     const requirements = this.getEffectiveRequirements(classification);
-    
     // Check authentication requirements
-    const authDecision = this.checkAuthenticationRequirements(
+    const authDecision = this.checkAuthenticationRequirements(;)
       requirements.access,
       fullContext
     );
-    
     if (!authDecision.met) {
       return {
         granted: false,
         reason: 'Insufficient authentication level',
-        requiredAuthentication: authDecision.required
+        requiredAuthentication: authDecision.required,
       };
     }
-    
     // Check authorization requirements
-    const authzDecision = this.checkAuthorizationRequirements(
+    const authzDecision = this.checkAuthorizationRequirements(;)
       requirements.access,
       fullContext,
       classification
     );
-    
     if (!authzDecision.met) {
       return {
         granted: false,
         reason: 'Insufficient authorization',
-        requiredAuthorization: authzDecision.required
+        requiredAuthorization: authzDecision.required,
       };
     }
-    
     // Check time restrictions
     if (requirements.access.timeRestrictions) {
       const timeDecision = this.checkTimeRestrictions(fullContext);
@@ -310,10 +272,9 @@ export class ClassificationEnforcer {
         };
       }
     }
-    
     // Check purpose limitation
     if (requirements.access.purposeLimitation) {
-      const purposeDecision = this.checkPurposeLimitation(
+      const purposeDecision = this.checkPurposeLimitation(;)
         fullContext.purpose,
         classification
       );
@@ -324,28 +285,25 @@ export class ClassificationEnforcer {
         };
       }
     }
-    
     // All checks passed
     return {
       granted: true,
       reason: 'All access requirements met',
       conditions: this.getAccessConditions(classification, fullContext),
-      expiresAt: this.calculateAccessExpiration(classification)
+      expiresAt: this.calculateAccessExpiration(classification),
     };
   }
-  
   /**
    * Validate an operation against classification policies
    */
-  async validateOperation(
+  async validateOperation()
     operation: OperationContext,
     classification: DataClassificationLevel,
-    dataElement: any
+    dataElement: any,
   ): Promise<{ valid: boolean; issues: string[]; controls: string[] }> {
     const requirements = this.getEffectiveRequirements(classification);
     const issues: string[] = [];
     const requiredControls: string[] = [];
-    
     // Validate based on operation type
     switch (operation.operation) {
     case 'read':
@@ -353,7 +311,6 @@ export class ClassificationEnforcer {
         requiredControls.push('enhanced-audit-logging');
       }
       break;
-        
     case 'write':
     case 'update':
       if (requirements.storage.encryptionRequired) {
@@ -363,16 +320,14 @@ export class ClassificationEnforcer {
         requiredControls.push('audit-trail');
       }
       break;
-        
     case 'delete':
       if (requirements.processing.auditTrailRequired) {
         requiredControls.push('deletion-audit');
       }
       if (requirements.storage.retentionDays > 0) {
-        issues.push(`Data must be retained for ${requirements.storage.retentionDays} days`);
+        issues.push(`Data must be retained for ${requirements.storage.retentionDays} days`);}
       }
       break;
-        
     case 'export':
       if (requirements.access.exportRestrictions) {
         issues.push('Export restrictions apply to this classification');
@@ -382,7 +337,6 @@ export class ClassificationEnforcer {
         requiredControls.push('end-to-end-encryption');
       }
       break;
-        
     case 'share':
       if (requirements.access.approvalWorkflow) {
         issues.push('Approval workflow required for sharing');
@@ -393,160 +347,134 @@ export class ClassificationEnforcer {
       }
       break;
     }
-    
     // Check environment restrictions
     if (requirements.processing.approvedEnvironments.length > 0) {
       if (!requirements.processing.approvedEnvironments.includes(operation.environment)) {
-        issues.push(`Environment '${operation.environment}' not approved for this classification`);
+        issues.push(`Environment '${operation.environment}' not approved for this classification`);}
       }
     }
-    
     // Check third-party processing restrictions
     if (!requirements.processing.thirdPartyProcessing && operation.source === 'third-party') {
       issues.push('Third-party processing not allowed for this classification');
     }
-    
     return {
       valid: issues.length === 0,
       issues,
-      controls: requiredControls
+      controls: requiredControls,
     };
   }
-  
   /**
    * Get effective requirements considering overrides
    */
-  private getEffectiveRequirements(
-    classification: DataClassificationLevel
+  private getEffectiveRequirements()
+    classification: DataClassificationLevel,
   ): HandlingRequirements {
     const sensitivityLevel = CLASSIFICATION_LEVEL_MAPPING[classification];
     const dataHandlingReqs = DataSensitivityUtils.getHandlingRequirements(sensitivityLevel);
-    
     // Convert DataHandlingRequirements to HandlingRequirements
-    const baseRequirements: HandlingRequirements = this.convertDataHandlingToHandlingRequirements(
+    const baseRequirements: HandlingRequirements = this.convertDataHandlingToHandlingRequirements()
       dataHandlingReqs,
       classification
     );
-    
     // Apply any configured overrides
     if (this.config.policyOverrides?.has(classification)) {
       const overrides = this.config.policyOverrides.get(classification)!;
       return this.mergeRequirements(baseRequirements, overrides);
     }
-    
     return baseRequirements;
   }
-  
   /**
    * Validate access requirements
    */
-  private async validateAccessRequirements(
+  private async validateAccessRequirements()
     requirements: AccessRequirements,
     operation: OperationContext,
-    currentControls: string[]
+    currentControls: string[],
   ): Promise<string[]> {
     const violations: string[] = [];
-    
     // Check authentication level
-    if (!currentControls.includes(`auth-${requirements.authenticationLevel.toLowerCase()}`)) {
-      violations.push(`Required authentication level: ${requirements.authenticationLevel}`);
+    if (!currentControls.includes(`auth-${requirements.authenticationLevel.toLowerCase()}`)) {}
+      violations.push(`Required authentication level: ${requirements.authenticationLevel}`);}
     }
-    
     // Check authorization
     if (requirements.authorizationRequired && !currentControls.includes('authorization')) {
       violations.push('Authorization required but not present');
     }
-    
     // Check approval workflow
     if (requirements.approvalWorkflow && !currentControls.includes('approval-workflow')) {
       violations.push('Approval workflow required but not completed');
     }
-    
     // Check audit logging
-    if (requirements.auditLogging !== 'STANDARD' && 
-        !currentControls.includes(`audit-${requirements.auditLogging.toLowerCase()}`)) {
-      violations.push(`Required audit level: ${requirements.auditLogging}`);
+    if (requirements.auditLogging !== 'STANDARD' && )
+        !currentControls.includes(`audit-${requirements.auditLogging.toLowerCase()}`)) {}
+      violations.push(`Required audit level: ${requirements.auditLogging}`);}
     }
-    
     return violations;
   }
-  
   /**
    * Validate operation-specific requirements
    */
-  private async validateOperationRequirements(
+  private async validateOperationRequirements()
     classification: DataClassificationLevel,
     operation: OperationContext,
     requirements: HandlingRequirements,
-    currentControls: string[]
+    currentControls: string[],
   ): Promise<string[]> {
     const violations: string[] = [];
-    
     // Storage requirements for write operations
     if (['write', 'update'].includes(operation.operation)) {
       if (requirements.storage.encryptionRequired && !currentControls.includes('encryption')) {
         violations.push('Encryption required for storage');
       }
-      
       if (!requirements.storage.approvedLocations.includes(operation.environment)) {
-        violations.push(`Storage location '${operation.environment}' not approved`);
+        violations.push(`Storage location '${operation.environment}' not approved`);}
       }
     }
-    
     // Transmission requirements for data movement
     if (['export', 'share'].includes(operation.operation)) {
-      if (requirements.transmission.endToEndEncryption && 
+      if (requirements.transmission.endToEndEncryption && )
           !currentControls.includes('e2e-encryption')) {
         violations.push('End-to-end encryption required for transmission');
       }
-      
-      if (requirements.transmission.certificatePinning && 
+      if (requirements.transmission.certificatePinning && )
           !currentControls.includes('cert-pinning')) {
         violations.push('Certificate pinning required');
       }
     }
-    
     // Processing requirements
-    if (requirements.processing.isolationRequired && 
+    if (requirements.processing.isolationRequired && )
         !currentControls.includes('process-isolation')) {
       violations.push('Process isolation required');
     }
-    
     // Caching restrictions
-    if (!requirements.processing.cachingRestrictions.allowed && 
+    if (!requirements.processing.cachingRestrictions.allowed && )
         currentControls.includes('caching')) {
       violations.push('Caching not allowed for this classification');
     }
-    
     return violations;
   }
-  
   /**
    * Calculate risk score
    */
-  private calculateRiskScore(
+  private calculateRiskScore()
     classification: DataClassificationLevel,
     operation: OperationContext,
     violations: string[],
-    currentControls: string[]
+    currentControls: string[],
   ): number {
     let score = 0;
-    
     // Base score by classification
     const classificationScores: Record<DataClassificationLevel, number> = {
       PUBLIC: 10,
       INTERNAL: 30,
       CONFIDENTIAL: 60,
-      RESTRICTED: 90
+      RESTRICTED: 90,
     };
     score += classificationScores[classification];
-    
     // Add score for violations
     score += violations.length * 10;
-    
     // Reduce score for controls in place
     score -= currentControls.length * 5;
-    
     // Adjust for operation type
     const operationMultipliers: Record<string, number> = {
       read: 0.8,
@@ -554,81 +482,68 @@ export class ClassificationEnforcer {
       update: 1.0,
       delete: 1.2,
       export: 1.5,
-      share: 1.5
+      share: 1.5,
     };
     score *= operationMultipliers[operation.operation] || 1.0;
-    
     // Ensure score is between 0 and 100
     return Math.max(0, Math.min(100, Math.round(score)));
   }
-  
   /**
    * Determine if operation should be allowed
    */
-  private shouldAllowOperation(
+  private shouldAllowOperation()
     violations: string[],
     riskScore: number,
     classification: DataClassificationLevel,
-    operation: OperationContext
+    operation: OperationContext,
   ): boolean {
     // In strict mode, any violation blocks the operation
     if (this.config.strictMode && violations.length > 0) {
       return false;
     }
-    
     // Check if violations should block
     if (this.config.blockViolations && violations.length > 0) {
       // Allow with high risk score in non-strict mode
       return riskScore < 80;
     }
-    
     // Check grace period for legacy data
     if (this.isInGracePeriod(operation.timestamp)) {
       return riskScore < 90;
     }
-    
     // Default: allow if risk score is acceptable
     return riskScore < 70;
   }
-  
   /**
    * Get required controls for an operation
    */
-  private getRequiredControls(
+  private getRequiredControls()
     classification: DataClassificationLevel,
     operation: OperationContext,
-    requirements: HandlingRequirements
+    requirements: HandlingRequirements,
   ): string[] {
     const controls: string[] = [];
-    
     // Authentication controls
-    controls.push(`auth-${requirements.access.authenticationLevel.toLowerCase()}`);
-    
+    controls.push(`auth-${requirements.access.authenticationLevel.toLowerCase()}`);}
     // Encryption controls
     if (requirements.storage.encryptionRequired) {
       controls.push('encryption-at-rest');
-      controls.push(`encryption-${requirements.storage.encryptionAlgorithm}`);
+      controls.push(`encryption-${requirements.storage.encryptionAlgorithm}`);}
     }
-    
     // Transmission controls
     if (['export', 'share'].includes(operation.operation)) {
-      controls.push(`tls-${requirements.transmission.tlsVersion}`);
+      controls.push(`tls-${requirements.transmission.tlsVersion}`);}
       if (requirements.transmission.endToEndEncryption) {
         controls.push('e2e-encryption');
       }
     }
-    
     // Audit controls
-    controls.push(`audit-${requirements.access.auditLogging.toLowerCase()}`);
-    
+    controls.push(`audit-${requirements.access.auditLogging.toLowerCase()}`);}
     // Monitoring controls
     if (requirements.monitoring.realtimeMonitoring) {
       controls.push('realtime-monitoring');
     }
-    
     return [...new Set(controls)]; // Remove duplicates
   }
-  
   /**
    * Check if user is exempted
    */
@@ -636,76 +551,63 @@ export class ClassificationEnforcer {
     if (!this.config.exemptions) {
       return false;
     }
-    
     // Check direct user exemption
     if (this.config.exemptions.users?.includes(userId)) {
       return true;
     }
-    
     // TODO: Check role-based exemptions
     // This would require integration with the role system
-    
     return false;
   }
-  
   /**
    * Check if operation is in grace period
    */
   private isInGracePeriod(timestamp: Date): boolean {
     const gracePeriodMs = this.config.gracePeriodDays * 24 * 60 * 60 * 1000;
-    const configuredDate = new Date('2025-01-01'); // Configuration start date
+    const configuredDate = new Date('2025-01-01'); // Configuration start date;
     return timestamp.getTime() - configuredDate.getTime() < gracePeriodMs;
   }
-  
   /**
    * Check authentication requirements
    */
-  private checkAuthenticationRequirements(
+  private checkAuthenticationRequirements()
     requirements: AccessRequirements,
-    context: OperationContext
+    context: OperationContext,
   ): { met: boolean; required?: string } {
     // TODO: Integrate with actual authentication system
     // For now, return a simplified check
-    const currentAuthLevel = 'STANDARD'; // Would come from auth system
-    
+    const currentAuthLevel = 'STANDARD'; // Would come from auth system;
     const authLevels = ['STANDARD', 'MFA', 'STRONG_MFA', 'BIOMETRIC'];
     const requiredIndex = authLevels.indexOf(requirements.authenticationLevel);
     const currentIndex = authLevels.indexOf(currentAuthLevel);
-    
     if (currentIndex < requiredIndex) {
       return { met: false, required: requirements.authenticationLevel };
     }
-    
     return { met: true };
   }
-  
   /**
    * Check authorization requirements
    */
-  private checkAuthorizationRequirements(
+  private checkAuthorizationRequirements()
     requirements: AccessRequirements,
     context: OperationContext,
-    classification: DataClassificationLevel
+    classification: DataClassificationLevel,
   ): { met: boolean; required?: string[] } {
     if (!requirements.authorizationRequired) {
       return { met: true };
     }
-    
     // TODO: Integrate with actual authorization system
     // For now, return a simplified check
-        
     return { met: true }; // Placeholder
   }
-  
   /**
    * Check time restrictions
    */
-  private checkTimeRestrictions(
-    context: OperationContext
+  private checkTimeRestrictions()
+    context: OperationContext,
   ): { met: boolean; reason?: string } {
     const hour = context.timestamp.getHours();
     const dayOfWeek = context.timestamp.getDay();
-    
     // Example: No access outside business hours for certain operations
     if (context.operation === 'export' || context.operation === 'share') {
       if (hour < 8 || hour > 18) {
@@ -715,16 +617,14 @@ export class ClassificationEnforcer {
         return { met: false, reason: 'Operation not allowed on weekends' };
       }
     }
-    
     return { met: true };
   }
-  
   /**
    * Check purpose limitation
    */
-  private checkPurposeLimitation(
+  private checkPurposeLimitation()
     purpose: string,
-    classification: DataClassificationLevel
+    classification: DataClassificationLevel,
   ): { met: boolean } {
     // Define allowed purposes by classification
     const allowedPurposes: Record<DataClassificationLevel, string[]> = {
@@ -733,47 +633,39 @@ export class ClassificationEnforcer {
       CONFIDENTIAL: ['authorized-business', 'compliance', 'security'],
       RESTRICTED: ['critical-operations', 'legal-requirement', 'security-incident']
     };
-    
     const allowed = allowedPurposes[classification];
     if (allowed.includes('any')) {
       return { met: true };
     }
-    
     return { met: allowed.some(p => purpose.includes(p)) };
   }
-  
   /**
    * Get access conditions
    */
-  private getAccessConditions(
+  private getAccessConditions()
     classification: DataClassificationLevel,
-    context: OperationContext
+    context: OperationContext,
   ): string[] {
     const conditions: string[] = [];
-    
     // Add standard conditions
     conditions.push('No unauthorized sharing');
     conditions.push('Access logged for audit');
-    
     // Add classification-specific conditions
     if (classification === 'CONFIDENTIAL' || classification === 'RESTRICTED') {
       conditions.push('Must not be cached locally');
       conditions.push('Must not be printed');
     }
-    
     if (classification === 'RESTRICTED') {
       conditions.push('Access monitored in real-time');
       conditions.push('Automatic session timeout after 15 minutes');
     }
-    
     return conditions;
   }
-  
   /**
    * Calculate access expiration
    */
-  private calculateAccessExpiration(
-    classification: DataClassificationLevel
+  private calculateAccessExpiration()
+    classification: DataClassificationLevel,
   ): Date {
     const now = new Date();
     const expirationHours: Record<DataClassificationLevel, number> = {
@@ -782,21 +674,19 @@ export class ClassificationEnforcer {
       CONFIDENTIAL: 24, // 1 day
       RESTRICTED: 4 // 4 hours
     };
-    
     const hours = expirationHours[classification];
     return new Date(now.getTime() + hours * 60 * 60 * 1000);
   }
-  
   /**
    * Log enforcement decision
    */
-  private async logEnforcementDecision(
+  private async logEnforcementDecision()
     auditId: string,
     operation: OperationContext,
     classification: DataClassificationLevel,
     allowed: boolean,
     violations: string[],
-    riskScore: number
+    riskScore: number,
   ): Promise<void> {
     const event: ClassificationAuditEvent = {
       id: auditId,
@@ -807,109 +697,95 @@ export class ClassificationEnforcer {
       classification,
       action: operation.operation,
       result: allowed ? 'SUCCESS' : 'FAILURE',
-      details: {
+      details: {,
         violations,
         riskScore,
         environment: operation.environment,
         purpose: operation.purpose,
-        sessionId: operation.sessionId
+        sessionId: operation.sessionId,
       }
     };
-    
     this.auditLog.push(event);
-    
     // TODO: Persist to audit storage
     if (this.config.realtimeMonitoring) {
       // Send to monitoring system
       console.log('Enforcement decision:', event);
     }
   }
-  
   /**
    * Alert on violation
    */
-  private async alertOnViolation(
+  private async alertOnViolation()
     classification: DataClassificationLevel,
     operation: OperationContext,
     violations: string[],
-    riskScore: number
+    riskScore: number,
   ): Promise<void> {
     if (riskScore > 80 || classification === 'RESTRICTED') {
       // High priority alert
-      console.error('SECURITY ALERT: Classification policy violation', {
+      console.error('SECURITY ALERT: Classification policy violation', {)
         classification,
         operation: operation.operation,
         userId: operation.userId,
         violations,
         riskScore
       });
-      
       // TODO: Send to alerting system
     }
   }
-  
   /**
    * Generate recommendations
    */
-  private generateRecommendations(
+  private generateRecommendations()
     classification: DataClassificationLevel,
-    violations: string[]
+    violations: string[],
   ): string[] {
     const recommendations: string[] = [];
-    
     if (violations.includes('Encryption required for storage')) {
       recommendations.push('Enable encryption at rest for this data');
     }
-    
     if (violations.includes('Authorization required but not present')) {
       recommendations.push('Implement role-based access control');
     }
-    
     if (violations.includes('Certificate pinning required')) {
       recommendations.push('Configure certificate pinning for secure connections');
     }
-    
     if (classification === 'RESTRICTED') {
       recommendations.push('Consider implementing additional monitoring');
       recommendations.push('Review access logs regularly');
     }
-    
     return recommendations;
   }
-  
   /**
    * Convert DataHandlingRequirements to HandlingRequirements
    */
-  private convertDataHandlingToHandlingRequirements(
+  private convertDataHandlingToHandlingRequirements()
     dataReqs: DataHandlingRequirements,
-    classification: DataClassificationLevel
+    classification: DataClassificationLevel,
   ): HandlingRequirements {
     // Map authentication levels
     const authLevelMap: Record<string, HandlingRequirements['access']['authenticationLevel']> = {
       none: 'STANDARD',
       basic: 'STANDARD',
       strong: 'MFA',
-      mfa: 'STRONG_MFA'
+      mfa: 'STRONG_MFA',
     };
-    
     // Map audit levels
     const auditLevelMap: Record<string, HandlingRequirements['access']['auditLogging']> = {
       none: 'STANDARD',
       basic: 'STANDARD',
       enhanced: 'ENHANCED',
-      continuous: 'REALTIME'
+      continuous: 'REALTIME',
     };
-    
     // Map monitoring levels
     const monitoringLevelMap: Record<string, HandlingRequirements['monitoring']['alertThreshold']> = {
       none: 'LOW',
       basic: 'MEDIUM',
       enhanced: 'HIGH',
-      continuous: 'CRITICAL'
+      continuous: 'CRITICAL',
     };
-    
     return {
-      storage: {
+      storage: {,
         encryptionRequired: dataReqs.encryption.atRest,
         encryptionAlgorithm: dataReqs.encryption.algorithm,
         keyRotationDays: parseInt(dataReqs.encryption.keyRotation) || 90,
@@ -917,9 +793,9 @@ export class ClassificationEnforcer {
         backupEncryption: dataReqs.encryption.atRest,
         retentionDays: this.getRetentionDaysForClassification(classification),
         approvedLocations: this.getApprovedLocationsForClassification(classification),
-        redundancyLevel: this.getRedundancyLevelForClassification(classification)
+        redundancyLevel: this.getRedundancyLevelForClassification(classification),
       },
-      transmission: {
+      transmission: {,
         tlsVersion: dataReqs.encryption.inTransit ? 'TLS1.3' : 'TLS1.2',
         certificatePinning: classification === 'RESTRICTED' || classification === 'CONFIDENTIAL',
         networkRestrictions: this.getNetworkRestrictionsForClassification(classification),
@@ -927,10 +803,10 @@ export class ClassificationEnforcer {
         compressionAllowed: classification === 'PUBLIC' || classification === 'INTERNAL',
         endToEndEncryption: dataReqs.encryption.inTransit && (classification === 'RESTRICTED' || classification === 'CONFIDENTIAL')
       },
-      processing: {
+      processing: {,
         approvedEnvironments: dataReqs.processingEnvironments || ['production'],
         loggingRequired: dataReqs.accessControl.monitoring !== 'none',
-        cachingRestrictions: {
+        cachingRestrictions: {,
           allowed: classification === 'PUBLIC' || classification === 'INTERNAL',
           encryptionRequired: classification !== 'PUBLIC',
           maxTtlSeconds: this.getCacheTtlForClassification(classification),
@@ -941,7 +817,7 @@ export class ClassificationEnforcer {
         isolationRequired: classification === 'RESTRICTED',
         auditTrailRequired: classification !== 'PUBLIC'
       },
-      access: {
+      access: {,
         authenticationLevel: authLevelMap[dataReqs.accessControl.authentication] || 'STANDARD',
         authorizationRequired: dataReqs.accessControl.authorization !== 'none',
         approvalWorkflow: dataReqs.transfer.approvalRequired || false,
@@ -950,7 +826,7 @@ export class ClassificationEnforcer {
         auditLogging: auditLevelMap[dataReqs.accessControl.monitoring] || 'STANDARD',
         exportRestrictions: dataReqs.transfer.restrictions?.includes('export-control') || classification === 'RESTRICTED'
       },
-      monitoring: {
+      monitoring: {,
         alertingEnabled: classification !== 'PUBLIC',
         anomalyDetection: classification === 'RESTRICTED' || classification === 'CONFIDENTIAL',
         alertThreshold: monitoringLevelMap[dataReqs.accessControl.monitoring] || 'LOW',
@@ -960,7 +836,6 @@ export class ClassificationEnforcer {
       }
     };
   }
-  
   /**
    * Get access controls for classification
    */
@@ -973,7 +848,6 @@ export class ClassificationEnforcer {
     };
     return controls[classification];
   }
-  
   /**
    * Get retention days for classification
    */
@@ -982,11 +856,10 @@ export class ClassificationEnforcer {
       PUBLIC: 365,
       INTERNAL: 730,
       CONFIDENTIAL: 90,
-      RESTRICTED: 30
+      RESTRICTED: 30,
     };
     return retention[classification];
   }
-  
   /**
    * Get approved locations for classification
    */
@@ -995,26 +868,24 @@ export class ClassificationEnforcer {
       PUBLIC: ['any'],
       INTERNAL: ['production', 'staging'],
       CONFIDENTIAL: ['production'],
-      RESTRICTED: ['production-secure']
+      RESTRICTED: ['production-secure'],
     };
     return locations[classification];
   }
-  
   /**
    * Get redundancy level for classification
    */
-  private getRedundancyLevelForClassification(
-    classification: DataClassificationLevel
+  private getRedundancyLevelForClassification()
+    classification: DataClassificationLevel,
   ): 'NONE' | 'STANDARD' | 'HIGH' | 'CRITICAL' {
     const redundancy: Record<DataClassificationLevel, 'NONE' | 'STANDARD' | 'HIGH' | 'CRITICAL'> = {
       PUBLIC: 'STANDARD',
       INTERNAL: 'STANDARD',
       CONFIDENTIAL: 'HIGH',
-      RESTRICTED: 'CRITICAL'
+      RESTRICTED: 'CRITICAL',
     };
     return redundancy[classification];
   }
-  
   /**
    * Get network restrictions for classification
    */
@@ -1027,7 +898,6 @@ export class ClassificationEnforcer {
     };
     return restrictions[classification];
   }
-  
   /**
    * Get cache TTL for classification
    */
@@ -1040,13 +910,12 @@ export class ClassificationEnforcer {
     };
     return ttl[classification];
   }
-  
   /**
    * Merge requirements with overrides
    */
-  private mergeRequirements(
+  private mergeRequirements()
     base: HandlingRequirements,
-    overrides: Partial<HandlingRequirements>
+    overrides: Partial<HandlingRequirements>,
   ): HandlingRequirements {
     return {
       storage: { ...base.storage, ...overrides.storage },
@@ -1056,11 +925,10 @@ export class ClassificationEnforcer {
       monitoring: { ...base.monitoring, ...overrides.monitoring }
     };
   }
-  
   /**
    * Create enforcement result
    */
-  private createEnforcementResult(
+  private createEnforcementResult()
     allowed: boolean,
     classification: DataClassificationLevel,
     violations: string[],
@@ -1081,29 +949,25 @@ export class ClassificationEnforcer {
       recommendations
     };
   }
-  
   /**
    * Generate audit ID
    */
   private generateAuditId(operation: OperationContext): string {
-    const data = `${operation.userId}-${operation.requestId}-${Date.now()}`;
+    const data = `${operation.userId}-${operation.requestId}-${Date.now()}`;}
     return createHash('sha256').update(data).digest('hex').substring(0, 16);
   }
-  
   /**
    * Generate request ID
    */
   private generateRequestId(): string {
-    return `req-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    return `req-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;}
   }
-  
   /**
    * Get audit log (for testing/monitoring)
    */
   getAuditLog(): ClassificationAuditEvent[] {
     return [...this.auditLog];
   }
-  
   /**
    * Clear audit log (for testing)
    */
@@ -1111,37 +975,34 @@ export class ClassificationEnforcer {
     this.auditLog = [];
   }
 }
-
 /**
  * Factory function for creating enforcers with presets
  */
-export function createClassificationEnforcer(
+export function createClassificationEnforcer()
   preset: 'development' | 'staging' | 'production' = 'production'
 ): ClassificationEnforcer {
   const configs: Record<string, Partial<ClassificationEnforcementConfig>> = {
-    development: {
+    development: {,
       strictMode: false,
       blockViolations: false,
       alertingEnabled: false,
-      gracePeriodDays: 90
+      gracePeriodDays: 90,
     },
-    staging: {
+    staging: {,
       strictMode: false,
       blockViolations: true,
       alertingEnabled: true,
-      gracePeriodDays: 30
+      gracePeriodDays: 30,
     },
-    production: {
+    production: {,
       strictMode: true,
       blockViolations: true,
       alertingEnabled: true,
-      gracePeriodDays: 0
+      gracePeriodDays: 0,
     }
   };
-  
   return new ClassificationEnforcer(configs[preset]);
 }
-
 /**
  * Export types for external use
  */

@@ -17,12 +17,12 @@ export interface PerformanceMetric {
 }
 
 export interface PerformanceReport {
-  period: {
+  period: {,
     start: number;
     end: number;
     duration: number;
   };
-  metrics: {
+  metrics: {,
     [key: string]: {
       count: number;
       average: number;
@@ -52,38 +52,32 @@ export class PerformanceMonitor {
   private listeners: Map<string, ((alert: PerformanceAlert) => void)[]> = new Map();
   private reportingInterval: number = 60000; // 1 minute
   private maxMetricHistory: number = 1000;
-  
   constructor() {
     this.setupDefaultThresholds();
     this.startReporting();
   }
-
   private setupDefaultThresholds(): void {
     // UI Performance Thresholds (based on performance goals)
     this.thresholds.set('canvas-render', { warning: 13, critical: 16 }); // 60 FPS target
     this.thresholds.set('preview-generation', { warning: 400, critical: 500 }); // 500ms target
     this.thresholds.set('help-system-response', { warning: 40, critical: 50 }); // 50ms target
     this.thresholds.set('weight-slider-update', { warning: 8, critical: 10 }); // 10ms target
-    
     // Graph Execution Thresholds
     this.thresholds.set('simple-node-execution', { warning: 0.8, critical: 1 }); // 1ms target
     this.thresholds.set('weighted-node-execution', { warning: 4, critical: 5 }); // 5ms target
     this.thresholds.set('advanced-node-execution', { warning: 15, critical: 20 }); // 20ms target
     this.thresholds.set('graph-validation', { warning: 40, critical: 50 }); // 50ms target
-    
     // Memory Thresholds (MB)
     this.thresholds.set('memory-usage', { warning: 80, critical: 100 }); // 100MB target
     this.thresholds.set('memory-leak-rate', { warning: 5, critical: 10 }); // MB per hour
-    
     // Network Thresholds
     this.thresholds.set('api-response-time', { warning: 400, critical: 500 }); // 500ms target
     this.thresholds.set('bundle-load-time', { warning: 2000, critical: 3000 }); // 3s target
   }
-
   /**
    * Record a performance metric
    */
-  public recordMetric(
+  public recordMetric()
     name: string, 
     value: number, 
     context?: Record<string, any>
@@ -92,38 +86,31 @@ export class PerformanceMonitor {
     if (!this.metrics.has(name)) {
       this.metrics.set(name, []);
     }
-    
     const values = this.metrics.get(name)!;
     values.push(value);
-    
     // Limit history to prevent memory growth
     if (values.length > this.maxMetricHistory) {
       values.shift();
     }
-    
     // Check thresholds and generate alerts
     this.checkThresholds(name, value, context);
-    
     // Report to external systems if configured
     this.reportToExternalSystems(name, value, context);
   }
-
   /**
    * Start a performance measurement
    */
   public startMeasurement(name: string): () => void {
     const startTime = performance.now();
-    
     return (context?: Record<string, any>) => {
       const duration = performance.now() - startTime;
       this.recordMetric(name, duration, context);
     };
   }
-
   /**
    * Measure function execution time
    */
-  public measureExecution<T>(
+  public measureExecution<T>()
     name: string,
     fn: () => T,
     context?: Record<string, any>
@@ -133,11 +120,10 @@ export class PerformanceMonitor {
     finishMeasurement(context);
     return result;
   }
-
   /**
    * Measure async function execution time
    */
-  public async measureAsyncExecution<T>(
+  public async measureAsyncExecution<T>()
     name: string,
     fn: () => Promise<T>,
     context?: Record<string, any>
@@ -147,7 +133,6 @@ export class PerformanceMonitor {
     finishMeasurement(context);
     return result;
   }
-
   /**
    * Get performance statistics for a metric
    */
@@ -164,11 +149,9 @@ export class PerformanceMonitor {
     if (!values || values.length === 0) {
       return null;
     }
-
     const sorted = [...values].sort((a, b) => a - b);
     const count = values.length;
     const sum = values.reduce((a, b) => a + b, 0);
-
     return {
       count,
       average: sum / count,
@@ -179,16 +162,14 @@ export class PerformanceMonitor {
       recent: values.slice(-10) // Last 10 measurements
     };
   }
-
   /**
    * Generate comprehensive performance report
    */
   public generateReport(periodMinutes: number = 60): PerformanceReport {
     const now = Date.now();
     const start = now - (periodMinutes * 60 * 1000);
-    
     const report: PerformanceReport = {
-      period: {
+      period: {,
         start,
         end: now,
         duration: periodMinutes * 60 * 1000
@@ -196,14 +177,12 @@ export class PerformanceMonitor {
       metrics: {},
       alerts: this.alerts.filter(alert => alert.timestamp >= start)
     };
-
     // Generate stats for all metrics
     for (const [name, values] of this.metrics.entries()) {
       if (values.length > 0) {
         const sorted = [...values].sort((a, b) => a - b);
         const count = values.length;
         const sum = values.reduce((a, b) => a + b, 0);
-
         report.metrics[name] = {
           count,
           average: sum / count,
@@ -211,14 +190,12 @@ export class PerformanceMonitor {
           max: sorted[sorted.length - 1],
           p95: sorted[Math.floor(count * 0.95)],
           p99: sorted[Math.floor(count * 0.99)],
-          values: [...values]
+          values: [...values],
         };
       }
     }
-
     return report;
   }
-
   /**
    * Monitor UI performance specifically
    */
@@ -226,41 +203,33 @@ export class PerformanceMonitor {
     // Monitor frame rate
     let frameCount = 0;
     let lastTime = performance.now();
-    
     const measureFrameRate = () => {
       const now = performance.now();
       frameCount++;
-      
       if (now - lastTime >= 1000) { // Every second
         const fps = frameCount;
         this.recordMetric('fps', fps);
-        
         frameCount = 0;
         lastTime = now;
       }
-      
       requestAnimationFrame(measureFrameRate);
     };
-    
     requestAnimationFrame(measureFrameRate);
-    
     // Monitor long tasks (> 50ms)
     if ('PerformanceObserver' in window) {
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           if (entry.duration > 50) {
-            this.recordMetric('long-task', entry.duration, {
+            this.recordMetric('long-task', entry.duration, {)
               name: entry.name,
-              startTime: entry.startTime
+              startTime: entry.startTime,
             });
           }
         }
       });
-      
       observer.observe({ entryTypes: ['longtask'] });
     }
   }
-
   /**
    * Monitor memory usage
    */
@@ -272,12 +241,10 @@ export class PerformanceMonitor {
         this.recordMetric('memory-limit', memory.jsHeapSizeLimit / 1024 / 1024); // MB
       }
     };
-
     // Check memory every 30 seconds
     setInterval(checkMemory, 30000);
     checkMemory(); // Initial check
   }
-
   /**
    * Monitor network performance
    */
@@ -290,18 +257,16 @@ export class PerformanceMonitor {
             this.recordMetric('dns-lookup', (entry as any).domainLookupEnd - (entry as any).domainLookupStart);
             this.recordMetric('tcp-connect', (entry as any).connectEnd - (entry as any).connectStart);
           } else if (entry.entryType === 'resource') {
-            this.recordMetric('resource-load-time', entry.duration, {
+            this.recordMetric('resource-load-time', entry.duration, {)
               name: entry.name,
               type: (entry as any).initiatorType
             });
           }
         }
       });
-      
       observer.observe({ entryTypes: ['navigation', 'resource'] });
     }
   }
-
   /**
    * Add performance alert listener
    */
@@ -311,7 +276,6 @@ export class PerformanceMonitor {
     }
     this.listeners.get(metricName)!.push(callback);
   }
-
   /**
    * Remove performance alert listener
    */
@@ -324,14 +288,11 @@ export class PerformanceMonitor {
       }
     }
   }
-
   private checkThresholds(name: string, value: number, context?: Record<string, any>): void {
     const threshold = this.thresholds.get(name);
     if (!threshold) return;
-    
     let level: 'warning' | 'critical' | null = null;
     let thresholdValue: number;
-    
     if (value >= threshold.critical) {
       level = 'critical';
       thresholdValue = threshold.critical;
@@ -339,7 +300,6 @@ export class PerformanceMonitor {
       level = 'warning';
       thresholdValue = threshold.warning;
     }
-    
     if (level) {
       const alert: PerformanceAlert = {
         metric: name,
@@ -349,61 +309,50 @@ export class PerformanceMonitor {
         timestamp: Date.now(),
         context
       };
-      
       this.alerts.push(alert);
-      
       // Limit alert history
       if (this.alerts.length > 1000) {
         this.alerts.shift();
       }
-      
       // Notify listeners
       const callbacks = this.listeners.get(name) || [];
       callbacks.forEach(callback => callback(alert));
-      
       // Global alert listeners
       const globalCallbacks = this.listeners.get('*') || [];
       globalCallbacks.forEach(callback => callback(alert));
     }
   }
-
   private reportToExternalSystems(name: string, value: number, context?: Record<string, any>): void {
     // Integration points for external monitoring systems
     // This could be extended to send to DataDog, New Relic, etc.
-    
     if (typeof window !== 'undefined' && (window as any).gtag) {
       // Google Analytics custom event
-      (window as any).gtag('event', 'performance_metric', {
+      (window as any).gtag('event', 'performance_metric', {)
         custom_parameter_1: name,
-        custom_parameter_2: value
+        custom_parameter_2: value,
       });
     }
-    
     // Console logging for development
     if (process.env.NODE_ENV === 'development') {
       const stats = this.getMetricStats(name);
       if (stats && stats.count % 100 === 0) { // Every 100th measurement
-        console.log(`Performance Metric [${name}]: ${value.toFixed(2)}ms (avg: ${stats.average.toFixed(2)}ms, p95: ${stats.p95.toFixed(2)}ms)`);
+        console.log(`Performance Metric [${name}]: ${value.toFixed(2)}ms (avg: ${stats.average.toFixed(2)}ms, p95: ${stats.p95.toFixed(2)}ms)`);}
       }
     }
   }
-
   private startReporting(): void {
     setInterval(() => {
-      const report = this.generateReport(1); // 1 minute report
-      
+      const report = this.generateReport(1); // 1 minute report;
       // Could send to monitoring service
       if (process.env.NODE_ENV === 'development') {
         const alertCount = report.alerts.length;
         const metricCount = Object.keys(report.metrics).length;
-        
         if (alertCount > 0 || metricCount > 0) {
-          console.log(`Performance Report: ${metricCount} metrics tracked, ${alertCount} alerts in last minute`);
+          console.log(`Performance Report: ${metricCount} metrics tracked, ${alertCount} alerts in last minute`);}
         }
       }
     }, this.reportingInterval);
   }
-
   /**
    * Initialize all performance monitoring
    */
@@ -414,17 +363,16 @@ export class PerformanceMonitor {
       this.monitorNetworkPerformance();
     }
   }
-
   /**
    * Get current performance dashboard data
    */
   public getDashboardData(): {
-    overview: {
+    overview: {,
       totalMetrics: number;
       activeAlerts: number;
       healthScore: number; // 0-100
     };
-    keyMetrics: {
+    keyMetrics: {,
       name: string;
       current: number;
       average: number;
@@ -433,30 +381,25 @@ export class PerformanceMonitor {
     recentAlerts: PerformanceAlert[];
     } {
     const totalMetrics = this.metrics.size;
-    const recentAlerts = this.alerts.filter(alert => 
+    const recentAlerts = this.alerts.filter(alert => ;)
       alert.timestamp > Date.now() - 60000 // Last minute
     );
-    
     // Calculate health score based on recent alerts
     const criticalAlerts = recentAlerts.filter(a => a.level === 'critical').length;
     const warningAlerts = recentAlerts.filter(a => a.level === 'warning').length;
     const healthScore = Math.max(0, 100 - (criticalAlerts * 20) - (warningAlerts * 5));
-    
     // Key metrics with trends
     const keyMetricNames = ['canvas-render', 'preview-generation', 'api-response-time', 'memory-usage'];
-    const keyMetrics = keyMetricNames
-      .map(name => {
+    const keyMetrics = keyMetricNames;
+      .map(name => {)
         const stats = this.getMetricStats(name);
         if (!stats) return null;
-        
         // Simple trend analysis based on recent vs overall average
         const recentAvg = stats.recent.reduce((a, b) => a + b, 0) / stats.recent.length;
         let trend: 'improving' | 'stable' | 'degrading' = 'stable';
-        
         const difference = (recentAvg - stats.average) / stats.average;
         if (difference > 0.1) trend = 'degrading';
         else if (difference < -0.1) trend = 'improving';
-        
         return {
           name,
           current: recentAvg,
@@ -465,9 +408,8 @@ export class PerformanceMonitor {
         };
       })
       .filter(Boolean) as any[];
-    
     return {
-      overview: {
+      overview: {,
         totalMetrics,
         activeAlerts: recentAlerts.length,
         healthScore

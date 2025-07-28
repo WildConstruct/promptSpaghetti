@@ -59,7 +59,7 @@ export const EPIC16_REPORT_CATEGORIES: Record<Epic16ReportCategory, ReportCatego
     name: 'Community Metrics',
     description: 'Community engagement and growth analytics',
     audience: [ReportAudience.ADMINS, ReportAudience.CREATORS],
-    format: [ReportFormat.DASHBOARD]
+    format: [ReportFormat.DASHBOARD],
   }
 };
 
@@ -67,9 +67,8 @@ export class Epic16ReportCategoryService {
   getAllCategories(): ReportCategoryDefinition[] {
     return Object.values(EPIC16_REPORT_CATEGORIES);
   }
-
   getCategoriesByAudience(audience: ReportAudience): ReportCategoryDefinition[] {
-    return this.getAllCategories().filter(category => 
+    return this.getAllCategories().filter(category => )
       category.audience.includes(audience)
     );
   }

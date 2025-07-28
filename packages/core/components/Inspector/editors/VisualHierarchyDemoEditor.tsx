@@ -9,14 +9,12 @@ import {
   SpacingScale 
 } from '../../VisualHierarchy/HierarchyDesignSystem';
 import { useUISettingsStore } from '../../../stores/uiSettingsStore';
-
 interface VisualHierarchyDemoEditorProps {
   nodeId: string;
   nodeType: string;
   data: Record<string, unknown>;
   onChange: (updates: Record<string, any>) => void;
 }
-
 /**
  * Epic 8.4 Task 2 - Visual Hierarchy Design Demo
  * 
@@ -27,7 +25,7 @@ interface VisualHierarchyDemoEditorProps {
  * - Progressive visual complexity indicators
  * - Full accessibility compliance
  */
-export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps> = ({
+export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps> = ({)
   nodeId,
   nodeType,
   data,
@@ -35,14 +33,13 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
 }) => {
   const { getNodeDisclosureLevel } = useUISettingsStore();
   const currentLevel = getNodeDisclosureLevel(nodeId, nodeType);
-  
-  return (
+  return ()
     <div 
       style={{ 
         padding: SpacingScale.md,
         maxHeight: '100%',
         overflowY: 'auto',
-        background: HierarchyColors.neutral.background
+        background: HierarchyColors.neutral.background,
       }}
       role="form"
       aria-label={`${nodeType} editor with visual hierarchy`}
@@ -57,7 +54,6 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
       >
         <ComplexityIndicator level={currentLevel} size="small" />
       </HierarchyHeader>
-
       {/* Basic Level - Essential Fields Only */}
       <ProgressiveDisclosureSection
         title="Essential Settings"
@@ -82,14 +78,13 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
               width: '100%',
               padding: SpacingScale.sm,
               borderRadius: 4,
-              border: `1px solid ${HierarchyColors[currentLevel].border}`,
+              border: `1px solid ${HierarchyColors[currentLevel].border}`,}
               background: HierarchyColors[currentLevel].background,
               color: HierarchyColors[currentLevel].text,
               ...TypographyScale.tertiary
             }}
           />
         </HierarchyField>
-
         <HierarchyField
           priority="critical"
           level={currentLevel}
@@ -106,7 +101,7 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
               width: '100%',
               padding: SpacingScale.sm,
               borderRadius: 4,
-              border: `1px solid ${HierarchyColors[currentLevel].border}`,
+              border: `1px solid ${HierarchyColors[currentLevel].border}`,}
               background: HierarchyColors[currentLevel].background,
               color: HierarchyColors[currentLevel].text,
               resize: 'vertical',
@@ -115,7 +110,6 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
           />
         </HierarchyField>
       </ProgressiveDisclosureSection>
-
       {/* Advanced Level - Power User Features */}
       <ProgressiveDisclosureSection
         title="Advanced Options"
@@ -142,13 +136,12 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
             <span style={{ 
               ...TypographyScale.caption,
               color: HierarchyColors[currentLevel].text,
-              minWidth: '3em'
+              minWidth: '3em',
             }}>
               {data.weight || 50}%
             </span>
           </div>
         </HierarchyField>
-
         <HierarchyField
           priority="important"
           level={currentLevel}
@@ -164,14 +157,13 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
               width: '100%',
               padding: SpacingScale.sm,
               borderRadius: 4,
-              border: `1px solid ${HierarchyColors[currentLevel].border}`,
+              border: `1px solid ${HierarchyColors[currentLevel].border}`,}
               background: HierarchyColors[currentLevel].background,
               color: HierarchyColors[currentLevel].text,
               ...TypographyScale.tertiary
             }}
           />
         </HierarchyField>
-
         <HierarchyField
           priority="standard"
           level={currentLevel}
@@ -184,21 +176,20 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
             gap: SpacingScale.sm,
             cursor: 'pointer',
             ...TypographyScale.tertiary,
-            color: HierarchyColors[currentLevel].text
+            color: HierarchyColors[currentLevel].text,
           }}>
             <input
               type="checkbox"
               checked={data.performanceMode || false}
               onChange={(e) => onChange({ performanceMode: e.target.checked })}
               style={{ 
-                accentColor: HierarchyColors[currentLevel].primary
+                accentColor: HierarchyColors[currentLevel].primary,
               }}
             />
             Enable performance optimizations
           </label>
         </HierarchyField>
       </ProgressiveDisclosureSection>
-
       {/* Debug Level - Technical Details */}
       <ProgressiveDisclosureSection
         title="Debug Information"
@@ -221,16 +212,15 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
               width: '100%',
               padding: SpacingScale.sm,
               borderRadius: 4,
-              border: `1px solid ${HierarchyColors[currentLevel].border}`,
+              border: `1px solid ${HierarchyColors[currentLevel].border}`,}
               background: HierarchyColors[currentLevel].accent,
               color: HierarchyColors[currentLevel].text,
               ...TypographyScale.caption,
               fontFamily: 'monospace',
-              opacity: 0.8
+              opacity: 0.8,
             }}
           />
         </HierarchyField>
-
         <HierarchyField
           priority="supplementary"
           level={currentLevel}
@@ -241,7 +231,7 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
             style={{
               padding: SpacingScale.sm,
               borderRadius: 4,
-              border: `1px solid ${HierarchyColors[currentLevel].border}`,
+              border: `1px solid ${HierarchyColors[currentLevel].border}`,}
               background: HierarchyColors[currentLevel].accent,
               color: HierarchyColors[currentLevel].text,
               ...TypographyScale.micro,
@@ -249,13 +239,12 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
               maxHeight: '200px',
               overflowY: 'auto',
               whiteSpace: 'pre-wrap',
-              wordBreak: 'break-all'
+              wordBreak: 'break-all',
             }}
           >
             {JSON.stringify(data, null, 2)}
           </pre>
         </HierarchyField>
-
         <HierarchyField
           priority="supplementary"
           level={currentLevel}
@@ -268,19 +257,19 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
             gap: SpacingScale.sm,
             padding: SpacingScale.sm,
             borderRadius: 4,
-            background: HierarchyColors[currentLevel].accent
+            background: HierarchyColors[currentLevel].accent,
           }}>
             {[
               { label: 'Executions', value: Math.floor(Math.random() * 1000) },
-              { label: 'Avg Time', value: `${(Math.random() * 10).toFixed(1)}ms` },
-              { label: 'Cache Hits', value: `${Math.floor(Math.random() * 100)}%` },
+              { label: 'Avg Time', value: `${(Math.random() * 10).toFixed(1)}ms` },}
+              { label: 'Cache Hits', value: `${Math.floor(Math.random() * 100)}%` },}
               { label: 'Memory', value: `${(Math.random() * 5).toFixed(1)}MB` }
-            ].map((stat) => (
+            ].map((stat) => ()
               <div 
                 key={stat.label} 
                 style={{ 
                   textAlign: 'center',
-                  color: HierarchyColors[currentLevel].text
+                  color: HierarchyColors[currentLevel].text,
                 }}
               >
                 <div style={{ 
@@ -295,7 +284,7 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
                 <div style={{ 
                   ...TypographyScale.caption,
                   fontWeight: 600,
-                  color: HierarchyColors[currentLevel].primary
+                  color: HierarchyColors[currentLevel].primary,
                 }}>
                   {stat.value}
                 </div>
@@ -304,14 +293,13 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
           </div>
         </HierarchyField>
       </ProgressiveDisclosureSection>
-
       {/* Information Architecture Summary */}
       <div style={{
         marginTop: SpacingScale.xl,
         padding: SpacingScale.md,
         borderRadius: 6,
-        background: `${HierarchyColors[currentLevel].primary}10`,
-        border: `1px solid ${HierarchyColors[currentLevel].primary}`
+        background: `${HierarchyColors[currentLevel].primary}10`,}
+        border: `1px solid ${HierarchyColors[currentLevel].primary}`}
       }}>
         <div style={{
           ...TypographyScale.caption,
@@ -320,14 +308,14 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
           marginBottom: SpacingScale.xs,
           display: 'flex',
           alignItems: 'center',
-          gap: SpacingScale.xs
+          gap: SpacingScale.xs,
         }}>
           📊 Visual Hierarchy Summary
         </div>
         <div style={{
           ...TypographyScale.micro,
           color: HierarchyColors[currentLevel].secondary,
-          lineHeight: 1.4
+          lineHeight: 1.4,
         }}>
           <strong>Current Level:</strong> {currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1)}<br/>
           <strong>Critical Fields:</strong> {currentLevel === 'basic' ? '2 visible' : 'All available'}<br/>

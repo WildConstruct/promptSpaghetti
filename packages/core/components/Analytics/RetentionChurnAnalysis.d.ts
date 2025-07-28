@@ -138,7 +138,7 @@ export interface RetentionChurnExportData {
     retentionData: RetentionData[];
     churnPredictions: ChurnPredictionData[];
     analysisTimestamp: number;
-    metadata: {
+    metadata: {,
         totalCohorts: number;
         totalUsers: number;
         highRiskUsers: number;

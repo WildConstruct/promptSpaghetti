@@ -1027,7 +1027,7 @@ export declare class Epic16LearningPathService extends EventEmitter {
     /**
      * Search learning paths
      */
-    searchLearningPaths(query: string, filters?: {
+    searchLearningPaths(query: string, filters?: {)
         category?: LearningCategory[];
         difficulty?: DifficultyLevel[];
         audience?: TargetAudience[];

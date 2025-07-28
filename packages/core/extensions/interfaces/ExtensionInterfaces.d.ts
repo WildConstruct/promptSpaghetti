@@ -111,7 +111,7 @@ export interface NodeDefinition {
     icon?: string;
     color?: string;
     schema: z.ZodSchema<any>;
-    metadata: {
+    metadata: {,
         author: string;
         license: string;
         repository?: string;
@@ -224,7 +224,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     description: z.ZodString;
     author: z.ZodString;
     license: z.ZodString;
-    engines: z.ZodObject<{
+    engines: z.ZodObject<{,
         promptSpaghetti: z.ZodString;
         node: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -239,7 +239,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     permissions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     main: z.ZodOptional<z.ZodString>;
     browser: z.ZodOptional<z.ZodString>;
-    contributes: z.ZodOptional<z.ZodObject<{
+    contributes: z.ZodOptional<z.ZodObject<{,
         nodes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         commands: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         menus: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -262,7 +262,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     homepage: z.ZodOptional<z.ZodString>;
     bugs: z.ZodOptional<z.ZodString>;
     keywords: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    configuration: z.ZodOptional<z.ZodObject<{
+    configuration: z.ZodOptional<z.ZodObject<{,
         type: z.ZodLiteral<"object">;
         properties: z.ZodRecord<z.ZodString, z.ZodAny>;
     }, "strip", z.ZodTypeAny, {
@@ -279,7 +279,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     version: string;
     author: string;
     license: string;
-    engines: {
+    engines: {,
         promptSpaghetti: string;
         node?: string | undefined;
     };
@@ -310,7 +310,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     version: string;
     author: string;
     license: string;
-    engines: {
+    engines: {,
         promptSpaghetti: string;
         node?: string | undefined;
     };

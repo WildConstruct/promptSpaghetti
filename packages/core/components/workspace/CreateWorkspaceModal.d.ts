@@ -4,7 +4,7 @@
  */
 import React from 'react';
 interface CreateWorkspaceModalProps {
-    onSubmit: (data: {
+    onSubmit: (data: {)
         name: string;
         description?: string;
     }) => void;

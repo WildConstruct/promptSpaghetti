@@ -6,10 +6,8 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { X, Settings, Shield, Eye, Target, MessageSquare, Cookie } from 'lucide-react';
-
 interface ConsentBannerProps {
   onConsentUpdate?: (consents: ConsentPreferences) => void;
   onClose?: () => void;
@@ -22,7 +20,6 @@ interface ConsentBannerProps {
   autoHide?: boolean;
   respectDoNotTrack?: boolean;
 }
-
 interface ConsentPreferences {
   essential: boolean;
   functional: boolean;
@@ -32,7 +29,6 @@ interface ConsentPreferences {
   socialMedia: boolean;
   personalization: boolean;
 }
-
 interface ConsentPurpose {
   id: string;
   category: keyof ConsentPreferences;
@@ -44,7 +40,6 @@ interface ConsentPurpose {
   retention: string;
   thirdParties: string[];
 }
-
 const defaultConsents: ConsentPreferences = {
   essential: true,
   functional: false,
@@ -52,9 +47,8 @@ const defaultConsents: ConsentPreferences = {
   marketing: false,
   advertising: false,
   socialMedia: false,
-  personalization: false
+  personalization: false,
 };
-
 const consentPurposes: ConsentPurpose[] = [
   {
     id: 'essential',
@@ -65,7 +59,7 @@ const consentPurposes: ConsentPurpose[] = [
     examples: ['Authentication', 'Security', 'Session management'],
     dataTypes: ['Session ID', 'Security tokens', 'User preferences'],
     retention: '30 days',
-    thirdParties: []
+    thirdParties: [],
   },
   {
     id: 'functional',
@@ -76,7 +70,7 @@ const consentPurposes: ConsentPurpose[] = [
     examples: ['Language preferences', 'Region selection', 'Theme settings'],
     dataTypes: ['Language code', 'Timezone', 'UI preferences'],
     retention: '1 year',
-    thirdParties: []
+    thirdParties: [],
   },
   {
     id: 'analytics',
@@ -134,8 +128,7 @@ const consentPurposes: ConsentPurpose[] = [
     thirdParties: ['Recommendation engines', 'Content platforms']
   }
 ];
-
-const ConsentBanner: React.FC<ConsentBannerProps> = ({
+const ConsentBanner: React.FC<ConsentBannerProps> = ({)
   onConsentUpdate,
   onClose,
   country = 'US',
@@ -153,21 +146,17 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
   const [activeTab, setActiveTab] = useState('overview');
   const [isGDPRApplicable, setIsGDPRApplicable] = useState(false);
   const [isCCPAApplicable, setIsCCPAApplicable] = useState(false);
-
   useEffect(() => {
     // Check if user is subject to GDPR or CCPA
     const gdprCountries = ['US', 'GB', 'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'AT', 'SE', 'DK', 'FI', 'IE', 'PT', 'LU'];
-    const _____ccpaStates = ['CA']; // Would need more sophisticated geo-detection
-    
+    const _____ccpaStates = ['CA']; // Would need more sophisticated geo-detection;
     setIsGDPRApplicable(gdprCountries.includes(country));
     setIsCCPAApplicable(country === 'US'); // Simplified - would detect state
-    
     // Check for Do Not Track header
     if (respectDoNotTrack && navigator.doNotTrack === '1') {
       handleRejectAll();
       return;
     }
-
     // Auto-hide after delay if configured
     if (autoHide) {
       const timer = setTimeout(() => {
@@ -176,7 +165,6 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
       return () => clearTimeout(timer);
     }
   }, [country, autoHide, respectDoNotTrack]);
-
   const handleAcceptAll = useCallback(() => {
     const allConsents: ConsentPreferences = {
       essential: true,
@@ -185,14 +173,13 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
       marketing: true,
       advertising: true,
       socialMedia: true,
-      personalization: true
+      personalization: true,
     };
     setConsents(allConsents);
     onConsentUpdate?.(allConsents);
     setIsVisible(false);
     onClose?.();
   }, [onConsentUpdate, onClose]);
-
   const handleRejectAll = useCallback(() => {
     const minimalConsents: ConsentPreferences = {
       essential: true,
@@ -201,30 +188,26 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
       marketing: false,
       advertising: false,
       socialMedia: false,
-      personalization: false
+      personalization: false,
     };
     setConsents(minimalConsents);
     onConsentUpdate?.(minimalConsents);
     setIsVisible(false);
     onClose?.();
   }, [onConsentUpdate, onClose]);
-
   const handleSavePreferences = useCallback(() => {
     onConsentUpdate?.(consents);
     setIsVisible(false);
     setShowDetails(false);
     onClose?.();
   }, [consents, onConsentUpdate, onClose]);
-
   const handleConsentChange = useCallback((category: keyof ConsentPreferences, value: boolean) => {
     if (category === 'essential') return; // Essential cookies cannot be disabled
-    
-    setConsents(prev => ({
+    setConsents(prev => ({)
       ...prev,
       [category]: value
     }));
   }, []);
-
   const getThemeClasses = () => {
     if (theme === 'dark') {
       return 'bg-gray-900 text-white border-gray-700';
@@ -234,7 +217,6 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
     }
     return 'bg-white text-gray-900 border-gray-200';
   };
-
   const getPositionClasses = () => {
     switch (position) {
     case 'top':
@@ -249,7 +231,6 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
       return 'bottom-0 left-0 right-0';
     }
   };
-
   const getCategoryIcon = (category: string) => {
     switch (category) {
     case 'essential':
@@ -270,13 +251,11 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
       return <Cookie className="w-5 h-5 text-gray-600" />;
     }
   };
-
   if (!isVisible) return null;
-
-  return (
-    <div className={`fixed z-50 ${getPositionClasses()}`}>
-      <div className={`border-2 shadow-2xl ${getThemeClasses()} ${position === 'overlay' || position === 'modal' ? 'max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-lg' : 'w-full'}`}>
-        {!showDetails ? (
+  return ()
+    <div className={`fixed z-50 ${getPositionClasses()}`}>}
+      <div className={`border-2 shadow-2xl ${getThemeClasses()} ${position === 'overlay' || position === 'modal' ? 'max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-lg' : 'w-full'}`}>}
+        {!showDetails ? ()
           // Simple Banner View
           <div className="p-4 md:p-6">
             <div className="flex items-start justify-between">
@@ -297,7 +276,7 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                   >
                     Accept All
                   </button>
-                  {showRejectButton && (
+                  {showRejectButton && ()
                     <button
                       onClick={handleRejectAll}
                       className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium"
@@ -305,7 +284,7 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                       Reject All
                     </button>
                   )}
-                  {showCustomizeButton && (
+                  {showCustomizeButton && ()
                     <button
                       onClick={() => setShowDetails(true)}
                       className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium"
@@ -340,7 +319,7 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
               </button>
             </div>
           </div>
-        ) : (
+        ) : ()
           // Detailed Preferences View
           <div className="p-4 md:p-6">
             <div className="flex items-center justify-between mb-6">
@@ -356,7 +335,6 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                 <X className="w-5 h-5" />
               </button>
             </div>
-
             {/* Tab Navigation */}
             <div className="flex border-b border-gray-200 mb-6">
               <button
@@ -390,17 +368,15 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                 Third Parties
               </button>
             </div>
-
             {/* Tab Content */}
             <div className="max-h-96 overflow-y-auto">
-              {activeTab === 'overview' && (
+              {activeTab === 'overview' && ()
                 <div className="space-y-4">
                   <p className="text-sm opacity-90 mb-4">
                     We respect your privacy and give you control over how your data is used. 
                     Choose which types of cookies and data processing you're comfortable with.
                   </p>
-                  
-                  {isGDPRApplicable && (
+                  {isGDPRApplicable && ()
                     <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
                       <h4 className="font-medium text-blue-900 mb-1">GDPR Rights</h4>
                       <p className="text-sm text-blue-800">
@@ -409,8 +385,7 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                       </p>
                     </div>
                   )}
-                  
-                  {isCCPAApplicable && (
+                  {isCCPAApplicable && ()
                     <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
                       <h4 className="font-medium text-yellow-900 mb-1">CCPA Rights</h4>
                       <p className="text-sm text-yellow-800">
@@ -419,9 +394,8 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                       </p>
                     </div>
                   )}
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {consentPurposes.slice(0, 4).map((purpose) => (
+                    {consentPurposes.slice(0, 4).map((purpose) => ()
                       <div key={purpose.id} className="p-3 border border-gray-200 rounded-md">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center">
@@ -440,7 +414,7 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                           </label>
                         </div>
                         <p className="text-xs opacity-75">{purpose.description}</p>
-                        {purpose.essential && (
+                        {purpose.essential && ()
                           <p className="text-xs text-green-600 mt-1">Required for basic functionality</p>
                         )}
                       </div>
@@ -448,16 +422,15 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                   </div>
                 </div>
               )}
-
-              {activeTab === 'categories' && (
+              {activeTab === 'categories' && ()
                 <div className="space-y-4">
-                  {consentPurposes.map((purpose) => (
+                  {consentPurposes.map((purpose) => ()
                     <div key={purpose.id} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center">
                           {getCategoryIcon(purpose.category)}
                           <h4 className="ml-2 font-medium">{purpose.name}</h4>
-                          {purpose.essential && (
+                          {purpose.essential && ()
                             <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Required</span>
                           )}
                         </div>
@@ -472,14 +445,12 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                           <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                         </label>
                       </div>
-                      
                       <p className="text-sm opacity-90 mb-3">{purpose.description}</p>
-                      
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                         <div>
                           <h5 className="font-medium mb-1">Examples:</h5>
                           <ul className="list-disc list-inside opacity-75">
-                            {purpose.examples.map((example, index) => (
+                            {purpose.examples.map((example, index) => ()
                               <li key={index}>{example}</li>
                             ))}
                           </ul>
@@ -487,7 +458,7 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                         <div>
                           <h5 className="font-medium mb-1">Data Types:</h5>
                           <ul className="list-disc list-inside opacity-75">
-                            {purpose.dataTypes.map((dataType, index) => (
+                            {purpose.dataTypes.map((dataType, index) => ()
                               <li key={index}>{dataType}</li>
                             ))}
                           </ul>
@@ -496,11 +467,11 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                           <h5 className="font-medium mb-1">Retention:</h5>
                           <p className="opacity-75">{purpose.retention}</p>
                         </div>
-                        {purpose.thirdParties.length > 0 && (
+                        {purpose.thirdParties.length > 0 && ()
                           <div>
                             <h5 className="font-medium mb-1">Third Parties:</h5>
                             <ul className="list-disc list-inside opacity-75">
-                              {purpose.thirdParties.map((party, index) => (
+                              {purpose.thirdParties.map((party, index) => ()
                                 <li key={index}>{party}</li>
                               ))}
                             </ul>
@@ -511,14 +482,12 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                   ))}
                 </div>
               )}
-
-              {activeTab === 'vendors' && (
+              {activeTab === 'vendors' && ()
                 <div className="space-y-4">
                   <p className="text-sm opacity-90 mb-4">
                     We work with trusted third-party partners to provide our services. 
                     Here's information about the companies that may process your data.
                   </p>
-                  
                   {/* Mock vendor list */}
                   <div className="space-y-3">
                     {[
@@ -526,7 +495,7 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                       { name: 'Facebook Pixel', purpose: 'Social media integration', country: 'US', privacy: 'https://www.facebook.com/privacy/explanation' },
                       { name: 'Mailchimp', purpose: 'Email marketing', country: 'US', privacy: 'https://mailchimp.com/legal/privacy/' },
                       { name: 'Stripe', purpose: 'Payment processing', country: 'US', privacy: 'https://stripe.com/privacy' }
-                    ].map((vendor, index) => (
+                    ].map((vendor, index) => ()
                       <div key={index} className="p-3 border border-gray-200 rounded-md">
                         <div className="flex justify-between items-start">
                           <div>
@@ -549,7 +518,6 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
                 </div>
               )}
             </div>
-
             {/* Action Buttons */}
             <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
               <div className="flex gap-2">

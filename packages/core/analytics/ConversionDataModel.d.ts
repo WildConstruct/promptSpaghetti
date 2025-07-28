@@ -18,7 +18,7 @@ export interface ConversionFunnelDefinition {
     description: string;
     category: FunnelCategory;
     version: string;
-    configuration: {
+    configuration: {,
         timeWindow: number;
         allowBacktracking: boolean;
         requireSequentialSteps: boolean;
@@ -28,13 +28,13 @@ export interface ConversionFunnelDefinition {
     steps: ConversionStep[];
     conditionalPaths: ConditionalPath[];
     successCriteria: SuccessCriteria;
-    analytics: {
+    analytics: {,
         enableRealTimeTracking: boolean;
         retentionPeriod: number;
         cohortTrackingEnabled: boolean;
         segmentationRules: SegmentationRule[];
     };
-    metadata: {
+    metadata: {,
         createdAt: number;
         updatedAt: number;
         createdBy: string;
@@ -54,19 +54,19 @@ export interface ConversionStep {
     isTerminal: boolean;
     eventCriteria: EventCriteria;
     conditions: StepCondition[];
-    timeConstraints: {
+    timeConstraints: {,
         minTimeFromPrevious?: number;
         maxTimeFromPrevious?: number;
         maxTimeFromStart?: number;
         allowedTimeWindows?: TimeWindow[];
     };
-    successMetrics: {
+    successMetrics: {,
         expectedCompletionRate: number;
         averageTimeToComplete: number;
         criticalSuccessFactors: string[];
     };
     branches: StepBranch[];
-    metadata: {
+    metadata: {,
         businessValue: number;
         complexity: 'low' | 'medium' | 'high';
         dependencies: string[];
@@ -131,7 +131,7 @@ export interface StepBranch {
     condition: ConditionLogic;
     nextStepId: string;
     weight: number;
-    metadata: {
+    metadata: {,
         description: string;
         expectedFlow: number;
     };
@@ -146,18 +146,18 @@ export interface ConditionalPath {
     isDefault: boolean;
 }
 export interface SuccessCriteria {
-    primary: {
+    primary: {,
         stepId: string;
         requirements: ConditionLogic;
         weight: number;
     };
-    secondary: Array<{
+    secondary: Array<{,
         stepId: string;
         requirements: ConditionLogic;
         weight: number;
         isOptional: boolean;
     }>;
-    scoreCalculation: {
+    scoreCalculation: {,
         method: 'weighted' | 'binary' | 'progressive' | 'custom';
         customFormula?: string;
     };
@@ -169,7 +169,7 @@ export interface SegmentationRule {
     conditions: ConditionLogic;
     priority: number;
     isExclusive: boolean;
-    metadata: {
+    metadata: {,
         expectedSize: number;
         businessValue: string;
         trackingPeriod: number;
@@ -201,18 +201,18 @@ export interface HistoricalBenchmark {
  * Extends the base conversion event with flexible property validation
  */
 export interface FlexibleConversionEvent extends EnhancedConversionEvent {
-    flexibleProperties: {
+    flexibleProperties: {,
         [key: string]: FlexibleProperty;
     };
     schemaVersion: string;
-    validation: {
+    validation: {,
         isValid: boolean;
         score: number;
         errors: ValidationError[];
         warnings: ValidationWarning[];
         appliedRules: string[];
     };
-    funnelContext: {
+    funnelContext: {,
         funnelId: string;
         stepId: string;
         stepOrder: number;
@@ -221,7 +221,7 @@ export interface FlexibleConversionEvent extends EnhancedConversionEvent {
         previousSteps: string[];
         isBacktracking: boolean;
     };
-    userContext: {
+    userContext: {,
         segmentIds: string[];
         cohortIds: string[];
         lifetimeValue: number;
@@ -240,7 +240,7 @@ export interface FlexibleConversionEvent extends EnhancedConversionEvent {
         popularity: number;
         tags: string[];
     };
-    sessionContext: {
+    sessionContext: {,
         isNewSession: boolean;
         sessionDuration: number;
         pageViewCount: number;
@@ -254,7 +254,7 @@ export interface FlexibleProperty {
     value: any;
     type: PropertyType;
     schema?: PropertySchema;
-    metadata: {
+    metadata: {,
         source: string;
         confidence: number;
         lastUpdated: number;
@@ -319,34 +319,34 @@ export interface ConversionCohort {
     id: string;
     name: string;
     description: string;
-    definition: {
+    definition: {,
         criteriaEvent: string;
         criteriaConditions: ConditionLogic;
         timeWindow: number;
         maxSize?: number;
         minSize?: number;
     };
-    analysis: {
+    analysis: {,
         retentionPeriods: number[];
         analysisWindow: number;
         metricCalculations: MetricCalculation[];
         comparisonCohorts?: string[];
     };
-    state: {
+    state: {,
         currentSize: number;
         creationDate: number;
         lastAnalysisDate: number;
         status: 'active' | 'completed' | 'archived';
         completionRate: number;
     };
-    performance: {
+    performance: {,
         conversionRates: TimeSeriesData[];
         retentionRates: TimeSeriesData[];
         averageTimeToConvert: number;
         topDropOffPoints: DropOffPoint[];
         valueMetrics: ValueMetrics;
     };
-    metadata: {
+    metadata: {,
         businessContext: string;
         hypothesis: string;
         expectedOutcome: string;
@@ -358,20 +358,20 @@ export interface UserSegment {
     id: string;
     name: string;
     description: string;
-    definition: {
+    definition: {,
         rules: SegmentationRule[];
         operator: 'AND' | 'OR';
         updateFrequency: 'real_time' | 'hourly' | 'daily' | 'weekly';
         isStatic: boolean;
     };
-    state: {
+    state: {,
         currentSize: number;
         lastUpdated: number;
         growthRate: number;
         churnRate: number;
         status: 'active' | 'paused' | 'archived';
     };
-    performance: {
+    performance: {,
         averageConversionRate: number;
         averageTimeToConvert: number;
         averageLifetimeValue: number;
@@ -380,7 +380,7 @@ export interface UserSegment {
         behaviorPatterns: BehaviorPattern[];
     };
     funnelMetrics: Map<string, FunnelSegmentMetrics>;
-    metadata: {
+    metadata: {,
         businessValue: 'high' | 'medium' | 'low';
         targetingPriority: number;
         marketingPersona?: string;
@@ -450,21 +450,21 @@ export interface PathPreference {
  */
 export interface UserEntity {
     id: string;
-    profile: {
+    profile: {,
         email?: string;
         name?: string;
         registrationDate: number;
         verificationStatus: 'verified' | 'pending' | 'suspended';
         accountType: 'free' | 'premium' | 'enterprise';
     };
-    conversionHistory: {
+    conversionHistory: {,
         totalConversions: number;
         firstConversionDate?: number;
         lastConversionDate?: number;
         conversionsByFunnel: Map<string, ConversionSummary>;
         averageTimeToConvert: number;
     };
-    behavior: {
+    behavior: {,
         sessionCount: number;
         totalTimeSpent: number;
         averageSessionDuration: number;
@@ -472,21 +472,21 @@ export interface UserEntity {
         locationHistory: LocationData[];
         activityPatterns: ActivityPattern[];
     };
-    value: {
+    value: {,
         lifetimeValue: number;
         averageOrderValue: number;
         totalRevenue: number;
         acquisitionCost: number;
         churnRisk: number;
     };
-    segmentation: {
+    segmentation: {,
         currentSegments: string[];
         segmentHistory: SegmentChange[];
         cohorts: CohortMembership[];
         riskScore: number;
         engagementScore: number;
     };
-    preferences: {
+    preferences: {,
         privacySettings: PrivacySettings;
         communicationPreferences: CommunicationPreference[];
         contentPreferences: ContentPreference[];
@@ -495,7 +495,7 @@ export interface UserEntity {
 }
 export interface TemplateEntity {
     id: string;
-    metadata: {
+    metadata: {,
         name: string;
         description: string;
         creatorId: string;
@@ -505,7 +505,7 @@ export interface TemplateEntity {
         createdDate: number;
         lastUpdated: number;
     };
-    conversionMetrics: {
+    conversionMetrics: {,
         totalViews: number;
         totalPreviews: number;
         totalPurchases: number;
@@ -515,7 +515,7 @@ export interface TemplateEntity {
         previewToPurchaseRate: number;
     };
     funnelPerformance: Map<string, TemplateFunnelMetrics>;
-    engagement: {
+    engagement: {,
         averageViewTime: number;
         bounceRate: number;
         shareCount: number;
@@ -523,21 +523,21 @@ export interface TemplateEntity {
         reviewCount: number;
         averageRating: number;
     };
-    revenue: {
+    revenue: {,
         totalRevenue: number;
         price: number;
         priceHistory: PriceChange[];
         averageRevenuePerUser: number;
         monthlyRecurringRevenue?: number;
     };
-    trends: {
+    trends: {,
         viewTrend: TrendData;
         conversionTrend: TrendData;
         revenueTrend: TrendData;
         ratingTrend: TrendData;
         seasonality?: SeasonalityData;
     };
-    quality: {
+    quality: {,
         completionRate: number;
         errorRate: number;
         supportTickets: number;
@@ -635,7 +635,7 @@ export interface TrendData {
 }
 export interface SeasonalityData {
     pattern: 'weekly' | 'monthly' | 'quarterly' | 'yearly';
-    peaks: Array<{
+    peaks: Array<{,
         period: string;
         multiplier: number;
     }>;

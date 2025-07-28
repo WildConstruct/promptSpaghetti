@@ -47,7 +47,7 @@ export declare const useQueryBuilder: () => {
     buildQuery: () => HistoricalQuery | null;
 };
 export declare const useCacheManagement: () => {
-    cacheStats: {
+    cacheStats: {,
         size: number;
         hitRate: number;
         lastCleanup: string;

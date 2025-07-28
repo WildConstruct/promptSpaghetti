@@ -66,7 +66,7 @@ export interface MidjourneyResponse {
 export interface MidjourneyGenerationResult {
     jobId: string;
     status: 'completed' | 'failed';
-    images: Array<{
+    images: Array<{,
         url: string;
         thumbnailUrl?: string;
         type: 'main' | 'upscaled' | 'variation';
@@ -74,7 +74,7 @@ export interface MidjourneyGenerationResult {
     }>;
     originalPrompt: string;
     processedPrompt: string;
-    metadata: {
+    metadata: {,
         version: string;
         aspectRatio: string;
         stylize: number;
@@ -83,7 +83,7 @@ export interface MidjourneyGenerationResult {
         seed?: number;
         generationTime: number;
     };
-    usage: {
+    usage: {,
         credits: number;
         estimatedCost: number;
     };

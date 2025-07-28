@@ -2,10 +2,8 @@
  * Epic 9.2.6 - Template Gallery UI Component
  * Displays and manages project templates with search, filtering, and preview
  */
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { ProjectTemplate, TemplateCategory, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
-
 interface TemplateGalleryProps {
   templateManager: ProjectTemplateManager;
   onTemplateSelect: (template: ProjectTemplate, customizations: Record<string, any>) => void;
@@ -13,7 +11,7 @@ interface TemplateGalleryProps {
   className?: string;
 }
 
-export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
+export const TemplateGallery: React.FC<TemplateGalleryProps> = ({)
   templateManager,
   onTemplateSelect,
   onTemplatePreview,
@@ -27,26 +25,23 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
   const [complexityFilter, setComplexityFilter] = useState<string>('');
   const [sortBy, setSortBy] = useState<'popularity' | 'rating' | 'newest' | 'name'>('popularity');
   const [featuredTemplates, setFeaturedTemplates] = useState<ProjectTemplate[]>([]);
-
   useEffect(() => {
     loadTemplates();
     loadCategories();
     loadFeaturedTemplates();
   }, []);
-
   useEffect(() => {
     loadTemplates();
   }, [searchQuery, selectedCategory, complexityFilter, sortBy]);
-
   const loadTemplates = async () => {
     try {
       setLoading(true);
-      const result = await templateManager.searchTemplates({
+      const result = await templateManager.searchTemplates({)
         query: searchQuery || undefined,
         category: selectedCategory || undefined,
         complexity: complexityFilter || undefined,
         sort_by: sortBy,
-        limit: 50
+        limit: 50,
       });
       setTemplates(result.templates);
     } catch (error) {
@@ -55,7 +50,6 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
       setLoading(false);
     }
   };
-
   const loadCategories = async () => {
     try {
       const cats = templateManager.getCategories();
@@ -64,7 +58,6 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
       console.error('Failed to load categories:', error);
     }
   };
-
   const loadFeaturedTemplates = async () => {
     try {
       const featured = await templateManager.getFeaturedTemplates();
@@ -73,39 +66,34 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
       console.error('Failed to load featured templates:', error);
     }
   };
-
   const handleTemplateUse = (template: ProjectTemplate) => {
     // For now, pass empty customizations - this could open a customization dialog
     onTemplateSelect(template, {});
   };
-
   const filteredTemplates = useMemo(() => {
     if (!searchQuery && !selectedCategory && !complexityFilter) {
       return templates;
     }
     return templates;
   }, [templates, searchQuery, selectedCategory, complexityFilter]);
-
   const _____complexityColors = {
     beginner: 'bg-green-100 text-green-800',
     intermediate: 'bg-yellow-100 text-yellow-800',
     advanced: 'bg-red-100 text-red-800'
   };
-
-  return (
-    <div className={`template-gallery ${className}`}>
+  return ()
+    <div className={`template-gallery ${className}`}>}
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Project Templates</h2>
         <p className="text-gray-600">Choose from pre-built templates to accelerate your workflow</p>
       </div>
-
       {/* Featured Templates */}
-      {featuredTemplates.length > 0 && (
+      {featuredTemplates.length > 0 && ()
         <div className="mb-8">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Featured Templates</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {featuredTemplates.slice(0, 3).map(template => (
+            {featuredTemplates.slice(0, 3).map(template => ()
               <TemplateCard
                 key={template.id}
                 template={template}
@@ -117,7 +105,6 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
           </div>
         </div>
       )}
-
       {/* Search and Filters */}
       <div className="mb-6 space-y-4">
         {/* Search Bar */}
@@ -135,7 +122,6 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
             </svg>
           </div>
         </div>
-
         {/* Filters */}
         <div className="flex flex-wrap gap-4">
           <select
@@ -144,11 +130,10 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
             className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">All Categories</option>
-            {categories.map(category => (
+            {categories.map(category => ()
               <option key={category.id} value={category.id}>{category.name}</option>
             ))}
           </select>
-
           <select
             value={complexityFilter}
             onChange={(e) => setComplexityFilter(e.target.value)}
@@ -159,7 +144,6 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
             <option value="intermediate">Intermediate</option>
             <option value="advanced">Advanced</option>
           </select>
-
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as any)}
@@ -172,15 +156,14 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
           </select>
         </div>
       </div>
-
       {/* Templates Grid */}
-      {loading ? (
+      {loading ? ()
         <div className="flex justify-center items-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
         </div>
-      ) : (
+      ) : ()
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredTemplates.map(template => (
+          {filteredTemplates.map(template => ()
             <TemplateCard
               key={template.id}
               template={template}
@@ -190,8 +173,7 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
           ))}
         </div>
       )}
-
-      {filteredTemplates.length === 0 && !loading && (
+      {filteredTemplates.length === 0 && !loading && ()
         <div className="text-center py-12">
           <div className="text-gray-400 mb-4">
             <svg className="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -205,34 +187,30 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
     </div>
   );
 };
-
 interface TemplateCardProps {
   template: ProjectTemplate;
   onUse: () => void;
   onPreview: () => void;
   featured?: boolean;
 }
-
 const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onPreview, featured = false }) => {
   const complexityColors = {
     beginner: 'bg-green-100 text-green-800',
     intermediate: 'bg-yellow-100 text-yellow-800',
     advanced: 'bg-red-100 text-red-800'
   };
-
-  return (
-    <div className={`bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border ${featured ? 'border-blue-200 bg-blue-50' : 'border-gray-200'}`}>
-      {featured && (
+  return ()
+    <div className={`bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border ${featured ? 'border-blue-200 bg-blue-50' : 'border-gray-200'}`}>}
+      {featured && ()
         <div className="bg-blue-500 text-white text-xs font-medium px-3 py-1 rounded-t-lg">
           Featured
         </div>
       )}
-      
       {/* Preview Image */}
       <div className="h-32 bg-gray-100 rounded-t-lg flex items-center justify-center">
-        {template.preview_image ? (
+        {template.preview_image ? ()
           <img src={template.preview_image} alt={template.name} className="w-full h-full object-cover rounded-t-lg" />
-        ) : (
+        ) : ()
           <div className="text-gray-400">
             <svg className="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -240,31 +218,27 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onPreview,
           </div>
         )}
       </div>
-
       <div className="p-4">
         {/* Header */}
         <div className="flex items-start justify-between mb-2">
           <h3 className="font-semibold text-gray-900 truncate">{template.name}</h3>
-          <span className={`text-xs px-2 py-1 rounded-full ${complexityColors[template.complexity_level]}`}>
+          <span className={`text-xs px-2 py-1 rounded-full ${complexityColors[template.complexity_level]}`}>}
             {template.complexity_level}
           </span>
         </div>
-
         {/* Description */}
         <p className="text-sm text-gray-600 mb-3 line-clamp-2">{template.description}</p>
-
         {/* Tags */}
         <div className="flex flex-wrap gap-1 mb-3">
-          {template.tags.slice(0, 3).map(tag => (
+          {template.tags.slice(0, 3).map(tag => ()
             <span key={tag} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
               {tag}
             </span>
           ))}
-          {template.tags.length > 3 && (
+          {template.tags.length > 3 && ()
             <span className="text-xs text-gray-500">+{template.tags.length - 3} more</span>
           )}
         </div>
-
         {/* Stats */}
         <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
           <div className="flex items-center space-x-3">
@@ -278,19 +252,17 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onPreview,
           </div>
           <span>{template.estimated_time}m</span>
         </div>
-
         {/* Author */}
         <div className="flex items-center mb-4">
           <div className="h-6 w-6 rounded-full bg-gray-300 flex items-center justify-center mr-2">
-            {template.author.avatar ? (
+            {template.author.avatar ? ()
               <img src={template.author.avatar} alt={template.author.name} className="h-6 w-6 rounded-full" />
-            ) : (
+            ) : ()
               <span className="text-xs text-gray-600">{template.author.name[0]}</span>
             )}
           </div>
           <span className="text-xs text-gray-600">{template.author.name}</span>
         </div>
-
         {/* Actions */}
         <div className="flex space-x-2">
           <button

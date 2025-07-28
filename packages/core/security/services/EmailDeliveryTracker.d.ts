@@ -104,7 +104,7 @@ export interface EmailDeliveryRecord {
         diagnosticCode?: string;
         remoteMta?: string;
     };
-    tracking: {
+    tracking: {,
         opens: EmailOpenEvent[];
         clicks: EmailClickEvent[];
         unsubscribes: EmailUnsubscribeEvent[];
@@ -156,7 +156,7 @@ export interface DeliveryStatistics {
     clickRate: number;
     bounceRate: number;
     spamRate: number;
-    statisticsByType: {
+    statisticsByType: {,
         [key in EmailType]: {
             count: number;
             deliveryRate: number;
@@ -164,7 +164,7 @@ export interface DeliveryStatistics {
             bounceRate: number;
         };
     };
-    statisticsByProvider: {
+    statisticsByProvider: {,
         [key in EmailProvider]: {
             count: number;
             deliveryRate: number;
@@ -173,7 +173,7 @@ export interface DeliveryStatistics {
     };
     averageDeliveryTime: number;
     averageOpenTime: number;
-    peakSendTimes: Array<{
+    peakSendTimes: Array<{,
         hour: number;
         count: number;
         deliveryRate: number;
@@ -188,7 +188,7 @@ export interface EmailDeliveryConfig {
     enableAnalytics: boolean;
     webhookEndpoint?: string;
     webhookSecret?: string;
-    providerConfigs: {
+    providerConfigs: {,
         [key in EmailProvider]?: {
             apiKey?: string;
             endpoint?: string;
@@ -200,7 +200,7 @@ export interface EmailSendRequest {
     type: EmailType;
     recipient: string;
     subject: string;
-    content: {
+    content: {,
         text?: string;
         html?: string;
         templateId?: string;

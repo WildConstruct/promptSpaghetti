@@ -42,7 +42,7 @@ export interface PolicyCheckRequest {
     resourceType: 'content' | 'user' | 'template' | 'api_request' | 'system_config';
     resourceId: string;
     data: Record<string, any>;
-    context: {
+    context: {,
         userId?: string;
         userRole?: string;
         source: string;
@@ -100,7 +100,7 @@ export declare class PolicyCheckersService {
     registerChecker(checker: PolicyChecker): void;
     executeChecks(request: PolicyCheckRequest): Promise<PolicyCheckResult[]>;
     executeCheck(request: PolicyCheckRequest, policyType: PolicyType): Promise<PolicyCheckResult>;
-    validateContent(content: {
+    validateContent(content: {)
         id: string;
         type: string;
         data: Record<string, any>;
@@ -113,7 +113,7 @@ export declare class PolicyCheckersService {
         criticalViolations: PolicyViolation[];
         requiredActions: string[];
     }>;
-    validateUserAction(action: {
+    validateUserAction(action: {)
         userId: string;
         userRole: string;
         action: string;
@@ -128,7 +128,7 @@ export declare class PolicyCheckersService {
         totalCheckers: number;
         checksExecutedToday: number;
         averageExecutionTime: number;
-        topViolationTypes: Array<{
+        topViolationTypes: Array<{,
             type: string;
             count: number;
         }>;

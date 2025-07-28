@@ -48,14 +48,14 @@ export declare class EventBus extends EventEmitter {
     private middleware;
     private eventHistory;
     private maxHistorySize;
-    constructor(options?: {
+    constructor(options?: {)
         maxHistorySize?: number;
         enableHistory?: boolean;
     });
     /**
      * Subscribe to events with filtering
      */
-    subscribe<T extends BaseEvent = BaseEvent>(filter: EventFilter, handler: EventHandler<T>, options?: {
+    subscribe<T extends BaseEvent = BaseEvent>(filter: EventFilter, handler: EventHandler<T>, options?: {)
         priority?: EventPriority;
         once?: boolean;
     }): string;

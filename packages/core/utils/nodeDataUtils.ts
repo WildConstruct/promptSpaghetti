@@ -11,7 +11,7 @@ import {
 
 // Legacy function - delegates to new factory system
 export const createDefaultNodeData = (type: NodeType): NodeData => {
-  const id = `${type}-${Date.now()}`;
+  const id = `${type}-${Date.now()}`;}
   return createNodeData(type, id);
 };
 
@@ -32,24 +32,24 @@ export const removeVariationFromNode = (nodeData: NodeData, index: number): Node
   };
 };
 
-export const updateVariationInNode = (
+export const updateVariationInNode = ()
   nodeData: NodeData,
   index: number,
-  newValue: string
+  newValue: string,
 ): NodeData => {
   const currentVariations = nodeData.variations || [];
   const updatedVariations = [...currentVariations];
   updatedVariations[index] = newValue;
   return {
     ...nodeData,
-    variations: updatedVariations
+    variations: updatedVariations,
   };
 };
 
-export const reorderVariationsInNode = (
+export const reorderVariationsInNode = ()
   nodeData: NodeData,
   fromIndex: number,
-  toIndex: number
+  toIndex: number,
 ): NodeData => {
   const currentVariations = nodeData.variations || [];
   const updatedVariations = [...currentVariations];
@@ -57,19 +57,17 @@ export const reorderVariationsInNode = (
   updatedVariations.splice(toIndex, 0, movedItem);
   return {
     ...nodeData,
-    variations: updatedVariations
+    variations: updatedVariations,
   };
 };
 
 export const getRandomVariation = (nodeData: NodeData, seed?: number): string => {
   const variations = nodeData.variations || [];
   if (variations.length === 0) return nodeData.label;
-  
   // Use seed for deterministic randomness if provided
-  const randomIndex = seed !== undefined
+  const randomIndex = seed !== undefined;
     ? Math.floor((Math.abs(seed) + 1) % variations.length)
     : Math.floor(Math.random() * variations.length);
-  
   return variations[randomIndex];
 };
 
@@ -86,7 +84,6 @@ export const validateNodeDataLegacyWrapper = (nodeData: NodeData): { valid: bool
   // Import the new validation function to avoid conflicts
   const { validateNodeData: newValidate } = require('../types/NodeTypes');
   const errors = newValidate(nodeData);
-  
   return {
     valid: errors.length === 0,
     errors
@@ -96,15 +93,12 @@ export const validateNodeDataLegacyWrapper = (nodeData: NodeData): { valid: bool
 // Legacy validation with old interface for backward compatibility
 export const validateNodeDataLegacy = (nodeData: NodeData): { valid: boolean; errors: string[] } => {
   const errors: string[] = [];
-  
   if (!nodeData.label || nodeData.label.trim() === '') {
     errors.push('Node label is required');
   }
-  
   if (!nodeData.id || nodeData.id.trim() === '') {
     errors.push('Node ID is required');
   }
-  
   // Type-specific validation with new field names
   switch (nodeData.type) {
   case 'WeightedChoice':
@@ -116,21 +110,18 @@ export const validateNodeDataLegacy = (nodeData: NodeData): { valid: boolean; er
       errors.push('All weights must be positive numbers');
     }
     break;
-      
   case 'SetVariable':
     const setVarData = nodeData as SetVariableNodeData;
     if (!setVarData.variableName || setVarData.variableName.trim() === '') {
       errors.push('Variable name is required');
     }
     break;
-      
   case 'GetVariable':
     const getVarData = nodeData as GetVariableNodeData;
     if (!getVarData.variableName || getVarData.variableName.trim() === '') {
       errors.push('Variable name is required');
     }
     break;
-      
   case 'Include':
     const includeData = nodeData as IncludeNodeData;
     if (!includeData.name || includeData.name.trim() === '') {
@@ -138,7 +129,6 @@ export const validateNodeDataLegacy = (nodeData: NodeData): { valid: boolean; er
     }
     break;
   }
-  
   return {
     valid: errors.length === 0,
     errors
@@ -149,9 +139,9 @@ export const cloneNodeData = (nodeData: NodeData): NodeData => {
   return JSON.parse(JSON.stringify(nodeData));
 };
 
-export const mergeNodeData = <T extends NodeData>(
+export const mergeNodeData = <T extends NodeData>()
   original: T,
-  updates: Partial<T>
+  updates: Partial<T>,
 ): T => {
   return {
     ...original,
@@ -166,19 +156,15 @@ export const migrateNodeData = (oldNodeData: any): NodeData | null => {
     if (oldNodeData.id && oldNodeData.type && oldNodeData.label) {
       return oldNodeData as NodeData;
     }
-
     // Create new node data from scratch if migration is needed
     const type = oldNodeData.type as NodeType;
-    const id = oldNodeData.id || `${type}-${Date.now()}`;
+    const id = oldNodeData.id || `${type}-${Date.now()}`;}
     const label = oldNodeData.label || type;
-    
     const newData = createNodeData(type, id, label);
-    
     // Migrate variations if they exist
     if (oldNodeData.variations) {
       newData.variations = oldNodeData.variations;
     }
-    
     return newData;
   } catch (error) {
     console.warn('Failed to migrate node data:', error);

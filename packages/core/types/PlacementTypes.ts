@@ -13,33 +13,27 @@ export interface PlacementSlot {
   name: string;
   displayName: string;
   description: string;
-  
   // Placement Configuration
   placementArea: PlacementArea;
   position: PlacementPosition;
   maxItems: number;
   minItems: number;
-  
   // Visual Configuration
   dimensions: PlacementDimensions;
   styling: PlacementStyling;
   layout: PlacementLayout;
-  
   // Targeting and Rules
   targetingRules: PlacementTargetingRules;
   displayRules: PlacementDisplayRules;
-  
   // Status and Management
   isActive: boolean;
   priority: number;
   tags: string[];
-  
   // Metadata
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
   lastModifiedBy?: string;
-  
   // Performance Data
   performanceMetrics?: PlacementSlotMetrics;
 }
@@ -179,34 +173,26 @@ export interface ContentPlacement {
   slotId: string;
   contentId: string;
   contentType: ContentType;
-  
   // Placement Configuration
   priority: number;
   weight?: number;
-  
   // Scheduling
   startTime?: Date;
   endTime?: Date;
   timezone?: string;
-  
   // Targeting Overrides
   targetingOverrides?: Partial<PlacementTargetingRules>;
-  
   // Placement-Specific Styling
   customStyling?: Partial<PlacementStyling>;
   customData?: Record<string, any>;
-  
   // Status and Management
   status: PlacementStatus;
   approvalStatus?: PlacementApprovalStatus;
-  
   // A/B Testing
   experimentId?: string;
   variantId?: string;
-  
   // Performance Tracking
   performanceMetrics?: ContentPlacementMetrics;
-  
   // Metadata
   createdAt: Date;
   updatedAt: Date;
@@ -245,25 +231,20 @@ export enum PlacementApprovalStatus {
 export interface PlacementSchedule {
   scheduleId: string;
   placementId: string;
-  
   // Schedule Configuration
   type: ScheduleType;
   pattern: SchedulePattern;
-  
   // Timing
   startDate: Date;
   endDate?: Date;
   timezone: string;
-  
   // Recurrence
   recurrenceRules?: RecurrenceRules;
-  
   // Status
   isActive: boolean;
   nextExecution?: Date;
   lastExecution?: Date;
   executionCount: number;
-  
   // Metadata
   createdAt: Date;
   updatedAt: Date;
@@ -298,28 +279,21 @@ export interface PlacementCampaign {
   campaignId: string;
   name: string;
   description: string;
-  
   // Campaign Configuration
   objective: CampaignObjective;
   budget?: CampaignBudget;
-  
   // Associated Placements
   placements: string[]; // placement IDs
-  
   // Targeting
   globalTargeting?: PlacementTargetingRules;
-  
   // Performance Goals
   kpis: CampaignKPI[];
-  
   // Status and Timeline
   status: CampaignStatus;
   startDate: Date;
   endDate?: Date;
-  
   // Results
   performanceMetrics?: CampaignMetrics;
-  
   // Metadata
   createdAt: Date;
   updatedAt: Date;
@@ -361,29 +335,24 @@ export enum CampaignStatus {
 export interface PlacementSlotMetrics {
   slotId: string;
   period: MetricsPeriod;
-  
   // Visibility Metrics
   impressions: number;
   uniqueViews: number;
   viewDuration: number; // seconds
   viewabilityRate: number; // percentage
-  
   // Engagement Metrics
   clicks: number;
   clickThroughRate: number;
   interactionRate: number;
   bounceRate: number;
-  
   // Performance Metrics
   conversions: number;
   conversionRate: number;
   revenue: number;
   revenuePerView: number;
-  
   // Quality Metrics
   loadTime: number; // milliseconds
   errorRate: number;
-  
   // Comparative Metrics
   performanceIndex: number; // vs baseline
   competitiveIndex?: number; // vs other slots
@@ -392,24 +361,20 @@ export interface PlacementSlotMetrics {
 export interface ContentPlacementMetrics {
   placementId: string;
   period: MetricsPeriod;
-  
   // Content Performance
   impressions: number;
   clicks: number;
   clickThroughRate: number;
   engagementScore: number;
-  
   // Business Impact
   conversions: number;
   conversionValue: number;
   attributedRevenue: number;
   costPerConversion?: number;
-  
   // User Behavior
   averageTimeSpent: number;
   interactionDepth: number;
   returnVisitorRate: number;
-  
   // A/B Testing Results
   liftOverControl?: number;
   confidenceLevel?: number;
@@ -419,26 +384,22 @@ export interface ContentPlacementMetrics {
 export interface CampaignMetrics {
   campaignId: string;
   period: MetricsPeriod;
-  
   // Overall Performance
   totalImpressions: number;
   totalClicks: number;
   totalConversions: number;
   totalRevenue: number;
-  
   // Efficiency Metrics
   costPerClick?: number;
   costPerConversion?: number;
   returnOnAdSpend?: number;
-  
   // Goal Achievement
-  kpiProgress: Array<{
+  kpiProgress: Array<{,
     kpi: string;
     current: number;
     target: number;
     progress: number; // percentage
   }>;
-  
   // Budget Utilization
   budgetSpent?: number;
   budgetRemaining?: number;
@@ -454,27 +415,23 @@ export interface MetricsPeriod {
 export interface PlacementAnalytics {
   period: MetricsPeriod;
   generatedAt: Date;
-  
   // Overview Metrics
   totalSlots: number;
   activeSlots: number;
   totalPlacements: number;
   activePlacements: number;
-  
   // Performance Summary
-  overallPerformance: {
+  overallPerformance: {,
     totalImpressions: number;
     totalClicks: number;
     averageCTR: number;
     totalConversions: number;
     totalRevenue: number;
   };
-  
   // Top Performers
   topSlots: PlacementSlotMetrics[];
   topPlacements: ContentPlacementMetrics[];
   topCampaigns: CampaignMetrics[];
-  
   // Insights and Recommendations
   insights: PlacementInsight[];
   recommendations: PlacementRecommendation[];
@@ -508,19 +465,16 @@ export interface PlacementPreview {
   previewId: string;
   slotId: string;
   placements: ContentPlacement[];
-  
   // Preview Configuration
   previewMode: 'live' | 'staged' | 'test';
-  viewerContext: {
+  viewerContext: {,
     userSegment?: string;
     deviceType: 'desktop' | 'mobile' | 'tablet';
     location?: string;
     timestamp: Date;
   };
-  
   // Rendered Output
   renderedContent: RenderedPlacement[];
-  
   // Performance Simulation
   estimatedMetrics?: {
     expectedCTR: number;
@@ -528,7 +482,6 @@ export interface PlacementPreview {
     expectedRevenue: number;
     confidence: number;
   };
-  
   createdAt: Date;
   expiresAt: Date;
 }
@@ -536,7 +489,7 @@ export interface PlacementPreview {
 export interface RenderedPlacement {
   placementId: string;
   slotPosition: number;
-  content: {
+  content: {,
     id: string;
     type: ContentType;
     title: string;
@@ -581,19 +534,16 @@ export interface BulkPlacementOperation {
   operationType: 'create' | 'update' | 'delete' | 'activate' | 'deactivate' | 'schedule';
   targetPlacements: string[];
   operationData?: Record<string, any>;
-  
   // Execution Status
   status: 'pending' | 'running' | 'completed' | 'failed';
   progress: number; // 0-100
-  
   // Results
   successCount: number;
   failureCount: number;
-  errors: Array<{
+  errors: Array<{,
     placementId: string;
     error: string;
   }>;
-  
   // Metadata
   createdAt: Date;
   completedAt?: Date;
@@ -604,20 +554,16 @@ export interface PlacementTemplate {
   templateId: string;
   name: string;
   description: string;
-  
   // Template Configuration
   slotConfiguration: Partial<PlacementSlot>;
   defaultPlacements: Array<Partial<ContentPlacement>>;
-  
   // Usage and Application
   category: string;
   useCase: string;
   isPublic: boolean;
-  
   // Performance Data
   usageCount: number;
   averagePerformance?: PlacementSlotMetrics;
-  
   // Metadata
   createdAt: Date;
   updatedAt: Date;
@@ -631,20 +577,17 @@ export interface PlacementAuditLog {
   entityType: 'slot' | 'placement' | 'campaign' | 'schedule';
   entityId: string;
   action: string;
-  
   // Change Details
   changes?: Array<{
     field: string;
     oldValue: any;
     newValue: any;
   }>;
-  
   // Context
   userId: string;
   userRole: string;
   ipAddress?: string;
   userAgent?: string;
-  
   // Metadata
   timestamp: Date;
   reason?: string;

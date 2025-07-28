@@ -137,13 +137,13 @@ export declare class IOSpecBuilder {
     /**
      * Add an input port
      */
-    addInput(definition: Omit<IOPortDefinition, 'id'> & {
+    addInput(definition: Omit<IOPortDefinition, 'id'> & {)
         id: string;
     }): IOSpecBuilder;
     /**
      * Add an output port
      */
-    addOutput(definition: Omit<IOPortDefinition, 'id'> & {
+    addOutput(definition: Omit<IOPortDefinition, 'id'> & {)
         id: string;
     }): IOSpecBuilder;
     /**

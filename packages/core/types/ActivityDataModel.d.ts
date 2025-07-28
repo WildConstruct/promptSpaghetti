@@ -137,7 +137,7 @@ export interface DataActivity extends BaseActivity {
 }
 export interface PerformanceActivity extends BaseActivity {
     type: 'performance_event';
-    metrics: {
+    metrics: {,
         responseTime?: number;
         throughput?: number;
         errorRate?: number;
@@ -262,22 +262,22 @@ export interface ActivityMetrics {
     activitiesByType: Record<ActivityType, number>;
     activitiesBySeverity: Record<ActivitySeverity, number>;
     activitiesByStatus: Record<ActivityStatus, number>;
-    activitiesOverTime: Array<{
+    activitiesOverTime: Array<{,
         timestamp: string;
         count: number;
         types: Record<ActivityType, number>;
     }>;
-    topSources: Array<{
+    topSources: Array<{,
         source: string;
         count: number;
         percentage: number;
     }>;
-    topActions: Array<{
+    topActions: Array<{,
         action: string;
         count: number;
         percentage: number;
     }>;
-    topUsers: Array<{
+    topUsers: Array<{,
         userId: string;
         userEmail?: string;
         count: number;
@@ -285,7 +285,7 @@ export interface ActivityMetrics {
     }>;
     errorRate: number;
     averageDuration: number;
-    performanceMetrics: {
+    performanceMetrics: {,
         p50: number;
         p95: number;
         p99: number;

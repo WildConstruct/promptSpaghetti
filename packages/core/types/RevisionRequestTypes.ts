@@ -6,7 +6,6 @@
  * 
  * Following patterns from AppealProcessService and DocumentReviewInterface.
  */
-
 import { TimeRange } from '../marketplace/analytics.types';
 
 // Core revision request status enum
@@ -86,13 +85,11 @@ export interface RevisionRequest {
   requesterId: string;
   requesterName: string;
   requesterEmail: string;
-  
   // Content being revised
   contentType: RevisionContentType;
   contentId: string;
   contentTitle: string;
   contentVersion?: string;
-  
   // Request details
   title: string;
   description: string;
@@ -100,13 +97,11 @@ export interface RevisionRequest {
   businessJustification: string;
   type: RevisionRequestType;
   priority: RevisionRequestPriority;
-  
   // Workflow and assignment
   status: RevisionRequestStatus;
   reviewerId?: string;
   reviewerName?: string;
   assignedAt?: Date;
-  
   // Timing
   dueDate?: Date;
   estimatedHours?: number;
@@ -114,18 +109,15 @@ export interface RevisionRequest {
   createdAt: Date;
   updatedAt: Date;
   completedAt?: Date;
-  
   // Review details
   reviewNotes?: string;
   rejectionReason?: string;
   approvalNotes?: string;
   implementationNotes?: string;
-  
   // Attachments and tracking
   evidence: RevisionEvidence[];
   timeline: RevisionTimelineEvent[];
   tags: string[];
-  
   // Metadata
   metadata: Record<string, any>;
   urgencyScore?: number;
@@ -206,12 +198,10 @@ export interface RevisionRequestSearchQuery {
   priority?: RevisionRequestPriority[];
   contentType?: RevisionContentType[];
   type?: RevisionRequestType[];
-  
   // Assignment filters
   requesterId?: string;
   reviewerId?: string;
   unassigned?: boolean;
-  
   // Date filters
   dateRange?: {
     start: Date;
@@ -221,20 +211,16 @@ export interface RevisionRequestSearchQuery {
     start: Date;
     end: Date;
   };
-  
   // Content filters
   contentId?: string;
   tags?: string[];
-  
   // Text search
   search?: string; // Search in title, description, requested changes
-  
   // Complexity and urgency
   minUrgencyScore?: number;
   maxUrgencyScore?: number;
   minComplexityScore?: number;
   maxComplexityScore?: number;
-  
   // Pagination and sorting
   page?: number;
   pageSize?: number;
@@ -255,7 +241,7 @@ export type RevisionRequestSortField =
 
 export interface RevisionRequestSearchResults {
   requests: RevisionRequest[];
-  pagination: {
+  pagination: {,
     page: number;
     pageSize: number;
     total: number;
@@ -270,7 +256,7 @@ export interface RevisionRequestAggregations {
   priorityBreakdown: Record<RevisionRequestPriority, number>;
   typeBreakdown: Record<RevisionRequestType, number>;
   contentTypeBreakdown: Record<RevisionContentType, number>;
-  assignmentStats: {
+  assignmentStats: {,
     assigned: number;
     unassigned: number;
     overdue: number;
@@ -278,12 +264,12 @@ export interface RevisionRequestAggregations {
     dueThisWeek: number;
   };
   averageCompletionTime: number; // in hours
-  topRequesters: Array<{
+  topRequesters: Array<{,
     requesterId: string;
     requesterName: string;
     count: number;
   }>;
-  topReviewers: Array<{
+  topReviewers: Array<{,
     reviewerId: string;
     reviewerName: string;
     count: number;
@@ -293,7 +279,7 @@ export interface RevisionRequestAggregations {
 
 export interface AppliedFilters {
   count: number;
-  filters: Array<{
+  filters: Array<{,
     field: string;
     operator: string;
     value: any;
@@ -326,9 +312,8 @@ export interface RevisionRequestOverview {
   averageCompletionTime: number;
   completionRate: number;
   satisfactionScore: number;
-  
   // Growth metrics
-  growthMetrics: {
+  growthMetrics: {,
     requestGrowth: number;
     completionGrowth: number;
     averageTimeImprovement: number;
@@ -339,9 +324,8 @@ export interface RevisionRequestPerformance {
   reviewerPerformance: Record<string, ReviewerPerformance>;
   contentTypePerformance: Record<RevisionContentType, ContentTypePerformance>;
   priorityPerformance: Record<RevisionRequestPriority, PriorityPerformance>;
-  
   // SLA metrics
-  slaMetrics: {
+  slaMetrics: {,
     onTimeCompletionRate: number;
     averageResponseTime: number;
     escalationRate: number;
@@ -374,17 +358,17 @@ export interface PriorityPerformance {
 }
 
 export interface RevisionRequestTrends {
-  requestVolume: Array<{
+  requestVolume: Array<{,
     date: string;
     count: number;
     priority: Record<RevisionRequestPriority, number>;
   }>;
-  completionTrends: Array<{
+  completionTrends: Array<{,
     date: string;
     completed: number;
     averageTime: number;
   }>;
-  contentTypeTrends: Array<{
+  contentTypeTrends: Array<{,
     contentType: RevisionContentType;
     trend: 'increasing' | 'decreasing' | 'stable';
     changePercent: number;
@@ -408,7 +392,7 @@ export interface RevisionRequestRecommendation {
   title: string;
   description: string;
   expectedImpact: string;
-  implementation: {
+  implementation: {,
     complexity: 'low' | 'medium' | 'high';
     timeframe: string;
     requirements: string[];
@@ -433,31 +417,26 @@ export interface RevisionRequestConfig {
   defaultReviewerAssignment: 'round_robin' | 'workload_based' | 'skill_based';
   autoEscalationDays: number;
   enableSLA: boolean;
-  
   // SLA settings by priority
   slaHours: Record<RevisionRequestPriority, number>;
-  
   // Approval settings
   requireApprovalFor: RevisionRequestType[];
   multipleReviewersFor: RevisionRequestType[];
-  
   // Notification settings
   enableEmailNotifications: boolean;
   enableSlackNotifications: boolean;
-  notificationSettings: {
+  notificationSettings: {,
     onAssignment: boolean;
     onStatusChange: boolean;
     onComment: boolean;
     onDueDate: boolean;
     onOverdue: boolean;
   };
-  
   // Evidence settings
   maxEvidenceFiles: number;
   maxFileSizeMB: number;
   allowedFileTypes: string[];
   enableAnnotations: boolean;
-  
   // Advanced features
   enableComplexityScoring: boolean;
   enableImpactScoring: boolean;
@@ -470,38 +449,33 @@ export const DEFAULT_REVISION_REQUEST_CONFIG: RevisionRequestConfig = {
   defaultReviewerAssignment: 'workload_based',
   autoEscalationDays: 3,
   enableSLA: true,
-  
-  slaHours: {
+  slaHours: {,
     [RevisionRequestPriority.LOW]: 168, // 7 days
     [RevisionRequestPriority.MEDIUM]: 72, // 3 days
     [RevisionRequestPriority.HIGH]: 24, // 1 day
     [RevisionRequestPriority.URGENT]: 4, // 4 hours
     [RevisionRequestPriority.CRITICAL]: 1 // 1 hour
   },
-  
-  requireApprovalFor: [
+  requireApprovalFor: [,
     RevisionRequestType.SECURITY_UPDATE,
     RevisionRequestType.COMPLIANCE_UPDATE
   ],
-  
-  multipleReviewersFor: [
+  multipleReviewersFor: [,
     RevisionRequestType.SECURITY_UPDATE,
     RevisionRequestType.COMPLIANCE_UPDATE
   ],
-  
   enableEmailNotifications: true,
   enableSlackNotifications: true,
-  notificationSettings: {
+  notificationSettings: {,
     onAssignment: true,
     onStatusChange: true,
     onComment: true,
     onDueDate: true,
-    onOverdue: true
+    onOverdue: true,
   },
-  
   maxEvidenceFiles: 10,
   maxFileSizeMB: 25,
-  allowedFileTypes: [
+  allowedFileTypes: [,
     'image/jpeg', 'image/png', 'image/gif',
     'application/pdf',
     'text/plain', 'text/markdown',
@@ -509,7 +483,6 @@ export const DEFAULT_REVISION_REQUEST_CONFIG: RevisionRequestConfig = {
     'video/mp4', 'video/quicktime'
   ],
   enableAnnotations: true,
-  
   enableComplexityScoring: true,
   enableImpactScoring: true,
   enablePredictiveAnalytics: false,

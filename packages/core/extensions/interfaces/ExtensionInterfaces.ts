@@ -2,7 +2,6 @@
  * Core Extension Interfaces - Epic 8.4 Story 8.4.2
  * Defines the fundamental interfaces that all extensions must implement
  */
-
 import { z } from 'zod';
 
 // Base Extension Interface
@@ -15,17 +14,14 @@ export interface BaseExtension {
   readonly dependencies: string[];
   readonly permissions: string[];
   readonly extensionType: string; // Extension type identifier (e.g., 'node', 'ui', 'transform', 'storage')
-  
   // Lifecycle methods
   initialize(): Promise<void>;
   activate(): Promise<void>;
   deactivate(): Promise<void>;
   dispose(): Promise<void>;
-  
   // Configuration
   getConfiguration(): Record<string, any>;
   setConfiguration(config: Record<string, any>): void;
-  
   // Health checking
   isHealthy(): boolean;
   getHealthStatus(): ExtensionHealthStatus;
@@ -67,7 +63,6 @@ export interface ExtensionStorage {
   delete(key: string): Promise<void>;
   clear(): Promise<void>;
   keys(): Promise<string[]>;
-  
   // Scoped storage
   getScoped(scope: string): ExtensionStorage;
 }
@@ -85,11 +80,9 @@ export interface ExtensionEventEmitter {
 export interface ExtensionRuntime {
   readonly version: string;
   readonly environment: 'development' | 'production' | 'test';
-  
   // System access
   getSystemInfo(): SystemInfo;
   getPerformanceMetrics(): PerformanceMetrics;
-  
   // Node registry access
   registerNode(nodeDefinition: NodeDefinition): void;
   unregisterNode(nodeId: string): void;
@@ -101,15 +94,12 @@ export interface ExtensionUIContext {
   // Component registration
   registerComponent(componentId: string, component: React.ComponentType<any>): void;
   unregisterComponent(componentId: string): void;
-  
   // Inspector extensions
   registerInspectorEditor(nodeType: string, editor: React.ComponentType<any>): void;
   unregisterInspectorEditor(nodeType: string): void;
-  
   // Menu and toolbar extensions
   registerMenuItem(menuId: string, item: MenuItem): void;
   unregisterMenuItem(menuId: string, itemId: string): void;
-  
   // Notification system
   showNotification(notification: Notification): void;
   showModal(modal: ModalDefinition): void;
@@ -119,11 +109,9 @@ export interface ExtensionUIContext {
 export interface ExtensionAPIContext {
   // HTTP client
   createHttpClient(): HttpClient;
-  
   // API endpoint registration
   registerEndpoint(path: string, handler: APIHandler): void;
   unregisterEndpoint(path: string): void;
-  
   // Middleware registration
   registerMiddleware(middleware: APIMiddleware): void;
   unregisterMiddleware(middlewareId: string): void;
@@ -155,20 +143,16 @@ export interface NodeDefinition {
   category: string;
   description: string;
   version: string;
-  
   // Node class constructor
   nodeClass: new (id: string, config: any) => any;
-  
   // UI configuration
   editorComponent?: React.ComponentType<any>;
   icon?: string;
   color?: string;
-  
   // Schema definition
   schema: z.ZodSchema<any>;
-  
   // Metadata
-  metadata: {
+  metadata: {,
     author: string;
     license: string;
     repository?: string;
@@ -290,7 +274,7 @@ export enum ExtensionErrorType {
 
 // Extension Error
 export class ExtensionError extends Error {
-  constructor(
+  constructor()
     public readonly type: ExtensionErrorType,
     public readonly extensionId: string,
     message: string,
@@ -309,50 +293,43 @@ export interface ExtensionValidationResult {
 }
 
 // Extension Manifest Schema (will be used in Story 8.4.3)
-export const ExtensionManifestSchema = z.object({
+export const ExtensionManifestSchema = z.object({)
   id: z.string().regex(/^[a-zA-Z0-9-_.]+$/),
   name: z.string().min(1),
   version: z.string().regex(/^\d+\.\d+\.\d+$/),
   description: z.string().min(1),
   author: z.string().min(1),
   license: z.string().min(1),
-  
   // Engine requirements
-  engines: z.object({
+  engines: z.object({),
     promptSpaghetti: z.string(),
-    node: z.string().optional()
+    node: z.string().optional(),
   }),
-  
   // Dependencies
   dependencies: z.array(z.string()).optional(),
   optionalDependencies: z.array(z.string()).optional(),
-  
   // Permissions
   permissions: z.array(z.string()).optional(),
-  
   // Entry points
   main: z.string().optional(),
   browser: z.string().optional(),
-  
   // Extension points
-  contributes: z.object({
+  contributes: z.object({),
     nodes: z.array(z.string()).optional(),
     commands: z.array(z.string()).optional(),
     menus: z.array(z.string()).optional(),
     themes: z.array(z.string()).optional(),
-    languages: z.array(z.string()).optional()
+    languages: z.array(z.string()).optional(),
   }).optional(),
-  
   // Metadata
   repository: z.string().optional(),
   homepage: z.string().optional(),
   bugs: z.string().optional(),
   keywords: z.array(z.string()).optional(),
-  
   // Configuration
-  configuration: z.object({
+  configuration: z.object({),
     type: z.literal('object'),
-    properties: z.record(z.any())
+    properties: z.record(z.any()),
   }).optional()
 });
 

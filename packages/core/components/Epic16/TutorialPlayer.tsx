@@ -4,7 +4,6 @@
  * Interactive tutorial system for onboarding users to template marketplace features,
  * creation workflows, and advanced platform capabilities.
  */
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -76,7 +75,7 @@ export interface Tutorial {
   estimatedTime: number; // in minutes
   prerequisites?: string[];
   steps: TutorialStep[];
-  completionRewards: {
+  completionRewards: {,
     xp: number;
     badge?: string;
     certificate?: string;
@@ -111,7 +110,7 @@ export interface TutorialPlayerProps {
   className?: string;
 }
 
-export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
+export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
   tutorial,
   isOpen,
   onClose,
@@ -132,10 +131,8 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [timeSpent, setTimeSpent] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
-
   const videoRef = useRef<HTMLVideoElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-
   useEffect(() => {
     if (tutorial && isOpen) {
       const newProgress: TutorialProgress = {
@@ -144,7 +141,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
         completed: false,
         startedAt: new Date(),
         timeSpent: 0,
-        stepsCompleted: []
+        stepsCompleted: [],
       };
       setProgress(newProgress);
       setCurrentStepIndex(0);
@@ -152,7 +149,6 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
       setCompletedActions(new Set());
     }
   }, [tutorial, isOpen]);
-
   useEffect(() => {
     if (isOpen && isPlaying) {
       timerRef.current = setInterval(() => {
@@ -163,26 +159,21 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
         clearInterval(timerRef.current);
       }
     }
-
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
     };
   }, [isOpen, isPlaying]);
-
   if (!tutorial) return null;
-
   const currentStep = tutorial.steps[currentStepIndex];
   const totalSteps = tutorial.steps.length;
   const progressPercentage = ((currentStepIndex + 1) / totalSteps) * 100;
-
   const handleNext = () => {
     if (currentStepIndex < totalSteps - 1) {
       const newIndex = currentStepIndex + 1;
       setCurrentStepIndex(newIndex);
       onStepComplete?.(currentStep.id, tutorial);
-      
       if (progress) {
         const updatedProgress = {
           ...progress,
@@ -196,13 +187,11 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
       handleComplete();
     }
   };
-
   const handlePrevious = () => {
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
     }
   };
-
   const handleComplete = () => {
     if (progress) {
       const completedProgress = {
@@ -216,23 +205,19 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
       onComplete?.(tutorial, completedProgress);
     }
   };
-
   const handleActionComplete = (actionId: string) => {
     setCompletedActions(prev => new Set(prev).add(actionId));
   };
-
   const getTotalActions = () => {
     return tutorial.steps.reduce((total, step) => {
       return total + (step.actions?.length || 0);
     }, 0);
   };
-
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;}
   };
-
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
     case 'beginner': return 'bg-green-100 text-green-800';
@@ -241,7 +226,6 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getCategoryIcon = (category: string) => {
     switch (category) {
     case 'getting-started': return <BookOpen className="w-4 h-4" />;
@@ -252,11 +236,10 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
     default: return <BookOpen className="w-4 h-4" />;
     }
   };
-
   const renderStepContent = () => {
     switch (currentStep.type) {
     case 'introduction':
-      return (
+      return ()
         <div className="text-center space-y-4">
           <div className="p-4 bg-blue-50 rounded-lg">
             <Lightbulb className="w-12 h-12 text-blue-600 mx-auto mb-4" />
@@ -266,12 +249,11 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
           <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
         </div>
       );
-
     case 'demonstration':
-      return (
+      return ()
         <div className="space-y-4">
           <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-            {currentStep.videoUrl ? (
+            {currentStep.videoUrl ? ()
               <video
                 ref={videoRef}
                 src={currentStep.videoUrl}
@@ -281,13 +263,13 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
               />
-            ) : currentStep.imageUrl ? (
+            ) : currentStep.imageUrl ? ()
               <img
                 src={currentStep.imageUrl}
                 alt={currentStep.title}
                 className="w-full h-full object-cover"
               />
-            ) : (
+            ) : ()
               <div className="w-full h-full flex items-center justify-center text-gray-400">
                 <Video className="w-16 h-16" />
               </div>
@@ -300,9 +282,8 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
           </div>
         </div>
       );
-
     case 'interaction':
-      return (
+      return ()
         <div className="space-y-4">
           <div className="p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
             <div className="flex items-center gap-2 mb-2">
@@ -311,11 +292,10 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
             </div>
             <p className="text-gray-600">{currentStep.description}</p>
           </div>
-
-          {currentStep.actions && (
+          {currentStep.actions && ()
             <div className="space-y-3">
               <h4 className="font-medium">Actions to complete:</h4>
-              {currentStep.actions.map((action, index) => (
+              {currentStep.actions.map((action, index) => ()
                 <div
                   key={action.id}
                   className={`flex items-center gap-3 p-3 rounded-lg border ${
@@ -324,16 +304,16 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
                       : 'bg-gray-50 border-gray-200'
                   }`}
                 >
-                  {completedActions.has(action.id) ? (
+                  {completedActions.has(action.id) ? ()
                     <CheckCircle className="w-5 h-5 text-green-600" />
-                  ) : (
+                  ) : ()
                     <Circle className="w-5 h-5 text-gray-400" />
                   )}
                   <div className="flex-1">
                     <div className="font-medium">{action.type.toUpperCase()}</div>
                     <div className="text-sm text-gray-600">{action.message}</div>
                   </div>
-                  {enableInteractions && !completedActions.has(action.id) && (
+                  {enableInteractions && !completedActions.has(action.id) && ()
                     <Button
                       size="sm"
                       onClick={() => handleActionComplete(action.id)}
@@ -345,13 +325,11 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
               ))}
             </div>
           )}
-
           <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
         </div>
       );
-
     case 'practice':
-      return (
+      return ()
         <div className="space-y-4">
           <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-400">
             <div className="flex items-center gap-2 mb-2">
@@ -360,17 +338,15 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
             </div>
             <p className="text-gray-600">{currentStep.description}</p>
           </div>
-            
           <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
-            
-          {currentStep.tips && (
+          {currentStep.tips && ()
             <div className="bg-blue-50 p-4 rounded-lg">
               <h4 className="font-medium mb-2 flex items-center gap-2">
                 <Lightbulb className="w-4 h-4 text-blue-600" />
                   Tips:
               </h4>
               <ul className="space-y-1">
-                {currentStep.tips.map((tip, index) => (
+                {currentStep.tips.map((tip, index) => ()
                   <li key={index} className="text-sm text-gray-600">• {tip}</li>
                 ))}
               </ul>
@@ -378,16 +354,14 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
           )}
         </div>
       );
-
     case 'completion':
-      return (
+      return ()
         <div className="text-center space-y-6">
           <div className="p-6 bg-green-50 rounded-lg">
             <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
             <h3 className="text-2xl font-bold text-green-800 mb-2">Congratulations!</h3>
             <p className="text-green-700">You've completed the tutorial: {tutorial.title}</p>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
               <CardContent className="p-4 text-center">
@@ -396,7 +370,6 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
                 <div className="text-sm text-gray-600">{formatTime(timeSpent)}</div>
               </CardContent>
             </Card>
-
             <Card>
               <CardContent className="p-4 text-center">
                 <Award className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
@@ -404,7 +377,6 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
                 <div className="text-sm text-gray-600">+{tutorial.completionRewards.xp}</div>
               </CardContent>
             </Card>
-
             <Card>
               <CardContent className="p-4 text-center">
                 <Star className="w-8 h-8 text-purple-600 mx-auto mb-2" />
@@ -415,8 +387,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
               </CardContent>
             </Card>
           </div>
-
-          {tutorial.completionRewards.badge && (
+          {tutorial.completionRewards.badge && ()
             <div className="p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
               <div className="flex items-center gap-2">
                 <Award className="w-5 h-5 text-yellow-600" />
@@ -426,9 +397,8 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
           )}
         </div>
       );
-
     default:
-      return (
+      return ()
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">{currentStep.title}</h3>
           <p className="text-gray-600">{currentStep.description}</p>
@@ -437,10 +407,9 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
       );
     }
   };
-
-  const renderStepList = () => (
+  const renderStepList = () => (;)
     <div className="space-y-2">
-      {tutorial.steps.map((step, index) => (
+      {tutorial.steps.map((step, index) => ()
         <div
           key={step.id}
           className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
@@ -452,18 +421,18 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
           }`}
           onClick={() => setCurrentStepIndex(index)}
         >
-          {index < currentStepIndex ? (
+          {index < currentStepIndex ? ()
             <CheckCircle className="w-4 h-4 text-green-600" />
-          ) : index === currentStepIndex ? (
+          ) : index === currentStepIndex ? ()
             <Circle className="w-4 h-4 text-blue-600 fill-current" />
-          ) : (
+          ) : ()
             <Circle className="w-4 h-4 text-gray-400" />
           )}
           <div className="flex-1">
             <div className="text-sm font-medium">{step.title}</div>
             <div className="text-xs opacity-75">{step.type}</div>
           </div>
-          {step.duration && (
+          {step.duration && ()
             <div className="text-xs opacity-75">
               {Math.round(step.duration / 60)}min
             </div>
@@ -472,10 +441,9 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
       ))}
     </div>
   );
-
-  return (
+  return ()
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={`max-w-6xl h-[90vh] flex flex-col ${isFullscreen ? 'max-w-full h-full' : ''} ${className}`}>
+      <DialogContent className={`max-w-6xl h-[90vh] flex flex-col ${isFullscreen ? 'max-w-full h-full' : ''} ${className}`}>}
         <DialogHeader className="flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -496,7 +464,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
                 size="sm"
                 onClick={() => setIsBookmarked(!isBookmarked)}
               >
-                <BookmarkPlus className={`w-4 h-4 ${isBookmarked ? 'text-blue-600' : ''}`} />
+                <BookmarkPlus className={`w-4 h-4 ${isBookmarked ? 'text-blue-600' : ''}`} />}
               </Button>
               <Button
                 variant="ghost"
@@ -517,7 +485,6 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
               </Button>
             </div>
           </div>
-          
           <div className="flex items-center gap-4">
             <div className="flex-1">
               <div className="flex items-center justify-between mb-1">
@@ -532,14 +499,12 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
             </div>
           </div>
         </DialogHeader>
-
         <div className="flex-1 flex gap-6 overflow-hidden">
           {/* Main Content */}
           <div className="flex-1 flex flex-col overflow-hidden">
             <div className="flex-1 overflow-y-auto p-6">
               {renderStepContent()}
             </div>
-            
             {/* Controls */}
             <div className="flex-shrink-0 flex items-center justify-between p-4 border-t bg-gray-50">
               <div className="flex items-center gap-2">
@@ -552,8 +517,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
                   <ArrowLeft className="w-4 h-4 mr-1" />
                   Previous
                 </Button>
-                
-                {currentStep.type === 'demonstration' && (
+                {currentStep.type === 'demonstration' && ()
                   <div className="flex items-center gap-2">
                     <Button
                       variant="outline"
@@ -571,7 +535,6 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
                     </Button>
                   </div>
                 )}
-
                 <Button
                   variant="outline"
                   size="sm"
@@ -581,14 +544,13 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
                   Restart
                 </Button>
               </div>
-
               <div className="flex items-center gap-2">
-                {currentStepIndex === totalSteps - 1 ? (
+                {currentStepIndex === totalSteps - 1 ? ()
                   <Button onClick={handleComplete}>
                     Complete Tutorial
                     <Award className="w-4 h-4 ml-1" />
                   </Button>
-                ) : (
+                ) : ()
                   <Button onClick={handleNext}>
                     Next
                     <ArrowRight className="w-4 h-4 ml-1" />
@@ -597,14 +559,12 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
               </div>
             </div>
           </div>
-
           {/* Sidebar */}
           <div className="w-80 flex-shrink-0 border-l bg-gray-50 overflow-y-auto">
             <div className="p-4">
               <h3 className="font-semibold mb-4">Tutorial Steps</h3>
               {renderStepList()}
-              
-              {showTranscript && currentStep.content && (
+              {showTranscript && currentStep.content && ()
                 <div className="mt-6">
                   <h4 className="font-medium mb-2">Transcript</h4>
                   <div className="text-sm text-gray-600 bg-white p-3 rounded-lg">
@@ -615,9 +575,8 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
             </div>
           </div>
         </div>
-
         {/* Settings Panel */}
-        {showSettings && (
+        {showSettings && ()
           <div className="absolute top-16 right-4 bg-white border rounded-lg shadow-lg p-4 z-50">
             <h4 className="font-medium mb-3">Tutorial Settings</h4>
             <div className="space-y-3">
@@ -668,7 +627,7 @@ export interface TutorialBrowserProps {
   className?: string;
 }
 
-export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
+export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
   tutorials,
   onSelectTutorial,
   onStartTutorial,
@@ -678,18 +637,15 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
-
   const getFilteredTutorials = () => {
-    return tutorials.filter(tutorial => {
+    return tutorials.filter(tutorial => {)
       const matchesCategory = selectedCategory === 'all' || tutorial.category === selectedCategory;
       const matchesDifficulty = selectedDifficulty === 'all' || tutorial.difficulty === selectedDifficulty;
-      const matchesSearch = tutorial.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      const matchesSearch = tutorial.title.toLowerCase().includes(searchTerm.toLowerCase()) ||;
                            tutorial.description.toLowerCase().includes(searchTerm.toLowerCase());
-      
       return matchesCategory && matchesDifficulty && matchesSearch;
     });
   };
-
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
     case 'beginner': return 'bg-green-100 text-green-800';
@@ -698,7 +654,6 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getCategoryIcon = (category: string) => {
     switch (category) {
     case 'getting-started': return <BookOpen className="w-4 h-4" />;
@@ -709,14 +664,12 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
     default: return <BookOpen className="w-4 h-4" />;
     }
   };
-
-  return (
-    <div className={`max-w-6xl mx-auto p-6 ${className}`}>
+  return ()
+    <div className={`max-w-6xl mx-auto p-6 ${className}`}>}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Tutorial Library</h1>
         <p className="text-gray-600">Learn how to make the most of the template marketplace with interactive tutorials.</p>
       </div>
-
       {/* Filters */}
       <Card className="mb-6">
         <CardContent className="p-4">
@@ -730,7 +683,6 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-            
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -743,7 +695,6 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
               <option value="collaboration">Collaboration</option>
               <option value="advanced">Advanced</option>
             </select>
-
             <select
               value={selectedDifficulty}
               onChange={(e) => setSelectedDifficulty(e.target.value)}
@@ -757,15 +708,13 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
           </div>
         </CardContent>
       </Card>
-
       {/* Tutorial Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {getFilteredTutorials().map((tutorial) => {
           const progress = userProgress[tutorial.id];
           const isCompleted = progress?.completed || false;
           const progressPercentage = progress ? (progress.currentStepIndex / tutorial.steps.length) * 100 : 0;
-
-          return (
+          return ()
             <Card key={tutorial.id} className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-3">
@@ -779,11 +728,9 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
                     {tutorial.estimatedTime}min
                   </div>
                 </div>
-
                 <h3 className="text-lg font-semibold mb-2">{tutorial.title}</h3>
                 <p className="text-gray-600 text-sm mb-4 line-clamp-3">{tutorial.description}</p>
-
-                {progress && (
+                {progress && ()
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm font-medium">Progress</span>
@@ -794,7 +741,6 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
                     <Progress value={progressPercentage} className="h-2" />
                   </div>
                 )}
-
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow-400 fill-current" />
@@ -803,7 +749,6 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
                       ({tutorial.completionCount})
                     </span>
                   </div>
-
                   <div className="flex gap-2">
                     <Button
                       variant="outline"
@@ -814,8 +759,7 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
                     </Button>
                   </div>
                 </div>
-
-                {isCompleted && (
+                {isCompleted && ()
                   <div className="mt-3 flex items-center gap-2 text-green-600">
                     <CheckCircle className="w-4 h-4" />
                     <span className="text-sm font-medium">Completed</span>
@@ -826,8 +770,7 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
           );
         })}
       </div>
-
-      {getFilteredTutorials().length === 0 && (
+      {getFilteredTutorials().length === 0 && ()
         <div className="text-center py-12">
           <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No tutorials found</h3>

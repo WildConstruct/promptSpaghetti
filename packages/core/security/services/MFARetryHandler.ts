@@ -13,7 +13,6 @@
  * - Comprehensive error tracking and reporting
  * - Recovery mechanisms for transient failures
  */
-
 import { EventEmitter } from 'events';
 
 // Retry strategies
@@ -78,7 +77,7 @@ export interface CircuitBreakerConfig {
 }
 
 export interface MFARetryConfig {
-  operationConfigs: {
+  operationConfigs: {,
     [key in MFAOperation]: RetryConfig;
   };
   circuitBreaker: CircuitBreakerConfig;
@@ -138,7 +137,7 @@ export interface RetryMetrics {
   averageAttempts: number;
   averageDuration: number;
   circuitBreakerTrips: number;
-  operationMetrics: {
+  operationMetrics: {,
     [key in MFAOperation]: {
       count: number;
       successRate: number;
@@ -146,11 +145,10 @@ export interface RetryMetrics {
       averageDuration: number;
     };
   };
-  errorMetrics: {
+  errorMetrics: {,
     [key in FailureType]: number;
   };
 }
-
 /**
  * MFA Retry Handler Service
  */
@@ -159,18 +157,16 @@ export class MFARetryHandler extends EventEmitter {
   private circuitBreakers: Map<MFAOperation, CircuitBreakerStateData> = new Map();
   private metrics: RetryMetrics;
   private activeOperations: Map<string, OperationContext> = new Map();
-
   constructor(config: Partial<MFARetryConfig> = {}) {
     super();
     this.config = this.mergeConfig(config);
     this.metrics = this.initializeMetrics();
     this.initializeCircuitBreakers();
   }
-
   /**
    * Execute an MFA operation with retry and timeout handling
    */
-  public async executeWithRetry<T>(
+  public async executeWithRetry<T>()
     operation: MFAOperation,
     operationFn: () => Promise<T>,
     context: Partial<OperationContext> = {}
@@ -185,27 +181,22 @@ export class MFARetryHandler extends EventEmitter {
       attempt: 0,
       metadata: context.metadata || {}
     };
-
     this.activeOperations.set(operationId, fullContext);
-
     try {
       return await this.executeOperation(operation, operationFn, fullContext);
     } finally {
       this.activeOperations.delete(operationId);
     }
   }
-
   /**
    * Check if an operation should be attempted based on circuit breaker state
    */
   public canAttemptOperation(operation: MFAOperation): boolean {
     const circuitBreaker = this.circuitBreakers.get(operation);
     if (!circuitBreaker) return true;
-
     switch (circuitBreaker.state) {
     case CircuitBreakerStateEnum.CLOSED:
       return true;
-
     case CircuitBreakerStateEnum.OPEN:
       if (circuitBreaker.nextAttemptTime && new Date() >= circuitBreaker.nextAttemptTime) {
         // Transition to half-open
@@ -214,29 +205,24 @@ export class MFARetryHandler extends EventEmitter {
         return true;
       }
       return false;
-
     case CircuitBreakerStateEnum.HALF_OPEN:
       return circuitBreaker.halfOpenAttempts < this.config.circuitBreaker.halfOpenMaxAttempts;
-
     default:
       return true;
     }
   }
-
   /**
    * Get current metrics
    */
   public getMetrics(): RetryMetrics {
     return { ...this.metrics };
   }
-
   /**
    * Get active operations
    */
   public getActiveOperations(): OperationContext[] {
     return Array.from(this.activeOperations.values());
   }
-
   /**
    * Reset circuit breaker for an operation
    */
@@ -248,14 +234,12 @@ export class MFARetryHandler extends EventEmitter {
       circuitBreaker.lastFailureTime = undefined;
       circuitBreaker.nextAttemptTime = undefined;
       circuitBreaker.halfOpenAttempts = 0;
-
-      this.emit('circuitBreakerReset', {
+      this.emit('circuitBreakerReset', {)
         operation,
         timestamp: new Date()
       });
     }
   }
-
   /**
    * Update configuration
    */
@@ -263,62 +247,51 @@ export class MFARetryHandler extends EventEmitter {
     this.config = this.mergeConfig(newConfig);
     this.emit('configUpdated', { config: this.config });
   }
-
   // Private methods
-
-  private async executeOperation<T>(
+  private async executeOperation<T>()
     operation: MFAOperation,
     operationFn: () => Promise<T>,
-    context: OperationContext
+    context: OperationContext,
   ): Promise<OperationResult<T>> {
     const config = this.config.operationConfigs[operation];
     const attempts: RetryAttempt[] = [];
     const startTime = new Date();
-
     let lastError: Error | undefined;
     let result: T | undefined;
     let success = false;
-
     // Check circuit breaker
     if (!this.canAttemptOperation(operation)) {
       return {
         success: false,
-        error: new Error(`Circuit breaker is open for operation: ${operation}`),
+        error: new Error(`Circuit breaker is open for operation: ${operation}`),}
         attempts: [],
         totalDurationMs: 0,
         circuitBreakerTriggered: true,
-        rateLimited: false
+        rateLimited: false,
       };
     }
-
     for (let attempt = 1; attempt <= config.maxAttempts; attempt++) {
       context.attempt = attempt;
       const attemptStartTime = new Date();
-
       // Calculate delay for this attempt (skip delay for first attempt)
       const delayMs = attempt > 1 ? this.calculateDelay(attempt - 1, config) : 0;
-      
       if (delayMs > 0) {
         await this.sleep(delayMs);
       }
-
       const attemptData: RetryAttempt = {
         attempt,
         startTime: attemptStartTime,
         delayMs,
         success: false,
-        timeoutReached: false
+        timeoutReached: false,
       };
-
       try {
         // Execute with timeout
         result = await this.executeWithTimeout(operationFn, config.timeoutMs);
         attemptData.success = true;
         attemptData.endTime = new Date();
         success = true;
-
         this.handleSuccess(operation, context);
-        
         // Record successful attempt before breaking
         attempts.push(attemptData);
         break;
@@ -326,18 +299,14 @@ export class MFARetryHandler extends EventEmitter {
         attemptData.error = error instanceof Error ? error : new Error(String(error));
         attemptData.endTime = new Date();
         attemptData.timeoutReached = error instanceof Error && error.message.includes('timeout');
-
         lastError = attemptData.error;
-
         this.handleFailure(operation, context, attemptData.error);
-
         // Record failed attempt
         attempts.push(attemptData);
-
         // Check if error is retryable
         const failureType = this.categorizeError(attemptData.error);
         if (!config.retryableErrors.includes(failureType)) {
-          this.logOperation('Non-retryable error encountered', {
+          this.logOperation('Non-retryable error encountered', {)
             operation,
             attempt,
             error: attemptData.error.message,
@@ -345,32 +314,27 @@ export class MFARetryHandler extends EventEmitter {
           });
           break;
         }
-
         // Check if we should continue retrying
         if (attempt === config.maxAttempts) {
-          this.logOperation('Max retry attempts reached', {
+          this.logOperation('Max retry attempts reached', {)
             operation,
             attempt,
-            error: attemptData.error.message
+            error: attemptData.error.message,
           });
           break;
         }
-
-        this.logOperation('Retrying operation', {
+        this.logOperation('Retrying operation', {)
           operation,
           attempt,
           nextAttempt: attempt + 1,
           delayMs: this.calculateDelay(attempt, config),
-          error: attemptData.error.message
+          error: attemptData.error.message,
         });
       }
     }
-
     const totalDurationMs = new Date().getTime() - startTime.getTime();
-
     // Update metrics
     this.updateMetrics(operation, success, attempts.length, totalDurationMs);
-
     return {
       success,
       data: result,
@@ -378,19 +342,17 @@ export class MFARetryHandler extends EventEmitter {
       attempts,
       totalDurationMs,
       circuitBreakerTriggered: false,
-      rateLimited: false
+      rateLimited: false,
     };
   }
-
-  private async executeWithTimeout<T>(
+  private async executeWithTimeout<T>()
     operationFn: () => Promise<T>,
-    timeoutMs: number
+    timeoutMs: number,
   ): Promise<T> {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
-        reject(new Error(`Operation timeout after ${timeoutMs}ms`));
+        reject(new Error(`Operation timeout after ${timeoutMs}ms`));}
       }, timeoutMs);
-
       operationFn()
         .then((result) => {
           clearTimeout(timeoutId);
@@ -402,29 +364,24 @@ export class MFARetryHandler extends EventEmitter {
         });
     });
   }
-
   private calculateDelay(attempt: number, config: RetryConfig): number {
     let delay: number;
-
     switch (config.strategy) {
     case RetryStrategy.EXPONENTIAL:
-      delay = Math.min(
+      delay = Math.min()
         config.baseDelayMs * Math.pow(config.backoffMultiplier, attempt - 1),
         config.maxDelayMs
       );
       break;
-
     case RetryStrategy.LINEAR:
-      delay = Math.min(
+      delay = Math.min()
         config.baseDelayMs * attempt,
         config.maxDelayMs
       );
       break;
-
     case RetryStrategy.FIXED:
       delay = config.baseDelayMs;
       break;
-
     case RetryStrategy.CUSTOM:
       if (config.customDelayFunction) {
         delay = config.customDelayFunction(attempt, config.baseDelayMs);
@@ -432,23 +389,18 @@ export class MFARetryHandler extends EventEmitter {
         delay = config.baseDelayMs;
       }
       break;
-
     default:
       delay = config.baseDelayMs;
     }
-
     // Add jitter to prevent thundering herd
     if (config.jitterMs > 0) {
       const jitter = Math.random() * config.jitterMs;
       delay += jitter;
     }
-
     return Math.max(0, Math.min(delay, config.maxDelayMs));
   }
-
   private categorizeError(error: Error): FailureType {
     const message = error.message.toLowerCase();
-
     if (message.includes('timeout')) {
       return FailureType.TIMEOUT;
     }
@@ -473,10 +425,8 @@ export class MFARetryHandler extends EventEmitter {
     if (message.includes('validation') || message.includes('invalid input')) {
       return FailureType.VALIDATION_ERROR;
     }
-
     return FailureType.UNKNOWN_ERROR;
   }
-
   private handleSuccess(operation: MFAOperation, context: OperationContext): void {
     const circuitBreaker = this.circuitBreakers.get(operation);
     if (circuitBreaker) {
@@ -485,44 +435,36 @@ export class MFARetryHandler extends EventEmitter {
         circuitBreaker.state = CircuitBreakerStateEnum.CLOSED;
         circuitBreaker.failureCount = 0;
         circuitBreaker.halfOpenAttempts = 0;
-
-        this.emit('circuitBreakerClosed', {
+        this.emit('circuitBreakerClosed', {)
           operation,
           context,
           timestamp: new Date()
         });
       }
     }
-
-    this.emit('operationSuccess', {
+    this.emit('operationSuccess', {)
       operation,
       context,
       timestamp: new Date()
     });
   }
-
   private handleFailure(operation: MFAOperation, context: OperationContext, error: Error): void {
     const circuitBreaker = this.circuitBreakers.get(operation);
     if (circuitBreaker) {
       circuitBreaker.failureCount++;
       circuitBreaker.lastFailureTime = new Date();
-
       if (circuitBreaker.state === CircuitBreakerStateEnum.HALF_OPEN) {
         circuitBreaker.halfOpenAttempts++;
       }
-
       // Check if we should open the circuit breaker
-      if (circuitBreaker.state === CircuitBreakerStateEnum.CLOSED &&
+      if (circuitBreaker.state === CircuitBreakerStateEnum.CLOSED &&)
           circuitBreaker.failureCount >= this.config.circuitBreaker.failureThreshold) {
-        
         circuitBreaker.state = CircuitBreakerStateEnum.OPEN;
-        circuitBreaker.nextAttemptTime = new Date(
+        circuitBreaker.nextAttemptTime = new Date()
           Date.now() + this.config.circuitBreaker.resetTimeoutMs
         );
-
         this.metrics.circuitBreakerTrips++;
-
-        this.emit('circuitBreakerOpened', {
+        this.emit('circuitBreakerOpened', {)
           operation,
           context,
           failureCount: circuitBreaker.failureCount,
@@ -530,35 +472,30 @@ export class MFARetryHandler extends EventEmitter {
         });
       }
     }
-
-    this.emit('operationFailure', {
+    this.emit('operationFailure', {)
       operation,
       context,
       error,
       timestamp: new Date()
     });
   }
-
-  private updateMetrics(
+  private updateMetrics()
     operation: MFAOperation,
     success: boolean,
     attempts: number,
-    durationMs: number
+    durationMs: number,
   ): void {
     this.metrics.totalOperations++;
-
     if (success) {
       this.metrics.successfulOperations++;
     } else {
       this.metrics.failedOperations++;
     }
-
     this.metrics.totalRetries += attempts - 1; // Subtract 1 for initial attempt
     this.metrics.averageAttempts = this.metrics.totalRetries / this.metrics.totalOperations;
     this.metrics.averageDuration = 
       ((this.metrics.averageDuration * (this.metrics.totalOperations - 1)) + durationMs) / 
       this.metrics.totalOperations;
-
     // Update operation-specific metrics
     const opMetrics = this.metrics.operationMetrics[operation];
     opMetrics.count++;
@@ -570,18 +507,15 @@ export class MFARetryHandler extends EventEmitter {
     opMetrics.averageDuration = 
       ((opMetrics.averageDuration * (opMetrics.count - 1)) + durationMs) / opMetrics.count;
   }
-
   private sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-
   private generateOperationId(): string {
-    return `mfa_op_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+    return `mfa_op_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;}
   }
-
   private logOperation(message: string, data: any): void {
     if (this.config.enableLogging) {
-      this.emit('log', {
+      this.emit('log', {)
         level: 'info',
         message,
         data,
@@ -589,7 +523,6 @@ export class MFARetryHandler extends EventEmitter {
       });
     }
   }
-
   private mergeConfig(config: Partial<MFARetryConfig>): MFARetryConfig {
     const defaultRetryConfig: RetryConfig = {
       maxAttempts: 3,
@@ -599,15 +532,14 @@ export class MFARetryHandler extends EventEmitter {
       backoffMultiplier: 2,
       jitterMs: 100,
       timeoutMs: 10000,
-      retryableErrors: [
+      retryableErrors: [,
         FailureType.NETWORK_ERROR,
         FailureType.TIMEOUT,
         FailureType.SERVICE_UNAVAILABLE
       ]
     };
-
     return {
-      operationConfigs: {
+      operationConfigs: {,
         [MFAOperation.TOTP_VERIFICATION]: {
           ...defaultRetryConfig,
           maxAttempts: 2,
@@ -618,7 +550,7 @@ export class MFARetryHandler extends EventEmitter {
           ...defaultRetryConfig,
           maxAttempts: 3,
           timeoutMs: 15000,
-          retryableErrors: [
+          retryableErrors: [,
             FailureType.NETWORK_ERROR,
             FailureType.TIMEOUT,
             FailureType.SERVICE_UNAVAILABLE
@@ -634,7 +566,7 @@ export class MFARetryHandler extends EventEmitter {
           ...defaultRetryConfig,
           maxAttempts: 3,
           timeoutMs: 20000,
-          retryableErrors: [
+          retryableErrors: [,
             FailureType.NETWORK_ERROR,
             FailureType.TIMEOUT,
             FailureType.SERVICE_UNAVAILABLE
@@ -656,7 +588,7 @@ export class MFARetryHandler extends EventEmitter {
           ...defaultRetryConfig,
           maxAttempts: 3,
           timeoutMs: 15000,
-          retryableErrors: [
+          retryableErrors: [,
             FailureType.NETWORK_ERROR,
             FailureType.TIMEOUT,
             FailureType.SERVICE_UNAVAILABLE
@@ -666,7 +598,7 @@ export class MFARetryHandler extends EventEmitter {
           ...defaultRetryConfig,
           maxAttempts: 3,
           timeoutMs: 20000,
-          retryableErrors: [
+          retryableErrors: [,
             FailureType.NETWORK_ERROR,
             FailureType.TIMEOUT,
             FailureType.SERVICE_UNAVAILABLE
@@ -680,7 +612,7 @@ export class MFARetryHandler extends EventEmitter {
         },
         ...config.operationConfigs
       },
-      circuitBreaker: {
+      circuitBreaker: {,
         failureThreshold: 5,
         resetTimeoutMs: 60000, // 1 minute
         monitoringWindowMs: 300000, // 5 minutes
@@ -692,26 +624,22 @@ export class MFARetryHandler extends EventEmitter {
       enableLogging: config.enableLogging !== false
     };
   }
-
   private initializeMetrics(): RetryMetrics {
     const operationMetrics = {} as RetryMetrics['operationMetrics'];
     const errorMetrics = {} as RetryMetrics['errorMetrics'];
-
     // Initialize operation metrics
-    Object.values(MFAOperation).forEach(operation => {
+    Object.values(MFAOperation).forEach(operation => {)
       operationMetrics[operation] = {
         count: 0,
         successRate: 0,
         averageAttempts: 0,
-        averageDuration: 0
+        averageDuration: 0,
       };
     });
-
     // Initialize error metrics
-    Object.values(FailureType).forEach(errorType => {
+    Object.values(FailureType).forEach(errorType => {)
       errorMetrics[errorType] = 0;
     });
-
     return {
       totalOperations: 0,
       successfulOperations: 0,
@@ -724,13 +652,12 @@ export class MFARetryHandler extends EventEmitter {
       errorMetrics
     };
   }
-
   private initializeCircuitBreakers(): void {
-    Object.values(MFAOperation).forEach(operation => {
-      this.circuitBreakers.set(operation, {
+    Object.values(MFAOperation).forEach(operation => {)
+      this.circuitBreakers.set(operation, {)
         state: CircuitBreakerStateEnum.CLOSED,
         failureCount: 0,
-        halfOpenAttempts: 0
+        halfOpenAttempts: 0,
       });
     });
   }

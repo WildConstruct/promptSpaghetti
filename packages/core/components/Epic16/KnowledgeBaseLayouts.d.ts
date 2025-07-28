@@ -10,7 +10,7 @@ export interface KnowledgeBaseSection {
     id: string;
     title: string;
     description: string;
-    icon: React.ComponentType<{
+    icon: React.ComponentType<{,
         className?: string;
     }>;
     articles: Article[];

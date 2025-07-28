@@ -78,7 +78,7 @@ export interface SessionTimeoutState {
     adaptedTimeout?: number;
     recentActivities: ActivityData[];
     activityScore: number;
-    activityPattern: {
+    activityPattern: {,
         peakHours: number[];
         averageSessionLength: number;
         typicalActivityLevel: ActivityLevel;

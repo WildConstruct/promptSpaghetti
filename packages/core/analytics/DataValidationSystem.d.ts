@@ -14,10 +14,10 @@ export declare const ValidationRuleSchema: z.ZodObject<{
     category: z.ZodEnum<["integrity", "consistency", "completeness", "accuracy", "timeliness"]>;
     severity: z.ZodEnum<["critical", "high", "medium", "low"]>;
     enabled: z.ZodDefault<z.ZodBoolean>;
-    conditions: z.ZodObject<{
+    conditions: z.ZodObject<{,
         eventTypes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         sources: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        timeRange: z.ZodOptional<z.ZodObject<{
+        timeRange: z.ZodOptional<z.ZodObject<{,
             start: z.ZodOptional<z.ZodNumber>;
             end: z.ZodOptional<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
@@ -42,8 +42,8 @@ export declare const ValidationRuleSchema: z.ZodObject<{
         } | undefined;
         eventTypes?: string[] | undefined;
     }>;
-    validation: z.ZodObject<{
-        rules: z.ZodArray<z.ZodObject<{
+    validation: z.ZodObject<{,
+        rules: z.ZodArray<z.ZodObject<{,
             field: z.ZodString;
             operator: z.ZodEnum<["exists", "not_exists", "equals", "not_equals", "greater_than", "less_than", "matches", "in_range", "custom"]>;
             value: z.ZodOptional<z.ZodUnknown>;
@@ -62,7 +62,7 @@ export declare const ValidationRuleSchema: z.ZodObject<{
             required?: boolean | undefined;
             customFunction?: string | undefined;
         }>, "many">;
-        crossFieldValidation: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        crossFieldValidation: z.ZodOptional<z.ZodArray<z.ZodObject<{,
             fields: z.ZodArray<z.ZodString, "many">;
             relationship: z.ZodEnum<["sum_equals", "all_or_none", "mutually_exclusive", "sequential", "custom"]>;
             expectedValue: z.ZodOptional<z.ZodUnknown>;
@@ -79,7 +79,7 @@ export declare const ValidationRuleSchema: z.ZodObject<{
             customFunction?: string | undefined;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        rules: {
+        rules: {,
             required: boolean;
             operator: "custom" | "matches" | "equals" | "exists" | "not_equals" | "greater_than" | "less_than" | "not_exists" | "in_range";
             field: string;
@@ -93,7 +93,7 @@ export declare const ValidationRuleSchema: z.ZodObject<{
             customFunction?: string | undefined;
         }[] | undefined;
     }, {
-        rules: {
+        rules: {,
             operator: "custom" | "matches" | "equals" | "exists" | "not_equals" | "greater_than" | "less_than" | "not_exists" | "in_range";
             field: string;
             value?: unknown;
@@ -111,8 +111,8 @@ export declare const ValidationRuleSchema: z.ZodObject<{
     id: string;
     name: string;
     description: string;
-    validation: {
-        rules: {
+    validation: {,
+        rules: {,
             required: boolean;
             operator: "custom" | "matches" | "equals" | "exists" | "not_equals" | "greater_than" | "less_than" | "not_exists" | "in_range";
             field: string;
@@ -129,7 +129,7 @@ export declare const ValidationRuleSchema: z.ZodObject<{
     category: "accuracy" | "integrity" | "consistency" | "completeness" | "timeliness";
     enabled: boolean;
     severity: "low" | "medium" | "high" | "critical";
-    conditions: {
+    conditions: {,
         sources?: string[] | undefined;
         timeRange?: {
             start?: number | undefined;
@@ -141,8 +141,8 @@ export declare const ValidationRuleSchema: z.ZodObject<{
     id: string;
     name: string;
     description: string;
-    validation: {
-        rules: {
+    validation: {,
+        rules: {,
             operator: "custom" | "matches" | "equals" | "exists" | "not_equals" | "greater_than" | "less_than" | "not_exists" | "in_range";
             field: string;
             value?: unknown;
@@ -158,7 +158,7 @@ export declare const ValidationRuleSchema: z.ZodObject<{
     };
     category: "accuracy" | "integrity" | "consistency" | "completeness" | "timeliness";
     severity: "low" | "medium" | "high" | "critical";
-    conditions: {
+    conditions: {,
         sources?: string[] | undefined;
         timeRange?: {
             start?: number | undefined;
@@ -176,7 +176,7 @@ export interface ValidationResult {
     severity: string;
     message: string;
     affectedRecords: string[];
-    details: {
+    details: {,
         expectedValue?: unknown;
         actualValue?: unknown;
         field?: string;
@@ -195,7 +195,7 @@ export interface ConsistencyCheckResult {
     category: string;
     passed: boolean;
     severity: string;
-    summary: {
+    summary: {,
         totalRecords: number;
         validRecords: number;
         invalidRecords: number;
@@ -207,38 +207,38 @@ export interface ConsistencyCheckResult {
     timestamp: number;
 }
 export interface DataQualityMetrics {
-    completeness: {
+    completeness: {,
         score: number;
-        missingFields: {
+        missingFields: {,
             [field: string]: number;
         };
         requiredFieldsCoverage: number;
     };
-    accuracy: {
+    accuracy: {,
         score: number;
         invalidValues: number;
         formatErrors: number;
         typeErrors: number;
     };
-    consistency: {
+    consistency: {,
         score: number;
         duplicates: number;
         contradictions: number;
         referentialIntegrityErrors: number;
     };
-    timeliness: {
+    timeliness: {,
         score: number;
         lateArrivals: number;
         futureTimestamps: number;
         timestampGaps: number;
     };
-    integrity: {
+    integrity: {,
         score: number;
         corruptedRecords: number;
         checksumFailures: number;
         structuralErrors: number;
     };
-    overall: {
+    overall: {,
         score: number;
         grade: 'A' | 'B' | 'C' | 'D' | 'F';
         issueCount: number;
@@ -270,14 +270,14 @@ export declare class DataValidationSystem {
     /**
      * Perform comprehensive consistency check
      */
-    performConsistencyCheck(filter?: EventFilter, timeRange?: {
+    performConsistencyCheck(filter?: EventFilter, timeRange?: {)
         start: number;
         end: number;
     }): Promise<ConsistencyCheckResult>;
     /**
      * Calculate data quality metrics
      */
-    calculateDataQualityMetrics(filter?: EventFilter, timeRange?: {
+    calculateDataQualityMetrics(filter?: EventFilter, timeRange?: {)
         start: number;
         end: number;
     }): Promise<DataQualityMetrics>;

@@ -8,7 +8,7 @@ import React from 'react';
 export interface DrawingAnnotation {
     id: string;
     type: 'freehand' | 'arrow' | 'circle' | 'rectangle' | 'line' | 'text';
-    points: Array<{
+    points: Array<{,
         x: number;
         y: number;
     }>;
@@ -21,7 +21,7 @@ export interface DrawingAnnotation {
     text?: string;
     transform?: {
         rotation: number;
-        scale: {
+        scale: {,
             x: number;
             y: number;
         };

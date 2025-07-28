@@ -289,24 +289,24 @@ export interface EncryptionConfig {
 }
 
 export interface SecurityMetrics {
-  authentication: {
+  authentication: {,
     successfulLogins: number;
     failedLogins: number;
     mfaAdoption: number;
     passwordCompliance: number;
   };
-  authorization: {
+  authorization: {,
     accessViolations: number;
     privilegeEscalations: number;
     permissionChanges: number;
   };
-  monitoring: {
+  monitoring: {,
     alertsGenerated: number;
     alertsResolved: number;
     averageResolutionTime: number;
     falsePositiveRate: number;
   };
-  compliance: {
+  compliance: {,
     policyViolations: number;
     complianceScore: number;
     auditFindings: number;

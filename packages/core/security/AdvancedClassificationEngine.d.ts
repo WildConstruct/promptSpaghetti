@@ -57,12 +57,12 @@ export interface ClassificationAnalytics {
     classificationsByCategory: Record<DataCategory, number>;
     complianceViolations: number;
     averageConfidence: number;
-    topRiskPatterns: Array<{
+    topRiskPatterns: Array<{,
         pattern: string;
         count: number;
         riskScore: number;
     }>;
-    temporalTrends: Array<{
+    temporalTrends: Array<{,
         timestamp: Date;
         count: number;
         avgConfidence: number;
@@ -83,13 +83,13 @@ export interface DataFlow {
 export interface ClassificationContext {
     source: string;
     purpose: string;
-    userContext: {
+    userContext: {,
         userId: string;
         role: string;
         department: string;
         clearanceLevel: string;
     };
-    environmentContext: {
+    environmentContext: {,
         system: string;
         network: string;
         location: string;
@@ -99,19 +99,19 @@ export interface ClassificationContext {
     parentClassification?: string;
 }
 export interface EnhancedClassificationResult extends ClassificationResult {
-    mlPredictions: Array<{
+    mlPredictions: Array<{,
         model: string;
         prediction: ClassificationLevel;
         confidence: number;
         features: Record<string, number>;
     }>;
-    contextualFactors: Array<{
+    contextualFactors: Array<{,
         factor: string;
         impact: number;
         description: string;
     }>;
     riskScore: number;
-    remediation: Array<{
+    remediation: Array<{,
         action: string;
         priority: 'low' | 'medium' | 'high' | 'critical';
         description: string;
@@ -140,9 +140,9 @@ export declare class AdvancedClassificationEngine extends EventEmitter {
     /**
      * Real-time stream classification
      */
-    classifyStream(
+    classifyStream()
       dataStream: AsyncIterable<DataElement>,
-      context: ClassificationContext
+      context: ClassificationContext,
     ): Promise<AsyncGenerator<EnhancedClassificationResult>>;
     private classifyStreamInternal;
     /**
@@ -152,7 +152,7 @@ export declare class AdvancedClassificationEngine extends EventEmitter {
     /**
      * Train ML model with new data
      */
-    trainMLModel(modelId: string, trainingData: Array<{
+    trainMLModel(modelId: string, trainingData: Array<{)
         data: DataElement;
         expectedClassification: ClassificationLevel;
         context?: ClassificationContext;
@@ -167,10 +167,10 @@ export declare class AdvancedClassificationEngine extends EventEmitter {
     /**
      * Execute workflow manually
      */
-    executeWorkflow(
+    executeWorkflow()
       workflowId: string,
       result: EnhancedClassificationResult,
-      context: ClassificationContext
+      context: ClassificationContext,
     ): Promise<void>;
     /**
      * Get classification analytics
@@ -183,18 +183,18 @@ export declare class AdvancedClassificationEngine extends EventEmitter {
     /**
      * Get compliance report
      */
-    generateComplianceReport(framework: ComplianceFramework, dateRange: {
+    generateComplianceReport(framework: ComplianceFramework, dateRange: {)
         start: Date;
         end: Date;
     }): {
         framework: ComplianceFramework;
-        period: {
+        period: {,
             start: Date;
             end: Date;
         };
         totalClassifications: number;
         compliantClassifications: number;
-        violations: Array<{
+        violations: Array<{,
             dataId: string;
             violation: string;
             severity: string;

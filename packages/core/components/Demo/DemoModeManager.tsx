@@ -4,7 +4,6 @@
  * 
  * Manages presentation modes, screenshot mode, and demo optimizations
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner';
 
@@ -22,34 +21,31 @@ export interface DemoModeManagerProps {
   onModeChange?: (config: DemoModeConfig) => void;
   initialConfig?: Partial<DemoModeConfig>;
 }
-
 const DEFAULT_CONFIG: DemoModeConfig = {
   screenshotMode: false,
   presentationFocus: false,
   performanceMode: false,
   accessibilityMode: false,
   brandingVisible: true,
-  debugElementsHidden: false
+  debugElementsHidden: false,
 };
 
-export const DemoModeManager: React.FC<DemoModeManagerProps> = ({
+export const DemoModeManager: React.FC<DemoModeManagerProps> = ({)
   children,
   onModeChange,
   initialConfig = {}
 }) => {
-  const [config, setConfig] = useState<DemoModeConfig>({
+  const [config, setConfig] = useState<DemoModeConfig>({)
     ...DEFAULT_CONFIG,
     ...initialConfig
   });
   const [isTransitioning, setIsTransitioning] = useState(false);
-
   // Auto-detect screen resolution and apply appropriate scaling
   useEffect(() => {
     const detectScreenMode = () => {
       const width = window.screen.width;
       const height = window.screen.height;
       const pixelRatio = window.devicePixelRatio || 1;
-      
       // Apply demo scaling for presentation screens
       if (width === 1920 && height === 1080) {
         document.documentElement.className += ' presentation-1080p';
@@ -58,57 +54,45 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({
       } else if (width >= 2560) {
         document.documentElement.className += ' presentation-ultrawide';
       }
-      
       // Apply high-DPI optimizations
       if (pixelRatio >= 2) {
         document.documentElement.className += ' presentation-hidpi';
       }
     };
-
     detectScreenMode();
     window.addEventListener('resize', detectScreenMode);
     return () => window.removeEventListener('resize', detectScreenMode);
   }, []);
-
   // Apply CSS classes based on config - memoized for performance
   useEffect(() => {
     const classes = [];
-    
     if (config.screenshotMode) classes.push('demo-screenshot-mode');
     if (config.presentationFocus) classes.push('presentation-focus');
     if (config.performanceMode) classes.push('demo-performance-mode');
     if (config.accessibilityMode) classes.push('presentation-a11y');
     if (config.debugElementsHidden) classes.push('hide-debug-elements');
-    
     // Always add demo mode class
     classes.push('demo-mode', 'presentation-typography');
-    
     // Apply classes to document body more efficiently
     const currentClasses = document.body.className.split(' ');
-    const filteredClasses = currentClasses.filter(cls => 
+    const filteredClasses = currentClasses.filter(cls => ;)
       !cls.startsWith('demo-') && !cls.startsWith('presentation-')
     );
-    
     document.body.className = [...filteredClasses, ...classes].join(' ');
-      
     onModeChange?.(config);
   }, [config, onModeChange]);
-
   const updateConfig = useCallback((updates: Partial<DemoModeConfig>) => {
     setIsTransitioning(true);
-    
     setTimeout(() => {
       setConfig(prev => ({ ...prev, ...updates }));
       setIsTransitioning(false);
     }, 150); // Brief transition for smooth mode changes
   }, []);
-
   // Keyboard shortcuts for demo control
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       // Only handle if Alt + Shift are pressed (presenter shortcut)
       if (!e.altKey || !e.shiftKey) return;
-      
       switch (e.key) {
       case 'S':
         // Alt+Shift+S: Toggle screenshot mode
@@ -137,17 +121,14 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({
         break;
       }
     };
-
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [config, updateConfig]);
-
-  return (
+  return ()
     <>
       {children}
-      
       {/* Professional branding for demos */}
-      {config.brandingVisible && !config.screenshotMode && (
+      {config.brandingVisible && !config.screenshotMode && ()
         <div className="demo-branding" data-demo-safe="true">
           <div style={{ fontSize: '12px', fontWeight: 600, marginBottom: 2 }}>
             🎬 PromptScape Studio
@@ -157,9 +138,8 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({
           </div>
         </div>
       )}
-      
       {/* Demo mode transition overlay */}
-      {isTransitioning && (
+      {isTransitioning && ()
         <div
           style={{
             position: 'fixed',
@@ -173,7 +153,7 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 9999,
-            pointerEvents: 'none'
+            pointerEvents: 'none',
           }}
         >
           <ProfessionalSpinner
@@ -184,9 +164,8 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({
           />
         </div>
       )}
-      
       {/* Demo control panel (hidden in screenshot mode) */}
-      {!config.screenshotMode && process.env.NODE_ENV === 'development' && (
+      {!config.screenshotMode && process.env.NODE_ENV === 'development' && ()
         <DemoControlPanel config={config} onConfigChange={updateConfig} />
       )}
     </>
@@ -198,11 +177,9 @@ interface DemoControlPanelProps {
   config: DemoModeConfig;
   onConfigChange: (updates: Partial<DemoModeConfig>) => void;
 }
-
 const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigChange }) => {
   const [panelVisible, setPanelVisible] = useState(false);
-
-  return (
+  return ()
     <>
       {/* Toggle button */}
       <button
@@ -227,9 +204,8 @@ const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigCha
       >
         🎭 Demo
       </button>
-      
       {/* Control panel */}
-      {panelVisible && (
+      {panelVisible && ()
         <div
           style={{
             position: 'fixed',
@@ -251,7 +227,6 @@ const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigCha
           <div style={{ fontWeight: 600, marginBottom: 12, fontSize: 14 }}>
             Demo Mode Controls
           </div>
-          
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
               <input
@@ -262,7 +237,6 @@ const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigCha
               />
               <span>Screenshot Mode (Alt+Shift+S)</span>
             </label>
-            
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
               <input
                 type="checkbox"
@@ -272,7 +246,6 @@ const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigCha
               />
               <span>Focus Mode (Alt+Shift+F)</span>
             </label>
-            
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
               <input
                 type="checkbox"
@@ -282,7 +255,6 @@ const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigCha
               />
               <span>Performance Mode (Alt+Shift+P)</span>
             </label>
-            
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
               <input
                 type="checkbox"
@@ -292,7 +264,6 @@ const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigCha
               />
               <span>High Contrast (Alt+Shift+A)</span>
             </label>
-            
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
               <input
                 type="checkbox"
@@ -302,7 +273,6 @@ const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigCha
               />
               <span>Hide Debug (Alt+Shift+D)</span>
             </label>
-            
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
               <input
                 type="checkbox"
@@ -313,7 +283,6 @@ const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigCha
               <span>Show Branding</span>
             </label>
           </div>
-          
           <div style={{ marginTop: 12, fontSize: 10, opacity: 0.7, lineHeight: 1.4 }}>
             Screen: {window.screen.width}×{window.screen.height} ({window.devicePixelRatio}x DPI)
           </div>

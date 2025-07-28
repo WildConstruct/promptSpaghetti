@@ -15,7 +15,6 @@
  * - Accessibility-first design
  * - Responsive help interfaces
  */
-
 import React, { useState, useEffect, useCallback, useRef, useMemo, ReactNode } from 'react';
 import {
   HelpCircle,
@@ -68,7 +67,7 @@ export interface HelpContentItem {
   thumbnail?: string;
   videoUrl?: string;
   lastUpdated: Date;
-  helpfulness: {
+  helpfulness: {,
     helpful: number;
     unhelpful: number;
   };
@@ -134,7 +133,7 @@ export interface HelpTooltipProps {
   onHide?: () => void;
 }
 
-export const HelpTooltip: React.FC<HelpTooltipProps> = ({
+export const HelpTooltip: React.FC<HelpTooltipProps> = ({)
   content,
   title,
   position = 'top',
@@ -154,22 +153,17 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({
   const triggerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
   const showTooltip = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    
     timeoutRef.current = setTimeout(() => {
       setIsVisible(true);
       onShow?.();
-      
       // Calculate position
       if (triggerRef.current && tooltipRef.current) {
         const triggerRect = triggerRef.current.getBoundingClientRect();
         const tooltipRect = tooltipRef.current.getBoundingClientRect();
         const viewport = { width: window.innerWidth, height: window.innerHeight };
-        
         let top = 0, left = 0;
-        
         switch (position) {
         case 'top':
           top = triggerRect.top - tooltipRect.height - 8;
@@ -188,24 +182,20 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({
           left = triggerRect.right + 8;
           break;
         }
-        
         // Viewport collision detection
         if (left < 0) left = 8;
         if (left + tooltipRect.width > viewport.width) left = viewport.width - tooltipRect.width - 8;
         if (top < 0) top = 8;
         if (top + tooltipRect.height > viewport.height) top = viewport.height - tooltipRect.height - 8;
-        
         setTooltipPosition({ top, left });
       }
     }, delay);
   }, [delay, onShow, position]);
-
   const hideTooltip = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setIsVisible(false);
     onHide?.();
   }, [onHide]);
-
   const handleTriggerEvent = useCallback((event: React.MouseEvent | React.FocusEvent) => {
     if (trigger === 'click' && event.type === 'click') {
       isVisible ? hideTooltip() : showTooltip();
@@ -217,8 +207,7 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({
       else if (event.type === 'blur') hideTooltip();
     }
   }, [trigger, isVisible, showTooltip, hideTooltip]);
-
-  return (
+  return ()
     <>
       <div 
         ref={triggerRef}
@@ -231,8 +220,7 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({
       >
         {children}
       </div>
-      
-      {isVisible && (
+      {isVisible && ()
         <div
           ref={tooltipRef}
           className={`help-tooltip help-tooltip-${position}`}
@@ -241,18 +229,16 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({
             top: tooltipPosition.top,
             left: tooltipPosition.left,
             maxWidth,
-            zIndex: 9999
+            zIndex: 9999,
           }}
         >
           {showArrow && <div className={`help-tooltip-arrow help-tooltip-arrow-${position}`} />}
-          
           <div className="help-tooltip-content">
             {title && <div className="help-tooltip-title">{title}</div>}
             <div className="help-tooltip-body">{content}</div>
-            
-            {(helpLink || helpText) && (
+            {(helpLink || helpText) && ()
               <div className="help-tooltip-actions">
-                {helpLink && (
+                {helpLink && ()
                   <Button 
                     variant="ghost" 
                     size="sm" 
@@ -287,7 +273,7 @@ export interface ContextualHelpPanelProps {
   onFeedback?: (contentId: string, helpful: boolean) => void;
 }
 
-export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
+export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({)
   title,
   content,
   context,
@@ -304,39 +290,32 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
   const [selectedContent, setSelectedContent] = useState<HelpContentItem | null>(null);
-
   const categories = useMemo(() => {
     const cats = new Set(content.map(item => item.category));
     return Array.from(cats).sort();
   }, [content]);
-
   const filteredContent = useMemo(() => {
-    return content.filter(item => {
+    return content.filter(item => {)
       // Search filter
-      const matchesSearch = searchQuery === '' || 
+      const matchesSearch = searchQuery === '' || ;
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-
       // Category filter
       const matchesFilter = selectedFilter === 'all' || item.category === selectedFilter;
-
       return matchesSearch && matchesFilter;
     });
   }, [content, searchQuery, selectedFilter]);
-
   const handleContentClick = useCallback((item: HelpContentItem) => {
     setSelectedContent(item);
     onContentSelect?.(item);
   }, [onContentSelect]);
-
   const handleFeedback = useCallback((contentId: string, helpful: boolean) => {
     onFeedback?.(contentId, helpful);
   }, [onFeedback]);
-
   if (isCollapsed && collapsible) {
-    return (
-      <div className={`help-panel help-panel-collapsed help-panel-${position} ${className}`}>
+    return ()
+      <div className={`help-panel help-panel-collapsed help-panel-${position} ${className}`}>}
         <Button
           variant="ghost"
           size="icon"
@@ -349,16 +328,15 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`help-panel help-panel-${position} ${className}`}>
+  return ()
+    <div className={`help-panel help-panel-${position} ${className}`}>}
       <CardHeader className="help-panel-header">
         <div className="help-panel-header-content">
           <CardTitle className="help-panel-title">
             <HelpCircle size={16} />
             {title}
           </CardTitle>
-          {collapsible && (
+          {collapsible && ()
             <Button
               variant="ghost"
               size="icon"
@@ -369,8 +347,7 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
             </Button>
           )}
         </div>
-        
-        {searchable && (
+        {searchable && ()
           <div className="help-panel-search">
             <div className="search-input-container">
               <Search size={14} className="search-icon" />
@@ -384,8 +361,7 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
             </div>
           </div>
         )}
-        
-        {filterable && categories.length > 1 && (
+        {filterable && categories.length > 1 && ()
           <div className="help-panel-filters">
             <select
               value={selectedFilter}
@@ -393,16 +369,15 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
               className="help-filter-select"
             >
               <option value="all">All Topics</option>
-              {categories.map(category => (
+              {categories.map(category => ()
                 <option key={category} value={category}>{category}</option>
               ))}
             </select>
           </div>
         )}
       </CardHeader>
-
       <CardContent className="help-panel-content">
-        {selectedContent ? (
+        {selectedContent ? ()
           <div className="help-content-detail">
             <div className="help-content-header">
               <Button
@@ -415,7 +390,6 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
                 Back
               </Button>
             </div>
-            
             <div className="help-content-body">
               <div className="help-content-meta">
                 <Badge variant={selectedContent.difficulty === 'beginner' ? 'secondary' : 
@@ -428,18 +402,16 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
                   {selectedContent.type === 'tutorial' && <BookOpen size={12} />}
                   {selectedContent.type}
                 </span>
-                {selectedContent.estimatedReadTime && (
+                {selectedContent.estimatedReadTime && ()
                   <span className="help-content-time">
                     <Clock size={12} />
                     {selectedContent.estimatedReadTime} min
                   </span>
                 )}
               </div>
-              
               <h3 className="help-content-title">{selectedContent.title}</h3>
               <p className="help-content-description">{selectedContent.description}</p>
-              
-              {selectedContent.type === 'video' && selectedContent.videoUrl && (
+              {selectedContent.type === 'video' && selectedContent.videoUrl && ()
                 <div className="help-video-container">
                   <iframe
                     src={selectedContent.videoUrl}
@@ -449,10 +421,8 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
                   />
                 </div>
               )}
-              
               <div className="help-content-text" 
                 dangerouslySetInnerHTML={{ __html: selectedContent.content }} />
-              
               <div className="help-content-actions">
                 <div className="help-content-feedback">
                   <span>Was this helpful?</span>
@@ -476,9 +446,9 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
               </div>
             </div>
           </div>
-        ) : (
+        ) : ()
           <div className="help-content-list">
-            {filteredContent.length === 0 ? (
+            {filteredContent.length === 0 ? ()
               <div className="help-no-results">
                 <Search size={24} className="help-no-results-icon" />
                 <p>No help content found</p>
@@ -486,8 +456,8 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
                   Try adjusting your search or filters
                 </p>
               </div>
-            ) : (
-              filteredContent.map(item => (
+            ) : ()
+              filteredContent.map(item => ()
                 <div
                   key={item.id}
                   className="help-content-item"
@@ -504,20 +474,18 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
                     </div>
                     <div className="help-content-item-meta">
                       <Badge variant="secondary" size="sm">{item.difficulty}</Badge>
-                      {item.estimatedReadTime && (
+                      {item.estimatedReadTime && ()
                         <span className="help-content-item-time">
                           {item.estimatedReadTime}m
                         </span>
                       )}
                     </div>
                   </div>
-                  
                   <h4 className="help-content-item-title">{item.title}</h4>
                   <p className="help-content-item-description">{item.description}</p>
-                  
                   <div className="help-content-item-footer">
                     <div className="help-content-item-tags">
-                      {item.tags.slice(0, 3).map(tag => (
+                      {item.tags.slice(0, 3).map(tag => ()
                         <Badge key={tag} variant="outline" size="sm">{tag}</Badge>
                       ))}
                     </div>
@@ -546,7 +514,7 @@ export interface GuidedTourProps {
   className?: string;
 }
 
-export const GuidedTour: React.FC<GuidedTourProps> = ({
+export const GuidedTour: React.FC<GuidedTourProps> = ({)
   tour,
   isActive,
   onComplete,
@@ -559,34 +527,28 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
   const [_____highlightedElement, setHighlightedElement] = useState<HTMLElement | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const tourRef = useRef<HTMLDivElement>(null);
-
   const currentStep = tour.steps[currentStepIndex];
   const isLastStep = currentStepIndex === tour.steps.length - 1;
   const isFirstStep = currentStepIndex === 0;
-
   // Highlight target element
   useEffect(() => {
     if (!isActive || !currentStep) return;
-
     const targetElement = document.querySelector(currentStep.target) as HTMLElement;
     if (targetElement) {
       setHighlightedElement(targetElement);
-      
       // Create overlay effect
       const _____rect = targetElement.getBoundingClientRect();
       if (overlayRef.current) {
         overlayRef.current.style.display = 'block';
         // Add spotlight effect positioning
       }
-      
       // Scroll element into view
-      targetElement.scrollIntoView({
+      targetElement.scrollIntoView({)
         behavior: 'smooth',
         block: 'center',
-        inline: 'center'
+        inline: 'center',
       });
     }
-
     return () => {
       if (overlayRef.current) {
         overlayRef.current.style.display = 'none';
@@ -594,14 +556,12 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
       setHighlightedElement(null);
     };
   }, [isActive, currentStep]);
-
   const goToStep = useCallback((stepIndex: number) => {
     if (stepIndex >= 0 && stepIndex < tour.steps.length) {
       setCurrentStepIndex(stepIndex);
       onStepChange?.(stepIndex);
     }
   }, [tour.steps.length, onStepChange]);
-
   const nextStep = useCallback(() => {
     if (isLastStep) {
       onComplete?.();
@@ -609,41 +569,32 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
       goToStep(currentStepIndex + 1);
     }
   }, [isLastStep, currentStepIndex, goToStep, onComplete]);
-
   const prevStep = useCallback(() => {
     if (!isFirstStep) {
       goToStep(currentStepIndex - 1);
     }
   }, [isFirstStep, currentStepIndex, goToStep]);
-
   const skipTour = useCallback(() => {
     onSkip?.();
   }, [onSkip]);
-
   const toggleAutoplay = useCallback(() => {
     setIsPlaying(!isPlaying);
   }, [isPlaying]);
-
   // Auto-advance when playing
   useEffect(() => {
     if (!isPlaying || !isActive) return;
-
     const timer = setTimeout(() => {
       nextStep();
     }, 3000); // 3 seconds per step
-
     return () => clearTimeout(timer);
   }, [isPlaying, isActive, nextStep, currentStepIndex]);
-
   if (!isActive || !currentStep) return null;
-
-  return (
+  return ()
     <>
       {/* Overlay for highlighting */}
       <div ref={overlayRef} className="tour-overlay" style={{ display: 'none' }} />
-      
       {/* Tour popup */}
-      <div ref={tourRef} className={`guided-tour ${className}`}>
+      <div ref={tourRef} className={`guided-tour ${className}`}>}
         <Card className="tour-card">
           <CardHeader className="tour-header">
             <div className="tour-header-content">
@@ -658,7 +609,6 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
                   />
                 </div>
               </div>
-              
               <div className="tour-controls">
                 <Button
                   variant="ghost"
@@ -668,8 +618,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
                 >
                   {isPlaying ? <Pause size={14} /> : <Play size={14} />}
                 </Button>
-                
-                {tour.skippable && (
+                {tour.skippable && ()
                   <Button
                     variant="ghost"
                     size="sm"
@@ -680,7 +629,6 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
                     Skip
                   </Button>
                 )}
-                
                 <Button
                   variant="ghost"
                   size="icon"
@@ -692,15 +640,13 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
               </div>
             </div>
           </CardHeader>
-
           <CardContent className="tour-content">
             <div className="tour-step-content">
               <h3 className="tour-step-title">{currentStep.title}</h3>
               <div className="tour-step-body">
                 {currentStep.content}
               </div>
-              
-              {currentStep.action && (
+              {currentStep.action && ()
                 <div className="tour-step-action">
                   <Badge variant="outline" className="tour-action-badge">
                     {currentStep.action === 'click' && 'Click the highlighted element'}
@@ -711,7 +657,6 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
                 </div>
               )}
             </div>
-            
             <div className="tour-navigation">
               <Button
                 variant="outline"
@@ -722,9 +667,8 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
                 <ChevronLeft size={14} />
                 Previous
               </Button>
-              
               <div className="tour-step-indicators">
-                {tour.steps.map((_, index) => (
+                {tour.steps.map((_, index) => ()
                   <button
                     key={index}
                     className={`tour-step-indicator ${index === currentStepIndex ? 'active' : ''} ${index < currentStepIndex ? 'completed' : ''}`}
@@ -733,7 +677,6 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
                   />
                 ))}
               </div>
-              
               <Button
                 variant={isLastStep ? 'primary' : 'outline'}
                 onClick={nextStep}
@@ -761,7 +704,7 @@ export interface HelpHubProps {
   className?: string;
 }
 
-export const HelpHub: React.FC<HelpHubProps> = ({
+export const HelpHub: React.FC<HelpHubProps> = ({)
   tours,
   content,
   context,
@@ -770,35 +713,31 @@ export const HelpHub: React.FC<HelpHubProps> = ({
   className = ''
 }) => {
   const [activeTab, setActiveTab] = useState<'getting-started' | 'tutorials' | 'guides' | 'faq'>('getting-started');
-
   const suggestedTours = useMemo(() => {
-    return tours.filter(tour => {
+    return tours.filter(tour => {)
       // Filter based on user experience and completed tours
       const isCompleted = context.completedTours?.includes(tour.id);
       const matchesExperience = !context.userExperience || tour.difficulty === context.userExperience;
       return !isCompleted && matchesExperience;
     }).slice(0, 3);
   }, [tours, context]);
-
   const suggestedContent = useMemo(() => {
-    return content.filter(item => {
+    return content.filter(item => {)
       const matchesExperience = !context.userExperience || item.difficulty === context.userExperience;
-      const isRelevant = item.tags.some(tag => 
+      const isRelevant = item.tags.some(tag => ;)
         tag.toLowerCase().includes(context.currentPage.toLowerCase())
       );
       return matchesExperience && (isRelevant || item.category === 'getting-started');
     }).slice(0, 6);
   }, [content, context]);
-
-  return (
-    <div className={`help-hub ${className}`}>
+  return ()
+    <div className={`help-hub ${className}`}>}
       <Card className="help-hub-card">
         <CardHeader>
           <CardTitle className="help-hub-title">
             <Lightbulb size={18} />
             Help Center
           </CardTitle>
-          
           <div className="help-hub-tabs">
             <Button
               variant={activeTab === 'getting-started' ? 'primary' : 'ghost'}
@@ -830,9 +769,8 @@ export const HelpHub: React.FC<HelpHubProps> = ({
             </Button>
           </div>
         </CardHeader>
-
         <CardContent className="help-hub-content">
-          {activeTab === 'getting-started' && (
+          {activeTab === 'getting-started' && ()
             <div className="help-getting-started">
               <div className="help-section">
                 <h3 className="help-section-title">
@@ -840,7 +778,7 @@ export const HelpHub: React.FC<HelpHubProps> = ({
                   Recommended Tours
                 </h3>
                 <div className="help-tours-grid">
-                  {suggestedTours.map(tour => (
+                  {suggestedTours.map(tour => ()
                     <div key={tour.id} className="help-tour-card">
                       <div className="help-tour-header">
                         <Badge variant={tour.difficulty === 'beginner' ? 'secondary' : 
@@ -866,14 +804,13 @@ export const HelpHub: React.FC<HelpHubProps> = ({
                   ))}
                 </div>
               </div>
-
               <div className="help-section">
                 <h3 className="help-section-title">
                   <Star size={16} />
                   Popular Articles
                 </h3>
                 <div className="help-content-grid">
-                  {suggestedContent.map(item => (
+                  {suggestedContent.map(item => ()
                     <div
                       key={item.id}
                       className="help-content-card"
@@ -889,7 +826,7 @@ export const HelpHub: React.FC<HelpHubProps> = ({
                         <p className="help-content-card-description">{item.description}</p>
                         <div className="help-content-card-meta">
                           <Badge variant="outline" size="sm">{item.difficulty}</Badge>
-                          {item.estimatedReadTime && (
+                          {item.estimatedReadTime && ()
                             <span className="help-content-card-time">
                               {item.estimatedReadTime} min read
                             </span>
@@ -902,13 +839,12 @@ export const HelpHub: React.FC<HelpHubProps> = ({
               </div>
             </div>
           )}
-
-          {activeTab === 'tutorials' && (
+          {activeTab === 'tutorials' && ()
             <div className="help-tutorials">
               <div className="help-content-grid">
                 {content
                   .filter(item => item.type === 'tutorial')
-                  .map(item => (
+                  .map(item => ()
                     <div
                       key={item.id}
                       className="help-content-card"
@@ -924,7 +860,7 @@ export const HelpHub: React.FC<HelpHubProps> = ({
                       <h4 className="help-content-card-title">{item.title}</h4>
                       <p className="help-content-card-description">{item.description}</p>
                       <div className="help-content-card-footer">
-                        {item.estimatedReadTime && (
+                        {item.estimatedReadTime && ()
                           <span className="help-content-card-time">
                             <Clock size={12} />
                             {item.estimatedReadTime} min
@@ -940,13 +876,12 @@ export const HelpHub: React.FC<HelpHubProps> = ({
               </div>
             </div>
           )}
-
-          {activeTab === 'guides' && (
+          {activeTab === 'guides' && ()
             <div className="help-guides">
               <div className="help-content-grid">
                 {content
                   .filter(item => item.type === 'guide')
-                  .map(item => (
+                  .map(item => ()
                     <div
                       key={item.id}
                       className="help-content-card"
@@ -959,7 +894,7 @@ export const HelpHub: React.FC<HelpHubProps> = ({
                       <h4 className="help-content-card-title">{item.title}</h4>
                       <p className="help-content-card-description">{item.description}</p>
                       <div className="help-content-card-tags">
-                        {item.tags.slice(0, 3).map(tag => (
+                        {item.tags.slice(0, 3).map(tag => ()
                           <Badge key={tag} variant="outline" size="sm">{tag}</Badge>
                         ))}
                       </div>
@@ -968,13 +903,12 @@ export const HelpHub: React.FC<HelpHubProps> = ({
               </div>
             </div>
           )}
-
-          {activeTab === 'faq' && (
+          {activeTab === 'faq' && ()
             <div className="help-faq">
               <div className="help-faq-list">
                 {content
                   .filter(item => item.type === 'faq')
-                  .map(item => (
+                  .map(item => ()
                     <div key={item.id} className="help-faq-item">
                       <div className="help-faq-question">
                         <MessageCircle size={16} />
@@ -1008,15 +942,14 @@ export interface QuickHelpProps {
   className?: string;
 }
 
-export const QuickHelp: React.FC<QuickHelpProps> = ({
+export const QuickHelp: React.FC<QuickHelpProps> = ({)
   helpContent,
   onHelpRequest,
   className = ''
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className={`quick-help ${className}`}>
+  return ()
+    <div className={`quick-help ${className}`}>}
       <Button
         variant="primary"
         size="icon"
@@ -1026,8 +959,7 @@ export const QuickHelp: React.FC<QuickHelpProps> = ({
       >
         <HelpCircle size={18} />
       </Button>
-
-      {isOpen && (
+      {isOpen && ()
         <div className="quick-help-popup">
           <Card className="quick-help-card">
             <CardHeader>
@@ -1070,8 +1002,7 @@ export const QuickHelp: React.FC<QuickHelpProps> = ({
                   Take a Tour
                 </Button>
               </div>
-
-              {helpContent.slice(0, 3).map(item => (
+              {helpContent.slice(0, 3).map(item => ()
                 <div key={item.id} className="quick-help-suggestion">
                   <div className="quick-help-suggestion-icon">
                     {item.type === 'video' && <Video size={14} />}

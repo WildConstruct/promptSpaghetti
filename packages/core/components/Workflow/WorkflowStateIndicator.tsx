@@ -10,7 +10,6 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { WorkflowState, WorkflowStateConfig } from '../../types/WorkflowTypes';
-
 interface WorkflowStateIndicatorProps {
   state: WorkflowState;
   stateConfig?: WorkflowStateConfig;
@@ -18,9 +17,8 @@ interface WorkflowStateIndicatorProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
-
 const DEFAULT_STATE_CONFIGS: Record<WorkflowState, WorkflowStateConfig> = {
-  draft: {
+  draft: {,
     id: 'draft',
     name: 'Draft',
     description: 'Work in progress',
@@ -28,9 +26,9 @@ const DEFAULT_STATE_CONFIGS: Record<WorkflowState, WorkflowStateConfig> = {
     icon: 'FileText',
     is_initial: true,
     is_final: false,
-    required_permissions: []
+    required_permissions: [],
   },
-  review: {
+  review: {,
     id: 'review',
     name: 'In Review',
     description: 'Under review',
@@ -38,9 +36,9 @@ const DEFAULT_STATE_CONFIGS: Record<WorkflowState, WorkflowStateConfig> = {
     icon: 'Eye',
     is_initial: false,
     is_final: false,
-    required_permissions: []
+    required_permissions: [],
   },
-  approved: {
+  approved: {,
     id: 'approved',
     name: 'Approved',
     description: 'Approved for publication',
@@ -48,9 +46,9 @@ const DEFAULT_STATE_CONFIGS: Record<WorkflowState, WorkflowStateConfig> = {
     icon: 'CheckCircle',
     is_initial: false,
     is_final: false,
-    required_permissions: []
+    required_permissions: [],
   },
-  published: {
+  published: {,
     id: 'published',
     name: 'Published',
     description: 'Live and public',
@@ -58,9 +56,9 @@ const DEFAULT_STATE_CONFIGS: Record<WorkflowState, WorkflowStateConfig> = {
     icon: 'Globe',
     is_initial: false,
     is_final: true,
-    required_permissions: []
+    required_permissions: [],
   },
-  archived: {
+  archived: {,
     id: 'archived',
     name: 'Archived',
     description: 'No longer active',
@@ -68,9 +66,9 @@ const DEFAULT_STATE_CONFIGS: Record<WorkflowState, WorkflowStateConfig> = {
     icon: 'Archive',
     is_initial: false,
     is_final: true,
-    required_permissions: []
+    required_permissions: [],
   },
-  rejected: {
+  rejected: {,
     id: 'rejected',
     name: 'Rejected',
     description: 'Rejected during review',
@@ -78,10 +76,9 @@ const DEFAULT_STATE_CONFIGS: Record<WorkflowState, WorkflowStateConfig> = {
     icon: 'XCircle',
     is_initial: false,
     is_final: false,
-    required_permissions: []
+    required_permissions: [],
   }
 };
-
 const STATE_ICONS = {
   FileText,
   Eye,
@@ -92,7 +89,6 @@ const STATE_ICONS = {
   Clock,
   AlertCircle
 };
-
 const getStateColors = (color: string) => {
   switch (color) {
     case 'gray':
@@ -100,84 +96,83 @@ const getStateColors = (color: string) => {
         bg: 'bg-gray-100',
         text: 'text-gray-800',
         border: 'border-gray-300',
-        icon: 'text-gray-600'
+        icon: 'text-gray-600',
       };
     case 'yellow':
       return {
         bg: 'bg-yellow-100',
         text: 'text-yellow-800',
         border: 'border-yellow-300',
-        icon: 'text-yellow-600'
+        icon: 'text-yellow-600',
       };
     case 'green':
       return {
         bg: 'bg-green-100',
         text: 'text-green-800',
         border: 'border-green-300',
-        icon: 'text-green-600'
+        icon: 'text-green-600',
       };
     case 'blue':
       return {
         bg: 'bg-blue-100',
         text: 'text-blue-800',
         border: 'border-blue-300',
-        icon: 'text-blue-600'
+        icon: 'text-blue-600',
       };
     case 'red':
       return {
         bg: 'bg-red-100',
         text: 'text-red-800',
         border: 'border-red-300',
-        icon: 'text-red-600'
+        icon: 'text-red-600',
       };
     case 'purple':
       return {
         bg: 'bg-purple-100',
         text: 'text-purple-800',
         border: 'border-purple-300',
-        icon: 'text-purple-600'
+        icon: 'text-purple-600',
       };
     case 'indigo':
       return {
         bg: 'bg-indigo-100',
         text: 'text-indigo-800',
         border: 'border-indigo-300',
-        icon: 'text-indigo-600'
+        icon: 'text-indigo-600',
       };
     default:
       return {
         bg: 'bg-gray-100',
         text: 'text-gray-800',
         border: 'border-gray-300',
-        icon: 'text-gray-600'
+        icon: 'text-gray-600',
       };
   }
 };
-
 const getSizeClasses = (size: 'sm' | 'md' | 'lg') => {
   switch (size) {
     case 'sm':
       return {
         container: 'px-2 py-1 text-xs',
         icon: 'w-3 h-3',
-        gap: 'space-x-1'
+        gap: 'space-x-1',
       };
     case 'lg':
       return {
         container: 'px-4 py-2 text-base',
         icon: 'w-5 h-5',
-        gap: 'space-x-3'
+        gap: 'space-x-3',
       };
     default: // md
       return {
         container: 'px-3 py-1 text-sm',
         icon: 'w-4 h-4',
-        gap: 'space-x-2'
+        gap: 'space-x-2',
       };
   }
 };
 
-export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({
+export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
   state,
   stateConfig,
   showLabel = true,
@@ -187,27 +182,24 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({
   const config = stateConfig || DEFAULT_STATE_CONFIGS[state];
   const colors = getStateColors(config.color);
   const sizes = getSizeClasses(size);
-
   // Get icon component
   const IconComponent = STATE_ICONS[config.icon as keyof typeof STATE_ICONS] || FileText;
-
   if (!showLabel) {
-    return (
+    return ()
       <div 
         className={`inline-flex items-center justify-center rounded-full border ${colors.bg} ${colors.border} ${sizes.container} ${className}`}
         title={`${config.name}${config.description ? ` - ${config.description}` : ''}`}
       >
-        <IconComponent className={`${sizes.icon} ${colors.icon}`} />
+        <IconComponent className={`${sizes.icon} ${colors.icon}`} />}
       </div>
     );
   }
-
-  return (
+  return ()
     <div 
       className={`inline-flex items-center rounded-full border font-medium ${colors.bg} ${colors.text} ${colors.border} ${sizes.container} ${sizes.gap} ${className}`}
       title={config.description}
     >
-      <IconComponent className={`${sizes.icon} ${colors.icon}`} />
+      <IconComponent className={`${sizes.icon} ${colors.icon}`} />}
       <span>{config.name}</span>
     </div>
   );
@@ -221,16 +213,14 @@ interface WorkflowStateTimelineProps {
   className?: string;
 }
 
-export   const isCurrent = (stateId: WorkflowState) => stateId === currentState;
-
-  return (
-    <div className={`flex items-center space-x-2 ${className}`}>
+export const isCurrent = (stateId: WorkflowState) => stateId === currentState;
+  return ()
+    <div className={`flex items-center space-x-2 ${className}`}>}
       {states.map((state, index) => {
         const isLast = index === states.length - 1;
         const completed = isCompleted(state.id);
         const current = isCurrent(state.id);
-
-        return (
+        return ()
           <React.Fragment key={state.id}>
             <div className="flex flex-col items-center">
               <WorkflowStateIndicator
@@ -240,12 +230,11 @@ export   const isCurrent = (stateId: WorkflowState) => stateId === currentState;
                 size="sm"
                 className={`${current ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
               />
-              <span className={`text-xs mt-1 ${current ? 'font-medium text-gray-900' : 'text-gray-500'}`}>
+              <span className={`text-xs mt-1 ${current ? 'font-medium text-gray-900' : 'text-gray-500'}`}>}
                 {state.name}
               </span>
             </div>
-
-            {!isLast && (
+            {!isLast && ()
               <div className="flex-1 mx-2">
                 <div 
                   className={`h-0.5 ${
@@ -263,7 +252,7 @@ export   const isCurrent = (stateId: WorkflowState) => stateId === currentState;
 
 // Workflow State History Component
 interface WorkflowStateHistoryProps {
-  history: Array<{
+  history: Array<{,
     state: WorkflowState;
     stateConfig?: WorkflowStateConfig;
     timestamp: string;

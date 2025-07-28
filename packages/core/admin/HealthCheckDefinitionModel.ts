@@ -21,13 +21,11 @@ export interface HealthCheckDefinition {
   category: HealthCheckCategory;
   priority: HealthCheckPriority;
   tags: string[];
-  
   // Configuration
   config: HealthCheckConfig;
   validation: ValidationRules;
   execution: ExecutionConfig;
   alerting: AlertingConfig;
-  
   // Metadata
   createdBy: string;
   createdAt: Date;
@@ -424,7 +422,6 @@ export interface ExecutionMetadata {
 
 export class HealthCheckDefinitionBuilder {
   private definition: Partial<HealthCheckDefinition> = {};
-
   constructor(id: string, name: string) {
     this.definition = {
       id,
@@ -436,27 +433,22 @@ export class HealthCheckDefinitionBuilder {
       updatedAt: new Date()
     };
   }
-
   description(desc: string): this {
     this.definition.description = desc;
     return this;
   }
-
   category(cat: HealthCheckCategory): this {
     this.definition.category = cat;
     return this;
   }
-
   priority(pri: HealthCheckPriority): this {
     this.definition.priority = pri;
     return this;
   }
-
   tags(...tags: string[]): this {
     this.definition.tags = [...(this.definition.tags || []), ...tags];
     return this;
   }
-
   httpEndpoint(config: EndpointConfig): this {
     this.definition.config = {
       type: HealthCheckType.HTTP_ENDPOINT,
@@ -468,7 +460,6 @@ export class HealthCheckDefinitionBuilder {
     };
     return this;
   }
-
   databaseQuery(config: QueryConfig): this {
     this.definition.config = {
       type: HealthCheckType.DATABASE_QUERY,
@@ -480,26 +471,25 @@ export class HealthCheckDefinitionBuilder {
     };
     return this;
   }
-
   schedule(cronExpression: string, timezone = 'UTC'): this {
     if (!this.definition.execution) {
       this.definition.execution = {
         triggers: [],
-        environment: {
+        environment: {,
           runtime: RuntimeEnvironment.LOCAL,
           resources: { maxMemory: 256, maxCpu: 50, maxDiskSpace: 100 },
           network: {},
-          storage: {
-            cleanupAfterExecution: true
+          storage: {,
+            cleanupAfterExecution: true,
           }
         },
-        isolation: {
-          sandboxed: false
+        isolation: {,
+          sandboxed: false,
         },
-        cleanup: {
+        cleanup: {,
           enabled: true,
           actions: [],
-          timeout: 5000
+          timeout: 5000,
         }
       };
     }
@@ -507,15 +497,14 @@ export class HealthCheckDefinitionBuilder {
       enabled: true,
       cronExpression,
       timezone,
-      maxConcurrentExecutions: 1
+      maxConcurrentExecutions: 1,
     };
     return this;
   }
-
   alerting(config: Partial<AlertingConfig>): this {
     this.definition.alerting = {
       enabled: true,
-      thresholds: {
+      thresholds: {,
         responseTime: { warning: 5000, critical: 10000, unit: 'ms', evaluationWindow: 300, evaluationMethod: 'average' },
         errorRate: { warning: 5, critical: 10, unit: '%', evaluationWindow: 300, evaluationMethod: 'average' },
         availability: { warning: 95, critical: 90, unit: '%', evaluationWindow: 300, evaluationMethod: 'average' },
@@ -528,23 +517,21 @@ export class HealthCheckDefinitionBuilder {
     };
     return this;
   }
-
   validation(rules: Partial<ValidationRules>): this {
     this.definition.validation = {
       input: { required: [], customValidators: [] },
       output: { expectedFormat: 'json', successConditions: [], warningConditions: [], errorConditions: [] },
       runtime: { maxExecutionTime: 30000, networkAccessRequired: false, fileSystemAccessRequired: false, privilegedAccessRequired: false },
-      security: { 
+      security: { ,
         requiresAuthentication: false, 
         requiredPermissions: [], 
         sensitiveDataHandling: SensitiveDataPolicy.NONE,
-        auditLevel: AuditLevel.BASIC 
+        auditLevel: AuditLevel.BASIC ,
       },
       ...rules
     };
     return this;
   }
-
   parameter(name: string, definition: ParameterDefinition): this {
     if (!this.definition.config) {
       throw new Error('Configuration must be set before adding parameters');
@@ -552,7 +539,6 @@ export class HealthCheckDefinitionBuilder {
     this.definition.config.parameters[name] = definition;
     return this;
   }
-
   dependency(...checkIds: string[]): this {
     if (!this.definition.config) {
       throw new Error('Configuration must be set before adding dependencies');
@@ -560,16 +546,14 @@ export class HealthCheckDefinitionBuilder {
     this.definition.config.dependencies.push(...checkIds);
     return this;
   }
-
   build(): HealthCheckDefinition {
     // Validate required fields
     const required = ['id', 'name', 'description', 'category', 'priority', 'config', 'validation'];
     for (const field of required) {
       if (!this.definition[field as keyof HealthCheckDefinition]) {
-        throw new Error(`Required field '${field}' is missing`);
+        throw new Error(`Required field '${field}' is missing`);}
       }
     }
-
     return this.definition as HealthCheckDefinition;
   }
 }
@@ -719,16 +703,13 @@ export class HealthCheckDefinitionValidator {
   static validate(definition: HealthCheckDefinition): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
-
     // Basic validation
     if (!definition.id || definition.id.length < 3) {
       errors.push('Health check ID must be at least 3 characters long');
     }
-
     if (!definition.name || definition.name.length < 5) {
       errors.push('Health check name must be at least 5 characters long');
     }
-
     // Configuration validation
     if (!definition.config) {
       errors.push('Health check configuration is required');
@@ -740,21 +721,18 @@ export class HealthCheckDefinitionValidator {
         warnings.push('Timeout greater than 5 minutes may impact system performance');
       }
     }
-
     // Validation rules validation
     if (definition.validation) {
       if (definition.validation.runtime.maxExecutionTime > definition.config.timeout) {
         errors.push('Runtime max execution time cannot exceed configuration timeout');
       }
     }
-
     // Schedule validation
     if (definition.execution?.schedule?.cronExpression) {
       if (!this.isValidCronExpression(definition.execution.schedule.cronExpression)) {
         errors.push('Invalid cron expression format');
       }
     }
-
     return {
       isValid: errors.length === 0,
       errors,
@@ -762,13 +740,11 @@ export class HealthCheckDefinitionValidator {
       score: this.calculateValidationScore(errors, warnings)
     };
   }
-
   private static isValidCronExpression(expression: string): boolean {
     // Basic cron expression validation (simplified)
     const parts = expression.trim().split(/\s+/);
     return parts.length === 5 || parts.length === 6;
   }
-
   private static calculateValidationScore(errors: string[], warnings: string[]): number {
     const baseScore = 100;
     const errorDeduction = errors.length * 20;
@@ -788,44 +764,43 @@ export interface ValidationResult {
 // EXAMPLE DEFINITIONS
 // ==========================================
 
-export     
+export 
   // API endpoint check
-  const apiCheck = new HealthCheckDefinitionBuilder('api_health', 'API Health Check')
+  const apiCheck = new HealthCheckDefinitionBuilder('api_health', 'API Health Check');
     .description('Monitors primary API endpoint availability and performance')
     .category(HealthCheckCategory.INTEGRATION)
     .priority(HealthCheckPriority.HIGH)
     .tags('api', 'endpoint', 'availability')
-    .httpEndpoint({
+    .httpEndpoint({)
       url: '/api/health',
       method: 'GET',
       expectedStatusCodes: [200],
       timeout: 10000,
-      responseValidation: {
+      responseValidation: {,
         contentType: ['application/json'],
-        jsonPath: [
+        jsonPath: [,
           { path: '$.status', expectedValue: 'healthy', required: true },
           { path: '$.timestamp', expectedType: 'string', required: true }
         ]
       }
     })
     .schedule('*/2 * * * *') // Every 2 minutes
-    .validation({
-      output: {
+    .validation({)
+      output: {,
         expectedFormat: 'json',
-        successConditions: [
+        successConditions: [,
           { field: 'status', operator: ComparisonOperator.EQUALS, value: 'healthy', description: 'API reports healthy status' }
         ],
         warningConditions: [],
-        errorConditions: []
+        errorConditions: [],
       },
-      runtime: {
+      runtime: {,
         maxExecutionTime: 8000,
         networkAccessRequired: true,
         fileSystemAccessRequired: false,
-        privilegedAccessRequired: false
+        privilegedAccessRequired: false,
       }
     })
     .build();
-
   return [dbCheck, apiCheck];
 };

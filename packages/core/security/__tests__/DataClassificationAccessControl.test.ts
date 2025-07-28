@@ -4,7 +4,6 @@
  * Comprehensive test suite covering RBAC, ABAC, and combined access control
  * for data classification-aware security.
  */
-
 import {
   AccessControlModel,
   RBACModel,
@@ -19,20 +18,17 @@ import {
   ACCESS_CONTROL_MATRIX,
   DataOperation
 } from '../DataClassificationAccessControl';
-
 import { DataClassificationLevel } from '../../types/DataClassification';
 import DataClassificationAccessControlEngine from '../DataClassificationAccessControlEngine';
-
 describe('DataClassificationAccessControl', () => {
   let mockRBACModel: RBACModel;
   let mockABACModel: ABACModel;
   let mockClassificationPolicies: ClassificationAccessPolicy[];
   let accessControlEngine: DataClassificationAccessControlEngine;
-
   beforeEach(() => {
     // Setup mock RBAC model
     mockRBACModel = {
-      roles: [
+      roles: [,
         {
           id: 'role-admin',
           name: 'System Administrator',
@@ -43,12 +39,12 @@ describe('DataClassificationAccessControl', () => {
           constraints: [],
           parentRoles: [],
           isActive: true,
-          metadata: {
+          metadata: {,
             createdBy: 'system',
             createdAt: new Date(),
             lastModified: new Date(),
             approvalRequired: false,
-            riskLevel: 'CRITICAL'
+            riskLevel: 'CRITICAL',
           }
         },
         {
@@ -58,7 +54,7 @@ describe('DataClassificationAccessControl', () => {
           category: 'FUNCTIONAL',
           permissions: ['perm-read', 'perm-analyze'],
           maxClassificationLevel: 'CONFIDENTIAL',
-          constraints: [
+          constraints: [,
             {
               type: 'TIME',
               operator: 'BETWEEN',
@@ -68,12 +64,12 @@ describe('DataClassificationAccessControl', () => {
           ],
           parentRoles: [],
           isActive: true,
-          metadata: {
+          metadata: {,
             createdBy: 'admin',
             createdAt: new Date(),
             lastModified: new Date(),
             approvalRequired: false,
-            riskLevel: 'MEDIUM'
+            riskLevel: 'MEDIUM',
           }
         },
         {
@@ -86,16 +82,16 @@ describe('DataClassificationAccessControl', () => {
           constraints: [],
           parentRoles: [],
           isActive: true,
-          metadata: {
+          metadata: {,
             createdBy: 'admin',
             createdAt: new Date(),
             lastModified: new Date(),
             approvalRequired: false,
-            riskLevel: 'LOW'
+            riskLevel: 'LOW',
           }
         }
       ],
-      permissions: [
+      permissions: [,
         {
           id: 'perm-all',
           name: 'All Operations',
@@ -105,7 +101,7 @@ describe('DataClassificationAccessControl', () => {
           classificationLevels: ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'],
           conditions: [],
           effect: 'ALLOW',
-          priority: 100
+          priority: 100,
         },
         {
           id: 'perm-read',
@@ -116,7 +112,7 @@ describe('DataClassificationAccessControl', () => {
           classificationLevels: ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL'],
           conditions: [],
           effect: 'ALLOW',
-          priority: 50
+          priority: 50,
         },
         {
           id: 'perm-analyze',
@@ -127,18 +123,18 @@ describe('DataClassificationAccessControl', () => {
           classificationLevels: ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL'],
           conditions: [],
           effect: 'ALLOW',
-          priority: 50
+          priority: 50,
         }
       ],
-      roleHierarchy: {
-        hierarchy: [
+      roleHierarchy: {,
+        hierarchy: [,
           {
             level: 1,
             name: 'Administrative',
             description: 'Administrative roles',
             roles: ['role-admin'],
             automaticInheritance: false,
-            maxClassificationAccess: 'RESTRICTED'
+            maxClassificationAccess: 'RESTRICTED',
           },
           {
             level: 2,
@@ -146,12 +142,12 @@ describe('DataClassificationAccessControl', () => {
             description: 'Functional roles',
             roles: ['role-analyst', 'role-viewer'],
             automaticInheritance: true,
-            maxClassificationAccess: 'CONFIDENTIAL'
+            maxClassificationAccess: 'CONFIDENTIAL',
           }
         ],
-        inheritanceRules: []
+        inheritanceRules: [],
       },
-      userRoleAssignments: [
+      userRoleAssignments: [,
         {
           userId: 'user-admin',
           roleId: 'role-admin',
@@ -159,7 +155,7 @@ describe('DataClassificationAccessControl', () => {
           assignedAt: new Date(),
           conditions: [],
           approvals: [],
-          status: 'ACTIVE'
+          status: 'ACTIVE',
         },
         {
           userId: 'user-analyst',
@@ -168,7 +164,7 @@ describe('DataClassificationAccessControl', () => {
           assignedAt: new Date(),
           conditions: [],
           approvals: [],
-          status: 'ACTIVE'
+          status: 'ACTIVE',
         },
         {
           userId: 'user-viewer',
@@ -177,27 +173,26 @@ describe('DataClassificationAccessControl', () => {
           assignedAt: new Date(),
           conditions: [],
           approvals: [],
-          status: 'ACTIVE'
+          status: 'ACTIVE',
         }
       ]
     };
-
     // Setup mock ABAC model
     mockABACModel = {
-      subjects: {
+      subjects: {,
         userId: 'user-test',
         roles: ['role-analyst'],
         clearanceLevel: 'CONFIDENTIAL',
         department: 'Analytics',
         jobTitle: 'Senior Analyst',
-        location: {
+        location: {,
           country: 'US',
           region: 'California',
           city: 'San Francisco',
           timezone: 'America/Los_Angeles',
-          withinApprovedRegions: true
+          withinApprovedRegions: true,
         },
-        device: {
+        device: {,
           deviceId: 'device-123',
           deviceType: 'LAPTOP',
           operatingSystem: 'Windows 11',
@@ -208,13 +203,13 @@ describe('DataClassificationAccessControl', () => {
           registered: true,
           lastSeen: new Date()
         },
-        behaviorProfile: {
+        behaviorProfile: {,
           normalAccessPatterns: [],
           anomalyScore: 5,
           typicalHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
           typicalLocations: ['office'],
           accessFrequency: 'MEDIUM',
-          dataAccessPatterns: {
+          dataAccessPatterns: {,
             PUBLIC: { operations: ['READ'], frequency: 10, timeRanges: [], locations: [], dataTypes: [] },
             INTERNAL: { operations: ['READ'], frequency: 8, timeRanges: [], locations: [], dataTypes: [] },
             CONFIDENTIAL: { operations: ['READ'], frequency: 3, timeRanges: [], locations: [], dataTypes: [] },
@@ -225,9 +220,9 @@ describe('DataClassificationAccessControl', () => {
         certifications: ['ISO27001'],
         lastActivity: new Date(),
         mfaVerified: true,
-        trustLevel: 'HIGH'
+        trustLevel: 'HIGH',
       },
-      objects: {
+      objects: {,
         dataId: 'data-123',
         classification: 'CONFIDENTIAL',
         dataOwner: 'data-owner-1',
@@ -240,9 +235,9 @@ describe('DataClassificationAccessControl', () => {
         businessValue: 'HIGH',
         dataType: 'customer_data',
         sourceSystem: 'CRM',
-        encryptionStatus: 'ENCRYPTED'
+        encryptionStatus: 'ENCRYPTED',
       },
-      actions: {
+      actions: {,
         operation: 'READ',
         purpose: 'analysis',
         urgency: 'ROUTINE',
@@ -250,83 +245,83 @@ describe('DataClassificationAccessControl', () => {
         bulkOperation: false,
         automated: false,
         delegated: false,
-        riskLevel: 'MEDIUM'
+        riskLevel: 'MEDIUM',
       },
-      environment: {
+      environment: {,
         timestamp: new Date(),
-        location: {
+        location: {,
           country: 'US',
           region: 'California',
           city: 'San Francisco',
           timezone: 'America/Los_Angeles',
-          withinApprovedRegions: true
+          withinApprovedRegions: true,
         },
-        network: {
+        network: {,
           ipAddress: '192.168.1.100',
           vpnConnection: true,
           corporateNetwork: true,
           securityLevel: 'SECURED',
           bandwidth: '1Gbps',
-          connectionType: 'VPN'
+          connectionType: 'VPN',
         },
-        securityContext: {
+        securityContext: {,
           authenticationMethod: 'MFA',
           sessionAge: 30, // minutes
           sessionRisk: 10,
           recentSecurityEvents: [],
-          complianceStatus: 'COMPLIANT'
+          complianceStatus: 'COMPLIANT',
         },
         complianceMode: true,
         auditMode: true,
-        emergencyMode: false
+        emergencyMode: false,
       },
-      policies: [
+      policies: [,
         {
           id: 'policy-business-hours',
           name: 'Business Hours Access Policy',
           description: 'Restricts access to business hours for confidential data',
-          target: {
-            subjects: [{
+          target: {,
+            subjects: [{,
               attribute: 'clearanceLevel',
               operator: 'IN',
               value: ['CONFIDENTIAL', 'RESTRICTED']
             }],
-            objects: [{
+            objects: [{,
               attribute: 'classification',
               operator: 'IN',
               value: ['CONFIDENTIAL', 'RESTRICTED']
             }],
-            actions: [{
+            actions: [{,
               attribute: 'operation',
               operator: 'IN',
               value: ['READ', 'WRITE', 'UPDATE']
             }],
-            environment: [{
+            environment: [{,
               attribute: 'timestamp.hours',
               operator: 'BETWEEN',
               value: [8, 18]
             }]
           },
-          rule: {
-            condition: {
+          rule: {,
+            condition: {,
               type: 'SIMPLE',
-              expression: 'business_hours_check'
+              expression: 'business_hours_check',
             }
           },
           effect: 'PERMIT',
-          obligations: [
+          obligations: [,
             {
               id: 'audit-access',
               type: 'AUDIT',
               action: 'log_access',
               parameters: { level: 'detailed' },
-              fulfillmentRequired: true
+              fulfillmentRequired: true,
             }
           ],
           priority: 100,
           enabled: true,
           version: '1.0',
-          metadata: {
+          metadata: {,
             createdBy: 'security-team',
             createdAt: new Date(),
             lastModified: new Date(),
@@ -338,50 +333,49 @@ describe('DataClassificationAccessControl', () => {
         }
       ]
     };
-
     // Setup mock classification policies
     mockClassificationPolicies = [
       {
         id: 'policy-confidential',
         name: 'Confidential Data Policy',
         classification: 'CONFIDENTIAL',
-        accessRules: [
+        accessRules: [,
           {
             id: 'rule-read-confidential',
             operation: 'READ',
-            subjects: {
+            subjects: {,
               roles: ['role-analyst', 'role-admin'],
               clearanceLevel: 'CONFIDENTIAL',
               departments: ['Analytics', 'Security'],
               attributes: {}
             },
-            conditions: [
+            conditions: [,
               {
                 type: 'TEMPORAL',
-                specification: {
+                specification: {,
                   attribute: 'timestamp.hours',
                   operator: 'BETWEEN',
                   value: [8, 18]
                 },
-                required: true
+                required: true,
               }
             ],
             effect: 'ALLOW',
-            requirements: [
+            requirements: [,
               {
                 type: 'MFA',
-                specification: {
+                specification: {,
                   parameters: { method: 'TOTP' },
-                  validation: []
+                  validation: [],
                 },
-                mandatory: true
+                mandatory: true,
               }
             ],
-            priority: 100
+            priority: 100,
           }
         ],
-        handlingRequirements: {
-          storage: {
+        handlingRequirements: {,
+          storage: {,
             encryptionRequired: true,
             encryptionAlgorithm: 'AES-256',
             keyRotationDays: 90,
@@ -389,53 +383,53 @@ describe('DataClassificationAccessControl', () => {
             backupEncryption: true,
             retentionDays: 2555,
             approvedLocations: ['primary-dc', 'backup-dc'],
-            redundancyLevel: 'HIGH'
+            redundancyLevel: 'HIGH',
           },
-          transmission: {
+          transmission: {,
             tlsVersion: 'TLS 1.3',
             certificatePinning: true,
             networkRestrictions: ['corporate-network'],
             loggingLevel: 'COMPREHENSIVE',
             compressionAllowed: false,
-            endToEndEncryption: true
+            endToEndEncryption: true,
           },
-          processing: {
+          processing: {,
             approvedEnvironments: ['production', 'staging'],
             loggingRequired: true,
-            cachingRestrictions: {
+            cachingRestrictions: {,
               allowed: true,
               encryptionRequired: true,
               maxTtlSeconds: 300,
               purgeOnAccess: true,
-              secureEviction: true
+              secureEviction: true,
             },
             thirdPartyProcessing: false,
             isolationRequired: true,
-            auditTrailRequired: true
+            auditTrailRequired: true,
           },
-          access: {
+          access: {,
             authenticationLevel: 'MFA',
             authorizationRequired: true,
             approvalWorkflow: false,
             timeRestrictions: true,
             purposeLimitation: true,
             auditLogging: 'ENHANCED',
-            exportRestrictions: true
+            exportRestrictions: true,
           },
-          monitoring: {
+          monitoring: {,
             alertingEnabled: true,
             anomalyDetection: true,
             alertThreshold: 'MEDIUM',
             realtimeMonitoring: true,
             complianceChecks: true,
-            incidentResponse: true
+            incidentResponse: true,
           }
         },
         exceptions: [],
         approvalWorkflows: [],
         monitoringRequirements: [],
         violationActions: [],
-        metadata: {
+        metadata: {,
           createdBy: 'security-officer',
           createdAt: new Date(),
           lastModified: new Date(),
@@ -446,34 +440,32 @@ describe('DataClassificationAccessControl', () => {
         }
       }
     ];
-
-    accessControlEngine = new DataClassificationAccessControlEngine(
+    accessControlEngine = new DataClassificationAccessControlEngine()
       mockRBACModel,
       mockABACModel,
       mockClassificationPolicies
     );
   });
-
   describe('RBAC Evaluation', () => {
     it('should grant access for user with appropriate role and clearance', async () => {
       const request: AccessRequest = {
         requestId: 'req-001',
         timestamp: new Date(),
-        subject: {
+        subject: {,
           ...mockABACModel.subjects,
           userId: 'user-analyst',
-          clearanceLevel: 'CONFIDENTIAL'
+          clearanceLevel: 'CONFIDENTIAL',
         },
-        object: {
+        object: {,
           ...mockABACModel.objects,
-          classification: 'INTERNAL'
+          classification: 'INTERNAL',
         },
-        action: {
+        action: {,
           ...mockABACModel.actions,
-          operation: 'READ'
+          operation: 'READ',
         },
         environment: mockABACModel.environment,
-        context: {
+        context: {,
           operation: 'read',
           userId: 'user-analyst',
           sessionId: 'session-123',
@@ -481,37 +473,34 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: new Date(),
           source: '192.168.1.100',
-          requestId: 'req-001'
+          requestId: 'req-001',
         }
       };
-
       const rbacDecision = await accessControlEngine.evaluateRBAC(request);
-
       expect(rbacDecision.permitted).toBe(true);
       expect(rbacDecision.matchedRoles).toContain('role-analyst');
       expect(rbacDecision.matchedPermissions.length).toBeGreaterThan(0);
       expect(rbacDecision.denialReasons).toHaveLength(0);
     });
-
     it('should deny access for user without sufficient clearance', async () => {
       const request: AccessRequest = {
         requestId: 'req-002',
         timestamp: new Date(),
-        subject: {
+        subject: {,
           ...mockABACModel.subjects,
           userId: 'user-viewer',
-          clearanceLevel: 'INTERNAL'
+          clearanceLevel: 'INTERNAL',
         },
-        object: {
+        object: {,
           ...mockABACModel.objects,
-          classification: 'RESTRICTED'
+          classification: 'RESTRICTED',
         },
-        action: {
+        action: {,
           ...mockABACModel.actions,
-          operation: 'READ'
+          operation: 'READ',
         },
         environment: mockABACModel.environment,
-        context: {
+        context: {,
           operation: 'read',
           userId: 'user-viewer',
           sessionId: 'session-124',
@@ -519,42 +508,38 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: new Date(),
           source: '192.168.1.100',
-          requestId: 'req-002'
+          requestId: 'req-002',
         }
       };
-
       const rbacDecision = await accessControlEngine.evaluateRBAC(request);
-
       expect(rbacDecision.permitted).toBe(false);
       expect(rbacDecision.denialReasons.length).toBeGreaterThan(0);
     });
-
     it('should enforce time-based constraints', async () => {
       // Create request during non-business hours
       const lateNightTime = new Date();
       lateNightTime.setHours(22, 0, 0, 0); // 10 PM
-
       const request: AccessRequest = {
         requestId: 'req-003',
         timestamp: lateNightTime,
-        subject: {
+        subject: {,
           ...mockABACModel.subjects,
           userId: 'user-analyst',
-          clearanceLevel: 'CONFIDENTIAL'
+          clearanceLevel: 'CONFIDENTIAL',
         },
-        object: {
+        object: {,
           ...mockABACModel.objects,
-          classification: 'CONFIDENTIAL'
+          classification: 'CONFIDENTIAL',
         },
-        action: {
+        action: {,
           ...mockABACModel.actions,
-          operation: 'READ'
+          operation: 'READ',
         },
-        environment: {
+        environment: {,
           ...mockABACModel.environment,
-          timestamp: lateNightTime
+          timestamp: lateNightTime,
         },
-        context: {
+        context: {,
           operation: 'read',
           userId: 'user-analyst',
           sessionId: 'session-125',
@@ -562,37 +547,34 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: lateNightTime,
           source: '192.168.1.100',
-          requestId: 'req-003'
+          requestId: 'req-003',
         }
       };
-
       const rbacDecision = await accessControlEngine.evaluateRBAC(request);
-
       expect(rbacDecision.permitted).toBe(false);
-      expect(rbacDecision.denialReasons).toContain(
+      expect(rbacDecision.denialReasons).toContain()
         expect.stringContaining('constraints not satisfied')
       );
     });
-
     it('should validate access control matrix compliance', async () => {
       const request: AccessRequest = {
         requestId: 'req-004',
         timestamp: new Date(),
-        subject: {
+        subject: {,
           ...mockABACModel.subjects,
           userId: 'user-viewer',
-          clearanceLevel: 'INTERNAL'
+          clearanceLevel: 'INTERNAL',
         },
-        object: {
+        object: {,
           ...mockABACModel.objects,
-          classification: 'CONFIDENTIAL'
+          classification: 'CONFIDENTIAL',
         },
-        action: {
+        action: {,
           ...mockABACModel.actions,
-          operation: 'WRITE'
+          operation: 'WRITE',
         },
         environment: mockABACModel.environment,
-        context: {
+        context: {,
           operation: 'write',
           userId: 'user-viewer',
           sessionId: 'session-126',
@@ -600,19 +582,16 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: new Date(),
           source: '192.168.1.100',
-          requestId: 'req-004'
+          requestId: 'req-004',
         }
       };
-
       const rbacDecision = await accessControlEngine.evaluateRBAC(request);
-
       expect(rbacDecision.permitted).toBe(false);
-      expect(rbacDecision.denialReasons).toContain(
+      expect(rbacDecision.denialReasons).toContain()
         'Operation not permitted by access control matrix'
       );
     });
   });
-
   describe('ABAC Evaluation', () => {
     it('should evaluate subject attributes correctly', async () => {
       const request: AccessRequest = {
@@ -622,7 +601,7 @@ describe('DataClassificationAccessControl', () => {
         object: mockABACModel.objects,
         action: mockABACModel.actions,
         environment: mockABACModel.environment,
-        context: {
+        context: {,
           operation: 'read',
           userId: 'user-test',
           sessionId: 'session-127',
@@ -630,17 +609,14 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: new Date(),
           source: '192.168.1.100',
-          requestId: 'req-005'
+          requestId: 'req-005',
         }
       };
-
       const abacDecision = await accessControlEngine.evaluateABAC(request);
-
       expect(abacDecision.permitted).toBe(true);
       expect(abacDecision.matchedPolicies.length).toBeGreaterThan(0);
       expect(abacDecision.confidence).toBeGreaterThan(0.5);
     });
-
     it('should evaluate environmental constraints', async () => {
       const request: AccessRequest = {
         requestId: 'req-006',
@@ -648,14 +624,14 @@ describe('DataClassificationAccessControl', () => {
         subject: mockABACModel.subjects,
         object: mockABACModel.objects,
         action: mockABACModel.actions,
-        environment: {
+        environment: {,
           ...mockABACModel.environment,
-          securityContext: {
+          securityContext: {,
             ...mockABACModel.environment.securityContext,
-            complianceStatus: 'NON_COMPLIANT'
+            complianceStatus: 'NON_COMPLIANT',
           }
         },
-        context: {
+        context: {,
           operation: 'read',
           userId: 'user-test',
           sessionId: 'session-128',
@@ -663,34 +639,31 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: new Date(),
           source: '192.168.1.100',
-          requestId: 'req-006'
+          requestId: 'req-006',
         }
       };
-
       const abacDecision = await accessControlEngine.evaluateABAC(request);
-
       // Should still permit but with lower confidence
       expect(abacDecision.confidence).toBeLessThan(1.0);
     });
-
     it('should handle classification-specific policies', async () => {
       const request: AccessRequest = {
         requestId: 'req-007',
         timestamp: new Date(),
-        subject: {
+        subject: {,
           ...mockABACModel.subjects,
-          clearanceLevel: 'CONFIDENTIAL'
+          clearanceLevel: 'CONFIDENTIAL',
         },
-        object: {
+        object: {,
           ...mockABACModel.objects,
-          classification: 'CONFIDENTIAL'
+          classification: 'CONFIDENTIAL',
         },
-        action: {
+        action: {,
           ...mockABACModel.actions,
-          operation: 'READ'
+          operation: 'READ',
         },
         environment: mockABACModel.environment,
-        context: {
+        context: {,
           operation: 'read',
           userId: 'user-test',
           sessionId: 'session-129',
@@ -698,42 +671,38 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: new Date(),
           source: '192.168.1.100',
-          requestId: 'req-007'
+          requestId: 'req-007',
         }
       };
-
       const abacDecision = await accessControlEngine.evaluateABAC(request);
-
       expect(abacDecision.matchedPolicies).toContain('policy-confidential');
     });
   });
-
   describe('Combined Decision Making', () => {
     it('should combine RBAC and ABAC decisions correctly', async () => {
       const businessHoursTime = new Date();
       businessHoursTime.setHours(14, 0, 0, 0); // 2 PM
-
       const request: AccessRequest = {
         requestId: 'req-008',
         timestamp: businessHoursTime,
-        subject: {
+        subject: {,
           ...mockABACModel.subjects,
           userId: 'user-analyst',
-          clearanceLevel: 'CONFIDENTIAL'
+          clearanceLevel: 'CONFIDENTIAL',
         },
-        object: {
+        object: {,
           ...mockABACModel.objects,
-          classification: 'CONFIDENTIAL'
+          classification: 'CONFIDENTIAL',
         },
-        action: {
+        action: {,
           ...mockABACModel.actions,
-          operation: 'READ'
+          operation: 'READ',
         },
-        environment: {
+        environment: {,
           ...mockABACModel.environment,
-          timestamp: businessHoursTime
+          timestamp: businessHoursTime,
         },
-        context: {
+        context: {,
           operation: 'read',
           userId: 'user-analyst',
           sessionId: 'session-130',
@@ -741,38 +710,35 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: businessHoursTime,
           source: '192.168.1.100',
-          requestId: 'req-008'
+          requestId: 'req-008',
         }
       };
-
       const decision = await accessControlEngine.evaluateAccess(request);
-
       expect(decision.decision).toBe('PERMIT');
       expect(decision.reason).toContain('Access granted');
       expect(decision.riskLevel).toBeDefined();
       expect(decision.auditRequired).toBeDefined();
       expect(decision.metadata.evaluationTime).toBeGreaterThan(0);
     });
-
     it('should deny access when either RBAC or ABAC fails', async () => {
       const request: AccessRequest = {
         requestId: 'req-009',
         timestamp: new Date(),
-        subject: {
+        subject: {,
           ...mockABACModel.subjects,
           userId: 'user-viewer',
-          clearanceLevel: 'INTERNAL'
+          clearanceLevel: 'INTERNAL',
         },
-        object: {
+        object: {,
           ...mockABACModel.objects,
-          classification: 'RESTRICTED'
+          classification: 'RESTRICTED',
         },
-        action: {
+        action: {,
           ...mockABACModel.actions,
-          operation: 'WRITE'
+          operation: 'WRITE',
         },
         environment: mockABACModel.environment,
-        context: {
+        context: {,
           operation: 'write',
           userId: 'user-viewer',
           sessionId: 'session-131',
@@ -780,37 +746,34 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: new Date(),
           source: '192.168.1.100',
-          requestId: 'req-009'
+          requestId: 'req-009',
         }
       };
-
       const decision = await accessControlEngine.evaluateAccess(request);
-
       expect(decision.decision).toBe('DENY');
       expect(decision.reason).toBeDefined();
       expect(decision.riskLevel).toBe('HIGH');
     });
-
     it('should calculate appropriate risk levels', async () => {
       const request: AccessRequest = {
         requestId: 'req-010',
         timestamp: new Date(),
-        subject: {
+        subject: {,
           ...mockABACModel.subjects,
           userId: 'user-admin',
-          clearanceLevel: 'RESTRICTED'
+          clearanceLevel: 'RESTRICTED',
         },
-        object: {
+        object: {,
           ...mockABACModel.objects,
-          classification: 'RESTRICTED'
+          classification: 'RESTRICTED',
         },
-        action: {
+        action: {,
           ...mockABACModel.actions,
           operation: 'DELETE',
-          riskLevel: 'CRITICAL'
+          riskLevel: 'CRITICAL',
         },
         environment: mockABACModel.environment,
-        context: {
+        context: {,
           operation: 'delete',
           userId: 'user-admin',
           sessionId: 'session-132',
@@ -818,36 +781,33 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: new Date(),
           source: '192.168.1.100',
-          requestId: 'req-010'
+          requestId: 'req-010',
         }
       };
-
       const decision = await accessControlEngine.evaluateAccess(request);
-
       expect(decision.riskLevel).toMatch(/HIGH|CRITICAL/);
       expect(decision.monitoring.length).toBeGreaterThan(0);
       expect(decision.auditRequired).toBe(true);
     });
-
     it('should handle caching correctly', async () => {
       const request: AccessRequest = {
         requestId: 'req-011',
         timestamp: new Date(),
-        subject: {
+        subject: {,
           ...mockABACModel.subjects,
           userId: 'user-analyst',
-          clearanceLevel: 'CONFIDENTIAL'
+          clearanceLevel: 'CONFIDENTIAL',
         },
-        object: {
+        object: {,
           ...mockABACModel.objects,
-          classification: 'INTERNAL'
+          classification: 'INTERNAL',
         },
-        action: {
+        action: {,
           ...mockABACModel.actions,
-          operation: 'READ'
+          operation: 'READ',
         },
         environment: mockABACModel.environment,
-        context: {
+        context: {,
           operation: 'read',
           userId: 'user-analyst',
           sessionId: 'session-133',
@@ -855,61 +815,48 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: new Date(),
           source: '192.168.1.100',
-          requestId: 'req-011'
+          requestId: 'req-011',
         }
       };
-
       // First request
       const decision1 = await accessControlEngine.evaluateAccess(request);
       expect(decision1.metadata.cacheHit).toBe(false);
-
       // Second identical request should hit cache
       const decision2 = await accessControlEngine.evaluateAccess(request);
       expect(decision2.metadata.cacheHit).toBe(true);
     });
   });
-
   describe('Access Control Matrix', () => {
     it('should validate PUBLIC data access permissions', () => {
       const publicMatrix = ACCESS_CONTROL_MATRIX.PUBLIC;
-      
       expect(publicMatrix.READ).toContain('VIEWER');
       expect(publicMatrix.READ).toContain('USER');
       expect(publicMatrix.READ).toContain('ANALYST');
-      
       expect(publicMatrix.WRITE).not.toContain('VIEWER');
       expect(publicMatrix.WRITE).toContain('USER');
-      
       expect(publicMatrix.DELETE).toContain('DATA_OWNER');
       expect(publicMatrix.DELETE).not.toContain('USER');
     });
-
     it('should validate RESTRICTED data access permissions', () => {
       const restrictedMatrix = ACCESS_CONTROL_MATRIX.RESTRICTED;
-      
       expect(restrictedMatrix.READ).toContain('DATA_OWNER');
       expect(restrictedMatrix.READ).toContain('SYSTEM_ADMIN');
       expect(restrictedMatrix.READ).not.toContain('USER');
-      
       expect(restrictedMatrix.EXPORT).toHaveLength(0);
       expect(restrictedMatrix.SHARE).toHaveLength(0);
     });
-
     it('should enforce progressive access restrictions', () => {
       const classifications: DataClassificationLevel[] = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'];
-      
       // Each higher classification should have more restrictions
       for (let i = 1; i < classifications.length; i++) {
         const current = ACCESS_CONTROL_MATRIX[classifications[i]];
         const previous = ACCESS_CONTROL_MATRIX[classifications[i - 1]];
-        
         // Higher classifications should generally have fewer roles with access
         expect(current.READ.length).toBeLessThanOrEqual(previous.READ.length);
         expect(current.WRITE.length).toBeLessThanOrEqual(previous.WRITE.length);
       }
     });
   });
-
   describe('Standard Roles', () => {
     it('should define appropriate clearance levels for standard roles', () => {
       expect(STANDARD_CLASSIFICATION_ROLES.SYSTEM_ADMIN.maxClassification).toBe('RESTRICTED');
@@ -918,13 +865,11 @@ describe('DataClassificationAccessControl', () => {
       expect(STANDARD_CLASSIFICATION_ROLES.USER.maxClassification).toBe('INTERNAL');
       expect(STANDARD_CLASSIFICATION_ROLES.VIEWER.maxClassification).toBe('PUBLIC');
     });
-
     it('should assign appropriate risk levels to roles', () => {
       expect(STANDARD_CLASSIFICATION_ROLES.SYSTEM_ADMIN.riskLevel).toBe('CRITICAL');
       expect(STANDARD_CLASSIFICATION_ROLES.SECURITY_OFFICER.riskLevel).toBe('HIGH');
       expect(STANDARD_CLASSIFICATION_ROLES.VIEWER.riskLevel).toBe('LOW');
     });
-
     it('should categorize roles correctly', () => {
       expect(STANDARD_CLASSIFICATION_ROLES.SYSTEM_ADMIN.category).toBe('SYSTEM');
       expect(STANDARD_CLASSIFICATION_ROLES.DATA_OWNER.category).toBe('DATA_OWNER');
@@ -932,21 +877,20 @@ describe('DataClassificationAccessControl', () => {
       expect(STANDARD_CLASSIFICATION_ROLES.COMPLIANCE_OFFICER.category).toBe('ADMINISTRATIVE');
     });
   });
-
   describe('Error Handling', () => {
     it('should handle invalid user gracefully', async () => {
       const request: AccessRequest = {
         requestId: 'req-012',
         timestamp: new Date(),
-        subject: {
+        subject: {,
           ...mockABACModel.subjects,
           userId: 'non-existent-user',
-          clearanceLevel: 'PUBLIC'
+          clearanceLevel: 'PUBLIC',
         },
         object: mockABACModel.objects,
         action: mockABACModel.actions,
         environment: mockABACModel.environment,
-        context: {
+        context: {,
           operation: 'read',
           userId: 'non-existent-user',
           sessionId: 'session-134',
@@ -954,22 +898,19 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: new Date(),
           source: '192.168.1.100',
-          requestId: 'req-012'
+          requestId: 'req-012',
         }
       };
-
       const decision = await accessControlEngine.evaluateAccess(request);
-
       expect(decision.decision).toBe('DENY');
       expect(decision.riskLevel).toBe('HIGH');
     });
-
     it('should handle malformed requests gracefully', async () => {
       const invalidRequest = {
         requestId: 'req-013',
         timestamp: new Date(),
         // Missing required fields
-        context: {
+        context: {,
           operation: 'read',
           userId: 'user-test',
           sessionId: 'session-135',
@@ -977,12 +918,10 @@ describe('DataClassificationAccessControl', () => {
           environment: 'production',
           timestamp: new Date(),
           source: '192.168.1.100',
-          requestId: 'req-013'
+          requestId: 'req-013',
         }
       } as any;
-
       const decision = await accessControlEngine.evaluateAccess(invalidRequest);
-
       expect(decision.decision).toBe('DENY');
       expect(decision.reason).toContain('system error');
     });

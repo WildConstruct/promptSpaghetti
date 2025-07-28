@@ -6,12 +6,12 @@
  */
 import React from 'react';
 export interface VerificationAnalyticsData {
-    period: {
+    period: {,
         start: Date;
         end: Date;
         label: string;
     };
-    overview: {
+    overview: {,
         totalRequests: number;
         approvedRequests: number;
         rejectedRequests: number;
@@ -19,31 +19,31 @@ export interface VerificationAnalyticsData {
         averageProcessingTime: number;
         approvalRate: number;
     };
-    requestsByType: Array<{
+    requestsByType: Array<{,
         type: string;
         count: number;
         approvalRate: number;
         averageProcessingTime: number;
     }>;
-    processingTrends: Array<{
+    processingTrends: Array<{,
         date: Date;
         requests: number;
         approved: number;
         rejected: number;
         averageTime: number;
     }>;
-    trustScoreDistribution: Array<{
+    trustScoreDistribution: Array<{,
         range: string;
         count: number;
         percentage: number;
     }>;
-    riskAnalysis: {
+    riskAnalysis: {,
         highRiskUsers: number;
         flaggedDocuments: number;
         fraudAttempts: number;
         suspendedAccounts: number;
     };
-    performanceMetrics: {
+    performanceMetrics: {,
         slaCompliance: number;
         qualityScore: number;
         reviewerProductivity: number;

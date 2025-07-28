@@ -4,7 +4,6 @@
  * 
  * Provides real-time constraint validation feedback in the graph editor
  */
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { AlertTriangle, CheckCircle, Info, X, Eye, EyeOff, Settings } from 'lucide-react';
 import { ConstraintValidator } from '../../historical/ConstraintValidator';
@@ -19,7 +18,6 @@ import {
 } from '../../types/UTDG';
 import { Node } from '../../graphSchema';
 import './ConstraintValidationPanel.css';
-
 interface ConstraintValidationPanelProps {
   nodes: Node[];
   utdgNodes?: UTDGNode[];
@@ -30,7 +28,7 @@ interface ConstraintValidationPanelProps {
   onConstraintOverride?: (constraintId: string) => void;
 }
 
-export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps> = ({
+export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps> = ({)
   nodes,
   utdgNodes = [],
   targetEra,
@@ -44,77 +42,67 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
   const [selectedEra, setSelectedEra] = useState<Era | undefined>(targetEra);
   const [showSettings, setShowSettings] = useState(false);
   const [enforcementLevels, setEnforcementLevels] = useState<('strict' | 'warning' | 'suggestion')[]>(['strict', 'warning', 'suggestion']);
-
   // Convert regular nodes to UTDG nodes for validation
   const convertedNodes = useMemo(() => {
     const converted: UTDGNode[] = [...utdgNodes];
-    
     // Convert regular nodes to basic UTDG nodes for validation
-    nodes.forEach(node => {
+    nodes.forEach(node => {)
       if (!utdgNodes.find(un => un.id === node.id)) {
         const utdgNode: UTDGNode = {
           id: node.id,
           type: 'style', // Default type for regular nodes
           content: getNodeContent(node),
-          metadata: {
+          metadata: {,
             era: selectedEra ? [selectedEra] : [HISTORICAL_ERAS.MODERN_EARLY],
             authenticity: 0.5,
             source: 'graph_editor',
             tags: extractTags(node),
             social_class: extractSocialClass(node),
-            daily_use: true
+            daily_use: true,
           },
-          relationships: {
+          relationships: {,
             compatible: node.inputs || [],
             incompatible: [],
-            variations: []
+            variations: [],
           },
-          constraints: []
+          constraints: [],
         };
         converted.push(utdgNode);
       }
     });
-    
     return converted;
   }, [nodes, utdgNodes, selectedEra]);
-
   // Run validation when nodes or era changes
   useEffect(() => {
     if (convertedNodes.length > 0) {
       validator.setEnforcement(enforcementLevels);
-      
-      const result = selectedEra 
+      const result = selectedEra ;
         ? validator.validateForEra(convertedNodes, selectedEra)
         : validator.validateNodes(convertedNodes);
-        
       setValidationResult(result);
     }
   }, [convertedNodes, selectedEra, validator, enforcementLevels]);
-
   const handleNodeClick = (nodeIds: string[]) => {
     onNodeHighlight?.(nodeIds);
   };
-
   const handleConstraintOverride = (constraintId: string) => {
     onConstraintOverride?.(constraintId);
     // Re-run validation after override
     if (convertedNodes.length > 0) {
-      const result = selectedEra 
+      const result = selectedEra ;
         ? validator.validateForEra(convertedNodes, selectedEra)
         : validator.validateNodes(convertedNodes);
       setValidationResult(result);
     }
   };
-
   const handleEnforcementChange = (level: 'strict' | 'warning' | 'suggestion', enabled: boolean) => {
-    const newLevels = enabled 
+    const newLevels = enabled ;
       ? [...enforcementLevels, level]
       : enforcementLevels.filter(l => l !== level);
     setEnforcementLevels(newLevels);
   };
-
   if (!visible) {
-    return (
+    return ()
       <div className="constraint-validation-collapsed">
         <button 
           onClick={onToggleVisibility}
@@ -126,8 +114,7 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="constraint-validation-panel">
       <div className="constraint-panel-header">
         <h3>Historical Constraints</h3>
@@ -148,8 +135,7 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
           </button>
         </div>
       </div>
-
-      {showSettings && (
+      {showSettings && ()
         <div className="constraint-settings">
           <div className="era-selector">
             <label>Target Era:</label>
@@ -161,15 +147,14 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
               }}
             >
               <option value="">All Eras</option>
-              {Object.values(HISTORICAL_ERAS).map(era => (
+              {Object.values(HISTORICAL_ERAS).map(era => ()
                 <option key={era.name} value={era.name}>{era.name}</option>
               ))}
             </select>
           </div>
-          
           <div className="enforcement-settings">
             <label>Enforcement Levels:</label>
-            {(['strict', 'warning', 'suggestion'] as const).map(level => (
+            {(['strict', 'warning', 'suggestion'] as const).map(level => ()
               <label key={level} className="enforcement-checkbox">
                 <input
                   type="checkbox"
@@ -182,17 +167,16 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
           </div>
         </div>
       )}
-
       <div className="constraint-validation-content">
-        {validationResult ? (
+        {validationResult ? ()
           <>
             <div className="validation-summary">
-              {validationResult.valid ? (
+              {validationResult.valid ? ()
                 <div className="validation-status valid">
                   <CheckCircle size={16} />
                   <span>All constraints satisfied</span>
                 </div>
-              ) : (
+              ) : ()
                 <div className="validation-status invalid">
                   <AlertTriangle size={16} />
                   <span>
@@ -202,15 +186,14 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
                 </div>
               )}
             </div>
-
             {/* Violations */}
-            {validationResult.violations.length > 0 && (
+            {validationResult.violations.length > 0 && ()
               <div className="constraint-section violations">
                 <h4>
                   <AlertTriangle size={16} />
                   Constraint Violations
                 </h4>
-                {validationResult.violations.map((violation, index) => (
+                {validationResult.violations.map((violation, index) => ()
                   <ConstraintItem
                     key={`violation-${index}`}
                     type="violation"
@@ -221,15 +204,14 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
                 ))}
               </div>
             )}
-
             {/* Warnings */}
-            {validationResult.warnings.length > 0 && (
+            {validationResult.warnings.length > 0 && ()
               <div className="constraint-section warnings">
                 <h4>
                   <Info size={16} />
                   Historical Warnings
                 </h4>
-                {validationResult.warnings.map((warning, index) => (
+                {validationResult.warnings.map((warning, index) => ()
                   <ConstraintItem
                     key={`warning-${index}`}
                     type="warning"
@@ -240,15 +222,14 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
                 ))}
               </div>
             )}
-
             {/* Suggestions */}
-            {validationResult.suggestions.length > 0 && (
+            {validationResult.suggestions.length > 0 && ()
               <div className="constraint-section suggestions">
                 <h4>
                   <Info size={16} />
                   Improvement Suggestions
                 </h4>
-                {validationResult.suggestions.map((suggestion, index) => (
+                {validationResult.suggestions.map((suggestion, index) => ()
                   <ConstraintItem
                     key={`suggestion-${index}`}
                     type="suggestion"
@@ -260,7 +241,7 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
               </div>
             )}
           </>
-        ) : (
+        ) : ()
           <div className="validation-placeholder">
             <Info size={16} />
             <span>Add nodes to validate historical constraints</span>
@@ -270,15 +251,13 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
     </div>
   );
 };
-
 interface ConstraintItemProps {
   type: 'violation' | 'warning' | 'suggestion';
   constraint: ConstraintViolation | ConstraintWarning | ConstraintSuggestion;
   onNodeClick?: (nodeIds: string[]) => void;
   onOverride?: (constraintId: string) => void;
 }
-
-const ConstraintItem: React.FC<ConstraintItemProps> = ({
+const ConstraintItem: React.FC<ConstraintItemProps> = ({)
   type,
   constraint,
   onNodeClick,
@@ -291,19 +270,17 @@ const ConstraintItem: React.FC<ConstraintItemProps> = ({
     case 'suggestion': return <CheckCircle size={14} />;
     }
   };
-
   const getSeverityClass = () => {
     if (type === 'violation') return 'severity-high';
     if (type === 'warning') return 'severity-medium';
     return 'severity-low';
   };
-
-  return (
-    <div className={`constraint-item ${type} ${getSeverityClass()}`}>
+  return ()
+    <div className={`constraint-item ${type} ${getSeverityClass()}`}>}
       <div className="constraint-item-header">
         {getIcon()}
         <span className="constraint-message">{constraint.message}</span>
-        {type === 'violation' && onOverride && (
+        {type === 'violation' && onOverride && ()
           <button 
             className="constraint-override-btn"
             onClick={() => onOverride(constraint.constraint_id)}
@@ -313,12 +290,11 @@ const ConstraintItem: React.FC<ConstraintItemProps> = ({
           </button>
         )}
       </div>
-      
       <div className="constraint-item-details">
-        {constraint.node_ids.length > 0 && (
+        {constraint.node_ids.length > 0 && ()
           <div className="affected-nodes">
             <span>Affects: </span>
-            {constraint.node_ids.map((nodeId, index) => (
+            {constraint.node_ids.map((nodeId, index) => ()
               <button
                 key={nodeId}
                 className="node-reference"
@@ -330,18 +306,16 @@ const ConstraintItem: React.FC<ConstraintItemProps> = ({
             ))}
           </div>
         )}
-        
-        {'historical_context' in constraint && constraint.historical_context && (
+        {'historical_context' in constraint && constraint.historical_context && ()
           <div className="historical-context">
             <strong>Historical Context:</strong> {constraint.historical_context}
           </div>
         )}
-        
-        {'suggested_alternatives' in constraint && constraint.suggested_alternatives && (
+        {'suggested_alternatives' in constraint && constraint.suggested_alternatives && ()
           <div className="suggested-alternatives">
             <strong>Suggestions:</strong>
             <ul>
-              {constraint.suggested_alternatives.map((alt, index) => (
+              {constraint.suggested_alternatives.map((alt, index) => ()
                 <li key={index}>{alt}</li>
               ))}
             </ul>
@@ -358,14 +332,12 @@ function getNodeContent(node: Node): string {
     return node.choices.map(c => typeof c === 'string' ? c : c.value).join(', ');
   }
   if (node.type === 'SetVariable') {
-    return `${node.key} = ${node.value}`;
+    return `${node.key} = ${node.value}`;}
   }
   return node.type;
 }
-
 function extractTags(node: Node): string[] {
   const tags: string[] = [node.type.toLowerCase()];
-  
   if (node.type === 'SetVariable' && node.key) {
     const key = node.key.toLowerCase();
     if (key.includes('medieval')) tags.push('medieval');
@@ -374,10 +346,8 @@ function extractTags(node: Node): string[] {
     if (key.includes('noble')) tags.push('noble');
     if (key.includes('peasant')) tags.push('peasant');
   }
-  
   return tags;
 }
-
 function extractSocialClass(node: Node): ('peasant' | 'artisan' | 'merchant' | 'noble' | 'clergy' | 'royal')[] | undefined {
   if (node.type === 'SetVariable' && node.key) {
     const key = node.key.toLowerCase();

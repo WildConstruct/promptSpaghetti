@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-
 interface PerformanceMetrics {
   total_rules: number;
   active_rules: number;
   total_executions: number;
   average_execution_time: number;
   error_rate: number;
-  most_used_rules: Array<{
+  most_used_rules: Array<{,
     rule_id: number;
     rule_name: string;
     total_applications: number;
@@ -24,7 +23,7 @@ interface PerformanceMetrics {
     usage_trend: 'increasing' | 'decreasing' | 'stable';
     performance_trend: 'improving' | 'degrading' | 'stable';
   }>;
-  performance_trends: Array<{
+  performance_trends: Array<{,
     date: string;
     executions: number;
     avg_time: number;
@@ -50,13 +49,12 @@ interface PerformanceMetrics {
   good_rules: number;
   poor_rules: number;
 }
-
 interface CorrectionsStatsDashboardProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps> = ({ 
+export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps> = ({ )
   isOpen, 
   onClose 
 }) => {
@@ -65,18 +63,15 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
   const [error, setError] = useState<string | null>(null);
   const [selectedPeriod, setSelectedPeriod] = useState<'7' | '30' | '90'>('30');
   const [_____selectedView, _____setSelectedView] = useState<'overview' | 'rules' | 'trends' | 'effectiveness'>('overview');
-
   useEffect(() => {
     if (isOpen) {
       fetchMetrics();
     }
   }, [isOpen, selectedPeriod]);
-
   const fetchMetrics = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/corrections/stats?days=${selectedPeriod}`);
-      
+      const response = await fetch(`/api/corrections/stats?days=${selectedPeriod}`);}
       if (response.ok) {
         const data = await response.json();
         setMetrics(data.data);
@@ -90,10 +85,8 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
       setLoading(false);
     }
   };
-
   if (!isOpen) return null;
-
-  return (
+  return ()
     <div
       style={{
         position: 'fixed',
@@ -105,7 +98,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 1001
+        zIndex: 1001,
       }}
     >
       <div
@@ -117,14 +110,14 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
           maxWidth: '800px',
           maxHeight: '90vh',
           overflow: 'auto',
-          color: '#fff'
+          color: '#fff',
         }}
       >
         <div style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center',
-          marginBottom: '24px'
+          marginBottom: '24px',
         }}>
           <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>
             Corrections Statistics
@@ -139,7 +132,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 color: '#fff',
                 border: '1px solid #444',
                 borderRadius: '4px',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             >
               <option value="7">Last 7 days</option>
@@ -161,38 +154,35 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
             </button>
           </div>
         </div>
-
-        {loading && (
+        {loading && ()
           <div style={{ 
             display: 'flex', 
             justifyContent: 'center', 
             alignItems: 'center',
             height: '200px',
-            color: '#a0aec0'
+            color: '#a0aec0',
           }}>
             Loading statistics...
           </div>
         )}
-
-        {error && (
+        {error && ()
           <div style={{ 
             background: '#fed7d7', 
             color: '#c53030', 
             padding: '12px',
             borderRadius: '6px',
-            marginBottom: '16px'
+            marginBottom: '16px',
           }}>
             {error}
           </div>
         )}
-
-        {metrics && !loading && (
+        {metrics && !loading && ()
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {/* Overview Cards */}
             <div style={{ 
               display: 'grid', 
               gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '16px'
+              gap: '16px',
             }}>
               <div style={{
                 background: '#2a2e37',
@@ -210,7 +200,6 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   {metrics.active_rules} active
                 </div>
               </div>
-
               <div style={{
                 background: '#2a2e37',
                 padding: '16px',
@@ -227,7 +216,6 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   Last {selectedPeriod} days
                 </div>
               </div>
-
               <div style={{
                 background: '#2a2e37',
                 padding: '16px',
@@ -244,7 +232,6 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   Per rule application
                 </div>
               </div>
-
               <div style={{
                 background: '#2a2e37',
                 padding: '16px',
@@ -265,7 +252,6 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   {metrics.error_rate > 5 ? 'Needs attention' : 'Good performance'}
                 </div>
               </div>
-
               <div style={{
                 background: '#2a2e37',
                 padding: '16px',
@@ -287,7 +273,6 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   Overall effectiveness
                 </div>
               </div>
-
               <div style={{
                 background: '#2a2e37',
                 padding: '16px',
@@ -309,7 +294,6 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   Average significance
                 </div>
               </div>
-
               <div style={{
                 background: '#2a2e37',
                 padding: '16px',
@@ -330,7 +314,6 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   Text optimization
                 </div>
               </div>
-
               <div style={{
                 background: '#2a2e37',
                 padding: '16px',
@@ -353,7 +336,6 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 </div>
               </div>
             </div>
-
             {/* Most Used Rules */}
             <div>
               <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px' }}>
@@ -363,7 +345,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 background: '#2a2e37', 
                 borderRadius: '8px',
                 border: '1px solid #444',
-                overflow: 'hidden'
+                overflow: 'hidden',
               }}>
                 <div style={{ 
                   display: 'grid', 
@@ -384,7 +366,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   <div>Success Rate</div>
                   <div>Trend</div>
                 </div>
-                {metrics.most_used_rules.slice(0, 10).map((rule) => (
+                {metrics.most_used_rules.slice(0, 10).map((rule) => ()
                   <div
                     key={rule.rule_id}
                     style={{
@@ -393,7 +375,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                       gap: '12px',
                       padding: '12px 16px',
                       borderBottom: '1px solid #444',
-                      fontSize: '14px'
+                      fontSize: '14px',
                     }}
                   >
                     <div style={{ fontWeight: 500 }}>{rule.rule_name}</div>
@@ -421,7 +403,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                       <span style={{ 
                         color: rule.usage_trend === 'increasing' ? '#68d391' : 
                           rule.usage_trend === 'decreasing' ? '#e53e3e' : '#a0aec0',
-                        fontSize: '12px'
+                        fontSize: '12px',
                       }}>
                         {rule.usage_trend === 'increasing' ? '↗' : 
                           rule.usage_trend === 'decreasing' ? '↘' : '→'}
@@ -431,7 +413,6 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 ))}
               </div>
             </div>
-
             {/* Performance Trends */}
             <div>
               <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px' }}>
@@ -441,23 +422,23 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 background: '#2a2e37', 
                 borderRadius: '8px',
                 border: '1px solid #444',
-                padding: '16px'
+                padding: '16px',
               }}>
-                {metrics.performance_trends.length > 0 ? (
+                {metrics.performance_trends.length > 0 ? ()
                   <div style={{ 
                     display: 'grid', 
                     gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
                     gap: '12px',
-                    marginBottom: '16px'
+                    marginBottom: '16px',
                   }}>
-                    {metrics.performance_trends.slice(-7).map((trend) => (
+                    {metrics.performance_trends.slice(-7).map((trend) => ()
                       <div
                         key={trend.date}
                         style={{
                           background: '#1e2228',
                           padding: '12px',
                           borderRadius: '6px',
-                          textAlign: 'center'
+                          textAlign: 'center',
                         }}
                       >
                         <div style={{ fontSize: '12px', color: '#a0aec0', marginBottom: '4px' }}>
@@ -475,7 +456,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                         <div style={{ fontSize: '11px', color: '#9f7aea' }}>
                           I: {trend.impact_rating.toFixed(1)}
                         </div>
-                        {trend.error_count > 0 && (
+                        {trend.error_count > 0 && ()
                           <div style={{ fontSize: '11px', color: '#e53e3e' }}>
                             {trend.error_count} errors
                           </div>
@@ -483,18 +464,17 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                       </div>
                     ))}
                   </div>
-                ) : (
+                ) : ()
                   <div style={{ 
                     color: '#a0aec0', 
                     textAlign: 'center',
-                    padding: '20px'
+                    padding: '20px',
                   }}>
                     No performance data available for the selected period.
                   </div>
                 )}
               </div>
             </div>
-
             {/* Rule Distribution */}
             <div>
               <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px' }}>
@@ -504,7 +484,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 display: 'grid', 
                 gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
                 gap: '16px',
-                marginBottom: '24px'
+                marginBottom: '24px',
               }}>
                 <div style={{
                   background: '#2a2e37',
@@ -528,7 +508,6 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                     <span style={{ fontSize: '12px', color: '#e53e3e' }}>{metrics.low_impact_rules}</span>
                   </div>
                 </div>
-
                 <div style={{
                   background: '#2a2e37',
                   padding: '16px',
@@ -551,7 +530,6 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                     <span style={{ fontSize: '12px', color: '#e53e3e' }}>{metrics.poor_rules}</span>
                   </div>
                 </div>
-
                 <div style={{
                   background: '#2a2e37',
                   padding: '16px',
@@ -574,8 +552,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                     <span style={{ fontSize: '12px', color: '#e53e3e' }}>{metrics.slow_rules}</span>
                   </div>
                 </div>
-
-                {metrics.user_satisfaction_score && (
+                {metrics.user_satisfaction_score && ()
                   <div style={{
                     background: '#2a2e37',
                     padding: '16px',
@@ -600,7 +577,6 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 )}
               </div>
             </div>
-
             {/* Actions */}
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
               <button
@@ -613,7 +589,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   borderRadius: '4px',
                   cursor: 'pointer',
                   fontSize: '14px',
-                  fontWeight: 500
+                  fontWeight: 500,
                 }}
               >
                 Refresh
@@ -628,7 +604,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   borderRadius: '4px',
                   cursor: 'pointer',
                   fontSize: '14px',
-                  fontWeight: 500
+                  fontWeight: 500,
                 }}
               >
                 Close

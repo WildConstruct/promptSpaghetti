@@ -1,7 +1,6 @@
 // packages/core/components/WeightControls/WeightPresets.tsx
 // Preset Weight Patterns for Story 8.3 Task 5
 // Implements preset patterns: Equal, Linear Decrease, Exponential, Custom
-
 import React, { useState } from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 
@@ -50,10 +49,8 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     pattern: (options) => {
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
-      
       const remainingWeight = 100 - 70;
       const otherWeight = Math.round(remainingWeight / (options.length - 1));
-      
       return options.map((_, index) => index === 0 ? 70 : otherWeight);
     }
   },
@@ -67,14 +64,11 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     pattern: (options) => {
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
-      
       const remainingWeight = 100 - 70;
       const otherWeight = Math.round(remainingWeight / (options.length - 1));
-      
       return options.map((_, index) => index === options.length - 1 ? 70 : otherWeight);
     }
   },
-
   // Creative Patterns
   {
     id: 'linear-decrease',
@@ -86,16 +80,13 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     pattern: (options) => {
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
-      
       const weights: number[] = [];
       const totalSteps = options.length;
-      
       for (let i = 0; i < totalSteps; i++) {
         // Linear decrease from high to low
         const weight = Math.round(((totalSteps - i) / totalSteps) * 60 + 10);
         weights.push(weight);
       }
-      
       // Normalize to 100%
       const sum = weights.reduce((a, b) => a + b, 0);
       return weights.map(w => Math.round((w / sum) * 100));
@@ -111,16 +102,13 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     pattern: (options) => {
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
-      
       const weights: number[] = [];
       const totalSteps = options.length;
-      
       for (let i = 0; i < totalSteps; i++) {
         // Linear increase from low to high
         const weight = Math.round(((i + 1) / totalSteps) * 60 + 10);
         weights.push(weight);
       }
-      
       // Normalize to 100%
       const sum = weights.reduce((a, b) => a + b, 0);
       return weights.map(w => Math.round((w / sum) * 100));
@@ -137,25 +125,21 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
       if (options.length === 2) return [50, 50];
-      
       const weights: number[] = [];
       const center = (options.length - 1) / 2;
-      
       for (let i = 0; i < options.length; i++) {
         // Gaussian-like distribution
         const distance = Math.abs(i - center);
         const maxDistance = Math.max(center, options.length - 1 - center);
         const normalized = 1 - (distance / maxDistance);
-        const weight = Math.round(normalized * 40 + 10); // 10-50 range
+        const weight = Math.round(normalized * 40 + 10); // 10-50 range;
         weights.push(weight);
       }
-      
       // Normalize to 100%
       const sum = weights.reduce((a, b) => a + b, 0);
       return weights.map(w => Math.round((w / sum) * 100));
     }
   },
-
   // Advanced Patterns
   {
     id: 'exponential-decrease',
@@ -167,15 +151,12 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     pattern: (options) => {
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
-      
       const weights: number[] = [];
-      const base = 0.6; // Exponential decay factor
-      
+      const base = 0.6; // Exponential decay factor;
       for (let i = 0; i < options.length; i++) {
         const weight = Math.round(Math.pow(base, i) * 50 + 5);
         weights.push(weight);
       }
-      
       // Normalize to 100%
       const sum = weights.reduce((a, b) => a + b, 0);
       return weights.map(w => Math.round((w / sum) * 100));
@@ -191,13 +172,11 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     pattern: (options) => {
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
-      
       // Generate Fibonacci numbers
       const fib = [1, 1];
       for (let i = 2; i < options.length; i++) {
         fib[i] = fib[i-1] + fib[i-2];
       }
-      
       // Normalize to 100%
       const sum = fib.slice(0, options.length).reduce((a, b) => a + b, 0);
       return fib.slice(0, options.length).map(f => Math.round((f / sum) * 100));
@@ -213,15 +192,12 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     pattern: (options) => {
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
-      
-      const phi = 1.618033988749; // Golden ratio
+      const phi = 1.618033988749; // Golden ratio;
       const weights: number[] = [];
-      
       for (let i = 0; i < options.length; i++) {
         const weight = Math.round(Math.pow(1/phi, i) * 60 + 5);
         weights.push(weight);
       }
-      
       // Normalize to 100%
       const sum = weights.reduce((a, b) => a + b, 0);
       return weights.map(w => Math.round((w / sum) * 100));
@@ -229,7 +205,7 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
   }
 ];
 
-export const WeightPresets: React.FC<WeightPresetsProps> = ({
+export const WeightPresets: React.FC<WeightPresetsProps> = ({)
   options,
   onApplyPreset,
   onSaveCustomPreset,
@@ -242,60 +218,50 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [customPresetName, setCustomPresetName] = useState('');
   const [customPresetDescription, setCustomPresetDescription] = useState('');
-
   const allPresets = [...BUILT_IN_PRESETS, ...customPresets];
-  
-  const filteredPresets = selectedCategory === 'all' 
+  const filteredPresets = selectedCategory === 'all' ;
     ? allPresets 
     : allPresets.filter(preset => preset.category === selectedCategory);
-
-  const categories = [
+  const categories = [;
     { id: 'all', name: 'All', icon: '📋' },
     { id: 'basic', name: 'Basic', icon: '🎯' },
     { id: 'creative', name: 'Creative', icon: '🎨' },
     { id: 'advanced', name: 'Advanced', icon: '⚙️' },
     { id: 'custom', name: 'Custom', icon: '💾' }
   ];
-
   const handleApplyPreset = (preset: WeightPreset) => {
     const newWeights = preset.pattern(options);
     onApplyPreset(newWeights);
   };
-
   const handleSaveCurrentWeights = () => {
     if (!customPresetName.trim()) return;
-    
     const currentWeights = options.map(opt => opt.weight);
-    
     const newPreset: Omit<WeightPreset, 'id'> = {
       name: customPresetName.trim(),
       description: customPresetDescription.trim() || 'Custom weight pattern',
       category: 'custom',
       pattern: () => [...currentWeights],
-      preview: currentWeights.map(w => `${w}%`).join(' ')
+      preview: currentWeights.map(w => `${w}%`).join(' ')}
     };
-    
     onSaveCustomPreset?.(newPreset);
     setShowSaveDialog(false);
     setCustomPresetName('');
     setCustomPresetDescription('');
   };
-
   const resetToEqual = () => {
     const equalPreset = BUILT_IN_PRESETS.find(p => p.id === 'equal');
     if (equalPreset) {
       handleApplyPreset(equalPreset);
     }
   };
-
   if (compact) {
-    return (
-      <div className={`weight-presets compact ${className}`} style={{
+    return ()
+      <div className={`weight-presets compact ${className}`} style={{}
         display: 'flex',
         gap: '4px',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
       }}>
-        {BUILT_IN_PRESETS.slice(0, 4).map(preset => (
+        {BUILT_IN_PRESETS.slice(0, 4).map(preset => ()
           <button
             key={preset.id}
             onClick={() => handleApplyPreset(preset)}
@@ -310,7 +276,7 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '2px'
+              gap: '2px',
             }}
           >
             {preset.icon} {preset.name}
@@ -326,7 +292,7 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
             border: 'none',
             borderRadius: 3,
             color: 'white',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Reset
@@ -334,19 +300,18 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`weight-presets ${className}`} style={{
+  return ()
+    <div className={`weight-presets ${className}`} style={{}
       background: '#2d3748',
       borderRadius: 6,
       padding: 16,
-      color: '#e2e8f0'
+      color: '#e2e8f0',
     }}>
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 16
+        marginBottom: 16,
       }}>
         <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600 }}>
           Weight Presets
@@ -361,7 +326,7 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
               border: 'none',
               borderRadius: 3,
               color: 'white',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             💾 Save Current
@@ -375,23 +340,22 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
               border: 'none',
               borderRadius: 3,
               color: 'white',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             🔄 Reset
           </button>
         </div>
       </div>
-
       {/* Category Filter */}
-      {showCategories && (
+      {showCategories && ()
         <div style={{
           display: 'flex',
           gap: '4px',
           marginBottom: 12,
-          flexWrap: 'wrap'
+          flexWrap: 'wrap',
         }}>
-          {categories.map(category => (
+          {categories.map(category => ()
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
@@ -405,7 +369,7 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '4px'
+                gap: '4px',
               }}
             >
               {category.icon} {category.name}
@@ -413,14 +377,13 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
           ))}
         </div>
       )}
-
       {/* Preset Grid */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-        gap: '8px'
+        gap: '8px',
       }}>
-        {filteredPresets.map(preset => (
+        {filteredPresets.map(preset => ()
           <button
             key={preset.id}
             onClick={() => handleApplyPreset(preset)}
@@ -447,7 +410,7 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              marginBottom: 4
+              marginBottom: 4,
             }}>
               <span style={{ fontSize: '12px' }}>{preset.icon}</span>
               <span style={{ fontSize: '11px', fontWeight: 600 }}>
@@ -458,15 +421,15 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
               fontSize: '9px',
               color: '#a0aec0',
               marginBottom: 4,
-              lineHeight: 1.3
+              lineHeight: 1.3,
             }}>
               {preset.description}
             </div>
-            {preset.preview && (
+            {preset.preview && ()
               <div style={{
                 fontSize: '8px',
                 color: '#68d391',
-                fontFamily: 'monospace'
+                fontFamily: 'monospace',
               }}>
                 {preset.preview}
               </div>
@@ -474,9 +437,8 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
           </button>
         ))}
       </div>
-
       {/* Save Custom Preset Dialog */}
-      {showSaveDialog && (
+      {showSaveDialog && ()
         <div style={{
           position: 'fixed',
           top: 0,
@@ -487,25 +449,24 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 1000
+          zIndex: 1000,
         }}>
           <div style={{
             background: '#2d3748',
             padding: 20,
             borderRadius: 6,
             border: '1px solid #4a5568',
-            minWidth: 300
+            minWidth: 300,
           }}>
             <h3 style={{ margin: '0 0 16px 0', fontSize: 14 }}>
               Save Custom Preset
             </h3>
-            
             <div style={{ marginBottom: 12 }}>
               <label style={{ 
                 display: 'block', 
                 fontSize: 12, 
                 marginBottom: 4,
-                color: '#a0aec0'
+                color: '#a0aec0',
               }}>
                 Preset Name
               </label>
@@ -521,18 +482,17 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
                   border: '1px solid #718096',
                   borderRadius: 3,
                   color: '#e2e8f0',
-                  fontSize: 12
+                  fontSize: 12,
                 }}
                 autoFocus
               />
             </div>
-            
             <div style={{ marginBottom: 16 }}>
               <label style={{ 
                 display: 'block', 
                 fontSize: 12, 
                 marginBottom: 4,
-                color: '#a0aec0'
+                color: '#a0aec0',
               }}>
                 Description (optional)
               </label>
@@ -548,11 +508,10 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
                   border: '1px solid #718096',
                   borderRadius: 3,
                   color: '#e2e8f0',
-                  fontSize: 12
+                  fontSize: 12,
                 }}
               />
             </div>
-            
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
               <button
                 onClick={() => setShowSaveDialog(false)}
@@ -563,7 +522,7 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
                   borderRadius: 3,
                   color: '#e2e8f0',
                   cursor: 'pointer',
-                  fontSize: 12
+                  fontSize: 12,
                 }}
               >
                 Cancel
@@ -578,7 +537,7 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({
                   borderRadius: 3,
                   color: customPresetName.trim() ? 'white' : '#a0aec0',
                   cursor: customPresetName.trim() ? 'pointer' : 'not-allowed',
-                  fontSize: 12
+                  fontSize: 12,
                 }}
               >
                 Save Preset

@@ -58,7 +58,7 @@ export interface ConfigurationState {
 }
 export interface UseSecurityAlertingConfigReturn {
     state: ConfigurationState;
-    actions: {
+    actions: {,
         updateConfig: (config: Partial<SecurityAlertingConfig>) => void;
         updateEscalationThresholds: (thresholds: Partial<EscalationThresholds>) => void;
         addCorrelationRule: (rule: CorrelationRule) => void;
@@ -71,7 +71,7 @@ export interface UseSecurityAlertingConfigReturn {
         exportConfig: () => string;
         importConfig: (configJson: string) => boolean;
     };
-    utils: {
+    utils: {,
         getConfigDiff: () => Partial<SecurityAlertingConfig>;
         getValidationSummary: () => {
             hasErrors: boolean;
@@ -94,7 +94,7 @@ export interface ConfigRecommendation {
 /**
  * Hook for managing security alerting configuration
  */
-export declare const useSecurityAlertingConfig: (
+export declare const useSecurityAlertingConfig: ()
   initialConfig?: SecurityAlertingConfig,
   options?: UseSecurityAlertingConfigOptions
 ) => UseSecurityAlertingConfigReturn;

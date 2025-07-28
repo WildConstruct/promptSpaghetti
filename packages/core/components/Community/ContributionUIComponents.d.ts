@@ -15,7 +15,7 @@ export interface ContributionFormData {
     difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
     estimatedTime: number;
     prerequisites: string[];
-    resources: Array<{
+    resources: Array<{,
         type: 'link' | 'file' | 'image' | 'video';
         url: string;
         title: string;
@@ -26,7 +26,7 @@ export interface ContributionItem {
     id: string;
     title: string;
     description: string;
-    author: {
+    author: {,
         id: string;
         name: string;
         avatar?: string;

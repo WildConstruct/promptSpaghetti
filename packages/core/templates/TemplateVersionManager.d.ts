@@ -99,7 +99,7 @@ export interface VersionComparisonResult {
     from_version: TemplateVersion;
     to_version: TemplateVersion;
     diff: TemplateDiff;
-    compatibility: {
+    compatibility: {,
         breaking_changes: boolean;
         api_changes: boolean;
         schema_changes: boolean;
@@ -110,25 +110,25 @@ export interface VersionComparisonResult {
     estimated_migration_time: number;
 }
 export interface TemplateDiff {
-    metadata_changes: Array<{
+    metadata_changes: Array<{,
         field: string;
         old_value: any;
         new_value: any;
         change_type: 'added' | 'removed' | 'modified';
     }>;
-    variable_changes: Array<{
+    variable_changes: Array<{,
         variable_id: string;
         change_type: 'added' | 'removed' | 'modified';
         old_variable?: TemplateVariable;
         new_variable?: TemplateVariable;
     }>;
-    customization_changes: Array<{
+    customization_changes: Array<{,
         point_id: string;
         change_type: 'added' | 'removed' | 'modified';
         old_point?: CustomizationPoint;
         new_point?: CustomizationPoint;
     }>;
-    graph_changes: {
+    graph_changes: {,
         nodes_added: number;
         nodes_removed: number;
         nodes_modified: number;
@@ -144,7 +144,7 @@ export declare class TemplateVersionManager {
     private versions;
     private branches;
     constructor(apiClient: any, templateId: string, userId: string);
-    createVersion(template: ProjectTemplate, options?: {
+    createVersion(template: ProjectTemplate, options?: {)
         version_number?: string;
         version_tag?: string;
         title?: string;
@@ -153,11 +153,11 @@ export declare class TemplateVersionManager {
         branch_name?: string;
         compatibility_level?: 'patch' | 'minor' | 'major';
     }): Promise<TemplateVersion>;
-    publishVersion(versionId: string, options?: {
+    publishVersion(versionId: string, options?: {)
         release_notes?: string;
         visibility?: 'private' | 'workspace' | 'public';
     }): Promise<TemplateVersion>;
-    getVersions(options?: {
+    getVersions(options?: {)
         include_drafts?: boolean;
         branch_name?: string;
         limit?: number;
@@ -168,7 +168,7 @@ export declare class TemplateVersionManager {
     }>;
     getVersion(versionId: string): Promise<TemplateVersion>;
     importTemplate(options: TemplateImportOptions): Promise<TemplateImportResult>;
-    importFromGit(gitUrl: string, options: {
+    importFromGit(gitUrl: string, options: {)
         branch?: string;
         commit?: string;
         credentials?: {
@@ -177,7 +177,7 @@ export declare class TemplateVersionManager {
         };
         import_options?: Partial<TemplateImportOptions>;
     }): Promise<TemplateImportResult>;
-    importFromMarketplace(marketplaceId: string, options: {
+    importFromMarketplace(marketplaceId: string, options: {)
         version?: string;
         auto_update?: boolean;
         include_dependencies?: boolean;
@@ -189,7 +189,7 @@ export declare class TemplateVersionManager {
         size: number;
         checksum: string;
     }>;
-    exportVersionHistory(options?: {
+    exportVersionHistory(options?: {)
         branch_name?: string;
         start_version?: string;
         end_version?: string;
@@ -203,13 +203,13 @@ export declare class TemplateVersionManager {
         satisfied: boolean;
         missing: TemplateDependency[];
         conflicts: TemplateConflict[];
-        recommendations: Array<{
+        recommendations: Array<{,
             template_id: string;
             recommended_version: string;
             reason: string;
         }>;
     }>;
-    resolveDependencies(versionId: string, options: {
+    resolveDependencies(versionId: string, options: {)
         auto_install?: boolean;
         update_strategy?: 'conservative' | 'latest' | 'compatible';
     }): Promise<{
@@ -223,7 +223,7 @@ export declare class TemplateVersionManager {
         instructions: string;
         complexity: 'simple' | 'moderate' | 'complex';
         estimated_time: number;
-        breaking_changes: Array<{
+        breaking_changes: Array<{,
             type: string;
             description: string;
             action_required: string;
@@ -246,13 +246,13 @@ export interface TemplateBundle {
     template: TemplateVersion;
     dependencies: TemplateVersion[];
     related_templates: TemplateVersion[];
-    assets: Array<{
+    assets: Array<{,
         type: 'image' | 'document' | 'config' | 'script';
         filename: string;
         data: ArrayBuffer | string;
         mime_type: string;
     }>;
-    documentation: {
+    documentation: {,
         readme: string;
         changelog: string;
         api_docs?: string;

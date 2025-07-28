@@ -128,11 +128,11 @@ export interface PerformanceInsight {
 }
 export interface EffectivenessTrackingExportData {
     algorithmMetrics: RecommendationSystemMetrics[];
-    timeRange: {
+    timeRange: {,
         start: number;
         end: number;
     };
-    summary: {
+    summary: {,
         totalAlgorithms: number;
         bestPerforming: string;
         averageCTR: number;

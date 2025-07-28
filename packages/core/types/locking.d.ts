@@ -84,7 +84,7 @@ export interface LockingStatistics {
     by_user: Record<string, number>;
     avg_lock_duration_minutes: number;
     conflict_rate: number;
-    most_contended_resources: Array<{
+    most_contended_resources: Array<{,
         resource_id: string;
         conflict_count: number;
         avg_wait_time: number;

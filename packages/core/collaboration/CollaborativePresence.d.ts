@@ -5,10 +5,10 @@
 import React from 'react';
 import { UserPresence } from './collaborativeGraphStore';
 interface CollaborativePresenceProps {
-    userCursors: Array<{
+    userCursors: Array<{,
         userId: string;
         user: UserPresence;
-        position: {
+        position: {,
             x: number;
             y: number;
         };

@@ -1,19 +1,16 @@
 // packages/core/components/TemplateDialogs/SaveTemplateDialog.tsx
 // Epic 8.7 Task 6: Template Library - Save Template Dialog
-
 import React, { useState, useCallback } from 'react';
 import { 
   TemplateCategory, 
   TemplateSaveData 
 } from '../../types/TemplateTypes';
-
 interface SaveTemplateDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (templateData: TemplateSaveData) => Promise<{ success: boolean; error?: string }>;
   initialData?: Partial<TemplateSaveData>;
 }
-
 const TEMPLATE_CATEGORIES: Array<{ value: TemplateCategory; label: string }> = [
   { value: 'character', label: 'Character Generation' },
   { value: 'setting', label: 'Setting & Environment' },
@@ -27,13 +24,13 @@ const TEMPLATE_CATEGORIES: Array<{ value: TemplateCategory; label: string }> = [
   { value: 'general', label: 'General Purpose' }
 ];
 
-export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
+export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({)
   isOpen,
   onClose,
   onSave,
   initialData = {}
 }) => {
-  const [formData, setFormData] = useState<TemplateSaveData>({
+  const [formData, setFormData] = useState<TemplateSaveData>({)
     name: initialData.name || '',
     description: initialData.description || '',
     category: initialData.category || 'general',
@@ -41,16 +38,13 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
     isPublic: initialData.isPublic || false,
     includeAnnotations: initialData.includeAnnotations ?? true
   });
-  
   const [tagInput, setTagInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const handleInputChange = useCallback((field: keyof TemplateSaveData, value: Error) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setError(null);
   }, []);
-
   const handleAddTag = useCallback(() => {
     const trimmedTag = tagInput.trim().toLowerCase();
     if (trimmedTag && !formData.tags.includes(trimmedTag)) {
@@ -58,51 +52,43 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
       setTagInput('');
     }
   }, [tagInput, formData.tags, handleInputChange]);
-
   const handleRemoveTag = useCallback((tagToRemove: string) => {
     handleInputChange('tags', formData.tags.filter(tag => tag !== tagToRemove));
   }, [formData.tags, handleInputChange]);
-
   const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleAddTag();
     }
   }, [handleAddTag]);
-
   const handleSave = useCallback(async () => {
     // Validation
     if (!formData.name.trim()) {
       setError('Template name is required');
       return;
     }
-
     if (!formData.description.trim()) {
       setError('Template description is required');
       return;
     }
-
     if (formData.name.trim().length < 3) {
       setError('Template name must be at least 3 characters');
       return;
     }
-
     setIsLoading(true);
     setError(null);
-
     try {
       const result = await onSave(formData);
-      
       if (result.success) {
         onClose();
         // Reset form
-        setFormData({
+        setFormData({)
           name: '',
           description: '',
           category: 'general',
           tags: [],
           isPublic: false,
-          includeAnnotations: true
+          includeAnnotations: true,
         });
         setTagInput('');
       } else {
@@ -114,16 +100,13 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
       setIsLoading(false);
     }
   }, [formData, onSave, onClose]);
-
   const handleCancel = useCallback(() => {
     if (!isLoading) {
       onClose();
     }
   }, [isLoading, onClose]);
-
   if (!isOpen) return null;
-
-  return (
+  return ()
     <div style={{
       position: 'fixed',
       top: 0,
@@ -134,7 +117,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000
+      zIndex: 1000,
     }}>
       <div style={{
         backgroundColor: 'white',
@@ -150,11 +133,10 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
           margin: '0 0 20px 0',
           fontSize: '1.5rem',
           fontWeight: '600',
-          color: '#1f2937'
+          color: '#1f2937',
         }}>
           Save Template
         </h2>
-
         <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
           {/* Template Name */}
           <div style={{ marginBottom: '16px' }}>
@@ -163,7 +145,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
               marginBottom: '4px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#374151'
+              color: '#374151',
             }}>
               Template Name *
             </label>
@@ -179,12 +161,11 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
                 borderRadius: '6px',
                 fontSize: '14px',
                 outline: 'none',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
               }}
               disabled={isLoading}
             />
           </div>
-
           {/* Description */}
           <div style={{ marginBottom: '16px' }}>
             <label style={{
@@ -192,7 +173,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
               marginBottom: '4px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#374151'
+              color: '#374151',
             }}>
               Description *
             </label>
@@ -209,12 +190,11 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
                 fontSize: '14px',
                 outline: 'none',
                 resize: 'vertical',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
               }}
               disabled={isLoading}
             />
           </div>
-
           {/* Category */}
           <div style={{ marginBottom: '16px' }}>
             <label style={{
@@ -222,7 +202,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
               marginBottom: '4px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#374151'
+              color: '#374151',
             }}>
               Category
             </label>
@@ -237,18 +217,17 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
                 fontSize: '14px',
                 outline: 'none',
                 backgroundColor: 'white',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
               }}
               disabled={isLoading}
             >
-              {TEMPLATE_CATEGORIES.map(cat => (
+              {TEMPLATE_CATEGORIES.map(cat => ()
                 <option key={cat.value} value={cat.value}>
                   {cat.label}
                 </option>
               ))}
             </select>
           </div>
-
           {/* Tags */}
           <div style={{ marginBottom: '16px' }}>
             <label style={{
@@ -256,7 +235,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
               marginBottom: '4px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#374151'
+              color: '#374151',
             }}>
               Tags
             </label>
@@ -275,7 +254,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
                     borderRadius: '4px',
                     fontSize: '13px',
                     outline: 'none',
-                    boxSizing: 'border-box'
+                    boxSizing: 'border-box',
                   }}
                   disabled={isLoading}
                 />
@@ -297,10 +276,9 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
                   Add
                 </button>
               </div>
-              
-              {formData.tags.length > 0 && (
+              {formData.tags.length > 0 && ()
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {formData.tags.map(tag => (
+                  {formData.tags.map(tag => ()
                     <span
                       key={tag}
                       style={{
@@ -311,7 +289,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
                         backgroundColor: '#e5e7eb',
                         borderRadius: '12px',
                         fontSize: '12px',
-                        color: '#374151'
+                        color: '#374151',
                       }}
                     >
                       {tag}
@@ -327,7 +305,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
                           padding: '0',
                           marginLeft: '2px',
                           fontSize: '14px',
-                          lineHeight: 1
+                          lineHeight: 1,
                         }}
                       >
                         ×
@@ -338,7 +316,6 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
               )}
             </div>
           </div>
-
           {/* Options */}
           <div style={{ marginBottom: '20px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -354,7 +331,6 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
                   Include annotations (sticky notes, labels, regions)
                 </span>
               </label>
-              
               <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <input
                   type="checkbox"
@@ -369,8 +345,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
               </label>
             </div>
           </div>
-
-          {error && (
+          {error && ()
             <div style={{
               marginBottom: '16px',
               padding: '8px 12px',
@@ -378,12 +353,11 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
               border: '1px solid #fecaca',
               borderRadius: '6px',
               color: '#dc2626',
-              fontSize: '14px'
+              fontSize: '14px',
             }}>
               {error}
             </div>
           )}
-
           {/* Actions */}
           <div style={{
             display: 'flex',
@@ -409,7 +383,6 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
             >
               Cancel
             </button>
-            
             <button
               type="submit"
               disabled={isLoading || !formData.name.trim() || !formData.description.trim()}

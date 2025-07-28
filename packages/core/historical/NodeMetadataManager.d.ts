@@ -29,7 +29,7 @@ export interface NodeTag {
 export interface EraTag {
     id: string;
     name: string;
-    period: {
+    period: {,
         start: number;
         end: number;
     };
@@ -155,11 +155,11 @@ export declare class NodeMetadataManager {
     /**
      * Apply tag inheritance rules
      */
-    applyTagInheritance(
+    applyTagInheritance()
       sourceNodeId: string,
       targetNodeId: string,
       sourceNodeType: string,
-      targetNodeType: string
+      targetNodeType: string,
     ): void;
     /**
      * Evaluate inheritance rule conditions
@@ -194,7 +194,7 @@ export declare class NodeMetadataManager {
         totalTags: number;
         tagsByType: Record<string, number>;
         averageTagsPerNode: number;
-        topTags: {
+        topTags: {,
             value: string;
             count: number;
         }[];

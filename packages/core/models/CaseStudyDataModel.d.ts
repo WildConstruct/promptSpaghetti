@@ -37,25 +37,25 @@ export interface MediaGallery {
     charts: CaseStudyMedia[];
 }
 export interface ROIMetrics {
-    timeSaved: {
+    timeSaved: {,
         hours: number;
         period: 'day' | 'week' | 'month' | 'project';
         description: string;
     };
-    costSavings: {
+    costSavings: {,
         amount: number;
         currency: string;
         period: 'day' | 'week' | 'month' | 'project';
         calculation: string;
     };
-    qualityMetrics: {
+    qualityMetrics: {,
         metric: string;
         before: number | string;
         after: number | string;
         improvement: number;
         unit?: string;
     }[];
-    productivityGains: {
+    productivityGains: {,
         metric: string;
         value: number;
         unit: string;
@@ -78,7 +78,7 @@ export interface PerformanceMetrics {
     efficiency: number;
     errorReduction: number;
     stakeholderSatisfaction: number;
-    beforeAfter: {
+    beforeAfter: {,
         metric: string;
         before: number | string;
         after: number | string;
@@ -99,12 +99,12 @@ export interface TemplateReference {
 }
 export interface TemplateImplementation {
     originalTemplate: TemplateReference;
-    customizations: {
+    customizations: {,
         description: string;
         reasonForChange: string;
         impact: string;
     }[];
-    results: {
+    results: {,
         outputExamples: string[];
         performanceMetrics: Record<string, number>;
         userFeedback: string[];
@@ -123,7 +123,7 @@ export interface CaseStudy {
     industry: IndustryCategory;
     tags: string[];
     difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-    content: {
+    content: {,
         challenge: string;
         solution: string;
         implementation: string;
@@ -137,7 +137,7 @@ export interface CaseStudy {
     templateImplementations: TemplateImplementation[];
     roiMetrics: ROIMetrics;
     performanceMetrics: PerformanceMetrics;
-    author: {
+    author: {,
         userId: string;
         name: string;
         title?: string;
@@ -146,13 +146,13 @@ export interface CaseStudy {
         avatar?: string;
         verified: boolean;
     };
-    collaborators: {
+    collaborators: {,
         userId: string;
         name: string;
         role: string;
         contribution: string;
     }[];
-    engagement: {
+    engagement: {,
         views: number;
         likes: number;
         shares: number;
@@ -161,7 +161,7 @@ export interface CaseStudy {
         helpfulVotes: number;
         followUps: number;
     };
-    moderation: {
+    moderation: {,
         submittedAt: string;
         submittedBy: string;
         reviewedAt?: string;
@@ -171,7 +171,7 @@ export interface CaseStudy {
         featuredAt?: string;
         featuredBy?: string;
     };
-    seo: {
+    seo: {,
         slug: string;
         metaTitle: string;
         metaDescription: string;
@@ -184,7 +184,7 @@ export interface CaseStudy {
     archivedAt?: string;
     version: string;
     previousVersions: string[];
-    config: {
+    config: {,
         allowComments: boolean;
         allowSharing: boolean;
         showAuthor: boolean;
@@ -254,7 +254,7 @@ export interface CaseStudySort {
 export interface CaseStudyQuery {
     filters?: CaseStudyFilter;
     sort?: CaseStudySort;
-    pagination: {
+    pagination: {,
         offset: number;
         limit: number;
     };
@@ -262,23 +262,23 @@ export interface CaseStudyQuery {
 }
 export interface CaseStudyQueryResponse {
     caseStudies: CaseStudy[];
-    pagination: {
+    pagination: {,
         total: number;
         offset: number;
         limit: number;
         hasMore: boolean;
     };
-    aggregations: {
+    aggregations: {,
         totalCaseStudies: number;
-        byType: Array<{
+        byType: Array<{,
             type: CaseStudyType;
             count: number;
         }>;
-        byIndustry: Array<{
+        byIndustry: Array<{,
             industry: IndustryCategory;
             count: number;
         }>;
-        byDifficulty: Array<{
+        byDifficulty: Array<{,
             difficulty: string;
             count: number;
         }>;
@@ -299,35 +299,35 @@ export interface CaseStudyAnalytics {
     templatesDiscovered: number;
     templatePurchases: number;
     implementationAttempts: number;
-    topCountries: Array<{
+    topCountries: Array<{,
         country: string;
         views: number;
     }>;
-    topCities: Array<{
+    topCities: Array<{,
         city: string;
         views: number;
     }>;
-    topReferrers: Array<{
+    topReferrers: Array<{,
         source: string;
         visits: number;
     }>;
-    searchKeywords: Array<{
+    searchKeywords: Array<{,
         keyword: string;
         frequency: number;
     }>;
-    viewsByDay: Array<{
+    viewsByDay: Array<{,
         date: string;
         views: number;
     }>;
-    engagementByWeek: Array<{
+    engagementByWeek: Array<{,
         week: string;
         engagement: number;
     }>;
-    viewsByUserType: Array<{
+    viewsByUserType: Array<{,
         userType: string;
         count: number;
     }>;
-    viewsByIndustry: Array<{
+    viewsByIndustry: Array<{,
         industry: string;
         count: number;
     }>;
@@ -342,7 +342,7 @@ export declare const CaseStudyMediaSchema: z.ZodObject<{
     altText: z.ZodOptional<z.ZodString>;
     fileSize: z.ZodOptional<z.ZodNumber>;
     mimeType: z.ZodOptional<z.ZodString>;
-    dimensions: z.ZodOptional<z.ZodObject<{
+    dimensions: z.ZodOptional<z.ZodObject<{,
         width: z.ZodNumber;
         height: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
@@ -391,7 +391,7 @@ export declare const CaseStudyMediaSchema: z.ZodObject<{
     altText?: string | undefined;
 }>;
 export declare const ROIMetricsSchema: z.ZodObject<{
-    timeSaved: z.ZodObject<{
+    timeSaved: z.ZodObject<{,
         hours: z.ZodNumber;
         period: z.ZodEnum<["day", "week", "month", "project"]>;
         description: z.ZodString;
@@ -404,7 +404,7 @@ export declare const ROIMetricsSchema: z.ZodObject<{
         period: "project" | "month" | "week" | "day";
         hours: number;
     }>;
-    costSavings: z.ZodObject<{
+    costSavings: z.ZodObject<{,
         amount: z.ZodNumber;
         currency: z.ZodString;
         period: z.ZodEnum<["day", "week", "month", "project"]>;
@@ -420,7 +420,7 @@ export declare const ROIMetricsSchema: z.ZodObject<{
         currency: string;
         calculation: string;
     }>;
-    qualityMetrics: z.ZodArray<z.ZodObject<{
+    qualityMetrics: z.ZodArray<z.ZodObject<{,
         metric: z.ZodString;
         before: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
         after: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
@@ -439,7 +439,7 @@ export declare const ROIMetricsSchema: z.ZodObject<{
         improvement: number;
         unit?: string | undefined;
     }>, "many">;
-    productivityGains: z.ZodArray<z.ZodObject<{
+    productivityGains: z.ZodArray<z.ZodObject<{,
         metric: z.ZodString;
         value: z.ZodNumber;
         unit: z.ZodString;
@@ -455,7 +455,7 @@ export declare const ROIMetricsSchema: z.ZodObject<{
         metric: string;
         unit: string;
     }>, "many">;
-    claudeMetrics: z.ZodOptional<z.ZodObject<{
+    claudeMetrics: z.ZodOptional<z.ZodObject<{,
         tokensSaved: z.ZodNumber;
         costPerToken: z.ZodNumber;
         totalCostSavings: z.ZodNumber;
@@ -475,25 +475,25 @@ export declare const ROIMetricsSchema: z.ZodObject<{
         consistencyImprovement: number;
     }>>;
 }, "strip", z.ZodTypeAny, {
-    costSavings: {
+    costSavings: {,
         amount: number;
         period: "project" | "month" | "week" | "day";
         currency: string;
         calculation: string;
     };
-    qualityMetrics: {
+    qualityMetrics: {,
         before: string | number;
         after: string | number;
         metric: string;
         improvement: number;
         unit?: string | undefined;
     }[];
-    timeSaved: {
+    timeSaved: {,
         description: string;
         period: "project" | "month" | "week" | "day";
         hours: number;
     };
-    productivityGains: {
+    productivityGains: {,
         description: string;
         value: number;
         metric: string;
@@ -507,25 +507,25 @@ export declare const ROIMetricsSchema: z.ZodObject<{
         consistencyImprovement: number;
     } | undefined;
 }, {
-    costSavings: {
+    costSavings: {,
         amount: number;
         period: "project" | "month" | "week" | "day";
         currency: string;
         calculation: string;
     };
-    qualityMetrics: {
+    qualityMetrics: {,
         before: string | number;
         after: string | number;
         metric: string;
         improvement: number;
         unit?: string | undefined;
     }[];
-    timeSaved: {
+    timeSaved: {,
         description: string;
         period: "project" | "month" | "week" | "day";
         hours: number;
     };
-    productivityGains: {
+    productivityGains: {,
         description: string;
         value: number;
         metric: string;
@@ -584,7 +584,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     industry: z.ZodEnum<["film-production", "advertising", "gaming", "publishing", "education", "healthcare", "finance", "technology", "legal", "consulting", "e-commerce", "non-profit", "other"]>;
     tags: z.ZodArray<z.ZodString, "many">;
     difficulty: z.ZodEnum<["beginner", "intermediate", "advanced", "expert"]>;
-    content: z.ZodObject<{
+    content: z.ZodObject<{,
         challenge: z.ZodString;
         solution: z.ZodString;
         implementation: z.ZodString;
@@ -606,8 +606,8 @@ export declare const CaseStudySchema: z.ZodObject<{
         learnings: string;
         nextSteps?: string | undefined;
     }>;
-    media: z.ZodObject<{
-        featured: z.ZodArray<z.ZodObject<{
+    media: z.ZodObject<{,
+        featured: z.ZodArray<z.ZodObject<{,
             id: z.ZodString;
             type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
             url: z.ZodString;
@@ -617,7 +617,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             altText: z.ZodOptional<z.ZodString>;
             fileSize: z.ZodOptional<z.ZodNumber>;
             mimeType: z.ZodOptional<z.ZodString>;
-            dimensions: z.ZodOptional<z.ZodObject<{
+            dimensions: z.ZodOptional<z.ZodObject<{,
                 width: z.ZodNumber;
                 height: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
@@ -665,7 +665,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }>, "many">;
-        screenshots: z.ZodArray<z.ZodObject<{
+        screenshots: z.ZodArray<z.ZodObject<{,
             id: z.ZodString;
             type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
             url: z.ZodString;
@@ -675,7 +675,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             altText: z.ZodOptional<z.ZodString>;
             fileSize: z.ZodOptional<z.ZodNumber>;
             mimeType: z.ZodOptional<z.ZodString>;
-            dimensions: z.ZodOptional<z.ZodObject<{
+            dimensions: z.ZodOptional<z.ZodObject<{,
                 width: z.ZodNumber;
                 height: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
@@ -723,7 +723,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }>, "many">;
-        videos: z.ZodArray<z.ZodObject<{
+        videos: z.ZodArray<z.ZodObject<{,
             id: z.ZodString;
             type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
             url: z.ZodString;
@@ -733,7 +733,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             altText: z.ZodOptional<z.ZodString>;
             fileSize: z.ZodOptional<z.ZodNumber>;
             mimeType: z.ZodOptional<z.ZodString>;
-            dimensions: z.ZodOptional<z.ZodObject<{
+            dimensions: z.ZodOptional<z.ZodObject<{,
                 width: z.ZodNumber;
                 height: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
@@ -781,7 +781,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }>, "many">;
-        documents: z.ZodArray<z.ZodObject<{
+        documents: z.ZodArray<z.ZodObject<{,
             id: z.ZodString;
             type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
             url: z.ZodString;
@@ -791,7 +791,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             altText: z.ZodOptional<z.ZodString>;
             fileSize: z.ZodOptional<z.ZodNumber>;
             mimeType: z.ZodOptional<z.ZodString>;
-            dimensions: z.ZodOptional<z.ZodObject<{
+            dimensions: z.ZodOptional<z.ZodObject<{,
                 width: z.ZodNumber;
                 height: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
@@ -839,7 +839,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }>, "many">;
-        charts: z.ZodArray<z.ZodObject<{
+        charts: z.ZodArray<z.ZodObject<{,
             id: z.ZodString;
             type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
             url: z.ZodString;
@@ -849,7 +849,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             altText: z.ZodOptional<z.ZodString>;
             fileSize: z.ZodOptional<z.ZodNumber>;
             mimeType: z.ZodOptional<z.ZodString>;
-            dimensions: z.ZodOptional<z.ZodObject<{
+            dimensions: z.ZodOptional<z.ZodObject<{,
                 width: z.ZodNumber;
                 height: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
@@ -898,7 +898,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             altText?: string | undefined;
         }>, "many">;
     }, "strip", z.ZodTypeAny, {
-        featured: {
+        featured: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -916,7 +916,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        charts: {
+        charts: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -934,7 +934,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        documents: {
+        documents: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -952,7 +952,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        screenshots: {
+        screenshots: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -970,7 +970,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        videos: {
+        videos: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -989,7 +989,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             altText?: string | undefined;
         }[];
     }, {
-        featured: {
+        featured: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -1007,7 +1007,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        charts: {
+        charts: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -1025,7 +1025,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        documents: {
+        documents: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -1043,7 +1043,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        screenshots: {
+        screenshots: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -1061,7 +1061,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        videos: {
+        videos: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -1080,7 +1080,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             altText?: string | undefined;
         }[];
     }>;
-    featuredImage: z.ZodOptional<z.ZodObject<{
+    featuredImage: z.ZodOptional<z.ZodObject<{,
         id: z.ZodString;
         type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
         url: z.ZodString;
@@ -1090,7 +1090,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         altText: z.ZodOptional<z.ZodString>;
         fileSize: z.ZodOptional<z.ZodNumber>;
         mimeType: z.ZodOptional<z.ZodString>;
-        dimensions: z.ZodOptional<z.ZodObject<{
+        dimensions: z.ZodOptional<z.ZodObject<{,
             width: z.ZodNumber;
             height: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
@@ -1138,7 +1138,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         thumbnailUrl?: string | undefined;
         altText?: string | undefined;
     }>>;
-    templatesUsed: z.ZodArray<z.ZodObject<{
+    templatesUsed: z.ZodArray<z.ZodObject<{,
         templateId: z.ZodString;
         templateName: z.ZodString;
         templateVersion: z.ZodString;
@@ -1172,8 +1172,8 @@ export declare const CaseStudySchema: z.ZodObject<{
         cost?: number | undefined;
         purchaseDate?: string | undefined;
     }>, "many">;
-    templateImplementations: z.ZodArray<z.ZodObject<{
-        originalTemplate: z.ZodObject<{
+    templateImplementations: z.ZodArray<z.ZodObject<{,
+        originalTemplate: z.ZodObject<{,
             templateId: z.ZodString;
             templateName: z.ZodString;
             templateVersion: z.ZodString;
@@ -1207,7 +1207,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             cost?: number | undefined;
             purchaseDate?: string | undefined;
         }>;
-        customizations: z.ZodArray<z.ZodObject<{
+        customizations: z.ZodArray<z.ZodObject<{,
             description: z.ZodString;
             reasonForChange: z.ZodString;
             impact: z.ZodString;
@@ -1220,7 +1220,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             impact: string;
             reasonForChange: string;
         }>, "many">;
-        results: z.ZodObject<{
+        results: z.ZodObject<{,
             outputExamples: z.ZodArray<z.ZodString, "many">;
             performanceMetrics: z.ZodRecord<z.ZodString, z.ZodNumber>;
             userFeedback: z.ZodArray<z.ZodString, "many">;
@@ -1236,18 +1236,18 @@ export declare const CaseStudySchema: z.ZodObject<{
         lessonsLearned: z.ZodArray<z.ZodString, "many">;
         recommendations: z.ZodArray<z.ZodString, "many">;
     }, "strip", z.ZodTypeAny, {
-        results: {
+        results: {,
             performanceMetrics: Record<string, number>;
             outputExamples: string[];
             userFeedback: string[];
         };
         recommendations: string[];
-        customizations: {
+        customizations: {,
             description: string;
             impact: string;
             reasonForChange: string;
         }[];
-        originalTemplate: {
+        originalTemplate: {,
             templateId: string;
             templateName: string;
             templateCategory: string;
@@ -1261,18 +1261,18 @@ export declare const CaseStudySchema: z.ZodObject<{
         };
         lessonsLearned: string[];
     }, {
-        results: {
+        results: {,
             performanceMetrics: Record<string, number>;
             outputExamples: string[];
             userFeedback: string[];
         };
         recommendations: string[];
-        customizations: {
+        customizations: {,
             description: string;
             impact: string;
             reasonForChange: string;
         }[];
-        originalTemplate: {
+        originalTemplate: {,
             templateId: string;
             templateName: string;
             templateCategory: string;
@@ -1286,8 +1286,8 @@ export declare const CaseStudySchema: z.ZodObject<{
         };
         lessonsLearned: string[];
     }>, "many">;
-    roiMetrics: z.ZodObject<{
-        timeSaved: z.ZodObject<{
+    roiMetrics: z.ZodObject<{,
+        timeSaved: z.ZodObject<{,
             hours: z.ZodNumber;
             period: z.ZodEnum<["day", "week", "month", "project"]>;
             description: z.ZodString;
@@ -1300,7 +1300,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             period: "project" | "month" | "week" | "day";
             hours: number;
         }>;
-        costSavings: z.ZodObject<{
+        costSavings: z.ZodObject<{,
             amount: z.ZodNumber;
             currency: z.ZodString;
             period: z.ZodEnum<["day", "week", "month", "project"]>;
@@ -1316,7 +1316,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             currency: string;
             calculation: string;
         }>;
-        qualityMetrics: z.ZodArray<z.ZodObject<{
+        qualityMetrics: z.ZodArray<z.ZodObject<{,
             metric: z.ZodString;
             before: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
             after: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
@@ -1335,7 +1335,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             improvement: number;
             unit?: string | undefined;
         }>, "many">;
-        productivityGains: z.ZodArray<z.ZodObject<{
+        productivityGains: z.ZodArray<z.ZodObject<{,
             metric: z.ZodString;
             value: z.ZodNumber;
             unit: z.ZodString;
@@ -1351,7 +1351,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             metric: string;
             unit: string;
         }>, "many">;
-        claudeMetrics: z.ZodOptional<z.ZodObject<{
+        claudeMetrics: z.ZodOptional<z.ZodObject<{,
             tokensSaved: z.ZodNumber;
             costPerToken: z.ZodNumber;
             totalCostSavings: z.ZodNumber;
@@ -1371,25 +1371,25 @@ export declare const CaseStudySchema: z.ZodObject<{
             consistencyImprovement: number;
         }>>;
     }, "strip", z.ZodTypeAny, {
-        costSavings: {
+        costSavings: {,
             amount: number;
             period: "project" | "month" | "week" | "day";
             currency: string;
             calculation: string;
         };
-        qualityMetrics: {
+        qualityMetrics: {,
             before: string | number;
             after: string | number;
             metric: string;
             improvement: number;
             unit?: string | undefined;
         }[];
-        timeSaved: {
+        timeSaved: {,
             description: string;
             period: "project" | "month" | "week" | "day";
             hours: number;
         };
-        productivityGains: {
+        productivityGains: {,
             description: string;
             value: number;
             metric: string;
@@ -1403,25 +1403,25 @@ export declare const CaseStudySchema: z.ZodObject<{
             consistencyImprovement: number;
         } | undefined;
     }, {
-        costSavings: {
+        costSavings: {,
             amount: number;
             period: "project" | "month" | "week" | "day";
             currency: string;
             calculation: string;
         };
-        qualityMetrics: {
+        qualityMetrics: {,
             before: string | number;
             after: string | number;
             metric: string;
             improvement: number;
             unit?: string | undefined;
         }[];
-        timeSaved: {
+        timeSaved: {,
             description: string;
             period: "project" | "month" | "week" | "day";
             hours: number;
         };
-        productivityGains: {
+        productivityGains: {,
             description: string;
             value: number;
             metric: string;
@@ -1435,7 +1435,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             consistencyImprovement: number;
         } | undefined;
     }>;
-    performanceMetrics: z.ZodObject<{
+    performanceMetrics: z.ZodObject<{,
         templatesUsed: z.ZodNumber;
         implementationTime: z.ZodNumber;
         projectDuration: z.ZodNumber;
@@ -1444,7 +1444,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         efficiency: z.ZodNumber;
         errorReduction: z.ZodNumber;
         stakeholderSatisfaction: z.ZodNumber;
-        beforeAfter: z.ZodArray<z.ZodObject<{
+        beforeAfter: z.ZodArray<z.ZodObject<{,
             metric: z.ZodString;
             before: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
             after: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
@@ -1469,7 +1469,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         outputQuality: number;
         errorReduction: number;
         stakeholderSatisfaction: number;
-        beforeAfter: {
+        beforeAfter: {,
             before: string | number;
             after: string | number;
             metric: string;
@@ -1484,14 +1484,14 @@ export declare const CaseStudySchema: z.ZodObject<{
         outputQuality: number;
         errorReduction: number;
         stakeholderSatisfaction: number;
-        beforeAfter: {
+        beforeAfter: {,
             before: string | number;
             after: string | number;
             metric: string;
             unit?: string | undefined;
         }[];
     }>;
-    author: z.ZodObject<{
+    author: z.ZodObject<{,
         userId: z.ZodString;
         name: z.ZodString;
         title: z.ZodOptional<z.ZodString>;
@@ -1516,7 +1516,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         profileUrl?: string | undefined;
         avatar?: string | undefined;
     }>;
-    collaborators: z.ZodArray<z.ZodObject<{
+    collaborators: z.ZodArray<z.ZodObject<{,
         userId: z.ZodString;
         name: z.ZodString;
         role: z.ZodString;
@@ -1532,7 +1532,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         role: string;
         contribution: string;
     }>, "many">;
-    engagement: z.ZodObject<{
+    engagement: z.ZodObject<{,
         views: z.ZodNumber;
         likes: z.ZodNumber;
         shares: z.ZodNumber;
@@ -1557,7 +1557,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         shares: number;
         followUps: number;
     }>;
-    moderation: z.ZodObject<{
+    moderation: z.ZodObject<{,
         submittedAt: z.ZodString;
         submittedBy: z.ZodString;
         reviewedAt: z.ZodOptional<z.ZodString>;
@@ -1585,7 +1585,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         featuredAt?: string | undefined;
         featuredBy?: string | undefined;
     }>;
-    seo: z.ZodObject<{
+    seo: z.ZodObject<{,
         slug: z.ZodString;
         metaTitle: z.ZodString;
         metaDescription: z.ZodString;
@@ -1610,7 +1610,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     archivedAt: z.ZodOptional<z.ZodString>;
     version: z.ZodString;
     previousVersions: z.ZodArray<z.ZodString, "many">;
-    config: z.ZodObject<{
+    config: z.ZodObject<{,
         allowComments: z.ZodBoolean;
         allowSharing: z.ZodBoolean;
         showAuthor: z.ZodBoolean;
@@ -1642,7 +1642,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     description: string;
     status: "draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review";
     type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
-    config: {
+    config: {,
         priority: number;
         featured: boolean;
         allowComments: boolean;
@@ -1653,7 +1653,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     };
     tags: string[];
     version: string;
-    author: {
+    author: {,
         name: string;
         userId: string;
         verified: boolean;
@@ -1662,7 +1662,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         profileUrl?: string | undefined;
         avatar?: string | undefined;
     };
-    content: {
+    content: {,
         results: string;
         challenge: string;
         solution: string;
@@ -1672,7 +1672,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     };
     summary: string;
     title: string;
-    performanceMetrics: {
+    performanceMetrics: {,
         efficiency: number;
         templatesUsed: number;
         implementationTime: number;
@@ -1681,7 +1681,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         outputQuality: number;
         errorReduction: number;
         stakeholderSatisfaction: number;
-        beforeAfter: {
+        beforeAfter: {,
             before: string | number;
             after: string | number;
             metric: string;
@@ -1689,8 +1689,8 @@ export declare const CaseStudySchema: z.ZodObject<{
         }[];
     };
     difficulty: "advanced" | "expert" | "intermediate" | "beginner";
-    media: {
-        featured: {
+    media: {,
+        featured: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -1708,7 +1708,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        charts: {
+        charts: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -1726,7 +1726,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        documents: {
+        documents: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -1744,7 +1744,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        screenshots: {
+        screenshots: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -1762,7 +1762,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        videos: {
+        videos: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -1781,7 +1781,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             altText?: string | undefined;
         }[];
     };
-    engagement: {
+    engagement: {,
         bookmarks: number;
         comments: number;
         views: number;
@@ -1790,7 +1790,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         shares: number;
         followUps: number;
     };
-    seo: {
+    seo: {,
         keywords: string[];
         slug: string;
         metaTitle: string;
@@ -1798,7 +1798,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         canonicalUrl?: string | undefined;
     };
     industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
-    moderation: {
+    moderation: {,
         submittedAt: string;
         submittedBy: string;
         reviewedAt?: string | undefined;
@@ -1808,13 +1808,13 @@ export declare const CaseStudySchema: z.ZodObject<{
         featuredAt?: string | undefined;
         featuredBy?: string | undefined;
     };
-    collaborators: {
+    collaborators: {,
         name: string;
         userId: string;
         role: string;
         contribution: string;
     }[];
-    templatesUsed: {
+    templatesUsed: {,
         templateId: string;
         templateName: string;
         templateCategory: string;
@@ -1826,19 +1826,19 @@ export declare const CaseStudySchema: z.ZodObject<{
         cost?: number | undefined;
         purchaseDate?: string | undefined;
     }[];
-    templateImplementations: {
-        results: {
+    templateImplementations: {,
+        results: {,
             performanceMetrics: Record<string, number>;
             outputExamples: string[];
             userFeedback: string[];
         };
         recommendations: string[];
-        customizations: {
+        customizations: {,
             description: string;
             impact: string;
             reasonForChange: string;
         }[];
-        originalTemplate: {
+        originalTemplate: {,
             templateId: string;
             templateName: string;
             templateCategory: string;
@@ -1852,26 +1852,26 @@ export declare const CaseStudySchema: z.ZodObject<{
         };
         lessonsLearned: string[];
     }[];
-    roiMetrics: {
-        costSavings: {
+    roiMetrics: {,
+        costSavings: {,
             amount: number;
             period: "project" | "month" | "week" | "day";
             currency: string;
             calculation: string;
         };
-        qualityMetrics: {
+        qualityMetrics: {,
             before: string | number;
             after: string | number;
             metric: string;
             improvement: number;
             unit?: string | undefined;
         }[];
-        timeSaved: {
+        timeSaved: {,
             description: string;
             period: "project" | "month" | "week" | "day";
             hours: number;
         };
-        productivityGains: {
+        productivityGains: {,
             description: string;
             value: number;
             metric: string;
@@ -1914,7 +1914,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     description: string;
     status: "draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review";
     type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
-    config: {
+    config: {,
         priority: number;
         featured: boolean;
         allowComments: boolean;
@@ -1925,7 +1925,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     };
     tags: string[];
     version: string;
-    author: {
+    author: {,
         name: string;
         userId: string;
         verified: boolean;
@@ -1934,7 +1934,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         profileUrl?: string | undefined;
         avatar?: string | undefined;
     };
-    content: {
+    content: {,
         results: string;
         challenge: string;
         solution: string;
@@ -1944,7 +1944,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     };
     summary: string;
     title: string;
-    performanceMetrics: {
+    performanceMetrics: {,
         efficiency: number;
         templatesUsed: number;
         implementationTime: number;
@@ -1953,7 +1953,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         outputQuality: number;
         errorReduction: number;
         stakeholderSatisfaction: number;
-        beforeAfter: {
+        beforeAfter: {,
             before: string | number;
             after: string | number;
             metric: string;
@@ -1961,8 +1961,8 @@ export declare const CaseStudySchema: z.ZodObject<{
         }[];
     };
     difficulty: "advanced" | "expert" | "intermediate" | "beginner";
-    media: {
-        featured: {
+    media: {,
+        featured: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -1980,7 +1980,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        charts: {
+        charts: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -1998,7 +1998,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        documents: {
+        documents: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -2016,7 +2016,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        screenshots: {
+        screenshots: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -2034,7 +2034,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }[];
-        videos: {
+        videos: {,
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
             title: string;
@@ -2053,7 +2053,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             altText?: string | undefined;
         }[];
     };
-    engagement: {
+    engagement: {,
         bookmarks: number;
         comments: number;
         views: number;
@@ -2062,7 +2062,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         shares: number;
         followUps: number;
     };
-    seo: {
+    seo: {,
         keywords: string[];
         slug: string;
         metaTitle: string;
@@ -2070,7 +2070,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         canonicalUrl?: string | undefined;
     };
     industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
-    moderation: {
+    moderation: {,
         submittedAt: string;
         submittedBy: string;
         reviewedAt?: string | undefined;
@@ -2080,13 +2080,13 @@ export declare const CaseStudySchema: z.ZodObject<{
         featuredAt?: string | undefined;
         featuredBy?: string | undefined;
     };
-    collaborators: {
+    collaborators: {,
         name: string;
         userId: string;
         role: string;
         contribution: string;
     }[];
-    templatesUsed: {
+    templatesUsed: {,
         templateId: string;
         templateName: string;
         templateCategory: string;
@@ -2098,19 +2098,19 @@ export declare const CaseStudySchema: z.ZodObject<{
         cost?: number | undefined;
         purchaseDate?: string | undefined;
     }[];
-    templateImplementations: {
-        results: {
+    templateImplementations: {,
+        results: {,
             performanceMetrics: Record<string, number>;
             outputExamples: string[];
             userFeedback: string[];
         };
         recommendations: string[];
-        customizations: {
+        customizations: {,
             description: string;
             impact: string;
             reasonForChange: string;
         }[];
-        originalTemplate: {
+        originalTemplate: {,
             templateId: string;
             templateName: string;
             templateCategory: string;
@@ -2124,26 +2124,26 @@ export declare const CaseStudySchema: z.ZodObject<{
         };
         lessonsLearned: string[];
     }[];
-    roiMetrics: {
-        costSavings: {
+    roiMetrics: {,
+        costSavings: {,
             amount: number;
             period: "project" | "month" | "week" | "day";
             currency: string;
             calculation: string;
         };
-        qualityMetrics: {
+        qualityMetrics: {,
             before: string | number;
             after: string | number;
             metric: string;
             improvement: number;
             unit?: string | undefined;
         }[];
-        timeSaved: {
+        timeSaved: {,
             description: string;
             period: "project" | "month" | "week" | "day";
             hours: number;
         };
-        productivityGains: {
+        productivityGains: {,
             description: string;
             value: number;
             metric: string;
@@ -2188,7 +2188,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
     industry: z.ZodEnum<["film-production", "advertising", "gaming", "publishing", "education", "healthcare", "finance", "technology", "legal", "consulting", "e-commerce", "non-profit", "other"]>;
     tags: z.ZodArray<z.ZodString, "many">;
     difficulty: z.ZodEnum<["beginner", "intermediate", "advanced", "expert"]>;
-    content: z.ZodObject<{
+    content: z.ZodObject<{,
         challenge: z.ZodString;
         solution: z.ZodString;
         implementation: z.ZodString;
@@ -2210,7 +2210,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
         learnings: string;
         nextSteps?: string | undefined;
     }>;
-    templatesUsed: z.ZodArray<z.ZodObject<Omit<{
+    templatesUsed: z.ZodArray<z.ZodObject<Omit<{,
         templateId: z.ZodString;
         templateName: z.ZodString;
         templateVersion: z.ZodString;
@@ -2240,8 +2240,8 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
         cost?: number | undefined;
         purchaseDate?: string | undefined;
     }>, "many">;
-    roiMetrics: z.ZodOptional<z.ZodObject<{
-        timeSaved: z.ZodOptional<z.ZodObject<{
+    roiMetrics: z.ZodOptional<z.ZodObject<{,
+        timeSaved: z.ZodOptional<z.ZodObject<{,
             hours: z.ZodNumber;
             period: z.ZodEnum<["day", "week", "month", "project"]>;
             description: z.ZodString;
@@ -2254,7 +2254,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             period: "project" | "month" | "week" | "day";
             hours: number;
         }>>;
-        costSavings: z.ZodOptional<z.ZodObject<{
+        costSavings: z.ZodOptional<z.ZodObject<{,
             amount: z.ZodNumber;
             currency: z.ZodString;
             period: z.ZodEnum<["day", "week", "month", "project"]>;
@@ -2270,7 +2270,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             currency: string;
             calculation: string;
         }>>;
-        qualityMetrics: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        qualityMetrics: z.ZodOptional<z.ZodArray<z.ZodObject<{,
             metric: z.ZodString;
             before: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
             after: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
@@ -2289,7 +2289,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             improvement: number;
             unit?: string | undefined;
         }>, "many">>;
-        productivityGains: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        productivityGains: z.ZodOptional<z.ZodArray<z.ZodObject<{,
             metric: z.ZodString;
             value: z.ZodNumber;
             unit: z.ZodString;
@@ -2305,7 +2305,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             metric: string;
             unit: string;
         }>, "many">>;
-        claudeMetrics: z.ZodOptional<z.ZodOptional<z.ZodObject<{
+        claudeMetrics: z.ZodOptional<z.ZodOptional<z.ZodObject<{,
             tokensSaved: z.ZodNumber;
             costPerToken: z.ZodNumber;
             totalCostSavings: z.ZodNumber;
@@ -2389,7 +2389,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             consistencyImprovement: number;
         } | undefined;
     }>>;
-    performanceMetrics: z.ZodOptional<z.ZodObject<{
+    performanceMetrics: z.ZodOptional<z.ZodObject<{,
         templatesUsed: z.ZodOptional<z.ZodNumber>;
         implementationTime: z.ZodOptional<z.ZodNumber>;
         projectDuration: z.ZodOptional<z.ZodNumber>;
@@ -2398,7 +2398,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
         efficiency: z.ZodOptional<z.ZodNumber>;
         errorReduction: z.ZodOptional<z.ZodNumber>;
         stakeholderSatisfaction: z.ZodOptional<z.ZodNumber>;
-        beforeAfter: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        beforeAfter: z.ZodOptional<z.ZodArray<z.ZodObject<{,
             metric: z.ZodString;
             before: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
             after: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
@@ -2445,7 +2445,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             unit?: string | undefined;
         }[] | undefined;
     }>>;
-    collaborators: z.ZodOptional<z.ZodArray<z.ZodObject<{
+    collaborators: z.ZodOptional<z.ZodArray<z.ZodObject<{,
         userId: z.ZodString;
         name: z.ZodString;
         role: z.ZodString;
@@ -2461,7 +2461,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
         role: string;
         contribution: string;
     }>, "many">>;
-    config: z.ZodOptional<z.ZodObject<{
+    config: z.ZodOptional<z.ZodObject<{,
         allowComments: z.ZodOptional<z.ZodBoolean>;
         allowSharing: z.ZodOptional<z.ZodBoolean>;
         showAuthor: z.ZodOptional<z.ZodBoolean>;
@@ -2490,7 +2490,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
     description: string;
     type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
     tags: string[];
-    content: {
+    content: {,
         results: string;
         challenge: string;
         solution: string;
@@ -2501,7 +2501,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
     title: string;
     difficulty: "advanced" | "expert" | "intermediate" | "beginner";
     industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
-    templatesUsed: {
+    templatesUsed: {,
         templateId: string;
         templateVersion: string;
         usageDescription: string;
@@ -2580,7 +2580,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
     description: string;
     type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
     tags: string[];
-    content: {
+    content: {,
         results: string;
         challenge: string;
         solution: string;
@@ -2591,7 +2591,7 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
     title: string;
     difficulty: "advanced" | "expert" | "intermediate" | "beginner";
     industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
-    templatesUsed: {
+    templatesUsed: {,
         templateId: string;
         templateVersion: string;
         usageDescription: string;
@@ -2739,7 +2739,7 @@ export type CaseStudyOutput = z.output<typeof CaseStudySchema>;
 export type CreateCaseStudyInput = z.input<typeof CreateCaseStudyRequestSchema>;
 export type CaseStudyFilterInput = z.input<typeof CaseStudyFilterSchema>;
 declare const _default: {
-    CaseStudySchema: z.ZodObject<{
+    CaseStudySchema: z.ZodObject<{,
         id: z.ZodString;
         title: z.ZodString;
         subtitle: z.ZodOptional<z.ZodString>;
@@ -2750,7 +2750,7 @@ declare const _default: {
         industry: z.ZodEnum<["film-production", "advertising", "gaming", "publishing", "education", "healthcare", "finance", "technology", "legal", "consulting", "e-commerce", "non-profit", "other"]>;
         tags: z.ZodArray<z.ZodString, "many">;
         difficulty: z.ZodEnum<["beginner", "intermediate", "advanced", "expert"]>;
-        content: z.ZodObject<{
+        content: z.ZodObject<{,
             challenge: z.ZodString;
             solution: z.ZodString;
             implementation: z.ZodString;
@@ -2772,8 +2772,8 @@ declare const _default: {
             learnings: string;
             nextSteps?: string | undefined;
         }>;
-        media: z.ZodObject<{
-            featured: z.ZodArray<z.ZodObject<{
+        media: z.ZodObject<{,
+            featured: z.ZodArray<z.ZodObject<{,
                 id: z.ZodString;
                 type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
                 url: z.ZodString;
@@ -2783,7 +2783,7 @@ declare const _default: {
                 altText: z.ZodOptional<z.ZodString>;
                 fileSize: z.ZodOptional<z.ZodNumber>;
                 mimeType: z.ZodOptional<z.ZodString>;
-                dimensions: z.ZodOptional<z.ZodObject<{
+                dimensions: z.ZodOptional<z.ZodObject<{,
                     width: z.ZodNumber;
                     height: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
@@ -2831,7 +2831,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }>, "many">;
-            screenshots: z.ZodArray<z.ZodObject<{
+            screenshots: z.ZodArray<z.ZodObject<{,
                 id: z.ZodString;
                 type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
                 url: z.ZodString;
@@ -2841,7 +2841,7 @@ declare const _default: {
                 altText: z.ZodOptional<z.ZodString>;
                 fileSize: z.ZodOptional<z.ZodNumber>;
                 mimeType: z.ZodOptional<z.ZodString>;
-                dimensions: z.ZodOptional<z.ZodObject<{
+                dimensions: z.ZodOptional<z.ZodObject<{,
                     width: z.ZodNumber;
                     height: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
@@ -2889,7 +2889,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }>, "many">;
-            videos: z.ZodArray<z.ZodObject<{
+            videos: z.ZodArray<z.ZodObject<{,
                 id: z.ZodString;
                 type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
                 url: z.ZodString;
@@ -2899,7 +2899,7 @@ declare const _default: {
                 altText: z.ZodOptional<z.ZodString>;
                 fileSize: z.ZodOptional<z.ZodNumber>;
                 mimeType: z.ZodOptional<z.ZodString>;
-                dimensions: z.ZodOptional<z.ZodObject<{
+                dimensions: z.ZodOptional<z.ZodObject<{,
                     width: z.ZodNumber;
                     height: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
@@ -2947,7 +2947,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }>, "many">;
-            documents: z.ZodArray<z.ZodObject<{
+            documents: z.ZodArray<z.ZodObject<{,
                 id: z.ZodString;
                 type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
                 url: z.ZodString;
@@ -2957,7 +2957,7 @@ declare const _default: {
                 altText: z.ZodOptional<z.ZodString>;
                 fileSize: z.ZodOptional<z.ZodNumber>;
                 mimeType: z.ZodOptional<z.ZodString>;
-                dimensions: z.ZodOptional<z.ZodObject<{
+                dimensions: z.ZodOptional<z.ZodObject<{,
                     width: z.ZodNumber;
                     height: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
@@ -3005,7 +3005,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }>, "many">;
-            charts: z.ZodArray<z.ZodObject<{
+            charts: z.ZodArray<z.ZodObject<{,
                 id: z.ZodString;
                 type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
                 url: z.ZodString;
@@ -3015,7 +3015,7 @@ declare const _default: {
                 altText: z.ZodOptional<z.ZodString>;
                 fileSize: z.ZodOptional<z.ZodNumber>;
                 mimeType: z.ZodOptional<z.ZodString>;
-                dimensions: z.ZodOptional<z.ZodObject<{
+                dimensions: z.ZodOptional<z.ZodObject<{,
                     width: z.ZodNumber;
                     height: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
@@ -3064,7 +3064,7 @@ declare const _default: {
                 altText?: string | undefined;
             }>, "many">;
         }, "strip", z.ZodTypeAny, {
-            featured: {
+            featured: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3082,7 +3082,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            charts: {
+            charts: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3100,7 +3100,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            documents: {
+            documents: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3118,7 +3118,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            screenshots: {
+            screenshots: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3136,7 +3136,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            videos: {
+            videos: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3155,7 +3155,7 @@ declare const _default: {
                 altText?: string | undefined;
             }[];
         }, {
-            featured: {
+            featured: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3173,7 +3173,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            charts: {
+            charts: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3191,7 +3191,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            documents: {
+            documents: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3209,7 +3209,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            screenshots: {
+            screenshots: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3227,7 +3227,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            videos: {
+            videos: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3246,7 +3246,7 @@ declare const _default: {
                 altText?: string | undefined;
             }[];
         }>;
-        featuredImage: z.ZodOptional<z.ZodObject<{
+        featuredImage: z.ZodOptional<z.ZodObject<{,
             id: z.ZodString;
             type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
             url: z.ZodString;
@@ -3256,7 +3256,7 @@ declare const _default: {
             altText: z.ZodOptional<z.ZodString>;
             fileSize: z.ZodOptional<z.ZodNumber>;
             mimeType: z.ZodOptional<z.ZodString>;
-            dimensions: z.ZodOptional<z.ZodObject<{
+            dimensions: z.ZodOptional<z.ZodObject<{,
                 width: z.ZodNumber;
                 height: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
@@ -3304,7 +3304,7 @@ declare const _default: {
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
         }>>;
-        templatesUsed: z.ZodArray<z.ZodObject<{
+        templatesUsed: z.ZodArray<z.ZodObject<{,
             templateId: z.ZodString;
             templateName: z.ZodString;
             templateVersion: z.ZodString;
@@ -3338,8 +3338,8 @@ declare const _default: {
             cost?: number | undefined;
             purchaseDate?: string | undefined;
         }>, "many">;
-        templateImplementations: z.ZodArray<z.ZodObject<{
-            originalTemplate: z.ZodObject<{
+        templateImplementations: z.ZodArray<z.ZodObject<{,
+            originalTemplate: z.ZodObject<{,
                 templateId: z.ZodString;
                 templateName: z.ZodString;
                 templateVersion: z.ZodString;
@@ -3373,7 +3373,7 @@ declare const _default: {
                 cost?: number | undefined;
                 purchaseDate?: string | undefined;
             }>;
-            customizations: z.ZodArray<z.ZodObject<{
+            customizations: z.ZodArray<z.ZodObject<{,
                 description: z.ZodString;
                 reasonForChange: z.ZodString;
                 impact: z.ZodString;
@@ -3386,7 +3386,7 @@ declare const _default: {
                 impact: string;
                 reasonForChange: string;
             }>, "many">;
-            results: z.ZodObject<{
+            results: z.ZodObject<{,
                 outputExamples: z.ZodArray<z.ZodString, "many">;
                 performanceMetrics: z.ZodRecord<z.ZodString, z.ZodNumber>;
                 userFeedback: z.ZodArray<z.ZodString, "many">;
@@ -3402,18 +3402,18 @@ declare const _default: {
             lessonsLearned: z.ZodArray<z.ZodString, "many">;
             recommendations: z.ZodArray<z.ZodString, "many">;
         }, "strip", z.ZodTypeAny, {
-            results: {
+            results: {,
                 performanceMetrics: Record<string, number>;
                 outputExamples: string[];
                 userFeedback: string[];
             };
             recommendations: string[];
-            customizations: {
+            customizations: {,
                 description: string;
                 impact: string;
                 reasonForChange: string;
             }[];
-            originalTemplate: {
+            originalTemplate: {,
                 templateId: string;
                 templateName: string;
                 templateCategory: string;
@@ -3427,18 +3427,18 @@ declare const _default: {
             };
             lessonsLearned: string[];
         }, {
-            results: {
+            results: {,
                 performanceMetrics: Record<string, number>;
                 outputExamples: string[];
                 userFeedback: string[];
             };
             recommendations: string[];
-            customizations: {
+            customizations: {,
                 description: string;
                 impact: string;
                 reasonForChange: string;
             }[];
-            originalTemplate: {
+            originalTemplate: {,
                 templateId: string;
                 templateName: string;
                 templateCategory: string;
@@ -3452,8 +3452,8 @@ declare const _default: {
             };
             lessonsLearned: string[];
         }>, "many">;
-        roiMetrics: z.ZodObject<{
-            timeSaved: z.ZodObject<{
+        roiMetrics: z.ZodObject<{,
+            timeSaved: z.ZodObject<{,
                 hours: z.ZodNumber;
                 period: z.ZodEnum<["day", "week", "month", "project"]>;
                 description: z.ZodString;
@@ -3466,7 +3466,7 @@ declare const _default: {
                 period: "project" | "month" | "week" | "day";
                 hours: number;
             }>;
-            costSavings: z.ZodObject<{
+            costSavings: z.ZodObject<{,
                 amount: z.ZodNumber;
                 currency: z.ZodString;
                 period: z.ZodEnum<["day", "week", "month", "project"]>;
@@ -3482,7 +3482,7 @@ declare const _default: {
                 currency: string;
                 calculation: string;
             }>;
-            qualityMetrics: z.ZodArray<z.ZodObject<{
+            qualityMetrics: z.ZodArray<z.ZodObject<{,
                 metric: z.ZodString;
                 before: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
                 after: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
@@ -3501,7 +3501,7 @@ declare const _default: {
                 improvement: number;
                 unit?: string | undefined;
             }>, "many">;
-            productivityGains: z.ZodArray<z.ZodObject<{
+            productivityGains: z.ZodArray<z.ZodObject<{,
                 metric: z.ZodString;
                 value: z.ZodNumber;
                 unit: z.ZodString;
@@ -3517,7 +3517,7 @@ declare const _default: {
                 metric: string;
                 unit: string;
             }>, "many">;
-            claudeMetrics: z.ZodOptional<z.ZodObject<{
+            claudeMetrics: z.ZodOptional<z.ZodObject<{,
                 tokensSaved: z.ZodNumber;
                 costPerToken: z.ZodNumber;
                 totalCostSavings: z.ZodNumber;
@@ -3537,25 +3537,25 @@ declare const _default: {
                 consistencyImprovement: number;
             }>>;
         }, "strip", z.ZodTypeAny, {
-            costSavings: {
+            costSavings: {,
                 amount: number;
                 period: "project" | "month" | "week" | "day";
                 currency: string;
                 calculation: string;
             };
-            qualityMetrics: {
+            qualityMetrics: {,
                 before: string | number;
                 after: string | number;
                 metric: string;
                 improvement: number;
                 unit?: string | undefined;
             }[];
-            timeSaved: {
+            timeSaved: {,
                 description: string;
                 period: "project" | "month" | "week" | "day";
                 hours: number;
             };
-            productivityGains: {
+            productivityGains: {,
                 description: string;
                 value: number;
                 metric: string;
@@ -3569,25 +3569,25 @@ declare const _default: {
                 consistencyImprovement: number;
             } | undefined;
         }, {
-            costSavings: {
+            costSavings: {,
                 amount: number;
                 period: "project" | "month" | "week" | "day";
                 currency: string;
                 calculation: string;
             };
-            qualityMetrics: {
+            qualityMetrics: {,
                 before: string | number;
                 after: string | number;
                 metric: string;
                 improvement: number;
                 unit?: string | undefined;
             }[];
-            timeSaved: {
+            timeSaved: {,
                 description: string;
                 period: "project" | "month" | "week" | "day";
                 hours: number;
             };
-            productivityGains: {
+            productivityGains: {,
                 description: string;
                 value: number;
                 metric: string;
@@ -3601,7 +3601,7 @@ declare const _default: {
                 consistencyImprovement: number;
             } | undefined;
         }>;
-        performanceMetrics: z.ZodObject<{
+        performanceMetrics: z.ZodObject<{,
             templatesUsed: z.ZodNumber;
             implementationTime: z.ZodNumber;
             projectDuration: z.ZodNumber;
@@ -3610,7 +3610,7 @@ declare const _default: {
             efficiency: z.ZodNumber;
             errorReduction: z.ZodNumber;
             stakeholderSatisfaction: z.ZodNumber;
-            beforeAfter: z.ZodArray<z.ZodObject<{
+            beforeAfter: z.ZodArray<z.ZodObject<{,
                 metric: z.ZodString;
                 before: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
                 after: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
@@ -3635,7 +3635,7 @@ declare const _default: {
             outputQuality: number;
             errorReduction: number;
             stakeholderSatisfaction: number;
-            beforeAfter: {
+            beforeAfter: {,
                 before: string | number;
                 after: string | number;
                 metric: string;
@@ -3650,14 +3650,14 @@ declare const _default: {
             outputQuality: number;
             errorReduction: number;
             stakeholderSatisfaction: number;
-            beforeAfter: {
+            beforeAfter: {,
                 before: string | number;
                 after: string | number;
                 metric: string;
                 unit?: string | undefined;
             }[];
         }>;
-        author: z.ZodObject<{
+        author: z.ZodObject<{,
             userId: z.ZodString;
             name: z.ZodString;
             title: z.ZodOptional<z.ZodString>;
@@ -3682,7 +3682,7 @@ declare const _default: {
             profileUrl?: string | undefined;
             avatar?: string | undefined;
         }>;
-        collaborators: z.ZodArray<z.ZodObject<{
+        collaborators: z.ZodArray<z.ZodObject<{,
             userId: z.ZodString;
             name: z.ZodString;
             role: z.ZodString;
@@ -3698,7 +3698,7 @@ declare const _default: {
             role: string;
             contribution: string;
         }>, "many">;
-        engagement: z.ZodObject<{
+        engagement: z.ZodObject<{,
             views: z.ZodNumber;
             likes: z.ZodNumber;
             shares: z.ZodNumber;
@@ -3723,7 +3723,7 @@ declare const _default: {
             shares: number;
             followUps: number;
         }>;
-        moderation: z.ZodObject<{
+        moderation: z.ZodObject<{,
             submittedAt: z.ZodString;
             submittedBy: z.ZodString;
             reviewedAt: z.ZodOptional<z.ZodString>;
@@ -3751,7 +3751,7 @@ declare const _default: {
             featuredAt?: string | undefined;
             featuredBy?: string | undefined;
         }>;
-        seo: z.ZodObject<{
+        seo: z.ZodObject<{,
             slug: z.ZodString;
             metaTitle: z.ZodString;
             metaDescription: z.ZodString;
@@ -3776,7 +3776,7 @@ declare const _default: {
         archivedAt: z.ZodOptional<z.ZodString>;
         version: z.ZodString;
         previousVersions: z.ZodArray<z.ZodString, "many">;
-        config: z.ZodObject<{
+        config: z.ZodObject<{,
             allowComments: z.ZodBoolean;
             allowSharing: z.ZodBoolean;
             showAuthor: z.ZodBoolean;
@@ -3808,7 +3808,7 @@ declare const _default: {
         description: string;
         status: "draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review";
         type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
-        config: {
+        config: {,
             priority: number;
             featured: boolean;
             allowComments: boolean;
@@ -3819,7 +3819,7 @@ declare const _default: {
         };
         tags: string[];
         version: string;
-        author: {
+        author: {,
             name: string;
             userId: string;
             verified: boolean;
@@ -3828,7 +3828,7 @@ declare const _default: {
             profileUrl?: string | undefined;
             avatar?: string | undefined;
         };
-        content: {
+        content: {,
             results: string;
             challenge: string;
             solution: string;
@@ -3838,7 +3838,7 @@ declare const _default: {
         };
         summary: string;
         title: string;
-        performanceMetrics: {
+        performanceMetrics: {,
             efficiency: number;
             templatesUsed: number;
             implementationTime: number;
@@ -3847,7 +3847,7 @@ declare const _default: {
             outputQuality: number;
             errorReduction: number;
             stakeholderSatisfaction: number;
-            beforeAfter: {
+            beforeAfter: {,
                 before: string | number;
                 after: string | number;
                 metric: string;
@@ -3855,8 +3855,8 @@ declare const _default: {
             }[];
         };
         difficulty: "advanced" | "expert" | "intermediate" | "beginner";
-        media: {
-            featured: {
+        media: {,
+            featured: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3874,7 +3874,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            charts: {
+            charts: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3892,7 +3892,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            documents: {
+            documents: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3910,7 +3910,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            screenshots: {
+            screenshots: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3928,7 +3928,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            videos: {
+            videos: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -3947,7 +3947,7 @@ declare const _default: {
                 altText?: string | undefined;
             }[];
         };
-        engagement: {
+        engagement: {,
             bookmarks: number;
             comments: number;
             views: number;
@@ -3956,7 +3956,7 @@ declare const _default: {
             shares: number;
             followUps: number;
         };
-        seo: {
+        seo: {,
             keywords: string[];
             slug: string;
             metaTitle: string;
@@ -3964,7 +3964,7 @@ declare const _default: {
             canonicalUrl?: string | undefined;
         };
         industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
-        moderation: {
+        moderation: {,
             submittedAt: string;
             submittedBy: string;
             reviewedAt?: string | undefined;
@@ -3974,13 +3974,13 @@ declare const _default: {
             featuredAt?: string | undefined;
             featuredBy?: string | undefined;
         };
-        collaborators: {
+        collaborators: {,
             name: string;
             userId: string;
             role: string;
             contribution: string;
         }[];
-        templatesUsed: {
+        templatesUsed: {,
             templateId: string;
             templateName: string;
             templateCategory: string;
@@ -3992,19 +3992,19 @@ declare const _default: {
             cost?: number | undefined;
             purchaseDate?: string | undefined;
         }[];
-        templateImplementations: {
-            results: {
+        templateImplementations: {,
+            results: {,
                 performanceMetrics: Record<string, number>;
                 outputExamples: string[];
                 userFeedback: string[];
             };
             recommendations: string[];
-            customizations: {
+            customizations: {,
                 description: string;
                 impact: string;
                 reasonForChange: string;
             }[];
-            originalTemplate: {
+            originalTemplate: {,
                 templateId: string;
                 templateName: string;
                 templateCategory: string;
@@ -4018,26 +4018,26 @@ declare const _default: {
             };
             lessonsLearned: string[];
         }[];
-        roiMetrics: {
-            costSavings: {
+        roiMetrics: {,
+            costSavings: {,
                 amount: number;
                 period: "project" | "month" | "week" | "day";
                 currency: string;
                 calculation: string;
             };
-            qualityMetrics: {
+            qualityMetrics: {,
                 before: string | number;
                 after: string | number;
                 metric: string;
                 improvement: number;
                 unit?: string | undefined;
             }[];
-            timeSaved: {
+            timeSaved: {,
                 description: string;
                 period: "project" | "month" | "week" | "day";
                 hours: number;
             };
-            productivityGains: {
+            productivityGains: {,
                 description: string;
                 value: number;
                 metric: string;
@@ -4080,7 +4080,7 @@ declare const _default: {
         description: string;
         status: "draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review";
         type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
-        config: {
+        config: {,
             priority: number;
             featured: boolean;
             allowComments: boolean;
@@ -4091,7 +4091,7 @@ declare const _default: {
         };
         tags: string[];
         version: string;
-        author: {
+        author: {,
             name: string;
             userId: string;
             verified: boolean;
@@ -4100,7 +4100,7 @@ declare const _default: {
             profileUrl?: string | undefined;
             avatar?: string | undefined;
         };
-        content: {
+        content: {,
             results: string;
             challenge: string;
             solution: string;
@@ -4110,7 +4110,7 @@ declare const _default: {
         };
         summary: string;
         title: string;
-        performanceMetrics: {
+        performanceMetrics: {,
             efficiency: number;
             templatesUsed: number;
             implementationTime: number;
@@ -4119,7 +4119,7 @@ declare const _default: {
             outputQuality: number;
             errorReduction: number;
             stakeholderSatisfaction: number;
-            beforeAfter: {
+            beforeAfter: {,
                 before: string | number;
                 after: string | number;
                 metric: string;
@@ -4127,8 +4127,8 @@ declare const _default: {
             }[];
         };
         difficulty: "advanced" | "expert" | "intermediate" | "beginner";
-        media: {
-            featured: {
+        media: {,
+            featured: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -4146,7 +4146,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            charts: {
+            charts: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -4164,7 +4164,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            documents: {
+            documents: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -4182,7 +4182,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            screenshots: {
+            screenshots: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -4200,7 +4200,7 @@ declare const _default: {
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
             }[];
-            videos: {
+            videos: {,
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
                 title: string;
@@ -4219,7 +4219,7 @@ declare const _default: {
                 altText?: string | undefined;
             }[];
         };
-        engagement: {
+        engagement: {,
             bookmarks: number;
             comments: number;
             views: number;
@@ -4228,7 +4228,7 @@ declare const _default: {
             shares: number;
             followUps: number;
         };
-        seo: {
+        seo: {,
             keywords: string[];
             slug: string;
             metaTitle: string;
@@ -4236,7 +4236,7 @@ declare const _default: {
             canonicalUrl?: string | undefined;
         };
         industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
-        moderation: {
+        moderation: {,
             submittedAt: string;
             submittedBy: string;
             reviewedAt?: string | undefined;
@@ -4246,13 +4246,13 @@ declare const _default: {
             featuredAt?: string | undefined;
             featuredBy?: string | undefined;
         };
-        collaborators: {
+        collaborators: {,
             name: string;
             userId: string;
             role: string;
             contribution: string;
         }[];
-        templatesUsed: {
+        templatesUsed: {,
             templateId: string;
             templateName: string;
             templateCategory: string;
@@ -4264,19 +4264,19 @@ declare const _default: {
             cost?: number | undefined;
             purchaseDate?: string | undefined;
         }[];
-        templateImplementations: {
-            results: {
+        templateImplementations: {,
+            results: {,
                 performanceMetrics: Record<string, number>;
                 outputExamples: string[];
                 userFeedback: string[];
             };
             recommendations: string[];
-            customizations: {
+            customizations: {,
                 description: string;
                 impact: string;
                 reasonForChange: string;
             }[];
-            originalTemplate: {
+            originalTemplate: {,
                 templateId: string;
                 templateName: string;
                 templateCategory: string;
@@ -4290,26 +4290,26 @@ declare const _default: {
             };
             lessonsLearned: string[];
         }[];
-        roiMetrics: {
-            costSavings: {
+        roiMetrics: {,
+            costSavings: {,
                 amount: number;
                 period: "project" | "month" | "week" | "day";
                 currency: string;
                 calculation: string;
             };
-            qualityMetrics: {
+            qualityMetrics: {,
                 before: string | number;
                 after: string | number;
                 metric: string;
                 improvement: number;
                 unit?: string | undefined;
             }[];
-            timeSaved: {
+            timeSaved: {,
                 description: string;
                 period: "project" | "month" | "week" | "day";
                 hours: number;
             };
-            productivityGains: {
+            productivityGains: {,
                 description: string;
                 value: number;
                 metric: string;
@@ -4346,7 +4346,7 @@ declare const _default: {
         } | undefined;
         archivedAt?: string | undefined;
     }>;
-    CreateCaseStudyRequestSchema: z.ZodObject<{
+    CreateCaseStudyRequestSchema: z.ZodObject<{,
         title: z.ZodString;
         subtitle: z.ZodOptional<z.ZodString>;
         description: z.ZodString;
@@ -4354,7 +4354,7 @@ declare const _default: {
         industry: z.ZodEnum<["film-production", "advertising", "gaming", "publishing", "education", "healthcare", "finance", "technology", "legal", "consulting", "e-commerce", "non-profit", "other"]>;
         tags: z.ZodArray<z.ZodString, "many">;
         difficulty: z.ZodEnum<["beginner", "intermediate", "advanced", "expert"]>;
-        content: z.ZodObject<{
+        content: z.ZodObject<{,
             challenge: z.ZodString;
             solution: z.ZodString;
             implementation: z.ZodString;
@@ -4376,7 +4376,7 @@ declare const _default: {
             learnings: string;
             nextSteps?: string | undefined;
         }>;
-        templatesUsed: z.ZodArray<z.ZodObject<Omit<{
+        templatesUsed: z.ZodArray<z.ZodObject<Omit<{,
             templateId: z.ZodString;
             templateName: z.ZodString;
             templateVersion: z.ZodString;
@@ -4406,8 +4406,8 @@ declare const _default: {
             cost?: number | undefined;
             purchaseDate?: string | undefined;
         }>, "many">;
-        roiMetrics: z.ZodOptional<z.ZodObject<{
-            timeSaved: z.ZodOptional<z.ZodObject<{
+        roiMetrics: z.ZodOptional<z.ZodObject<{,
+            timeSaved: z.ZodOptional<z.ZodObject<{,
                 hours: z.ZodNumber;
                 period: z.ZodEnum<["day", "week", "month", "project"]>;
                 description: z.ZodString;
@@ -4420,7 +4420,7 @@ declare const _default: {
                 period: "project" | "month" | "week" | "day";
                 hours: number;
             }>>;
-            costSavings: z.ZodOptional<z.ZodObject<{
+            costSavings: z.ZodOptional<z.ZodObject<{,
                 amount: z.ZodNumber;
                 currency: z.ZodString;
                 period: z.ZodEnum<["day", "week", "month", "project"]>;
@@ -4436,7 +4436,7 @@ declare const _default: {
                 currency: string;
                 calculation: string;
             }>>;
-            qualityMetrics: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            qualityMetrics: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 metric: z.ZodString;
                 before: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
                 after: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
@@ -4455,7 +4455,7 @@ declare const _default: {
                 improvement: number;
                 unit?: string | undefined;
             }>, "many">>;
-            productivityGains: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            productivityGains: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 metric: z.ZodString;
                 value: z.ZodNumber;
                 unit: z.ZodString;
@@ -4471,7 +4471,7 @@ declare const _default: {
                 metric: string;
                 unit: string;
             }>, "many">>;
-            claudeMetrics: z.ZodOptional<z.ZodOptional<z.ZodObject<{
+            claudeMetrics: z.ZodOptional<z.ZodOptional<z.ZodObject<{,
                 tokensSaved: z.ZodNumber;
                 costPerToken: z.ZodNumber;
                 totalCostSavings: z.ZodNumber;
@@ -4555,7 +4555,7 @@ declare const _default: {
                 consistencyImprovement: number;
             } | undefined;
         }>>;
-        performanceMetrics: z.ZodOptional<z.ZodObject<{
+        performanceMetrics: z.ZodOptional<z.ZodObject<{,
             templatesUsed: z.ZodOptional<z.ZodNumber>;
             implementationTime: z.ZodOptional<z.ZodNumber>;
             projectDuration: z.ZodOptional<z.ZodNumber>;
@@ -4564,7 +4564,7 @@ declare const _default: {
             efficiency: z.ZodOptional<z.ZodNumber>;
             errorReduction: z.ZodOptional<z.ZodNumber>;
             stakeholderSatisfaction: z.ZodOptional<z.ZodNumber>;
-            beforeAfter: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            beforeAfter: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 metric: z.ZodString;
                 before: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
                 after: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
@@ -4611,7 +4611,7 @@ declare const _default: {
                 unit?: string | undefined;
             }[] | undefined;
         }>>;
-        collaborators: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        collaborators: z.ZodOptional<z.ZodArray<z.ZodObject<{,
             userId: z.ZodString;
             name: z.ZodString;
             role: z.ZodString;
@@ -4627,7 +4627,7 @@ declare const _default: {
             role: string;
             contribution: string;
         }>, "many">>;
-        config: z.ZodOptional<z.ZodObject<{
+        config: z.ZodOptional<z.ZodObject<{,
             allowComments: z.ZodOptional<z.ZodBoolean>;
             allowSharing: z.ZodOptional<z.ZodBoolean>;
             showAuthor: z.ZodOptional<z.ZodBoolean>;
@@ -4656,7 +4656,7 @@ declare const _default: {
         description: string;
         type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
         tags: string[];
-        content: {
+        content: {,
             results: string;
             challenge: string;
             solution: string;
@@ -4667,7 +4667,7 @@ declare const _default: {
         title: string;
         difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
-        templatesUsed: {
+        templatesUsed: {,
             templateId: string;
             templateVersion: string;
             usageDescription: string;
@@ -4746,7 +4746,7 @@ declare const _default: {
         description: string;
         type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
         tags: string[];
-        content: {
+        content: {,
             results: string;
             challenge: string;
             solution: string;
@@ -4757,7 +4757,7 @@ declare const _default: {
         title: string;
         difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
-        templatesUsed: {
+        templatesUsed: {,
             templateId: string;
             templateVersion: string;
             usageDescription: string;
@@ -4833,7 +4833,7 @@ declare const _default: {
             } | undefined;
         } | undefined;
     }>;
-    CaseStudyFilterSchema: z.ZodObject<{
+    CaseStudyFilterSchema: z.ZodObject<{,
         type: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["template-success", "user-story", "roi-analysis", "before-after", "industry-showcase", "community-highlight", "innovation-case"]>, z.ZodArray<z.ZodEnum<["template-success", "user-story", "roi-analysis", "before-after", "industry-showcase", "community-highlight", "innovation-case"]>, "many">]>>;
         industry: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["film-production", "advertising", "gaming", "publishing", "education", "healthcare", "finance", "technology", "legal", "consulting", "e-commerce", "non-profit", "other"]>, z.ZodArray<z.ZodEnum<["film-production", "advertising", "gaming", "publishing", "education", "healthcare", "finance", "technology", "legal", "consulting", "e-commerce", "non-profit", "other"]>, "many">]>>;
         tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -4900,7 +4900,7 @@ declare const _default: {
         verifiedAuthorsOnly?: boolean | undefined;
         featuredOnly?: boolean | undefined;
     }>;
-    CaseStudyMediaSchema: z.ZodObject<{
+    CaseStudyMediaSchema: z.ZodObject<{,
         id: z.ZodString;
         type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;
         url: z.ZodString;
@@ -4910,7 +4910,7 @@ declare const _default: {
         altText: z.ZodOptional<z.ZodString>;
         fileSize: z.ZodOptional<z.ZodNumber>;
         mimeType: z.ZodOptional<z.ZodString>;
-        dimensions: z.ZodOptional<z.ZodObject<{
+        dimensions: z.ZodOptional<z.ZodObject<{,
             width: z.ZodNumber;
             height: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
@@ -4958,8 +4958,8 @@ declare const _default: {
         thumbnailUrl?: string | undefined;
         altText?: string | undefined;
     }>;
-    ROIMetricsSchema: z.ZodObject<{
-        timeSaved: z.ZodObject<{
+    ROIMetricsSchema: z.ZodObject<{,
+        timeSaved: z.ZodObject<{,
             hours: z.ZodNumber;
             period: z.ZodEnum<["day", "week", "month", "project"]>;
             description: z.ZodString;
@@ -4972,7 +4972,7 @@ declare const _default: {
             period: "project" | "month" | "week" | "day";
             hours: number;
         }>;
-        costSavings: z.ZodObject<{
+        costSavings: z.ZodObject<{,
             amount: z.ZodNumber;
             currency: z.ZodString;
             period: z.ZodEnum<["day", "week", "month", "project"]>;
@@ -4988,7 +4988,7 @@ declare const _default: {
             currency: string;
             calculation: string;
         }>;
-        qualityMetrics: z.ZodArray<z.ZodObject<{
+        qualityMetrics: z.ZodArray<z.ZodObject<{,
             metric: z.ZodString;
             before: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
             after: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
@@ -5007,7 +5007,7 @@ declare const _default: {
             improvement: number;
             unit?: string | undefined;
         }>, "many">;
-        productivityGains: z.ZodArray<z.ZodObject<{
+        productivityGains: z.ZodArray<z.ZodObject<{,
             metric: z.ZodString;
             value: z.ZodNumber;
             unit: z.ZodString;
@@ -5023,7 +5023,7 @@ declare const _default: {
             metric: string;
             unit: string;
         }>, "many">;
-        claudeMetrics: z.ZodOptional<z.ZodObject<{
+        claudeMetrics: z.ZodOptional<z.ZodObject<{,
             tokensSaved: z.ZodNumber;
             costPerToken: z.ZodNumber;
             totalCostSavings: z.ZodNumber;
@@ -5043,25 +5043,25 @@ declare const _default: {
             consistencyImprovement: number;
         }>>;
     }, "strip", z.ZodTypeAny, {
-        costSavings: {
+        costSavings: {,
             amount: number;
             period: "project" | "month" | "week" | "day";
             currency: string;
             calculation: string;
         };
-        qualityMetrics: {
+        qualityMetrics: {,
             before: string | number;
             after: string | number;
             metric: string;
             improvement: number;
             unit?: string | undefined;
         }[];
-        timeSaved: {
+        timeSaved: {,
             description: string;
             period: "project" | "month" | "week" | "day";
             hours: number;
         };
-        productivityGains: {
+        productivityGains: {,
             description: string;
             value: number;
             metric: string;
@@ -5075,25 +5075,25 @@ declare const _default: {
             consistencyImprovement: number;
         } | undefined;
     }, {
-        costSavings: {
+        costSavings: {,
             amount: number;
             period: "project" | "month" | "week" | "day";
             currency: string;
             calculation: string;
         };
-        qualityMetrics: {
+        qualityMetrics: {,
             before: string | number;
             after: string | number;
             metric: string;
             improvement: number;
             unit?: string | undefined;
         }[];
-        timeSaved: {
+        timeSaved: {,
             description: string;
             period: "project" | "month" | "week" | "day";
             hours: number;
         };
-        productivityGains: {
+        productivityGains: {,
             description: string;
             value: number;
             metric: string;
@@ -5107,7 +5107,7 @@ declare const _default: {
             consistencyImprovement: number;
         } | undefined;
     }>;
-    TemplateReferenceSchema: z.ZodObject<{
+    TemplateReferenceSchema: z.ZodObject<{,
         templateId: z.ZodString;
         templateName: z.ZodString;
         templateVersion: z.ZodString;

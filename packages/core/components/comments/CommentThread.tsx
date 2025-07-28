@@ -2,13 +2,11 @@
  * Epic 9.2.4 - Comment Thread Component
  * Individual comment thread with replies
  */
-
 import React, { useState } from 'react';
 import { Comment } from '../../types/workspace';
 import { CommentItem } from './CommentItem';
 import { CommentForm } from './CommentForm';
 import { useCommentReplies } from '../../hooks/useCommentReplies';
-
 interface CommentThreadProps {
   comment: Comment;
   workspaceId: string;
@@ -21,7 +19,7 @@ interface CommentThreadProps {
   isLast?: boolean;
 }
 
-export const CommentThread: React.FC<CommentThreadProps> = ({
+export const CommentThread: React.FC<CommentThreadProps> = ({)
   comment,
   workspaceId,
   userId,
@@ -34,20 +32,18 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
 }) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
-  
   const {
     replies,
     loading: repliesLoading,
     error: repliesError,
     loadMore: loadMoreReplies,
     hasMore: hasMoreReplies,
-    refresh: refreshReplies
-  } = useCommentReplies({
+    refresh: refreshReplies,
+  } = useCommentReplies({)
     commentId: comment.id,
     userId,
-    enabled: showReplies
+    enabled: showReplies,
   });
-
   const handleReply = async (content: string) => {
     try {
       await onReply(content);
@@ -62,15 +58,12 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
       console.error('Failed to reply to comment:', error);
     }
   };
-
   const handleShowReplies = () => {
     setShowReplies(!showReplies);
   };
-
   const canShowReplies = comment.reply_count > 0 || showReplies;
   const isResolved = comment.metadata?.resolved;
-
-  return (
+  return ()
     <div 
       className={`comment-thread ${compact ? 'comment-thread--compact' : ''} ${isLast ? 'comment-thread--last' : ''} ${isResolved ? 'comment-thread--resolved' : ''}`}
     >
@@ -84,8 +77,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
         compact={compact}
         isThreadRoot={true}
       />
-
-      {showReplyForm && (
+      {showReplyForm && ()
         <div className="comment-thread__reply-form">
           <CommentForm
             onSubmit={handleReply}
@@ -97,10 +89,9 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
           />
         </div>
       )}
-
-      {canShowReplies && (
+      {canShowReplies && ()
         <div className="comment-thread__replies">
-          {comment.reply_count > 0 && !showReplies && (
+          {comment.reply_count > 0 && !showReplies && ()
             <button
               className="comment-thread__show-replies"
               onClick={handleShowReplies}
@@ -109,8 +100,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
               Show {comment.reply_count} {comment.reply_count === 1 ? 'reply' : 'replies'}
             </button>
           )}
-
-          {showReplies && (
+          {showReplies && ()
             <div className="comment-replies">
               <div className="comment-replies__header">
                 <button
@@ -121,16 +111,15 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
                   Hide replies
                 </button>
               </div>
-
               <div className="comment-replies__list">
-                {repliesLoading && replies.length === 0 ? (
+                {repliesLoading && replies.length === 0 ? ()
                   <div className="comment-replies__loading">
                     <div className="skeleton-comment">
                       <div className="skeleton-line skeleton-line--short"></div>
                       <div className="skeleton-line skeleton-line--content"></div>
                     </div>
                   </div>
-                ) : repliesError ? (
+                ) : repliesError ? ()
                   <div className="comment-replies__error">
                     <span className="error-message">Failed to load replies</span>
                     <button
@@ -140,9 +129,9 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
                       Retry
                     </button>
                   </div>
-                ) : (
+                ) : ()
                   <>
-                    {replies.map((reply, index) => (
+                    {replies.map((reply, index) => ()
                       <div key={reply.id} className="comment-reply">
                         <CommentItem
                           comment={reply}
@@ -156,8 +145,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
                         />
                       </div>
                     ))}
-
-                    {hasMoreReplies && (
+                    {hasMoreReplies && ()
                       <div className="comment-replies__load-more">
                         <button
                           className="btn btn--ghost btn--small"

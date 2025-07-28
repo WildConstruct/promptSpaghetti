@@ -41,7 +41,7 @@ export interface DomainRegistry {
 }
 
 // Domain factory registry
-export const createDomainRegistry = (): DomainRegistry => ({
+export const createDomainRegistry = (): DomainRegistry => ({)
   'graph-editor': () => import('./graph-editor'),
   'admin-dashboard': () => import('./admin-dashboard'),
   'security': () => import('./security'),
@@ -60,7 +60,7 @@ export const DOMAIN_METADATA = {
     features: ['node-editing', 'visual-flow', 'execution', 'validation', 'inspector-system'],
     components: 15,
     hooks: 6,
-    services: 4
+    services: 4,
   },
   'admin-dashboard': {
     name: 'Admin Dashboard',
@@ -71,7 +71,7 @@ export const DOMAIN_METADATA = {
     features: ['user-management', 'security-monitoring', 'api-management', 'system-metrics', 'widget-system'],
     components: 12,
     hooks: 5,
-    services: 6
+    services: 6,
   },
   'security': {
     name: 'Security Framework',
@@ -82,7 +82,7 @@ export const DOMAIN_METADATA = {
     features: ['access-control', 'audit-logging', 'threat-detection', 'compliance', 'encryption'],
     components: 8,
     hooks: 5,
-    services: 7
+    services: 7,
   },
   'runtime': {
     name: 'Runtime Engine',
@@ -93,7 +93,7 @@ export const DOMAIN_METADATA = {
     features: ['node-execution', 'graph-processing', 'validation', 'performance-monitoring', 'caching'],
     components: 6,
     hooks: 5,
-    services: 6
+    services: 6,
   },
   'targeting': {
     name: 'Advanced Targeting',
@@ -104,7 +104,7 @@ export const DOMAIN_METADATA = {
     features: ['audience-builder', 'condition-engine', 'preview', 'analytics', 'segmentation'],
     components: 0,
     hooks: 0,
-    services: 0
+    services: 0,
   }
 } as const;
 
@@ -124,42 +124,35 @@ export class DomainManager {
   private domains = new Map<DomainName, any>();
   private status = new Map<DomainName, DomainStatus>();
   private registry: DomainRegistry;
-
   constructor() {
     this.registry = createDomainRegistry();
-    
     // Initialize status for all domains
-    Object.keys(DOMAIN_METADATA).forEach(name => {
-      this.status.set(name as DomainName, {
+    Object.keys(DOMAIN_METADATA).forEach(name => {)
+      this.status.set(name as DomainName, {)
         name: name as DomainName,
         loaded: false,
-        initialized: false
+        initialized: false,
       });
     });
   }
-
   async loadDomain(name: DomainName): Promise<any> {
     if (this.domains.has(name)) {
       return this.domains.get(name);
     }
-
     const startTime = Date.now();
-    
     try {
       const domainModule = await this.registry[name]();
       const loadTime = Date.now() - startTime;
-      
       this.domains.set(name, domainModule);
-      this.status.set(name, {
+      this.status.set(name, {)
         name,
         loaded: true,
         initialized: false,
         loadTime
       });
-      
       return domainModule;
     } catch (error) {
-      this.status.set(name, {
+      this.status.set(name, {)
         name,
         loaded: false,
         initialized: false,
@@ -168,35 +161,29 @@ export class DomainManager {
       throw error;
     }
   }
-
   getDomain(name: DomainName): any {
     return this.domains.get(name);
   }
-
   getDomainStatus(name: DomainName): DomainStatus | undefined {
     return this.status.get(name);
   }
-
   getAllDomainStatus(): DomainStatus[] {
     return Array.from(this.status.values());
   }
-
   isLoaded(name: DomainName): boolean {
     return this.status.get(name)?.loaded ?? false;
   }
-
   async preloadDomains(domains: DomainName[]): Promise<void> {
     await Promise.all(domains.map(name => this.loadDomain(name)));
   }
-
   unloadDomain(name: DomainName): void {
     this.domains.delete(name);
     const status = this.status.get(name);
     if (status) {
-      this.status.set(name, {
+      this.status.set(name, {)
         ...status,
         loaded: false,
-        initialized: false
+        initialized: false,
       });
     }
   }

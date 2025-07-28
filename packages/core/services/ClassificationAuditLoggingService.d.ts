@@ -120,7 +120,7 @@ export interface AuditReport {
 export interface AuditSummary {
     totalEntries: number;
     uniqueUsers: number;
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };
@@ -131,12 +131,12 @@ export interface AuditSummary {
         nonCompliant: number;
         needsReview: number;
     }>;
-    riskAnalysis: {
+    riskAnalysis: {,
         averageRiskScore: number;
         highRiskEntries: number;
         criticalViolations: number;
     };
-    trendsAnalysis: {
+    trendsAnalysis: {,
         activityTrend: 'INCREASING' | 'DECREASING' | 'STABLE';
         riskTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
         complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
@@ -165,7 +165,7 @@ export declare class ClassificationAuditLoggingService {
     /**
      * Log an audit entry
      */
-    logAuditEvent(
+    logAuditEvent()
       action: AuditAction,
       classification: DataClassificationLevel,
       dataId: string,
@@ -205,12 +205,12 @@ export declare class ClassificationAuditLoggingService {
     /**
      * Generate audit report
      */
-    generateAuditReport(
+    generateAuditReport()
       name: string,
       description: string,
       query: AuditQuery,
       format: AuditReport["format"] | undefined,
-      requestedBy: string
+      requestedBy: string,
     ): Promise<string>;
     /**
      * Generate audit summary

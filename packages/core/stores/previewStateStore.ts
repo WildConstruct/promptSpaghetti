@@ -5,7 +5,6 @@
  * Centralized state management for real-time preview functionality with
  * synchronization, caching, and performance optimizations.
  */
-
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { devtools } from 'zustand/middleware';
@@ -40,7 +39,7 @@ export interface PreviewCache {
   graphHash: string;
   timestamp: number;
   results: PreviewResult[];
-  performanceStats: {
+  performanceStats: {,
     totalTime: number;
     averageTime: number;
   } | null;
@@ -61,51 +60,43 @@ export interface PreviewStateStore {
   error: string | null;
   results: PreviewResult[];
   aggregateError: string | null;
-  performanceStats: {
+  performanceStats: {,
     totalTime: number;
     averageTime: number;
   } | null;
-  
   // Real-time sync state
   lastGraphHash: string | null;
   lastUpdateTimestamp: number;
   isRealTimeEnabled: boolean;
   syncInterval: number; // milliseconds
-  
   // Preview cache system
   cache: Map<string, PreviewCache>;
   maxCacheSize: number;
   cacheExpirationMs: number;
-  
   // Result management state
   lockedResults: number[];
   regeneratingResults: number[];
-  
   // Performance monitoring
   performanceMetrics: PreviewPerformanceMetrics;
   performanceHistory: PreviewPerformanceMetrics[];
   maxHistoryLength: number;
-  
   // Auto-refresh configuration
   autoRefreshEnabled: boolean;
   autoRefreshInterval: number;
   autoRefreshThreshold: number; // Graph change significance threshold
-  
   // Actions
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setResults: (results: PreviewResult[]) => void;
   setAggregateError: (error: string | null) => void;
   setPerformanceStats: (stats: { totalTime: number; averageTime: number } | null) => void;
-  
   // Real-time sync actions
   updateGraphHash: (hash: string) => void;
   enableRealTimeSync: (enabled: boolean) => void;
   setSyncInterval: (interval: number) => void;
-  
   // Cache management
   getCachedResults: (graphHash: string) => PreviewCache | null;
-  setCachedResults: (
+  setCachedResults: (),
     graphHash: string,
     results: PreviewResult[],
     stats: { totalTime: number; averageTime: number }
@@ -113,12 +104,10 @@ export interface PreviewStateStore {
   clearCache: () => void;
   pruneCacheByAge: () => void;
   pruneCacheBySize: () => void;
-  
   // Result management
   lockResult: (index: number, note?: string) => void;
   unlockResult: (index: number) => void;
   setRegeneratingResult: (index: number, regenerating: boolean) => void;
-  
   // Performance monitoring
   updatePerformanceMetrics: (metrics: Partial<PreviewPerformanceMetrics>) => void;
   addPerformanceSnapshot: () => void;
@@ -127,11 +116,9 @@ export interface PreviewStateStore {
     bottlenecks: string[];
     recommendations: string[];
   };
-  
   // Auto-refresh
   setAutoRefresh: (enabled: boolean, interval?: number) => void;
   shouldAutoRefresh: (changeSignificance?: number) => boolean;
-  
   // Utility actions
   resetState: () => void;
   getStateSnapshot: () => any;
@@ -142,13 +129,13 @@ export interface PreviewStateStore {
 const generateGraphHash = (graph: { nodes?: Array<{ id: string; type: string; data: unknown }>; edges?: Array<{ id: string; source: string; target: string }> }): string => {
   try {
     // Simple hash generation based on graph structure
-    const graphString = JSON.stringify({
+    const graphString = JSON.stringify({)
       nodes: graph.nodes?.map((n) => ({ id: n.id, type: n.type, data: n.data })) || [],
       edges: graph.edges?.map((e) => ({ id: e.id, source: e.source, target: e.target })) || []
     });
     return btoa(graphString).substring(0, 16);
   } catch {
-    return `hash_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `hash_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
 };
 
@@ -157,183 +144,151 @@ const defaultPerformanceMetrics: PreviewPerformanceMetrics = {
   totalExecutionTime: 0,
   averageExecutionTime: 0,
   cacheHitRate: 0,
-  lastExecutionCount: 0
+  lastExecutionCount: 0,
 };
 
-export         // Update last update timestamp
+export // Update last update timestamp
         set({ lastUpdateTimestamp: Date.now() });
       },
       setAggregateError: (aggregateError) => set({ aggregateError }),
       setPerformanceStats: (performanceStats) => set({ performanceStats }),
-      
       // Real-time sync actions
       updateGraphHash: (hash) => {
         const state = get();
         if (state.lastGraphHash !== hash) {
-          set({
+          set({)
             lastGraphHash: hash,
-            lastUpdateTimestamp: Date.now()
+            lastUpdateTimestamp: Date.now(),
           });
         }
       },
-      
       enableRealTimeSync: (enabled) => set({ isRealTimeEnabled: enabled }),
       setSyncInterval: (interval) => set({ syncInterval: Math.max(100, interval) }),
-      
       // Cache management
       getCachedResults: (graphHash) => {
         const state = get();
         const cached = state.cache.get(graphHash);
-        
         if (!cached) return null;
-        
         // Check if cache is expired
         const isExpired = Date.now() - cached.timestamp > state.cacheExpirationMs;
         if (isExpired) {
           state.cache.delete(graphHash);
           return null;
         }
-        
         // Update cache hit rate
         const currentMetrics = state.performanceMetrics;
         const totalRequests = currentMetrics.lastExecutionCount + 1;
         const cacheHits = Math.round(currentMetrics.cacheHitRate * currentMetrics.lastExecutionCount) + 1;
-        
-        set({
-          performanceMetrics: {
+        set({)
+          performanceMetrics: {,
             ...currentMetrics,
             cacheHitRate: cacheHits / totalRequests,
-            lastExecutionCount: totalRequests
+            lastExecutionCount: totalRequests,
           }
         });
-        
         return cached;
       },
-      
       setCachedResults: (graphHash, results, stats) => {
         const state = get();
         const newCache = new Map(state.cache);
-        
         // Add new cache entry
-        newCache.set(graphHash, {
+        newCache.set(graphHash, {)
           graphHash,
           timestamp: Date.now(),
           results: [...results],
           performanceStats: stats ? { ...stats } : null
         });
-        
         // Prune cache if needed
         if (newCache.size > state.maxCacheSize) {
           const oldestKey = Array.from(newCache.keys())[0];
           newCache.delete(oldestKey);
         }
-        
         set({ cache: newCache });
       },
-      
       clearCache: () => set({ cache: new Map() }),
-      
       pruneCacheByAge: () => {
         const state = get();
         const newCache = new Map();
         const cutoffTime = Date.now() - state.cacheExpirationMs;
-        
         for (const [key, value] of state.cache.entries()) {
           if (value.timestamp > cutoffTime) {
             newCache.set(key, value);
           }
         }
-        
         set({ cache: newCache });
       },
-      
       pruneCacheBySize: () => {
         const state = get();
         if (state.cache.size <= state.maxCacheSize) return;
-        
-        const entries = Array.from(state.cache.entries())
+        const entries = Array.from(state.cache.entries());
           .sort(([, a], [, b]) => b.timestamp - a.timestamp)
           .slice(0, state.maxCacheSize);
-          
         set({ cache: new Map(entries) });
       },
-      
       // Result management
       lockResult: (index, note) => {
         const state = get();
         const updatedResults = [...state.results];
-        
         if (updatedResults[index]) {
           updatedResults[index] = {
             ...updatedResults[index],
             locked: true,
             lockedAt: Date.now(),
-            lockedNote: note
+            lockedNote: note,
           };
         }
-        
-        set({
+        set({)
           results: updatedResults,
           lockedResults: [...state.lockedResults, index]
         });
       },
-      
       unlockResult: (index) => {
         const state = get();
         const updatedResults = [...state.results];
-        
         if (updatedResults[index]) {
           updatedResults[index] = {
             ...updatedResults[index],
             locked: false,
             lockedAt: undefined,
-            lockedNote: undefined
+            lockedNote: undefined,
           };
         }
-        
-        set({
+        set({)
           results: updatedResults,
           lockedResults: state.lockedResults.filter(i => i !== index)
         });
       },
-      
       setRegeneratingResult: (index, regenerating) => {
         const state = get();
-        const updatedRegenerating = regenerating
+        const updatedRegenerating = regenerating;
           ? [...state.regeneratingResults, index]
           : state.regeneratingResults.filter(i => i !== index);
-          
         set({ regeneratingResults: updatedRegenerating });
       },
-      
       // Performance monitoring
       updatePerformanceMetrics: (newMetrics) => {
         const state = get();
-        set({
-          performanceMetrics: {
+        set({)
+          performanceMetrics: {,
             ...state.performanceMetrics,
             ...newMetrics
           }
         });
       },
-      
       addPerformanceSnapshot: () => {
         const state = get();
-        const newHistory = [
+        const newHistory = [;
           ...state.performanceHistory,
           {
             ...state.performanceMetrics,
-            timestamp: Date.now()
+            timestamp: Date.now(),
           } as any
         ].slice(-state.maxHistoryLength);
-        
         set({ performanceHistory: newHistory });
       },
-      
       getPerformanceInsights: () => {
         const state = get();
         const history = state.performanceHistory;
-        
         if (history.length < 2) {
           return {
             trend: 'stable' as const,
@@ -341,38 +296,30 @@ export         // Update last update timestamp
             recommendations: ['Need more data for analysis']
           };
         }
-        
         const recent = history.slice(-5);
         const avgRecent = recent.reduce((sum, h) => sum + h.averageExecutionTime, 0) / recent.length;
-        const avgOlder = history.slice(
+        const avgOlder = history.slice(;)
           -10,
           -5
         ).reduce((sum, h) => sum + h.averageExecutionTime, 0) / Math.max(1, history.length - 5);
-        
-        const trend = avgRecent > avgOlder * 1.1 ? 'degrading' : 
+        const trend = avgRecent > avgOlder * 1.1 ? 'degrading' : ;
                      avgRecent < avgOlder * 0.9 ? 'improving' : 'stable';
-        
         const bottlenecks: string[] = [];
         const recommendations: string[] = [];
-        
         if (state.performanceMetrics.cacheHitRate < 0.3) {
           bottlenecks.push('Low cache hit rate');
           recommendations.push('Consider increasing cache size or adjusting refresh patterns');
         }
-        
         if (state.performanceMetrics.averageExecutionTime > 1000) {
           bottlenecks.push('Slow execution time');
           recommendations.push('Optimize graph complexity or enable parallel processing');
         }
-        
         if (state.performanceMetrics.networkLatency && state.performanceMetrics.networkLatency > 500) {
           bottlenecks.push('High network latency');
           recommendations.push('Consider local caching or server optimization');
         }
-        
         return { trend, bottlenecks, recommendations };
       },
-      
       // Auto-refresh
       setAutoRefresh: (enabled, interval) => {
         const updates: Partial<PreviewStateStore> = { autoRefreshEnabled: enabled };
@@ -381,22 +328,18 @@ export         // Update last update timestamp
         }
         set(updates);
       },
-      
       shouldAutoRefresh: (changeSignificance = 0) => {
         const state = get();
         if (!state.autoRefreshEnabled) return false;
         if (state.isLoading) return false;
-        
         const timeSinceLastUpdate = Date.now() - state.lastUpdateTimestamp;
         const intervalPassed = timeSinceLastUpdate > state.autoRefreshInterval;
         const significantChange = changeSignificance > state.autoRefreshThreshold;
-        
         return intervalPassed || significantChange;
       },
-      
       // Utility actions
       resetState: () => {
-        set({
+        set({)
           isLoading: false,
           error: null,
           results: [],
@@ -405,10 +348,9 @@ export         // Update last update timestamp
           lockedResults: [],
           regeneratingResults: [],
           lastUpdateTimestamp: 0,
-          performanceMetrics: defaultPerformanceMetrics
+          performanceMetrics: defaultPerformanceMetrics,
         });
       },
-      
       getStateSnapshot: () => {
         const state = get();
         return {
@@ -417,12 +359,11 @@ export         // Update last update timestamp
           performanceStats: state.performanceStats,
           lastGraphHash: state.lastGraphHash,
           lastUpdateTimestamp: state.lastUpdateTimestamp,
-          performanceMetrics: state.performanceMetrics
+          performanceMetrics: state.performanceMetrics,
         };
       },
-      
       restoreFromSnapshot: (snapshot) => {
-        set({
+        set({)
           results: snapshot.results || [],
           lockedResults: snapshot.lockedResults || [],
           performanceStats: snapshot.performanceStats || null,
@@ -434,14 +375,14 @@ export         // Update last update timestamp
     })),
     {
       name: 'preview-state-store',
-      partialize: (state) => ({
+      partialize: (state) => ({)
         // Only persist essential state
         isRealTimeEnabled: state.isRealTimeEnabled,
         syncInterval: state.syncInterval,
         autoRefreshEnabled: state.autoRefreshEnabled,
         autoRefreshInterval: state.autoRefreshInterval,
         maxCacheSize: state.maxCacheSize,
-        cacheExpirationMs: state.cacheExpirationMs
+        cacheExpirationMs: state.cacheExpirationMs,
       })
     }
   )

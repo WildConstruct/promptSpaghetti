@@ -13,7 +13,7 @@ export interface QueueSubmission {
     submitter_email: string;
     status: 'submitted' | 'under_review' | 'changes_requested' | 'approved' | 'rejected';
     version_number: number;
-    submission_data: {
+    submission_data: {,
         title: string;
         description: string;
         tags: string[];
@@ -46,7 +46,7 @@ export interface QueueMetrics {
     average_review_time_hours: number;
     reviews_completed_today: number;
     queue_velocity: number;
-    reviewer_workload: Array<{
+    reviewer_workload: Array<{,
         reviewer_id: string;
         reviewer_name: string;
         active_reviews: number;

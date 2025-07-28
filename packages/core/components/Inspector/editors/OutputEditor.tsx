@@ -15,14 +15,12 @@ import {
 export interface OutputEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Output specific props can be added here
 }
-
 const OUTPUT_FORMATS: SelectOption[] = [
   { value: 'text', label: 'Plain Text' },
   { value: 'markdown', label: 'Markdown' },
   { value: 'html', label: 'HTML' },
   { value: 'json', label: 'JSON' }
 ];
-
 const OUTPUT_DESTINATIONS: SelectOption[] = [
   { value: 'final', label: 'Final Output' },
   { value: 'intermediate', label: 'Intermediate Result' },
@@ -37,32 +35,26 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
   const destination = (nodeData.destination as string) || 'final';
   const includeMetadata = !!(nodeData.includeMetadata as boolean);
   const transformations = (nodeData.transformations as string[]) || [];
-
   // No longer need collapse state - managed by ProgressiveDisclosureSection
-
   const handleFieldChange = (field: string, value: unknown) => {
     onChange({ [field]: value });
   };
-
   const handleTransformationChange = (index: number, transformation: string) => {
     const newTransformations = [...transformations];
     newTransformations[index] = transformation;
     onChange({ transformations: newTransformations });
   };
-
   const addTransformation = () => {
-    onChange({ 
+    onChange({ )
       transformations: [...transformations, ''] 
     });
   };
-
   const removeTransformation = (index: number) => {
     const newTransformations = transformations.filter((_: unknown, i: number) => i !== index);
     onChange({ transformations: newTransformations });
   };
-
   // Contextual help for the output name field
-  const { wrapWithHelp: wrapNameHelp } = useContextualHelp({
+  const { wrapWithHelp: wrapNameHelp } = useContextualHelp({)
     id: 'output-node-name',
     title: 'Output Name',
     description: 'Give your output node a descriptive name to identify its purpose in your workflow.',
@@ -71,11 +63,10 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
     position: 'right',
     showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
     examples: ['Final Script', 'Character Description', 'Scene Summary'],
-    priority: 'high'
+    priority: 'high',
   });
-
   // Contextual help for template editor
-  const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({
+  const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({)
     id: 'output-template',
     title: 'Output Template',
     description: 'Define the final format of your generated content. Use {variable} syntax to insert dynamic content from connected nodes.',
@@ -85,11 +76,10 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
     showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
     examples: ['Final result: {content}', '{character} says: "{dialogue}"'],
     relatedFeatures: ['variable-system', 'node-connections'],
-    priority: 'high'
+    priority: 'high',
   });
-
   // Contextual help for format selection
-  const { wrapWithHelp: wrapFormatHelp } = useContextualHelp({
+  const { wrapWithHelp: wrapFormatHelp } = useContextualHelp({)
     id: 'output-format',
     title: 'Output Format',
     description: 'Choose how the final output should be formatted for export or display.',
@@ -98,10 +88,9 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
     position: 'right',
     showOnDisclosureLevel: ['advanced', 'debug'],
     examples: ['Plain Text: simple text', 'Markdown: formatted text', 'JSON: structured data'],
-    priority: 'medium'
+    priority: 'medium',
   });
-
-  return (
+  return ()
     <div className="output-editor">
       {/* BASIC LEVEL: Essential output configuration */}
       <ProgressiveDisclosureSection
@@ -112,7 +101,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
         priority="critical"
         fieldName="template"
       >
-        {wrapNameHelp(
+        {wrapNameHelp()
           <TextFieldEditor
             label="Output Name"
             value={label}
@@ -122,15 +111,14 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
             placeholder="Enter a name for this output..."
           />
         )}
-
-        {wrapTemplateHelp(
+        {wrapTemplateHelp()
           <div style={{ marginBottom: 16 }}>
             <label style={{
               display: 'block',
               fontSize: 12,
               fontWeight: 500,
               color: '#e2e8f0',
-              marginBottom: 6
+              marginBottom: 6,
             }}>
               Output Template
             </label>
@@ -149,14 +137,13 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
             <div style={{
               fontSize: 10,
               color: '#a0aec0',
-              marginTop: 4
+              marginTop: 4,
             }}>
               Use {'{variable}'} syntax to create dynamic content. Variables will appear as connection ports.
             </div>
           </div>
         )}
       </ProgressiveDisclosureSection>
-
       {/* ADVANCED LEVEL: Output format and metadata configuration */}
       <ProgressiveDisclosureSection
         title="Output Format & Metadata"
@@ -166,7 +153,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
         priority="important"
         fieldName="format"
       >
-        {wrapFormatHelp(
+        {wrapFormatHelp()
           <SelectEditor
             label="Output Format"
             value={format}
@@ -176,7 +163,6 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
             onChange={(value) => handleFieldChange('format', value)}
           />
         )}
-
         <SelectEditor
           label="Destination"
           value={destination}
@@ -185,7 +171,6 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
           zodType={null as any}
           onChange={(value) => handleFieldChange('destination', value)}
         />
-
         <div style={{ marginBottom: 16 }}>
           <label style={{
             display: 'flex',
@@ -193,7 +178,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
             gap: 8,
             fontSize: 12,
             color: '#e2e8f0',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}>
             <input
               type="checkbox"
@@ -202,7 +187,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
               style={{
                 width: 14,
                 height: 14,
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             />
             Include execution metadata
@@ -211,13 +196,12 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
             fontSize: 10,
             color: '#a0aec0',
             marginTop: 2,
-            marginLeft: 22
+            marginLeft: 22,
           }}>
             Adds execution metadata like timestamp, node path, and seed information
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* ADVANCED LEVEL: Post-processing transformations */}
       <ProgressiveDisclosureSection
         title="Post-Processing Transformations"
@@ -232,12 +216,12 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: 8
+            marginBottom: 8,
           }}>
             <label style={{ 
               fontWeight: 500, 
               color: '#e2e8f0',
-              fontSize: 12
+              fontSize: 12,
             }}>
               Transformations
             </label>
@@ -250,14 +234,13 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
                 border: 'none',
                 borderRadius: 2,
                 color: 'white',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               + Add
             </button>
           </div>
-
-          {transformations.length === 0 ? (
+          {transformations.length === 0 ? ()
             <div style={{
               padding: 12,
               background: '#2d3748',
@@ -266,18 +249,18 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
               textAlign: 'center',
               color: '#a0aec0',
               fontSize: 12,
-              fontStyle: 'italic'
+              fontStyle: 'italic',
             }}>
               No transformations configured. Add transformations to modify output.
             </div>
-          ) : (
+          ) : ()
             <div style={{
               background: '#2d3748',
               border: '1px solid #4a5568',
               borderRadius: 4,
-              padding: 8
+              padding: 8,
             }}>
-              {transformations.map((transformation: string, index: number) => (
+              {transformations.map((transformation: string, index: number) => ()
                 <div key={index} style={{
                   display: 'flex',
                   gap: 8,
@@ -295,7 +278,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
                       borderRadius: 2,
                       background: '#1a202c',
                       color: '#e2e8f0',
-                      fontSize: 12
+                      fontSize: 12,
                     }}
                   />
                   <button
@@ -307,7 +290,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
                       borderRadius: 2,
                       color: 'white',
                       cursor: 'pointer',
-                      fontSize: 10
+                      fontSize: 10,
                     }}
                   >
                     ✕
@@ -317,11 +300,10 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
             </div>
           )}
         </div>
-
         <div style={{
           fontSize: 10,
           color: '#a0aec0',
-          lineHeight: 1.4
+          lineHeight: 1.4,
         }}>
           <strong>Available transformations:</strong><br />
           • trim - Remove leading/trailing whitespace<br />
@@ -331,7 +313,6 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
           • Custom JavaScript expressions supported
         </div>
       </ProgressiveDisclosureSection>
-
       {/* DEBUG LEVEL: Technical details and preview */}
       <ProgressiveDisclosureSection
         title="Technical Details & Preview"
@@ -348,12 +329,11 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
           padding: 12,
           fontSize: 12,
           color: '#e2e8f0',
-          marginBottom: 16
+          marginBottom: 16,
         }}>
           <div style={{ marginBottom: 8, fontWeight: 500 }}>
             Output Configuration Summary:
           </div>
-          
           <div style={{ marginBottom: 4 }}>
             <span style={{ color: '#a0aec0' }}>Node ID:</span> {nodeData.id || 'auto-generated'}
           </div>
@@ -366,19 +346,17 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
           <div style={{ marginBottom: 4 }}>
             <span style={{ color: '#a0aec0' }}>Metadata:</span> {includeMetadata ? 'Included' : 'Excluded'}
           </div>
-          
-          {transformations.length > 0 && (
+          {transformations.length > 0 && ()
             <div style={{ marginBottom: 4 }}>
               <span style={{ color: '#a0aec0' }}>Transformations:</span> {transformations.filter(Boolean).join(' → ')}
             </div>
           )}
-
-          {template && (
+          {template && ()
             <div style={{ 
               marginTop: 8, 
               padding: 8, 
               background: 'rgba(66, 153, 225, 0.1)',
-              borderRadius: 2
+              borderRadius: 2,
             }}>
               <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                 Template Preview:
@@ -389,7 +367,6 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
             </div>
           )}
         </div>
-
         {/* Raw Node Data (Debug only) */}
         <div style={{
           background: '#0d1117',
@@ -397,7 +374,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
           borderRadius: 4,
           padding: 12,
           fontSize: 11,
-          color: '#8b949e'
+          color: '#8b949e',
         }}>
           <div style={{ marginBottom: 8, fontWeight: 500, color: '#f0f6fc' }}>
             Raw Node Data:
@@ -408,7 +385,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
             wordBreak: 'break-all',
             fontFamily: 'Monaco, Consolas, "Courier New", monospace',
             fontSize: 10,
-            lineHeight: 1.4
+            lineHeight: 1.4,
           }}>
             {JSON.stringify(nodeData, null, 2)}
           </pre>

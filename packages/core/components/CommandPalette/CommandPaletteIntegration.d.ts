@@ -9,7 +9,7 @@ import { Node } from 'reactflow';
 import { CommandPaletteAction } from './CommandPalette';
 export interface CommandPaletteIntegrationProps {
     theme?: 'light' | 'dark' | 'cinema';
-    onNodeCreate?: (nodeType: string, position: {
+    onNodeCreate?: (nodeType: string, position: {)
         x: number;
         y: number;
     }, data?: any) => void;

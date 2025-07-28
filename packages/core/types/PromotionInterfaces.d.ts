@@ -306,7 +306,7 @@ export interface CampaignChannel {
     channel: 'email' | 'web' | 'mobile_app' | 'social_media' | 'external_ads';
     enabled: boolean;
     channel_config: Record<string, any>;
-    channel_metrics: {
+    channel_metrics: {,
         impressions: number;
         clicks: number;
         conversions: number;
@@ -379,7 +379,7 @@ export interface CampaignMetrics {
     cost_per_click_cents: number;
     cost_per_conversion_cents: number;
     return_on_ad_spend: number;
-    channel_performance: Array<{
+    channel_performance: Array<{,
         channel: string;
         impressions: number;
         clicks: number;
@@ -387,13 +387,13 @@ export interface CampaignMetrics {
         spend_cents: number;
         roas: number;
     }>;
-    promotion_performance: Array<{
+    promotion_performance: Array<{,
         promotion_id: string;
         promotion_name: string;
         contribution_to_revenue: number;
         usage_count: number;
     }>;
-    daily_metrics: Array<{
+    daily_metrics: Array<{,
         date: string;
         impressions: number;
         clicks: number;
@@ -505,7 +505,7 @@ export interface PromotionApplicationResult {
     original_total_cents: number;
     new_total_cents: number;
     total_savings_cents: number;
-    items_affected: Array<{
+    items_affected: Array<{,
         item_id: string;
         original_price_cents: number;
         discounted_price_cents: number;
@@ -541,7 +541,7 @@ export interface PromotionSearchResult {
     promotions: BasePromotion[];
     total_count: number;
     has_more: boolean;
-    aggregates: {
+    aggregates: {,
         total_active: number;
         total_scheduled: number;
         total_expired: number;
@@ -549,15 +549,15 @@ export interface PromotionSearchResult {
         average_conversion_rate: number;
     };
     facets?: {
-        types: Array<{
+        types: Array<{,
             type: PromotionType;
             count: number;
         }>;
-        statuses: Array<{
+        statuses: Array<{,
             status: PromotionStatus;
             count: number;
         }>;
-        creators: Array<{
+        creators: Array<{,
             creator: string;
             count: number;
         }>;
@@ -575,7 +575,7 @@ export declare const CreatePromotionSchema: z.ZodObject<{
     usage_limit: z.ZodOptional<z.ZodNumber>;
     user_usage_limit: z.ZodOptional<z.ZodNumber>;
     target_type: z.ZodNativeEnum<typeof PromotionTargetType>;
-    targeting_rules: z.ZodArray<z.ZodObject<{
+    targeting_rules: z.ZodArray<z.ZodObject<{,
         type: z.ZodNativeEnum<typeof PromotionTargetType>;
         conditions: z.ZodArray<z.ZodAny, "many">;
         operator: z.ZodEnum<["AND", "OR"]>;
@@ -602,7 +602,7 @@ export declare const CreatePromotionSchema: z.ZodObject<{
     end_date: Date;
     timezone: string;
     application_type: PromotionApplicationType;
-    targeting_rules: {
+    targeting_rules: {,
         type: PromotionTargetType;
         operator: "AND" | "OR";
         conditions: any[];
@@ -620,7 +620,7 @@ export declare const CreatePromotionSchema: z.ZodObject<{
     end_date: Date;
     timezone: string;
     application_type: PromotionApplicationType;
-    targeting_rules: {
+    targeting_rules: {,
         type: PromotionTargetType;
         operator: "AND" | "OR";
         conditions: any[];

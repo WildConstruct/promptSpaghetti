@@ -18,7 +18,6 @@
  * @version 1.0.0
  * @since 2025-07-22
  */
-
 import { SecurityMetrics, SecurityAlert, ComplianceStatus, ResponseAction } from './SecurityDashboardMain';
 
 export interface SecurityAction {
@@ -43,7 +42,6 @@ export interface ApiResponse<T> {
   error?: string;
   timestamp: Date;
 }
-
 /**
  * Security Dashboard Data Service
  */
@@ -53,7 +51,6 @@ export class SecurityDashboardDataService {
   private cache: Map<string, { data: Record<string, unknown>; expires: number }> = new Map();
   private ws: WebSocket | null = null;
   private listeners: Map<string, Function[]> = new Map();
-
   constructor(workspaceId: string, config?: Partial<DataServiceConfig>) {
     this.workspaceId = workspaceId;
     this.config = {
@@ -65,27 +62,22 @@ export class SecurityDashboardDataService {
       ...config
     };
   }
-
   // =============================================================================
   // Core Data Methods
   // =============================================================================
-
   /**
    * Get current security metrics
    */
   async getSecurityMetrics(): Promise<SecurityMetrics> {
-    const cacheKey = `security-metrics-${this.workspaceId}`;
+    const cacheKey = `security-metrics-${this.workspaceId}`;}
     const cached = this.getFromCache(cacheKey);
-    
     if (cached) {
       return cached;
     }
-
     try {
-      const response = await this.apiRequest<SecurityMetrics>(
-        `/security/metrics/${this.workspaceId}`
+      const response = await this.apiRequest<SecurityMetrics>(;)
+        `/security/metrics/${this.workspaceId}`}
       );
-
       if (response.success && response.data) {
         this.setCache(cacheKey, response.data, this.config.cacheTimeout);
         return response.data;
@@ -98,24 +90,21 @@ export class SecurityDashboardDataService {
       return this.getFallbackSecurityMetrics();
     }
   }
-
   /**
    * Get active security alerts
    */
-  async getActiveAlerts(filters?: {
+  async getActiveAlerts(filters?: {)
     severity?: string[];
     category?: string[];
     status?: string[];
     limit?: number;
     offset?: number;
   }): Promise<SecurityAlert[]> {
-    const cacheKey = `security-alerts-${this.workspaceId}-${JSON.stringify(filters)}`;
+    const cacheKey = `security-alerts-${this.workspaceId}-${JSON.stringify(filters)}`;}
     const cached = this.getFromCache(cacheKey);
-    
     if (cached) {
       return cached;
     }
-
     try {
       const queryParams = new URLSearchParams();
       if (filters) {
@@ -127,22 +116,19 @@ export class SecurityDashboardDataService {
           }
         });
       }
-
-      const response = await this.apiRequest<SecurityAlert[]>(
-        `/security/alerts/${this.workspaceId}?${queryParams.toString()}`
+      const response = await this.apiRequest<SecurityAlert[]>(;)
+        `/security/alerts/${this.workspaceId}?${queryParams.toString()}`}
       );
-
       if (response.success && response.data) {
         // Transform dates and ensure proper typing
-        const alerts = response.data.map(alert => ({
+        const alerts = response.data.map(alert => ({)
           ...alert,
           timestamp: new Date(alert.timestamp),
-          responseActions: alert.responseActions.map(action => ({
+          responseActions: alert.responseActions.map(action => ({)
             ...action,
             timestamp: action.timestamp ? new Date(action.timestamp) : undefined
           }))
         }));
-
         this.setCache(cacheKey, alerts, 15); // Cache for 15 seconds
         return alerts;
       } else {
@@ -154,34 +140,29 @@ export class SecurityDashboardDataService {
       return this.getFallbackSecurityAlerts();
     }
   }
-
   /**
    * Get compliance status
    */
   async getComplianceStatus(): Promise<ComplianceStatus[]> {
-    const cacheKey = `compliance-status-${this.workspaceId}`;
+    const cacheKey = `compliance-status-${this.workspaceId}`;}
     const cached = this.getFromCache(cacheKey);
-    
     if (cached) {
       return cached;
     }
-
     try {
-      const response = await this.apiRequest<ComplianceStatus[]>(
-        `/security/compliance/${this.workspaceId}`
+      const response = await this.apiRequest<ComplianceStatus[]>(;)
+        `/security/compliance/${this.workspaceId}`}
       );
-
       if (response.success && response.data) {
         // Transform dates
-        const complianceData = response.data.map(status => ({
+        const complianceData = response.data.map(status => ({)
           ...status,
           lastAssessment: new Date(status.lastAssessment),
-          violations: status.violations.map(violation => ({
+          violations: status.violations.map(violation => ({)
             ...violation,
             dueDate: new Date(violation.dueDate)
           }))
         }));
-
         this.setCache(cacheKey, complianceData, this.config.cacheTimeout * 2); // Cache longer
         return complianceData;
       } else {
@@ -193,7 +174,6 @@ export class SecurityDashboardDataService {
       return this.getFallbackComplianceStatus();
     }
   }
-
   /**
    * Execute a security action
    */
@@ -205,19 +185,16 @@ export class SecurityDashboardDataService {
         timestamp: new Date(),
         executedBy: 'current-user' // Would get from auth context
       };
-
-      const response = await this.apiRequest(
-        `/security/actions/${this.workspaceId}`,
+      const response = await this.apiRequest(;)
+        `/security/actions/${this.workspaceId}`,}
         {
           method: 'POST',
-          body: JSON.stringify(action)
+          body: JSON.stringify(action),
         }
       );
-
       if (!response.success) {
         throw new Error(response.error || 'Failed to execute security action');
       }
-
       // Emit event for real-time updates
       this.emit('security_action_executed', action);
     } catch (error) {
@@ -225,27 +202,23 @@ export class SecurityDashboardDataService {
       throw error;
     }
   }
-
   /**
    * Update an alert
    */
   async updateAlert(alertId: string, updates: Partial<SecurityAlert>): Promise<SecurityAlert> {
     try {
-      const response = await this.apiRequest<SecurityAlert>(
-        `/security/alerts/${this.workspaceId}/${alertId}`,
+      const response = await this.apiRequest<SecurityAlert>(;)
+        `/security/alerts/${this.workspaceId}/${alertId}`,}
         {
           method: 'PATCH',
-          body: JSON.stringify(updates)
+          body: JSON.stringify(updates),
         }
       );
-
       if (response.success && response.data) {
         // Invalidate relevant cache entries
-        this.invalidateCache(`security-alerts-${this.workspaceId}`);
-        
+        this.invalidateCache(`security-alerts-${this.workspaceId}`);}
         // Emit event for real-time updates
         this.emit('alert_updated', response.data);
-        
         return response.data;
       } else {
         throw new Error(response.error || 'Failed to update alert');
@@ -255,11 +228,9 @@ export class SecurityDashboardDataService {
       throw error;
     }
   }
-
   // =============================================================================
   // Real-time Event Handling
   // =============================================================================
-
   /**
    * Subscribe to real-time events
    */
@@ -269,7 +240,6 @@ export class SecurityDashboardDataService {
     }
     this.listeners.get(event)!.push(callback);
   }
-
   /**
    * Unsubscribe from events
    */
@@ -282,37 +252,33 @@ export class SecurityDashboardDataService {
       }
     }
   }
-
   /**
    * Emit events to subscribers
    */
   private emit(event: string, data: Record<string, unknown>): void {
     const eventListeners = this.listeners.get(event);
     if (eventListeners) {
-      eventListeners.forEach(callback => {
+      eventListeners.forEach(callback => {)
         try {
           callback(data);
         } catch (error) {
-          console.error(`Error in event listener for ${event}:`, error);
+          console.error(`Error in event listener for ${event}:`, error);}
         }
       });
     }
   }
-
   /**
    * Initialize WebSocket connection for real-time updates
    */
   initializeWebSocket(): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
-        this.ws = new WebSocket(`${this.config.wsUrl}/security-dashboard/${this.workspaceId}`);
-        
+        this.ws = new WebSocket(`${this.config.wsUrl}/security-dashboard/${this.workspaceId}`);}
         this.ws.onopen = () => {
           console.log('Security dashboard WebSocket connected');
           this.emit('connection_established', { workspaceId: this.workspaceId });
           resolve();
         };
-
         this.ws.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data);
@@ -321,17 +287,14 @@ export class SecurityDashboardDataService {
             console.error('Failed to parse WebSocket message:', error);
           }
         };
-
         this.ws.onclose = () => {
           console.log('Security dashboard WebSocket disconnected');
           this.emit('connection_lost', { workspaceId: this.workspaceId });
-          
           // Attempt to reconnect after 5 seconds
           setTimeout(() => {
             this.initializeWebSocket().catch(console.error);
           }, 5000);
         };
-
         this.ws.onerror = (error) => {
           console.error('Security dashboard WebSocket error:', error);
           this.emit('connection_error', { error });
@@ -343,73 +306,64 @@ export class SecurityDashboardDataService {
       }
     });
   }
-
   /**
    * Handle incoming WebSocket messages
    */
   private handleWebSocketMessage(data: Record<string, unknown>): void {
     switch (data.type) {
     case 'security_metrics_update':
-      this.invalidateCache(`security-metrics-${this.workspaceId}`);
+      this.invalidateCache(`security-metrics-${this.workspaceId}`);}
       this.emit('security_metrics', data.payload);
       break;
-
     case 'new_security_alert':
-      this.invalidateCache(`security-alerts-${this.workspaceId}`);
-      this.emit('security_alert', {
+      this.invalidateCache(`security-alerts-${this.workspaceId}`);}
+      this.emit('security_alert', {)
         ...data.payload,
         timestamp: new Date(data.payload.timestamp)
       });
       break;
-
     case 'alert_status_change':
-      this.invalidateCache(`security-alerts-${this.workspaceId}`);
-      this.emit('alert_update', {
+      this.invalidateCache(`security-alerts-${this.workspaceId}`);}
+      this.emit('alert_update', {)
         ...data.payload,
         timestamp: new Date(data.payload.timestamp)
       });
       break;
-
     case 'compliance_status_update':
-      this.invalidateCache(`compliance-status-${this.workspaceId}`);
-      this.emit('compliance_update', {
+      this.invalidateCache(`compliance-status-${this.workspaceId}`);}
+      this.emit('compliance_update', {)
         ...data.payload,
         lastAssessment: new Date(data.payload.lastAssessment)
       });
       break;
-
     default:
       console.log('Unknown WebSocket message type:', data.type);
     }
   }
-
   // =============================================================================
   // Private Helper Methods
   // =============================================================================
-
   /**
    * Make API request with retry logic
    */
-  private async apiRequest<T>(
+  private async apiRequest<T>()
     endpoint: string, 
     options?: RequestInit
   ): Promise<ApiResponse<T>> {
-    const url = `${this.config.baseUrl}${endpoint}`;
+    const url = `${this.config.baseUrl}${endpoint}`;}
     const requestOptions: RequestInit = {
-      headers: {
+      headers: {,
         'Content-Type': 'application/json',
-        ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }),
+        ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }),}
         ...options?.headers
       },
       timeout: this.config.timeout,
       ...options
     };
-
     for (let attempt = 1; attempt <= this.config.retryAttempts; attempt++) {
       try {
         const response = await fetch(url, requestOptions);
         const data = await response.json();
-
         if (response.ok) {
           return {
             success: true,
@@ -419,13 +373,12 @@ export class SecurityDashboardDataService {
         } else {
           return {
             success: false,
-            error: data.error || `HTTP ${response.status}: ${response.statusText}`,
+            error: data.error || `HTTP ${response.status}: ${response.statusText}`,}
             timestamp: new Date()
           };
         }
       } catch (error) {
-        console.error(`API request attempt ${attempt} failed:`, error);
-        
+        console.error(`API request attempt ${attempt} failed:`, error);}
         if (attempt === this.config.retryAttempts) {
           return {
             success: false,
@@ -433,42 +386,35 @@ export class SecurityDashboardDataService {
             timestamp: new Date()
           };
         }
-        
         // Wait before retrying (exponential backoff)
         await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
       }
     }
-
     return {
       success: false,
       error: 'Max retry attempts exceeded',
       timestamp: new Date()
     };
   }
-
   /**
    * Cache management
    */
   private setCache(key: string, data: Record<string, unknown>, ttlSeconds: number): void {
-    this.cache.set(key, {
+    this.cache.set(key, {)
       data,
       expires: Date.now() + (ttlSeconds * 1000)
     });
   }
-
   private getFromCache(key: string): any | null {
     const cached = this.cache.get(key);
     if (cached && cached.expires > Date.now()) {
       return cached.data;
     }
-    
     if (cached) {
       this.cache.delete(key);
     }
-    
     return null;
   }
-
   private invalidateCache(keyPattern: string): void {
     const keysToDelete: string[] = [];
     for (const key of this.cache.keys()) {
@@ -478,7 +424,6 @@ export class SecurityDashboardDataService {
     }
     keysToDelete.forEach(key => this.cache.delete(key));
   }
-
   /**
    * Fallback data methods (for offline/error scenarios)
    */
@@ -491,7 +436,6 @@ export class SecurityDashboardDataService {
       lastScanTime: new Date(Date.now() - 30 * 60 * 1000) // 30 minutes ago
     };
   }
-
   private getFallbackSecurityAlerts(): SecurityAlert[] {
     return [
       {
@@ -505,7 +449,7 @@ export class SecurityDashboardDataService {
         status: 'new',
         affectedAssets: ['WS-4521'],
         indicators: ['suspicious.exe', 'registry.modification'],
-        responseActions: []
+        responseActions: [],
       },
       {
         id: 'alert-002',
@@ -519,7 +463,7 @@ export class SecurityDashboardDataService {
         assignee: 'analyst-1',
         affectedAssets: ['Server-Web-01'],
         indicators: ['192.168.1.100', 'failed.login'],
-        responseActions: [
+        responseActions: [,
           {
             id: 'action-001',
             type: 'investigate',
@@ -533,7 +477,6 @@ export class SecurityDashboardDataService {
       }
     ];
   }
-
   private getFallbackComplianceStatus(): ComplianceStatus[] {
     return [
       {
@@ -547,7 +490,7 @@ export class SecurityDashboardDataService {
         framework: 'SOX',
         status: 'partial',
         score: 78,
-        violations: [
+        violations: [,
           {
             id: 'sox-001',
             type: 'Access Control',
@@ -561,7 +504,6 @@ export class SecurityDashboardDataService {
       }
     ];
   }
-
   /**
    * Cleanup resources
    */
@@ -570,7 +512,6 @@ export class SecurityDashboardDataService {
       this.ws.close();
       this.ws = null;
     }
-    
     this.cache.clear();
     this.listeners.clear();
   }

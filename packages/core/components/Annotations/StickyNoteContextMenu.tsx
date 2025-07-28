@@ -5,14 +5,12 @@
  * Context menu for sticky note operations like edit, delete, 
  * change color, and duplicate.
  */
-
 import React, { useEffect, useRef } from 'react';
 import { 
   StickyNoteColor, 
   STICKY_NOTE_COLORS,
   StickyNoteContextMenuOptions 
 } from '../../types/CollaborationTypes';
-
 interface StickyNoteContextMenuProps extends StickyNoteContextMenuOptions {
   onClose: () => void;
 }
@@ -23,24 +21,19 @@ export
     if (menuRef.current) {
       const menu = menuRef.current;
       const rect = menu.getBoundingClientRect();
-      
       // Adjust position if menu would go off-screen
       let adjustedX = x;
       let adjustedY = y;
-      
       if (x + rect.width > window.innerWidth) {
         adjustedX = window.innerWidth - rect.width - 10;
       }
-      
       if (y + rect.height > window.innerHeight) {
         adjustedY = window.innerHeight - rect.height - 10;
       }
-      
-      menu.style.left = `${Math.max(10, adjustedX)}px`;
-      menu.style.top = `${Math.max(10, adjustedY)}px`;
+      menu.style.left = `${Math.max(10, adjustedX)}px`;}
+      menu.style.top = `${Math.max(10, adjustedY)}px`;}
     }
   }, [x, y]);
-
   // Close menu on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -48,11 +41,9 @@ export
         onClose();
       }
     };
-    
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [onClose]);
-
   // Handle escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -60,18 +51,16 @@ export
         onClose();
       }
     };
-    
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
-
   const MenuItem: React.FC<{
     onClick: () => void;
     disabled?: boolean;
     children: React.ReactNode;
     icon?: string;
     shortcut?: string;
-  }> = ({ onClick, disabled = false, children, icon, shortcut }) => (
+  }> = ({ onClick, disabled = false, children, icon, shortcut }) => ()
     <div
       onClick={disabled ? undefined : onClick}
       style={{
@@ -101,7 +90,7 @@ export
         {icon && <span style={{ fontSize: 14 }}>{icon}</span>}
         {children}
       </div>
-      {shortcut && (
+      {shortcut && ()
         <span style={{ 
           fontSize: 11, 
           color: '#6b7280',
@@ -112,8 +101,7 @@ export
       )}
     </div>
   );
-
-  return (
+  return ()
     <div
       ref={menuRef}
       style={{
@@ -137,7 +125,6 @@ export
       >
         Edit Note
       </MenuItem>
-
       {/* Duplicate */}
       <MenuItem
         onClick={() => onDuplicate?.()}
@@ -146,13 +133,11 @@ export
       >
         Duplicate
       </MenuItem>
-
       <div style={{
         height: 1,
         background: '#e5e7eb',
         margin: '4px 0'
       }} />
-
       {/* Color Options */}
       <div style={{ padding: '8px 12px' }}>
         <div style={{
@@ -161,16 +146,16 @@ export
           color: '#6b7280',
           marginBottom: 6,
           textTransform: 'uppercase',
-          letterSpacing: '0.05em'
+          letterSpacing: '0.05em',
         }}>
           Change Color
         </div>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 8
+          gap: 8,
         }}>
-          {Object.entries(STICKY_NOTE_COLORS).map(([color, info]) => (
+          {Object.entries(STICKY_NOTE_COLORS).map(([color, info]) => ()
             <button
               key={color}
               onClick={() => onChangeColor?.(color as StickyNoteColor)}
@@ -180,18 +165,18 @@ export
                 gap: 6,
                 padding: '6px 8px',
                 background: info.background,
-                border: `1px solid ${info.border}`,
+                border: `1px solid ${info.border}`,}
                 borderRadius: 4,
                 cursor: 'pointer',
                 fontSize: 10,
                 color: info.text,
                 fontWeight: 500,
                 transition: 'all 0.15s ease',
-                textAlign: 'left'
+                textAlign: 'left',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'scale(1.05)';
-                e.currentTarget.style.boxShadow = `0 2px 8px ${info.shadow}`;
+                e.currentTarget.style.boxShadow = `0 2px 8px ${info.shadow}`;}
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'scale(1)';
@@ -203,20 +188,18 @@ export
                 width: 8,
                 height: 8,
                 borderRadius: '50%',
-                background: info.border
+                background: info.border,
               }} />
               {info.category}
             </button>
           ))}
         </div>
       </div>
-
       <div style={{
         height: 1,
         background: '#e5e7eb',
         margin: '4px 0'
       }} />
-
       {/* Delete */}
       <MenuItem
         onClick={() => onDelete?.()}

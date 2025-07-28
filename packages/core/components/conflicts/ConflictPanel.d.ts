@@ -3,7 +3,7 @@ export interface ConflictData {
     id: string;
     type: string;
     description: string;
-    operations: Array<{
+    operations: Array<{,
         id: string;
         userId: string;
         userName?: string;

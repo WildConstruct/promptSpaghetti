@@ -4,7 +4,6 @@
  * Comprehensive ticket detail view with comments, attachments, status updates,
  * and SLA tracking. Provides full ticket management capabilities.
  */
-
 import React, { useState, useMemo } from 'react';
 import {
   MarketplaceTicket,
@@ -14,7 +13,6 @@ import {
   TicketAttachment,
   Epic16TicketIntegrationService
 } from '../../services/Epic16TicketIntegrationService';
-
 interface TicketDetailsViewProps {
   ticket: MarketplaceTicket;
   ticketService: Epic16TicketIntegrationService;
@@ -23,14 +21,13 @@ interface TicketDetailsViewProps {
   onClose?: () => void;
   onTicketUpdate?: (ticket: MarketplaceTicket) => void;
 }
-
 interface CommentFormData {
   content: string;
   visibility: 'public' | 'internal' | 'private';
   attachments: File[];
 }
 
-export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
+export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
   ticket,
   ticketService,
   userId,
@@ -41,37 +38,30 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
   const [currentTicket, setCurrentTicket] = useState<MarketplaceTicket>(ticket);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
-  const [commentForm, setCommentForm] = useState<CommentFormData>({
+  const [commentForm, setCommentForm] = useState<CommentFormData>({)
     content: '',
     visibility: 'public',
-    attachments: []
+    attachments: [],
   });
-
   const [showStatusUpdate, setShowStatusUpdate] = useState(false);
   const [showAssignment, setShowAssignment] = useState(false);
   const [showEscalation, setShowEscalation] = useState(false);
-
   // Permissions
   const canModify = useMemo(() => {
     return userRole === 'admin' || 
            (userRole === 'agent' && currentTicket.assignedTo === userId) ||
            (currentTicket.metadata.userId === userId);
   }, [userRole, currentTicket.assignedTo, currentTicket.metadata.userId, userId]);
-
   const canViewInternal = useMemo(() => {
     return userRole === 'admin' || userRole === 'agent';
   }, [userRole]);
-
   // SLA calculations
   const slaStatus = useMemo(() => {
     const now = new Date();
     const responseDeadline = currentTicket.sla.responseTime.deadline;
     const resolutionDeadline = currentTicket.sla.resolutionTime.deadline;
-    
     const responseTimeRemaining = responseDeadline.getTime() - now.getTime();
     const resolutionTimeRemaining = resolutionDeadline.getTime() - now.getTime();
-    
     return {
       responseOverdue: responseTimeRemaining < 0 && !currentTicket.sla.responseTime.actual,
       resolutionOverdue: resolutionTimeRemaining < 0 && !currentTicket.sla.resolutionTime.actual,
@@ -81,40 +71,34 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
       resolutionTimeRemaining: Math.max(0, resolutionTimeRemaining)
     };
   }, [currentTicket]);
-
   // Format time remaining
   const formatTimeRemaining = (ms: number): string => {
     const hours = Math.floor(ms / (1000 * 60 * 60));
     const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-    
     if (hours > 24) {
       const days = Math.floor(hours / 24);
-      return `${days}d ${hours % 24}h`;
+      return `${days}d ${hours % 24}h`;}
     } else if (hours > 0) {
-      return `${hours}h ${minutes}m`;
+      return `${hours}h ${minutes}m`;}
     } else {
-      return `${minutes}m`;
+      return `${minutes}m`;}
     }
   };
-
   // Handle comment submission
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!commentForm.content.trim()) return;
-    
     setLoading(true);
     setError(null);
-    
     try {
-      const newComment = await ticketService.addComment(currentTicket.id, {
+      const newComment = await ticketService.addComment(currentTicket.id, {)
         content: commentForm.content,
         author: userId,
         authorType: userRole === 'user' ? 'user' : 'agent',
         visibility: commentForm.visibility,
         attachments: [], // Simplified - would handle file uploads
-        mentions: []
+        mentions: [],
       });
-      
       if (newComment) {
         const updatedTicket = {
           ...currentTicket,
@@ -123,12 +107,11 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
         };
         setCurrentTicket(updatedTicket);
         onTicketUpdate?.(updatedTicket);
-        
         // Reset form
-        setCommentForm({
+        setCommentForm({)
           content: '',
           visibility: 'public',
-          attachments: []
+          attachments: [],
         });
       }
     } catch (err) {
@@ -137,12 +120,10 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
       setLoading(false);
     }
   };
-
   // Handle status update
   const handleStatusUpdate = async (newStatus: TicketStatus) => {
     setLoading(true);
     setError(null);
-    
     try {
       const updatedTicket = await ticketService.updateTicketStatus(currentTicket.id, newStatus, userId);
       if (updatedTicket) {
@@ -156,12 +137,10 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
       setLoading(false);
     }
   };
-
   // Handle assignment
   const handleAssignment = async (assigneeId: string) => {
     setLoading(true);
     setError(null);
-    
     try {
       const updatedTicket = await ticketService.assignTicket(currentTicket.id, assigneeId, userId);
       if (updatedTicket) {
@@ -175,12 +154,10 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
       setLoading(false);
     }
   };
-
   // Handle escalation
   const handleEscalation = async (reason: string) => {
     setLoading(true);
     setError(null);
-    
     try {
       const updatedTicket = await ticketService.escalateTicket(currentTicket.id, reason, userId);
       if (updatedTicket) {
@@ -194,18 +171,16 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
       setLoading(false);
     }
   };
-
   // Filter comments based on visibility permissions
   const visibleComments = useMemo(() => {
-    return currentTicket.comments.filter(comment => {
+    return currentTicket.comments.filter(comment => {)
       if (comment.visibility === 'public') return true;
       if (comment.visibility === 'internal' && canViewInternal) return true;
       if (comment.visibility === 'private' && (comment.author === userId || userRole === 'admin')) return true;
       return false;
     });
   }, [currentTicket.comments, canViewInternal, userId, userRole]);
-
-  return (
+  return ()
     <div className="ticket-details-view h-full flex flex-col bg-white">
       {/* Header */}
       <div className="border-b border-gray-200 p-6">
@@ -215,22 +190,19 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
               <span className="text-sm font-medium text-blue-600">#{currentTicket.id.split('-').pop()}</span>
               <StatusBadge status={currentTicket.status} />
               <PriorityBadge priority={currentTicket.priority} />
-              
-              {slaStatus.responseOverdue && (
+              {slaStatus.responseOverdue && ()
                 <span className="px-2 py-1 bg-red-500 text-white text-xs font-medium rounded-full">
                   RESPONSE OVERDUE
                 </span>
               )}
-              {slaStatus.resolutionOverdue && (
+              {slaStatus.resolutionOverdue && ()
                 <span className="px-2 py-1 bg-red-500 text-white text-xs font-medium rounded-full">
                   RESOLUTION OVERDUE
                 </span>
               )}
             </div>
-            
             <h1 className="text-xl font-bold text-gray-900 mb-2">{currentTicket.title}</h1>
             <p className="text-gray-600">{currentTicket.description}</p>
-            
             <div className="flex items-center space-x-6 mt-4 text-sm text-gray-500">
               <span>Type: {currentTicket.type.replace('_', ' ')}</span>
               <span>Category: {currentTicket.category}</span>
@@ -239,9 +211,8 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
               <span>Updated: {currentTicket.updatedAt.toLocaleDateString()}</span>
             </div>
           </div>
-
           <div className="flex items-center space-x-2">
-            {canModify && (
+            {canModify && ()
               <>
                 <button
                   onClick={() => setShowStatusUpdate(true)}
@@ -249,14 +220,12 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
                 >
                   Update Status
                 </button>
-                
                 <button
                   onClick={() => setShowAssignment(true)}
                   className="px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200"
                 >
                   Assign
                 </button>
-                
                 <button
                   onClick={() => setShowEscalation(true)}
                   className="px-3 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700"
@@ -265,8 +234,7 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
                 </button>
               </>
             )}
-            
-            {onClose && (
+            {onClose && ()
               <button
                 onClick={onClose}
                 className="p-2 text-gray-400 hover:text-gray-600"
@@ -278,7 +246,6 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
             )}
           </div>
         </div>
-
         {/* SLA Status */}
         <div className="mt-4 grid grid-cols-2 gap-4">
           <div className="bg-gray-50 rounded-lg p-3">
@@ -289,7 +256,7 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
                   slaStatus.responseWarning ? 'text-yellow-600' : 'text-green-600'
               }`}>
                 {currentTicket.sla.responseTime.actual 
-                  ? `Responded in ${currentTicket.sla.responseTime.actual}m`
+                  ? `Responded in ${currentTicket.sla.responseTime.actual}m`}
                   : slaStatus.responseOverdue 
                     ? 'OVERDUE' 
                     : formatTimeRemaining(slaStatus.responseTimeRemaining)
@@ -297,7 +264,6 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
               </span>
             </div>
           </div>
-          
           <div className="bg-gray-50 rounded-lg p-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">Resolution SLA</span>
@@ -306,7 +272,7 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
                   slaStatus.resolutionWarning ? 'text-yellow-600' : 'text-green-600'
               }`}>
                 {currentTicket.sla.resolutionTime.actual 
-                  ? `Resolved in ${Math.round(currentTicket.sla.resolutionTime.actual / 60)}h`
+                  ? `Resolved in ${Math.round(currentTicket.sla.resolutionTime.actual / 60)}h`}
                   : slaStatus.resolutionOverdue 
                     ? 'OVERDUE' 
                     : formatTimeRemaining(slaStatus.resolutionTimeRemaining)
@@ -315,14 +281,12 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
             </div>
           </div>
         </div>
-
-        {error && (
+        {error && ()
           <div className="mt-4 bg-red-50 border border-red-200 rounded-md p-4">
             <p className="text-sm text-red-700">{error}</p>
           </div>
         )}
       </div>
-
       {/* Content Area */}
       <div className="flex-1 flex overflow-hidden">
         {/* Main Content - Comments */}
@@ -332,17 +296,15 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
             <h2 className="text-lg font-medium text-gray-900 mb-4">
               Comments ({visibleComments.length})
             </h2>
-            
             <div className="space-y-4">
-              {visibleComments.map((comment) => (
+              {visibleComments.map((comment) => ()
                 <CommentItem 
                   key={comment.id} 
                   comment={comment} 
                   canViewInternal={canViewInternal}
                 />
               ))}
-              
-              {visibleComments.length === 0 && (
+              {visibleComments.length === 0 && ()
                 <div className="text-center py-8 text-gray-500">
                   <svg className="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -352,7 +314,6 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
               )}
             </div>
           </div>
-
           {/* Comment Form */}
           <div className="border-t border-gray-200 p-6">
             <form onSubmit={handleCommentSubmit} className="space-y-4">
@@ -366,10 +327,9 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
                   required
                 />
               </div>
-              
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  {canViewInternal && (
+                  {canViewInternal && ()
                     <div>
                       <select
                         value={commentForm.visibility}
@@ -383,7 +343,6 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
                     </div>
                   )}
                 </div>
-                
                 <button
                   type="submit"
                   disabled={loading || !commentForm.content.trim()}
@@ -395,15 +354,14 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
             </form>
           </div>
         </div>
-
         {/* Sidebar - Metadata and Actions */}
         <div className="w-80 border-l border-gray-200 bg-gray-50 p-6 overflow-y-auto">
           {/* Labels */}
-          {currentTicket.labels.length > 0 && (
+          {currentTicket.labels.length > 0 && ()
             <div className="mb-6">
               <h3 className="text-sm font-medium text-gray-900 mb-2">Labels</h3>
               <div className="flex flex-wrap gap-2">
-                {currentTicket.labels.map((label) => (
+                {currentTicket.labels.map((label) => ()
                   <span key={label} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
                     {label}
                   </span>
@@ -411,25 +369,23 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
               </div>
             </div>
           )}
-
           {/* Attachments */}
-          {currentTicket.attachments.length > 0 && (
+          {currentTicket.attachments.length > 0 && ()
             <div className="mb-6">
               <h3 className="text-sm font-medium text-gray-900 mb-2">Attachments</h3>
               <div className="space-y-2">
-                {currentTicket.attachments.map((attachment) => (
+                {currentTicket.attachments.map((attachment) => ()
                   <AttachmentItem key={attachment.id} attachment={attachment} />
                 ))}
               </div>
             </div>
           )}
-
           {/* External Integrations */}
-          {currentTicket.externalIntegrations.length > 0 && (
+          {currentTicket.externalIntegrations.length > 0 && ()
             <div className="mb-6">
               <h3 className="text-sm font-medium text-gray-900 mb-2">External Links</h3>
               <div className="space-y-2">
-                {currentTicket.externalIntegrations.map((integration) => (
+                {currentTicket.externalIntegrations.map((integration) => ()
                   <div key={integration.system} className="flex items-center justify-between p-2 bg-white rounded border">
                     <span className="text-sm font-medium">{integration.system}</span>
                     <span className={`px-2 py-1 text-xs rounded ${
@@ -446,27 +402,24 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
           )}
         </div>
       </div>
-
       {/* Status Update Modal */}
-      {showStatusUpdate && (
+      {showStatusUpdate && ()
         <StatusUpdateModal
           currentStatus={currentTicket.status}
           onStatusUpdate={handleStatusUpdate}
           onClose={() => setShowStatusUpdate(false)}
         />
       )}
-
       {/* Assignment Modal */}
-      {showAssignment && (
+      {showAssignment && ()
         <AssignmentModal
           currentAssignee={currentTicket.assignedTo}
           onAssign={handleAssignment}
           onClose={() => setShowAssignment(false)}
         />
       )}
-
       {/* Escalation Modal */}
-      {showEscalation && (
+      {showEscalation && ()
         <EscalationModal
           onEscalate={handleEscalation}
           onClose={() => setShowEscalation(false)}
@@ -477,7 +430,6 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
 };
 
 // Helper Components
-
 const StatusBadge: React.FC<{ status: TicketStatus }> = ({ status }) => {
   const colors = {
     [TicketStatus.NEW]: 'bg-blue-100 text-blue-800',
@@ -492,14 +444,12 @@ const StatusBadge: React.FC<{ status: TicketStatus }> = ({ status }) => {
     [TicketStatus.ESCALATED]: 'bg-red-500 text-white',
     [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700'
   };
-
-  return (
-    <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>
+  return ()
+    <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>}
       {status.replace('_', ' ').toUpperCase()}
     </span>
   );
 };
-
 const PriorityBadge: React.FC<{ priority: TicketPriority }> = ({ priority }) => {
   const colors = {
     [TicketPriority.LOW]: 'bg-gray-100 text-gray-800',
@@ -508,37 +458,32 @@ const PriorityBadge: React.FC<{ priority: TicketPriority }> = ({ priority }) => 
     [TicketPriority.URGENT]: 'bg-orange-100 text-orange-800',
     [TicketPriority.CRITICAL]: 'bg-red-500 text-white'
   };
-
-  return (
-    <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>
+  return ()
+    <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>}
       {priority.toUpperCase()}
     </span>
   );
 };
-
 const CommentItem: React.FC<{ comment: TicketComment; _canViewInternal: boolean }> = ({ comment, canViewInternal }) => {
   const visibilityColors = {
     public: 'bg-green-100 text-green-800',
     internal: 'bg-yellow-100 text-yellow-800',
     private: 'bg-red-100 text-red-800'
   };
-
-  return (
+  return ()
     <div className="bg-white border border-gray-200 rounded-lg p-4">
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center space-x-2">
           <span className="font-medium text-gray-900">{comment.author}</span>
           <span className="text-sm text-gray-500">{comment.authorType}</span>
-          <span className={`px-2 py-1 rounded-full text-xs font-medium ${visibilityColors[comment.visibility]}`}>
+          <span className={`px-2 py-1 rounded-full text-xs font-medium ${visibilityColors[comment.visibility]}`}>}
             {comment.visibility.toUpperCase()}
           </span>
         </div>
         <span className="text-sm text-gray-500">{comment.createdAt.toLocaleString()}</span>
       </div>
-      
       <p className="text-gray-700 whitespace-pre-wrap">{comment.content}</p>
-      
-      {comment.attachments.length > 0 && (
+      {comment.attachments.length > 0 && ()
         <div className="mt-2 text-sm text-blue-600">
           {comment.attachments.length} attachment{comment.attachments.length !== 1 ? 's' : ''}
         </div>
@@ -546,9 +491,8 @@ const CommentItem: React.FC<{ comment: TicketComment; _canViewInternal: boolean 
     </div>
   );
 };
-
 const AttachmentItem: React.FC<{ attachment: TicketAttachment }> = ({ attachment }) => {
-  return (
+  return ()
     <div className="flex items-center justify-between p-2 bg-white rounded border">
       <div className="flex items-center space-x-2">
         <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -568,28 +512,25 @@ const StatusUpdateModal: React.FC<{
   onClose: () => void;
 }> = ({ currentStatus, onStatusUpdate, onClose }) => {
   const [selectedStatus, setSelectedStatus] = useState(currentStatus);
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">Update Status</h3>
         </div>
-        
         <div className="p-6">
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value as TicketStatus)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
           >
-            {Object.values(TicketStatus).map((status) => (
+            {Object.values(TicketStatus).map((status) => ()
               <option key={status} value={status}>
                 {status.replace('_', ' ').toUpperCase()}
               </option>
             ))}
           </select>
         </div>
-        
         <div className="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
           <button
             onClick={onClose}
@@ -608,21 +549,18 @@ const StatusUpdateModal: React.FC<{
     </div>
   );
 };
-
 const AssignmentModal: React.FC<{
   currentAssignee?: string;
   onAssign: (assigneeId: string) => void;
   onClose: () => void;
 }> = ({ currentAssignee, onAssign, onClose }) => {
   const [selectedAssignee, setSelectedAssignee] = useState(currentAssignee || '');
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">Assign Ticket</h3>
         </div>
-        
         <div className="p-6">
           <select
             value={selectedAssignee}
@@ -636,7 +574,6 @@ const AssignmentModal: React.FC<{
             <option value="agent-4">Agent 4</option>
           </select>
         </div>
-        
         <div className="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
           <button
             onClick={onClose}
@@ -655,20 +592,17 @@ const AssignmentModal: React.FC<{
     </div>
   );
 };
-
 const EscalationModal: React.FC<{
   onEscalate: (reason: string) => void;
   onClose: () => void;
 }> = ({ onEscalate, onClose }) => {
   const [reason, setReason] = useState('');
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">Escalate Ticket</h3>
         </div>
-        
         <div className="p-6">
           <textarea
             value={reason}
@@ -679,7 +613,6 @@ const EscalationModal: React.FC<{
             required
           />
         </div>
-        
         <div className="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
           <button
             onClick={onClose}

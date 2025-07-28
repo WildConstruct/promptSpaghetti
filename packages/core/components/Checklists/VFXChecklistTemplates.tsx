@@ -1,12 +1,10 @@
 /**
 import { CheckSquare } from 'lucide-react';
-
  * VFX Checklist Templates - E17-1753114397304-B22E55
  * 
  * Pre-built checklist templates for common VFX workflows and production phases.
  * Supports template creation, sharing, and customization for different project types.
  */
-
 import React, { useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -38,7 +36,6 @@ import {
   CheckCircle,
   Settings
 } from 'lucide-react';
-
 import type { 
   VFXChecklistTemplate, 
   VFXChecklistCategory, 
@@ -57,7 +54,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
     phase: 'asset_build',
     isPublic: true,
     usageCount: 247,
-    createdBy: {
+    createdBy: {,
       id: 'system',
       name: 'Wild Construct',
       role: 'director',
@@ -65,7 +62,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
       color: '#3b82f6',
       permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true }
     },
-    items: [
+    items: [,
       {
         title: 'Concept Art Review',
         description: 'Review and approve initial concept art and design direction',
@@ -75,14 +72,14 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'concept',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Historical accuracy validation', completed: false },
           { id: '2', title: 'Art direction alignment', completed: false },
           { id: '3', title: 'Technical feasibility check', completed: false }
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Historical Accuracy', type: 'accuracy', status: 'pending', criteria: '90%+ accuracy score', required: true },
           { id: '2', name: 'Art Direction', type: 'creative', status: 'pending', criteria: 'Director approval', required: true }
         ],
@@ -90,7 +87,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: [],
         tags: ['concept', 'art', 'accuracy'],
         estimatedHours: 4,
-        history: []
+        history: [],
       },
       {
         title: '3D Model Creation',
@@ -101,7 +98,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'asset_build',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Base mesh modeling', completed: false },
           { id: '2', title: 'Detail sculpting', completed: false },
           { id: '3', title: 'Retopology for animation', completed: false },
@@ -109,7 +106,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Topology Check', type: 'technical', status: 'pending', criteria: 'Clean quad topology', required: true },
           { id: '2', name: 'UV Layout', type: 'technical', status: 'pending', criteria: 'Efficient UV layout', required: true }
         ],
@@ -117,7 +114,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: [],
         tags: ['modeling', '3d', 'geometry'],
         estimatedHours: 12,
-        history: []
+        history: [],
       },
       {
         title: 'Texturing & Materials',
@@ -128,7 +125,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'asset_build',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Diffuse texture creation', completed: false },
           { id: '2', title: 'Normal/bump mapping', completed: false },
           { id: '3', title: 'Roughness/metallic maps', completed: false },
@@ -136,14 +133,14 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Material Accuracy', type: 'accuracy', status: 'pending', criteria: 'Historically appropriate materials', required: true }
         ],
         comments: [],
         dependencies: ['3D Model Creation'],
         tags: ['texturing', 'materials', 'pbr'],
         estimatedHours: 8,
-        history: []
+        history: [],
       },
       {
         title: 'Rigging & Animation Setup',
@@ -154,7 +151,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'asset_build',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Bone structure creation', completed: false },
           { id: '2', title: 'Weight painting', completed: false },
           { id: '3', title: 'Control rig setup', completed: false },
@@ -162,14 +159,14 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Deformation Test', type: 'technical', status: 'pending', criteria: 'Clean deformation in all poses', required: true }
         ],
         comments: [],
         dependencies: ['3D Model Creation'],
         tags: ['rigging', 'animation', 'bones'],
         estimatedHours: 10,
-        history: []
+        history: [],
       },
       {
         title: 'Final Asset Review',
@@ -180,7 +177,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'review',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Technical quality assurance', completed: false },
           { id: '2', title: 'Historical accuracy validation', completed: false },
           { id: '3', title: 'Performance optimization check', completed: false },
@@ -188,7 +185,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Final QA', type: 'technical', status: 'pending', criteria: 'All technical requirements met', required: true },
           { id: '2', name: 'Director Sign-off', type: 'creative', status: 'pending', criteria: 'Director final approval', required: true }
         ],
@@ -196,7 +193,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: ['Concept Art Review', '3D Model Creation', 'Texturing & Materials', 'Rigging & Animation Setup'],
         tags: ['review', 'qa', 'approval'],
         estimatedHours: 3,
-        history: []
+        history: [],
       }
     ]
   },
@@ -208,7 +205,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
     phase: 'final',
     isPublic: true,
     usageCount: 189,
-    createdBy: {
+    createdBy: {,
       id: 'system',
       name: 'Wild Construct',
       role: 'director',
@@ -216,7 +213,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
       color: '#3b82f6',
       permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true }
     },
-    items: [
+    items: [,
       {
         title: 'Composite Review',
         description: 'Review composite against reference and brief',
@@ -226,7 +223,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'comp',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Color grading review', completed: false },
           { id: '2', title: 'Edge integration check', completed: false },
           { id: '3', title: 'Tracking validation', completed: false },
@@ -234,14 +231,14 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Composite Quality', type: 'technical', status: 'pending', criteria: 'Seamless integration', required: true }
         ],
         comments: [],
         dependencies: [],
         tags: ['composite', 'review', 'integration'],
         estimatedHours: 2,
-        history: []
+        history: [],
       },
       {
         title: 'Color Correction & Grading',
@@ -252,21 +249,21 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'comp',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Primary color correction', completed: false },
           { id: '2', title: 'Secondary color work', completed: false },
           { id: '3', title: 'LUT application', completed: false }
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Color Match', type: 'creative', status: 'pending', criteria: 'Matches adjacent shots', required: true }
         ],
         comments: [],
         dependencies: ['Composite Review'],
         tags: ['color', 'grading', 'lut'],
         estimatedHours: 3,
-        history: []
+        history: [],
       },
       {
         title: 'Technical QC',
@@ -277,7 +274,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'review',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Resolution verification', completed: false },
           { id: '2', title: 'Frame rate check', completed: false },
           { id: '3', title: 'Color space validation', completed: false },
@@ -285,14 +282,14 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Technical Standards', type: 'technical', status: 'pending', criteria: 'Meets delivery specs', required: true }
         ],
         comments: [],
         dependencies: ['Color Correction & Grading'],
         tags: ['qc', 'technical', 'standards'],
         estimatedHours: 1,
-        history: []
+        history: [],
       },
       {
         title: 'Client Review & Notes',
@@ -303,7 +300,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'review',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Prepare review materials', completed: false },
           { id: '2', title: 'Submit to client', completed: false },
           { id: '3', title: 'Collect feedback', completed: false },
@@ -311,14 +308,14 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Client Approval', type: 'creative', status: 'pending', criteria: 'Client sign-off received', required: true }
         ],
         comments: [],
         dependencies: ['Technical QC'],
         tags: ['client', 'review', 'feedback'],
         estimatedHours: 4,
-        history: []
+        history: [],
       },
       {
         title: 'Final Delivery',
@@ -329,21 +326,21 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'final',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Package final files', completed: false },
           { id: '2', title: 'Generate deliverables', completed: false },
           { id: '3', title: 'Archive project files', completed: false }
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Delivery Package', type: 'technical', status: 'pending', criteria: 'All deliverables included', required: true }
         ],
         comments: [],
         dependencies: ['Client Review & Notes'],
         tags: ['delivery', 'package', 'final'],
         estimatedHours: 1,
-        history: []
+        history: [],
       }
     ]
   },
@@ -355,7 +352,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
     phase: 'review',
     isPublic: true,
     usageCount: 156,
-    createdBy: {
+    createdBy: {,
       id: 'system',
       name: 'Wild Construct',
       role: 'director',
@@ -363,7 +360,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
       color: '#3b82f6',
       permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true }
     },
-    items: [
+    items: [,
       {
         title: 'Architecture Accuracy Review',
         description: 'Validate architectural elements against historical period',
@@ -373,7 +370,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'review',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Building style verification', completed: false },
           { id: '2', title: 'Construction techniques check', completed: false },
           { id: '3', title: 'Materials authenticity', completed: false },
@@ -381,7 +378,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Expert Review', type: 'accuracy', status: 'pending', criteria: 'Historical expert approval', required: true },
           { id: '2', name: 'UTDG Score', type: 'accuracy', status: 'pending', criteria: '90%+ accuracy score', required: true }
         ],
@@ -389,7 +386,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: [],
         tags: ['architecture', 'accuracy', 'utdg'],
         estimatedHours: 6,
-        history: []
+        history: [],
       },
       {
         title: 'Clothing & Costume Validation',
@@ -400,7 +397,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'review',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Fabric types verification', completed: false },
           { id: '2', title: 'Cut and style accuracy', completed: false },
           { id: '3', title: 'Color availability check', completed: false },
@@ -408,14 +405,14 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Costume Research', type: 'accuracy', status: 'pending', criteria: 'Research documentation complete', required: true }
         ],
         comments: [],
         dependencies: [],
         tags: ['costume', 'clothing', 'fashion'],
         estimatedHours: 4,
-        history: []
+        history: [],
       },
       {
         title: 'Technology & Tools Assessment',
@@ -426,7 +423,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         vfxPhase: 'review',
         completion: 0,
         author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-        subtasks: [
+        subtasks: [,
           { id: '1', title: 'Weapons and armor check', completed: false },
           { id: '2', title: 'Tools and implements', completed: false },
           { id: '3', title: 'Transportation methods', completed: false },
@@ -434,14 +431,14 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         ],
         attachments: [],
         assets: [],
-        qualityGates: [
+        qualityGates: [,
           { id: '1', name: 'Technology Timeline', type: 'accuracy', status: 'pending', criteria: 'All items within period', required: true }
         ],
         comments: [],
         dependencies: [],
         tags: ['technology', 'tools', 'timeline'],
         estimatedHours: 3,
-        history: []
+        history: [],
       }
     ]
   }
@@ -459,7 +456,7 @@ export interface VFXChecklistTemplatesProps {
   className?: string;
 }
 
-export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({
+export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({)
   templates = [],
   currentUser,
   onTemplateSelect,
@@ -477,53 +474,43 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({
   const [showOnlyMine, setShowOnlyMine] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [_____showCreateForm, setShowCreateForm] = useState(false);
-
   // Combine built-in and user templates
   const allTemplates = useMemo(() => {
     return [...BUILTIN_TEMPLATES, ...templates];
   }, [templates]);
-
   // Filter templates
   const filteredTemplates = useMemo(() => {
-    return allTemplates.filter(template => {
+    return allTemplates.filter(template => {)
       // Search filter
       if (searchTerm && !template.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
           !template.description?.toLowerCase().includes(searchTerm.toLowerCase())) {
         return false;
       }
-
       // Category filter
       if (categoryFilter !== 'all' && template.category !== categoryFilter) return false;
-
       // Phase filter
       if (phaseFilter !== 'all' && template.phase !== phaseFilter) return false;
-
       // Public only filter
       if (showOnlyPublic && !template.isPublic) return false;
-
       // My templates only filter
       if (showOnlyMine && template.createdBy.id !== currentUser.id) return false;
-
       return true;
     });
   }, [allTemplates, searchTerm, categoryFilter, phaseFilter, showOnlyPublic, showOnlyMine, currentUser.id]);
-
   // Handle template selection
   const handleTemplateSelect = useCallback((template: VFXChecklistTemplate) => {
     onTemplateSelect(template);
   }, [onTemplateSelect]);
-
   // Handle template cloning
   const handleCloneTemplate = useCallback((templateId: string) => {
     const template = allTemplates.find(t => t.id === templateId);
     if (template && onTemplateClone) {
-      const newName = `${template.name} (Copy)`;
+      const newName = `${template.name} (Copy)`;}
       onTemplateClone(templateId, newName);
     }
   }, [allTemplates, onTemplateClone]);
-
-  return (
-    <div className={`vfx-checklist-templates ${className}`}>
+  return ()
+    <div className={`vfx-checklist-templates ${className}`}>}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
@@ -534,8 +521,7 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({
                 {filteredTemplates.length} templates
               </Badge>
             </div>
-            
-            {!readonly && onTemplateCreate && (
+            {!readonly && onTemplateCreate && ()
               <Button
                 variant="default"
                 size="sm"
@@ -546,7 +532,6 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({
               </Button>
             )}
           </CardTitle>
-
           {/* Search and Filters */}
           <div className="space-y-4 mt-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -563,7 +548,6 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({
                   />
                 </div>
               </div>
-
               <div>
                 <label className="block text-xs font-medium mb-2">Category</label>
                 <Select value={categoryFilter} onValueChange={setCategoryFilter}>
@@ -585,7 +569,6 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({
                   </SelectContent>
                 </Select>
               </div>
-
               <div>
                 <label className="block text-xs font-medium mb-2">Production Phase</label>
                 <Select value={phaseFilter} onValueChange={setPhaseFilter}>
@@ -607,7 +590,6 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({
                   </SelectContent>
                 </Select>
               </div>
-
               <div className="flex flex-col justify-end">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
@@ -629,10 +611,9 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({
             </div>
           </div>
         </CardHeader>
-
         <CardContent>
           <div className="space-y-4">
-            {filteredTemplates.length === 0 ? (
+            {filteredTemplates.length === 0 ? ()
               <Card>
                 <CardContent className="flex flex-col items-center justify-center py-12">
                   <FileText className="w-16 h-16 text-gray-400 mb-4" />
@@ -642,7 +623,7 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({
                       ? 'No templates available. Create your first template to get started.' 
                       : 'No templates match your current filters.'}
                   </p>
-                  {!readonly && onTemplateCreate && (
+                  {!readonly && onTemplateCreate && ()
                     <Button
                       variant="default"
                       onClick={() => setShowCreateForm(true)}
@@ -654,9 +635,9 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({
                   )}
                 </CardContent>
               </Card>
-            ) : (
+            ) : ()
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredTemplates.map(template => (
+                {filteredTemplates.map(template => ()
                   <TemplateCard
                     key={template.id}
                     template={template}
@@ -691,8 +672,7 @@ interface TemplateCardProps {
   onDelete?: (templateId: string) => void;
   readonly?: boolean;
 }
-
-const TemplateCard: React.FC<TemplateCardProps> = ({
+const TemplateCard: React.FC<TemplateCardProps> = ({)
   template,
   currentUser,
   isSelected,
@@ -705,7 +685,6 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
 }) => {
   const isOwner = template.createdBy.id === currentUser.id;
   const isBuiltIn = template.createdBy.id === 'system';
-
   const getCategoryIcon = (category: VFXChecklistCategory) => {
     const iconMap = {
       pre_production: FileText,
@@ -717,36 +696,34 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
       rendering: BarChart3,
       post_production: Edit3,
       review: Eye,
-      delivery: CheckCircle
+      delivery: CheckCircle,
     };
     const IconComponent = iconMap[category] || FileText;
     return <IconComponent className="w-4 h-4" />;
   };
-
-  return (
-    <Card className={`template-card cursor-pointer hover:shadow-lg transition-all ${isSelected ? 'ring-2 ring-blue-500' : ''} ${isBuiltIn ? 'border-blue-200 bg-blue-50' : ''}`}>
+  return ()
+    <Card className={`template-card cursor-pointer hover:shadow-lg transition-all ${isSelected ? 'ring-2 ring-blue-500' : ''} ${isBuiltIn ? 'border-blue-200 bg-blue-50' : ''}`}>}
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2">
               {getCategoryIcon(template.category)}
               <h3 className="font-semibold text-sm truncate">{template.name}</h3>
-              {isBuiltIn && (
+              {isBuiltIn && ()
                 <Badge variant="secondary" className="text-xs">
                   Built-in
                 </Badge>
               )}
-              {template.isPublic && (
+              {template.isPublic && ()
                 <Badge variant="secondary" className="text-xs">
                   Public
                 </Badge>
               )}
             </div>
-            {template.description && (
+            {template.description && ()
               <p className="text-xs text-gray-600 line-clamp-2">{template.description}</p>
             )}
           </div>
-          
           <div className="flex items-center gap-1 ml-2">
             <Button
               variant="ghost"
@@ -757,32 +734,28 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
             </Button>
           </div>
         </div>
-
         <div className="flex items-center gap-4 text-xs text-gray-500 mt-2">
           <div className="flex items-center gap-1">
             <Users className="w-3 h-3" />
             <span>{template.usageCount} uses</span>
           </div>
-          
           <div className="flex items-center gap-1">
             <CheckSquare className="w-3 h-3" />
             <span>{template.items.length} items</span>
           </div>
-          
           <div className="flex items-center gap-1">
             <Clock className="w-3 h-3" />
             <span>{template.items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0)}h</span>
           </div>
         </div>
       </CardHeader>
-
-      {isSelected && (
+      {isSelected && ()
         <CardContent className="pt-0 border-t">
           <div className="space-y-3">
             <div>
               <h4 className="text-sm font-medium mb-2">Template Items ({template.items.length})</h4>
               <div className="space-y-1 max-h-32 overflow-y-auto">
-                {template.items.slice(0, 5).map((item, index) => (
+                {template.items.slice(0, 5).map((item, index) => ()
                   <div key={index} className="flex items-center gap-2 text-xs">
                     <div 
                       className="w-2 h-2 rounded-full"
@@ -795,19 +768,17 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
                     <span className="truncate">{item.title}</span>
                   </div>
                 ))}
-                {template.items.length > 5 && (
+                {template.items.length > 5 && ()
                   <div className="text-xs text-gray-500 italic">
                     +{template.items.length - 5} more items...
                   </div>
                 )}
               </div>
             </div>
-
             <div className="flex items-center justify-between pt-2 border-t">
               <div className="text-xs text-gray-500">
                 By {template.createdBy.name}
               </div>
-              
               <div className="flex items-center gap-1">
                 <Button
                   variant="default"
@@ -816,8 +787,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
                 >
                   Use Template
                 </Button>
-                
-                {onClone && (
+                {onClone && ()
                   <Button
                     variant="outline"
                     size="sm"
@@ -826,8 +796,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
                     <Copy className="w-3 h-3" />
                   </Button>
                 )}
-                
-                {!readonly && isOwner && onUpdate && (
+                {!readonly && isOwner && onUpdate && ()
                   <Button
                     variant="outline"
                     size="sm"
@@ -835,8 +804,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
                     <Edit3 className="w-3 h-3" />
                   </Button>
                 )}
-                
-                {!readonly && isOwner && onDelete && !isBuiltIn && (
+                {!readonly && isOwner && onDelete && !isBuiltIn && ()
                   <Button
                     variant="outline"
                     size="sm"

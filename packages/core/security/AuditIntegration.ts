@@ -6,7 +6,6 @@
  * 
  * Epic 19 Task T-1752989143998-485: Implement audit logging for data access
  */
-
 import { AuditLogger, AuditOperation, type AuditLogEntry } from './AuditLogger';
 import { ClassificationEnforcer } from './ClassificationEnforcer';
 import { DataClassifier } from './DataClassifier';
@@ -15,7 +14,6 @@ import {
   type OperationContext,
   type ClassificationResult
 } from '../types/DataClassification';
-
 /**
  * Configuration for audit integration
  */
@@ -23,14 +21,12 @@ export interface AuditIntegrationConfig {
   auditLogger: AuditLogger;
   classificationEnforcer?: ClassificationEnforcer;
   dataClassifier?: DataClassifier;
-  
   // Options
   logAllOperations?: boolean;
   logDeniedAccess?: boolean;
   logClassificationChanges?: boolean;
   enrichWithClassification?: boolean;
 }
-
 /**
  * Audit integration service
  */
@@ -39,12 +35,10 @@ export class AuditIntegration {
   private enforcer?: ClassificationEnforcer;
   private classifier?: DataClassifier;
   private config: Required<Omit<AuditIntegrationConfig, 'classificationEnforcer' | 'dataClassifier'>>;
-  
   constructor(config: AuditIntegrationConfig) {
     this.logger = config.auditLogger;
     this.enforcer = config.classificationEnforcer;
     this.classifier = config.dataClassifier;
-    
     this.config = {
       auditLogger: config.auditLogger,
       logAllOperations: config.logAllOperations ?? true,
@@ -52,15 +46,13 @@ export class AuditIntegration {
       logClassificationChanges: config.logClassificationChanges ?? true,
       enrichWithClassification: config.enrichWithClassification ?? true
     };
-    
     // Set up event listeners if components are provided
     this.setupEventListeners();
   }
-  
   /**
    * Log a data access operation with automatic classification enrichment
    */
-  async logDataAccess(
+  async logDataAccess()
     context: OperationContext,
     resourceType: string,
     resourceId: string,
@@ -69,7 +61,6 @@ export class AuditIntegration {
   ): Promise<void> {
     let classification = DataClassificationLevel.PUBLIC;
     let classificationMetadata: Record<string, any> = {};
-    
     // Classify the data if classifier is available
     if (this.classifier && data && this.config.enrichWithClassification) {
       const result = await this.classifier.classifyData(data);
@@ -77,21 +68,19 @@ export class AuditIntegration {
       classificationMetadata = {
         confidenceScore: result.confidence,
         matchedPatterns: result.matchedPatterns,
-        fieldClassifications: result.fieldClassifications
+        fieldClassifications: result.fieldClassifications,
       };
     }
-    
     // Check if access is allowed if enforcer is available
     let enforcementResult;
     if (this.enforcer) {
-      enforcementResult = await this.enforcer.enforceClassification(
+      enforcementResult = await this.enforcer.enforceClassification()
         classification,
         context
       );
     }
-    
     // Log the access
-    await this.logger.logDataAccess(
+    await this.logger.logDataAccess()
       context,
       resourceType,
       resourceId,
@@ -104,14 +93,13 @@ export class AuditIntegration {
           allowed: enforcementResult.allowed,
           riskScore: enforcementResult.riskScore,
           appliedControls: enforcementResult.appliedControls,
-          missingControls: enforcementResult.missingControls
+          missingControls: enforcementResult.missingControls,
         } : undefined
       }
     );
-    
     // Log denied access separately if configured
     if (!enforcementResult?.allowed && this.config.logDeniedAccess) {
-      await this.logSecurityEvent(
+      await this.logSecurityEvent()
         'ACCESS_DENIED',
         context,
         {
@@ -119,19 +107,18 @@ export class AuditIntegration {
           resourceId,
           classification,
           reason: enforcementResult?.reason,
-          missingControls: enforcementResult?.missingControls
+          missingControls: enforcementResult?.missingControls,
         }
       );
     }
   }
-  
   /**
    * Log an administrative operation
    */
-  async logAdminOperation(
+  async logAdminOperation()
     operation: 'GRANT_ACCESS' | 'REVOKE_ACCESS' | 'CHANGE_CLASSIFICATION',
     context: OperationContext,
-    target: {
+    target: {,
       userId?: string;
       resourceType: string;
       resourceId: string;
@@ -139,7 +126,7 @@ export class AuditIntegration {
     },
     metadata?: Record<string, any>
   ): Promise<void> {
-    await this.logger.log({
+    await this.logger.log({)
       userId: context.userId,
       userRole: context.userRole,
       operation: AuditOperation[operation],
@@ -152,22 +139,21 @@ export class AuditIntegration {
       success: true,
       sensitiveAccess: target.classification ? 
         this.isSensitiveClassification(target.classification) : false,
-      metadata: {
+      metadata: {,
         targetUserId: target.userId,
         ...metadata
       }
     });
   }
-  
   /**
    * Log a security event
    */
-  async logSecurityEvent(
+  async logSecurityEvent()
     eventType: string,
     context: OperationContext,
     details: Record<string, any>
   ): Promise<void> {
-    await this.logger.log({
+    await this.logger.log({)
       userId: context.userId,
       userRole: context.userRole,
       operation: AuditOperation.AUTHORIZATION,
@@ -179,20 +165,19 @@ export class AuditIntegration {
       authorized: false,
       success: false,
       anomalyDetected: true,
-      metadata: {
+      metadata: {,
         eventType,
         ...details
       }
     });
   }
-  
   /**
    * Log a batch operation
    */
-  async logBatchOperation(
+  async logBatchOperation()
     context: OperationContext,
     operation: AuditOperation,
-    resources: Array<{
+    resources: Array<{,
       type: string;
       id: string;
       classification?: DataClassificationLevel;
@@ -205,13 +190,12 @@ export class AuditIntegration {
       return this.getClassificationPriority(level) > this.getClassificationPriority(highest)
         ? level : highest;
     }, DataClassificationLevel.PUBLIC);
-    
-    await this.logger.log({
+    await this.logger.log({)
       userId: context.userId,
       userRole: context.userRole,
       operation: AuditOperation.BATCH_OPERATION,
       resourceType: 'batch',
-      resourceId: `batch_${Date.now()}`,
+      resourceId: `batch_${Date.now()}`,}
       dataClassification: highestClassification,
       ipAddress: context.ipAddress,
       sessionId: context.sessionId,
@@ -219,7 +203,7 @@ export class AuditIntegration {
       success,
       recordCount: resources.length,
       sensitiveAccess: this.isSensitiveClassification(highestClassification),
-      metadata: {
+      metadata: {,
         batchOperation: operation,
         resourceTypes: [...new Set(resources.map(r => r.type))],
         resourceCount: resources.length,
@@ -227,18 +211,16 @@ export class AuditIntegration {
       }
     });
   }
-  
   /**
    * Create an audit trail for a workflow
    */
-  async startAuditTrail(
+  async startAuditTrail()
     workflowId: string,
     context: OperationContext,
     metadata?: Record<string, any>
   ): Promise<string> {
-    const correlationId = `workflow_${workflowId}_${Date.now()}`;
-    
-    await this.logger.log({
+    const correlationId = `workflow_${workflowId}_${Date.now()}`;}
+    await this.logger.log({)
       userId: context.userId,
       userRole: context.userRole,
       operation: AuditOperation.API_CALL,
@@ -250,15 +232,13 @@ export class AuditIntegration {
       sessionId: context.sessionId,
       authorized: true,
       success: true,
-      metadata: {
+      metadata: {,
         workflowStart: true,
         ...metadata
       }
     });
-    
     return correlationId;
   }
-  
   /**
    * Set up event listeners for automatic logging
    */
@@ -267,7 +247,7 @@ export class AuditIntegration {
     if (this.enforcer) {
       this.enforcer.on('enforcement', async (event) => {
         if (this.config.logAllOperations || !event.allowed) {
-          await this.logger.log({
+          await this.logger.log({)
             userId: event.context.userId,
             userRole: event.context.userRole,
             operation: AuditOperation.AUTHORIZATION,
@@ -281,28 +261,26 @@ export class AuditIntegration {
             denialReason: event.reason,
             riskScore: event.riskScore,
             sensitiveAccess: this.isSensitiveClassification(event.classification),
-            metadata: {
+            metadata: {,
               appliedControls: event.appliedControls,
               missingControls: event.missingControls,
-              recommendations: event.recommendations
+              recommendations: event.recommendations,
             }
           });
         }
       });
-      
       this.enforcer.on('anomaly', async (event) => {
-        await this.logSecurityEvent('ANOMALY_DETECTED', event.context, {
+        await this.logSecurityEvent('ANOMALY_DETECTED', event.context, {)
           anomalyType: event.type,
-          details: event.details
+          details: event.details,
         });
       });
     }
-    
     // Listen to classification events
     if (this.classifier) {
       this.classifier.on('classification', async (event) => {
         if (this.config.logClassificationChanges) {
-          await this.logger.log({
+          await this.logger.log({)
             userId: event.userId || 'system',
             operation: AuditOperation.CHANGE_CLASSIFICATION,
             resourceType: event.resourceType || 'data',
@@ -311,17 +289,16 @@ export class AuditIntegration {
             authorized: true,
             success: true,
             sensitiveAccess: this.isSensitiveClassification(event.newLevel),
-            metadata: {
+            metadata: {,
               previousLevel: event.previousLevel,
               confidence: event.confidence,
-              reason: event.reason
+              reason: event.reason,
             }
           });
         }
       });
     }
   }
-  
   /**
    * Check if classification level is sensitive
    */
@@ -332,7 +309,6 @@ export class AuditIntegration {
       DataClassificationLevel.TOP_SECRET
     ].includes(level);
   }
-  
   /**
    * Get classification priority for comparison
    */
@@ -344,14 +320,12 @@ export class AuditIntegration {
       [DataClassificationLevel.RESTRICTED]: 3,
       [DataClassificationLevel.TOP_SECRET]: 4
     };
-    
     return priorities[level] || 0;
   }
-  
   /**
    * Generate compliance report
    */
-  async generateComplianceReport(
+  async generateComplianceReport()
     startDate: Date,
     endDate: Date,
     options?: {
@@ -359,15 +333,14 @@ export class AuditIntegration {
       includeDetails?: boolean;
     }
   ): Promise<ComplianceReport> {
-    const logs = await this.logger.query({
+    const logs = await this.logger.query({)
       startDate,
       endDate
     });
-    
     const report: ComplianceReport = {
-      period: {
+      period: {,
         start: startDate,
-        end: endDate
+        end: endDate,
       },
       totalAccess: logs.length,
       sensitiveAccess: logs.filter(log => log.sensitiveAccess).length,
@@ -376,22 +349,19 @@ export class AuditIntegration {
       classificationBreakdown: {},
       operationBreakdown: {},
       anomalies: logs.filter(log => log.anomalyDetected).length,
-      riskMetrics: {
+      riskMetrics: {,
         averageRiskScore: 0,
-        highRiskOperations: 0
+        highRiskOperations: 0,
       }
     };
-    
     // Calculate breakdowns
     for (const log of logs) {
       // Classification breakdown
       report.classificationBreakdown[log.dataClassification] = 
         (report.classificationBreakdown[log.dataClassification] || 0) + 1;
-      
       // Operation breakdown
       report.operationBreakdown[log.operation] = 
         (report.operationBreakdown[log.operation] || 0) + 1;
-      
       // Risk metrics
       if (log.riskScore) {
         report.riskMetrics.averageRiskScore += log.riskScore;
@@ -400,27 +370,23 @@ export class AuditIntegration {
         }
       }
     }
-    
     // Calculate average risk score
     const logsWithRisk = logs.filter(log => log.riskScore !== undefined);
     if (logsWithRisk.length > 0) {
       report.riskMetrics.averageRiskScore /= logsWithRisk.length;
     }
-    
     // Add details if requested
     if (options?.includeDetails) {
       report.details = logs;
     }
-    
     return report;
   }
 }
-
 /**
  * Compliance report structure
  */
 export interface ComplianceReport {
-  period: {
+  period: {,
     start: Date;
     end: Date;
   };
@@ -431,18 +397,17 @@ export interface ComplianceReport {
   classificationBreakdown: Record<string, number>;
   operationBreakdown: Record<string, number>;
   anomalies: number;
-  riskMetrics: {
+  riskMetrics: {,
     averageRiskScore: number;
     highRiskOperations: number;
   };
   details?: AuditLogEntry[];
 }
-
 /**
  * Factory function to create audit integration
  */
-export function createAuditIntegration(
-  config: AuditIntegrationConfig
+export function createAuditIntegration()
+  config: AuditIntegrationConfig,
 ): AuditIntegration {
   return new AuditIntegration(config);
 }

@@ -21,22 +21,22 @@ export interface RateLimiter {
     reset(key: string): Promise<void>;
 }
 export interface ValidationServiceConfig {
-    rateLimiting: {
+    rateLimiting: {,
         enabled: boolean;
         maxGenerationsPerHour: number;
         maxValidationAttemptsPerHour: number;
         maxValidationAttemptsPerCode: number;
     };
-    monitoring: {
+    monitoring: {,
         enabled: boolean;
         alertOnSuspiciousActivity: boolean;
         logAllValidations: boolean;
     };
-    cleanup: {
+    cleanup: {,
         autoDeleteExpired: boolean;
         cleanupIntervalMinutes: number;
     };
-    security: {
+    security: {,
         constantTimeValidation: boolean;
         logFailedAttempts: boolean;
         blockAfterFailures: number;
@@ -72,7 +72,7 @@ export declare class ValidationService extends EventEmitter {
     /**
      * Generate and store a verification code
      */
-    generateVerificationCode(userId: string, purpose: string, options?: {
+    generateVerificationCode(userId: string, purpose: string, options?: {)
         length?: number;
         format?: 'numeric' | 'alphanumeric' | 'alphabetic';
         expirationMinutes?: number;
@@ -86,7 +86,7 @@ export declare class ValidationService extends EventEmitter {
     /**
      * Validate a verification code
      */
-    validateVerificationCode(codeId: string, inputCode: string, options?: {
+    validateVerificationCode(codeId: string, inputCode: string, options?: {)
         userId?: string;
         ipAddress?: string;
         userAgent?: string;
@@ -95,7 +95,7 @@ export declare class ValidationService extends EventEmitter {
     /**
      * Validate code by user and purpose (convenience method)
      */
-    validateByUserAndPurpose(userId: string, purpose: string, inputCode: string, options?: {
+    validateByUserAndPurpose(userId: string, purpose: string, inputCode: string, options?: {)
         ipAddress?: string;
         userAgent?: string;
     }): Promise<ValidationResult>;
@@ -132,7 +132,7 @@ export declare class ValidationService extends EventEmitter {
     private logValidationAttempt;
     private checkForSuspiciousActivity;
 }
-export declare function createValidationService(
+export declare function createValidationService()
   storage: VerificationCodeStorage,
   rateLimiter: RateLimiter,
   environment?: 'development' | 'production'

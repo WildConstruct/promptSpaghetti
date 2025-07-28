@@ -1,40 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { useCorrectionsStore, Notification } from '../correctionsStore';
-
 interface NotificationSystemProps {
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
   maxVisible?: number;
   autoHideDuration?: number;
 }
 
-export const NotificationSystem: React.FC<NotificationSystemProps> = ({
+export const NotificationSystem: React.FC<NotificationSystemProps> = ({)
   position = 'top-right',
   maxVisible = 5,
   autoHideDuration = 5000
 }) => {
   const { notifications, dismissNotification, clearNotifications } = useCorrectionsStore();
   const [visibleNotifications, setVisibleNotifications] = useState<Notification[]>([]);
-
   useEffect(() => {
     // Show only the most recent notifications
     setVisibleNotifications(notifications.slice(0, maxVisible));
   }, [notifications, maxVisible]);
-
   useEffect(() => {
     // Auto-hide notifications after duration
     if (autoHideDuration > 0) {
-      const timers = visibleNotifications.map(notification => {
+      const timers = visibleNotifications.map(notification => {)
         return setTimeout(() => {
           dismissNotification(notification.id);
         }, autoHideDuration);
       });
-
       return () => {
         timers.forEach(timer => clearTimeout(timer));
       };
     }
   }, [visibleNotifications, autoHideDuration, dismissNotification]);
-
   const getPositionStyles = () => {
     const baseStyles = {
       position: 'fixed' as const,
@@ -43,9 +38,8 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
       flexDirection: 'column' as const,
       gap: '8px',
       width: '320px',
-      maxWidth: '90vw'
+      maxWidth: '90vw',
     };
-
     switch (position) {
     case 'top-right':
       return { ...baseStyles, top: '20px', right: '20px' };
@@ -59,7 +53,6 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
       return { ...baseStyles, top: '20px', right: '20px' };
     }
   };
-
   const getNotificationStyles = (type: Notification['type']) => {
     const baseStyles = {
       padding: '12px 16px',
@@ -74,28 +67,27 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
       fontSize: '14px',
       fontFamily: 'system-ui, -apple-system, sans-serif'
     };
-
     switch (type) {
     case 'success':
       return {
         ...baseStyles,
         background: '#065f46',
         borderColor: '#10b981',
-        color: '#d1fae5'
+        color: '#d1fae5',
       };
     case 'error':
       return {
         ...baseStyles,
         background: '#7f1d1d',
         borderColor: '#ef4444',
-        color: '#fee2e2'
+        color: '#fee2e2',
       };
     case 'warning':
       return {
         ...baseStyles,
         background: '#78350f',
         borderColor: '#f59e0b',
-        color: '#fef3c7'
+        color: '#fef3c7',
       };
     case 'info':
     default:
@@ -103,11 +95,10 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
         ...baseStyles,
         background: '#1e3a8a',
         borderColor: '#3b82f6',
-        color: '#dbeafe'
+        color: '#dbeafe',
       };
     }
   };
-
   const getIcon = (type: Notification['type']) => {
     switch (type) {
     case 'success':
@@ -121,27 +112,21 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
       return 'ℹ';
     }
   };
-
   const formatTimestamp = (timestamp: Date) => {
     const now = new Date();
     const diff = now.getTime() - timestamp.getTime();
     const minutes = Math.floor(diff / (1000 * 60));
-    
     if (minutes < 1) return 'Just now';
-    if (minutes < 60) return `${minutes}m ago`;
-    
+    if (minutes < 60) return `${minutes}m ago`;}
     const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours}h ago`;
-    
+    if (hours < 24) return `${hours}h ago`;}
     const days = Math.floor(hours / 24);
-    return `${days}d ago`;
+    return `${days}d ago`;}
   };
-
   if (visibleNotifications.length === 0) {
     return null;
   }
-
-  return (
+  return ()
     <>
       {/* CSS Animation */}
       <style>{`
@@ -155,7 +140,6 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
             opacity: 1;
           }
         }
-        
         @keyframes fadeOut {
           from {
             opacity: 1;
@@ -165,9 +149,8 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
           }
         }
       `}</style>
-      
       <div style={getPositionStyles()}>
-        {visibleNotifications.map((notification) => (
+        {visibleNotifications.map((notification) => ()
           <div
             key={notification.id}
             style={getNotificationStyles(notification.type)}
@@ -176,38 +159,34 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
               <div style={{ 
                 fontSize: '16px', 
                 marginTop: '2px',
-                flexShrink: 0
+                flexShrink: 0,
               }}>
                 {getIcon(notification.type)}
               </div>
-              
               <div style={{ flex: 1 }}>
                 <div style={{ 
                   fontWeight: 600, 
                   marginBottom: '2px',
-                  fontSize: '13px'
+                  fontSize: '13px',
                 }}>
                   {notification.title}
                 </div>
-                
                 <div style={{ 
                   fontSize: '12px', 
                   opacity: 0.9,
-                  lineHeight: '1.4'
+                  lineHeight: '1.4',
                 }}>
                   {notification.message}
                 </div>
-                
                 <div style={{ 
                   fontSize: '10px', 
                   opacity: 0.7,
-                  marginTop: '4px'
+                  marginTop: '4px',
                 }}>
                   {formatTimestamp(notification.timestamp)}
                 </div>
               </div>
             </div>
-            
             <button
               onClick={() => dismissNotification(notification.id)}
               style={{
@@ -218,7 +197,7 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
                 fontSize: '14px',
                 padding: '0 4px',
                 opacity: 0.7,
-                flexShrink: 0
+                flexShrink: 0,
               }}
               title="Dismiss"
             >
@@ -226,8 +205,7 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
             </button>
           </div>
         ))}
-        
-        {notifications.length > maxVisible && (
+        {notifications.length > maxVisible && ()
           <div style={{
             padding: '8px 12px',
             background: '#2d3748',
@@ -238,7 +216,7 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
           }}>
             <span>+{notifications.length - maxVisible} more notifications</span>
             <button
@@ -249,7 +227,7 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
                 color: '#63b3ed',
                 cursor: 'pointer',
                 fontSize: '11px',
-                padding: 0
+                padding: 0,
               }}
             >
               Clear all

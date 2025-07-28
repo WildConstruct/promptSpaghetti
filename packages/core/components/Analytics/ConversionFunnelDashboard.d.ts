@@ -6,7 +6,7 @@
 import React from 'react';
 export interface ConversionFunnelDashboardProps {
     conversionData: unknown;
-    timeRange: {
+    timeRange: {,
         startTime: number;
         endTime: number;
     };

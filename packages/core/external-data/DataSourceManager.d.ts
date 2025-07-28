@@ -10,7 +10,7 @@ export interface DataSource {
         credentials: Record<string, string>;
         headers?: Record<string, string>;
     };
-    caching: {
+    caching: {,
         enabled: boolean;
         ttl: number;
         strategy: 'memory' | 'disk' | 'hybrid';
@@ -22,13 +22,13 @@ export interface DataSource {
         window: number;
         burst?: number;
     };
-    reliability: {
+    reliability: {,
         timeout: number;
         retries: number;
         backoff: 'linear' | 'exponential';
         healthCheck?: string;
     };
-    metadata: {
+    metadata: {,
         description: string;
         category: 'historical' | 'cultural' | 'artistic' | 'academic' | 'commercial';
         tags: string[];
@@ -58,7 +58,7 @@ export interface HistoricalQuery {
 export interface QueryResult<T = any> {
     success: boolean;
     data: T[];
-    metadata: {
+    metadata: {,
         total: number;
         offset: number;
         limit: number;

@@ -6,7 +6,6 @@
  * 
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
-
 import React, { useState } from 'react';
 import {
   ShareableResourceType,
@@ -18,7 +17,6 @@ import {
   SharePermission
 } from '../../types/sharingTypes';
 import { SharingService } from '../../services/SharingService';
-
 interface ShareModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -29,7 +27,7 @@ interface ShareModalProps {
   onShareCreated?: (shareResponse: ShareResponse) => void;
 }
 
-export const ShareModal: React.FC<ShareModalProps> = ({
+export const ShareModal: React.FC<ShareModalProps> = ({)
   isOpen,
   onClose,
   resourceId,
@@ -41,7 +39,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   const [shareTarget, setShareTarget] = useState<ShareTarget>('public');
   const [shareFormat, setShareFormat] = useState<ShareFormat>('link');
   const [selectedPlatforms, setSelectedPlatforms] = useState<SocialPlatform[]>([]);
-  const [permissions, setPermissions] = useState<SharePermission>({
+  const [permissions, setPermissions] = useState<SharePermission>({)
     canView: true,
     canComment: true,
     canClone: false,
@@ -49,18 +47,16 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     canShare: true,
     canEmbed: true,
     canDownload: false,
-    requiresAuth: false
+    requiresAuth: false,
   });
   const [customTitle, setCustomTitle] = useState(resourceTitle);
   const [customDescription, setCustomDescription] = useState(resourceDescription || '');
   const [isLoading, setIsLoading] = useState(false);
   const [shareResponse, setShareResponse] = useState<ShareResponse | null>(null);
   const [activeTab, setActiveTab] = useState<'options' | 'permissions' | 'preview'>('options');
-
-  const sharingService = new SharingService({
-    baseUrl: 'https://prompt-spaghetti.vercel.app'
+  const sharingService = new SharingService({)
+    baseUrl: 'https://prompt-spaghetti.vercel.app',
   });
-
   const handleCreateShare = async () => {
     setIsLoading(true);
     try {
@@ -72,9 +68,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({
         title: customTitle,
         description: customDescription,
         permissions,
-        socialPlatforms: selectedPlatforms
+        socialPlatforms: selectedPlatforms,
       };
-
       const response = await sharingService.createShare(request);
       setShareResponse(response);
       onShareCreated?.(response);
@@ -85,15 +80,13 @@ export const ShareModal: React.FC<ShareModalProps> = ({
       setIsLoading(false);
     }
   };
-
   const handlePlatformToggle = (platform: SocialPlatform) => {
-    setSelectedPlatforms(prev => 
+    setSelectedPlatforms(prev => )
       prev.includes(platform) 
         ? prev.filter(p => p !== platform)
         : [...prev, platform]
     );
   };
-
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -102,10 +95,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({
       console.error('Failed to copy to clipboard:', error);
     }
   };
-
   if (!isOpen) return null;
-
-  return (
+  return ()
     <div style={{
       position: 'fixed',
       top: 0,
@@ -116,7 +107,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000
+      zIndex: 1000,
     }}>
       <div style={{
         backgroundColor: 'white',
@@ -144,16 +135,15 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                 fontSize: '24px',
                 cursor: 'pointer',
                 color: '#6b7280',
-                padding: '4px'
+                padding: '4px',
               }}
             >
               ×
             </button>
           </div>
-          
           {/* Tabs */}
           <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
-            {['options', 'permissions', 'preview'].map(tab => (
+            {['options', 'permissions', 'preview'].map(tab => ()
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
@@ -166,7 +156,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                   cursor: 'pointer',
                   textTransform: 'capitalize',
                   fontSize: '14px',
-                  fontWeight: '500'
+                  fontWeight: '500',
                 }}
               >
                 {tab}
@@ -174,10 +164,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({
             ))}
           </div>
         </div>
-
         {/* Content */}
         <div style={{ padding: '24px', maxHeight: '500px', overflowY: 'auto' }}>
-          {activeTab === 'options' && (
+          {activeTab === 'options' && ()
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {/* Basic Info */}
               <div>
@@ -193,11 +182,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                     padding: '8px 12px',
                     border: '1px solid #d1d5db',
                     borderRadius: '6px',
-                    fontSize: '14px'
+                    fontSize: '14px',
                   }}
                 />
               </div>
-
               <div>
                 <label style={{ display: 'block', fontWeight: '500', marginBottom: '8px', color: '#374151' }}>
                   Description
@@ -212,11 +200,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                     border: '1px solid #d1d5db',
                     borderRadius: '6px',
                     fontSize: '14px',
-                    resize: 'vertical'
+                    resize: 'vertical',
                   }}
                 />
               </div>
-
               {/* Share Options */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div>
@@ -231,7 +218,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                       padding: '8px 12px',
                       border: '1px solid #d1d5db',
                       borderRadius: '6px',
-                      fontSize: '14px'
+                      fontSize: '14px',
                     }}
                   >
                     <option value="public">Public</option>
@@ -241,7 +228,6 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                     <option value="private">Private</option>
                   </select>
                 </div>
-
                 <div>
                   <label style={{ display: 'block', fontWeight: '500', marginBottom: '8px', color: '#374151' }}>
                     Format
@@ -254,7 +240,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                       padding: '8px 12px',
                       border: '1px solid #d1d5db',
                       borderRadius: '6px',
-                      fontSize: '14px'
+                      fontSize: '14px',
                     }}
                   >
                     <option value="link">Share Link</option>
@@ -264,20 +250,19 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                   </select>
                 </div>
               </div>
-
               {/* Social Platforms */}
               <div>
                 <label style={{ display: 'block', fontWeight: '500', marginBottom: '12px', color: '#374151' }}>
                   Share on Social Platforms
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-                  {['twitter', 'linkedin', 'discord', 'slack', 'teams', 'email'].map(platform => (
+                  {['twitter', 'linkedin', 'discord', 'slack', 'teams', 'email'].map(platform => ()
                     <button
                       key={platform}
                       onClick={() => handlePlatformToggle(platform as SocialPlatform)}
                       style={{
                         padding: '8px 12px',
-                        border: `1px solid ${selectedPlatforms.includes(platform as SocialPlatform) ? '#3b82f6' : '#d1d5db'}`,
+                        border: `1px solid ${selectedPlatforms.includes(platform as SocialPlatform) ? '#3b82f6' : '#d1d5db'}`,}
                         backgroundColor: selectedPlatforms.includes(platform as SocialPlatform) ? '#eff6ff' : 'white',
                         borderRadius: '6px',
                         cursor: 'pointer',
@@ -293,16 +278,14 @@ export const ShareModal: React.FC<ShareModalProps> = ({
               </div>
             </div>
           )}
-
-          {activeTab === 'permissions' && (
+          {activeTab === 'permissions' && ()
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600', color: '#111827' }}>
                 Access Permissions
               </h3>
-              
               {Object.entries(permissions).map(([key, value]) => {
                 if (typeof value !== 'boolean') return null;
-                return (
+                return ()
                   <label key={key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <input
                       type="checkbox"
@@ -318,13 +301,11 @@ export const ShareModal: React.FC<ShareModalProps> = ({
               })}
             </div>
           )}
-
-          {activeTab === 'preview' && shareResponse && (
+          {activeTab === 'preview' && shareResponse && ()
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600', color: '#111827' }}>
                 Share Created Successfully!
               </h3>
-              
               {/* Share Link */}
               <div>
                 <label style={{ display: 'block', fontWeight: '500', marginBottom: '8px', color: '#374151' }}>
@@ -341,7 +322,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                       border: '1px solid #d1d5db',
                       borderRadius: '6px',
                       fontSize: '14px',
-                      backgroundColor: '#f9fafb'
+                      backgroundColor: '#f9fafb',
                     }}
                   />
                   <button
@@ -353,28 +334,27 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                       border: 'none',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '14px'
+                      fontSize: '14px',
                     }}
                   >
                     Copy
                   </button>
                 </div>
               </div>
-
               {/* Social Links */}
-              {Object.keys(shareResponse.socialLinks).length > 0 && (
+              {Object.keys(shareResponse.socialLinks).length > 0 && ()
                 <div>
                   <label style={{ display: 'block', fontWeight: '500', marginBottom: '8px', color: '#374151' }}>
                     Social Platform Links
                   </label>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {Object.entries(shareResponse.socialLinks).map(([platform, url]) => (
+                    {Object.entries(shareResponse.socialLinks).map(([platform, url]) => ()
                       <div key={platform} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                         <span style={{ 
                           fontSize: '12px', 
                           textTransform: 'capitalize', 
                           minWidth: '80px',
-                          color: '#6b7280'
+                          color: '#6b7280',
                         }}>
                           {platform}:
                         </span>
@@ -385,7 +365,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                           style={{
                             color: '#3b82f6',
                             textDecoration: 'none',
-                            fontSize: '14px'
+                            fontSize: '14px',
                           }}
                         >
                           Open {platform}
@@ -395,9 +375,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                   </div>
                 </div>
               )}
-
               {/* Embed Code */}
-              {shareFormat === 'embed' && (
+              {shareFormat === 'embed' && ()
                 <div>
                   <label style={{ display: 'block', fontWeight: '500', marginBottom: '8px', color: '#374151' }}>
                     Embed Code
@@ -413,7 +392,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                       borderRadius: '6px',
                       fontSize: '12px',
                       fontFamily: 'monospace',
-                      backgroundColor: '#f9fafb'
+                      backgroundColor: '#f9fafb',
                     }}
                   />
                   <button
@@ -426,7 +405,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                       border: 'none',
                       borderRadius: '4px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     Copy Embed Code
@@ -436,14 +415,13 @@ export const ShareModal: React.FC<ShareModalProps> = ({
             </div>
           )}
         </div>
-
         {/* Footer */}
         <div style={{
           padding: '16px 24px',
           borderTop: '1px solid #e5e7eb',
           display: 'flex',
           justifyContent: 'flex-end',
-          gap: '12px'
+          gap: '12px',
         }}>
           <button
             onClick={onClose}
@@ -454,12 +432,12 @@ export const ShareModal: React.FC<ShareModalProps> = ({
               borderRadius: '6px',
               cursor: 'pointer',
               fontSize: '14px',
-              color: '#374151'
+              color: '#374151',
             }}
           >
             Cancel
           </button>
-          {activeTab !== 'preview' && (
+          {activeTab !== 'preview' && ()
             <button
               onClick={handleCreateShare}
               disabled={isLoading}
@@ -471,7 +449,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                 borderRadius: '6px',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 fontSize: '14px',
-                fontWeight: '500'
+                fontWeight: '500',
               }}
             >
               {isLoading ? 'Creating...' : 'Create Share'}

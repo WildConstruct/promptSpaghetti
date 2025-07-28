@@ -152,7 +152,7 @@ export interface MetricResult {
     metricId: string;
     value: number;
     standardError: number;
-    confidenceInterval: {
+    confidenceInterval: {,
         lower: number;
         upper: number;
     };
@@ -181,13 +181,13 @@ export interface OptimizationRecommendation {
     title: string;
     description: string;
     priority: 'low' | 'medium' | 'high';
-    expectedImpact: {
+    expectedImpact: {,
         conversionIncrease: number;
         engagementIncrease: number;
         revenueIncrease: number;
         confidenceLevel: number;
     };
-    implementation: {
+    implementation: {,
         complexity: 'low' | 'medium' | 'high';
         estimatedTime: string;
         resources: string[];
@@ -197,7 +197,7 @@ export interface OptimizationRecommendation {
 }
 export interface ABTestingExportData {
     tests: PersonalizationABTest[];
-    summary: {
+    summary: {,
         totalTests: number;
         runningTests: number;
         completedTests: number;

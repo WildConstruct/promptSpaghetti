@@ -28,7 +28,7 @@ export interface ReactionSummary {
     totalReactions: number;
     reactionCounts: Record<string, number>;
     userReaction?: string;
-    topReactions: Array<{
+    topReactions: Array<{,
         type: string;
         emoji: string;
         count: number;

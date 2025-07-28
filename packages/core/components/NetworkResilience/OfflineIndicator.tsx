@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NetworkStatus } from '../../network-resilience/NetworkResilienceManager';
 import { ConnectionState } from '../../network-resilience/ConnectionStateManager';
-
 interface OfflineIndicatorProps {
   status: NetworkStatus;
   position?: 'top' | 'bottom';
@@ -12,7 +11,7 @@ interface OfflineIndicatorProps {
   className?: string;
 }
 
-export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
+export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({)
   status,
   position = 'top',
   showQueueInfo = true,
@@ -23,11 +22,9 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [canDismiss, setCanDismiss] = useState(false);
-
   useEffect(() => {
     const shouldShow = !status.isOnline || status.queueSize > 0;
     setIsVisible(shouldShow);
-    
     // Allow dismissing after 5 seconds if connected but has queue
     if (status.isOnline && status.queueSize > 0) {
       const timer = setTimeout(() => setCanDismiss(true), 5000);
@@ -36,7 +33,6 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
       setCanDismiss(false);
     }
   }, [status.isOnline, status.queueSize]);
-
   const getIndicatorMessage = () => {
     if (!status.isOnline) {
       switch (status.connectionState) {
@@ -50,12 +46,10 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
         return 'Not connected. Working in offline mode.';
       }
     } else if (status.queueSize > 0) {
-      return `Syncing ${status.queueSize} pending change${status.queueSize === 1 ? '' : 's'}...`;
+      return `Syncing ${status.queueSize} pending change${status.queueSize === 1 ? '' : 's'}...`;}
     }
-    
     return '';
   };
-
   const getIndicatorType = () => {
     if (!status.isOnline) {
       return status.connectionState === ConnectionState.FAILED ? 'error' : 'warning';
@@ -64,7 +58,6 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
     }
     return 'info';
   };
-
   const getIndicatorColor = () => {
     const type = getIndicatorType();
     switch (type) {
@@ -73,46 +66,42 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
         background: '#fef2f2',
         border: '#fecaca',
         text: '#dc2626',
-        button: '#dc2626'
+        button: '#dc2626',
       };
     case 'warning':
       return {
         background: '#fffbeb',
         border: '#fed7aa',
         text: '#d97706',
-        button: '#d97706'
+        button: '#d97706',
       };
     case 'info':
       return {
         background: '#eff6ff',
         border: '#bfdbfe',
         text: '#2563eb',
-        button: '#2563eb'
+        button: '#2563eb',
       };
     default:
       return {
         background: '#f8fafc',
         border: '#e2e8f0',
         text: '#475569',
-        button: '#475569'
+        button: '#475569',
       };
     }
   };
-
   const handleDismiss = () => {
     if (canDismiss) {
       setIsVisible(false);
     }
   };
-
   if (!isVisible) {
     return null;
   }
-
   const colors = getIndicatorColor();
   const message = getIndicatorMessage();
-
-  return (
+  return ()
     <div 
       className={`offline-indicator ${position} ${className}`}
       style={{
@@ -122,8 +111,8 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
         top: position === 'top' ? 0 : undefined,
         bottom: position === 'bottom' ? 0 : undefined,
         backgroundColor: colors.background,
-        borderBottom: position === 'top' ? `2px solid ${colors.border}` : undefined,
-        borderTop: position === 'bottom' ? `2px solid ${colors.border}` : undefined,
+        borderBottom: position === 'top' ? `2px solid ${colors.border}` : undefined,}
+        borderTop: position === 'bottom' ? `2px solid ${colors.border}` : undefined,}
         color: colors.text,
         padding: '12px 16px',
         zIndex: 1000,
@@ -140,14 +129,13 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
             </span>
             <span>{message}</span>
           </div>
-
-          {showQueueInfo && status.queueSize > 0 && (
+          {showQueueInfo && status.queueSize > 0 && ()
             <div className="flex items-center gap-4 text-sm">
               <div className="flex items-center gap-1">
                 <span>Pending:</span>
                 <span className="font-bold">{status.queueSize}</span>
               </div>
-              {status.metrics.syncedOperations > 0 && (
+              {status.metrics.syncedOperations > 0 && ()
                 <div className="flex items-center gap-1">
                   <span>Synced:</span>
                   <span className="font-bold">{status.metrics.syncedOperations}</span>
@@ -156,18 +144,17 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
             </div>
           )}
         </div>
-
         <div className="flex items-center gap-2">
-          {showActions && (
+          {showActions && ()
             <>
-              {!status.isOnline && onRetryConnection && (
+              {!status.isOnline && onRetryConnection && ()
                 <button
                   onClick={onRetryConnection}
                   className="px-3 py-1 text-sm font-medium rounded transition-colors"
                   style={{
                     backgroundColor: 'transparent',
-                    border: `1px solid ${colors.button}`,
-                    color: colors.button
+                    border: `1px solid ${colors.button}`,}
+                    color: colors.button,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = colors.button;
@@ -181,15 +168,14 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
                   Retry Connection
                 </button>
               )}
-
-              {status.queueSize > 0 && onViewQueue && (
+              {status.queueSize > 0 && onViewQueue && ()
                 <button
                   onClick={onViewQueue}
                   className="px-3 py-1 text-sm font-medium rounded transition-colors"
                   style={{
                     backgroundColor: 'transparent',
-                    border: `1px solid ${colors.button}`,
-                    color: colors.button
+                    border: `1px solid ${colors.button}`,}
+                    color: colors.button,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = colors.button;
@@ -205,8 +191,7 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
               )}
             </>
           )}
-
-          {canDismiss && (
+          {canDismiss && ()
             <button
               onClick={handleDismiss}
               className="ml-2 text-lg opacity-60 hover:opacity-100 transition-opacity"

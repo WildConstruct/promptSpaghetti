@@ -5,7 +5,6 @@
  * Displays creative variance metrics, diversity indicators, and suggestions
  * for improving or optimizing the creative range of generated results.
  */
-
 import React, { useMemo } from 'react';
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 import { 
@@ -15,25 +14,21 @@ import {
   VarianceSuggestion 
 } from '../services/VarianceAnalysisService';
 import { professionalColors } from '../styles/professional-design-system';
-
 interface VarianceAnalysisProps {
   results: PreviewResultWithPath[];
   onSuggestionClick?: (suggestion: VarianceSuggestion) => void;
   compact?: boolean;
 }
 
-export   }, [results]);
-
+export }, [results]);
   const indicators = useMemo(() => {
     return varianceAnalysisService.createDiversityIndicators(analysis);
   }, [analysis]);
-
   const varianceInfo = useMemo(() => {
     return varianceAnalysisService.getVarianceLevelInfo(analysis.overallVariance);
   }, [analysis.overallVariance]);
-
   if (results.length < 2) {
-    return (
+    return ()
       <div style={{
         padding: 12,
         background: '#f8fafc',
@@ -41,36 +36,34 @@ export   }, [results]);
         borderRadius: 6,
         textAlign: 'center',
         color: professionalColors.text.secondary,
-        fontSize: 12
+        fontSize: 12,
       }}>
         📊 Generate more results to analyze creative variance
       </div>
     );
   }
-
   if (compact) {
     return <CompactVarianceDisplay analysis={analysis} varianceInfo={varianceInfo} />;
   }
-
-  return (
+  return ()
     <div style={{
       background: '#fff',
       border: '1px solid #e5e7eb',
       borderRadius: 8,
-      overflow: 'hidden'
+      overflow: 'hidden',
     }}>
       {/* Header */}
       <div style={{
         padding: 16,
         background: varianceInfo.background,
-        border: `1px solid ${varianceInfo.border}`,
-        borderBottom: 'none'
+        border: `1px solid ${varianceInfo.border}`,}
+        borderBottom: 'none',
       }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginBottom: 8
+          marginBottom: 8,
         }}>
           <h3 style={{
             margin: 0,
@@ -79,20 +72,20 @@ export   }, [results]);
             color: varianceInfo.color,
             display: 'flex',
             alignItems: 'center',
-            gap: 8
+            gap: 8,
           }}>
             {varianceInfo.icon} Creative Variance Analysis
           </h3>
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 8
+            gap: 8,
           }}>
             <span style={{
               fontSize: 12,
               fontWeight: 500,
               color: varianceInfo.color,
-              textTransform: 'uppercase'
+              textTransform: 'uppercase',
             }}>
               {analysis.overallVariance} Variance
             </span>
@@ -101,10 +94,10 @@ export   }, [results]);
               height: 6,
               background: '#e5e7eb',
               borderRadius: 3,
-              overflow: 'hidden'
+              overflow: 'hidden',
             }}>
               <div style={{
-                width: `${analysis.varianceScore * 100}%`,
+                width: `${analysis.varianceScore * 100}%`,}
                 height: '100%',
                 background: varianceInfo.color,
                 transition: 'width 0.3s ease'
@@ -116,34 +109,31 @@ export   }, [results]);
           margin: 0,
           fontSize: 11,
           color: varianceInfo.color,
-          lineHeight: 1.4
+          lineHeight: 1.4,
         }}>
           {varianceInfo.description}
         </p>
       </div>
-
       {/* Diversity Metrics */}
       <div style={{ padding: 16 }}>
         <h4 style={{
           margin: '0 0 12px 0',
           fontSize: 12,
           fontWeight: 600,
-          color: professionalColors.text.primary
+          color: professionalColors.text.primary,
         }}>
           📈 Diversity Metrics
         </h4>
-        
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: 12
+          gap: 12,
         }}>
-          {indicators.map((indicator, index) => (
+          {indicators.map((indicator, index) => ()
             <DiversityMetricCard key={index} indicator={indicator} />
           ))}
         </div>
       </div>
-
       {/* Creative Range Summary */}
       <div style={{
         padding: 16,
@@ -154,22 +144,21 @@ export   }, [results]);
           margin: '0 0 12px 0',
           fontSize: 12,
           fontWeight: 600,
-          color: professionalColors.text.primary
+          color: professionalColors.text.primary,
         }}>
           🎨 Creative Range Summary
         </h4>
-        
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          gap: 16
+          gap: 16,
         }}>
           <div>
             <div style={{
               fontSize: 11,
               fontWeight: 500,
               color: '#6b7280',
-              marginBottom: 4
+              marginBottom: 4,
             }}>
               Unique Elements ({analysis.creativeRange.uniqueElements.length})
             </div>
@@ -178,19 +167,18 @@ export   }, [results]);
               overflow: 'hidden',
               fontSize: 10,
               color: '#374151',
-              lineHeight: 1.3
+              lineHeight: 1.3,
             }}>
               {analysis.creativeRange.uniqueElements.slice(0, 8).join(', ')}
               {analysis.creativeRange.uniqueElements.length > 8 && '...'}
             </div>
           </div>
-          
           <div>
             <div style={{
               fontSize: 11,
               fontWeight: 500,
               color: '#6b7280',
-              marginBottom: 4
+              marginBottom: 4,
             }}>
               Common Elements ({analysis.creativeRange.commonElements.length})
             </div>
@@ -199,14 +187,13 @@ export   }, [results]);
               overflow: 'hidden',
               fontSize: 10,
               color: '#374151',
-              lineHeight: 1.3
+              lineHeight: 1.3,
             }}>
               {analysis.creativeRange.commonElements.slice(0, 6).join(', ')}
               {analysis.creativeRange.commonElements.length > 6 && '...'}
             </div>
           </div>
         </div>
-
         <div style={{
           display: 'flex',
           gap: 16,
@@ -218,7 +205,7 @@ export   }, [results]);
             <div style={{
               fontSize: 10,
               color: '#6b7280',
-              marginBottom: 2
+              marginBottom: 2,
             }}>
               Repetition Rate
             </div>
@@ -230,12 +217,11 @@ export   }, [results]);
               {(analysis.creativeRange.repetitionRate * 100).toFixed(1)}%
             </div>
           </div>
-          
           <div style={{ flex: 1 }}>
             <div style={{
               fontSize: 10,
               color: '#6b7280',
-              marginBottom: 2
+              marginBottom: 2,
             }}>
               Creativity Score
             </div>
@@ -249,9 +235,8 @@ export   }, [results]);
           </div>
         </div>
       </div>
-
       {/* Suggestions */}
-      {analysis.suggestions.length > 0 && (
+      {analysis.suggestions.length > 0 && ()
         <div style={{
           padding: 16,
           borderTop: '1px solid #e5e7eb'
@@ -260,13 +245,12 @@ export   }, [results]);
             margin: '0 0 12px 0',
             fontSize: 12,
             fontWeight: 600,
-            color: professionalColors.text.primary
+            color: professionalColors.text.primary,
           }}>
             💡 Optimization Suggestions
           </h4>
-          
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {analysis.suggestions.map((suggestion, index) => (
+            {analysis.suggestions.map((suggestion, index) => ()
               <SuggestionCard
                 key={index}
                 suggestion={suggestion}
@@ -279,20 +263,19 @@ export   }, [results]);
     </div>
   );
 };
-
 const CompactVarianceDisplay: React.FC<{
   analysis: VarianceMetrics;
   varianceInfo: ReturnType<typeof varianceAnalysisService.getVarianceLevelInfo>;
-}> = ({ analysis, varianceInfo }) => (
+}> = ({ analysis, varianceInfo }) => ()
   <div style={{
     display: 'flex',
     alignItems: 'center',
     gap: 8,
     padding: 8,
     background: varianceInfo.background,
-    border: `1px solid ${varianceInfo.border}`,
+    border: `1px solid ${varianceInfo.border}`,}
     borderRadius: 6,
-    fontSize: 11
+    fontSize: 11,
   }}>
     <span>{varianceInfo.icon}</span>
     <span style={{ fontWeight: 500, color: varianceInfo.color }}>
@@ -303,12 +286,12 @@ const CompactVarianceDisplay: React.FC<{
       height: 4,
       background: '#e5e7eb',
       borderRadius: 2,
-      overflow: 'hidden'
+      overflow: 'hidden',
     }}>
       <div style={{
-        width: `${analysis.varianceScore * 100}%`,
+        width: `${analysis.varianceScore * 100}%`,}
         height: '100%',
-        background: varianceInfo.color
+        background: varianceInfo.color,
       }} />
     </div>
     <span style={{ fontSize: 10, color: '#6b7280' }}>
@@ -316,24 +299,23 @@ const CompactVarianceDisplay: React.FC<{
     </span>
   </div>
 );
-
-const DiversityMetricCard: React.FC<{ indicator: DiversityIndicator }> = ({ indicator }) => (
+const DiversityMetricCard: React.FC<{ indicator: DiversityIndicator }> = ({ indicator }) => ()
   <div style={{
     padding: 10,
     background: '#fff',
     border: '1px solid #e5e7eb',
-    borderRadius: 4
+    borderRadius: 4,
   }}>
     <div style={{
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 6
+      marginBottom: 6,
     }}>
       <span style={{
         fontSize: 11,
         fontWeight: 500,
-        color: professionalColors.text.primary
+        color: professionalColors.text.primary,
       }}>
         {indicator.metric}
       </span>
@@ -344,38 +326,35 @@ const DiversityMetricCard: React.FC<{ indicator: DiversityIndicator }> = ({ indi
         background: indicator.color + '20',
         color: indicator.color,
         fontWeight: 500,
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
       }}>
         {indicator.level}
       </span>
     </div>
-    
     <div style={{
       width: '100%',
       height: 4,
       background: '#e5e7eb',
       borderRadius: 2,
       overflow: 'hidden',
-      marginBottom: 6
+      marginBottom: 6,
     }}>
       <div style={{
-        width: `${indicator.value * 100}%`,
+        width: `${indicator.value * 100}%`,}
         height: '100%',
         background: indicator.color,
         transition: 'width 0.3s ease'
       }} />
     </div>
-    
     <div style={{
       fontSize: 9,
       color: '#6b7280',
-      lineHeight: 1.3
+      lineHeight: 1.3,
     }}>
       {indicator.description}
     </div>
   </div>
 );
-
 const SuggestionCard: React.FC<{
   suggestion: VarianceSuggestion;
   onClick?: () => void;
@@ -385,22 +364,19 @@ const SuggestionCard: React.FC<{
     decrease: { color: '#ef4444', bg: '#fef2f2', border: '#fecaca' },
     optimize: { color: '#3b82f6', bg: '#eff6ff', border: '#bfdbfe' }
   };
-
   const impactIcons = {
     low: '⚪',
     medium: '🟡',
-    high: '🔴'
+    high: '🔴',
   };
-
   const colors = typeColors[suggestion.type];
-
-  return (
+  return ()
     <div
       onClick={suggestion.actionable ? onClick : undefined}
       style={{
         padding: 10,
         background: colors.bg,
-        border: `1px solid ${colors.border}`,
+        border: `1px solid ${colors.border}`,}
         borderRadius: 4,
         cursor: suggestion.actionable ? 'pointer' : 'default',
         transition: 'all 0.2s',
@@ -410,12 +386,12 @@ const SuggestionCard: React.FC<{
       <div style={{
         display: 'flex',
         alignItems: 'flex-start',
-        gap: 8
+        gap: 8,
       }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 4
+          gap: 4,
         }}>
           <span style={{ fontSize: 10 }}>{impactIcons[suggestion.impact]}</span>
           <span style={{
@@ -425,25 +401,23 @@ const SuggestionCard: React.FC<{
             background: colors.color + '20',
             color: colors.color,
             fontWeight: 500,
-            textTransform: 'uppercase'
+            textTransform: 'uppercase',
           }}>
             {suggestion.category}
           </span>
         </div>
-        
         <div style={{ flex: 1 }}>
           <div style={{
             fontSize: 11,
             color: colors.color,
             lineHeight: 1.4,
-            marginBottom: 2
+            marginBottom: 2,
           }}>
             {suggestion.message}
           </div>
-          
           <div style={{
             fontSize: 9,
-            color: '#6b7280'
+            color: '#6b7280',
           }}>
             {suggestion.impact.toUpperCase()} IMPACT
             {suggestion.actionable && ' • Click for guidance'}

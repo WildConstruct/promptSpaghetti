@@ -45,7 +45,7 @@ export interface EnhancedSession {
     analyticsConsent: boolean;
     personalizationConsent: boolean;
     crossDeviceConsent: boolean;
-    viewport: {
+    viewport: {,
         width: number;
         height: number;
     };
@@ -75,12 +75,12 @@ export interface SessionAnalytics {
     conversionsBySource: Record<string, number>;
     hourlyDistribution: number[];
     dailyDistribution: number[];
-    commonPaths: Array<{
+    commonPaths: Array<{,
         path: string[];
         frequency: number;
         conversionRate: number;
     }>;
-    dropoffPoints: Array<{
+    dropoffPoints: Array<{,
         page: string;
         dropoffRate: number;
         recoverableUsers: number;
@@ -125,7 +125,7 @@ export declare class SessionTrackingManager {
     /**
      * Update consent preferences
      */
-    updateConsentPreferences(consent: {
+    updateConsentPreferences(consent: {)
         trackingConsent?: boolean;
         analyticsConsent?: boolean;
         personalizationConsent?: boolean;

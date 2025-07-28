@@ -8,7 +8,6 @@ export interface NodeMeta {
   category?: string;
   tooltip: string;
 }
-
 interface PaletteProps {
   nodes: NodeMeta[];
   collapsed: boolean;
@@ -17,20 +16,20 @@ interface PaletteProps {
 }
 
 export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, onDragStart }) => {
-  return (
+  return ()
     <aside
       aria-label="Node Palette"
       style={{
         width: collapsed ? 56 : 200,
         background: professionalColors.background.primary,
         color: professionalColors.text.primary,
-        borderRight: `1px solid ${professionalColors.ui.border}`,
+        borderRight: `1px solid ${professionalColors.ui.border}`,}
         padding: 0,
         height: '100%',
         transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
         overflow: 'hidden',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
       }}
     >
       <button
@@ -39,7 +38,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
         onClick={onToggle}
         style={{
           background: professionalColors.ui.hover,
-          border: `1px solid ${professionalColors.ui.border}`,
+          border: `1px solid ${professionalColors.ui.border}`,}
           color: professionalColors.text.primary,
           fontSize: 18,
           width: '100%',
@@ -52,9 +51,9 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
         {collapsed ? '»' : '«'}
       </button>
       <div style={{ flex: 1, overflowY: 'auto', padding: collapsed ? 0 : 8 }}>
-        {collapsed ? (
+        {collapsed ? ()
           // Collapsed view - show icons only
-          nodes.map((node) => (
+          nodes.map((node) => ()
             <div
               key={node.id}
               role="button"
@@ -77,7 +76,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                 borderRadius: 6,
                 background: 'none',
                 cursor: 'grab',
-                outline: 'none'
+                outline: 'none',
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -85,11 +84,11 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                 }
               }}
             >
-              <span id={`tooltip-${node.id}`} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>{node.tooltip}</span>
+              <span id={`tooltip-${node.id}`} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>{node.tooltip}</span>}
               <span style={{ fontSize: 22, width: 28, textAlign: 'center' }}>{node.icon}</span>
             </div>
           ))
-        ) : (
+        ) : ()
           // Expanded view - show by category
           (() => {
             const categories = nodes.reduce((acc, node) => {
@@ -98,7 +97,6 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
               acc[category].push(node);
               return acc;
             }, {} as Record<string, typeof nodes>);
-
             const categoryOrder = ['content', 'flow', 'advanced', 'transform', 'output', 'memory', 'smart', 'process', 'other'];
             const categoryLabels = {
               content: 'Content Building Blocks',
@@ -111,12 +109,10 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
               process: 'Custom Processing',
               other: 'Other Tools'
             };
-
-            return categoryOrder.map(categoryKey => {
+            return categoryOrder.map(categoryKey => {)
               const categoryNodes = categories[categoryKey];
               if (!categoryNodes || categoryNodes.length === 0) return null;
-
-              return (
+              return ()
                 <div key={categoryKey} style={{ marginBottom: 16 }}>
                   <div style={{
                     fontSize: 11,
@@ -125,11 +121,11 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                     textTransform: 'uppercase',
                     letterSpacing: '0.5px',
                     marginBottom: 8,
-                    paddingLeft: 8
+                    paddingLeft: 8,
                   }}>
                     {categoryLabels[categoryKey as keyof typeof categoryLabels]}
                   </div>
-                  {categoryNodes.map((node) => (
+                  {categoryNodes.map((node) => ()
                     <div
                       key={node.id}
                       role="button"
@@ -167,7 +163,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                         }
                       }}
                     >
-                      <span id={`tooltip-${node.id}`} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>{node.tooltip}</span>
+                      <span id={`tooltip-${node.id}`} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>{node.tooltip}</span>}
                       <span style={{ fontSize: 22, width: 28, textAlign: 'center' }}>{node.icon}</span>
                       <div style={{ flex: 1 }}>
                         <div style={{ fontSize: 13, fontWeight: 500 }}>{node.label}</div>

@@ -6,14 +6,12 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Settings, Shield, Eye, Target, MessageSquare, Cookie, Download, 
   Trash2, Edit, History, AlertCircle, CheckCircle, Clock, 
   FileText, ExternalLink, RefreshCw, User, Globe, Calendar 
 } from 'lucide-react';
-
 interface ConsentPreferenceCenterProps {
   userId?: string;
   onConsentUpdate?: (consents: ConsentSettings) => void;
@@ -22,7 +20,6 @@ interface ConsentPreferenceCenterProps {
   showHistory?: boolean;
   jurisdiction?: string;
 }
-
 interface ConsentSettings {
   categories: Record<string, CategoryConsent>;
   communications: CommunicationPreferences;
@@ -31,7 +28,6 @@ interface ConsentSettings {
   sharing: SharingPreferences;
   lastUpdated: Date;
 }
-
 interface CategoryConsent {
   enabled: boolean;
   granularChoices: Record<string, boolean>;
@@ -39,7 +35,6 @@ interface CategoryConsent {
   expiresAt?: Date;
   source: string;
 }
-
 interface CommunicationPreferences {
   email: ChannelPreference;
   sms: ChannelPreference;
@@ -47,19 +42,17 @@ interface CommunicationPreferences {
   phone: ChannelPreference;
   post: ChannelPreference;
 }
-
 interface ChannelPreference {
   enabled: boolean;
   frequency: 'IMMEDIATE' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'NEVER';
   topics: string[];
-  quietHours: {
+  quietHours: {,
     enabled: boolean;
     start: string;
     end: string;
     timezone: string;
   };
 }
-
 interface DataProcessingPreferences {
   analytics: ProcessingConsent;
   personalization: ProcessingConsent;
@@ -67,7 +60,6 @@ interface DataProcessingPreferences {
   research: ProcessingConsent;
   aiProcessing: ProcessingConsent;
 }
-
 interface ProcessingConsent {
   enabled: boolean;
   allowAutomatedDecisions: boolean;
@@ -76,7 +68,6 @@ interface ProcessingConsent {
   allowInternationalTransfers: boolean;
   retentionPeriod: number; // days
 }
-
 interface RetentionPreferences {
   minimumRetention: boolean;
   autoDelete: boolean;
@@ -84,7 +75,6 @@ interface RetentionPreferences {
   deleteInactiveData: boolean;
   inactivityThreshold: number; // days
 }
-
 interface SharingPreferences {
   internal: SharingConsent;
   partners: SharingConsent;
@@ -92,7 +82,6 @@ interface SharingPreferences {
   research: SharingConsent;
   legal: SharingConsent;
 }
-
 interface SharingConsent {
   enabled: boolean;
   purposes: string[];
@@ -100,7 +89,6 @@ interface SharingConsent {
   geographicRestrictions: string[];
   requiresNotification: boolean;
 }
-
 interface ConsentHistoryEntry {
   id: string;
   timestamp: Date;
@@ -111,7 +99,6 @@ interface ConsentHistoryEntry {
   ipAddress: string;
   userAgent: string;
 }
-
 interface DataRightRequest {
   id: string;
   type: DataRequestType;
@@ -120,10 +107,8 @@ interface DataRightRequest {
   completedAt?: Date;
   description: string;
 }
-
 type DataRequestType = 'ACCESS' | 'PORTABILITY' | 'RECTIFICATION' | 'ERASURE' | 'RESTRICTION' | 'OBJECTION';
-
-const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
+const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({)
   userId,
   onConsentUpdate,
   onDataRequest,
@@ -132,180 +117,179 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
   jurisdiction = 'US'
 }) => {
   const [activeSection, setActiveSection] = useState('overview');
-  const [settings, setSettings] = useState<ConsentSettings>({
-    categories: {
-      essential: {
+  const [settings, setSettings] = useState<ConsentSettings>({)
+    categories: {,
+      essential: {,
         enabled: true,
         granularChoices: {},
         lastModified: new Date(),
-        source: 'SYSTEM'
+        source: 'SYSTEM',
       },
-      functional: {
+      functional: {,
         enabled: false,
         granularChoices: {},
         lastModified: new Date(),
-        source: 'USER'
+        source: 'USER',
       },
-      analytics: {
+      analytics: {,
         enabled: false,
         granularChoices: {},
         lastModified: new Date(),
-        source: 'USER'
+        source: 'USER',
       },
-      marketing: {
+      marketing: {,
         enabled: false,
         granularChoices: {},
         lastModified: new Date(),
-        source: 'USER'
+        source: 'USER',
       }
     },
-    communications: {
-      email: {
+    communications: {,
+      email: {,
         enabled: true,
         frequency: 'WEEKLY',
         topics: ['product_updates'],
-        quietHours: {
+        quietHours: {,
           enabled: true,
           start: '22:00',
           end: '08:00',
-          timezone: 'UTC'
+          timezone: 'UTC',
         }
       },
-      sms: {
+      sms: {,
         enabled: false,
         frequency: 'NEVER',
         topics: [],
-        quietHours: {
+        quietHours: {,
           enabled: true,
           start: '21:00',
           end: '09:00',
-          timezone: 'UTC'
+          timezone: 'UTC',
         }
       },
-      push: {
+      push: {,
         enabled: true,
         frequency: 'IMMEDIATE',
         topics: ['security_alerts'],
-        quietHours: {
+        quietHours: {,
           enabled: false,
           start: '22:00',
           end: '08:00',
-          timezone: 'UTC'
+          timezone: 'UTC',
         }
       },
-      phone: {
+      phone: {,
         enabled: false,
         frequency: 'NEVER',
         topics: [],
-        quietHours: {
+        quietHours: {,
           enabled: true,
           start: '20:00',
           end: '09:00',
-          timezone: 'UTC'
+          timezone: 'UTC',
         }
       },
-      post: {
+      post: {,
         enabled: false,
         frequency: 'NEVER',
         topics: [],
-        quietHours: {
+        quietHours: {,
           enabled: false,
           start: '00:00',
           end: '00:00',
-          timezone: 'UTC'
+          timezone: 'UTC',
         }
       }
     },
-    dataProcessing: {
-      analytics: {
+    dataProcessing: {,
+      analytics: {,
         enabled: false,
         allowAutomatedDecisions: false,
         allowProfiling: false,
         allowSharing: false,
         allowInternationalTransfers: false,
-        retentionPeriod: 365
+        retentionPeriod: 365,
       },
-      personalization: {
+      personalization: {,
         enabled: false,
         allowAutomatedDecisions: true,
         allowProfiling: true,
         allowSharing: false,
         allowInternationalTransfers: false,
-        retentionPeriod: 730
+        retentionPeriod: 730,
       },
-      marketing: {
+      marketing: {,
         enabled: false,
         allowAutomatedDecisions: false,
         allowProfiling: false,
         allowSharing: false,
         allowInternationalTransfers: false,
-        retentionPeriod: 365
+        retentionPeriod: 365,
       },
-      research: {
+      research: {,
         enabled: false,
         allowAutomatedDecisions: false,
         allowProfiling: false,
         allowSharing: true,
         allowInternationalTransfers: false,
-        retentionPeriod: 1825
+        retentionPeriod: 1825,
       },
-      aiProcessing: {
+      aiProcessing: {,
         enabled: false,
         allowAutomatedDecisions: false,
         allowProfiling: false,
         allowSharing: false,
         allowInternationalTransfers: false,
-        retentionPeriod: 365
+        retentionPeriod: 365,
       }
     },
-    retention: {
+    retention: {,
       minimumRetention: true,
       autoDelete: true,
       customRetentionPeriods: {},
       deleteInactiveData: true,
       inactivityThreshold: 1095 // 3 years
     },
-    sharing: {
-      internal: {
+    sharing: {,
+      internal: {,
         enabled: true,
         purposes: ['service_provision'],
         recipientTypes: ['subsidiaries'],
         geographicRestrictions: [],
-        requiresNotification: false
+        requiresNotification: false,
       },
-      partners: {
+      partners: {,
         enabled: false,
         purposes: [],
         recipientTypes: [],
         geographicRestrictions: ['EU', 'US'],
-        requiresNotification: true
+        requiresNotification: true,
       },
-      vendors: {
+      vendors: {,
         enabled: false,
         purposes: [],
         recipientTypes: [],
         geographicRestrictions: ['EU', 'US'],
-        requiresNotification: true
+        requiresNotification: true,
       },
-      research: {
+      research: {,
         enabled: false,
         purposes: [],
         recipientTypes: [],
         geographicRestrictions: [],
-        requiresNotification: true
+        requiresNotification: true,
       },
-      legal: {
+      legal: {,
         enabled: true,
         purposes: ['legal_compliance'],
         recipientTypes: ['authorities'],
         geographicRestrictions: [],
-        requiresNotification: false
+        requiresNotification: false,
       }
     },
     lastUpdated: new Date()
   });
-
-  const [consentHistory, setConsentHistory] = useState<ConsentHistoryEntry[]>([
+  const [consentHistory, setConsentHistory] = useState<ConsentHistoryEntry[]>([)
     {
       id: 'HIST-001',
       timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
@@ -314,7 +298,7 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
       details: 'Initial consent granted for essential cookies',
       method: 'Banner',
       ipAddress: '192.168.1.1',
-      userAgent: 'Mozilla/5.0...'
+      userAgent: 'Mozilla/5.0...',
     },
     {
       id: 'HIST-002',
@@ -324,11 +308,10 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
       details: 'Enabled analytics cookies for better user experience',
       method: 'Preference Center',
       ipAddress: '192.168.1.1',
-      userAgent: 'Mozilla/5.0...'
+      userAgent: 'Mozilla/5.0...',
     }
   ]);
-
-  const [dataRequests, setDataRequests] = useState<DataRightRequest[]>([
+  const [dataRequests, setDataRequests] = useState<DataRightRequest[]>([)
     {
       id: 'REQ-001',
       type: 'ACCESS',
@@ -338,61 +321,51 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
       description: 'Request for copy of personal data'
     }
   ]);
-
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
-
   const isGDPRApplicable = ['GB', 'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'AT', 'SE', 'DK', 'FI', 'IE', 'PT', 'LU'].includes(jurisdiction);
   const isCCPAApplicable = jurisdiction === 'CA' || jurisdiction === 'US';
-
   const handleSaveSettings = useCallback(async () => {
     setSaving(true);
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
       const updatedSettings = {
         ...settings,
         lastUpdated: new Date()
       };
-      
       setSettings(updatedSettings);
       setLastSaved(new Date());
       onConsentUpdate?.(updatedSettings);
-      
       // Add to history
       const historyEntry: ConsentHistoryEntry = {
-        id: `HIST-${Date.now()}`,
+        id: `HIST-${Date.now()}`,}
         timestamp: new Date(),
         action: 'MODIFIED',
         category: 'Multiple',
         details: 'Updated consent preferences via Preference Center',
         method: 'Preference Center',
         ipAddress: '192.168.1.1',
-        userAgent: navigator.userAgent
+        userAgent: navigator.userAgent,
       };
       setConsentHistory(prev => [historyEntry, ...prev]);
-      
     } catch (error) {
       console.error('Failed to save settings:', error);
     } finally {
       setSaving(false);
     }
   }, [settings, onConsentUpdate]);
-
   const handleDataRightRequest = useCallback(async (requestType: DataRequestType) => {
     const request: DataRightRequest = {
-      id: `REQ-${Date.now()}`,
+      id: `REQ-${Date.now()}`,}
       type: requestType,
       status: 'SUBMITTED',
       submittedAt: new Date(),
-      description: getRequestDescription(requestType)
+      description: getRequestDescription(requestType),
     };
-    
     setDataRequests(prev => [request, ...prev]);
     onDataRequest?.(requestType);
   }, [onDataRequest]);
-
   const getRequestDescription = (type: DataRequestType): string => {
     switch (type) {
     case 'ACCESS': return 'Request for access to personal data';
@@ -404,13 +377,11 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
     default: return 'Data subject rights request';
     }
   };
-
   const updateCategoryConsent = (category: string, enabled: boolean) => {
     if (category === 'essential' && !enabled) return; // Cannot disable essential
-    
-    setSettings(prev => ({
+    setSettings(prev => ({)
       ...prev,
-      categories: {
+      categories: {,
         ...prev.categories,
         [category]: {
           ...prev.categories[category],
@@ -420,14 +391,13 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
       }
     }));
   };
-
-  const updateCommunicationPreference = (
+  const updateCommunicationPreference = (;)
     channel: keyof CommunicationPreferences,
-    updates: Partial<ChannelPreference>
+    updates: Partial<ChannelPreference>,
   ) => {
-    setSettings(prev => ({
+    setSettings(prev => ({)
       ...prev,
-      communications: {
+      communications: {,
         ...prev.communications,
         [channel]: {
           ...prev.communications[channel],
@@ -436,7 +406,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
       }
     }));
   };
-
   const getSectionIcon = (section: string) => {
     switch (section) {
     case 'overview': return <Settings className="w-5 h-5" />;
@@ -450,7 +419,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
     default: return <Settings className="w-5 h-5" />;
     }
   };
-
   const getStatusIcon = (status: string) => {
     switch (status) {
     case 'COMPLETED': return <CheckCircle className="w-4 h-4 text-green-600" />;
@@ -460,8 +428,7 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
     default: return <Clock className="w-4 h-4 text-gray-600" />;
     }
   };
-
-  return (
+  return ()
     <div className="max-w-6xl mx-auto p-6 bg-white">
       {/* Header */}
       <div className="mb-8">
@@ -471,14 +438,13 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
           {isGDPRApplicable && ' You have comprehensive rights under GDPR.'}
           {isCCPAApplicable && ' California residents have additional privacy rights under CCPA.'}
         </p>
-        {lastSaved && (
+        {lastSaved && ()
           <div className="mt-2 flex items-center text-sm text-green-600">
             <CheckCircle className="w-4 h-4 mr-1" />
             Last saved: {lastSaved.toLocaleString()}
           </div>
         )}
       </div>
-
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Sidebar Navigation */}
         <div className="lg:w-64 space-y-2">
@@ -491,7 +457,7 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
             { id: 'sharing', label: 'Data Sharing' },
             ...(showDataRights ? [{ id: 'rights', label: 'Your Rights' }] : []),
             ...(showHistory ? [{ id: 'history', label: 'Consent History' }] : [])
-          ].map((section) => (
+          ].map((section) => ()
             <button
               key={section.id}
               onClick={() => setActiveSection(section.id)}
@@ -506,14 +472,12 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
             </button>
           ))}
         </div>
-
         {/* Main Content */}
         <div className="flex-1">
           <div className="bg-white border border-gray-200 rounded-lg p-6">
-            {activeSection === 'overview' && (
+            {activeSection === 'overview' && ()
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold mb-4">Privacy Overview</h2>
-                
                 {/* Status Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="p-4 border border-gray-200 rounded-lg">
@@ -524,7 +488,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                     <p className="text-2xl font-bold text-green-600">Active</p>
                     <p className="text-sm text-gray-600">All essential protections enabled</p>
                   </div>
-                  
                   <div className="p-4 border border-gray-200 rounded-lg">
                     <div className="flex items-center mb-2">
                       <Cookie className="w-5 h-5 text-blue-600 mr-2" />
@@ -535,7 +498,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                     </p>
                     <p className="text-sm text-gray-600">Categories enabled</p>
                   </div>
-                  
                   <div className="p-4 border border-gray-200 rounded-lg">
                     <div className="flex items-center mb-2">
                       <MessageSquare className="w-5 h-5 text-purple-600 mr-2" />
@@ -547,7 +509,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                     <p className="text-sm text-gray-600">Channels active</p>
                   </div>
                 </div>
-
                 {/* Quick Actions */}
                 <div className="border-t border-gray-200 pt-6">
                   <h3 className="font-medium mb-4">Quick Actions</h3>
@@ -560,7 +521,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                       <div className="font-medium">Manage Cookies</div>
                       <div className="text-sm text-gray-600">Control cookie categories and preferences</div>
                     </button>
-                    
                     <button
                       onClick={() => setActiveSection('rights')}
                       className="p-3 border border-gray-200 rounded-md hover:bg-gray-50 text-left"
@@ -569,7 +529,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                       <div className="font-medium">Exercise Rights</div>
                       <div className="text-sm text-gray-600">Access, download, or delete your data</div>
                     </button>
-                    
                     <button
                       onClick={() => setActiveSection('communications')}
                       className="p-3 border border-gray-200 rounded-md hover:bg-gray-50 text-left"
@@ -578,7 +537,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                       <div className="font-medium">Communication Settings</div>
                       <div className="text-sm text-gray-600">Manage how we contact you</div>
                     </button>
-                    
                     <button
                       onClick={() => setActiveSection('history')}
                       className="p-3 border border-gray-200 rounded-md hover:bg-gray-50 text-left"
@@ -591,18 +549,16 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                 </div>
               </div>
             )}
-
-            {activeSection === 'categories' && (
+            {activeSection === 'categories' && ()
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold mb-4">Cookie Categories</h2>
-                
-                {Object.entries(settings.categories).map(([category, consent]) => (
+                {Object.entries(settings.categories).map(([category, consent]) => ()
                   <div key={category} className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center">
                         <Cookie className="w-5 h-5 text-blue-600 mr-2" />
                         <h3 className="font-medium capitalize">{category} Cookies</h3>
-                        {category === 'essential' && (
+                        {category === 'essential' && ()
                           <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Required</span>
                         )}
                       </div>
@@ -620,7 +576,7 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                     <p className="text-sm text-gray-600 mb-2">
                       Last modified: {consent.lastModified.toLocaleDateString()}
                     </p>
-                    {consent.expiresAt && (
+                    {consent.expiresAt && ()
                       <p className="text-sm text-gray-600">
                         Expires: {consent.expiresAt.toLocaleDateString()}
                       </p>
@@ -629,12 +585,10 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                 ))}
               </div>
             )}
-
-            {activeSection === 'communications' && (
+            {activeSection === 'communications' && ()
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold mb-4">Communication Preferences</h2>
-                
-                {Object.entries(settings.communications).map(([channel, preference]) => (
+                {Object.entries(settings.communications).map(([channel, preference]) => ()
                   <div key={channel} className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center">
@@ -651,8 +605,7 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                         <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                       </label>
                     </div>
-                    
-                    {preference.enabled && (
+                    {preference.enabled && ()
                       <div className="space-y-3">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Frequency</label>
@@ -668,15 +621,14 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                             <option value="NEVER">Never</option>
                           </select>
                         </div>
-                        
-                        {preference.quietHours.enabled && (
+                        {preference.quietHours.enabled && ()
                           <div className="grid grid-cols-2 gap-3">
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">Quiet Hours Start</label>
                               <input
                                 type="time"
                                 value={preference.quietHours.start}
-                                onChange={(e) => updateCommunicationPreference(channel as keyof CommunicationPreferences, {
+                                onChange={(e) => updateCommunicationPreference(channel as keyof CommunicationPreferences, {)
                                   quietHours: { ...preference.quietHours, start: e.target.value }
                                 })}
                                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -687,7 +639,7 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                               <input
                                 type="time"
                                 value={preference.quietHours.end}
-                                onChange={(e) => updateCommunicationPreference(channel as keyof CommunicationPreferences, {
+                                onChange={(e) => updateCommunicationPreference(channel as keyof CommunicationPreferences, {)
                                   quietHours: { ...preference.quietHours, end: e.target.value }
                                 })}
                                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -701,12 +653,10 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                 ))}
               </div>
             )}
-
-            {activeSection === 'rights' && showDataRights && (
+            {activeSection === 'rights' && showDataRights && ()
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold mb-4">Your Data Rights</h2>
-                
-                {isGDPRApplicable && (
+                {isGDPRApplicable && ()
                   <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-6">
                     <h3 className="font-medium text-blue-900 mb-2">GDPR Rights</h3>
                     <p className="text-sm text-blue-800">
@@ -715,8 +665,7 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                     </p>
                   </div>
                 )}
-                
-                {isCCPAApplicable && (
+                {isCCPAApplicable && ()
                   <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-6">
                     <h3 className="font-medium text-yellow-900 mb-2">CCPA Rights</h3>
                     <p className="text-sm text-yellow-800">
@@ -725,7 +674,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                     </p>
                   </div>
                 )}
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <button
                     onClick={() => handleDataRightRequest('ACCESS')}
@@ -735,7 +683,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                     <h3 className="font-medium mb-1">Access My Data</h3>
                     <p className="text-sm text-gray-600">Download a copy of your personal data</p>
                   </button>
-                  
                   <button
                     onClick={() => handleDataRightRequest('PORTABILITY')}
                     className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
@@ -744,7 +691,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                     <h3 className="font-medium mb-1">Data Portability</h3>
                     <p className="text-sm text-gray-600">Export data in a machine-readable format</p>
                   </button>
-                  
                   <button
                     onClick={() => handleDataRightRequest('RECTIFICATION')}
                     className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
@@ -753,7 +699,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                     <h3 className="font-medium mb-1">Correct My Data</h3>
                     <p className="text-sm text-gray-600">Request correction of inaccurate data</p>
                   </button>
-                  
                   <button
                     onClick={() => handleDataRightRequest('ERASURE')}
                     className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
@@ -762,7 +707,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                     <h3 className="font-medium mb-1">Delete My Data</h3>
                     <p className="text-sm text-gray-600">Request deletion of your personal data</p>
                   </button>
-                  
                   <button
                     onClick={() => handleDataRightRequest('RESTRICTION')}
                     className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
@@ -771,7 +715,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                     <h3 className="font-medium mb-1">Restrict Processing</h3>
                     <p className="text-sm text-gray-600">Limit how we process your data</p>
                   </button>
-                  
                   <button
                     onClick={() => handleDataRightRequest('OBJECTION')}
                     className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
@@ -781,13 +724,12 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                     <p className="text-sm text-gray-600">Object to certain types of processing</p>
                   </button>
                 </div>
-
                 {/* Recent Requests */}
-                {dataRequests.length > 0 && (
+                {dataRequests.length > 0 && ()
                   <div className="border-t border-gray-200 pt-6">
                     <h3 className="font-medium mb-4">Recent Requests</h3>
                     <div className="space-y-3">
-                      {dataRequests.map((request) => (
+                      {dataRequests.map((request) => ()
                         <div key={request.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-md">
                           <div className="flex items-center">
                             {getStatusIcon(request.status)}
@@ -814,13 +756,11 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                 )}
               </div>
             )}
-
-            {activeSection === 'history' && showHistory && (
+            {activeSection === 'history' && showHistory && ()
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold mb-4">Consent History</h2>
-                
                 <div className="space-y-3">
-                  {consentHistory.map((entry) => (
+                  {consentHistory.map((entry) => ()
                     <div key={entry.id} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -846,7 +786,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
           </div>
         </div>
       </div>
-
       {/* Save Button */}
       <div className="fixed bottom-6 right-6">
         <button
@@ -858,12 +797,12 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
               : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-xl'
           }`}
         >
-          {saving ? (
+          {saving ? ()
             <div className="flex items-center">
               <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
               Saving...
             </div>
-          ) : (
+          ) : ()
             'Save Preferences'
           )}
         </button>

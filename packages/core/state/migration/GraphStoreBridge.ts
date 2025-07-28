@@ -5,23 +5,19 @@
  * This bridge allows gradual migration from the old graphStore to the new
  * GraphStateContainer while maintaining backward compatibility.
  */
-
 import { GraphStateContainer, GraphState as NewGraphState } from '../domains/graph-editor/state/GraphStateContainer';
 import { GraphState as OldGraphState, useGraphStore } from '../graphStore';
 import { Node, Edge } from 'reactflow';
-
 /**
  * Migration bridge that syncs between old and new state systems
  */
 export class GraphStoreBridge {
   private newStateContainer: GraphStateContainer;
   private isNewStateContainer: boolean = false;
-  
   constructor() {
     this.newStateContainer = new GraphStateContainer();
     this.setupBidirectionalSync();
   }
-
   /**
    * Setup bidirectional synchronization between old and new state
    */
@@ -29,46 +25,36 @@ export class GraphStoreBridge {
     // Sync from new state to old store when new state changes
     this.newStateContainer.subscribe((newState, change) => {
       if (this.isNewStateContainer) return; // Prevent circular updates
-      
       this.isNewStateContainer = false;
-      
       // Convert new state format to old format and update Zustand store
       const oldNodes = this.convertNodesToOldFormat(Object.values(newState.nodes));
       const oldEdges = this.convertEdgesToOldFormat(Object.values(newState.edges));
-      
       const { setNodes, setEdges } = useGraphStore.getState();
       setNodes(oldNodes);
       setEdges(oldEdges);
-      
       this.isNewStateContainer = false;
     });
-
     // Sync from old store to new state when old store changes
     useGraphStore.subscribe((oldState, prevState) => {
       if (this.isNewStateContainer) return; // Prevent circular updates
-      
       this.isNewStateContainer = true;
-      
       // Convert old state format to new format and update new state container
       const newNodes = this.convertNodesToNewFormat(oldState.nodes);
       const newEdges = this.convertEdgesToNewFormat(oldState.edges);
-      
       // Update new state container
-      this.newStateContainer.executeOperation({
+      this.newStateContainer.executeOperation({)
         type: 'BULK_UPDATE',
         nodes: newNodes,
-        edges: newEdges
+        edges: newEdges,
       });
-      
       this.isNewStateContainer = false;
     });
   }
-
   /**
    * Convert nodes from new format to old ReactFlow format
    */
   private convertNodesToOldFormat(newNodes: any[]): Node[] {
-    return newNodes.map(node => ({
+    return newNodes.map(node => ({)
       id: node.id,
       type: node.type,
       position: node.position,
@@ -78,12 +64,11 @@ export class GraphStoreBridge {
       // Map other properties as needed
     }));
   }
-
   /**
    * Convert edges from new format to old ReactFlow format
    */
   private convertEdgesToOldFormat(newEdges: any[]): Edge[] {
-    return newEdges.map(edge => ({
+    return newEdges.map(edge => ({)
       id: edge.id,
       source: edge.sourceId,
       target: edge.targetId,
@@ -94,37 +79,32 @@ export class GraphStoreBridge {
       selected: false, // Will be handled by selection state
     }));
   }
-
   /**
    * Convert nodes from old ReactFlow format to new format
    */
   private convertNodesToNewFormat(oldNodes: Node[]): Record<string, any> {
     const nodes: Record<string, any> = {};
-    
-    oldNodes.forEach(node => {
+    oldNodes.forEach(node => {)
       nodes[node.id] = {
         id: node.id,
         type: node.type || 'default',
         position: node.position,
         data: node.data || {},
-        metadata: {
+        metadata: {,
           created: Date.now(),
           updated: Date.now(),
-          version: 1
+          version: 1,
         }
       };
     });
-    
     return nodes;
   }
-
   /**
    * Convert edges from old ReactFlow format to new format
    */
   private convertEdgesToNewFormat(oldEdges: Edge[]): Record<string, any> {
     const edges: Record<string, any> = {};
-    
-    oldEdges.forEach(edge => {
+    oldEdges.forEach(edge => {)
       edges[edge.id] = {
         id: edge.id,
         sourceId: edge.source,
@@ -133,24 +113,21 @@ export class GraphStoreBridge {
         targetHandle: edge.targetHandle,
         type: edge.type || 'default',
         data: edge.data || {},
-        metadata: {
+        metadata: {,
           created: Date.now(),
           updated: Date.now(),
-          version: 1
+          version: 1,
         }
       };
     });
-    
     return edges;
   }
-
   /**
    * Get the new state container instance
    */
   getNewStateContainer(): GraphStateContainer {
     return this.newStateContainer;
   }
-
   /**
    * Check if a component should use the new state system
    * This allows gradual migration by feature flags or component names
@@ -158,16 +135,14 @@ export class GraphStoreBridge {
   shouldUseNewState(componentName?: string): boolean {
     // For now, keep using old state for existing components
     // New components can opt into new state system
-    const newStateComponents = [
+    const newStateComponents = [;
       'DevToolsPanel',
       'PerformancePanel',
       'TimeTravelPanel',
       'StateInspectorPanel'
     ];
-    
     return componentName ? newStateComponents.includes(componentName) : false;
   }
-
   /**
    * Cleanup method to remove listeners
    */
@@ -179,22 +154,20 @@ export class GraphStoreBridge {
 
 // Singleton instance for global access
 export const graphStoreBridge = new GraphStoreBridge();
-
 /**
  * Hook for components that want to gradually migrate to new state
  */
 export function useGraphStateMigration(componentName?: string) {
   const shouldUseNew = graphStoreBridge.shouldUseNewState(componentName);
-  
   if (shouldUseNew) {
     return {
       stateContainer: graphStoreBridge.getNewStateContainer(),
-      isNewState: true
+      isNewState: true,
     };
   } else {
     return {
       store: useGraphStore,
-      isNewState: false
+      isNewState: false,
     };
   }
 }

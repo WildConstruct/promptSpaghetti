@@ -16,7 +16,7 @@ import { ConversionCohort, UserSegment, FlexibleConversionEvent, BehaviorPattern
 export interface CohortAnalysisResult {
     cohortId: string;
     analysisDate: number;
-    metrics: {
+    metrics: {,
         totalUsers: number;
         activeUsers: number;
         retentionRates: Map<number, number>;
@@ -25,24 +25,24 @@ export interface CohortAnalysisResult {
         averageLifetimeValue: number;
         averageTimeToConvert: number;
     };
-    behavior: {
+    behavior: {,
         commonPathways: PathwayAnalysis[];
         dropOffAnalysis: DropOffAnalysis;
         engagementPatterns: EngagementPattern[];
         valueSegmentation: ValueSegmentation;
     };
-    comparison: {
+    comparison: {,
         previousPeriod?: CohortComparison;
         benchmarkCohorts?: CohortBenchmark[];
         industryBenchmarks?: IndustryBenchmark;
     };
-    predictions: {
+    predictions: {,
         projectedRetention: Map<number, number>;
         churnRisk: Map<string, number>;
         lifetimeValueForecast: Map<string, number>;
         optimalInterventionPoints: InterventionPoint[];
     };
-    dataQuality: {
+    dataQuality: {,
         completeness: number;
         accuracy: number;
         consistency: number;
@@ -52,27 +52,27 @@ export interface CohortAnalysisResult {
 export interface SegmentAnalysisResult {
     segmentId: string;
     analysisDate: number;
-    composition: {
+    composition: {,
         currentSize: number;
         growthRate: number;
         demographicBreakdown: DemographicBreakdown;
         behavioralProfile: BehavioralProfile;
         valueDistribution: ValueDistribution;
     };
-    performance: {
+    performance: {,
         conversionMetrics: SegmentConversionMetrics;
         engagementMetrics: SegmentEngagementMetrics;
         revenueMetrics: SegmentRevenueMetrics;
         retentionMetrics: SegmentRetentionMetrics;
     };
     funnelAnalysis: Map<string, FunnelSegmentMetrics>;
-    lifecycle: {
+    lifecycle: {,
         acquisitionSources: Map<string, number>;
         transitionPatterns: SegmentTransition[];
         exitReasons: Map<string, number>;
         averageLifetime: number;
     };
-    recommendations: {
+    recommendations: {,
         optimization: SegmentOptimization[];
         targeting: TargetingRecommendation[];
         personalization: PersonalizationSuggestion[];
@@ -117,9 +117,9 @@ export interface EngagementPattern {
     recommendations: string[];
 }
 export interface ValueSegmentation {
-    segments: Array<{
+    segments: Array<{,
         name: string;
-        range: {
+        range: {,
             min: number;
             max: number;
         };
@@ -127,7 +127,7 @@ export interface ValueSegmentation {
         percentage: number;
         characteristics: string[];
     }>;
-    distribution: {
+    distribution: {,
         mean: number;
         median: number;
         standardDeviation: number;
@@ -146,7 +146,7 @@ export interface CohortComparison {
 export interface CohortBenchmark {
     benchmarkCohortId: string;
     benchmarkName: string;
-    comparisonMetrics: {
+    comparisonMetrics: {,
         retentionComparison: Map<number, number>;
         conversionComparison: Map<number, number>;
         valueComparison: number;
@@ -159,7 +159,7 @@ export interface IndustryBenchmark {
     industry: string;
     retentionBenchmarks: Map<number, number>;
     conversionBenchmarks: Map<number, number>;
-    valueBenchmarks: {
+    valueBenchmarks: {,
         averageLTV: number;
         averageOrderValue: number;
         churnRate: number;
@@ -172,7 +172,7 @@ export interface InterventionPoint {
     userCount: number;
     riskScore: number;
     recommendedActions: string[];
-    expectedImpact: {
+    expectedImpact: {,
         retentionImprovement: number;
         revenueImpact: number;
         costOfIntervention: number;
@@ -213,7 +213,7 @@ export interface SegmentConversionMetrics {
 }
 export interface SegmentEngagementMetrics {
     averageEngagementScore: number;
-    sessionMetrics: {
+    sessionMetrics: {,
         averageSessions: number;
         averageDuration: number;
         bounceRate: number;
@@ -221,7 +221,7 @@ export interface SegmentEngagementMetrics {
     };
     contentEngagement: Map<string, number>;
     featureUsage: Map<string, number>;
-    socialEngagement: {
+    socialEngagement: {,
         shareRate: number;
         likeRate: number;
         commentRate: number;
@@ -258,7 +258,7 @@ export interface SegmentOptimization {
     targetPerformance: number;
     improvementPotential: number;
     recommendedActions: string[];
-    estimatedImpact: {
+    estimatedImpact: {,
         revenueImpact: number;
         conversionImprovement: number;
         retentionImprovement: number;
@@ -405,7 +405,7 @@ export interface SegmentOverlap {
     overlapSize: number;
     overlapPercentage: number;
     characteristics: string[];
-    performance: {
+    performance: {,
         conversionRate: number;
         retentionRate: number;
         averageValue: number;

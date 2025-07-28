@@ -497,20 +497,20 @@ export interface WorkflowStats {
     runningExecutions: number;
     completedExecutions: number;
     failedExecutions: number;
-    performance: {
+    performance: {,
         averageExecutionTime: number;
         averageStepsPerWorkflow: number;
         automationRate: number;
         successRate: number;
         throughput: number;
     };
-    utilization: {
+    utilization: {,
         processingCapacity: number;
         queueDepth: number;
         resourceUtilization: number;
         bottlenecks: string[];
     };
-    quality: {
+    quality: {,
         slaCompliance: number;
         errorRate: number;
         escalationRate: number;
@@ -565,7 +565,7 @@ export declare class ModerationWorkflowService {
     /**
      * Data Retrieval
      */
-    getWorkflows(filter?: {
+    getWorkflows(filter?: {)
         category?: ModerationCategory;
         active?: boolean;
     }): ModerationWorkflow[];
@@ -603,7 +603,7 @@ export interface WorkflowEvent {
 export declare const moderationWorkflowService: ModerationWorkflowService;
 export declare const createWorkflow: (workflowData: Omit<ModerationWorkflow, "id" | "createdAt" | "updatedAt">, createdBy: string) => Promise<ModerationWorkflow>;
 export declare const executeWorkflow: (workflowId: string, itemId: string, triggeredBy: string) => Promise<WorkflowExecution>;
-export declare const getWorkflows: (filter?: {
+export declare const getWorkflows: (filter?: {)
     category?: ModerationCategory;
     active?: boolean;
 }) => ModerationWorkflow[];

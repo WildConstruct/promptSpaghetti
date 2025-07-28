@@ -33,7 +33,7 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     priority: z.ZodNativeEnum<typeof ExtensionPointPriority>;
     lifecycle: z.ZodNativeEnum<typeof ExtensionPointLifecycle>;
     version: z.ZodString;
-    location: z.ZodObject<{
+    location: z.ZodObject<{,
         file: z.ZodString;
         line: z.ZodOptional<z.ZodNumber>;
         function: z.ZodOptional<z.ZodString>;
@@ -46,10 +46,10 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         function?: string | undefined;
         line?: number | undefined;
     }>;
-    interfaces: z.ZodArray<z.ZodObject<{
+    interfaces: z.ZodArray<z.ZodObject<{,
         name: z.ZodString;
         description: z.ZodString;
-        parameters: z.ZodArray<z.ZodObject<{
+        parameters: z.ZodArray<z.ZodObject<{,
             name: z.ZodString;
             type: z.ZodString;
             required: z.ZodBoolean;
@@ -73,7 +73,7 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         name: string;
         description: string;
-        parameters: {
+        parameters: {,
             name: string;
             description: string;
             type: string;
@@ -85,7 +85,7 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     }, {
         name: string;
         description: string;
-        parameters: {
+        parameters: {,
             name: string;
             description: string;
             type: string;
@@ -96,7 +96,7 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         examples?: string[] | undefined;
     }>, "many">;
     dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    examples: z.ZodOptional<z.ZodArray<z.ZodObject<{
+    examples: z.ZodOptional<z.ZodArray<z.ZodObject<{,
         name: z.ZodString;
         description: z.ZodString;
         code: z.ZodString;
@@ -112,8 +112,8 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         code: string;
         language: string;
     }>, "many">>;
-    constraints: z.ZodOptional<z.ZodObject<{
-        performance: z.ZodOptional<z.ZodObject<{
+    constraints: z.ZodOptional<z.ZodObject<{,
+        performance: z.ZodOptional<z.ZodObject<{,
             maxExecutionTime: z.ZodOptional<z.ZodNumber>;
             maxMemoryUsage: z.ZodOptional<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
@@ -123,7 +123,7 @@ export declare const ExtensionPointSchema: z.ZodObject<{
             maxExecutionTime?: number | undefined;
             maxMemoryUsage?: number | undefined;
         }>>;
-        security: z.ZodOptional<z.ZodObject<{
+        security: z.ZodOptional<z.ZodObject<{,
             permissions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             sandboxed: z.ZodOptional<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
@@ -152,7 +152,7 @@ export declare const ExtensionPointSchema: z.ZodObject<{
             sandboxed?: boolean | undefined;
         } | undefined;
     }>>;
-    metadata: z.ZodObject<{
+    metadata: z.ZodObject<{,
         addedIn: z.ZodString;
         deprecatedIn: z.ZodOptional<z.ZodString>;
         removedIn: z.ZodOptional<z.ZodString>;
@@ -173,24 +173,24 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     name: string;
     description: string;
     priority: ExtensionPointPriority;
-    location: {
+    location: {,
         file: string;
         function?: string | undefined;
         line?: number | undefined;
     };
     category: ExtensionPointCategory;
     version: string;
-    metadata: {
+    metadata: {,
         addedIn: string;
         deprecatedIn?: string | undefined;
         removedIn?: string | undefined;
         replacedBy?: string | undefined;
     };
     lifecycle: ExtensionPointLifecycle;
-    interfaces: {
+    interfaces: {,
         name: string;
         description: string;
-        parameters: {
+        parameters: {,
             name: string;
             description: string;
             type: string;
@@ -222,24 +222,24 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     name: string;
     description: string;
     priority: ExtensionPointPriority;
-    location: {
+    location: {,
         file: string;
         function?: string | undefined;
         line?: number | undefined;
     };
     category: ExtensionPointCategory;
     version: string;
-    metadata: {
+    metadata: {,
         addedIn: string;
         deprecatedIn?: string | undefined;
         removedIn?: string | undefined;
         replacedBy?: string | undefined;
     };
     lifecycle: ExtensionPointLifecycle;
-    interfaces: {
+    interfaces: {,
         name: string;
         description: string;
-        parameters: {
+        parameters: {,
             name: string;
             description: string;
             type: string;

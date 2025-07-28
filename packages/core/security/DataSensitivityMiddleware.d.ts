@@ -57,7 +57,7 @@ export declare function createDataSensitivityMiddleware(config?: Partial<DataSen
 /**
  * Endpoint-specific sensitivity configuration
  */
-export declare function createEndpointSensitivityMiddleware(endpointConfig: {
+export declare function createEndpointSensitivityMiddleware(endpointConfig: {)
     path: string;
     maxSensitivityLevel: DataSensitivityLevel;
     requiredControls?: string[];

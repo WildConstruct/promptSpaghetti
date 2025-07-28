@@ -10,7 +10,7 @@ export interface ProjectTemplate {
     tags: string[];
     version: string;
     preview_image?: string;
-    author: {
+    author: {,
         id: string;
         name: string;
         avatar?: string;
@@ -69,7 +69,7 @@ export interface TemplateUsageAnalytics {
     average_rating: number;
     completion_rate: number;
     most_used_customizations: string[];
-    trend_data: {
+    trend_data: {,
         date: string;
         uses: number;
     }[];
@@ -80,13 +80,13 @@ export declare class ProjectTemplateManager {
     private categories;
     private analytics;
     constructor(apiClient: any);
-    createTemplate(
+    createTemplate()
       template: Omit<ProjectTemplate,
       'id' | 'created_at' | 'updated_at' | 'usage_count' | 'rating'>
     ): Promise<ProjectTemplate>;
     updateTemplate(id: string, updates: Partial<ProjectTemplate>): Promise<ProjectTemplate>;
     deleteTemplate(id: string): Promise<void>;
-    searchTemplates(criteria: {
+    searchTemplates(criteria: {)
         query?: string;
         category?: string;
         tags?: string[];

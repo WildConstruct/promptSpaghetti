@@ -18,20 +18,20 @@ export interface ContentSafetyRequest {
     id: string;
     content_id: string;
     content_type: MarketplaceContentType;
-    content_data: {
+    content_data: {,
         title?: string;
         description?: string;
         body?: string;
         metadata?: Record<string, any>;
         attachments?: ContentAttachment[];
     };
-    submission_context: {
+    submission_context: {,
         submitter_id: string;
         submission_type: 'new' | 'update' | 'revision' | 'appeal';
         submission_source: 'marketplace' | 'community' | 'tutorial' | 'api';
         urgency: ModerationPriority;
     };
-    integration_context: {
+    integration_context: {,
         contribution_id?: string;
         template_id?: string;
         tutorial_id?: string;
@@ -39,7 +39,7 @@ export interface ContentSafetyRequest {
         parent_content_id?: string;
         workflow_stage?: string;
     };
-    safety_config: {
+    safety_config: {,
         enable_filtering: boolean;
         enable_moderation: boolean;
         enable_community_review: boolean;
@@ -47,7 +47,7 @@ export interface ContentSafetyRequest {
         auto_publish_threshold: number;
         human_review_threshold: number;
     };
-    business_context: {
+    business_context: {,
         revenue_impact: 'none' | 'low' | 'medium' | 'high';
         brand_sensitivity: 'low' | 'medium' | 'high';
         regulatory_requirements: string[];
@@ -65,13 +65,13 @@ export interface ContentAttachment {
 }
 export interface AttachmentScanResult {
     virus_scan_clean: boolean;
-    content_analysis: {
+    content_analysis: {,
         inappropriate_content: boolean;
         copyright_issues: boolean;
         privacy_concerns: boolean;
         security_risks: boolean;
     };
-    metadata_analysis: {
+    metadata_analysis: {,
         personal_data_detected: boolean;
         sensitive_information: string[];
         compliance_issues: string[];
@@ -130,7 +130,7 @@ export interface SafetyFinding {
     business_impact: BusinessImpactAssessment;
 }
 export interface SafetyAssessment {
-    content_safety: {
+    content_safety: {,
         toxicity_score: number;
         harassment_score: number;
         hate_speech_score: number;
@@ -138,27 +138,27 @@ export interface SafetyAssessment {
         sexual_content_score: number;
         spam_score: number;
     };
-    quality_safety: {
+    quality_safety: {,
         accuracy_score: number;
         completeness_score: number;
         clarity_score: number;
         usefulness_score: number;
         originality_score: number;
     };
-    technical_safety: {
+    technical_safety: {,
         security_score: number;
         privacy_score: number;
         accessibility_score: number;
         performance_score: number;
         compatibility_score: number;
     };
-    business_safety: {
+    business_safety: {,
         brand_alignment_score: number;
         legal_compliance_score: number;
         competitive_risk_score: number;
         revenue_protection_score: number;
     };
-    community_safety: {
+    community_safety: {,
         community_standards_score: number;
         contribution_value_score: number;
         collaboration_potential_score: number;

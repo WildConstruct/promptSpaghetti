@@ -320,17 +320,17 @@ export interface TicketIntegrationConfig {
     autoAssignment: boolean;
     slaEnabled: boolean;
     integrations: IntegrationConfig;
-    notifications: {
+    notifications: {,
         enabled: boolean;
         channels: string[];
         templates: Record<string, string>;
     };
-    security: {
+    security: {,
         encryptAttachments: boolean;
         scanUploads: boolean;
         retentionPeriod: number;
     };
-    analytics: {
+    analytics: {,
         trackMetrics: boolean;
         dashboardEnabled: boolean;
         reportingEnabled: boolean;
@@ -372,7 +372,7 @@ export declare class Epic16TicketIntegrationService extends EventEmitter {
     /**
      * Get tickets with filtering and pagination
      */
-    getTickets(filters?: {
+    getTickets(filters?: {)
         status?: TicketStatus[];
         type?: MarketplaceTicketType[];
         priority?: TicketPriority[];
@@ -392,7 +392,7 @@ export declare class Epic16TicketIntegrationService extends EventEmitter {
     /**
      * Get ticket metrics and analytics
      */
-    getTicketMetrics(timeRange: {
+    getTicketMetrics(timeRange: {)
         start: Date;
         end: Date;
     }): Promise<{

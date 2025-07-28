@@ -4,7 +4,6 @@
  * Defines the schema and validation for .psg project files using Zod.
  * Provides versioning support and comprehensive metadata structure.
  */
-
 import { z } from 'zod';
 import { GraphSchema } from '../graphSchema';
 
@@ -12,7 +11,7 @@ import { GraphSchema } from '../graphSchema';
 export const PSG_FORMAT_VERSION = '1.0.0';
 
 // Project metadata schema
-export const ProjectMetadataSchema = z.object({
+export const ProjectMetadataSchema = z.object({)
   name: z.string().min(1, 'Project name is required'),
   description: z.string().optional(),
   version: z.string().default('1.0.0'),
@@ -20,11 +19,11 @@ export const ProjectMetadataSchema = z.object({
   lastModified: z.string().datetime(),
   author: z.string().optional(),
   tags: z.array(z.string()).default([]),
-  fileFormatVersion: z.string().default(PSG_FORMAT_VERSION)
+  fileFormatVersion: z.string().default(PSG_FORMAT_VERSION),
 });
 
 // Project settings schema
-export const ProjectSettingsSchema = z.object({
+export const ProjectSettingsSchema = z.object({)
   autoSave: z.boolean().default(true),
   backupInterval: z.number().min(1).default(5), // minutes
   maxBackups: z.number().min(1).max(50).default(10),
@@ -32,33 +31,33 @@ export const ProjectSettingsSchema = z.object({
   gridSize: z.number().min(5).max(50).default(20),
   theme: z.enum(['light', 'dark', 'auto']).default('auto'),
   showMinimap: z.boolean().default(true),
-  autoLayout: z.boolean().default(false)
+  autoLayout: z.boolean().default(false),
 });
 
 // Collaboration data schema (Epic 8.7 compatibility)
-export const CollaborationDataSchema = z.object({
-  stickyNotes: z.array(z.object({
+export const CollaborationDataSchema = z.object({)
+  stickyNotes: z.array(z.object({),
     id: z.string(),
     content: z.string(),
     position: z.object({ x: z.number(), y: z.number() }),
     size: z.object({ width: z.number(), height: z.number() }),
     color: z.string(),
     author: z.string().optional(),
-    timestamp: z.string().datetime()
+    timestamp: z.string().datetime(),
   })).default([]),
-  annotations: z.object({
+  annotations: z.object({),
     nodeLabels: z.record(z.string()).default({}),
-    regionGroups: z.array(z.object({
+    regionGroups: z.array(z.object({),
       id: z.string(),
       name: z.string(),
       nodeIds: z.array(z.string()),
       position: z.object({ x: z.number(), y: z.number() }),
       size: z.object({ width: z.number(), height: z.number() }),
       color: z.string(),
-      collapsed: z.boolean().default(false)
+      collapsed: z.boolean().default(false),
     })).default([]),
     connectionLabels: z.record(z.string()).default({})
-  }).default({
+  }).default({)
     nodeLabels: {},
     regionGroups: [],
     connectionLabels: {}
@@ -66,22 +65,18 @@ export const CollaborationDataSchema = z.object({
 });
 
 // Main .psg file format schema
-export const PsgFileSchema = z.object({
+export const PsgFileSchema = z.object({)
   // Format identification and versioning
   fileType: z.literal('psg').describe('File type identifier'),
   formatVersion: z.string().describe('Format version for compatibility checking'),
-  
   // Core project data
   metadata: ProjectMetadataSchema,
   settings: ProjectSettingsSchema,
   graph: GraphSchema,
-  
   // Extended features
   collaboration: CollaborationDataSchema.optional(),
-  
   // Extensibility for future features
   extensions: z.record(z.unknown()).optional().describe('Extension data for future features'),
-  
   // File integrity
   checksum: z.string().optional().describe('File integrity checksum'),
   exportedAt: z.string().datetime().describe('Timestamp when file was created')
@@ -97,21 +92,20 @@ export type CollaborationData = z.infer<typeof CollaborationDataSchema>;
 export function validatePsgFile(data: unknown): { success: true; data: PsgFile } | { success: false; error: string; issues: z.ZodIssue[] } {
   try {
     const result = PsgFileSchema.safeParse(data);
-    
     if (result.success) {
       return { success: true, data: result.data };
     } else {
       return {
         success: false,
         error: 'Invalid .psg file format',
-        issues: result.error.issues
+        issues: result.error.issues,
       };
     }
   } catch (error) {
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown validation error',
-      issues: []
+      issues: [],
     };
   }
 }
@@ -120,7 +114,6 @@ export function validatePsgFile(data: unknown): { success: true; data: PsgFile }
 export function isVersionCompatible(fileVersion: string): { compatible: boolean; requiresMigration: boolean; message?: string } {
   const [fileMajor, fileMinor] = fileVersion.split('.').map(Number);
   const [currentMajor, currentMinor] = PSG_FORMAT_VERSION.split('.').map(Number);
-  
   // Same major version is compatible
   if (fileMajor === currentMajor) {
     return {
@@ -129,7 +122,6 @@ export function isVersionCompatible(fileVersion: string): { compatible: boolean;
       message: fileMinor < currentMinor ? 'File will be upgraded to current format version' : undefined
     };
   }
-  
   // Future major version is not compatible
   if (fileMajor > currentMajor) {
     return {
@@ -138,7 +130,6 @@ export function isVersionCompatible(fileVersion: string): { compatible: boolean;
       message: 'This file was created with a newer version of the application. Please update to the latest version.'
     };
   }
-  
   // Older major version requires migration
   return {
     compatible: true,
@@ -150,7 +141,6 @@ export function isVersionCompatible(fileVersion: string): { compatible: boolean;
 // Helper to create default project metadata
 export function createDefaultMetadata(name: string, author?: string): ProjectMetadata {
   const now = new Date().toISOString();
-  
   return {
     name,
     description: '',
@@ -159,7 +149,7 @@ export function createDefaultMetadata(name: string, author?: string): ProjectMet
     lastModified: now,
     author: author || 'Anonymous',
     tags: [],
-    fileFormatVersion: PSG_FORMAT_VERSION
+    fileFormatVersion: PSG_FORMAT_VERSION,
   };
 }
 
@@ -173,6 +163,6 @@ export function createDefaultSettings(): ProjectSettings {
     gridSize: 20,
     theme: 'auto',
     showMinimap: true,
-    autoLayout: false
+    autoLayout: false,
   };
 }

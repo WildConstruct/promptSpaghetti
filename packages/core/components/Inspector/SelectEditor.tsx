@@ -16,7 +16,7 @@ export interface SelectEditorProps extends EditorFieldProps {
   emptyLabel?: string;
 }
 
-export const SelectEditor: React.FC<SelectEditorProps> = ({
+export const SelectEditor: React.FC<SelectEditorProps> = ({)
   label,
   value,
   fieldKey,
@@ -36,14 +36,11 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
   const [customValue, setCustomValue] = React.useState('');
   const [showCustomInput, setShowCustomInput] = React.useState(false);
   const [isFocused, setIsFocused] = React.useState(false);
-
   const dropdownRef = React.useRef<HTMLDivElement>(null);
-
   // Update local value when external value changes
   React.useEffect(() => {
     setLocalValue(value);
   }, [value]);
-
   // Close dropdown when clicking outside
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -53,20 +50,17 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
         setSearchTerm('');
       }
     };
-
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
-
   const handleSelect = (optionValue: string | number) => {
     if (multiple) {
       const currentValues = Array.isArray(localValue) ? localValue : [];
-      const newValues = currentValues.includes(optionValue)
+      const newValues = currentValues.includes(optionValue);
         ? currentValues.filter(v => v !== optionValue)
         : [...currentValues, optionValue];
       setLocalValue(newValues);
@@ -77,7 +71,6 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
       setIsOpen(false);
     }
   };
-
   const handleCustomSubmit = () => {
     if (customValue.trim()) {
       handleSelect(customValue.trim());
@@ -85,14 +78,12 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
       setShowCustomInput(false);
     }
   };
-
-  const filteredOptions = searchable && searchTerm
-    ? options.filter(option => 
+  const filteredOptions = searchable && searchTerm;
+    ? options.filter(option => )
       option.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
         String(option.value).toLowerCase().includes(searchTerm.toLowerCase())
     )
     : options;
-
   // Group options if they have groups
   const groupedOptions = filteredOptions.reduce((acc, option) => {
     const group = option.group || 'default';
@@ -100,7 +91,6 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
     acc[group].push(option);
     return acc;
   }, {} as Record<string, SelectOption[]>);
-
   const getDisplayValue = (): string => {
     if (multiple && Array.isArray(localValue)) {
       if (localValue.length === 0) return emptyLabel;
@@ -108,33 +98,29 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
         const option = options.find(opt => opt.value === localValue[0]);
         return option?.label || String(localValue[0]);
       }
-      return `${localValue.length} selected`;
+      return `${localValue.length} selected`;}
     } else {
       const option = options.find(opt => opt.value === localValue);
       return option?.label || (localValue ? String(localValue) : emptyLabel);
     }
   };
-
-  const inputId = `field-${fieldKey}`;
-
+  const inputId = `field-${fieldKey}`;}
   const containerStyle = {
     position: 'relative' as const,
-    marginBottom: 16
+    marginBottom: 16,
   };
-
   const labelStyle = {
     display: 'block',
     fontWeight: 500,
     marginBottom: 4,
     color: '#e2e8f0',
     fontSize: 12,
-    letterSpacing: '0.025em'
+    letterSpacing: '0.025em',
   };
-
   const selectStyle = {
     width: '100%',
     padding: 8,
-    border: error 
+    border: error ,
       ? '1px solid #f56565' 
       : isFocused 
         ? '1px solid #4299e1' 
@@ -149,9 +135,8 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    minHeight: 36
+    minHeight: 36,
   };
-
   const dropdownStyle = {
     position: 'absolute' as const,
     top: '100%',
@@ -166,8 +151,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
     zIndex: 1000,
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
   };
-
-  const optionStyle = (selected: boolean, disabled: boolean) => ({
+  const optionStyle = (selected: boolean, disabled: boolean) => ({)
     padding: 8,
     cursor: disabled ? 'not-allowed' : 'pointer',
     background: selected ? '#4299e1' : 'transparent',
@@ -175,18 +159,16 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
     fontSize: 13,
     borderBottom: '1px solid #4a5568'
   });
-
-  return (
+  return ()
     <div style={containerStyle} ref={dropdownRef}>
       <label htmlFor={inputId} style={labelStyle}>
         {label}
-        {error && (
+        {error && ()
           <span style={{ color: '#f56565', marginLeft: 4, fontSize: 10 }}>
             *
           </span>
         )}
       </label>
-
       <div
         style={selectStyle}
         onClick={() => !disabled && setIsOpen(!isOpen)}
@@ -201,10 +183,9 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
           {isOpen ? '▲' : '▼'}
         </span>
       </div>
-
-      {isOpen && (
+      {isOpen && ()
         <div style={dropdownStyle}>
-          {searchable && (
+          {searchable && ()
             <div style={{ padding: 8, borderBottom: '1px solid #4a5568' }}>
               <input
                 type="text"
@@ -219,15 +200,14 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
                   background: '#1a202c',
                   color: '#e2e8f0',
                   fontSize: 12,
-                  outline: 'none'
+                  outline: 'none',
                 }}
               />
             </div>
           )}
-
-          {Object.entries(groupedOptions).map(([groupName, groupOptions]) => (
+          {Object.entries(groupedOptions).map(([groupName, groupOptions]) => ()
             <div key={groupName}>
-              {groupName !== 'default' && (
+              {groupName !== 'default' && ()
                 <div style={{
                   padding: '4px 8px',
                   background: '#1a202c',
@@ -235,24 +215,22 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
                   fontSize: 11,
                   fontWeight: 600,
                   textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
+                  letterSpacing: '0.05em',
                 }}>
                   {groupName}
                 </div>
               )}
-              
               {groupOptions.map((option) => {
-                const selected = multiple
+                const selected = multiple;
                   ? Array.isArray(localValue) && localValue.includes(option.value)
                   : localValue === option.value;
-
-                return (
+                return ()
                   <div
                     key={option.value}
                     style={optionStyle(selected, option.disabled || false)}
                     onClick={() => !option.disabled && handleSelect(option.value)}
                   >
-                    {multiple && (
+                    {multiple && ()
                       <span style={{ marginRight: 8 }}>
                         {selected ? '☑' : '☐'}
                       </span>
@@ -263,10 +241,9 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
               })}
             </div>
           ))}
-
-          {allowCustom && (
+          {allowCustom && ()
             <div style={{ padding: 8, borderTop: '1px solid #4a5568' }}>
-              {!showCustomInput ? (
+              {!showCustomInput ? ()
                 <button
                   onClick={() => setShowCustomInput(true)}
                   style={{
@@ -277,12 +254,12 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
                     borderRadius: 2,
                     color: '#a0aec0',
                     fontSize: 12,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 >
                   + Add custom value
                 </button>
-              ) : (
+              ) : ()
                 <div style={{ display: 'flex', gap: 4 }}>
                   <input
                     type="text"
@@ -297,7 +274,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
                       background: '#1a202c',
                       color: '#e2e8f0',
                       fontSize: 12,
-                      outline: 'none'
+                      outline: 'none',
                     }}
                     onKeyPress={(e) => e.key === 'Enter' && handleCustomSubmit()}
                   />
@@ -310,7 +287,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
                       borderRadius: 2,
                       color: 'white',
                       fontSize: 12,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     Add
@@ -319,27 +296,25 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
               )}
             </div>
           )}
-
-          {filteredOptions.length === 0 && (
+          {filteredOptions.length === 0 && ()
             <div style={{
               padding: 16,
               textAlign: 'center',
               color: '#a0aec0',
               fontSize: 12,
-              fontStyle: 'italic'
+              fontStyle: 'italic',
             }}>
               No options found
             </div>
           )}
         </div>
       )}
-
-      {error && (
+      {error && ()
         <div style={{ 
           color: '#f56565', 
           fontSize: 11, 
           marginTop: 4,
-          fontWeight: 400
+          fontWeight: 400,
         }}>
           {error}
         </div>

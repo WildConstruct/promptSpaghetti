@@ -5,42 +5,42 @@
 
 export interface StickyNote {
   id: string;
-  position: {
+  position: {,
     x: number;
     y: number;
   };
-  size: {
+  size: {,
     width: number;
     height: number;
   };
-  content: {
+  content: {,
     text: string;
     markdown?: string;
     format: 'plain' | 'markdown' | 'rich';
   };
-  appearance: {
+  appearance: {,
     color: StickyNoteColor;
     category?: StickyNoteCategory;
     opacity: number;
     zIndex: number;
   };
-  metadata: {
+  metadata: {,
     createdAt: string;
     updatedAt: string;
-    author: {
+    author: {,
       id: string;
       name: string;
       email?: string;
     };
     version: number;
   };
-  behavior: {
+  behavior: {,
     draggable: boolean;
     resizable: boolean;
     editable: boolean;
     minimized: boolean;
   };
-  collaboration: {
+  collaboration: {,
     locked: boolean;
     lockedBy?: string;
     comments: StickyNoteComment[];
@@ -71,7 +71,7 @@ export type StickyNoteCategory =
 export interface StickyNoteComment {
   id: string;
   text: string;
-  author: {
+  author: {,
     id: string;
     name: string;
   };
@@ -83,11 +83,11 @@ export interface StickyNoteGroup {
   id: string;
   name: string;
   notes: string[]; // Note IDs
-  position: {
+  position: {,
     x: number;
     y: number;
   };
-  appearance: {
+  appearance: {,
     backgroundColor: string;
     borderColor: string;
     collapsed: boolean;
@@ -112,7 +112,7 @@ export interface StickyNoteState {
   selection: string[]; // Selected note IDs
   activeNote?: string; // Currently editing note
   filter: StickyNoteFilter;
-  settings: {
+  settings: {,
     showAll: boolean;
     ghostMode: boolean; // Semi-transparent when not editing
     snapToGrid: boolean;
@@ -128,45 +128,37 @@ export interface StickyNoteActions {
   updateNote: (id: string, updates: Partial<StickyNote>) => void;
   deleteNote: (id: string) => void;
   duplicateNote: (id: string) => string;
-  
   // Positioning and sizing
   moveNote: (id: string, position: { x: number; y: number }) => void;
   resizeNote: (id: string, size: { width: number; height: number }) => void;
   bringToFront: (id: string) => void;
   sendToBack: (id: string) => void;
-  
   // Selection and editing
   selectNote: (id: string, multiSelect?: boolean) => void;
   deselectNote: (id: string) => void;
   clearSelection: () => void;
   startEditing: (id: string) => void;
   stopEditing: () => void;
-  
   // Content editing
   updateContent: (id: string, content: StickyNote['content']) => void;
   updateAppearance: (id: string, appearance: Partial<StickyNote['appearance']>) => void;
-  
   // Grouping
   createGroup: (noteIds: string[], name: string) => string;
   addToGroup: (groupId: string, noteId: string) => void;
   removeFromGroup: (groupId: string, noteId: string) => void;
   deleteGroup: (groupId: string) => void;
-  
   // Filtering and search
   setFilter: (filter: Partial<StickyNoteFilter>) => void;
   clearFilter: () => void;
   searchNotes: (query: string) => string[];
-  
   // Import/Export
   exportNotes: (format: 'json' | 'markdown' | 'html') => string;
   importNotes: (data: string, format: 'json') => void;
-  
   // Collaboration
   lockNote: (id: string) => void;
   unlockNote: (id: string) => void;
   addComment: (noteId: string, comment: string) => void;
   resolveComment: (noteId: string, commentId: string) => void;
-  
   // Settings
   updateSettings: (settings: Partial<StickyNoteState['settings']>) => void;
 }
@@ -198,7 +190,7 @@ export interface StickyNoteTemplate {
   content: StickyNote['content'];
   appearance: StickyNote['appearance'];
   category: StickyNoteCategory;
-  author: {
+  author: {,
     id: string;
     name: string;
   };

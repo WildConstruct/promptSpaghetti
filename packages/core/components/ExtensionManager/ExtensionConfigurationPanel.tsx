@@ -2,7 +2,6 @@
  * Extension Configuration Panel - Epic 8.4 Story 8.4.5
  * Configuration interface for individual extensions
  */
-
 import React, { useState, useEffect } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 
@@ -11,7 +10,6 @@ export interface ExtensionConfigurationPanelProps {
   onSave: (config: Record<string, any>) => void;
   onCancel: () => void;
 }
-
 interface ConfigField {
   key: string;
   label: string;
@@ -23,7 +21,7 @@ interface ConfigField {
   validation?: (value: Error) => string | null;
 }
 
-export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelProps> = ({
+export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelProps> = ({)
   extension,
   onSave,
   onCancel
@@ -32,7 +30,6 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isDirty, setIsDirty] = useState(false);
   const [activeTab, setActiveTab] = useState<'general' | 'advanced' | 'security'>('general');
-
   // Mock configuration schema - in a real implementation, this would come from the extension
   const configSchema: ConfigField[] = [
     {
@@ -41,7 +38,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
       type: 'boolean',
       description: 'Enable or disable this extension',
       defaultValue: true,
-      required: true
+      required: true,
     },
     {
       key: 'maxConcurrency',
@@ -60,7 +57,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
       type: 'select',
       description: 'Logging verbosity level',
       defaultValue: 'info',
-      options: [
+      options: [,
         { label: 'Debug', value: 'debug' },
         { label: 'Info', value: 'info' },
         { label: 'Warning', value: 'warning' },
@@ -79,7 +76,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
       label: 'Allowed Domains',
       type: 'array',
       description: 'List of domains this extension can access',
-      defaultValue: []
+      defaultValue: [],
     },
     {
       key: 'cacheTimeout',
@@ -97,28 +94,24 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
       label: 'Enable Analytics',
       type: 'boolean',
       description: 'Allow anonymous usage analytics',
-      defaultValue: false
+      defaultValue: false,
     }
   ];
-
   // Initialize config with defaults
   useEffect(() => {
     const initialConfig: Record<string, any> = {};
-    configSchema.forEach(field => {
+    configSchema.forEach(field => {)
       initialConfig[field.key] = field.defaultValue;
     });
     setConfig(initialConfig);
   }, []);
-
   const validateField = (field: ConfigField, value: Error): string | null => {
     if (field.required && (value === undefined || value === null || value === '')) {
       return 'This field is required';
     }
-
     if (field.validation) {
       return field.validation(value);
     }
-
     // Type-specific validation
     switch (field.type) {
     case 'number':
@@ -134,18 +127,14 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
       }
       break;
     }
-
     return null;
   };
-
   const handleFieldChange = (fieldKey: string, value: Error) => {
     const field = configSchema.find(f => f.key === fieldKey);
     if (!field) return;
-
     const newConfig = { ...config, [fieldKey]: value };
     setConfig(newConfig);
     setIsDirty(true);
-
     // Validate field
     const error = validateField(field, value);
     const newErrors = { ...errors };
@@ -156,52 +145,44 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
     }
     setErrors(newErrors);
   };
-
   const handleSave = () => {
     // Validate all fields
     const newErrors: Record<string, string> = {};
-    configSchema.forEach(field => {
+    configSchema.forEach(field => {)
       const error = validateField(field, config[field.key]);
       if (error) {
         newErrors[field.key] = error;
       }
     });
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-
     onSave(config);
   };
-
   const handleReset = () => {
     const resetConfig: Record<string, any> = {};
-    configSchema.forEach(field => {
+    configSchema.forEach(field => {)
       resetConfig[field.key] = field.defaultValue;
     });
     setConfig(resetConfig);
     setErrors({});
     setIsDirty(false);
   };
-
   const renderField = (field: ConfigField) => {
     const value = config[field.key];
     const error = errors[field.key];
-
-    return (
-      <div key={field.key} className={`config-field ${error ? 'error' : ''}`}>
+    return ()
+      <div key={field.key} className={`config-field ${error ? 'error' : ''}`}>}
         <label className="field-label">
           {field.label}
           {field.required && <span className="required">*</span>}
         </label>
-        
-        {field.description && (
+        {field.description && ()
           <p className="field-description">{field.description}</p>
         )}
-
         <div className="field-input">
-          {field.type === 'boolean' && (
+          {field.type === 'boolean' && ()
             <label className="checkbox-label">
               <input
                 type="checkbox"
@@ -213,8 +194,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
               </span>
             </label>
           )}
-
-          {field.type === 'string' && (
+          {field.type === 'string' && ()
             <input
               type="text"
               className="text-input"
@@ -223,8 +203,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
               placeholder={field.label}
             />
           )}
-
-          {field.type === 'number' && (
+          {field.type === 'number' && ()
             <input
               type="number"
               className="number-input"
@@ -233,22 +212,20 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
               placeholder={field.label}
             />
           )}
-
-          {field.type === 'select' && (
+          {field.type === 'select' && ()
             <select
               className="select-input"
               value={value || ''}
               onChange={(e) => handleFieldChange(field.key, e.target.value)}
             >
-              {field.options?.map(option => (
+              {field.options?.map(option => ()
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
               ))}
             </select>
           )}
-
-          {field.type === 'json' && (
+          {field.type === 'json' && ()
             <textarea
               className="json-input"
               value={value || '{}'}
@@ -257,8 +234,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
               rows={6}
             />
           )}
-
-          {field.type === 'array' && (
+          {field.type === 'array' && ()
             <div className="array-input">
               <ArrayInput
                 value={value || []}
@@ -268,8 +244,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
             </div>
           )}
         </div>
-
-        {error && (
+        {error && ()
           <div className="field-error">
             <span className="error-icon">❌</span>
             <span className="error-text">{error}</span>
@@ -278,20 +253,16 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
       </div>
     );
   };
-
-  const generalFields = configSchema.filter(f => 
+  const generalFields = configSchema.filter(f => ;)
     ['enabled', 'maxConcurrency', 'logLevel', 'cacheTimeout'].includes(f.key)
   );
-  
-  const advancedFields = configSchema.filter(f => 
+  const advancedFields = configSchema.filter(f => ;)
     ['customSettings', 'allowedDomains'].includes(f.key)
   );
-  
-  const securityFields = configSchema.filter(f => 
+  const securityFields = configSchema.filter(f => ;)
     ['enableAnalytics'].includes(f.key)
   );
-
-  return (
+  return ()
     <div className="extension-config-panel-overlay">
       <div className="extension-config-panel">
         <div className="config-header">
@@ -301,7 +272,6 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
           </div>
           <button className="close-btn" onClick={onCancel}>✕</button>
         </div>
-
         <div className="config-tabs">
           <button 
             className={activeTab === 'general' ? 'active' : ''}
@@ -322,9 +292,8 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
             Security
           </button>
         </div>
-
         <div className="config-content">
-          {activeTab === 'general' && (
+          {activeTab === 'general' && ()
             <div className="config-section">
               <h3>General Settings</h3>
               <div className="config-fields">
@@ -332,8 +301,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
               </div>
             </div>
           )}
-
-          {activeTab === 'advanced' && (
+          {activeTab === 'advanced' && ()
             <div className="config-section">
               <h3>Advanced Settings</h3>
               <div className="config-warning">
@@ -345,14 +313,12 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
               </div>
             </div>
           )}
-
-          {activeTab === 'security' && (
+          {activeTab === 'security' && ()
             <div className="config-section">
               <h3>Security & Privacy</h3>
               <div className="config-fields">
                 {securityFields.map(renderField)}
               </div>
-              
               <div className="security-info">
                 <h4>Security Information</h4>
                 <div className="security-item">
@@ -371,7 +337,6 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
             </div>
           )}
         </div>
-
         <div className="config-footer">
           <div className="footer-left">
             <button className="reset-btn" onClick={handleReset}>
@@ -391,8 +356,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
             </button>
           </div>
         </div>
-
-        {isDirty && (
+        {isDirty && ()
           <div className="dirty-indicator">
             <span className="dirty-icon">•</span>
             <span>Unsaved changes</span>
@@ -409,25 +373,21 @@ interface ArrayInputProps {
   onChange: (value: string[]) => void;
   placeholder?: string;
 }
-
 const ArrayInput: React.FC<ArrayInputProps> = ({ value, onChange, placeholder }) => {
   const [newItem, setNewItem] = useState('');
-
   const addItem = () => {
     if (newItem.trim() && !value.includes(newItem.trim())) {
       onChange([...value, newItem.trim()]);
       setNewItem('');
     }
   };
-
   const removeItem = (index: number) => {
     onChange(value.filter((_, i) => i !== index));
   };
-
-  return (
+  return ()
     <div className="array-input-container">
       <div className="array-items">
-        {value.map((item, index) => (
+        {value.map((item, index) => ()
           <div key={index} className="array-item">
             <span className="item-text">{item}</span>
             <button 

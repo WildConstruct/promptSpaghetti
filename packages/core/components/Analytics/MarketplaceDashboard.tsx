@@ -4,7 +4,6 @@
  * Comprehensive marketplace analytics dashboard for business intelligence
  * and template performance tracking
  */
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
@@ -32,7 +31,7 @@ export interface MarketplaceDashboardProps {
   className?: string;
 }
 
-export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
+export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
   userId,
   userRole = 'director',
   timeRange = '30d',
@@ -46,11 +45,9 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
     getSearchAnalytics,
     refreshData
   } = useMarketplaceMetrics({ userRole });
-
   const [selectedMetric, setSelectedMetric] = useState<'revenue' | 'downloads' | 'rating'>('revenue');
   const [topTemplates, setTopTemplates] = useState<any[]>([]);
   const [searchData, setSearchData] = useState<unknown>(null);
-
   useEffect(() => {
     if (!isLoading && dashboardData) {
       const templates = getTopPerformingTemplates(selectedMetric, 10);
@@ -59,31 +56,26 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
       setSearchData(search);
     }
   }, [isLoading, dashboardData, selectedMetric, getTopPerformingTemplates, getSearchAnalytics]);
-
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-US', {)
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   };
-
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
-      return `${(num / 1000000).toFixed(1)}M`;
+      return `${(num / 1000000).toFixed(1)}M`;}
     } else if (num >= 1000) {
-      return `${(num / 1000).toFixed(1)}K`;
+      return `${(num / 1000).toFixed(1)}K`;}
     }
     return num.toString();
   };
-
   const renderOverviewMetrics = () => {
     if (!dashboardData) return null;
-
     const { overview, trends } = dashboardData;
-
-    return (
+    return ()
       <div className="overview-metrics">
         <div className="metrics-grid">
           <Card className="metric-card revenue">
@@ -102,7 +94,6 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
               </div>
             </CardContent>
           </Card>
-
           <Card className="metric-card transactions">
             <CardHeader>
               <CardTitle className="metric-title">
@@ -119,7 +110,6 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
               </div>
             </CardContent>
           </Card>
-
           <Card className="metric-card templates">
             <CardHeader>
               <CardTitle className="metric-title">
@@ -132,7 +122,6 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
               <div className="metric-subtitle">Live in marketplace</div>
             </CardContent>
           </Card>
-
           <Card className="metric-card creators">
             <CardHeader>
               <CardTitle className="metric-title">
@@ -149,7 +138,6 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
               </div>
             </CardContent>
           </Card>
-
           <Card className="metric-card rating">
             <CardHeader>
               <CardTitle className="metric-title">
@@ -160,7 +148,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
             <CardContent>
               <div className="metric-value">{overview.averageRating.toFixed(1)}</div>
               <div className="rating-stars">
-                {[...Array(5)].map((_, i) => (
+                {[...Array(5)].map((_, i) => ()
                   <Star
                     key={i}
                     className={`w-4 h-4 ${i < Math.floor(overview.averageRating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
@@ -169,7 +157,6 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
               </div>
             </CardContent>
           </Card>
-
           <Card className="metric-card conversion">
             <CardHeader>
               <CardTitle className="metric-title">
@@ -186,18 +173,16 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
       </div>
     );
   };
-
   const renderTopCategories = () => {
     if (!dashboardData?.trends.topCategories) return null;
-
-    return (
+    return ()
       <Card className="top-categories-card">
         <CardHeader>
           <CardTitle>Top Performing Categories</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="categories-list">
-            {dashboardData.trends.topCategories.map((category: unknown, index: number) => (
+            {dashboardData.trends.topCategories.map((category: unknown, index: number) => ()
               <div key={category.category} className="category-item">
                 <div className="category-info">
                   <div className="category-rank">#{index + 1}</div>
@@ -218,9 +203,8 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
       </Card>
     );
   };
-
   const renderTopTemplates = () => {
-    return (
+    return ()
       <Card className="top-templates-card">
         <CardHeader>
           <div className="templates-header">
@@ -239,7 +223,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
         </CardHeader>
         <CardContent>
           <div className="templates-list">
-            {topTemplates.map((template, index) => (
+            {topTemplates.map((template, index) => ()
               <div key={template.templateId} className="template-item">
                 <div className="template-rank">#{index + 1}</div>
                 <div className="template-info">
@@ -249,13 +233,13 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
                   </div>
                 </div>
                 <div className="template-metrics">
-                  {selectedMetric === 'revenue' && (
+                  {selectedMetric === 'revenue' && ()
                     <div className="metric-primary">{formatCurrency(template.metrics.revenue.total)}</div>
                   )}
-                  {selectedMetric === 'downloads' && (
+                  {selectedMetric === 'downloads' && ()
                     <div className="metric-primary">{formatNumber(template.metrics.downloads)}</div>
                   )}
-                  {selectedMetric === 'rating' && (
+                  {selectedMetric === 'rating' && ()
                     <div className="metric-primary">{template.metrics.ratings.average.toFixed(1)} ★</div>
                   )}
                   <div className="metric-secondary">
@@ -270,11 +254,9 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
       </Card>
     );
   };
-
   const renderSearchAnalytics = () => {
     if (!searchData) return null;
-
-    return (
+    return ()
       <div className="search-analytics">
         <Card className="search-overview">
           <CardHeader>
@@ -296,14 +278,13 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
             </div>
           </CardContent>
         </Card>
-
         <Card className="top-queries">
           <CardHeader>
             <CardTitle>Top Search Queries</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="queries-list">
-              {searchData.topQueries?.slice(0, 8).map((query: unknown, index: number) => (
+              {searchData.topQueries?.slice(0, 8).map((query: unknown, index: number) => ()
                 <div key={query.query} className="query-item">
                   <div className="query-rank">#{index + 1}</div>
                   <div className="query-info">
@@ -321,17 +302,16 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
       </div>
     );
   };
-
   const renderInsights = () => {
-    return (
+    return ()
       <Card className="insights-card">
         <CardHeader>
           <CardTitle>Marketplace Insights</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="insights-list">
-            {insights.map((insight: unknown, index: number) => (
-              <div key={index} className={`insight-item ${insight.impact}`}>
+            {insights.map((insight: unknown, index: number) => ()
+              <div key={index} className={`insight-item ${insight.impact}`}>}
                 <div className="insight-icon">
                   {insight.type === 'opportunity' && <TrendingUp className="w-5 h-5" />}
                   {insight.type === 'trend' && <Target className="w-5 h-5" />}
@@ -356,25 +336,22 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
       </Card>
     );
   };
-
   if (isLoading) {
-    return (
+    return ()
       <div className="marketplace-dashboard loading">
         <div className="loading-spinner"></div>
         <p>Loading marketplace analytics...</p>
       </div>
     );
   }
-
-  return (
-    <div className={`marketplace-dashboard ${className}`}>
+  return ()
+    <div className={`marketplace-dashboard ${className}`}>}
       <div className="dashboard-header">
         <h2>Marketplace Analytics</h2>
         <Button onClick={refreshData} variant="outline">
           Refresh Data
         </Button>
       </div>
-
       <Tabs defaultValue="overview" className="dashboard-tabs">
         <TabsList className="grid grid-cols-4 w-full">
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -382,27 +359,22 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
           <TabsTrigger value="search">Search</TabsTrigger>
           <TabsTrigger value="insights">Insights</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview" className="tab-content">
           <div className="overview-content">
             {renderOverviewMetrics()}
             {renderTopCategories()}
           </div>
         </TabsContent>
-
         <TabsContent value="templates" className="tab-content">
           {renderTopTemplates()}
         </TabsContent>
-
         <TabsContent value="search" className="tab-content">
           {renderSearchAnalytics()}
         </TabsContent>
-
         <TabsContent value="insights" className="tab-content">
           {renderInsights()}
         </TabsContent>
       </Tabs>
-
       <style>{`
         .marketplace-dashboard {
           display: flex;
@@ -410,35 +382,29 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
           gap: 1.5rem;
           padding: 1rem;
         }
-
         .dashboard-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-
         .dashboard-header h2 {
           margin: 0;
           font-size: 1.5rem;
           font-weight: 600;
           color: #1f2937;
         }
-
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
           gap: 1rem;
           margin-bottom: 2rem;
         }
-
         .metric-card {
           transition: transform 0.2s ease;
         }
-
         .metric-card:hover {
           transform: translateY(-2px);
         }
-
         .metric-title {
           display: flex;
           align-items: center;
@@ -447,47 +413,39 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
           font-weight: 500;
           color: #6b7280;
         }
-
         .metric-value {
           font-size: 2rem;
           font-weight: 700;
           color: #1f2937;
           margin: 0.5rem 0;
         }
-
         .metric-trend {
           display: flex;
           align-items: center;
           gap: 0.25rem;
           font-size: 0.875rem;
         }
-
         .trend-value {
           font-weight: 600;
           color: #059669;
         }
-
         .trend-period {
           color: #9ca3af;
         }
-
         .metric-subtitle {
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .rating-stars {
           display: flex;
           gap: 0.125rem;
           margin-top: 0.25rem;
         }
-
         .categories-list, .templates-list, .queries-list, .insights-list {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .category-item, .template-item, .query-item {
           display: flex;
           align-items: center;
@@ -496,75 +454,62 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
           border: 1px solid #e5e7eb;
           border-radius: 8px;
         }
-
         .category-info, .template-info, .query-info {
           display: flex;
           align-items: center;
           gap: 1rem;
         }
-
         .category-rank, .template-rank, .query-rank {
           font-weight: 600;
           color: #6b7280;
           min-width: 2rem;
         }
-
         .category-name, .template-name, .query-text {
           font-weight: 600;
           color: #1f2937;
         }
-
         .category-revenue, .metric-primary {
           font-size: 1.1rem;
           font-weight: 600;
           color: #059669;
         }
-
         .metric-secondary {
           display: flex;
           gap: 1rem;
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .query-stats {
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .templates-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-
         .search-analytics {
           display: grid;
           grid-template-columns: 1fr 2fr;
           gap: 1rem;
         }
-
         .search-metrics {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1rem;
         }
-
         .search-stat {
           text-align: center;
         }
-
         .stat-value {
           font-size: 1.5rem;
           font-weight: 700;
           color: #1f2937;
         }
-
         .stat-label {
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .insight-item {
           display: flex;
           gap: 1rem;
@@ -573,48 +518,39 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
           border-radius: 8px;
           border-left: 4px solid;
         }
-
         .insight-item.high {
           border-left-color: #dc2626;
         }
-
         .insight-item.medium {
           border-left-color: #f59e0b;
         }
-
         .insight-item.low {
           border-left-color: #10b981;
         }
-
         .insight-icon {
           flex-shrink: 0;
           padding: 0.5rem;
           background: #f3f4f6;
           border-radius: 8px;
         }
-
         .insight-content {
           flex: 1;
         }
-
         .insight-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 0.5rem;
         }
-
         .insight-title {
           font-weight: 600;
           color: #1f2937;
         }
-
         .insight-description {
           font-size: 0.875rem;
           color: #6b7280;
           margin-bottom: 0.75rem;
         }
-
         .loading {
           display: flex;
           flex-direction: column;
@@ -622,7 +558,6 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
           padding: 4rem;
           gap: 1rem;
         }
-
         .loading-spinner {
           width: 2rem;
           height: 2rem;
@@ -631,21 +566,17 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
           border-radius: 50%;
           animation: spin 1s linear infinite;
         }
-
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-
         @media (max-width: 768px) {
           .metrics-grid {
             grid-template-columns: 1fr;
           }
-
           .search-analytics {
             grid-template-columns: 1fr;
           }
-
           .templates-header {
             flex-direction: column;
             gap: 1rem;

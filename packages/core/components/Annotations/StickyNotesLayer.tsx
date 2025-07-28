@@ -6,7 +6,6 @@
  * creation, selection, context menus, and ensuring non-interference
  * with graph interactions.
  */
-
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { StickyNote } from './StickyNote';
 import { StickyNoteContextMenu } from './StickyNoteContextMenu';
@@ -17,7 +16,6 @@ import {
   StickyNoteContextMenuOptions,
   DEFAULT_STICKY_NOTE 
 } from '../../types/CollaborationTypes';
-
 interface StickyNotesLayerProps {
   notes: StickyNoteType[];
   onNotesChange: (notes: StickyNoteType[]) => void;
@@ -28,17 +26,14 @@ interface StickyNotesLayerProps {
   readOnly?: boolean;
 }
 
-export   const layerRef = useRef<HTMLDivElement>(null);
-
+export const layerRef = useRef<HTMLDivElement>(null);
   // Generate unique ID for new notes
   const generateNoteId = useCallback((): string => {
-    return `note_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `note_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }, []);
-
   // Handle sticky note actions
   const handleNoteAction = useCallback((action: StickyNoteAction) => {
     const noteId = action.noteId;
-    
     switch (action.type) {
       case 'create': {
         const newNote: StickyNoteType = {
@@ -55,10 +50,9 @@ export   const layerRef = useRef<HTMLDivElement>(null);
         setSelectedNoteId(newNote.id);
         break;
       }
-      
       case 'update': {
         if (!noteId || !action.note) break;
-        const updatedNotes = notes.map(note => 
+        const updatedNotes = notes.map(note => ;)
           note.id === noteId 
             ? { ...note, ...action.note }
             : note
@@ -66,7 +60,6 @@ export   const layerRef = useRef<HTMLDivElement>(null);
         onNotesChange(updatedNotes);
         break;
       }
-      
       case 'delete': {
         if (!noteId) break;
         const filteredNotes = notes.filter(note => note.id !== noteId);
@@ -76,10 +69,9 @@ export   const layerRef = useRef<HTMLDivElement>(null);
         }
         break;
       }
-      
       case 'move': {
         if (!noteId || !action.position) break;
-        const updatedNotes = notes.map(note => 
+        const updatedNotes = notes.map(note => ;)
           note.id === noteId 
             ? { 
                 ...note, 
@@ -91,10 +83,9 @@ export   const layerRef = useRef<HTMLDivElement>(null);
         onNotesChange(updatedNotes);
         break;
       }
-      
       case 'resize': {
         if (!noteId || !action.size) break;
-        const updatedNotes = notes.map(note => 
+        const updatedNotes = notes.map(note => ;)
           note.id === noteId 
             ? { ...note, size: action.size! }
             : note
@@ -102,10 +93,9 @@ export   const layerRef = useRef<HTMLDivElement>(null);
         onNotesChange(updatedNotes);
         break;
       }
-      
       case 'startEdit': {
         if (!noteId) break;
-        const updatedNotes = notes.map(note => ({
+        const updatedNotes = notes.map(note => ({)
           ...note,
           isEditing: note.id === noteId
         }));
@@ -113,10 +103,9 @@ export   const layerRef = useRef<HTMLDivElement>(null);
         setSelectedNoteId(noteId);
         break;
       }
-      
       case 'stopEdit': {
         if (!noteId) break;
-        const updatedNotes = notes.map(note => 
+        const updatedNotes = notes.map(note => ;)
           note.id === noteId 
             ? { ...note, isEditing: false }
             : note
@@ -126,18 +115,14 @@ export   const layerRef = useRef<HTMLDivElement>(null);
       }
     }
   }, [notes, onNotesChange, author, generateNoteId, selectedNoteId]);
-
   // Handle context menu
   const handleContextMenu = useCallback((e: React.MouseEvent, noteId: string) => {
     if (readOnly) return;
-    
     e.preventDefault();
     e.stopPropagation();
-    
     const note = notes.find(n => n.id === noteId);
     if (!note) return;
-    
-    setContextMenu({
+    setContextMenu({)
       x: e.clientX,
       y: e.clientY,
       noteId,
@@ -152,7 +137,7 @@ export   const layerRef = useRef<HTMLDivElement>(null);
         setContextMenu(null);
       },
       onChangeColor: (color: StickyNoteColor) => {
-        handleNoteAction({ 
+        handleNoteAction({ )
           type: 'update', 
           noteId, 
           note: { color } 
@@ -163,13 +148,13 @@ export   const layerRef = useRef<HTMLDivElement>(null);
         const duplicatedNote: StickyNoteType = {
           ...note,
           id: generateNoteId(),
-          position: {
+          position: {,
             x: note.position.x + 20,
             y: note.position.y + 20
           },
           timestamp: new Date().toISOString(),
           author,
-          isEditing: false
+          isEditing: false,
         };
         onNotesChange([...notes, duplicatedNote]);
         setSelectedNoteId(duplicatedNote.id);
@@ -177,32 +162,25 @@ export   const layerRef = useRef<HTMLDivElement>(null);
       }
     });
   }, [notes, readOnly, handleNoteAction, author, generateNoteId, onNotesChange]);
-
   // Handle canvas double-click to create new note
   const handleCanvasDoubleClick = useCallback((e: React.MouseEvent) => {
     if (readOnly) return;
-    
     // Only create note if clicking on empty canvas (not on existing notes)
     const target = e.target as HTMLElement;
     if (target.closest('.sticky-note')) return;
-    
     e.preventDefault();
     e.stopPropagation();
-    
     const rect = layerRef.current?.getBoundingClientRect();
     if (!rect) return;
-    
     const position = {
       x: (e.clientX - rect.left - canvasOffset.x) / zoom,
       y: (e.clientY - rect.top - canvasOffset.y) / zoom
     };
-    
-    handleNoteAction({
+    handleNoteAction({)
       type: 'create',
       position
     });
   }, [readOnly, canvasOffset, zoom, handleNoteAction]);
-
   // Handle click outside to deselect notes
   const handleLayerClick = useCallback((e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -210,29 +188,24 @@ export   const layerRef = useRef<HTMLDivElement>(null);
       setSelectedNoteId(null);
     }
   }, []);
-
   // Handle note selection
   const handleNoteClick = useCallback((noteId: string) => {
     setSelectedNoteId(noteId);
   }, []);
-
   // Close context menu on outside click
   useEffect(() => {
     const handleClickOutside = () => {
       setContextMenu(null);
     };
-    
     if (contextMenu) {
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
     }
   }, [contextMenu]);
-
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (readOnly) return;
-      
       // Delete selected note with Delete key
       if (e.key === 'Delete' && selectedNoteId) {
         const selectedNote = notes.find(n => n.id === selectedNoteId);
@@ -240,19 +213,16 @@ export   const layerRef = useRef<HTMLDivElement>(null);
           handleNoteAction({ type: 'delete', noteId: selectedNoteId });
         }
       }
-      
       // Escape to deselect
       if (e.key === 'Escape') {
         setSelectedNoteId(null);
         setContextMenu(null);
       }
     };
-    
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [readOnly, selectedNoteId, notes, handleNoteAction]);
-
-  return (
+  return ()
     <>
       <div
         ref={layerRef}
@@ -265,14 +235,14 @@ export   const layerRef = useRef<HTMLDivElement>(null);
           height: canvasSize.height,
           pointerEvents: 'none', // Allow graph interactions to pass through
           zIndex: 1000,
-          overflow: 'hidden'
+          overflow: 'hidden',
         }}
         onDoubleClick={handleCanvasDoubleClick}
         onClick={handleLayerClick}
       >
         {/* Enable pointer events only for notes themselves */}
         <div style={{ pointerEvents: 'auto' }}>
-          {notes.map(note => (
+          {notes.map(note => ()
             <div
               key={note.id}
               onClick={() => handleNoteClick(note.id)}
@@ -291,9 +261,8 @@ export   const layerRef = useRef<HTMLDivElement>(null);
           ))}
         </div>
       </div>
-      
       {/* Context Menu */}
-      {contextMenu && (
+      {contextMenu && ()
         <StickyNoteContextMenu
           {...contextMenu}
           onClose={() => setContextMenu(null)}

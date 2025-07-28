@@ -2,9 +2,7 @@
  * Unsaved Changes Confirmation Dialog - Story 6.1 (AC: 5)
  * Shows confirmation dialog with Save/Don't Save/Cancel options
  */
-
 import React from 'react';
-
 interface UnsavedChangesDialogProps {
   isOpen: boolean;
   projectName?: string;
@@ -13,8 +11,7 @@ interface UnsavedChangesDialogProps {
   onCancel: () => void;
   actionDescription?: string; // e.g., "opening a new project", "closing the browser"
 }
-
-const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps> = ({ 
+const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps> = ({ )
   isOpen, 
   projectName = 'project', 
   onSave, 
@@ -23,7 +20,6 @@ const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps> = ({
   actionDescription = 'continue' 
 }) => {
   if (!isOpen) return null;
-
   const overlayStyle: React.CSSProperties = {
     position: 'fixed',
     top: 0,
@@ -34,9 +30,8 @@ const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps> = ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 10000
+    zIndex: 10000,
   };
-
   const dialogStyle: React.CSSProperties = {
     backgroundColor: 'white',
     borderRadius: 8,
@@ -46,39 +41,33 @@ const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps> = ({
     boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
     fontFamily: 'system-ui, -apple-system, sans-serif'
   };
-
   const headerStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     marginBottom: 16,
     fontSize: 18,
     fontWeight: 600,
-    color: '#1f2937'
+    color: '#1f2937',
   };
-
   const iconStyle: React.CSSProperties = {
     fontSize: 24,
     marginRight: 12,
-    color: '#f59e0b'
+    color: '#f59e0b',
   };
-
   const messageStyle: React.CSSProperties = {
     marginBottom: 24,
     lineHeight: 1.5,
-    color: '#374151'
+    color: '#374151',
   };
-
   const projectNameStyle: React.CSSProperties = {
     fontWeight: 600,
-    color: '#1f2937'
+    color: '#1f2937',
   };
-
   const buttonGroupStyle: React.CSSProperties = {
     display: 'flex',
     justifyContent: 'flex-end',
-    gap: 12
+    gap: 12,
   };
-
   const buttonBaseStyle: React.CSSProperties = {
     padding: '8px 16px',
     border: 'none',
@@ -88,42 +77,37 @@ const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps> = ({
     fontWeight: 500,
     transition: 'background-color 0.2s'
   };
-
   const saveButtonStyle: React.CSSProperties = {
     ...buttonBaseStyle,
     backgroundColor: '#3b82f6',
-    color: 'white'
+    color: 'white',
   };
-
   const dontSaveButtonStyle: React.CSSProperties = {
     ...buttonBaseStyle,
     backgroundColor: '#dc2626',
-    color: 'white'
+    color: 'white',
   };
-
   const cancelButtonStyle: React.CSSProperties = {
     ...buttonBaseStyle,
     backgroundColor: '#f3f4f6',
     color: '#374151',
     border: '1px solid #d1d5db'
   };
-
-  return (
+  return ()
     <div style={overlayStyle} onClick={onCancel}>
       <div style={dialogStyle} onClick={(e) => e.stopPropagation()}>
         <div style={headerStyle}>
           <span style={iconStyle}>⚠️</span>
           Unsaved Changes
         </div>
-        
         <div style={messageStyle}>
-          {projectName ? (
+          {projectName ? ()
             <>
               You have unsaved changes in <span style={projectNameStyle}>"{projectName}"</span>.
               <br />
               Do you want to save your changes before {actionDescription}?
             </>
-          ) : (
+          ) : ()
             <>
               You have unsaved changes in your current project.
               <br />
@@ -131,7 +115,6 @@ const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps> = ({
             </>
           )}
         </div>
-        
         <div style={buttonGroupStyle}>
           <button
             style={cancelButtonStyle}
@@ -145,7 +128,6 @@ const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps> = ({
           >
             Cancel
           </button>
-          
           <button
             style={dontSaveButtonStyle}
             onClick={onDontSave}
@@ -158,7 +140,6 @@ const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps> = ({
           >
             Don't Save
           </button>
-          
           <button
             style={saveButtonStyle}
             onClick={onSave}

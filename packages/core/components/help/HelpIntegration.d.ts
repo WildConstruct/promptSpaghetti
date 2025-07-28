@@ -1,8 +1,8 @@
 import React from 'react';
 import { HelpContent } from './ContextualHelpSystem';
-export declare function withHelp<P extends object>(
+export declare function withHelp<P extends object>()
   WrappedComponent: React.ComponentType<P>,
-  helpContent: HelpContent
+  helpContent: HelpContent,
 ): {
     (props: P): import("react/jsx-runtime").JSX.Element;
     displayName: string;
@@ -60,7 +60,7 @@ declare const _default: {
         wrapWithHelp: (element: React.ReactElement) => import("react/jsx-runtime").JSX.Element;
         showHelp: boolean;
     };
-    OnboardingOverlay: React.FC<{
+    OnboardingOverlay: React.FC<{,
         isActive: boolean;
         children: React.ReactNode;
     }>;

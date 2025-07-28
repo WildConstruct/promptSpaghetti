@@ -2,9 +2,7 @@
  * Epic 9.2.4 - Comment Form Component
  * Form for creating and editing comments
  */
-
 import React, { useState, useRef, useEffect } from 'react';
-
 interface CommentFormProps {
   onSubmit: (content: string) => Promise<void>;
   onCancel: () => void;
@@ -16,7 +14,7 @@ interface CommentFormProps {
   autoFocus?: boolean;
 }
 
-export const CommentForm: React.FC<CommentFormProps> = ({
+export const CommentForm: React.FC<CommentFormProps> = ({)
   onSubmit,
   onCancel,
   initialValue = '',
@@ -30,26 +28,21 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   const [submitting, setSubmitting] = useState(false);
   const [focused, setFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
   useEffect(() => {
     if (autoFocus && textareaRef.current) {
       textareaRef.current.focus();
     }
   }, [autoFocus]);
-
   useEffect(() => {
     // Auto-resize textarea
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;}
     }
   }, [content]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!content.trim() || submitting) return;
-
     setSubmitting(true);
     try {
       await onSubmit(content.trim());
@@ -60,34 +53,27 @@ export const CommentForm: React.FC<CommentFormProps> = ({
       setSubmitting(false);
     }
   };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
       handleSubmit(e);
     }
-    
     if (e.key === 'Escape') {
       e.preventDefault();
       onCancel();
     }
   };
-
   const insertFormatting = (before: string, after: string = '') => {
     if (!textareaRef.current) return;
-
     const textarea = textareaRef.current;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const selectedText = content.substring(start, end);
-    
-    const newContent = 
+    const newContent = ;
       content.substring(0, start) + 
       before + selectedText + after + 
       content.substring(end);
-    
     setContent(newContent);
-    
     // Restore cursor position
     setTimeout(() => {
       if (textarea) {
@@ -97,17 +83,14 @@ export const CommentForm: React.FC<CommentFormProps> = ({
       }
     }, 0);
   };
-
   const isExpanded = focused || content.length > 0;
-
-  return (
-    <div className={`comment-form ${compact ? 'comment-form--compact' : ''} ${isExpanded ? 'comment-form--expanded' : ''}`}>
+  return ()
+    <div className={`comment-form ${compact ? 'comment-form--compact' : ''} ${isExpanded ? 'comment-form--expanded' : ''}`}>}
       <div className="comment-form__avatar">
         <div className="user-avatar user-avatar--small">
           {userId.charAt(0).toUpperCase()}
         </div>
       </div>
-
       <form onSubmit={handleSubmit} className="comment-form__form">
         <div className="comment-form__input-container">
           <textarea
@@ -122,8 +105,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
             rows={compact ? 2 : 3}
             disabled={submitting}
           />
-
-          {isExpanded && (
+          {isExpanded && ()
             <div className="comment-form__toolbar">
               <div className="comment-form__formatting">
                 <button
@@ -151,7 +133,6 @@ export const CommentForm: React.FC<CommentFormProps> = ({
                   {'</>'}
                 </button>
               </div>
-
               <div className="comment-form__help">
                 <span className="help-text">
                   <kbd>Cmd/Ctrl</kbd> + <kbd>Enter</kbd> to submit
@@ -160,7 +141,6 @@ export const CommentForm: React.FC<CommentFormProps> = ({
             </div>
           )}
         </div>
-
         <div className="comment-form__actions">
           <button
             type="button"
@@ -178,8 +158,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
             {submitting ? 'Posting...' : submitText}
           </button>
         </div>
-
-        {!compact && (
+        {!compact && ()
           <div className="comment-form__tips">
             <div className="formatting-tips">
               <span className="tip">

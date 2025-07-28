@@ -754,7 +754,7 @@ export declare class AttributionTracker extends EventEmitter {
     getUserJourneys(userId: string): Promise<CustomerJourney[]>;
     mergeJourneys(sourceJourneyId: string, targetJourneyId: string): Promise<CustomerJourney>;
     calculateAttribution(conversionId: string, modelId?: string): Promise<ConversionAttribution>;
-    getAttributionReport(timeRange: {
+    getAttributionReport(timeRange: {)
         start: Date;
         end: Date;
     }, options?: {
@@ -776,11 +776,11 @@ export declare class AttributionTracker extends EventEmitter {
     getConfig(): AttributionConfig;
     flush(): Promise<void>;
     stop(): Promise<void>;
-    getChannelPerformance(timeRange: {
+    getChannelPerformance(timeRange: {)
         start: Date;
         end: Date;
     }): Promise<ChannelPerformanceReport>;
-    getConversionPaths(timeRange: {
+    getConversionPaths(timeRange: {)
         start: Date;
         end: Date;
     }, options?: {
@@ -788,7 +788,7 @@ export declare class AttributionTracker extends EventEmitter {
         minTouchPoints?: number;
         channels?: string[];
     }): Promise<ConversionPath[]>;
-    getAttributionInsights(timeRange: {
+    getAttributionInsights(timeRange: {)
         start: Date;
         end: Date;
     }): Promise<AttributionInsights>;
@@ -834,11 +834,11 @@ export declare class AttributionTracker extends EventEmitter {
 }
 export interface AttributionReport {
     id: string;
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };
-    summary: {
+    summary: {,
         totalJourneys: number;
         totalConversions: number;
         totalTouchPoints: number;
@@ -853,14 +853,14 @@ export interface AttributionReport {
 }
 export interface ChannelPerformanceReport {
     channels: any[];
-    summary: {
+    summary: {,
         totalChannels: number;
         totalTouchPoints: number;
         totalConversions: number;
         averageCPA: number;
         averageROAS: number;
     };
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };

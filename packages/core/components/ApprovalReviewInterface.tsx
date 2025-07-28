@@ -1,6 +1,5 @@
 // Epic 9.4.2 - Approval Review Interface Component
 // Detailed interface for reviewing approval requests with diff view
-
 import React, { useState, useEffect } from 'react';
 import { 
   CheckCircleIcon,
@@ -17,7 +16,6 @@ import {
   StarIcon,
   ClipboardDocumentListIcon
 } from '@heroicons/react/24/outline';
-
 interface ApprovalCriteria {
   id: string;
   name: string;
@@ -26,7 +24,6 @@ interface ApprovalCriteria {
   is_required: boolean;
   conditions: Record<string, any>;
 }
-
 interface ApprovalRequest {
   id: string;
   workspace_id: string;
@@ -44,7 +41,6 @@ interface ApprovalRequest {
   required_approvals: number;
   approval_percentage: number;
 }
-
 interface ReviewerAssignment {
   id: string;
   reviewer_id: string;
@@ -54,7 +50,6 @@ interface ReviewerAssignment {
   review_comment?: string;
   criteria_evaluations: Record<string, any>;
 }
-
 interface ApprovalReviewInterfaceProps {
   request: ApprovalRequest;
   workspaceId: string;
@@ -64,7 +59,7 @@ interface ApprovalReviewInterfaceProps {
   readOnly?: boolean;
 }
 
-export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = ({
+export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = ({)
   request,
   workspaceId,
   currentUserId,
@@ -80,33 +75,27 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['overview', 'criteria']));
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   // Current user's assignment
   const currentUserAssignment = reviewerAssignments.find(a => a.reviewer_id === currentUserId);
-  const canReview = !readOnly && currentUserAssignment?.status === 'pending' && 
+  const canReview = !readOnly && currentUserAssignment?.status === 'pending' && ;
                    ['pending', 'in_review'].includes(request.status);
-
   useEffect(() => {
     loadReviewData();
   }, [request.id, workspaceId]);
-
   const loadReviewData = async () => {
     try {
       setLoading(true);
-      
       // Load reviewer assignments
-      const reviewersResponse = await fetch(`/api/approval/requests/${request.id}/reviewers`);
+      const reviewersResponse = await fetch(`/api/approval/requests/${request.id}/reviewers`);}
       if (reviewersResponse.ok) {
         const reviewers = await reviewersResponse.json();
         setReviewerAssignments(reviewers);
       }
-
       // Load approval criteria
-      const criteriaResponse = await fetch(`/api/approval/criteria/${workspaceId}`);
+      const criteriaResponse = await fetch(`/api/approval/criteria/${workspaceId}`);}
       if (criteriaResponse.ok) {
         const criteria = await criteriaResponse.json();
         setApprovalCriteria(criteria);
-        
         // Initialize criteria evaluations
         const initialEvaluations: Record<string, any> = {};
         criteria.forEach((criterion: ApprovalCriteria) => {
@@ -114,7 +103,7 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
             criteria_id: criterion.id,
             passed: false,
             score: 0,
-            comment: ''
+            comment: '',
           };
         });
         setCriteriaEvaluations(initialEvaluations);
@@ -125,15 +114,12 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
       setLoading(false);
     }
   };
-
   const handleSubmitReview = () => {
     if (!selectedDecision) return;
-
     onReviewSubmit(selectedDecision, reviewComment, criteriaEvaluations);
   };
-
   const handleCriteriaEvaluation = (criteriaId: string, field: string, value: Error) => {
-    setCriteriaEvaluations(prev => ({
+    setCriteriaEvaluations(prev => ({)
       ...prev,
       [criteriaId]: {
         ...prev[criteriaId],
@@ -141,7 +127,6 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
       }
     }));
   };
-
   const toggleSection = (section: string) => {
     const newExpanded = new Set(expandedSections);
     if (newExpanded.has(section)) {
@@ -151,7 +136,6 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
     }
     setExpandedSections(newExpanded);
   };
-
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
     case 'critical': return 'bg-red-100 text-red-800 border-red-200';
@@ -161,7 +145,6 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
     default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-
   const getStatusIcon = (status: string) => {
     switch (status) {
     case 'approved': return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
@@ -171,7 +154,6 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
     default: return <ClockIcon className="h-4 w-4 text-gray-500" />;
     }
   };
-
   const calculateOverallScore = () => {
     const totalWeight = approvalCriteria.reduce((sum, c) => sum + c.weight, 0);
     const weightedScore = approvalCriteria.reduce((sum, c) => {
@@ -180,23 +162,20 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
     }, 0);
     return totalWeight > 0 ? Math.round((weightedScore / totalWeight) * 100) : 0;
   };
-
   const getRequiredCriteriaPassed = () => {
     const requiredCriteria = approvalCriteria.filter(c => c.is_required);
     const passedRequired = requiredCriteria.filter(c => criteriaEvaluations[c.id]?.passed).length;
     return { passed: passedRequired, total: requiredCriteria.length };
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <XCircleIcon className="h-5 w-5 text-red-400" />
@@ -208,8 +187,7 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg">
       {/* Header */}
       <div className="border-b border-gray-200 p-6">
@@ -217,13 +195,13 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
           <div>
             <h2 className="text-2xl font-bold text-gray-900">{request.title}</h2>
             <div className="mt-2 flex items-center space-x-4">
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getUrgencyColor(request.urgency)}`}>
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getUrgencyColor(request.urgency)}`}>}
                 {request.urgency.toUpperCase()}
               </span>
               <span className="text-sm text-gray-600">
                 Requested by {request.requester_id} on {new Date(request.requested_at).toLocaleDateString()}
               </span>
-              {request.due_date && (
+              {request.due_date && ()
                 <span className="text-sm text-gray-600">
                   Due: {new Date(request.due_date).toLocaleDateString()}
                 </span>
@@ -237,7 +215,6 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
             <XCircleIcon className="h-6 w-6" />
           </button>
         </div>
-
         {/* Progress Bar */}
         <div className="mt-4">
           <div className="flex items-center justify-between text-sm text-gray-600">
@@ -252,7 +229,6 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
           </div>
         </div>
       </div>
-
       <div className="p-6 space-y-6">
         {/* Overview Section */}
         <div className="border border-gray-200 rounded-lg">
@@ -264,29 +240,26 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
               <DocumentTextIcon className="h-5 w-5 text-gray-400" />
               <span className="font-medium">Request Overview</span>
             </div>
-            {expandedSections.has('overview') ? (
+            {expandedSections.has('overview') ? ()
               <ChevronDownIcon className="h-5 w-5 text-gray-400" />
-            ) : (
+            ) : ()
               <ChevronRightIcon className="h-5 w-5 text-gray-400" />
             )}
           </button>
-          
-          {expandedSections.has('overview') && (
+          {expandedSections.has('overview') && ()
             <div className="border-t border-gray-200 p-4 space-y-4">
-              {request.description && (
+              {request.description && ()
                 <div>
                   <h4 className="text-sm font-medium text-gray-900 mb-2">Description</h4>
                   <p className="text-sm text-gray-700">{request.description}</p>
                 </div>
               )}
-              
-              {request.business_justification && (
+              {request.business_justification && ()
                 <div>
                   <h4 className="text-sm font-medium text-gray-900 mb-2">Business Justification</h4>
                   <p className="text-sm text-gray-700">{request.business_justification}</p>
                 </div>
               )}
-              
               <div>
                 <h4 className="text-sm font-medium text-gray-900 mb-2">Resource Details</h4>
                 <div className="text-sm text-gray-700">
@@ -298,7 +271,6 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
             </div>
           )}
         </div>
-
         {/* Reviewers Section */}
         <div className="border border-gray-200 rounded-lg">
           <button
@@ -309,17 +281,16 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
               <UserIcon className="h-5 w-5 text-gray-400" />
               <span className="font-medium">Reviewers ({reviewerAssignments.length})</span>
             </div>
-            {expandedSections.has('reviewers') ? (
+            {expandedSections.has('reviewers') ? ()
               <ChevronDownIcon className="h-5 w-5 text-gray-400" />
-            ) : (
+            ) : ()
               <ChevronRightIcon className="h-5 w-5 text-gray-400" />
             )}
           </button>
-          
-          {expandedSections.has('reviewers') && (
+          {expandedSections.has('reviewers') && ()
             <div className="border-t border-gray-200 p-4">
               <div className="space-y-3">
-                {reviewerAssignments.map((assignment) => (
+                {reviewerAssignments.map((assignment) => ()
                   <div key={assignment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
                     <div className="flex items-center space-x-3">
                       <div className="flex items-center space-x-2">
@@ -333,16 +304,16 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
                       }`}>
                         {assignment.assignment_type}
                       </span>
-                      {assignment.reviewer_id === currentUserId && (
+                      {assignment.reviewer_id === currentUserId && ()
                         <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
                           You
                         </span>
                       )}
                     </div>
                     <div className="text-sm text-gray-600">
-                      {assignment.reviewed_at ? (
+                      {assignment.reviewed_at ? ()
                         <span>Reviewed {new Date(assignment.reviewed_at).toLocaleDateString()}</span>
-                      ) : (
+                      ) : ()
                         <span>Pending review</span>
                       )}
                     </div>
@@ -352,9 +323,8 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
             </div>
           )}
         </div>
-
         {/* Criteria Evaluation Section */}
-        {canReview && approvalCriteria.length > 0 && (
+        {canReview && approvalCriteria.length > 0 && ()
           <div className="border border-gray-200 rounded-lg">
             <button
               onClick={() => toggleSection('criteria')}
@@ -367,22 +337,21 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
                   Score: {calculateOverallScore()}%
                 </span>
               </div>
-              {expandedSections.has('criteria') ? (
+              {expandedSections.has('criteria') ? ()
                 <ChevronDownIcon className="h-5 w-5 text-gray-400" />
-              ) : (
+              ) : ()
                 <ChevronRightIcon className="h-5 w-5 text-gray-400" />
               )}
             </button>
-            
-            {expandedSections.has('criteria') && (
+            {expandedSections.has('criteria') && ()
               <div className="border-t border-gray-200 p-4">
                 <div className="space-y-4">
-                  {approvalCriteria.map((criterion) => (
+                  {approvalCriteria.map((criterion) => ()
                     <div key={criterion.id} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-2">
                           <span className="font-medium">{criterion.name}</span>
-                          {criterion.is_required && (
+                          {criterion.is_required && ()
                             <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded">
                               Required
                             </span>
@@ -403,11 +372,9 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
                           </label>
                         </div>
                       </div>
-                      
-                      {criterion.description && (
+                      {criterion.description && ()
                         <p className="text-sm text-gray-600 mb-3">{criterion.description}</p>
                       )}
-                      
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -437,7 +404,6 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
                       </div>
                     </div>
                   ))}
-                  
                   {/* Criteria Summary */}
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h4 className="font-medium text-gray-900 mb-2">Evaluation Summary</h4>
@@ -459,12 +425,10 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
             )}
           </div>
         )}
-
         {/* Review Decision Section */}
-        {canReview && (
+        {canReview && ()
           <div className="border border-gray-200 rounded-lg p-4">
             <h3 className="font-medium text-gray-900 mb-4">Your Review Decision</h3>
-            
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
                 <label className="flex items-center space-x-2">
@@ -479,7 +443,6 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
                   <CheckCircleIcon className="h-5 w-5 text-green-600" />
                   <span className="text-green-800 font-medium">Approve</span>
                 </label>
-                
                 <label className="flex items-center space-x-2">
                   <input
                     type="radio"
@@ -492,7 +455,6 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
                   <XCircleIcon className="h-5 w-5 text-red-600" />
                   <span className="text-red-800 font-medium">Reject</span>
                 </label>
-                
                 <label className="flex items-center space-x-2">
                   <input
                     type="radio"
@@ -506,7 +468,6 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
                   <span className="text-gray-800 font-medium">Abstain</span>
                 </label>
               </div>
-              
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Review Comment {selectedDecision === 'reject' ? '(required)' : '(optional)'}
@@ -523,19 +484,17 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
           </div>
         )}
       </div>
-
       {/* Footer */}
       <div className="border-t border-gray-200 p-6 flex items-center justify-between">
         <div className="text-sm text-gray-600">
-          {canReview ? (
+          {canReview ? ()
             'Complete your review to submit your decision.'
-          ) : currentUserAssignment ? (
+          ) : currentUserAssignment ? ()
             'You have already submitted your review.'
-          ) : (
+          ) : ()
             'You are not assigned as a reviewer for this request.'
           )}
         </div>
-        
         <div className="flex items-center space-x-3">
           <button
             onClick={onClose}
@@ -543,8 +502,7 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
           >
             Close
           </button>
-          
-          {canReview && (
+          {canReview && ()
             <button
               onClick={handleSubmitReview}
               disabled={!selectedDecision || (selectedDecision === 'reject' && !reviewComment.trim())}

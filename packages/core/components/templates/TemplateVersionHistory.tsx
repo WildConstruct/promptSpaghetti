@@ -2,7 +2,6 @@
  * Template Version History Component  
  * Visual interface for managing template versions and history
  */
-
 import React, { useState, useEffect } from 'react';
 import { TemplateVersion, VersionComparisonResult } from '../templates/TemplateVersionManager';
 import { ProjectTemplate } from '../templates/ProjectTemplateManager';
@@ -21,7 +20,6 @@ import {
   FiCopy,
   FiUpload
 } from 'react-icons/fi';
-
 interface TemplateVersionHistoryProps {
   template: ProjectTemplate;
   onVersionSelect?: (version: TemplateVersion) => void;
@@ -30,7 +28,6 @@ interface TemplateVersionHistoryProps {
   onVersionExport?: (version: TemplateVersion) => void;
   className?: string;
 }
-
 interface VersionNode {
   version: TemplateVersion;
   level: number;
@@ -45,11 +42,9 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
   const [_____filterBranch, _____setFilterBranch] = useState<string>('all');
   const [showComparison, setShowComparison] = useState(false);
   const [comparisonResult, setComparisonResult] = useState<VersionComparisonResult | null>(null);
-
   useEffect(() => {
     loadVersionHistory();
   }, [template.id]);
-
   const loadVersionHistory = async () => {
     setLoading(true);
     try {
@@ -77,7 +72,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
           rating: 4.7,
           dependencies: [],
           conflicts: [],
-          template_data: template
+          template_data: template,
         },
         {
           id: 'v-2',
@@ -101,7 +96,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
           rating: 4.5,
           dependencies: [],
           conflicts: [],
-          template_data: template
+          template_data: template,
         },
         {
           id: 'v-3',
@@ -125,10 +120,9 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
           rating: 4.3,
           dependencies: [],
           conflicts: [],
-          template_data: template
+          template_data: template,
         }
       ];
-      
       setVersions(mockVersions);
     } catch (error) {
       console.error('Failed to load version history:', error);
@@ -136,7 +130,6 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
       setLoading(false);
     }
   };
-
   const handleVersionSelect = (version: TemplateVersion, isMultiSelect: boolean) => {
     if (isMultiSelect) {
       const newSelection = new Set(selectedVersions);
@@ -151,48 +144,45 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
       onVersionSelect?.(version);
     }
   };
-
   const handleCompareVersions = async () => {
     const selectedArray = Array.from(selectedVersions);
     if (selectedArray.length !== 2) {
       alert('Please select exactly 2 versions to compare');
       return;
     }
-
     setLoading(true);
     try {
       // Mock comparison - in real implementation, would call TemplateVersionManager
       const mockComparison: VersionComparisonResult = {
         from_version: versions.find(v => v.id === selectedArray[0])!,
         to_version: versions.find(v => v.id === selectedArray[1])!,
-        diff: {
-          metadata_changes: [
+        diff: {,
+          metadata_changes: [,
             { field: 'name', old_value: 'Old Name', new_value: 'New Name', change_type: 'modified' }
           ],
-          variable_changes: [
+          variable_changes: [,
             { variable_id: 'var-1', change_type: 'added', new_variable: { id: 'var-1', name: 'new_var' } as any }
           ],
           customization_changes: [],
-          graph_changes: {
+          graph_changes: {,
             nodes_added: 2,
             nodes_removed: 1,
             nodes_modified: 3,
             edges_added: 1,
             edges_removed: 0,
-            edges_modified: 2
+            edges_modified: 2,
           }
         },
-        compatibility: {
+        compatibility: {,
           breaking_changes: false,
           api_changes: true,
           schema_changes: false,
-          dependency_changes: true
+          dependency_changes: true,
         },
         migration_required: false,
         migration_complexity: 'simple',
-        estimated_migration_time: 5
+        estimated_migration_time: 5,
       };
-
       setComparisonResult(mockComparison);
       setShowComparison(true);
     } catch (error) {
@@ -201,7 +191,6 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
       setLoading(false);
     }
   };
-
   const getStatusColor = (status: string) => {
     switch (status) {
     case 'published': return 'text-green-600 bg-green-100';
@@ -211,7 +200,6 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-
   const getCompatibilityColor = (level: string) => {
     switch (level) {
     case 'patch': return 'text-green-600';
@@ -220,10 +208,9 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
     default: return 'text-gray-600';
     }
   };
-
-  const renderTimelineView = () => (
+  const renderTimelineView = () => (;)
     <div className="space-y-4">
-      {versions.map((version, index) => (
+      {versions.map((version, index) => ()
         <div
           key={version.id}
           className={`relative flex items-start space-x-4 p-4 rounded-lg border-2 transition-colors cursor-pointer ${
@@ -234,17 +221,15 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
           onClick={(e) => handleVersionSelect(version, e.metaKey || e.ctrlKey)}
         >
           {/* Timeline connector */}
-          {index < versions.length - 1 && (
+          {index < versions.length - 1 && ()
             <div className="absolute left-6 top-12 w-0.5 h-16 bg-gray-300" />
           )}
-          
           {/* Version indicator */}
           <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
             version.status === 'published' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'
           }`}>
             <FiTag className="w-4 h-4" />
           </div>
-
           {/* Version info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between">
@@ -252,19 +237,18 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                 <h3 className="text-lg font-semibold text-gray-900">
                   v{version.version_number}
                 </h3>
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(version.status)}`}>
+                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(version.status)}`}>}
                   {version.status}
                 </span>
-                <span className={`text-sm font-medium ${getCompatibilityColor(version.compatibility_level)}`}>
+                <span className={`text-sm font-medium ${getCompatibilityColor(version.compatibility_level)}`}>}
                   {version.compatibility_level}
                 </span>
-                {version.migration_required && (
+                {version.migration_required && ()
                   <span className="px-2 py-1 text-xs font-medium text-orange-600 bg-orange-100 rounded-full">
                     Migration Required
                   </span>
                 )}
               </div>
-              
               <div className="flex items-center space-x-2">
                 <button
                   onClick={(e) => {
@@ -291,19 +275,16 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                 </button>
               </div>
             </div>
-
-            {version.title && (
+            {version.title && ()
               <h4 className="text-sm font-medium text-gray-700 mt-1">
                 {version.title}
               </h4>
             )}
-
-            {version.description && (
+            {version.description && ()
               <p className="text-sm text-gray-600 mt-1">
                 {version.description}
               </p>
             )}
-
             <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500">
               <span className="flex items-center">
                 <FiClock className="w-3 h-3 mr-1" />
@@ -323,8 +304,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                 ⭐ {version.rating.toFixed(1)}
               </span>
             </div>
-
-            {version.changelog && (
+            {version.changelog && ()
               <details className="mt-2">
                 <summary className="text-sm text-blue-600 cursor-pointer hover:text-blue-700">
                   View changelog
@@ -339,8 +319,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
       ))}
     </div>
   );
-
-  const renderTableView = () => (
+  const renderTableView = () => (;)
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
@@ -382,7 +361,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {versions.map((version) => (
+          {versions.map((version) => ()
             <tr
               key={version.id}
               className={`hover:bg-gray-50 cursor-pointer ${
@@ -403,7 +382,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                   <span className="text-sm font-medium text-gray-900">
                     v{version.version_number}
                   </span>
-                  <span className={`ml-2 text-xs font-medium ${getCompatibilityColor(version.compatibility_level)}`}>
+                  <span className={`ml-2 text-xs font-medium ${getCompatibilityColor(version.compatibility_level)}`}>}
                     {version.compatibility_level}
                   </span>
                 </div>
@@ -421,7 +400,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(version.status)}`}>
+                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(version.status)}`}>}
                   {version.status}
                 </span>
               </td>
@@ -460,15 +439,12 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
       </table>
     </div>
   );
-
   const renderComparisonModal = () => {
     if (!showComparison || !comparisonResult) return null;
-
-    return (
+    return ()
       <div className="fixed inset-0 z-50 overflow-y-auto">
         <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center">
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          
           <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full sm:p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">Version Comparison</h2>
@@ -479,7 +455,6 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                 <FiX size={24} />
               </button>
             </div>
-
             <div className="grid grid-cols-2 gap-6 mb-6">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="font-semibold text-gray-900 mb-2">
@@ -490,7 +465,6 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                   {new Date(comparisonResult.from_version.created_at).toLocaleDateString()}
                 </p>
               </div>
-              
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="font-semibold text-gray-900 mb-2">
                   To: v{comparisonResult.to_version.version_number}
@@ -501,7 +475,6 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                 </p>
               </div>
             </div>
-
             <div className="space-y-6">
               <div className="bg-blue-50 p-4 rounded-lg">
                 <h4 className="font-semibold text-gray-900 mb-2">Compatibility</h4>
@@ -536,7 +509,6 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                   </div>
                 </div>
               </div>
-
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h4 className="font-semibold text-gray-900 mb-2">Changes Summary</h4>
                 <div className="grid grid-cols-3 gap-4 text-sm">
@@ -556,8 +528,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                   </div>
                 </div>
               </div>
-
-              {comparisonResult.migration_required && (
+              {comparisonResult.migration_required && ()
                 <div className="bg-orange-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-gray-900 mb-2">Migration Required</h4>
                   <p className="text-sm text-gray-600 mb-2">
@@ -569,7 +540,6 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                 </div>
               )}
             </div>
-
             <div className="flex justify-end space-x-3 mt-6 pt-6 border-t">
               <button
                 onClick={() => setShowComparison(false)}
@@ -583,16 +553,14 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
       </div>
     );
   };
-
-  return (
-    <div className={`template-version-history ${className}`}>
+  return ()
+    <div className={`template-version-history ${className}`}>}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900">Version History</h2>
-        
         <div className="flex items-center space-x-4">
           {/* View mode selector */}
           <div className="flex rounded-lg border border-gray-300">
-            {['timeline', 'table'].map((mode) => (
+            {['timeline', 'table'].map((mode) => ()
               <button
                 key={mode}
                 onClick={() => setViewMode(mode as any)}
@@ -606,11 +574,10 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
               </button>
             ))}
           </div>
-
           {/* Actions */}
-          {selectedVersions.size > 0 && (
+          {selectedVersions.size > 0 && ()
             <div className="flex items-center space-x-2">
-              {selectedVersions.size === 2 && (
+              {selectedVersions.size === 2 && ()
                 <button
                   onClick={handleCompareVersions}
                   className="flex items-center space-x-2 bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors"
@@ -620,7 +587,6 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                   <span>Compare</span>
                 </button>
               )}
-              
               <span className="text-sm text-gray-600">
                 {selectedVersions.size} selected
               </span>
@@ -628,12 +594,11 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
           )}
         </div>
       </div>
-
-      {loading ? (
+      {loading ? ()
         <div className="flex items-center justify-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
-      ) : (
+      ) : ()
         <>
           {viewMode === 'timeline' ? renderTimelineView() : renderTableView()}
           {renderComparisonModal()}

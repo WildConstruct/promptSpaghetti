@@ -14,7 +14,7 @@ export declare class TrendingCommentsService {
     private cacheEnabled;
     private scoreCache;
     private trendingCache;
-    constructor(config: {
+    constructor(config: {)
         baseUrl: string;
         algorithms?: TrendingAlgorithmConfig[];
         defaultAlgorithm?: string;
@@ -36,7 +36,7 @@ export declare class TrendingCommentsService {
     /**
      * Get comment analytics for a resource
      */
-    getCommentAnalytics(resourceId: string, timeRange: {
+    getCommentAnalytics(resourceId: string, timeRange: {)
         start: Date;
         end: Date;
     }): Promise<CommentAnalytics>;

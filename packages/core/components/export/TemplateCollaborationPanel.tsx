@@ -5,7 +5,6 @@
  * Advanced collaboration interface for sharing export templates, managing
  * permissions, tracking usage analytics, and facilitating team workflows.
  */
-
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { 
   ExportTemplate, 
@@ -13,7 +12,6 @@ import {
   UpdateExportTemplate
 } from '../../types/export';
 import { useExport } from '../../hooks/useExport';
-
 interface TemplateCollaborationPanelProps {
   template: ExportTemplate;
   visible?: boolean;
@@ -21,7 +19,6 @@ interface TemplateCollaborationPanelProps {
   projectId?: string;
   className?: string;
 }
-
 interface CollaborationUser {
   id: string;
   name: string;
@@ -31,7 +28,6 @@ interface CollaborationUser {
   joinedAt: string;
   lastActive: string;
 }
-
 interface CollaborationActivity {
   id: string;
   userId: string;
@@ -41,7 +37,6 @@ interface CollaborationActivity {
   details: string;
   metadata?: Record<string, any>;
 }
-
 interface TemplateAnalytics {
   totalUses: number;
   uniqueUsers: number;
@@ -52,7 +47,6 @@ interface TemplateAnalytics {
   usageOverTime: Array<{ date: string; count: number }>;
   topUsers: Array<{ userId: string; email: string; uses: number }>;
 }
-
 interface ShareSettings {
   isPublic: boolean;
   allowForks: boolean;
@@ -62,7 +56,7 @@ interface ShareSettings {
   shareLink?: string;
 }
 
-export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProps> = ({
+export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProps> = ({)
   template,
   visible = true,
   onClose,
@@ -73,20 +67,18 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
   const [collaborators, setCollaborators] = useState<CollaborationUser[]>([]);
   const [activities, setActivities] = useState<CollaborationActivity[]>([]);
   const [analytics, setAnalytics] = useState<TemplateAnalytics | null>(null);
-  const [shareSettings, setShareSettings] = useState<ShareSettings>({
+  const [shareSettings, setShareSettings] = useState<ShareSettings>({)
     isPublic: template.is_public || false,
     allowForks: true,
     allowComments: true,
-    requireApproval: false
+    requireApproval: false,
   });
-  
   // UI state
   const [activeTab, setActiveTab] = useState<'collaborators' | 'activity' | 'analytics' | 'sharing'>('collaborators');
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState<'editor' | 'viewer'>('viewer');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   // Hooks
   const { 
     getTemplateCollaborators,
@@ -99,23 +91,20 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
     generateShareLink,
     forkTemplate
   } = useExport(projectId);
-
   // Load collaboration data
   useEffect(() => {
     if (visible) {
       loadCollaborationData();
     }
   }, [visible]);
-
   const loadCollaborationData = useCallback(async () => {
     setLoading(true);
     try {
-      const [collaboratorsData, activitiesData, analyticsData] = await Promise.all([
+      const [collaboratorsData, activitiesData, analyticsData] = await Promise.all([)
         getTemplateCollaborators(template.id),
         getTemplateActivity(template.id),
         getTemplateAnalytics(template.id)
       ]);
-      
       setCollaborators(collaboratorsData);
       setActivities(activitiesData);
       setAnalytics(analyticsData);
@@ -126,18 +115,15 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
       setLoading(false);
     }
   }, [template.id, getTemplateCollaborators, getTemplateActivity, getTemplateAnalytics]);
-
   // Handle inviting collaborator
   const handleInviteCollaborator = useCallback(async () => {
     if (!inviteEmail.trim()) return;
-    
     setLoading(true);
     try {
-      const newCollaborator = await inviteCollaborator(template.id, {
+      const newCollaborator = await inviteCollaborator(template.id, {)
         email: inviteEmail,
-        role: inviteRole
+        role: inviteRole,
       });
-      
       setCollaborators(prev => [...prev, newCollaborator]);
       setInviteEmail('');
       setError(null);
@@ -147,13 +133,12 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
       setLoading(false);
     }
   }, [template.id, inviteEmail, inviteRole, inviteCollaborator]);
-
   // Handle role change
   const handleRoleChange = useCallback(async (userId: string, newRole: 'owner' | 'editor' | 'viewer') => {
     setLoading(true);
     try {
       await updateCollaboratorRole(template.id, userId, newRole);
-      setCollaborators(prev => prev.map(c => 
+      setCollaborators(prev => prev.map(c => )
         c.id === userId ? { ...c, role: newRole } : c
       ));
       setError(null);
@@ -163,11 +148,9 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
       setLoading(false);
     }
   }, [template.id, updateCollaboratorRole]);
-
   // Handle removing collaborator
   const handleRemoveCollaborator = useCallback(async (userId: string) => {
     if (!confirm('Are you sure you want to remove this collaborator?')) return;
-    
     setLoading(true);
     try {
       await removeCollaborator(template.id, userId);
@@ -179,11 +162,9 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
       setLoading(false);
     }
   }, [template.id, removeCollaborator]);
-
   // Handle share settings update
   const handleShareSettingsUpdate = useCallback(async (newSettings: Partial<ShareSettings>) => {
     const updatedSettings = { ...shareSettings, ...newSettings };
-    
     setLoading(true);
     try {
       await updateShareSettings(template.id, updatedSettings);
@@ -195,7 +176,6 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
       setLoading(false);
     }
   }, [template.id, shareSettings, updateShareSettings]);
-
   // Generate share link
   const handleGenerateShareLink = useCallback(async () => {
     setLoading(true);
@@ -209,7 +189,6 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
       setLoading(false);
     }
   }, [template.id, generateShareLink]);
-
   // Handle template fork
   const handleForkTemplate = useCallback(async () => {
     setLoading(true);
@@ -222,28 +201,24 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
       setLoading(false);
     }
   }, [template.id, forkTemplate]);
-
   // Format date
   const formatDate = useCallback((dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-US', {)
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }, []);
-
   // Format usage count
   const formatUsageCount = useCallback((count: number) => {
     if (count < 1000) return count.toString();
-    if (count < 1000000) return `${Math.round(count / 100) / 10}K`;
-    return `${Math.round(count / 100000) / 10}M`;
+    if (count < 1000000) return `${Math.round(count / 100) / 10}K`;}
+    return `${Math.round(count / 100000) / 10}M`;}
   }, []);
-
   if (!visible) return null;
-
-  return (
+  return ()
     <div
       className={`template-collaboration-panel ${className}`}
       style={{
@@ -266,7 +241,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
           padding: '20px 24px',
           borderBottom: '1px solid #e2e8f0',
           background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
-          color: 'white'
+          color: 'white',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -278,8 +253,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
               {template.name} • {collaborators.length} collaborators
             </div>
           </div>
-          
-          {onClose && (
+          {onClose && ()
             <button
               onClick={onClose}
               style={{
@@ -293,7 +267,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '18px'
+                fontSize: '18px',
               }}
             >
               ×
@@ -301,13 +275,12 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
           )}
         </div>
       </div>
-
       {/* Navigation Tabs */}
       <div
         style={{
           padding: '16px 24px',
           borderBottom: '1px solid #e2e8f0',
-          background: '#f8fafc'
+          background: '#f8fafc',
         }}
       >
         <div style={{ display: 'flex', gap: '8px' }}>
@@ -316,7 +289,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
             { key: 'activity', label: '📈 Activity', desc: 'Recent changes and usage' },
             { key: 'analytics', label: '📊 Analytics', desc: 'Usage statistics' },
             { key: 'sharing', label: '🌐 Sharing', desc: 'Public sharing settings' }
-          ].map(tab => (
+          ].map(tab => ()
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as any)}
@@ -338,10 +311,9 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
           ))}
         </div>
       </div>
-
       {/* Content */}
       <div style={{ flex: 1, overflow: 'auto', padding: '20px 24px' }}>
-        {error && (
+        {error && ()
           <div
             style={{
               padding: '12px 16px',
@@ -350,15 +322,14 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
               borderRadius: '8px',
               color: '#dc2626',
               marginBottom: '20px',
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           >
             <strong>Error:</strong> {error}
           </div>
         )}
-
         {/* Collaborators Tab */}
-        {activeTab === 'collaborators' && (
+        {activeTab === 'collaborators' && ()
           <div>
             {/* Invite Section */}
             <div
@@ -367,7 +338,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                 border: '1px solid #e2e8f0',
                 borderRadius: '8px',
                 padding: '16px',
-                marginBottom: '24px'
+                marginBottom: '24px',
               }}
             >
               <h4 style={{ margin: '0 0 12px', fontSize: '16px', fontWeight: '600' }}>
@@ -388,7 +359,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                       padding: '8px 12px',
                       border: '1px solid #e2e8f0',
                       borderRadius: '6px',
-                      fontSize: '14px'
+                      fontSize: '14px',
                     }}
                   />
                 </div>
@@ -403,7 +374,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                       padding: '8px 12px',
                       border: '1px solid #e2e8f0',
                       borderRadius: '6px',
-                      fontSize: '14px'
+                      fontSize: '14px',
                     }}
                   >
                     <option value="viewer">Viewer</option>
@@ -421,33 +392,32 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                     borderRadius: '6px',
                     cursor: loading ? 'not-allowed' : 'pointer',
                     fontSize: '14px',
-                    fontWeight: '500'
+                    fontWeight: '500',
                   }}
                 >
                   {loading ? '⏳' : '➕'} Invite
                 </button>
               </div>
             </div>
-
             {/* Collaborators List */}
             <div>
               <h4 style={{ margin: '0 0 16px', fontSize: '16px', fontWeight: '600' }}>
                 Current Collaborators ({collaborators.length})
               </h4>
-              {collaborators.length === 0 ? (
+              {collaborators.length === 0 ? ()
                 <div
                   style={{
                     padding: '40px',
                     textAlign: 'center',
-                    color: '#9ca3af'
+                    color: '#9ca3af',
                   }}
                 >
                   <div style={{ fontSize: '32px', marginBottom: '8px' }}>👥</div>
                   <div>No collaborators yet. Invite team members to get started!</div>
                 </div>
-              ) : (
+              ) : ()
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {collaborators.map(collaborator => (
+                  {collaborators.map(collaborator => ()
                     <div
                       key={collaborator.id}
                       style={{
@@ -457,7 +427,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                         padding: '12px 16px',
                         background: 'white',
                         border: '1px solid #e2e8f0',
-                        borderRadius: '8px'
+                        borderRadius: '8px',
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -466,15 +436,15 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                             width: '40px',
                             height: '40px',
                             borderRadius: '50%',
-                            background: collaborator.avatar 
-                              ? `url(${collaborator.avatar}) center/cover`
+                            background: collaborator.avatar ,
+                              ? `url(${collaborator.avatar}) center/cover`}
                               : 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             color: 'white',
                             fontSize: '16px',
-                            fontWeight: '600'
+                            fontWeight: '600',
                           }}
                         >
                           {!collaborator.avatar && collaborator.name.charAt(0).toUpperCase()}
@@ -488,7 +458,6 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                           </div>
                         </div>
                       </div>
-                      
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span
                           style={{
@@ -500,13 +469,12 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                             borderRadius: '4px',
                             fontSize: '11px',
                             fontWeight: '600',
-                            textTransform: 'uppercase'
+                            textTransform: 'uppercase',
                           }}
                         >
                           {collaborator.role}
                         </span>
-                        
-                        {collaborator.role !== 'owner' && (
+                        {collaborator.role !== 'owner' && ()
                           <>
                             <select
                               value={collaborator.role}
@@ -515,13 +483,12 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                                 padding: '4px 8px',
                                 border: '1px solid #e2e8f0',
                                 borderRadius: '4px',
-                                fontSize: '12px'
+                                fontSize: '12px',
                               }}
                             >
                               <option value="viewer">Viewer</option>
                               <option value="editor">Editor</option>
                             </select>
-                            
                             <button
                               onClick={() => handleRemoveCollaborator(collaborator.id)}
                               style={{
@@ -531,7 +498,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                                 borderRadius: '4px',
                                 cursor: 'pointer',
                                 fontSize: '12px',
-                                color: '#dc2626'
+                                color: '#dc2626',
                               }}
                             >
                               Remove
@@ -546,27 +513,26 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
             </div>
           </div>
         )}
-
         {/* Activity Tab */}
-        {activeTab === 'activity' && (
+        {activeTab === 'activity' && ()
           <div>
             <h4 style={{ margin: '0 0 16px', fontSize: '16px', fontWeight: '600' }}>
               Recent Activity
             </h4>
-            {activities.length === 0 ? (
+            {activities.length === 0 ? ()
               <div
                 style={{
                   padding: '40px',
                   textAlign: 'center',
-                  color: '#9ca3af'
+                  color: '#9ca3af',
                 }}
               >
                 <div style={{ fontSize: '32px', marginBottom: '8px' }}>📈</div>
                 <div>No activity yet. Use the template to see activity here!</div>
               </div>
-            ) : (
+            ) : ()
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {activities.map(activity => (
+                {activities.map(activity => ()
                   <div
                     key={activity.id}
                     style={{
@@ -576,7 +542,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                       padding: '12px 16px',
                       background: 'white',
                       border: '1px solid #e2e8f0',
-                      borderRadius: '8px'
+                      borderRadius: '8px',
                     }}
                   >
                     <div
@@ -605,28 +571,27 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
             )}
           </div>
         )}
-
         {/* Analytics Tab */}
-        {activeTab === 'analytics' && (
+        {activeTab === 'analytics' && ()
           <div>
             <h4 style={{ margin: '0 0 16px', fontSize: '16px', fontWeight: '600' }}>
               Usage Analytics
             </h4>
-            {!analytics ? (
+            {!analytics ? ()
               <div
                 style={{
                   padding: '40px',
                   textAlign: 'center',
-                  color: '#9ca3af'
+                  color: '#9ca3af',
                 }}
               >
                 <div style={{ fontSize: '32px', marginBottom: '8px' }}>📊</div>
                 <div>Loading analytics...</div>
               </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(
+            ) : ()
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat()
                 auto-fit,
-                minmax(200px,
+                minmax(200px,)
                 1fr
               ))', gap: '16px' }}>
                 <div
@@ -634,7 +599,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                     padding: '16px',
                     background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
                     color: 'white',
-                    borderRadius: '8px'
+                    borderRadius: '8px',
                   }}
                 >
                   <div style={{ fontSize: '24px', fontWeight: '600' }}>
@@ -642,13 +607,12 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                   </div>
                   <div style={{ fontSize: '12px', opacity: 0.9 }}>Total Uses</div>
                 </div>
-                
                 <div
                   style={{
                     padding: '16px',
                     background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                     color: 'white',
-                    borderRadius: '8px'
+                    borderRadius: '8px',
                   }}
                 >
                   <div style={{ fontSize: '24px', fontWeight: '600' }}>
@@ -656,13 +620,12 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                   </div>
                   <div style={{ fontSize: '12px', opacity: 0.9 }}>Unique Users</div>
                 </div>
-                
                 <div
                   style={{
                     padding: '16px',
                     background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
                     color: 'white',
-                    borderRadius: '8px'
+                    borderRadius: '8px',
                   }}
                 >
                   <div style={{ fontSize: '24px', fontWeight: '600' }}>
@@ -670,13 +633,12 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                   </div>
                   <div style={{ fontSize: '12px', opacity: 0.9 }}>Success Rate</div>
                 </div>
-                
                 <div
                   style={{
                     padding: '16px',
                     background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
                     color: 'white',
-                    borderRadius: '8px'
+                    borderRadius: '8px',
                   }}
                 >
                   <div style={{ fontSize: '24px', fontWeight: '600' }}>
@@ -688,14 +650,12 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
             )}
           </div>
         )}
-
         {/* Sharing Tab */}
-        {activeTab === 'sharing' && (
+        {activeTab === 'sharing' && ()
           <div>
             <h4 style={{ margin: '0 0 16px', fontSize: '16px', fontWeight: '600' }}>
               Public Sharing Settings
             </h4>
-            
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {/* Public Toggle */}
               <div
@@ -703,7 +663,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                   padding: '16px',
                   background: '#f8fafc',
                   border: '1px solid #e2e8f0',
-                  borderRadius: '8px'
+                  borderRadius: '8px',
                 }}
               >
                 <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
@@ -720,16 +680,15 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                   </div>
                 </label>
               </div>
-
               {/* Additional Settings */}
-              {shareSettings.isPublic && (
+              {shareSettings.isPublic && ()
                 <>
                   <div
                     style={{
                       padding: '16px',
                       background: '#f8fafc',
                       border: '1px solid #e2e8f0',
-                      borderRadius: '8px'
+                      borderRadius: '8px',
                     }}
                   >
                     <div style={{ marginBottom: '12px' }}>
@@ -746,7 +705,6 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                           </div>
                         </div>
                       </label>
-                      
                       <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
                         <input
                           type="checkbox"
@@ -762,21 +720,20 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                       </label>
                     </div>
                   </div>
-
                   {/* Share Link */}
                   <div
                     style={{
                       padding: '16px',
                       background: '#f8fafc',
                       border: '1px solid #e2e8f0',
-                      borderRadius: '8px'
+                      borderRadius: '8px',
                     }}
                   >
                     <div style={{ marginBottom: '12px' }}>
                       <div style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px' }}>
                         Share Link
                       </div>
-                      {shareSettings.shareLink ? (
+                      {shareSettings.shareLink ? ()
                         <div style={{ display: 'flex', gap: '8px' }}>
                           <input
                             type="text"
@@ -788,7 +745,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                               border: '1px solid #e2e8f0',
                               borderRadius: '6px',
                               fontSize: '12px',
-                              background: 'white'
+                              background: 'white',
                             }}
                           />
                           <button
@@ -800,13 +757,13 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                               border: 'none',
                               borderRadius: '6px',
                               cursor: 'pointer',
-                              fontSize: '12px'
+                              fontSize: '12px',
                             }}
                           >
                             📋 Copy
                           </button>
                         </div>
-                      ) : (
+                      ) : ()
                         <button
                           onClick={handleGenerateShareLink}
                           style={{
@@ -816,7 +773,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                             border: 'none',
                             borderRadius: '6px',
                             cursor: 'pointer',
-                            fontSize: '14px'
+                            fontSize: '14px',
                           }}
                         >
                           🔗 Generate Share Link
@@ -830,7 +787,6 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
           </div>
         )}
       </div>
-
       {/* Footer */}
       <div
         style={{
@@ -840,7 +796,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
           display: 'flex',
           gap: '12px',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <div style={{ display: 'flex', gap: '12px' }}>
@@ -861,9 +817,8 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
             🍴 Fork Template
           </button>
         </div>
-
         <div style={{ display: 'flex', gap: '12px' }}>
-          {onClose && (
+          {onClose && ()
             <button
               onClick={onClose}
               style={{
@@ -873,7 +828,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                 borderRadius: '6px',
                 cursor: 'pointer',
                 fontSize: '14px',
-                color: '#6b7280'
+                color: '#6b7280',
               }}
             >
               Close

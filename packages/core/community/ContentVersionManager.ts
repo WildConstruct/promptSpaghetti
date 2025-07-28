@@ -12,34 +12,29 @@ export interface CommunityContent {
   title: string;
   subtitle?: string;
   slug: string;
-  
   // Content structure
-  content: {
+  content: {,
     markdown: string;
     html?: string;
     summary: string;
     tableOfContents?: ContentSection[];
     metadata: ContentMetadata;
   };
-  
   // Rich media attachments
   media: ContentMediaAttachment[];
-  
   // Categorization
   category: string;
   tags: string[];
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-  
   // SEO and discovery
-  seo: {
+  seo: {,
     metaTitle: string;
     metaDescription: string;
     keywords: string[];
     canonicalUrl?: string;
   };
-  
   // Editorial workflow
-  editorial: {
+  editorial: {,
     status: 'draft' | 'review' | 'approved' | 'published' | 'archived';
     assignedEditor?: string;
     reviewNotes?: string;
@@ -87,46 +82,37 @@ export interface ContentVersion {
   content_id: string;
   version_number: string; // Semantic version (e.g., "1.2.0")
   version_tag?: string; // Human-readable tag (e.g., "stable", "draft")
-  
   // Content state at this version
   content_data: CommunityContent;
-  
   // Version metadata
   title?: string;
   description?: string;
   changelog?: string;
   release_notes?: string;
-  
   // Editorial information
   editorial_notes?: string;
   review_feedback?: ReviewFeedback[];
   approval_status: 'pending' | 'approved' | 'rejected' | 'needs_revision';
-  
   // Versioning information
   parent_version_id?: string;
   branch_name: string;
   commit_hash: string;
-  
   // Collaboration tracking
   contributors: ContentContributor[];
   revision_type: 'major' | 'minor' | 'patch' | 'editorial';
   change_summary: string;
-  
   // Author and timing
   created_by: string;
   created_at: string;
   published_at?: string;
   deprecated_at?: string;
-  
   // Status and lifecycle
   status: 'draft' | 'review' | 'approved' | 'published' | 'deprecated' | 'archived';
   visibility: 'private' | 'team' | 'community' | 'public';
-  
   // Analytics and engagement
   view_count: number;
   engagement_score: number;
   feedback_score: number;
-  
   // Quality and editorial metrics
   quality_metrics: ContentQualityScore;
   plagiarism_check?: PlagiarismResult;
@@ -157,7 +143,7 @@ export interface ContentContributor {
 
 export interface ContentQualityScore {
   overall_score: number; // 0-100
-  dimensions: {
+  dimensions: {,
     accuracy: number;
     clarity: number;
     completeness: number;
@@ -165,7 +151,7 @@ export interface ContentQualityScore {
     originality: number;
     engagement: number;
   };
-  automated_checks: {
+  automated_checks: {,
     grammar_score: number;
     readability_score: number;
     seo_score: number;
@@ -181,7 +167,7 @@ export interface ContentQualityScore {
 
 export interface PlagiarismResult {
   overall_similarity: number; // 0-100%
-  sources_found: Array<{
+  sources_found: Array<{,
     url: string;
     similarity: number;
     matched_text: string;
@@ -195,7 +181,7 @@ export interface FactCheckResult {
   overall_accuracy: number; // 0-100%
   claims_checked: number;
   claims_verified: number;
-  disputed_claims: Array<{
+  disputed_claims: Array<{,
     claim: string;
     status: 'verified' | 'disputed' | 'false' | 'unverifiable';
     sources: string[];
@@ -208,24 +194,20 @@ export interface FactCheckResult {
 export interface ContentImportOptions {
   format: 'markdown' | 'html' | 'docx' | 'pdf' | 'notion' | 'confluence';
   source: string | File | ArrayBuffer;
-  
   // Import behavior
   merge_strategy?: 'replace' | 'merge' | 'create_version';
   preserve_formatting?: boolean;
   extract_media?: boolean;
   auto_generate_toc?: boolean;
-  
   // Version handling
   version_bump?: 'patch' | 'minor' | 'major' | 'custom';
   custom_version?: string;
   branch_name?: string;
-  
   // Content processing
   auto_tag?: boolean;
   detect_language?: boolean;
   extract_metadata?: boolean;
   run_quality_checks?: boolean;
-  
   // Editorial workflow
   assign_reviewer?: string;
   target_status?: 'draft' | 'review';
@@ -234,23 +216,19 @@ export interface ContentImportOptions {
 
 export interface ContentExportOptions {
   format: 'markdown' | 'html' | 'pdf' | 'docx' | 'epub' | 'content_bundle';
-  
   // Export scope
   include_version_history?: boolean;
   include_media?: boolean;
   include_metadata?: boolean;
   include_reviews?: boolean;
-  
   // Version selection
   version_id?: string;
   version_range?: string;
   include_branches?: string[];
-  
   // Bundle options
   bundle_media?: boolean;
   bundle_related_content?: boolean;
   compress?: boolean;
-  
   // Output customization
   filename?: string;
   template?: 'standard' | 'academic' | 'blog' | 'documentation';
@@ -262,36 +240,32 @@ export interface ContentExportOptions {
 }
 
 export interface ContentVersionDiff {
-  content_changes: Array<{
+  content_changes: Array<{,
     section: string;
     change_type: 'added' | 'removed' | 'modified';
     old_content?: string;
     new_content?: string;
     line_number?: number;
   }>;
-  
-  metadata_changes: Array<{
+  metadata_changes: Array<{,
     field: string;
     old_value: unknown;
     new_value: unknown;
     change_type: 'added' | 'removed' | 'modified';
   }>;
-  
-  media_changes: Array<{
+  media_changes: Array<{,
     media_id: string;
     change_type: 'added' | 'removed' | 'modified';
     old_media?: ContentMediaAttachment;
     new_media?: ContentMediaAttachment;
   }>;
-  
-  structure_changes: {
+  structure_changes: {,
     sections_added: number;
     sections_removed: number;
     sections_reordered: number;
     toc_changes: boolean;
   };
-  
-  editorial_changes: {
+  editorial_changes: {,
     status_change?: {
       from: string;
       to: string;
@@ -308,19 +282,17 @@ export interface ContentVersionDiff {
 export class ContentVersionManager {
   private versions = new Map<string, ContentVersion>();
   private apiClient: unknown;
-
-  constructor(
+  constructor()
     apiClient: unknown,
     private contentId: string,
     private userId: string
   ) {
     this.apiClient = apiClient;
   }
-
   // Core Version Management
-  async createVersion(
+  async createVersion()
     content: CommunityContent,
-    options: {
+    options: {,
       version_number?: string;
       version_tag?: string;
       title?: string;
@@ -335,7 +307,6 @@ export class ContentVersionManager {
     try {
       // Calculate content metrics
       const quality_metrics = await this.calculateQualityMetrics(content);
-      
       const versionData = {
         content_id: this.contentId,
         content_data: content,
@@ -351,19 +322,17 @@ export class ContentVersionManager {
         status: options.target_status || 'draft',
         visibility: 'team',
         quality_metrics,
-        contributors: [{
+        contributors: [{,
           user_id: this.userId,
           name: '', // Will be populated by API
           role: 'author',
           contribution: 'Content creation/update',
           contribution_date: new Date().toISOString(),
-          attribution_visible: true
+          attribution_visible: true,
         }]
       };
-
       const response = await this.apiClient.post('/api/content-versions', versionData);
       const version = response.data;
-
       this.versions.set(version.id, version);
       return version;
     } catch (error) {
@@ -371,82 +340,71 @@ export class ContentVersionManager {
       throw error;
     }
   }
-
-  async submitForReview(versionId: string, options: {
+  async submitForReview(versionId: string, options: {)
     reviewer_id?: string;
     review_notes?: string;
     priority?: 'low' | 'normal' | 'high' | 'urgent';
   } = {}): Promise<ContentVersion> {
     try {
-      const response = await this.apiClient.put(`/api/content-versions/${versionId}/submit-review`, {
+      const response = await this.apiClient.put(`/api/content-versions/${versionId}/submit-review`, {)}
         reviewer_id: options.reviewer_id,
         review_notes: options.review_notes,
         priority: options.priority || 'normal'
       });
-
       const version = response.data;
       this.versions.set(versionId, version);
-      
       return version;
     } catch (error) {
       console.error('Failed to submit content for review:', error);
       throw error;
     }
   }
-
-  async publishVersion(versionId: string, options: {
+  async publishVersion(versionId: string, options: {)
     release_notes?: string;
     visibility?: 'private' | 'team' | 'community' | 'public';
     publish_date?: string;
     notify_subscribers?: boolean;
   } = {}): Promise<ContentVersion> {
     try {
-      const response = await this.apiClient.put(`/api/content-versions/${versionId}/publish`, {
+      const response = await this.apiClient.put(`/api/content-versions/${versionId}/publish`, {)}
         release_notes: options.release_notes,
         visibility: options.visibility || 'public',
         publish_date: options.publish_date,
         notify_subscribers: options.notify_subscribers || true
       });
-
       const version = response.data;
       this.versions.set(versionId, version);
-      
       return version;
     } catch (error) {
       console.error('Failed to publish content version:', error);
       throw error;
     }
   }
-
   // Review and Editorial Workflow
-  async addReviewFeedback(
+  async addReviewFeedback()
     versionId: string,
     feedback: Omit<ReviewFeedback,
     'id' | 'reviewer_id' | 'reviewer_name' | 'review_date'>
   ): Promise<ReviewFeedback> {
     try {
-      const response = await this.apiClient.post(`/api/content-versions/${versionId}/feedback`, feedback);
-      
+      const response = await this.apiClient.post(`/api/content-versions/${versionId}/feedback`, feedback);}
       // Update local version data
       const version = this.versions.get(versionId);
       if (version) {
         version.content_data.editorial.reviewNotes = feedback.comment;
         version.content_data.editorial.lastReview = new Date().toISOString();
       }
-      
       return response.data;
     } catch (error) {
       console.error('Failed to add review feedback:', error);
       throw error;
     }
   }
-
   async resolveFeedback(versionId: string, feedbackId: string, resolution: string): Promise<void> {
     try {
-      await this.apiClient.put(`/api/content-versions/${versionId}/feedback/${feedbackId}/resolve`, {
+      await this.apiClient.put(`/api/content-versions/${versionId}/feedback/${feedbackId}/resolve`, {)}
         resolution
       });
-      
       // Update local data
       const version = this.versions.get(versionId);
       if (version && version.review_feedback) {
@@ -461,29 +419,26 @@ export class ContentVersionManager {
       throw error;
     }
   }
-
   async getReviewHistory(versionId: string): Promise<ReviewFeedback[]> {
     try {
-      const response = await this.apiClient.get(`/api/content-versions/${versionId}/reviews`);
+      const response = await this.apiClient.get(`/api/content-versions/${versionId}/reviews`);}
       return response.data;
     } catch (error) {
       console.error('Failed to get review history:', error);
       throw error;
     }
   }
-
   // Collaboration Features
   async addContributor(versionId: string, contributor: Omit<ContentContributor, 'contribution_date'>): Promise<void> {
     try {
-      await this.apiClient.post(`/api/content-versions/${versionId}/contributors`, {
+      await this.apiClient.post(`/api/content-versions/${versionId}/contributors`, {)}
         ...contributor,
         contribution_date: new Date().toISOString()
       });
-      
       // Update local data
       const version = this.versions.get(versionId);
       if (version) {
-        version.contributors.push({
+        version.contributors.push({)
           ...contributor,
           contribution_date: new Date().toISOString()
         });
@@ -493,7 +448,6 @@ export class ContentVersionManager {
       throw error;
     }
   }
-
   async getCollaborationHistory(contentId?: string): Promise<Array<{
     version_id: string;
     version_number: string;
@@ -503,14 +457,13 @@ export class ContentVersionManager {
   }>> {
     try {
       const targetId = contentId || this.contentId;
-      const response = await this.apiClient.get(`/api/content/${targetId}/collaboration-history`);
+      const response = await this.apiClient.get(`/api/content/${targetId}/collaboration-history`);}
       return response.data;
     } catch (error) {
       console.error('Failed to get collaboration history:', error);
       throw error;
     }
   }
-
   // Content Import/Export
   async importContent(options: ContentImportOptions): Promise<{
     success: boolean;
@@ -521,7 +474,6 @@ export class ContentVersionManager {
   }> {
     try {
       const formData = new FormData();
-      
       // Handle different source types
       if (typeof options.source === 'string') {
         formData.append('source_url', options.source);
@@ -531,30 +483,24 @@ export class ContentVersionManager {
         const blob = new Blob([options.source]);
         formData.append('source_data', blob);
       }
-
       // Add import options
       formData.append('format', options.format);
       formData.append('content_id', this.contentId);
       formData.append('options', JSON.stringify(options));
-
-      const response = await this.apiClient.post('/api/content-versions/import', formData, {
+      const response = await this.apiClient.post('/api/content-versions/import', formData, {)
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-
       const result = response.data;
-      
       // Update local cache
       if (result.success && result.imported_version) {
         this.versions.set(result.imported_version.id, result.imported_version);
       }
-
       return result;
     } catch (error) {
       console.error('Failed to import content:', error);
       throw error;
     }
   }
-
   async exportContent(versionId: string, options: ContentExportOptions): Promise<{
     download_url?: string;
     file_data?: ArrayBuffer;
@@ -568,17 +514,15 @@ export class ContentVersionManager {
         content_id: this.contentId,
         options
       };
-
-      const response = await this.apiClient.post('/api/content-versions/export', exportData, {
+      const response = await this.apiClient.post('/api/content-versions/export', exportData, {)
         responseType: options.format === 'content_bundle' ? 'blob' : 'json'
       });
-
       if (options.format === 'content_bundle') {
         return {
           file_data: response.data,
-          filename: options.filename || `content-${versionId}.bundle`,
+          filename: options.filename || `content-${versionId}.bundle`,}
           size: response.data.byteLength,
-          format: options.format
+          format: options.format,
         };
       } else {
         return response.data;
@@ -588,7 +532,6 @@ export class ContentVersionManager {
       throw error;
     }
   }
-
   // Version Comparison and Diff
   async compareVersions(fromVersionId: string, toVersionId: string): Promise<{
     from_version: ContentVersion;
@@ -598,8 +541,8 @@ export class ContentVersionManager {
     change_magnitude: 'trivial' | 'minor' | 'moderate' | 'major' | 'complete_rewrite';
   }> {
     try {
-      const response = await this.apiClient.get(
-        `/api/content-versions/${fromVersionId}/compare/${toVersionId}`
+      const response = await this.apiClient.get(;)
+        `/api/content-versions/${fromVersionId}/compare/${toVersionId}`}
       );
       return response.data;
     } catch (error) {
@@ -607,8 +550,7 @@ export class ContentVersionManager {
       throw error;
     }
   }
-
-  async getVersionHistory(options: {
+  async getVersionHistory(options: {)
     include_drafts?: boolean;
     branch_name?: string;
     limit?: number;
@@ -618,78 +560,65 @@ export class ContentVersionManager {
     try {
       const params = new URLSearchParams();
       params.append('content_id', this.contentId);
-      
       Object.entries(options).forEach(([key, value]) => {
         if (value !== undefined) {
           params.append(key, String(value));
         }
       });
-
-      const response = await this.apiClient.get(`/api/content-versions?${params}`);
+      const response = await this.apiClient.get(`/api/content-versions?${params}`);}
       const result = response.data;
-
       result.versions.forEach((version: ContentVersion) => {
         this.versions.set(version.id, version);
       });
-
       return result;
     } catch (error) {
       console.error('Failed to get content version history:', error);
       throw error;
     }
   }
-
   // Quality Assessment Integration
-  async runQualityAssessment(versionId: string, options: {
+  async runQualityAssessment(versionId: string, options: {)
     include_plagiarism_check?: boolean;
     include_fact_check?: boolean;
     include_grammar_check?: boolean;
     include_seo_analysis?: boolean;
   } = {}): Promise<ContentQualityScore> {
     try {
-      const response = await this.apiClient.post(`/api/content-versions/${versionId}/quality-assessment`, options);
-      
+      const response = await this.apiClient.post(`/api/content-versions/${versionId}/quality-assessment`, options);}
       // Update local version data
       const version = this.versions.get(versionId);
       if (version) {
         version.quality_metrics = response.data;
       }
-      
       return response.data;
     } catch (error) {
       console.error('Failed to run quality assessment:', error);
       throw error;
     }
   }
-
   // Utility Methods
   private async generateNextVersion(): Promise<string> {
     try {
       const { versions } = await this.getVersionHistory({ limit: 1 });
-      
       if (versions.length === 0) {
         return '1.0.0';
       }
-
       const latest = versions[0].version_number;
       const parts = latest.split('.').map(Number);
       parts[2]++; // Increment patch version
-      
       return parts.join('.');
     } catch (error) {
       return '1.0.0';
     }
   }
-
   private async calculateQualityMetrics(content: CommunityContent): Promise<ContentQualityScore> {
     // Basic quality metrics calculation
     const wordCount = content.content.markdown.split(/\s+/).length;
     const hasImages = content.media.some(m => m.type === 'image');
     const hasToc = content.content.tableOfContents && content.content.tableOfContents.length > 0;
-    
     return {
       overall_score: 75, // Default score, will be updated by quality service
-      dimensions: {
+      dimensions: {,
         accuracy: 80,
         clarity: 75,
         completeness: wordCount > 500 ? 80 : 60,
@@ -697,7 +626,7 @@ export class ContentVersionManager {
         originality: 85,
         engagement: hasImages ? 80 : 70
       },
-      automated_checks: {
+      automated_checks: {,
         grammar_score: 75,
         readability_score: 70,
         seo_score: content.seo.metaDescription.length > 0 ? 80 : 60,
@@ -712,16 +641,13 @@ export interface ContentBundle {
   format_version: string;
   created_at: string;
   created_by: string;
-  
   // Primary content
   content: ContentVersion;
-  
   // Related content and media
   related_content: ContentVersion[];
   media_assets: ContentMediaAttachment[];
-  
   // Documentation and metadata
-  documentation: {
+  documentation: {,
     readme: string;
     changelog: string;
     usage_guide?: string;
@@ -731,7 +657,6 @@ export interface ContentBundle {
       preview: string;
     }>;
   };
-  
   // Verification and integrity
   checksums: Record<string, string>;
   signature?: string;

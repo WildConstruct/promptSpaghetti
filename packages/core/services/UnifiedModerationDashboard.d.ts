@@ -19,7 +19,7 @@ export interface UnifiedDashboardConfig {
 }
 export interface DashboardOverview {
     timestamp: Date;
-    summary: {
+    summary: {,
         totalItems: number;
         pendingReview: number;
         autoApproved: number;
@@ -27,20 +27,20 @@ export interface DashboardOverview {
         escalated: number;
         appealed: number;
     };
-    queues: {
+    queues: {,
         highPriority: number;
         mediumPriority: number;
         lowPriority: number;
         automated: number;
     };
-    performance: {
+    performance: {,
         avgProcessingTime: number;
         throughputLast24h: number;
         moderatorEfficiency: number;
         slaCompliance: number;
     };
     alerts: ModerationAlert[];
-    trends: {
+    trends: {,
         volumeTrend: 'increasing' | 'decreasing' | 'stable';
         violationTrend: 'increasing' | 'decreasing' | 'stable';
         performanceTrend: 'improving' | 'declining' | 'stable';
@@ -65,7 +65,7 @@ export interface ModerationWorkload {
     accuracy: number;
     specializations: string[];
     performanceRating: number;
-    availabilityWindow: {
+    availabilityWindow: {,
         start: string;
         end: string;
         timezone: string;
@@ -101,31 +101,31 @@ export interface BulkModerationAction {
     scheduledFor?: Date;
 }
 export interface DashboardMetrics {
-    realTime: {
+    realTime: {,
         activeModerators: number;
         itemsBeingReviewed: number;
         averageWaitTime: number;
         systemLoad: number;
     };
-    historical: {
-        dailyVolume: Array<{
+    historical: {,
+        dailyVolume: Array<{,
             date: string;
             volume: number;
         }>;
-        resolutionTimes: Array<{
+        resolutionTimes: Array<{,
             date: string;
             avgTime: number;
         }>;
-        accuracyTrends: Array<{
+        accuracyTrends: Array<{,
             date: string;
             accuracy: number;
         }>;
         violationTypes: Record<string, number>;
     };
-    predictions: {
+    predictions: {,
         expectedVolume24h: number;
         estimatedBacklog: number;
-        resourceNeeds: {
+        resourceNeeds: {,
             additionalModerators: number;
             peakHours: string[];
         };
@@ -171,7 +171,7 @@ export declare class UnifiedModerationDashboard {
     executeBulkActions(actions: BulkModerationAction[], moderatorId: string): Promise<{
         successful: number;
         failed: number;
-        errors: Array<{
+        errors: Array<{,
             itemId: string;
             error: string;
         }>;
@@ -185,7 +185,7 @@ export declare class UnifiedModerationDashboard {
      * Intelligent workload distribution
      */
     distributeWorkload(items: string[], distribution: 'urgent' | 'balanced' | 'expertise'): Promise<{
-        assignments: Array<{
+        assignments: Array<{,
             moderatorId: string;
             itemIds: string[];
         }>;
@@ -195,7 +195,7 @@ export declare class UnifiedModerationDashboard {
     /**
      * Get comprehensive dashboard metrics
      */
-    getDashboardMetrics(timeRange?: {
+    getDashboardMetrics(timeRange?: {)
         start: Date;
         end: Date;
     }): Promise<DashboardMetrics>;

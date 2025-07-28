@@ -4,7 +4,6 @@
  * 
  * Provides UI for managing custom constraint rules and enforcement levels
  */
-
 import React, { useState, useEffect } from 'react';
 import { 
   Plus, 
@@ -27,14 +26,13 @@ import {
 } from '../../types/UTDG';
 import { ConstraintValidator } from '../../historical/ConstraintValidator';
 import './ConstraintRuleManager.css';
-
 interface ConstraintRuleManagerProps {
   validator: ConstraintValidator;
   onConstraintsChange?: (constraints: HistoricalConstraint[]) => void;
   onClose?: () => void;
 }
 
-export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
+export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({)
   validator,
   onConstraintsChange,
   onClose
@@ -44,17 +42,15 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
   const [isCreating, setIsCreating] = useState(false);
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [filterEnforcement, setFilterEnforcement] = useState<string>('all');
-
   // Load initial constraints
   useEffect(() => {
     // In real implementation, this would load from the validator
     const defaultConstraints = getDefaultConstraints();
     setConstraints(defaultConstraints);
   }, []);
-
   const handleCreateConstraint = () => {
     const newConstraint: HistoricalConstraint = {
-      id: `custom_${Date.now()}`,
+      id: `custom_${Date.now()}`,}
       rule: 'era_compatibility',
       eras: [HISTORICAL_ERAS.MEDIEVAL_HIGH],
       enforcement: 'warning',
@@ -62,35 +58,27 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
       description: 'Custom constraint description',
       historical_basis: 'Historical basis for this constraint'
     };
-    
     setEditingConstraint(newConstraint);
     setIsCreating(true);
   };
-
   const handleEditConstraint = (constraint: HistoricalConstraint) => {
     setEditingConstraint({ ...constraint });
     setIsCreating(false);
   };
-
   const handleSaveConstraint = () => {
     if (!editingConstraint) return;
-
-    const updatedConstraints = isCreating 
+    const updatedConstraints = isCreating ;
       ? [...constraints, editingConstraint]
       : constraints.map(c => c.id === editingConstraint.id ? editingConstraint : c);
-
     setConstraints(updatedConstraints);
     onConstraintsChange?.(updatedConstraints);
-    
     // Add to validator
     if (isCreating) {
       validator.addConstraint(editingConstraint);
     }
-
     setEditingConstraint(null);
     setIsCreating(false);
   };
-
   const handleDeleteConstraint = (constraintId: string) => {
     if (window.confirm('Are you sure you want to delete this constraint?')) {
       const updatedConstraints = constraints.filter(c => c.id !== constraintId);
@@ -99,23 +87,19 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
       validator.removeConstraint(constraintId);
     }
   };
-
   const handleCancelEdit = () => {
     setEditingConstraint(null);
     setIsCreating(false);
   };
-
   const handleExportConstraints = () => {
     const dataStr = JSON.stringify(constraints, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    const exportFileDefaultName = `constraint-rules-${new Date().toISOString().split('T')[0]}.json`;
-    
+    const exportFileDefaultName = `constraint-rules-${new Date().toISOString().split('T')[0]}.json`;}
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
   };
-
   const handleImportConstraints = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -134,13 +118,11 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
       reader.readAsText(file);
     }
   };
-
-  const filteredConstraints = constraints.filter(constraint => {
+  const filteredConstraints = constraints.filter(constraint => {)
     if (filterCategory !== 'all' && constraint.rule !== filterCategory) return false;
     if (filterEnforcement !== 'all' && constraint.enforcement !== filterEnforcement) return false;
     return true;
   });
-
   const _____getEnforcementIcon = (enforcement: string) => {
     switch (enforcement) {
     case 'strict': return <AlertTriangle size={16} className="text-red-500" />;
@@ -149,8 +131,7 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
     default: return <Settings size={16} />;
     }
   };
-
-  return (
+  return ()
     <div className="constraint-rule-manager">
       <div className="rule-manager-header">
         <h2>Constraint Rule Management</h2>
@@ -188,7 +169,6 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
           </button>
         </div>
       </div>
-
       <div className="rule-manager-filters">
         <div className="filter-group">
           <label>Category:</label>
@@ -205,7 +185,6 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
             <option value="regional_authenticity">Regional Authenticity</option>
           </select>
         </div>
-        
         <div className="filter-group">
           <label>Enforcement:</label>
           <select 
@@ -219,9 +198,8 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
           </select>
         </div>
       </div>
-
       <div className="constraints-list">
-        {filteredConstraints.map(constraint => (
+        {filteredConstraints.map(constraint => ()
           <ConstraintRuleItem
             key={constraint.id}
             constraint={constraint}
@@ -229,16 +207,14 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
             onDelete={handleDeleteConstraint}
           />
         ))}
-        
-        {filteredConstraints.length === 0 && (
+        {filteredConstraints.length === 0 && ()
           <div className="no-constraints">
             <Info size={24} />
             <p>No constraints match the current filters.</p>
           </div>
         )}
       </div>
-
-      {editingConstraint && (
+      {editingConstraint && ()
         <ConstraintEditor
           constraint={editingConstraint}
           isCreating={isCreating}
@@ -250,14 +226,12 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
     </div>
   );
 };
-
 interface ConstraintRuleItemProps {
   constraint: HistoricalConstraint;
   onEdit: (constraint: HistoricalConstraint) => void;
   onDelete: (id: string) => void;
 }
-
-const ConstraintRuleItem: React.FC<ConstraintRuleItemProps> = ({
+const ConstraintRuleItem: React.FC<ConstraintRuleItemProps> = ({)
   constraint,
   onEdit,
   onDelete
@@ -270,8 +244,7 @@ const ConstraintRuleItem: React.FC<ConstraintRuleItemProps> = ({
     default: return <Settings size={14} />;
     }
   };
-
-  return (
+  return ()
     <div className="constraint-rule-item">
       <div className="rule-header">
         <div className="rule-title">
@@ -296,20 +269,19 @@ const ConstraintRuleItem: React.FC<ConstraintRuleItemProps> = ({
           </button>
         </div>
       </div>
-      
       <div className="rule-details">
         <div className="rule-description">{constraint.description}</div>
-        {constraint.historical_basis && (
+        {constraint.historical_basis && ()
           <div className="historical-basis">
             <strong>Historical Basis:</strong> {constraint.historical_basis}
           </div>
         )}
         <div className="rule-scope">
           <span>Eras: {constraint.eras.map(era => era.name).join(', ')}</span>
-          {constraint.regions && (
+          {constraint.regions && ()
             <span>Regions: {constraint.regions.join(', ')}</span>
           )}
-          {constraint.social_classes && (
+          {constraint.social_classes && ()
             <span>Classes: {constraint.social_classes.join(', ')}</span>
           )}
         </div>
@@ -317,7 +289,6 @@ const ConstraintRuleItem: React.FC<ConstraintRuleItemProps> = ({
     </div>
   );
 };
-
 interface ConstraintEditorProps {
   constraint: HistoricalConstraint;
   isCreating: boolean;
@@ -325,8 +296,7 @@ interface ConstraintEditorProps {
   onSave: () => void;
   onCancel: () => void;
 }
-
-const ConstraintEditor: React.FC<ConstraintEditorProps> = ({
+const ConstraintEditor: React.FC<ConstraintEditorProps> = ({)
   constraint,
   isCreating,
   onChange,
@@ -336,28 +306,22 @@ const ConstraintEditor: React.FC<ConstraintEditorProps> = ({
   const updateConstraint = (updates: Partial<HistoricalConstraint>) => {
     onChange({ ...constraint, ...updates });
   };
-
   const handleEraChange = (eraName: string, selected: boolean) => {
     const era = Object.values(HISTORICAL_ERAS).find(e => e.name === eraName);
     if (!era) return;
-
-    const updatedEras = selected
+    const updatedEras = selected;
       ? [...constraint.eras, era]
       : constraint.eras.filter(e => e.name !== eraName);
-    
     updateConstraint({ eras: updatedEras });
   };
-
   const handleSocialClassChange = (className: SocialClass, selected: boolean) => {
     const current = constraint.social_classes || [];
-    const updated = selected
+    const updated = selected;
       ? [...current, className]
       : current.filter(c => c !== className);
-    
     updateConstraint({ social_classes: updated.length > 0 ? updated : undefined });
   };
-
-  return (
+  return ()
     <div className="constraint-editor-overlay">
       <div className="constraint-editor">
         <div className="editor-header">
@@ -373,7 +337,6 @@ const ConstraintEditor: React.FC<ConstraintEditorProps> = ({
             </button>
           </div>
         </div>
-
         <div className="editor-content">
           <div className="form-group">
             <label>Rule Type:</label>
@@ -389,7 +352,6 @@ const ConstraintEditor: React.FC<ConstraintEditorProps> = ({
               <option value="regional_authenticity">Regional Authenticity</option>
             </select>
           </div>
-
           <div className="form-group">
             <label>Enforcement Level:</label>
             <select 
@@ -401,7 +363,6 @@ const ConstraintEditor: React.FC<ConstraintEditorProps> = ({
               <option value="suggestion">Suggestion (Suggestions)</option>
             </select>
           </div>
-
           <div className="form-group">
             <label>Message:</label>
             <input 
@@ -411,7 +372,6 @@ const ConstraintEditor: React.FC<ConstraintEditorProps> = ({
               placeholder="Brief description of the constraint"
             />
           </div>
-
           <div className="form-group">
             <label>Description:</label>
             <textarea 
@@ -421,7 +381,6 @@ const ConstraintEditor: React.FC<ConstraintEditorProps> = ({
               rows={3}
             />
           </div>
-
           <div className="form-group">
             <label>Historical Basis:</label>
             <textarea 
@@ -431,11 +390,10 @@ const ConstraintEditor: React.FC<ConstraintEditorProps> = ({
               rows={3}
             />
           </div>
-
           <div className="form-group">
             <label>Applicable Eras:</label>
             <div className="checkbox-grid">
-              {Object.values(HISTORICAL_ERAS).map(era => (
+              {Object.values(HISTORICAL_ERAS).map(era => ()
                 <label key={era.name} className="checkbox-item">
                   <input
                     type="checkbox"
@@ -447,23 +405,21 @@ const ConstraintEditor: React.FC<ConstraintEditorProps> = ({
               ))}
             </div>
           </div>
-
           <div className="form-group">
             <label>Regions (optional):</label>
             <input 
               type="text"
               value={constraint.regions?.join(', ') || ''}
-              onChange={(e) => updateConstraint({ 
+              onChange={(e) => updateConstraint({ )
                 regions: e.target.value ? e.target.value.split(',').map(r => r.trim()) : undefined 
               })}
               placeholder="Comma-separated list of regions (e.g., Europe, Asia, Africa)"
             />
           </div>
-
           <div className="form-group">
             <label>Social Classes (optional):</label>
             <div className="checkbox-grid">
-              {(['peasant', 'artisan', 'merchant', 'noble', 'clergy', 'royal'] as SocialClass[]).map(socialClass => (
+              {(['peasant', 'artisan', 'merchant', 'noble', 'clergy', 'royal'] as SocialClass[]).map(socialClass => ()
                 <label key={socialClass} className="checkbox-item">
                   <input
                     type="checkbox"

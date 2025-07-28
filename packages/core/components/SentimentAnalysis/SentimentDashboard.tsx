@@ -6,7 +6,6 @@
  * 
  * Task: E16-1753114247016-0B348A - Create sentiment analysis
  */
-
 import React, { useState, useEffect } from 'react';
 import {
   SentimentAnalytics,
@@ -15,7 +14,6 @@ import {
   ToxicityLevel
 } from '../../types/SentimentAnalysisTypes';
 import { SentimentAnalysisService } from '../../services/SentimentAnalysisService';
-
 interface SentimentDashboardProps {
   resourceId: string;
   resourceType: string;
@@ -26,7 +24,7 @@ interface SentimentDashboardProps {
   refreshInterval?: number; // Auto-refresh interval in milliseconds
 }
 
-export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
+export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
   resourceId,
   resourceType,
   timeRange,
@@ -35,31 +33,26 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
   const [analytics, setAnalytics] = useState<SentimentAnalytics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedTimeRange, _____setSelectedTimeRange] = useState(timeRange || {
+  const [selectedTimeRange, _____setSelectedTimeRange] = useState(timeRange || {)
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
     end: new Date()
   });
-
-  const sentimentService = new SentimentAnalysisService({
-    baseUrl: 'https://prompt-spaghetti.vercel.app'
+  const sentimentService = new SentimentAnalysisService({)
+    baseUrl: 'https://prompt-spaghetti.vercel.app',
   });
-
   useEffect(() => {
     loadAnalytics();
-    
     // Set up auto-refresh if specified
     if (refreshInterval && refreshInterval > 0) {
       const interval = setInterval(loadAnalytics, refreshInterval);
       return () => clearInterval(interval);
     }
   }, [resourceId, resourceType, selectedTimeRange, refreshInterval]);
-
   const loadAnalytics = async () => {
     setIsLoading(true);
     setError(null);
-
     try {
-      const analyticsData = await sentimentService.getSentimentAnalytics(
+      const analyticsData = await sentimentService.getSentimentAnalytics(;)
         resourceId,
         resourceType,
         selectedTimeRange
@@ -71,7 +64,6 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
       setIsLoading(false);
     }
   };
-
   const getSentimentColor = (sentiment: SentimentType) => {
     switch (sentiment) {
     case 'positive': return '#059669';
@@ -79,7 +71,6 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
     default: return '#6b7280';
     }
   };
-
   const getEmotionIcon = (emotion: EmotionType) => {
     const icons = {
       joy: '😄',
@@ -89,11 +80,10 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
       surprise: '😲',
       disgust: '😒',
       trust: '😊',
-      anticipation: '🤔'
+      anticipation: '🤔',
     };
     return icons[emotion] || '😐';
   };
-
   const getToxicityColor = (level: ToxicityLevel) => {
     switch (level) {
     case 'severe': return '#dc2626';
@@ -103,20 +93,16 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
     default: return '#059669';
     }
   };
-
   const formatPercentage = (num: number) => {
     return num.toFixed(1) + '%';
   };
-
   const renderSentimentDistribution = () => {
     if (!analytics) return null;
-
     const { sentimentDistribution } = analytics;
-    const _____total = sentimentDistribution.positive.count + 
+    const _____total = sentimentDistribution.positive.count + ;
                  sentimentDistribution.neutral.count + 
                  sentimentDistribution.negative.count;
-
-    return (
+    return ()
       <div style={{
         backgroundColor: 'white',
         borderRadius: '12px',
@@ -127,11 +113,10 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
           margin: '0 0 16px 0',
           fontSize: '18px',
           fontWeight: '600',
-          color: '#111827'
+          color: '#111827',
         }}>
           📊 Sentiment Distribution
         </h3>
-
         {/* Sentiment Bar Chart */}
         <div style={{
           backgroundColor: '#f3f4f6',
@@ -139,18 +124,18 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
           overflow: 'hidden',
           marginBottom: '16px',
           height: '40px',
-          display: 'flex'
+          display: 'flex',
         }}>
           <div 
             style={{
               backgroundColor: '#059669',
-              width: `${sentimentDistribution.positive.percentage}%`,
+              width: `${sentimentDistribution.positive.percentage}%`,}
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: 'white',
               fontSize: '12px',
-              fontWeight: '600'
+              fontWeight: '600',
             }}
           >
             {sentimentDistribution.positive.percentage > 10 && 
@@ -159,13 +144,13 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
           <div 
             style={{
               backgroundColor: '#6b7280',
-              width: `${sentimentDistribution.neutral.percentage}%`,
+              width: `${sentimentDistribution.neutral.percentage}%`,}
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: 'white',
               fontSize: '12px',
-              fontWeight: '600'
+              fontWeight: '600',
             }}
           >
             {sentimentDistribution.neutral.percentage > 10 && 
@@ -174,93 +159,90 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
           <div 
             style={{
               backgroundColor: '#dc2626',
-              width: `${sentimentDistribution.negative.percentage}%`,
+              width: `${sentimentDistribution.negative.percentage}%`,}
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: 'white',
               fontSize: '12px',
-              fontWeight: '600'
+              fontWeight: '600',
             }}
           >
             {sentimentDistribution.negative.percentage > 10 && 
              formatPercentage(sentimentDistribution.negative.percentage)}
           </div>
         </div>
-
         {/* Sentiment Details */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '12px'
+          gap: '12px',
         }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{
               fontSize: '24px',
               fontWeight: '700',
               color: '#059669',
-              marginBottom: '4px'
+              marginBottom: '4px',
             }}>
               {sentimentDistribution.positive.count}
             </div>
             <div style={{
               fontSize: '12px',
               color: '#6b7280',
-              marginBottom: '4px'
+              marginBottom: '4px',
             }}>
               Positive ({formatPercentage(sentimentDistribution.positive.percentage)})
             </div>
             <div style={{
               fontSize: '10px',
-              color: '#9ca3af'
+              color: '#9ca3af',
             }}>
               Avg: {sentimentDistribution.positive.averageScore.toFixed(2)}
             </div>
           </div>
-
           <div style={{ textAlign: 'center' }}>
             <div style={{
               fontSize: '24px',
               fontWeight: '700',
               color: '#6b7280',
-              marginBottom: '4px'
+              marginBottom: '4px',
             }}>
               {sentimentDistribution.neutral.count}
             </div>
             <div style={{
               fontSize: '12px',
               color: '#6b7280',
-              marginBottom: '4px'
+              marginBottom: '4px',
             }}>
               Neutral ({formatPercentage(sentimentDistribution.neutral.percentage)})
             </div>
             <div style={{
               fontSize: '10px',
-              color: '#9ca3af'
+              color: '#9ca3af',
             }}>
               Avg: {sentimentDistribution.neutral.averageScore.toFixed(2)}
             </div>
           </div>
-
           <div style={{ textAlign: 'center' }}>
             <div style={{
               fontSize: '24px',
               fontWeight: '700',
               color: '#dc2626',
-              marginBottom: '4px'
+              marginBottom: '4px',
             }}>
               {sentimentDistribution.negative.count}
             </div>
             <div style={{
               fontSize: '12px',
               color: '#6b7280',
-              marginBottom: '4px'
+              marginBottom: '4px',
             }}>
               Negative ({formatPercentage(sentimentDistribution.negative.percentage)})
             </div>
             <div style={{
               fontSize: '10px',
-              color: '#9ca3af'
+              color: '#9ca3af',
             }}>
               Avg: {sentimentDistribution.negative.averageScore.toFixed(2)}
             </div>
@@ -269,13 +251,10 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
       </div>
     );
   };
-
   const renderEmotionAnalysis = () => {
     if (!analytics) return null;
-
     const { emotionAnalytics } = analytics;
-
-    return (
+    return ()
       <div style={{
         backgroundColor: 'white',
         borderRadius: '12px',
@@ -286,24 +265,23 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
           margin: '0 0 16px 0',
           fontSize: '18px',
           fontWeight: '600',
-          color: '#111827'
+          color: '#111827',
         }}>
           🎭 Emotion Analysis
         </h3>
-
         {/* Dominant Emotion */}
-        {emotionAnalytics.dominant && (
+        {emotionAnalytics.dominant && ()
           <div style={{
             backgroundColor: '#f0f9ff',
             border: '1px solid #bae6fd',
             borderRadius: '8px',
             padding: '12px',
             marginBottom: '16px',
-            textAlign: 'center'
+            textAlign: 'center',
           }}>
             <div style={{
               fontSize: '32px',
-              marginBottom: '8px'
+              marginBottom: '8px',
             }}>
               {getEmotionIcon(emotionAnalytics.dominant)}
             </div>
@@ -311,27 +289,26 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
               fontSize: '16px',
               fontWeight: '600',
               color: '#0c4a6e',
-              textTransform: 'capitalize'
+              textTransform: 'capitalize',
             }}>
               Dominant Emotion: {emotionAnalytics.dominant}
             </div>
           </div>
         )}
-
         {/* Emotion Distribution */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '8px'
+          gap: '8px',
         }}>
-          {Object.entries(emotionAnalytics.distribution).map(([emotion, percentage]) => (
+          {Object.entries(emotionAnalytics.distribution).map(([emotion, percentage]) => ()
             <div
               key={emotion}
               style={{
                 textAlign: 'center',
                 padding: '8px',
                 backgroundColor: '#f9fafb',
-                borderRadius: '6px'
+                borderRadius: '6px',
               }}
             >
               <div style={{ fontSize: '20px', marginBottom: '4px' }}>
@@ -341,21 +318,20 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
                 fontSize: '11px',
                 color: '#374151',
                 textTransform: 'capitalize',
-                marginBottom: '2px'
+                marginBottom: '2px',
               }}>
                 {emotion}
               </div>
               <div style={{
                 fontSize: '12px',
                 fontWeight: '600',
-                color: '#6b7280'
+                color: '#6b7280',
               }}>
                 {formatPercentage(percentage)}
               </div>
             </div>
           ))}
         </div>
-
         {/* Mixed Emotion Rate */}
         <div style={{
           marginTop: '12px',
@@ -364,20 +340,17 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
           borderRadius: '6px',
           fontSize: '12px',
           color: '#92400e',
-          textAlign: 'center'
+          textAlign: 'center',
         }}>
           🌀 Mixed emotions detected in {formatPercentage(emotionAnalytics.mixedEmotionRate)} of feedback
         </div>
       </div>
     );
   };
-
   const renderToxicityAnalysis = () => {
     if (!analytics) return null;
-
     const { toxicityAnalytics } = analytics;
-
-    return (
+    return ()
       <div style={{
         backgroundColor: 'white',
         borderRadius: '12px',
@@ -388,41 +361,39 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
           margin: '0 0 16px 0',
           fontSize: '18px',
           fontWeight: '600',
-          color: '#111827'
+          color: '#111827',
         }}>
           🛡️ Toxicity Analysis
         </h3>
-
         {/* Overall Toxicity Level */}
         <div style={{
           backgroundColor: toxicityAnalytics.overallLevel === 'none' ? '#f0fdf4' : 
             toxicityAnalytics.overallLevel === 'low' ? '#fefce8' :
               toxicityAnalytics.overallLevel === 'medium' ? '#fef3c7' :
                 toxicityAnalytics.overallLevel === 'high' ? '#fef2f2' : '#fecaca',
-          border: `1px solid ${getToxicityColor(toxicityAnalytics.overallLevel)}40`,
+          border: `1px solid ${getToxicityColor(toxicityAnalytics.overallLevel)}40`,}
           borderRadius: '8px',
           padding: '12px',
           marginBottom: '16px',
-          textAlign: 'center'
+          textAlign: 'center',
         }}>
           <div style={{
             fontSize: '16px',
             fontWeight: '600',
             color: getToxicityColor(toxicityAnalytics.overallLevel),
-            textTransform: 'uppercase'
+            textTransform: 'uppercase',
           }}>
             Overall Level: {toxicityAnalytics.overallLevel}
           </div>
         </div>
-
         {/* Toxicity Distribution */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(5, 1fr)',
           gap: '8px',
-          marginBottom: '16px'
+          marginBottom: '16px',
         }}>
-          {Object.entries(toxicityAnalytics.distribution).map(([level, percentage]) => (
+          {Object.entries(toxicityAnalytics.distribution).map(([level, percentage]) => ()
             <div
               key={level}
               style={{
@@ -430,36 +401,35 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
                 padding: '8px',
                 backgroundColor: '#f9fafb',
                 borderRadius: '6px',
-                border: `2px solid ${getToxicityColor(level as ToxicityLevel)}20`
+                border: `2px solid ${getToxicityColor(level as ToxicityLevel)}20`}
               }}
             >
               <div style={{
                 fontSize: '14px',
                 fontWeight: '600',
                 color: getToxicityColor(level as ToxicityLevel),
-                marginBottom: '4px'
+                marginBottom: '4px',
               }}>
                 {formatPercentage(percentage)}
               </div>
               <div style={{
                 fontSize: '11px',
                 color: '#374151',
-                textTransform: 'capitalize'
+                textTransform: 'capitalize',
               }}>
                 {level}
               </div>
             </div>
           ))}
         </div>
-
         {/* Toxicity Categories */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '8px',
-          marginBottom: '12px'
+          marginBottom: '12px',
         }}>
-          {Object.entries(toxicityAnalytics.categories).map(([category, percentage]) => (
+          {Object.entries(toxicityAnalytics.categories).map(([category, percentage]) => ()
             <div
               key={category}
               style={{
@@ -467,28 +437,27 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
                 backgroundColor: percentage > 10 ? '#fef2f2' : '#f9fafb',
                 borderRadius: '4px',
                 fontSize: '11px',
-                textAlign: 'center'
+                textAlign: 'center',
               }}
             >
               <div style={{
                 fontWeight: '600',
                 color: percentage > 10 ? '#dc2626' : '#6b7280',
-                marginBottom: '2px'
+                marginBottom: '2px',
               }}>
                 {formatPercentage(percentage)}
               </div>
               <div style={{
                 color: '#9ca3af',
-                textTransform: 'capitalize'
+                textTransform: 'capitalize',
               }}>
                 {category.replace('_', ' ')}
               </div>
             </div>
           ))}
         </div>
-
         {/* Action Required */}
-        {toxicityAnalytics.actionRequired > 0 && (
+        {toxicityAnalytics.actionRequired > 0 && ()
           <div style={{
             padding: '8px',
             backgroundColor: '#fef2f2',
@@ -496,7 +465,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
             borderRadius: '6px',
             fontSize: '12px',
             color: '#dc2626',
-            textAlign: 'center'
+            textAlign: 'center',
           }}>
             ⚠️ {formatPercentage(toxicityAnalytics.actionRequired)} of content requires moderation action
           </div>
@@ -504,13 +473,10 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
       </div>
     );
   };
-
   const renderInsights = () => {
     if (!analytics) return null;
-
     const { insights } = analytics;
-
-    return (
+    return ()
       <div style={{
         backgroundColor: 'white',
         borderRadius: '12px',
@@ -521,42 +487,41 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
           margin: '0 0 16px 0',
           fontSize: '18px',
           fontWeight: '600',
-          color: '#111827'
+          color: '#111827',
         }}>
           💡 Key Insights
         </h3>
-
         {/* Quality Metrics */}
         <div style={{
           backgroundColor: '#f0f9ff',
           borderRadius: '8px',
           padding: '12px',
-          marginBottom: '16px'
+          marginBottom: '16px',
         }}>
           <h4 style={{
             margin: '0 0 8px 0',
             fontSize: '14px',
             fontWeight: '600',
-            color: '#0c4a6e'
+            color: '#0c4a6e',
           }}>
             🏆 Quality Metrics
           </h4>
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '8px'
+            gap: '8px',
           }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{
                 fontSize: '16px',
                 fontWeight: '600',
-                color: '#1e40af'
+                color: '#1e40af',
               }}>
                 {insights.qualityMetrics.averageReadability}
               </div>
               <div style={{
                 fontSize: '11px',
-                color: '#6b7280'
+                color: '#6b7280',
               }}>
                 Readability
               </div>
@@ -565,13 +530,13 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
               <div style={{
                 fontSize: '16px',
                 fontWeight: '600',
-                color: '#1e40af'
+                color: '#1e40af',
               }}>
                 {insights.qualityMetrics.averageConstructiveness}
               </div>
               <div style={{
                 fontSize: '11px',
-                color: '#6b7280'
+                color: '#6b7280',
               }}>
                 Constructiveness
               </div>
@@ -580,38 +545,37 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
               <div style={{
                 fontSize: '16px',
                 fontWeight: '600',
-                color: '#1e40af'
+                color: '#1e40af',
               }}>
                 {insights.qualityMetrics.averageHelpfulness}
               </div>
               <div style={{
                 fontSize: '11px',
-                color: '#6b7280'
+                color: '#6b7280',
               }}>
                 Helpfulness
               </div>
             </div>
           </div>
         </div>
-
         {/* Top Keywords */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: '12px',
-          marginBottom: '16px'
+          marginBottom: '16px',
         }}>
           <div>
             <h4 style={{
               margin: '0 0 8px 0',
               fontSize: '14px',
               fontWeight: '600',
-              color: '#059669'
+              color: '#059669',
             }}>
               🟢 Top Positive Keywords
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-              {insights.topPositiveKeywords.map(keyword => (
+              {insights.topPositiveKeywords.map(keyword => ()
                 <span
                   key={keyword}
                   style={{
@@ -619,7 +583,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
                     backgroundColor: '#dcfce7',
                     color: '#166534',
                     borderRadius: '4px',
-                    fontSize: '11px'
+                    fontSize: '11px',
                   }}
                 >
                   {keyword}
@@ -627,18 +591,17 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
               ))}
             </div>
           </div>
-
           <div>
             <h4 style={{
               margin: '0 0 8px 0',
               fontSize: '14px',
               fontWeight: '600',
-              color: '#dc2626'
+              color: '#dc2626',
             }}>
               🔴 Top Negative Keywords
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-              {insights.topNegativeKeywords.map(keyword => (
+              {insights.topNegativeKeywords.map(keyword => ()
                 <span
                   key={keyword}
                   style={{
@@ -646,7 +609,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
                     backgroundColor: '#fecaca',
                     color: '#991b1b',
                     borderRadius: '4px',
-                    fontSize: '11px'
+                    fontSize: '11px',
                   }}
                 >
                   {keyword}
@@ -655,20 +618,19 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
             </div>
           </div>
         </div>
-
         {/* Emerging Topics */}
-        {insights.emergingTopics.length > 0 && (
+        {insights.emergingTopics.length > 0 && ()
           <div style={{ marginBottom: '16px' }}>
             <h4 style={{
               margin: '0 0 8px 0',
               fontSize: '14px',
               fontWeight: '600',
-              color: '#7c2d12'
+              color: '#7c2d12',
             }}>
               📈 Emerging Topics
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {insights.emergingTopics.map(topic => (
+              {insights.emergingTopics.map(topic => ()
                 <div
                   key={topic.topic}
                   style={{
@@ -678,18 +640,18 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
                     padding: '6px 8px',
                     backgroundColor: '#fef3c7',
                     borderRadius: '4px',
-                    fontSize: '12px'
+                    fontSize: '12px',
                   }}
                 >
                   <span style={{
                     color: '#92400e',
-                    textTransform: 'capitalize'
+                    textTransform: 'capitalize',
                   }}>
                     {topic.topic.replace('_', ' ')}
                   </span>
                   <span style={{
                     color: getSentimentColor(topic.sentiment),
-                    fontWeight: '600'
+                    fontWeight: '600',
                   }}>
                     {topic.sentiment} (+{topic.growth}%)
                   </span>
@@ -698,20 +660,19 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
             </div>
           </div>
         )}
-
         {/* Recommendations */}
-        {insights.recommendations.length > 0 && (
+        {insights.recommendations.length > 0 && ()
           <div>
             <h4 style={{
               margin: '0 0 8px 0',
               fontSize: '14px',
               fontWeight: '600',
-              color: '#7c2d12'
+              color: '#7c2d12',
             }}>
               🎯 Recommendations
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {insights.recommendations.map((rec, index) => (
+              {insights.recommendations.map((rec, index) => ()
                 <div
                   key={index}
                   style={{
@@ -719,39 +680,39 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
                     backgroundColor: rec.priority === 'critical' ? '#fef2f2' :
                       rec.priority === 'high' ? '#fef3c7' :
                         rec.priority === 'medium' ? '#eff6ff' : '#f9fafb',
-                    border: `1px solid ${rec.priority === 'critical' ? '#fecaca' :
+                    border: `1px solid ${rec.priority === 'critical' ? '#fecaca' :}
                       rec.priority === 'high' ? '#fed7aa' :
                         rec.priority === 'medium' ? '#bfdbfe' : '#e5e7eb'}`,
                     borderRadius: '6px',
-                    fontSize: '12px'
+                    fontSize: '12px',
                   }}
                 >
                   <div style={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: '4px'
+                    marginBottom: '4px',
                   }}>
                     <span style={{
                       fontWeight: '600',
                       color: rec.priority === 'critical' ? '#dc2626' :
                         rec.priority === 'high' ? '#d97706' :
                           rec.priority === 'medium' ? '#2563eb' : '#374151',
-                      textTransform: 'capitalize'
+                      textTransform: 'capitalize',
                     }}>
                       {rec.type.replace('_', ' ')}
                     </span>
                     <span style={{
                       fontSize: '10px',
                       color: '#6b7280',
-                      textTransform: 'uppercase'
+                      textTransform: 'uppercase',
                     }}>
                       {rec.priority} priority
                     </span>
                   </div>
                   <div style={{
                     color: '#374151',
-                    lineHeight: '1.3'
+                    lineHeight: '1.3',
                   }}>
                     {rec.description}
                   </div>
@@ -763,13 +724,12 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
       </div>
     );
   };
-
   if (isLoading) {
-    return (
+    return ()
       <div style={{
         padding: '40px',
         textAlign: 'center',
-        color: '#6b7280'
+        color: '#6b7280',
       }}>
         <div style={{
           width: '40px',
@@ -784,9 +744,8 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div style={{
         padding: '40px',
         textAlign: 'center',
@@ -806,7 +765,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
             color: 'white',
             border: 'none',
             borderRadius: '6px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Try Again
@@ -814,50 +773,47 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
       </div>
     );
   }
-
   if (!analytics) {
-    return (
+    return ()
       <div style={{
         padding: '40px',
         textAlign: 'center',
-        color: '#6b7280'
+        color: '#6b7280',
       }}>
         No sentiment analytics data available
       </div>
     );
   }
-
-  return (
+  return ()
     <div style={{
       padding: '20px',
       backgroundColor: '#f8fafc',
-      minHeight: '100vh'
+      minHeight: '100vh',
     }}>
       {/* Header */}
       <div style={{
         marginBottom: '24px',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
       }}>
         <div>
           <h1 style={{
             margin: '0',
             fontSize: '28px',
             fontWeight: '700',
-            color: '#111827'
+            color: '#111827',
           }}>
             📊 Sentiment Analytics Dashboard
           </h1>
           <p style={{
             margin: '4px 0 0 0',
             fontSize: '14px',
-            color: '#6b7280'
+            color: '#6b7280',
           }}>
             {analytics.totalAnalyses} analyses from {selectedTimeRange.start.toLocaleDateString()} to {selectedTimeRange.end.toLocaleDateString()}
           </p>
         </div>
-        
         <button
           onClick={loadAnalytics}
           style={{
@@ -868,18 +824,17 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
             borderRadius: '8px',
             fontSize: '14px',
             fontWeight: '500',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           🔄 Refresh
         </button>
       </div>
-
       {/* Dashboard Grid */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-        gap: '20px'
+        gap: '20px',
       }}>
         {renderSentimentDistribution()}
         {renderEmotionAnalysis()}

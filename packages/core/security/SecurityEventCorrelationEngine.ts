@@ -7,7 +7,6 @@
  * 
  * Task: E31-1753313263559-7F47D4
  */
-
 import { EventEmitter } from 'events';
 import { SecurityEvent, ThreatType } from './PredictiveSecurityAnalytics';
 import { SecurityAnomaly, AnomalySeverity } from './SecurityAnomalyDetector';
@@ -236,7 +235,7 @@ export interface PatternStats {
 export interface CorrelationReport {
   reportId: string;
   generatedAt: Date;
-  timeRange: {
+  timeRange: {,
     start: Date;
     end: Date;
   };
@@ -305,7 +304,6 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
   private threatIndicators: Map<string, ThreatIndicator> = new Map();
   private processingQueue: SecurityEvent[] = [];
   private isProcessing: boolean = false;
-
   constructor(config: CorrelationConfig) {
     super();
     this.config = config;
@@ -320,139 +318,109 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
       ruleEffectiveness: new Map(),
       threatPatternStats: new Map()
     };
-
     this.initializeCorrelationRules();
     if (this.config.enableRealTimeCorrelation) {
       this.startRealTimeProcessing();
     }
   }
-
   // ==========================================
   // PUBLIC METHODS
   // ==========================================
-
   public async processEvent(event: SecurityEvent): Promise<void> {
     this.processingQueue.push(event);
     this.analytics.totalEventsProcessed++;
-
     if (this.config.enableRealTimeCorrelation && !this.isProcessing) {
       await this.processEventQueue();
     }
-
     this.emit('eventProcessed', { event, queueSize: this.processingQueue.length });
   }
-
   public async processEvents(events: SecurityEvent[]): Promise<void> {
     this.processingQueue.push(...events);
     this.analytics.totalEventsProcessed += events.length;
-
     await this.processEventQueue();
     this.emit('batchProcessed', { count: events.length, totalProcessed: this.analytics.totalEventsProcessed });
   }
-
   public async correlateEvents(timeWindow?: number): Promise<CorrelatedEventGroup[]> {
     const windowMs = (timeWindow || this.config.correlationTimeWindow) * 60 * 1000;
     const now = Date.now();
-    
-    const recentEvents = this.eventBuffer.filter(event => 
+    const recentEvents = this.eventBuffer.filter(event => ;)
       now - event.timestamp.getTime() < windowMs
     );
-
     const correlatedGroups = await this.performCorrelation(recentEvents);
-    
     for (const group of correlatedGroups) {
       this.correlatedGroups.set(group.groupId, group);
       this.analytics.correlatedEventsCount += group.events.length;
     }
-
     this.updateAnalytics();
-    this.emit(
+    this.emit()
       'correlationCompleted',
       { groupsFound: correlatedGroups.length,
-      eventsCorrelated: correlatedGroups.reduce((sum,
+      eventsCorrelated: correlatedGroups.reduce((sum,)
       g
     ) => sum + g.events.length, 0) });
-
     return correlatedGroups;
   }
-
   public getCorrelatedGroup(groupId: string): CorrelatedEventGroup | undefined {
     return this.correlatedGroups.get(groupId);
   }
-
   public getActiveGroups(): CorrelatedEventGroup[] {
-    return Array.from(this.correlatedGroups.values()).filter(group => 
+    return Array.from(this.correlatedGroups.values()).filter(group => )
       group.status === GroupStatus.ACTIVE || group.status === GroupStatus.INVESTIGATING
     );
   }
-
   public async updateGroupStatus(groupId: string, status: GroupStatus, notes?: string): Promise<void> {
     const group = this.correlatedGroups.get(groupId);
     if (!group) {
-      throw new Error(`Correlation group ${groupId} not found`);
+      throw new Error(`Correlation group ${groupId} not found`);}
     }
-
     group.status = status;
     group.lastUpdated = new Date();
-
     this.emit('groupStatusUpdated', { groupId, oldStatus: group.status, newStatus: status, notes });
   }
-
   public addCorrelationRule(rule: Omit<CorrelationRule, 'id' | 'lastUpdated' | 'triggeredCount'>): string {
-    const ruleId = `rule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const ruleId = `rule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const fullRule: CorrelationRule = {
       ...rule,
       id: ruleId,
       lastUpdated: new Date(),
-      triggeredCount: 0
+      triggeredCount: 0,
     };
-
     this.correlationRules.set(ruleId, fullRule);
     this.emit('ruleAdded', { ruleId, rule: fullRule });
-    
     return ruleId;
   }
-
   public updateCorrelationRule(ruleId: string, updates: Partial<CorrelationRule>): void {
     const rule = this.correlationRules.get(ruleId);
     if (!rule) {
-      throw new Error(`Correlation rule ${ruleId} not found`);
+      throw new Error(`Correlation rule ${ruleId} not found`);}
     }
-
     Object.assign(rule, updates, { lastUpdated: new Date() });
     this.emit('ruleUpdated', { ruleId, rule });
   }
-
   public deleteCorrelationRule(ruleId: string): void {
     const deleted = this.correlationRules.delete(ruleId);
     if (!deleted) {
-      throw new Error(`Correlation rule ${ruleId} not found`);
+      throw new Error(`Correlation rule ${ruleId} not found`);}
     }
-
     this.emit('ruleDeleted', { ruleId });
   }
-
   public getAnalytics(): CorrelationAnalytics {
     return { ...this.analytics };
   }
-
   public async generateReport(timeRange: { start: Date; end: Date }): Promise<CorrelationReport> {
-    const groups = Array.from(this.correlatedGroups.values()).filter(group =>
+    const groups = Array.from(this.correlatedGroups.values()).filter(group =>;)
       group.createdAt >= timeRange.start && group.createdAt <= timeRange.end
     );
-
-    const events = this.eventBuffer.filter(event =>
+    const events = this.eventBuffer.filter(event =>;)
       event.timestamp >= timeRange.start && event.timestamp <= timeRange.end
     );
-
     const summary = this.calculateCorrelationSummary(groups, events);
     const topThreats = this.analyzeTopThreats(groups);
     const trends = this.analyzeCorrelationTrends(groups, timeRange);
     const rulePerformance = this.analyzeRulePerformance();
     const recommendations = this.generateSystemRecommendations();
-
     const report: CorrelationReport = {
-      reportId: `report_${Date.now()}`,
+      reportId: `report_${Date.now()}`,}
       generatedAt: new Date(),
       timeRange,
       summary,
@@ -461,15 +429,12 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
       rulePerformance,
       recommendations
     };
-
     this.emit('reportGenerated', { reportId: report.reportId, timeRange });
     return report;
   }
-
   // ==========================================
   // PRIVATE METHODS
   // ==========================================
-
   private initializeCorrelationRules(): void {
     // Default correlation rules
     const defaultRules: Omit<CorrelationRule, 'id' | 'lastUpdated' | 'triggeredCount'>[] = [
@@ -479,16 +444,16 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         ruleType: CorrelationRuleType.FREQUENCY_PATTERN,
         enabled: true,
         priority: 1,
-        conditions: [
+        conditions: [,
           { field: 'type', operator: CorrelationOperator.EQUALS, value: 'authentication_failure', weight: 1.0, required: true },
           { field: 'source.ip', operator: CorrelationOperator.SIMILAR_TO, value: '', weight: 0.8, required: true }
         ],
-        actions: [
+        actions: [,
           { actionType: CorrelationActionType.CREATE_INCIDENT, parameters: { severity: 'high' }, priority: 1, enabled: true },
           { actionType: CorrelationActionType.ADD_TO_WATCHLIST, parameters: { duration: 3600 }, priority: 2, enabled: true }
         ],
         timeWindow: 15,
-        threshold: 5
+        threshold: 5,
       },
       {
         name: 'Lateral Movement Detection',
@@ -496,15 +461,15 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         ruleType: CorrelationRuleType.TEMPORAL_SEQUENCE,
         enabled: true,
         priority: 1,
-        conditions: [
+        conditions: [,
           { field: 'type', operator: CorrelationOperator.EQUALS, value: 'network_connection', weight: 1.0, required: true },
           { field: 'userId', operator: CorrelationOperator.SIMILAR_TO, value: '', weight: 0.9, required: true }
         ],
-        actions: [
+        actions: [,
           { actionType: CorrelationActionType.ESCALATE_THREAT, parameters: { level: 'critical' }, priority: 1, enabled: true }
         ],
         timeWindow: 60,
-        threshold: 3
+        threshold: 3,
       },
       {
         name: 'Data Exfiltration Pattern',
@@ -512,22 +477,20 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         ruleType: CorrelationRuleType.BEHAVIORAL_PATTERN,
         enabled: true,
         priority: 1,
-        conditions: [
+        conditions: [,
           { field: 'type', operator: CorrelationOperator.EQUALS, value: 'data_access', weight: 1.0, required: true },
           { field: 'dataVolume', operator: CorrelationOperator.GREATER_THAN, value: 1000000, weight: 0.7, required: false }
         ],
-        actions: [
+        actions: [,
           { actionType: CorrelationActionType.TRIGGER_ALERT, parameters: { severity: 'critical' }, priority: 1, enabled: true },
           { actionType: CorrelationActionType.TRIGGER_AUTOMATION, parameters: { action: 'block_user' }, priority: 2, enabled: true }
         ],
         timeWindow: 30,
-        threshold: 2
+        threshold: 2,
       }
     ];
-
     defaultRules.forEach(rule => this.addCorrelationRule(rule));
   }
-
   private startRealTimeProcessing(): void {
     setInterval(async () => {
       if (this.processingQueue.length > 0 && !this.isProcessing) {
@@ -535,176 +498,131 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
       }
     }, 5000); // Process queue every 5 seconds
   }
-
   private async processEventQueue(): Promise<void> {
     if (this.isProcessing || this.processingQueue.length === 0) {
       return;
     }
-
     this.isProcessing = true;
     const startTime = Date.now();
-
     try {
-      const eventsToProcess = this.processingQueue.splice(0, 100); // Process in batches
-      
+      const eventsToProcess = this.processingQueue.splice(0, 100); // Process in batches;
       // Add events to buffer
       this.eventBuffer.push(...eventsToProcess);
-      
       // Clean old events from buffer
       this.cleanupEventBuffer();
-      
       // Perform correlation
       await this.correlateEvents();
-      
       // Extract threat indicators
       this.extractThreatIndicators(eventsToProcess);
-      
       this.analytics.processingLatency = Date.now() - startTime;
-      
     } catch (error) {
       this.emit('processingError', { error, queueSize: this.processingQueue.length });
     } finally {
       this.isProcessing = false;
     }
   }
-
   private cleanupEventBuffer(): void {
     const cutoffTime = Date.now() - (this.config.retentionPeriodDays * 24 * 60 * 60 * 1000);
-    this.eventBuffer = this.eventBuffer.filter(event => 
+    this.eventBuffer = this.eventBuffer.filter(event => )
       event.timestamp.getTime() > cutoffTime
     );
   }
-
   private async performCorrelation(events: SecurityEvent[]): Promise<CorrelatedEventGroup[]> {
     const groups: CorrelatedEventGroup[] = [];
     const processedEvents = new Set<string>();
-
     for (const rule of this.correlationRules.values()) {
       if (!rule.enabled) continue;
-
-      const matchingEvents = events.filter(event => 
+      const matchingEvents = events.filter(event => ;)
         !processedEvents.has(event.id) && this.evaluateRule(rule, event, events)
       );
-
       if (matchingEvents.length >= rule.threshold) {
         const group = this.createCorrelatedGroup(matchingEvents, rule);
         groups.push(group);
-        
         matchingEvents.forEach(event => processedEvents.add(event.id));
         rule.triggeredCount++;
-        
         this.updateRuleEffectiveness(rule.id, true);
       }
     }
-
     return groups;
   }
-
   private evaluateRule(rule: CorrelationRule, event: SecurityEvent, allEvents: SecurityEvent[]): boolean {
     const requiredConditions = rule.conditions.filter(c => c.required);
     const optionalConditions = rule.conditions.filter(c => !c.required);
-
     // All required conditions must match
-    const requiredMatch = requiredConditions.every(condition => 
+    const requiredMatch = requiredConditions.every(condition => ;)
       this.evaluateCondition(condition, event, allEvents)
     );
-
     if (!requiredMatch) return false;
-
     // Calculate weighted score for optional conditions
     let totalWeight = 0;
     let matchedWeight = 0;
-
-    optionalConditions.forEach(condition => {
+    optionalConditions.forEach(condition => {)
       totalWeight += condition.weight;
       if (this.evaluateCondition(condition, event, allEvents)) {
         matchedWeight += condition.weight;
       }
     });
-
     const optionalScore = totalWeight > 0 ? matchedWeight / totalWeight : 1;
     return optionalScore >= this.config.similarityThreshold;
   }
-
-  private evaluateCondition(
+  private evaluateCondition()
     condition: CorrelationCondition,
     event: SecurityEvent,
-    allEvents: SecurityEvent[]
+    allEvents: SecurityEvent[],
   ): boolean {
     const fieldValue = this.getFieldValue(event, condition.field);
-    
     switch (condition.operator) {
       case CorrelationOperator.EQUALS:
         return fieldValue === condition.value;
-      
       case CorrelationOperator.CONTAINS:
         return String(fieldValue).includes(String(condition.value));
-      
       case CorrelationOperator.MATCHES_REGEX:
         return new RegExp(String(condition.value)).test(String(fieldValue));
-      
       case CorrelationOperator.GREATER_THAN:
         return Number(fieldValue) > Number(condition.value);
-      
       case CorrelationOperator.LESS_THAN:
         return Number(fieldValue) < Number(condition.value);
-      
       case CorrelationOperator.TIME_WITHIN:
         const timeDiff = Math.abs(event.timestamp.getTime() - new Date(String(condition.value)).getTime());
         return timeDiff <= Number(condition.value) * 60 * 1000;
-      
       case CorrelationOperator.SIMILAR_TO:
         return this.calculateSimilarity(fieldValue, condition.value) >= this.config.similarityThreshold;
-      
       default:
         return false;
     }
   }
-
   private getFieldValue(event: SecurityEvent, fieldPath: string): unknown {
     const path = fieldPath.split('.');
     let value: any = event;
-    
     for (const key of path) {
       value = value?.[key];
       if (value === undefined) break;
     }
-    
     return value;
   }
-
   private calculateSimilarity(value1: unknown, value2: unknown): number {
     const str1 = String(value1).toLowerCase();
     const str2 = String(value2).toLowerCase();
-    
     if (str1 === str2) return 1.0;
-    
     // Simple Jaccard similarity for strings
     const set1 = new Set(str1.split(''));
     const set2 = new Set(str2.split(''));
-    
     const intersection = new Set([...set1].filter(x => set2.has(x)));
     const union = new Set([...set1, ...set2]);
-    
     return intersection.size / union.size;
   }
-
   private createCorrelatedGroup(events: SecurityEvent[], rule: CorrelationRule): CorrelatedEventGroup {
-    const groupId = `group_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const groupId = `group_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const now = new Date();
-    
     const severity = this.calculateGroupSeverity(events);
     const confidence = this.calculateGroupConfidence(events, rule);
     const riskScore = this.calculateGroupRiskScore(events);
-    
     const evidence = this.generateCorrelationEvidence(events, rule);
     const timeline = this.generateEventTimeline(events);
     const threatIndicators = this.extractGroupThreatIndicators(events);
     const recommendations = this.generateGroupRecommendations(events, rule);
-    
     const affectedSystems = [...new Set(events.flatMap(e => e.source || []))];
     const affectedUsers = [...new Set(events.flatMap(e => e.userId ? [e.userId] : []))];
-
     return {
       groupId,
       createdAt: now,
@@ -720,127 +638,106 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
       affectedUsers,
       threatIndicators,
       recommendations,
-      status: GroupStatus.ACTIVE
+      status: GroupStatus.ACTIVE,
     };
   }
-
   private calculateGroupSeverity(events: SecurityEvent[]): AnomalySeverity {
     const severityScores = { low: 1, medium: 2, high: 3, critical: 4 };
-    const avgScore = events.reduce((sum, event) => 
+    const avgScore = events.reduce((sum, event) => ;
       sum + (severityScores[event.severity as keyof typeof severityScores] || 1), 0
     ) / events.length;
-
     if (avgScore >= 3.5) return AnomalySeverity.CRITICAL;
     if (avgScore >= 2.5) return AnomalySeverity.HIGH;
     if (avgScore >= 1.5) return AnomalySeverity.MEDIUM;
     return AnomalySeverity.LOW;
   }
-
   private calculateGroupConfidence(events: SecurityEvent[], rule: CorrelationRule): number {
     const baseConfidence = 0.7;
     const eventCountBonus = Math.min(events.length * 0.05, 0.2);
     const ruleImportanceBonus = (1 / rule.priority) * 0.1;
-    
     return Math.min(baseConfidence + eventCountBonus + ruleImportanceBonus, 1.0);
   }
-
   private calculateGroupRiskScore(events: SecurityEvent[]): number {
     const baseScore = events.length * 10;
     const severityMultiplier = events.reduce((sum, event) => {
       const severityScores = { low: 1, medium: 2, high: 3, critical: 4 };
       return sum + (severityScores[event.severity as keyof typeof severityScores] || 1);
     }, 0) / events.length;
-    
     return Math.min(baseScore * severityMultiplier, 100);
   }
-
   private generateCorrelationEvidence(events: SecurityEvent[], rule: CorrelationRule): CorrelationEvidence[] {
     const evidence: CorrelationEvidence[] = [];
-    
     // Temporal proximity evidence
     if (events.length > 1) {
       const timestamps = events.map(e => e.timestamp.getTime());
       const timeSpan = Math.max(...timestamps) - Math.min(...timestamps);
-      
       if (timeSpan < rule.timeWindow * 60 * 1000) {
-        evidence.push({
+        evidence.push({)
           evidenceType: EvidenceType.TEMPORAL_PROXIMITY,
           strength: 1 - (timeSpan / (rule.timeWindow * 60 * 1000)),
-          description: `Events occurred within ${Math.round(timeSpan / 1000)} seconds`,
+          description: `Events occurred within ${Math.round(timeSpan / 1000)} seconds`,}
           sources: events.map(e => e.id),
           confidence: 0.9,
           supportingData: { timeSpan, ruleTimeWindow: rule.timeWindow }
         });
       }
     }
-
     // Common attributes evidence
     const commonAttributes = this.findCommonAttributes(events);
     if (Object.keys(commonAttributes).length > 0) {
-      evidence.push({
+      evidence.push({)
         evidenceType: EvidenceType.COMMON_ATTRIBUTES,
         strength: Object.keys(commonAttributes).length / 10, // Normalize
-        description: `Events share common attributes: ${Object.keys(commonAttributes).join(', ')}`,
+        description: `Events share common attributes: ${Object.keys(commonAttributes).join(', ')}`,}
         sources: events.map(e => e.id),
         confidence: 0.8,
-        supportingData: commonAttributes
+        supportingData: commonAttributes,
       });
     }
-
     return evidence;
   }
-
   private findCommonAttributes(events: SecurityEvent[]): Record<string, unknown> {
     if (events.length < 2) return {};
-    
     const commonAttrs: Record<string, unknown> = {};
     const firstEvent = events[0];
-    
     // Check common fields
     const fieldsToCheck = ['source', 'userId', 'type'];
-    
-    fieldsToCheck.forEach(field => {
+    fieldsToCheck.forEach(field => {)
       const firstValue = this.getFieldValue(firstEvent, field);
-      if (firstValue && events.every(event => 
+      if (firstValue && events.every(event => )
         this.getFieldValue(event, field) === firstValue
       )) {
         commonAttrs[field] = firstValue;
       }
     });
-    
     return commonAttrs;
   }
-
   private generateEventTimeline(events: SecurityEvent[]): EventTimeline[] {
     return events
       .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
-      .map(event => ({
+      .map(event => ({)
         timestamp: event.timestamp,
         eventId: event.id,
         eventType: event.type,
-        description: event.description || `${event.type} event`,
+        description: event.description || `${event.type} event`,}
         impact: this.calculateEventImpact(event),
         source: event.source || 'unknown'
       }));
   }
-
   private calculateEventImpact(event: SecurityEvent): number {
     const severityScores = { low: 25, medium: 50, high: 75, critical: 100 };
     return severityScores[event.severity as keyof typeof severityScores] || 25;
   }
-
   private extractGroupThreatIndicators(events: SecurityEvent[]): ThreatIndicator[] {
     const indicators: Map<string, ThreatIndicator> = new Map();
-    
-    events.forEach(event => {
+    events.forEach(event => {)
       // Extract IP addresses
       const ipRegex = /\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/g;
       const ips = (event.description || '').match(ipRegex) || [];
-      
-      ips.forEach(ip => {
-        const key = `ip_${ip}`;
+      ips.forEach(ip => {)
+        const key = `ip_${ip}`;}
         if (!indicators.has(key)) {
-          indicators.set(key, {
+          indicators.set(key, {)
             indicator: ip,
             indicatorType: IndicatorType.IP_ADDRESS,
             confidence: 0.7,
@@ -848,7 +745,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
             firstSeen: event.timestamp,
             lastSeen: event.timestamp,
             frequency: 1,
-            associatedThreats: [this.inferThreatType(event)]
+            associatedThreats: [this.inferThreatType(event)],
           });
         } else {
           const indicator = indicators.get(key)!;
@@ -857,65 +754,55 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         }
       });
     });
-    
     return Array.from(indicators.values());
   }
-
   private inferThreatType(event: SecurityEvent): ThreatType {
     const type = event.type.toLowerCase();
-    
     if (type.includes('malware') || type.includes('virus')) return ThreatType.MALWARE;
     if (type.includes('phishing')) return ThreatType.PHISHING;
     if (type.includes('ddos') || type.includes('dos')) return ThreatType.DDOS;
     if (type.includes('breach') || type.includes('unauthorized')) return ThreatType.DATA_BREACH;
     if (type.includes('insider')) return ThreatType.INSIDER_THREAT;
     if (type.includes('apt') || type.includes('advanced')) return ThreatType.APT;
-    
     return ThreatType.UNKNOWN;
   }
-
   private generateGroupRecommendations(events: SecurityEvent[], rule: CorrelationRule): GroupRecommendation[] {
     const recommendations: GroupRecommendation[] = [];
-    
     // High severity events need immediate action
-    const highSeverityCount = events.filter(e => 
+    const highSeverityCount = events.filter(e => ;)
       e.severity === 'high' || e.severity === 'critical'
     ).length;
-    
     if (highSeverityCount > 0) {
-      recommendations.push({
+      recommendations.push({)
         recommendationType: RecommendationType.IMMEDIATE_ACTION,
         priority: 1,
         description: 'High severity security events detected - immediate investigation required',
-        actionItems: [
+        actionItems: [,
           'Assign security analyst for investigation',
           'Review affected systems and users',
           'Consider implementing containment measures'
         ],
         estimatedEffort: 2,
-        riskReduction: 70
+        riskReduction: 70,
       });
     }
-    
     // Multiple events suggest pattern - need investigation
     if (events.length >= 5) {
-      recommendations.push({
+      recommendations.push({)
         recommendationType: RecommendationType.INVESTIGATION,
         priority: 2,
         description: 'Pattern of related security events detected',
-        actionItems: [
+        actionItems: [,
           'Perform root cause analysis',
           'Review historical data for similar patterns',
           'Check if this represents an ongoing campaign'
         ],
         estimatedEffort: 4,
-        riskReduction: 50
+        riskReduction: 50,
       });
     }
-    
     return recommendations;
   }
-
   private determineGroupType(events: SecurityEvent[], rule: CorrelationRule): EventGroupType {
     switch (rule.ruleType) {
       case CorrelationRuleType.THREAT_CHAIN:
@@ -929,23 +816,20 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         return criticalCount > 0 ? EventGroupType.SECURITY_INCIDENT : EventGroupType.THREAT_PATTERN;
     }
   }
-
   private extractThreatIndicators(events: SecurityEvent[]): void {
-    events.forEach(event => {
+    events.forEach(event => {)
       const indicators = this.extractGroupThreatIndicators([event]);
-      indicators.forEach(indicator => {
-        const key = `${indicator.indicatorType}_${indicator.indicator}`;
+      indicators.forEach(indicator => {)
+        const key = `${indicator.indicatorType}_${indicator.indicator}`;}
         this.threatIndicators.set(key, indicator);
       });
     });
   }
-
   private updateAnalytics(): void {
     this.analytics.activeGroupsCount = this.getActiveGroups().length;
     this.analytics.averageGroupSize = this.analytics.correlatedEventsCount / 
       Math.max(this.correlatedGroups.size, 1);
   }
-
   private updateRuleEffectiveness(ruleId: string, successful: boolean): void {
     let effectiveness = this.analytics.ruleEffectiveness.get(ruleId);
     if (!effectiveness) {
@@ -959,20 +843,17 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
       };
       this.analytics.ruleEffectiveness.set(ruleId, effectiveness);
     }
-    
     effectiveness.triggeredCount++;
     effectiveness.lastTriggered = new Date();
     // TODO: Implement accuracy tracking based on feedback
   }
-
   private calculateCorrelationSummary(groups: CorrelatedEventGroup[], events: SecurityEvent[]): CorrelationSummary {
     const correlatedEvents = groups.reduce((sum, group) => sum + group.events.length, 0);
     const activeGroups = groups.filter(g => g.status === GroupStatus.ACTIVE).length;
     const resolvedGroups = groups.filter(g => g.status === GroupStatus.RESOLVED).length;
-    const highSeverityGroups = groups.filter(g => 
+    const highSeverityGroups = groups.filter(g => ;)
       g.severity === AnomalySeverity.HIGH || g.severity === AnomalySeverity.CRITICAL
     ).length;
-
     return {
       totalEvents: events.length,
       correlatedEvents,
@@ -983,7 +864,6 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
       correlationEfficiency: correlatedEvents / Math.max(events.length, 1)
     };
   }
-
   private analyzeTopThreats(groups: CorrelatedEventGroup[]): ThreatSummary[] {
     const threatStats = new Map<ThreatType, {
       eventCount: number;
@@ -991,19 +871,17 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
       severitySum: number;
       indicators: Set<string>;
     }>();
-
-    groups.forEach(group => {
-      group.threatIndicators.forEach(indicator => {
-        indicator.associatedThreats.forEach(threatType => {
+    groups.forEach(group => {)
+      group.threatIndicators.forEach(indicator => {)
+        indicator.associatedThreats.forEach(threatType => {)
           if (!threatStats.has(threatType)) {
-            threatStats.set(threatType, {
+            threatStats.set(threatType, {)
               eventCount: 0,
               groupCount: 0,
               severitySum: 0,
               indicators: new Set()
             });
           }
-
           const stats = threatStats.get(threatType)!;
           stats.eventCount += group.events.length;
           stats.groupCount++;
@@ -1012,9 +890,8 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         });
       });
     });
-
     return Array.from(threatStats.entries())
-      .map(([threatType, stats]) => ({
+      .map(([threatType, stats]) => ({)
         threatType,
         eventCount: stats.eventCount,
         groupCount: stats.groupCount,
@@ -1025,7 +902,6 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
       .sort((a, b) => b.eventCount - a.eventCount)
       .slice(0, 10);
   }
-
   private severityToNumber(severity: AnomalySeverity): number {
     const scores = { 
       [AnomalySeverity.INFO]: 1, 
@@ -1036,8 +912,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
     };
     return scores[severity] || 1;
   }
-
-  private analyzeCorrelationTrends(
+  private analyzeCorrelationTrends()
     groups: CorrelatedEventGroup[],
     timeRange: { start: Date; end: Date }
   ): CorrelationTrend[] {
@@ -1048,13 +923,12 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         metric: 'correlation_rate',
         value: groups.length / Math.max((timeRange.end.getTime() - timeRange.start.getTime()) / (24 * 60 * 60 * 1000), 1),
         changePercent: 0, // TODO: Calculate change from previous period
-        significance: 'medium'
+        significance: 'medium',
       }
     ];
   }
-
   private analyzeRulePerformance(): RulePerformanceMetrics[] {
-    return Array.from(this.correlationRules.values()).map(rule => ({
+    return Array.from(this.correlationRules.values()).map(rule => ({)
       ruleId: rule.id,
       ruleName: rule.name,
       executionCount: rule.triggeredCount,
@@ -1063,37 +937,32 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
       impactScore: rule.priority * rule.triggeredCount
     }));
   }
-
   private generateSystemRecommendations(): SystemRecommendation[] {
     const recommendations: SystemRecommendation[] = [];
-    
     // Analyze rule effectiveness
-    const ineffectiveRules = Array.from(this.analytics.ruleEffectiveness.entries())
+    const ineffectiveRules = Array.from(this.analytics.ruleEffectiveness.entries());
       .filter(([_, effectiveness]) => effectiveness.triggeredCount === 0);
-    
     if (ineffectiveRules.length > 0) {
-      recommendations.push({
+      recommendations.push({)
         category: 'rules',
         priority: 2,
         title: 'Review inactive correlation rules',
-        description: `${ineffectiveRules.length} correlation rules have not triggered recently`,
+        description: `${ineffectiveRules.length} correlation rules have not triggered recently`,}
         expectedBenefit: 'Improved correlation accuracy and performance',
-        implementationEffort: 'low'
+        implementationEffort: 'low',
       });
     }
-
     // Performance recommendations
     if (this.analytics.processingLatency > 5000) {
-      recommendations.push({
+      recommendations.push({)
         category: 'performance',
         priority: 1,
         title: 'Optimize correlation processing',
         description: 'Correlation processing time exceeds recommended thresholds',
         expectedBenefit: 'Faster threat detection and response',
-        implementationEffort: 'medium'
+        implementationEffort: 'medium',
       });
     }
-
     return recommendations;
   }
 }
@@ -1113,30 +982,27 @@ export class SecurityEventCorrelationFactory {
       enableCrossSystemCorrelation: true,
       retentionPeriodDays: 30,
       enableMachineLearning: false,
-      correlationRules: []
+      correlationRules: [],
     };
   }
-
   public static createHighSensitivityConfig(): CorrelationConfig {
     return {
       ...this.createDefaultConfig(),
       similarityThreshold: 0.5,
       correlationTimeWindow: 120,
       enableAdvancedPatternRecognition: true,
-      enableMachineLearning: true
+      enableMachineLearning: true,
     };
   }
-
   public static createPerformanceOptimizedConfig(): CorrelationConfig {
     return {
       ...this.createDefaultConfig(),
       enableRealTimeCorrelation: false,
       correlationTimeWindow: 30,
       maxCorrelationDepth: 3,
-      enableAdvancedPatternRecognition: false
+      enableAdvancedPatternRecognition: false,
     };
   }
-
   public static createEngine(config?: Partial<CorrelationConfig>): SecurityEventCorrelationEngine {
     const fullConfig = { ...this.createDefaultConfig(), ...config };
     return new SecurityEventCorrelationEngine(fullConfig);

@@ -6,7 +6,6 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-
 import { 
   DataClassificationLevel, 
   HandlingRequirements,
@@ -64,19 +63,17 @@ export class ClassificationHandlingRulesService {
   private handlingRules: Map<string, HandlingRule> = new Map();
   private violations: HandlingRuleViolation[] = [];
   private complianceChecks: ComplianceCheck[] = [];
-
   constructor() {
     this.initializeDefaultHandlingRequirements();
     this.initializeDefaultHandlingRules();
   }
-
   /**
    * Initialize default handling requirements for each classification level
    */
   private initializeDefaultHandlingRequirements(): void {
     const requirements: Record<DataClassificationLevel, HandlingRequirements> = {
-      PUBLIC: {
-        storage: {
+      PUBLIC: {,
+        storage: {,
           encryptionRequired: false,
           encryptionAlgorithm: 'none',
           keyRotationDays: 0,
@@ -84,50 +81,50 @@ export class ClassificationHandlingRulesService {
           backupEncryption: false,
           retentionDays: 365,
           approvedLocations: ['any'],
-          redundancyLevel: 'NONE'
+          redundancyLevel: 'NONE',
         },
-        transmission: {
+        transmission: {,
           tlsVersion: 'TLS1.2',
           certificatePinning: false,
           networkRestrictions: [],
           loggingLevel: 'STANDARD',
           compressionAllowed: true,
-          endToEndEncryption: false
+          endToEndEncryption: false,
         },
-        processing: {
+        processing: {,
           approvedEnvironments: ['dev', 'staging', 'production'],
           loggingRequired: false,
-          cachingRestrictions: {
+          cachingRestrictions: {,
             allowed: true,
             encryptionRequired: false,
             maxTtlSeconds: 3600,
             purgeOnAccess: false,
-            secureEviction: false
+            secureEviction: false,
           },
           thirdPartyProcessing: true,
           isolationRequired: false,
-          auditTrailRequired: false
+          auditTrailRequired: false,
         },
-        access: {
+        access: {,
           authenticationLevel: 'STANDARD',
           authorizationRequired: false,
           approvalWorkflow: false,
           timeRestrictions: false,
           purposeLimitation: false,
           auditLogging: 'STANDARD',
-          exportRestrictions: false
+          exportRestrictions: false,
         },
-        monitoring: {
+        monitoring: {,
           alertingEnabled: false,
           anomalyDetection: false,
           alertThreshold: 'LOW',
           realtimeMonitoring: false,
           complianceChecks: false,
-          incidentResponse: false
+          incidentResponse: false,
         }
       },
-      INTERNAL: {
-        storage: {
+      INTERNAL: {,
+        storage: {,
           encryptionRequired: true,
           encryptionAlgorithm: 'AES-256',
           keyRotationDays: 90,
@@ -135,50 +132,50 @@ export class ClassificationHandlingRulesService {
           backupEncryption: true,
           retentionDays: 2555, // 7 years
           approvedLocations: ['internal_datacenter', 'approved_cloud'],
-          redundancyLevel: 'STANDARD'
+          redundancyLevel: 'STANDARD',
         },
-        transmission: {
+        transmission: {,
           tlsVersion: 'TLS1.3',
           certificatePinning: true,
           networkRestrictions: ['internal_network'],
           loggingLevel: 'ENHANCED',
           compressionAllowed: false,
-          endToEndEncryption: true
+          endToEndEncryption: true,
         },
-        processing: {
+        processing: {,
           approvedEnvironments: ['production', 'staging'],
           loggingRequired: true,
-          cachingRestrictions: {
+          cachingRestrictions: {,
             allowed: true,
             encryptionRequired: true,
             maxTtlSeconds: 1800,
             purgeOnAccess: true,
-            secureEviction: true
+            secureEviction: true,
           },
           thirdPartyProcessing: false,
           isolationRequired: true,
-          auditTrailRequired: true
+          auditTrailRequired: true,
         },
-        access: {
+        access: {,
           authenticationLevel: 'STANDARD',
           authorizationRequired: true,
           approvalWorkflow: false,
           timeRestrictions: false,
           purposeLimitation: true,
           auditLogging: 'ENHANCED',
-          exportRestrictions: true
+          exportRestrictions: true,
         },
-        monitoring: {
+        monitoring: {,
           alertingEnabled: true,
           anomalyDetection: true,
           alertThreshold: 'MEDIUM',
           realtimeMonitoring: false,
           complianceChecks: true,
-          incidentResponse: true
+          incidentResponse: true,
         }
       },
-      CONFIDENTIAL: {
-        storage: {
+      CONFIDENTIAL: {,
+        storage: {,
           encryptionRequired: true,
           encryptionAlgorithm: 'AES-256-GCM',
           keyRotationDays: 30,
@@ -186,50 +183,50 @@ export class ClassificationHandlingRulesService {
           backupEncryption: true,
           retentionDays: 2555, // 7 years
           approvedLocations: ['secure_datacenter'],
-          redundancyLevel: 'HIGH'
+          redundancyLevel: 'HIGH',
         },
-        transmission: {
+        transmission: {,
           tlsVersion: 'TLS1.3',
           certificatePinning: true,
           networkRestrictions: ['secure_network', 'vpn_required'],
           loggingLevel: 'COMPREHENSIVE',
           compressionAllowed: false,
-          endToEndEncryption: true
+          endToEndEncryption: true,
         },
-        processing: {
+        processing: {,
           approvedEnvironments: ['production'],
           loggingRequired: true,
-          cachingRestrictions: {
+          cachingRestrictions: {,
             allowed: false,
             encryptionRequired: true,
             maxTtlSeconds: 300,
             purgeOnAccess: true,
-            secureEviction: true
+            secureEviction: true,
           },
           thirdPartyProcessing: false,
           isolationRequired: true,
-          auditTrailRequired: true
+          auditTrailRequired: true,
         },
-        access: {
+        access: {,
           authenticationLevel: 'MFA',
           authorizationRequired: true,
           approvalWorkflow: true,
           timeRestrictions: true,
           purposeLimitation: true,
           auditLogging: 'ENHANCED',
-          exportRestrictions: true
+          exportRestrictions: true,
         },
-        monitoring: {
+        monitoring: {,
           alertingEnabled: true,
           anomalyDetection: true,
           alertThreshold: 'HIGH',
           realtimeMonitoring: true,
           complianceChecks: true,
-          incidentResponse: true
+          incidentResponse: true,
         }
       },
-      RESTRICTED: {
-        storage: {
+      RESTRICTED: {,
+        storage: {,
           encryptionRequired: true,
           encryptionAlgorithm: 'AES-256-GCM',
           keyRotationDays: 7,
@@ -237,55 +234,53 @@ export class ClassificationHandlingRulesService {
           backupEncryption: true,
           retentionDays: 2555, // 7 years
           approvedLocations: ['air_gapped_datacenter'],
-          redundancyLevel: 'CRITICAL'
+          redundancyLevel: 'CRITICAL',
         },
-        transmission: {
+        transmission: {,
           tlsVersion: 'TLS1.3',
           certificatePinning: true,
           networkRestrictions: ['air_gapped_network', 'dedicated_channel'],
           loggingLevel: 'COMPREHENSIVE',
           compressionAllowed: false,
-          endToEndEncryption: true
+          endToEndEncryption: true,
         },
-        processing: {
+        processing: {,
           approvedEnvironments: ['isolated_production'],
           loggingRequired: true,
-          cachingRestrictions: {
+          cachingRestrictions: {,
             allowed: false,
             encryptionRequired: true,
             maxTtlSeconds: 0,
             purgeOnAccess: true,
-            secureEviction: true
+            secureEviction: true,
           },
           thirdPartyProcessing: false,
           isolationRequired: true,
-          auditTrailRequired: true
+          auditTrailRequired: true,
         },
-        access: {
+        access: {,
           authenticationLevel: 'STRONG_MFA',
           authorizationRequired: true,
           approvalWorkflow: true,
           timeRestrictions: true,
           purposeLimitation: true,
           auditLogging: 'REALTIME',
-          exportRestrictions: true
+          exportRestrictions: true,
         },
-        monitoring: {
+        monitoring: {,
           alertingEnabled: true,
           anomalyDetection: true,
           alertThreshold: 'CRITICAL',
           realtimeMonitoring: true,
           complianceChecks: true,
-          incidentResponse: true
+          incidentResponse: true,
         }
       }
     };
-
     Object.entries(requirements).forEach(([level, req]) => {
       this.handlingRequirements.set(level as DataClassificationLevel, req);
     });
   }
-
   /**
    * Initialize default handling rules
    */
@@ -297,10 +292,10 @@ export class ClassificationHandlingRulesService {
         description: 'All internal data must be encrypted at rest using AES-256',
         classification: 'INTERNAL',
         ruleType: 'STORAGE',
-        requirements: {
+        requirements: {,
           encryptionRequired: true,
           encryptionAlgorithm: 'AES-256',
-          keyManagement: 'enterprise_kms'
+          keyManagement: 'enterprise_kms',
         },
         mandatory: true,
         priority: 1,
@@ -313,10 +308,10 @@ export class ClassificationHandlingRulesService {
         description: 'Confidential data must use TLS 1.3 with certificate pinning',
         classification: 'CONFIDENTIAL',
         ruleType: 'TRANSMISSION',
-        requirements: {
+        requirements: {,
           tlsVersion: 'TLS1.3',
           certificatePinning: true,
-          endToEndEncryption: true
+          endToEndEncryption: true,
         },
         mandatory: true,
         priority: 1,
@@ -329,10 +324,10 @@ export class ClassificationHandlingRulesService {
         description: 'Restricted data must be processed in isolated environments',
         classification: 'RESTRICTED',
         ruleType: 'PROCESSING',
-        requirements: {
+        requirements: {,
           isolationRequired: true,
           approvedEnvironments: ['isolated_production'],
-          thirdPartyProcessing: false
+          thirdPartyProcessing: false,
         },
         mandatory: true,
         priority: 1,
@@ -345,9 +340,9 @@ export class ClassificationHandlingRulesService {
         description: 'Access to confidential data requires multi-factor authentication',
         classification: 'CONFIDENTIAL',
         ruleType: 'ACCESS',
-        requirements: {
+        requirements: {,
           authenticationLevel: 'MFA',
-          approvalWorkflow: true
+          approvalWorkflow: true,
         },
         mandatory: true,
         priority: 1,
@@ -360,10 +355,10 @@ export class ClassificationHandlingRulesService {
         description: 'Access to restricted data must be monitored in real-time',
         classification: 'RESTRICTED',
         ruleType: 'MONITORING',
-        requirements: {
+        requirements: {,
           realtimeMonitoring: true,
           alertThreshold: 'CRITICAL',
-          incidentResponse: true
+          incidentResponse: true,
         },
         mandatory: true,
         priority: 1,
@@ -371,65 +366,56 @@ export class ClassificationHandlingRulesService {
         complianceFramework: ['FedRAMP', 'FISMA']
       }
     ];
-
-    rules.forEach(rule => {
+    rules.forEach(rule => {)
       this.handlingRules.set(rule.id, rule);
     });
   }
-
   /**
    * Get handling requirements for a classification level
    */
   getHandlingRequirements(classification: DataClassificationLevel): HandlingRequirements | undefined {
     return this.handlingRequirements.get(classification);
   }
-
   /**
    * Validate data handling against requirements
    */
-  async validateDataHandling(
+  async validateDataHandling()
     dataId: string,
     classification: DataClassificationLevel,
     operation: string,
-    context: OperationContext
+    context: OperationContext,
   ): Promise<ValidationResult> {
     const requirements = this.handlingRequirements.get(classification);
     if (!requirements) {
       return {
         valid: false,
-        errors: [`No handling requirements found for classification: ${classification}`],
+        errors: [`No handling requirements found for classification: ${classification}`],}
         warnings: [],
-        recommendations: []
+        recommendations: [],
       };
     }
-
     const errors: string[] = [];
     const warnings: string[] = [];
     const recommendations: string[] = [];
-
     // Validate storage requirements
     const storageValidation = this.validateStorageRequirements(requirements.storage, context);
     errors.push(...storageValidation.errors);
     warnings.push(...storageValidation.warnings);
-
     // Validate transmission requirements
     const transmissionValidation = this.validateTransmissionRequirements(requirements.transmission, context);
     errors.push(...transmissionValidation.errors);
     warnings.push(...transmissionValidation.warnings);
-
     // Validate processing requirements
     const processingValidation = this.validateProcessingRequirements(requirements.processing, context);
     errors.push(...processingValidation.errors);
     warnings.push(...processingValidation.warnings);
-
     // Validate monitoring requirements
     const monitoringValidation = this.validateMonitoringRequirements(requirements.monitoring, context);
     errors.push(...monitoringValidation.errors);
     warnings.push(...monitoringValidation.warnings);
-
     // Record compliance check
     const complianceCheck: ComplianceCheck = {
-      ruleId: `validation-${classification}`,
+      ruleId: `validation-${classification}`,}
       dataElement: dataId,
       classification,
       checkType: operation,
@@ -438,12 +424,10 @@ export class ClassificationHandlingRulesService {
       timestamp: new Date()
     };
     this.complianceChecks.push(complianceCheck);
-
     // Generate violations if there are errors
     if (errors.length > 0) {
       await this.recordViolations(dataId, classification, errors, context);
     }
-
     return {
       valid: errors.length === 0,
       errors,
@@ -451,14 +435,12 @@ export class ClassificationHandlingRulesService {
       recommendations
     };
   }
-
   /**
    * Validate storage requirements
    */
   private validateStorageRequirements(requirements: StorageRequirements, context: OperationContext): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
-
     // Check encryption requirements
     if (requirements.encryptionRequired) {
       const hasEncryption = this.checkEncryptionCompliance(context);
@@ -466,15 +448,13 @@ export class ClassificationHandlingRulesService {
         errors.push('Data storage encryption is required but not detected');
       }
     }
-
     // Check approved locations
     if (requirements.approvedLocations.length > 0 && !requirements.approvedLocations.includes('any')) {
       const isLocationApproved = this.checkLocationCompliance(requirements.approvedLocations, context);
       if (!isLocationApproved) {
-        errors.push(`Data must be stored in approved locations: ${requirements.approvedLocations.join(', ')}`);
+        errors.push(`Data must be stored in approved locations: ${requirements.approvedLocations.join(', ')}`);}
       }
     }
-
     // Check backup encryption
     if (requirements.backupEncryption) {
       const hasBackupEncryption = this.checkBackupEncryptionCompliance(context);
@@ -482,26 +462,22 @@ export class ClassificationHandlingRulesService {
         warnings.push('Backup encryption is required');
       }
     }
-
     return { valid: errors.length === 0, errors, warnings, recommendations: [] };
   }
-
   /**
    * Validate transmission requirements
    */
-  private validateTransmissionRequirements(
+  private validateTransmissionRequirements()
     requirements: TransmissionRequirements,
-    context: OperationContext
+    context: OperationContext,
   ): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
-
     // Check TLS version
     const tlsCompliance = this.checkTLSCompliance(requirements.tlsVersion, context);
     if (!tlsCompliance) {
-      errors.push(`TLS version ${requirements.tlsVersion} or higher is required`);
+      errors.push(`TLS version ${requirements.tlsVersion} or higher is required`);}
     }
-
     // Check certificate pinning
     if (requirements.certificatePinning) {
       const hasCertPinning = this.checkCertificatePinningCompliance(context);
@@ -509,7 +485,6 @@ export class ClassificationHandlingRulesService {
         errors.push('Certificate pinning is required for transmission');
       }
     }
-
     // Check end-to-end encryption
     if (requirements.endToEndEncryption) {
       const hasE2EEncryption = this.checkEndToEndEncryptionCompliance(context);
@@ -517,33 +492,28 @@ export class ClassificationHandlingRulesService {
         errors.push('End-to-end encryption is required for transmission');
       }
     }
-
     // Check network restrictions
     if (requirements.networkRestrictions.length > 0) {
       const networkCompliance = this.checkNetworkRestrictionCompliance(requirements.networkRestrictions, context);
       if (!networkCompliance) {
-        errors.push(`Transmission must use approved networks: ${requirements.networkRestrictions.join(', ')}`);
+        errors.push(`Transmission must use approved networks: ${requirements.networkRestrictions.join(', ')}`);}
       }
     }
-
     return { valid: errors.length === 0, errors, warnings, recommendations: [] };
   }
-
   /**
    * Validate processing requirements
    */
-  private validateProcessingRequirements(
+  private validateProcessingRequirements()
     requirements: ProcessingRequirements,
-    context: OperationContext
+    context: OperationContext,
   ): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
-
     // Check approved environments
     if (!requirements.approvedEnvironments.includes(context.environment)) {
-      errors.push(`Processing must occur in approved environments: ${requirements.approvedEnvironments.join(', ')}`);
+      errors.push(`Processing must occur in approved environments: ${requirements.approvedEnvironments.join(', ')}`);}
     }
-
     // Check isolation requirements
     if (requirements.isolationRequired) {
       const hasIsolation = this.checkIsolationCompliance(context);
@@ -551,7 +521,6 @@ export class ClassificationHandlingRulesService {
         errors.push('Data processing must occur in isolated environment');
       }
     }
-
     // Check third-party processing restrictions
     if (!requirements.thirdPartyProcessing) {
       const hasThirdPartyProcessing = this.checkThirdPartyProcessingCompliance(context);
@@ -559,7 +528,6 @@ export class ClassificationHandlingRulesService {
         errors.push('Third-party processing is not allowed for this data classification');
       }
     }
-
     // Check caching restrictions
     if (!requirements.cachingRestrictions.allowed) {
       const hasCaching = this.checkCachingCompliance(context);
@@ -567,20 +535,17 @@ export class ClassificationHandlingRulesService {
         errors.push('Data caching is not allowed for this classification');
       }
     }
-
     return { valid: errors.length === 0, errors, warnings, recommendations: [] };
   }
-
   /**
    * Validate monitoring requirements
    */
-  private validateMonitoringRequirements(
+  private validateMonitoringRequirements()
     requirements: MonitoringRequirements,
-    context: OperationContext
+    context: OperationContext,
   ): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
-
     // Check real-time monitoring
     if (requirements.realtimeMonitoring) {
       const hasRealtimeMonitoring = this.checkRealtimeMonitoringCompliance(context);
@@ -588,7 +553,6 @@ export class ClassificationHandlingRulesService {
         warnings.push('Real-time monitoring should be enabled for this classification');
       }
     }
-
     // Check anomaly detection
     if (requirements.anomalyDetection) {
       const hasAnomalyDetection = this.checkAnomalyDetectionCompliance(context);
@@ -596,43 +560,39 @@ export class ClassificationHandlingRulesService {
         warnings.push('Anomaly detection should be enabled for this classification');
       }
     }
-
     return { valid: errors.length === 0, errors, warnings, recommendations: [] };
   }
-
   /**
    * Record handling rule violations
    */
-  private async recordViolations(
+  private async recordViolations()
     dataId: string,
     classification: DataClassificationLevel,
     errors: string[],
-    context: OperationContext
+    context: OperationContext,
   ): Promise<void> {
     for (const error of errors) {
       const violation: HandlingRuleViolation = {
-        id: `violation-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        ruleId: `handling-${classification}`,
-        ruleName: `${classification} Data Handling Requirements`,
+        id: `violation-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,}
+        ruleId: `handling-${classification}`,}
+        ruleName: `${classification} Data Handling Requirements`,}
         classification,
         violationType: 'HANDLING_REQUIREMENT_VIOLATION',
         severity: this.getSeverityForClassification(classification),
         description: error,
         detectedAt: new Date(),
         context,
-        evidence: {
+        evidence: {,
           dataId,
           operation: context.operation,
-          environment: context.environment
+          environment: context.environment,
         },
         remediation: this.getRemediationSteps(error),
-        status: 'OPEN'
+        status: 'OPEN',
       };
-
       this.violations.push(violation);
     }
   }
-
   /**
    * Get severity level based on classification
    */
@@ -641,11 +601,10 @@ export class ClassificationHandlingRulesService {
       PUBLIC: 'LOW',
       INTERNAL: 'MEDIUM',
       CONFIDENTIAL: 'HIGH',
-      RESTRICTED: 'CRITICAL'
+      RESTRICTED: 'CRITICAL',
     };
     return severityMap[classification];
   }
-
   /**
    * Get remediation steps for error
    */
@@ -673,68 +632,55 @@ export class ClassificationHandlingRulesService {
     }
     return ['Review compliance requirements and update configuration'];
   }
-
   // Compliance check methods (simplified for demonstration)
   private checkEncryptionCompliance(context: OperationContext): boolean {
     // In real implementation, this would check encryption status
     return context.environment === 'production';
   }
-
   private checkLocationCompliance(approvedLocations: string[], context: OperationContext): boolean {
     // In real implementation, this would check data location
     return approvedLocations.includes('internal_datacenter') || approvedLocations.includes('approved_cloud');
   }
-
   private checkBackupEncryptionCompliance(context: OperationContext): boolean {
     // In real implementation, this would check backup encryption
     return context.environment === 'production';
   }
-
   private checkTLSCompliance(requiredVersion: string, context: OperationContext): boolean {
     // In real implementation, this would check TLS configuration
     return context.environment === 'production';
   }
-
   private checkCertificatePinningCompliance(context: OperationContext): boolean {
     // In real implementation, this would check certificate pinning
     return context.environment === 'production';
   }
-
   private checkEndToEndEncryptionCompliance(context: OperationContext): boolean {
     // In real implementation, this would check E2E encryption
     return context.environment === 'production';
   }
-
   private checkNetworkRestrictionCompliance(restrictions: string[], context: OperationContext): boolean {
     // In real implementation, this would check network configuration
     return context.environment === 'production';
   }
-
   private checkIsolationCompliance(context: OperationContext): boolean {
     // In real implementation, this would check environment isolation
     return context.environment === 'production' || context.environment === 'isolated_production';
   }
-
   private checkThirdPartyProcessingCompliance(context: OperationContext): boolean {
     // In real implementation, this would check for third-party processing
     return false; // Assume no third-party processing
   }
-
   private checkCachingCompliance(context: OperationContext): boolean {
     // In real implementation, this would check caching configuration
     return false; // Assume no caching for restricted data
   }
-
   private checkRealtimeMonitoringCompliance(context: OperationContext): boolean {
     // In real implementation, this would check monitoring configuration
     return context.environment === 'production';
   }
-
   private checkAnomalyDetectionCompliance(context: OperationContext): boolean {
     // In real implementation, this would check anomaly detection
     return context.environment === 'production';
   }
-
   /**
    * Get all handling rules for a classification level
    */
@@ -744,7 +690,6 @@ export class ClassificationHandlingRulesService {
     }
     return Array.from(this.handlingRules.values());
   }
-
   /**
    * Get all violations
    */
@@ -754,7 +699,6 @@ export class ClassificationHandlingRulesService {
     }
     return this.violations;
   }
-
   /**
    * Get compliance checks
    */
@@ -764,28 +708,24 @@ export class ClassificationHandlingRulesService {
     }
     return this.complianceChecks;
   }
-
   /**
    * Add custom handling rule
    */
   addHandlingRule(rule: HandlingRule): void {
     this.handlingRules.set(rule.id, rule);
   }
-
   /**
    * Update handling requirements for a classification level
    */
   updateHandlingRequirements(classification: DataClassificationLevel, requirements: HandlingRequirements): void {
     this.handlingRequirements.set(classification, requirements);
   }
-
   /**
    * Get compliance score for a classification level
    */
   getComplianceScore(classification: DataClassificationLevel): number {
     const checks = this.getComplianceChecks(classification);
     if (checks.length === 0) return 100;
-
     const passedChecks = checks.filter(check => check.passed).length;
     return Math.round((passedChecks / checks.length) * 100);
   }

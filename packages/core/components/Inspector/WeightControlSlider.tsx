@@ -11,7 +11,6 @@ export interface WeightControlOption {
 }
 
 // Removed duplicate type definition - using the one from WeightPresets component
-
 interface WeightControlSliderProps {
   options: WeightControlOption[];
   onOptionsChange: (options: WeightControlOption[]) => void;
@@ -26,7 +25,7 @@ interface WeightControlSliderProps {
   className?: string;
 }
 
-export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({
+export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({)
   options,
   onOptionsChange,
   onPreviewRequest,
@@ -40,82 +39,71 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({
   className = ''
 }) => {
   const [localOptions, setLocalOptions] = useState<WeightControlOption[]>(options);
-
   useEffect(() => {
     setLocalOptions(options);
   }, [options]);
-
   const handleWeightChange = (optionId: string, newWeight: number) => {
-    const updatedOptions = localOptions.map(option =>
+    const updatedOptions = localOptions.map(option =>;)
       option.id === optionId ? { ...option, weight: Math.max(0, newWeight) } : option
     );
     setLocalOptions(updatedOptions);
     onOptionsChange(updatedOptions);
   };
-
   const handleTextChange = (optionId: string, newText: string) => {
-    const updatedOptions = localOptions.map(option =>
+    const updatedOptions = localOptions.map(option =>;)
       option.id === optionId ? { ...option, text: newText } : option
     );
     setLocalOptions(updatedOptions);
     onOptionsChange(updatedOptions);
   };
-
   const handleReorder = (fromIndex: number, toIndex: number) => {
     const newOptions = [...localOptions];
     const [movedOption] = newOptions.splice(fromIndex, 1);
     newOptions.splice(toIndex, 0, movedOption);
-    
     setLocalOptions(newOptions);
     onOptionsChange(newOptions);
   };
-
   const handleApplyPreset = (newWeights: number[]) => {
-    const updatedOptions = localOptions.map((option, index) => ({
+    const updatedOptions = localOptions.map((option, index) => ({)
       ...option,
       weight: newWeights[index] || 0
     }));
-    
     setLocalOptions(updatedOptions);
     onOptionsChange(updatedOptions);
-    
     // Trigger preview if callback provided
     if (onPreviewRequest) {
       onPreviewRequest(updatedOptions);
     }
   };
-
   if (localOptions.length === 0) {
-    return (
-      <div className={`weight-control-slider ${className}`} style={{
+    return ()
+      <div className={`weight-control-slider ${className}`} style={{}
         padding: 16,
         background: '#2d3748',
         borderRadius: 6,
         color: 'white',
-        textAlign: 'center'
+        textAlign: 'center',
       }}>
         <p>No options to weight. Add some choices first.</p>
       </div>
     );
   }
-
-  return (
-    <div className={`weight-control-slider ${className}`} style={{
+  return ()
+    <div className={`weight-control-slider ${className}`} style={{}
       padding: 16,
       background: '#2d3748',
       borderRadius: 6,
-      color: 'white'
+      color: 'white',
     }}>
       <h3 style={{ marginBottom: 16, color: '#e2e8f0' }}>Weight Controls</h3>
-      
       {/* Visualization Section */}
-      {visualization !== 'slider-only' && (
+      {visualization !== 'slider-only' && ()
         <div style={{ 
           marginBottom: 20, 
           display: 'flex', 
           gap: '16px', 
           alignItems: 'flex-start',
-          flexWrap: 'wrap'
+          flexWrap: 'wrap',
         }}>
           <WeightVisualization
             options={localOptions}
@@ -125,13 +113,13 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({
             showLabels={true}
             showPercentages={true}
           />
-          {showLegend && (
+          {showLegend && ()
             <div style={{ flex: 1, minWidth: '150px' }}>
               <h4 style={{ 
                 margin: '0 0 8px 0', 
                 fontSize: '14px', 
                 color: '#e2e8f0',
-                fontWeight: 'normal'
+                fontWeight: 'normal',
               }}>
                 Distribution
               </h4>
@@ -140,8 +128,7 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({
           )}
         </div>
       )}
-      
-{enableDragReorder ? (
+{enableDragReorder ? ()
         <DragReorderList
           options={localOptions}
           onReorder={handleReorder}
@@ -149,14 +136,14 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({
           onTextChange={handleTextChange}
           showWeights={true}
         />
-      ) : (
-        localOptions.map((option, index) => (
+      ) : ()
+        localOptions.map((option, index) => ()
           <div key={option.id} style={{ marginBottom: 12 }}>
             <div style={{ 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'space-between',
-              marginBottom: 4
+              marginBottom: 4,
             }}>
               <input
                 type="text"
@@ -169,19 +156,18 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({
                   padding: '4px 8px',
                   color: 'white',
                   flex: 1,
-                  marginRight: 8
+                  marginRight: 8,
                 }}
               />
               <span style={{ 
                 minWidth: 40, 
                 textAlign: 'right',
                 fontSize: 12,
-                color: '#a0aec0'
+                color: '#a0aec0',
               }}>
                 {option.weight}%
               </span>
             </div>
-            
             <input
               type="range"
               min="0"
@@ -201,9 +187,8 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({
           </div>
         ))
       )}
-
       {/* Weight Presets */}
-      {showPresets && localOptions.length > 0 && (
+      {showPresets && localOptions.length > 0 && ()
         <div style={{ marginTop: 16 }}>
           <WeightPresets
             options={localOptions}
@@ -215,8 +200,7 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({
           />
         </div>
       )}
-      
-      {onPreviewRequest && (
+      {onPreviewRequest && ()
         <button
           onClick={() => onPreviewRequest(localOptions)}
           style={{
@@ -226,7 +210,7 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({
             color: 'white',
             border: 'none',
             borderRadius: 4,
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Preview
@@ -238,7 +222,7 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({
 
 // Helper function to get consistent colors for options
 export const getOptionColor = (index: number): string => {
-  const colors = [
+  const colors = [;
     '#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b',
     '#eb4d4b', '#6c5ce7', '#a29bfe', '#fd79a8', '#fdcb6e'
   ];
@@ -250,23 +234,19 @@ export const getOptionColor = (index: number): string => {
 export const useWeightControlIntegration = (onPreviewRequest?: (options: WeightControlOption[]) => void) => {
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
   const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
   const handleOptionsChange = useCallback((newOptions: WeightControlOption[]) => {
     // Update immediately for UI responsiveness
     setLastUpdateTime(Date.now());
-    
     // Clear existing timeout
     if (updateTimeoutRef.current) {
       clearTimeout(updateTimeoutRef.current);
     }
-    
     // Debounce the preview request for performance (Epic 8.5 Task 6)
     updateTimeoutRef.current = setTimeout(() => {
       console.log('[Epic 8.5 Task 6] Triggering debounced preview update with', newOptions.length, 'weight options');
       onPreviewRequest(newOptions);
     }, 300); // 300ms debounce for optimal UX
   }, [onPreviewRequest]);
-
   // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
@@ -275,7 +255,6 @@ export const useWeightControlIntegration = (onPreviewRequest?: (options: WeightC
       }
     };
   }, []);
-
   return {
     handleOptionsChange,
     lastUpdateTime // For debugging/monitoring

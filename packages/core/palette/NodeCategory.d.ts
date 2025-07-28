@@ -6,7 +6,7 @@ export interface NodeCategory {
     id: string;
     name: string;
     description: string;
-    icon: React.ComponentType<{
+    icon: React.ComponentType<{,
         size?: number;
         color?: string;
     }>;

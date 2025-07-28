@@ -21,7 +21,7 @@ export interface NavigationItem {
         actions: string[];
     }[];
     badge?: NavigationBadge;
-    metadata: {
+    metadata: {,
         category: string;
         priority: number;
         riskLevel: 'low' | 'medium' | 'high' | 'critical';

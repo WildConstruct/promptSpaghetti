@@ -29,14 +29,14 @@ export interface ThrottlingAnalyticsInsight {
     insightType: 'pattern_detected' | 'scaling_recommendation' | 'anomaly_detected' | 'predictive_adjustment';
     confidence: number;
     ruleId: string;
-    recommendation: {
+    recommendation: {,
         action: 'increase_throttling' | 'decrease_throttling' | 'maintain_current' | 'enable_protection' | 'disable_protection';
         adjustmentFactor: number;
         reason: string;
         expectedImpact: string;
         validityPeriod: number;
     };
-    metadata: {
+    metadata: {,
         patternType?: string;
         usageMetrics?: Record<string, number>;
         scalingFactors?: Record<string, number>;
@@ -46,19 +46,19 @@ export interface ThrottlingAnalyticsInsight {
 }
 export interface ThrottlingDecisionContext extends ThrottlingContext {
     analyticsInsights: ThrottlingAnalyticsInsight[];
-    historicalPerformance: {
+    historicalPerformance: {,
         requestVolume: number[];
         successRate: number[];
         averageLatency: number[];
         errorRates: number[];
     };
-    patternAnalysis: {
+    patternAnalysis: {,
         currentPattern: string;
         patternConfidence: number;
         predictedNextPattern: string;
         patternTransitionProbability: number;
     };
-    scalingContext: {
+    scalingContext: {,
         currentLoad: number;
         predictedLoad: number;
         scalingRecommendation: string;
@@ -145,7 +145,7 @@ export interface ThrottlingResult {
     delay: number;
     reason: string;
     ruleId: string;
-    metadata: {
+    metadata: {,
         originalDelay?: number;
         appliedMultiplier?: number;
         systemCondition: SystemCondition;
@@ -187,7 +187,7 @@ export declare class AdaptiveThrottlingRulesEngine extends EventEmitter {
     private analyticsInsights;
     private analyticsEnabled;
     private lastAnalyticsUpdate;
-    constructor(rateLimitingService: RateLimitingService, initializeDefaults?: boolean, analyticsConfig?: {
+    constructor(rateLimitingService: RateLimitingService, initializeDefaults?: boolean, analyticsConfig?: {)
         usagePatternAnalytics?: ApiUsagePatternQuotaRecommendations;
         scalingAnalytics?: ApiScalingAnalyticsIntegration;
         enableAnalytics?: boolean;
@@ -316,7 +316,7 @@ export declare class AdaptiveThrottlingRulesEngine extends EventEmitter {
         insightsByType: Record<string, number>;
         insightsByRule: Record<string, number>;
         averageConfidence: number;
-        performanceMetrics: {
+        performanceMetrics: {,
             averageEffectiveness: number;
             averageFalsePositiveRate: number;
             averageAdaptationSuccessRate: number;

@@ -16,7 +16,6 @@
  * - Custom attribution models
  * - Advanced reporting and insights
  */
-
 import { EventEmitter } from 'events';
 
 // Core Attribution Interfaces
@@ -897,91 +896,71 @@ export class AttributionTracker extends EventEmitter {
   private conversionQueue: Conversion[] = [];
   private isProcessing = false;
   private processingTimer?: NodeJS.Timeout;
-
   constructor(config: Partial<AttributionConfig>) {
     super();
-    
     this.config = this.mergeDefaultConfig(config);
     this.initializeModels();
     this.initializeChannels();
     this.startProcessing();
   }
-
   // Core Tracking Methods
   async trackTouchPoint(data: Partial<TouchPoint>): Promise<string> {
     try {
       const touchPoint = this.createTouchPoint(data);
-      
       // Add to processing queue
       this.touchPointQueue.push(touchPoint);
-      
       // Process immediately if real-time is enabled
       if (this.config.attribution.realTimeUpdates) {
         await this.processTouchPoint(touchPoint);
       }
-      
       this.emit('touchPointTracked', { touchPoint });
       return touchPoint.id;
-      
     } catch (error) {
       this.emit('trackingError', { type: 'touchpoint', error: error instanceof Error ? error.message : String(error) });
       throw error;
     }
   }
-
   async trackConversion(data: Partial<Conversion>): Promise<string> {
     try {
       const conversion = this.createConversion(data);
-      
       // Add to processing queue
       this.conversionQueue.push(conversion);
-      
       // Process immediately if real-time is enabled
       if (this.config.attribution.realTimeUpdates) {
         await this.processConversion(conversion);
       }
-      
       this.emit('conversionTracked', { conversion });
       return conversion.id;
-      
     } catch (error) {
       this.emit('trackingError', { type: 'conversion', error: error instanceof Error ? error.message : String(error) });
       throw error;
     }
   }
-
   // Journey Management
   async getJourney(journeyId: string): Promise<CustomerJourney | null> {
     return this.journeys.get(journeyId) || null;
   }
-
   async getUserJourneys(userId: string): Promise<CustomerJourney[]> {
-    return Array.from(this.journeys.values()).filter(
+    return Array.from(this.journeys.values()).filter()
       journey => journey.userId === userId
     );
   }
-
   async mergeJourneys(sourceJourneyId: string, targetJourneyId: string): Promise<CustomerJourney> {
     const sourceJourney = this.journeys.get(sourceJourneyId);
     const targetJourney = this.journeys.get(targetJourneyId);
-    
     if (!sourceJourney || !targetJourney) {
       throw new Error('One or both journeys not found');
     }
-    
     // Merge logic
     const mergedJourney = this.performJourneyMerge(sourceJourney, targetJourney);
-    
     // Update storage
     this.journeys.set(targetJourneyId, mergedJourney);
     this.journeys.delete(sourceJourneyId);
-    
     this.emit('journeysMerged', { sourceJourneyId, targetJourneyId, mergedJourney });
     return mergedJourney;
   }
-
   // Attribution Analysis
-  async calculateAttribution(
+  async calculateAttribution()
     conversionId: string,
     modelId?: string
   ): Promise<ConversionAttribution> {
@@ -989,26 +968,21 @@ export class AttributionTracker extends EventEmitter {
     if (!conversion) {
       throw new Error('Conversion not found');
     }
-    
     const journey = this.journeys.get(conversion.journeyId);
     if (!journey) {
       throw new Error('Journey not found');
     }
-    
-    const model = modelId 
+    const model = modelId ;
       ? this.models.get(modelId)
       : this.models.get(this.config.attribution.defaultModel);
-    
     if (!model) {
       throw new Error('Attribution model not found');
     }
-    
     return this.computeAttribution(journey, conversion, model);
   }
-
-  async getAttributionReport(
+  async getAttributionReport()
     timeRange: { start: Date; end: Date },
-    options: {
+    options: {,
       models?: string[];
       channels?: string[];
       dimensions?: string[];
@@ -1017,173 +991,138 @@ export class AttributionTracker extends EventEmitter {
   ): Promise<AttributionReport> {
     const journeys = this.getJourneysInRange(timeRange);
     const conversions = this.getConversionsInRange(timeRange);
-    
     return this.generateAttributionReport(journeys, conversions, options);
   }
-
   // Model Management
   async addAttributionModel(model: Omit<AttributionModel, 'id' | 'created' | 'updated'>): Promise<string> {
     const modelId = this.generateModelId();
-    
     const fullModel: AttributionModel = {
       id: modelId,
       created: new Date(),
       updated: new Date(),
       ...model
     };
-    
     this.models.set(modelId, fullModel);
     this.emit('modelAdded', { model: fullModel });
-    
     return modelId;
   }
-
   async updateAttributionModel(modelId: string, updates: Partial<AttributionModel>): Promise<void> {
     const model = this.models.get(modelId);
     if (!model) {
       throw new Error('Model not found');
     }
-    
     const updatedModel = {
       ...model,
       ...updates,
       updated: new Date()
     };
-    
     this.models.set(modelId, updatedModel);
     this.emit('modelUpdated', { modelId, model: updatedModel });
   }
-
   async removeAttributionModel(modelId: string): Promise<void> {
     if (!this.models.delete(modelId)) {
       throw new Error('Model not found');
     }
-    
     this.emit('modelRemoved', { modelId });
   }
-
   // Channel Management
   async addChannel(channel: Omit<ChannelConfig, 'id'>): Promise<string> {
     const channelId = this.generateChannelId();
-    
     const fullChannel: ChannelConfig = {
       id: channelId,
       ...channel
     };
-    
     this.channels.set(channelId, fullChannel);
     this.emit('channelAdded', { channel: fullChannel });
-    
     return channelId;
   }
-
   async updateChannel(channelId: string, updates: Partial<ChannelConfig>): Promise<void> {
     const channel = this.channels.get(channelId);
     if (!channel) {
       throw new Error('Channel not found');
     }
-    
     const updatedChannel = { ...channel, ...updates };
     this.channels.set(channelId, updatedChannel);
     this.emit('channelUpdated', { channelId, channel: updatedChannel });
   }
-
   // Cross-Device Tracking
   async linkDevices(deviceIds: string[], userId?: string): Promise<void> {
     if (!this.config.attribution.crossDevice.enabled) {
       throw new Error('Cross-device tracking is disabled');
     }
-    
     // Find journeys for each device
     const deviceJourneys = new Map<string, CustomerJourney[]>();
-    
     for (const deviceId of deviceIds) {
-      const journeys = Array.from(this.journeys.values()).filter(
+      const journeys = Array.from(this.journeys.values()).filter(;)
         journey => journey.deviceId === deviceId
       );
       deviceJourneys.set(deviceId, journeys);
     }
-    
     // Merge journeys across devices
     await this.mergeDeviceJourneys(deviceJourneys, userId);
-    
     this.emit('devicesLinked', { deviceIds, userId });
   }
-
   // Privacy and Compliance
   async deleteUserData(userId: string): Promise<void> {
     // Find all journeys for the user
-    const userJourneys = Array.from(this.journeys.values()).filter(
+    const userJourneys = Array.from(this.journeys.values()).filter(;)
       journey => journey.userId === userId
     );
-    
     // Delete journeys
     for (const journey of userJourneys) {
       this.journeys.delete(journey.id);
     }
-    
     this.emit('userDataDeleted', { userId, journeyCount: userJourneys.length });
   }
-
   async anonymizeUserData(userId: string): Promise<void> {
     // Find all journeys for the user
-    const userJourneys = Array.from(this.journeys.values()).filter(
+    const userJourneys = Array.from(this.journeys.values()).filter(;)
       journey => journey.userId === userId
     );
-    
     // Anonymize journeys
     for (const journey of userJourneys) {
       journey.userId = undefined;
       journey.anonymousId = this.generateAnonymousId();
       journey.updated = new Date();
     }
-    
     this.emit('userDataAnonymized', { userId, journeyCount: userJourneys.length });
   }
-
   async exportUserData(userId: string): Promise<any> {
-    const userJourneys = Array.from(this.journeys.values()).filter(
+    const userJourneys = Array.from(this.journeys.values()).filter(;)
       journey => journey.userId === userId
     );
-    
     return {
       userId,
       journeys: userJourneys,
       exportDate: new Date(),
-      format: 'json'
+      format: 'json',
     };
   }
-
   // Configuration Management
   updateConfig(updates: Partial<AttributionConfig>): void {
     this.config = { ...this.config, ...updates };
     this.emit('configUpdated', { config: this.config });
   }
-
   getConfig(): AttributionConfig {
     return { ...this.config };
   }
-
   // System Management
   async flush(): Promise<void> {
     await this.processQueues();
   }
-
   async stop(): Promise<void> {
     this.stopProcessing();
     await this.flush();
     this.cleanup();
   }
-
   // Analytics and Insights
   async getChannelPerformance(timeRange: { start: Date; end: Date }): Promise<ChannelPerformanceReport> {
     const journeys = this.getJourneysInRange(timeRange);
     return this.calculateChannelPerformance(journeys);
   }
-
-  async getConversionPaths(
+  async getConversionPaths()
     timeRange: { start: Date; end: Date },
-    options: {
+    options: {,
       limit?: number;
       minTouchPoints?: number;
       channels?: string[];
@@ -1192,42 +1131,39 @@ export class AttributionTracker extends EventEmitter {
     const journeys = this.getJourneysInRange(timeRange);
     return this.analyzeConversionPaths(journeys, options);
   }
-
   async getAttributionInsights(timeRange: { start: Date; end: Date }): Promise<AttributionInsights> {
     const journeys = this.getJourneysInRange(timeRange);
     const conversions = this.getConversionsInRange(timeRange);
-    
     return this.generateInsights(journeys, conversions);
   }
-
   // Private Methods
   private mergeDefaultConfig(config: Partial<AttributionConfig>): AttributionConfig {
     return {
       trackingId: config.trackingId || 'default',
-      attribution: {
-        lookbackWindow: {
+      attribution: {,
+        lookbackWindow: {,
           impression: 30,
           click: 90,
           view: 30,
           engagement: 30,
           custom: {}
         },
-        crossDevice: {
+        crossDevice: {,
           enabled: false,
-          identityResolution: {
+          identityResolution: {,
             email: true,
             phone: false,
             userId: true,
             cookieSync: false,
             fingerprinting: false,
             ipAddress: false,
-            userAgent: false
+            userAgent: false,
           },
           probabilisticMatching: false,
           deterministicMatching: true,
-          confidenceThreshold: 0.8
+          confidenceThreshold: 0.8,
         },
-        deduplication: {
+        deduplication: {,
           enabled: true,
           strategy: 'unique',
           window: 5,
@@ -1242,65 +1178,65 @@ export class AttributionTracker extends EventEmitter {
       },
       models: config.models || [],
       channels: config.channels || [],
-      privacy: {
+      privacy: {,
         gdprCompliance: true,
         ccpaCompliance: true,
         cookieConsent: false,
         dataMinimization: true,
-        anonymization: {
+        anonymization: {,
           enabled: true,
           ipAnonymization: true,
           userIdHashing: false,
           piiRemoval: true,
           aggregationThreshold: 50,
-          kAnonymity: 5
+          kAnonymity: 5,
         },
-        retention: {
+        retention: {,
           touchPoints: 90,
           conversions: 365,
           journeys: 365,
           analytics: 730,
           logs: 30,
-          autoDelete: true
+          autoDelete: true,
         },
-        userRights: {
+        userRights: {,
           accessRequests: true,
           deleteRequests: true,
           portabilityRequests: true,
           optOutRequests: true,
-          correctionRequests: true
+          correctionRequests: true,
         },
         ...config.privacy
       },
-      storage: {
-        backend: {
-          type: 'local'
+      storage: {,
+        backend: {,
+          type: 'local',
         },
-        partitioning: {
+        partitioning: {,
           strategy: 'time',
           granularity: 'day',
-          retention: 90
+          retention: 90,
         },
-        compression: {
+        compression: {,
           enabled: true,
           algorithm: 'gzip',
-          level: 6
+          level: 6,
         },
-        encryption: {
+        encryption: {,
           enabled: false,
           algorithm: 'AES-256',
           keyRotation: false,
-          rotationInterval: 30
+          rotationInterval: 30,
         },
-        backup: {
+        backup: {,
           enabled: false,
           frequency: 'daily',
           retention: 7,
-          offsite: false
+          offsite: false,
         },
         ...config.storage
       },
-      reporting: {
+      reporting: {,
         realTime: true,
         batchInterval: 15,
         aggregationLevels: [],
@@ -1309,7 +1245,7 @@ export class AttributionTracker extends EventEmitter {
         exports: [],
         ...config.reporting
       },
-      integration: {
+      integration: {,
         dataImport: [],
         webhooks: [],
         apis: [],
@@ -1318,7 +1254,6 @@ export class AttributionTracker extends EventEmitter {
       }
     };
   }
-
   private initializeModels(): void {
     // Default attribution models
     const defaultModels: AttributionModel[] = [
@@ -1328,12 +1263,12 @@ export class AttributionTracker extends EventEmitter {
         type: 'first_touch',
         description: 'Gives 100% credit to the first touchpoint',
         configuration: { parameters: {} },
-        weights: {
+        weights: {,
           byPosition: [{ position: 'first', weight: 1.0 }],
           byChannel: [],
           byTouchType: [],
           byTimeDecay: [],
-          byCustom: []
+          byCustom: [],
         },
         rules: [],
         isDefault: false,
@@ -1348,12 +1283,12 @@ export class AttributionTracker extends EventEmitter {
         type: 'last_touch',
         description: 'Gives 100% credit to the last touchpoint',
         configuration: { parameters: {} },
-        weights: {
+        weights: {,
           byPosition: [{ position: 'last', weight: 1.0 }],
           byChannel: [],
           byTouchType: [],
           byTimeDecay: [],
-          byCustom: []
+          byCustom: [],
         },
         rules: [],
         isDefault: true,
@@ -1368,12 +1303,12 @@ export class AttributionTracker extends EventEmitter {
         type: 'linear',
         description: 'Distributes credit equally across all touchpoints',
         configuration: { parameters: {} },
-        weights: {
+        weights: {,
           byPosition: [],
           byChannel: [],
           byTouchType: [],
           byTimeDecay: [],
-          byCustom: []
+          byCustom: [],
         },
         rules: [],
         isDefault: false,
@@ -1383,16 +1318,13 @@ export class AttributionTracker extends EventEmitter {
         updated: new Date()
       }
     ];
-
     for (const model of defaultModels) {
       this.models.set(model.id, model);
     }
   }
-
   private initializeChannels(): void {
     // Default channel configurations would be loaded here
   }
-
   private startProcessing(): void {
     if (!this.isProcessing) {
       this.isProcessing = true;
@@ -1401,7 +1333,6 @@ export class AttributionTracker extends EventEmitter {
       }, this.config.reporting.batchInterval * 60 * 1000);
     }
   }
-
   private stopProcessing(): void {
     this.isProcessing = false;
     if (this.processingTimer) {
@@ -1409,24 +1340,20 @@ export class AttributionTracker extends EventEmitter {
       this.processingTimer = undefined;
     }
   }
-
   private async processQueues(): Promise<void> {
     // Process touchpoint queue
     while (this.touchPointQueue.length > 0) {
       const touchPoint = this.touchPointQueue.shift()!;
       await this.processTouchPoint(touchPoint);
     }
-
     // Process conversion queue
     while (this.conversionQueue.length > 0) {
       const conversion = this.conversionQueue.shift()!;
       await this.processConversion(conversion);
     }
   }
-
   private createTouchPoint(data: Partial<TouchPoint>): TouchPoint {
     const touchPointId = this.generateTouchPointId();
-    
     return {
       id: touchPointId,
       journeyId: data.journeyId || this.findOrCreateJourney(data),
@@ -1448,29 +1375,27 @@ export class AttributionTracker extends EventEmitter {
         custom: {}
       },
       context: data.context || {
-        timeContext: {
+        timeContext: {,
           dayOfWeek: new Date().toLocaleDateString('en', { weekday: 'long' }),
           hourOfDay: new Date().getHours(),
           isWeekend: [0, 6].includes(new Date().getDay()),
           isHoliday: false,
           season: this.getSeason(new Date()),
-          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         }
       },
-      attribution: {
+      attribution: {,
         credit: 0,
         weight: 0,
         models: {},
         rank: 0,
         influence: 0,
-        decay: 0
+        decay: 0,
       }
     };
   }
-
   private createConversion(data: Partial<Conversion>): Conversion {
     const conversionId = this.generateConversionId();
-    
     return {
       id: conversionId,
       journeyId: data.journeyId || '',
@@ -1488,7 +1413,6 @@ export class AttributionTracker extends EventEmitter {
       data: data.data || { custom: {} }
     };
   }
-
   private async processTouchPoint(touchPoint: TouchPoint): Promise<void> {
     // Find or create journey
     let journey = this.journeys.get(touchPoint.journeyId);
@@ -1496,28 +1420,22 @@ export class AttributionTracker extends EventEmitter {
       journey = this.createJourney(touchPoint);
       this.journeys.set(journey.id, journey);
     }
-
     // Add touchpoint to journey
     journey.touchPoints.push(touchPoint);
     journey.updated = new Date();
-
     // Update journey timeline
     this.updateJourneyTimeline(journey, touchPoint);
-
     this.emit('touchPointProcessed', { touchPoint, journey });
   }
-
   private async processConversion(conversion: Conversion): Promise<void> {
     // Find journey
     const journey = this.journeys.get(conversion.journeyId);
     if (!journey) {
-      throw new Error(`Journey ${conversion.journeyId} not found for conversion`);
+      throw new Error(`Journey ${conversion.journeyId} not found for conversion`);}
     }
-
     // Add conversion to journey
     journey.conversions.push(conversion);
     journey.updated = new Date();
-
     // Calculate attribution for all models
     for (const [modelId, model] of this.models) {
       if (model.isActive) {
@@ -1525,17 +1443,14 @@ export class AttributionTracker extends EventEmitter {
         conversion.attribution.models[modelId] = attribution.models[modelId];
       }
     }
-
     this.emit('conversionProcessed', { conversion, journey });
   }
-
-  private computeAttribution(
+  private computeAttribution()
     journey: CustomerJourney,
     conversion: Conversion,
-    model: AttributionModel
+    model: AttributionModel,
   ): ConversionAttribution {
     const relevantTouchPoints = this.getRelevantTouchPoints(journey, conversion);
-    
     switch (model.type) {
     case 'first_touch':
       return this.computeFirstTouchAttribution(relevantTouchPoints, model);
@@ -1551,175 +1466,168 @@ export class AttributionTracker extends EventEmitter {
       return this.computeCustomAttribution(relevantTouchPoints, model, conversion);
     }
   }
-
   // Attribution computation methods (simplified implementations)
   private computeFirstTouchAttribution(touchPoints: TouchPoint[], model: AttributionModel): ConversionAttribution {
     const firstTouchPoint = touchPoints[0];
     return {
-      touchPoints: [{
+      touchPoints: [{,
         credit: 1.0,
         weight: 1.0,
         models: { [model.id]: 1.0 },
         rank: 1,
         influence: 1.0,
-        decay: 1.0
+        decay: 1.0,
       }],
-      models: {
+      models: {,
         [model.id]: {
           model: model.id,
-          credit: [{
+          credit: [{,
             touchPointId: firstTouchPoint.id,
             credit: 1.0,
             percentage: 100,
             channel: firstTouchPoint.channel,
-            position: 1
+            position: 1,
           }],
           confidence: 1.0,
-          methodology: 'first_touch'
+          methodology: 'first_touch',
         }
       },
-      primary: {
+      primary: {,
         model: model.id,
-        credit: [{
+        credit: [{,
           touchPointId: firstTouchPoint.id,
           credit: 1.0,
           percentage: 100,
           channel: firstTouchPoint.channel,
-          position: 1
+          position: 1,
         }],
         confidence: 1.0,
-        methodology: 'first_touch'
+        methodology: 'first_touch',
       },
-      assisted: {
+      assisted: {,
         model: model.id,
         credit: [],
         confidence: 0,
-        methodology: 'none'
+        methodology: 'none',
       },
-      incrementality: {
+      incrementality: {,
         baseline: 0,
         incremental: 1.0,
         lift: 1.0,
         confidence: 0.8,
-        methodology: 'estimated'
+        methodology: 'estimated',
       }
     };
   }
-
   private computeLastTouchAttribution(touchPoints: TouchPoint[], model: AttributionModel): ConversionAttribution {
     const lastTouchPoint = touchPoints[touchPoints.length - 1];
     return {
-      touchPoints: [{
+      touchPoints: [{,
         credit: 1.0,
         weight: 1.0,
         models: { [model.id]: 1.0 },
         rank: touchPoints.length,
         influence: 1.0,
-        decay: 1.0
+        decay: 1.0,
       }],
-      models: {
+      models: {,
         [model.id]: {
           model: model.id,
-          credit: [{
+          credit: [{,
             touchPointId: lastTouchPoint.id,
             credit: 1.0,
             percentage: 100,
             channel: lastTouchPoint.channel,
-            position: touchPoints.length
+            position: touchPoints.length,
           }],
           confidence: 1.0,
-          methodology: 'last_touch'
+          methodology: 'last_touch',
         }
       },
-      primary: {
+      primary: {,
         model: model.id,
-        credit: [{
+        credit: [{,
           touchPointId: lastTouchPoint.id,
           credit: 1.0,
           percentage: 100,
           channel: lastTouchPoint.channel,
-          position: touchPoints.length
+          position: touchPoints.length,
         }],
         confidence: 1.0,
-        methodology: 'last_touch'
+        methodology: 'last_touch',
       },
-      assisted: {
+      assisted: {,
         model: model.id,
         credit: [],
         confidence: 0,
-        methodology: 'none'
+        methodology: 'none',
       },
-      incrementality: {
+      incrementality: {,
         baseline: 0,
         incremental: 1.0,
         lift: 1.0,
         confidence: 0.8,
-        methodology: 'estimated'
+        methodology: 'estimated',
       }
     };
   }
-
   private computeLinearAttribution(touchPoints: TouchPoint[], model: AttributionModel): ConversionAttribution {
     const creditPerTouchPoint = 1.0 / touchPoints.length;
-    const credits: TouchPointCredit[] = touchPoints.map((tp, index) => ({
+    const credits: TouchPointCredit[] = touchPoints.map((tp, index) => ({)
       touchPointId: tp.id,
       credit: creditPerTouchPoint,
       percentage: (creditPerTouchPoint * 100),
       channel: tp.channel,
       position: index + 1
     }));
-
     return {
-      touchPoints: credits.map(c => ({
+      touchPoints: credits.map(c => ({)
         credit: c.credit,
         weight: c.credit,
         models: { [model.id]: c.credit },
         rank: c.position,
         influence: c.credit,
-        decay: 1.0
+        decay: 1.0,
       })),
-      models: {
+      models: {,
         [model.id]: {
           model: model.id,
           credit: credits,
           confidence: 0.9,
-          methodology: 'linear'
+          methodology: 'linear',
         }
       },
-      primary: {
+      primary: {,
         model: model.id,
         credit: credits,
         confidence: 0.9,
-        methodology: 'linear'
+        methodology: 'linear',
       },
-      assisted: {
+      assisted: {,
         model: model.id,
         credit: [],
         confidence: 0,
-        methodology: 'none'
+        methodology: 'none',
       },
-      incrementality: {
+      incrementality: {,
         baseline: 0,
         incremental: 1.0,
         lift: 1.0,
         confidence: 0.7,
-        methodology: 'estimated'
+        methodology: 'estimated',
       }
     };
   }
-
-  private computeTimeDecayAttribution(
+  private computeTimeDecayAttribution()
     touchPoints: TouchPoint[],
     model: AttributionModel,
-    conversion: Conversion
+    conversion: Conversion,
   ): ConversionAttribution {
-    const halfLife = model.configuration.halfLife || 7; // days
+    const halfLife = model.configuration.halfLife || 7; // days;
     const conversionTime = conversion.timestamp.getTime();
-    
     const credits: TouchPointCredit[] = touchPoints.map((tp, index) => {
       const daysDiff = (conversionTime - tp.timestamp.getTime()) / (24 * 60 * 60 * 1000);
       const decay = Math.pow(0.5, daysDiff / halfLife);
-      
       return {
         touchPointId: tp.id,
         credit: decay,
@@ -1728,108 +1636,100 @@ export class AttributionTracker extends EventEmitter {
         position: index + 1
       };
     });
-
     // Normalize credits to sum to 1.0
     const totalCredit = credits.reduce((sum, c) => sum + c.credit, 0);
-    credits.forEach(c => {
+    credits.forEach(c => {)
       c.credit = c.credit / totalCredit;
       c.percentage = c.credit * 100;
     });
-
     return {
-      touchPoints: credits.map(c => ({
+      touchPoints: credits.map(c => ({)
         credit: c.credit,
         weight: c.credit,
         models: { [model.id]: c.credit },
         rank: c.position,
         influence: c.credit,
-        decay: c.credit
+        decay: c.credit,
       })),
-      models: {
+      models: {,
         [model.id]: {
           model: model.id,
           credit: credits,
           confidence: 0.85,
-          methodology: 'time_decay'
+          methodology: 'time_decay',
         }
       },
-      primary: {
+      primary: {,
         model: model.id,
         credit: credits,
         confidence: 0.85,
-        methodology: 'time_decay'
+        methodology: 'time_decay',
       },
-      assisted: {
+      assisted: {,
         model: model.id,
         credit: [],
         confidence: 0,
-        methodology: 'none'
+        methodology: 'none',
       },
-      incrementality: {
+      incrementality: {,
         baseline: 0,
         incremental: 1.0,
         lift: 1.0,
         confidence: 0.75,
-        methodology: 'estimated'
+        methodology: 'estimated',
       }
     };
   }
-
   private computePositionBasedAttribution(touchPoints: TouchPoint[], model: AttributionModel): ConversionAttribution {
     const firstWeight = model.configuration.firstTouchWeight || 0.4;
     const lastWeight = model.configuration.lastTouchWeight || 0.4;
     const middleWeight = model.configuration.middleTouchWeight || 0.2;
-    
     const credits: TouchPointCredit[] = [];
-    
     if (touchPoints.length === 1) {
-      credits.push({
+      credits.push({)
         touchPointId: touchPoints[0].id,
         credit: 1.0,
         percentage: 100,
         channel: touchPoints[0].channel,
-        position: 1
+        position: 1,
       });
     } else if (touchPoints.length === 2) {
-      credits.push({
+      credits.push({)
         touchPointId: touchPoints[0].id,
         credit: firstWeight,
         percentage: firstWeight * 100,
         channel: touchPoints[0].channel,
-        position: 1
+        position: 1,
       });
-      credits.push({
+      credits.push({)
         touchPointId: touchPoints[1].id,
         credit: lastWeight,
         percentage: lastWeight * 100,
         channel: touchPoints[1].channel,
-        position: 2
+        position: 2,
       });
     } else {
       // First touch
-      credits.push({
+      credits.push({)
         touchPointId: touchPoints[0].id,
         credit: firstWeight,
         percentage: firstWeight * 100,
         channel: touchPoints[0].channel,
-        position: 1
+        position: 1,
       });
-      
       // Last touch
-      credits.push({
+      credits.push({)
         touchPointId: touchPoints[touchPoints.length - 1].id,
         credit: lastWeight,
         percentage: lastWeight * 100,
         channel: touchPoints[touchPoints.length - 1].channel,
-        position: touchPoints.length
+        position: touchPoints.length,
       });
-      
       // Middle touches
       const middleTouchPoints = touchPoints.slice(1, -1);
       const creditPerMiddle = middleWeight / middleTouchPoints.length;
-      
       middleTouchPoints.forEach((tp, index) => {
-        credits.push({
+        credits.push({)
           touchPointId: tp.id,
           credit: creditPerMiddle,
           percentage: creditPerMiddle * 100,
@@ -1838,142 +1738,130 @@ export class AttributionTracker extends EventEmitter {
         });
       });
     }
-
     return {
-      touchPoints: credits.map(c => ({
+      touchPoints: credits.map(c => ({)
         credit: c.credit,
         weight: c.credit,
         models: { [model.id]: c.credit },
         rank: c.position,
         influence: c.credit,
-        decay: 1.0
+        decay: 1.0,
       })),
-      models: {
+      models: {,
         [model.id]: {
           model: model.id,
           credit: credits,
           confidence: 0.8,
-          methodology: 'position_based'
+          methodology: 'position_based',
         }
       },
-      primary: {
+      primary: {,
         model: model.id,
         credit: credits,
         confidence: 0.8,
-        methodology: 'position_based'
+        methodology: 'position_based',
       },
-      assisted: {
+      assisted: {,
         model: model.id,
         credit: [],
         confidence: 0,
-        methodology: 'none'
+        methodology: 'none',
       },
-      incrementality: {
+      incrementality: {,
         baseline: 0,
         incremental: 1.0,
         lift: 1.0,
         confidence: 0.7,
-        methodology: 'estimated'
+        methodology: 'estimated',
       }
     };
   }
-
-  private computeCustomAttribution(
+  private computeCustomAttribution()
     touchPoints: TouchPoint[],
     model: AttributionModel,
-    conversion: Conversion
+    conversion: Conversion,
   ): ConversionAttribution {
     // Implement custom attribution logic based on model configuration
     // This is a simplified placeholder
     return this.computeLinearAttribution(touchPoints, model);
   }
-
   // Helper methods (simplified implementations)
   private findOrCreateJourney(data: Partial<TouchPoint>): string {
     // Logic to find existing journey or create new one
     return this.generateJourneyId();
   }
-
   private createJourney(touchPoint: TouchPoint): CustomerJourney {
     const journeyId = this.generateJourneyId();
-    
     return {
       id: journeyId,
       anonymousId: this.generateAnonymousId(),
       sessionIds: [touchPoint.sessionId],
       touchPoints: [],
       conversions: [],
-      attribution: {
+      attribution: {,
         models: {},
         primary: '',
         touchPointCount: 0,
         conversionPath: [],
         timeToConversion: 0,
         assist_interactions: 0,
-        direct_interactions: 0
+        direct_interactions: 0,
       },
-      timeline: {
+      timeline: {,
         firstTouch: touchPoint.timestamp,
         lastTouch: touchPoint.timestamp,
         duration: 0,
         touchPointsByDay: {},
         conversionsByDay: {},
-        engagementPeaks: []
+        engagementPeaks: [],
       },
-      metadata: {
+      metadata: {,
         source: 'web',
-        quality: {
+        quality: {,
           overall: 1.0,
           dataCompleteness: 1.0,
           attribution_confidence: 1.0,
           cross_device_matching: 0,
-          deduplication: 1.0
+          deduplication: 1.0,
         },
-        completeness: {
+        completeness: {,
           touchPoints: 1.0,
           conversions: 0,
           user_data: 0.5,
           context_data: 0.7,
-          overall: 0.55
+          overall: 0.55,
         },
         anomalies: [],
-        tags: []
+        tags: [],
       },
       created: new Date(),
       updated: new Date()
     };
   }
-
   private updateJourneyTimeline(journey: CustomerJourney, touchPoint: TouchPoint): void {
     // Update timeline with new touchpoint
     journey.timeline.lastTouch = touchPoint.timestamp;
     journey.timeline.duration = journey.timeline.lastTouch.getTime() - journey.timeline.firstTouch.getTime();
-    
     const dayKey = touchPoint.timestamp.toISOString().split('T')[0];
     journey.timeline.touchPointsByDay[dayKey] = (journey.timeline.touchPointsByDay[dayKey] || 0) + 1;
   }
-
   private getRelevantTouchPoints(journey: CustomerJourney, conversion: Conversion): TouchPoint[] {
     const lookbackWindow = this.config.attribution.lookbackWindow;
     const conversionTime = conversion.timestamp.getTime();
-    
-    return journey.touchPoints.filter(tp => {
+    return journey.touchPoints.filter(tp => {)
       const timeDiff = (conversionTime - tp.timestamp.getTime()) / (24 * 60 * 60 * 1000);
       const window = (lookbackWindow[tp.type as keyof LookbackWindow] as number) || lookbackWindow.custom[tp.type] || lookbackWindow.click;
       return timeDiff <= window;
     });
   }
-
   private getJourneysInRange(timeRange: { start: Date; end: Date }): CustomerJourney[] {
-    return Array.from(this.journeys.values()).filter(journey =>
+    return Array.from(this.journeys.values()).filter(journey =>)
       journey.timeline.firstTouch >= timeRange.start &&
       journey.timeline.firstTouch <= timeRange.end
     );
   }
-
   private getConversionsInRange(timeRange: { start: Date; end: Date }): Conversion[] {
     const conversions: Conversion[] = [];
-    
     for (const journey of this.journeys.values()) {
       for (const conversion of journey.conversions) {
         if (conversion.timestamp >= timeRange.start && conversion.timestamp <= timeRange.end) {
@@ -1981,10 +1869,8 @@ export class AttributionTracker extends EventEmitter {
         }
       }
     }
-    
     return conversions;
   }
-
   private async findConversion(conversionId: string): Promise<Conversion | null> {
     for (const journey of this.journeys.values()) {
       const conversion = journey.conversions.find(c => c.id === conversionId);
@@ -1994,16 +1880,13 @@ export class AttributionTracker extends EventEmitter {
     }
     return null;
   }
-
   private performJourneyMerge(source: CustomerJourney, target: CustomerJourney): CustomerJourney {
     // Merge touchpoints and sort by timestamp
-    const allTouchPoints = [...source.touchPoints, ...target.touchPoints]
+    const allTouchPoints = [...source.touchPoints, ...target.touchPoints];
       .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
-    
     // Merge conversions
-    const allConversions = [...source.conversions, ...target.conversions]
+    const allConversions = [...source.conversions, ...target.conversions];
       .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
-    
     // Update target journey
     target.touchPoints = allTouchPoints;
     target.conversions = allConversions;
@@ -2012,42 +1895,32 @@ export class AttributionTracker extends EventEmitter {
     target.timeline.lastTouch = allTouchPoints[allTouchPoints.length - 1]?.timestamp || target.timeline.lastTouch;
     target.timeline.duration = target.timeline.lastTouch.getTime() - target.timeline.firstTouch.getTime();
     target.updated = new Date();
-    
     return target;
   }
-
   private async mergeDeviceJourneys(deviceJourneys: Map<string, CustomerJourney[]>, userId?: string): Promise<void> {
     // Implementation for cross-device journey merging
   }
-
   private generateJourneyId(): string {
-    return `journey_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `journey_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   private generateTouchPointId(): string {
-    return `tp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `tp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   private generateConversionId(): string {
-    return `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   private generateModelId(): string {
-    return `model_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `model_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   private generateChannelId(): string {
-    return `channel_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `channel_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   private generateSessionId(): string {
-    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   private generateAnonymousId(): string {
-    return `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   private getSeason(date: Date): string {
     const month = date.getMonth();
     if (month >= 2 && month <= 4) return 'spring';
@@ -2055,7 +1928,6 @@ export class AttributionTracker extends EventEmitter {
     if (month >= 8 && month <= 10) return 'autumn';
     return 'winter';
   }
-
   private cleanup(): void {
     this.journeys.clear();
     this.models.clear();
@@ -2064,22 +1936,21 @@ export class AttributionTracker extends EventEmitter {
     this.conversionQueue = [];
     this.removeAllListeners();
   }
-
   // Placeholder methods for report generation
-  private async generateAttributionReport(
+  private async generateAttributionReport()
     journeys: CustomerJourney[],
     conversions: Conversion[],
-    options: any
+    options: any,
   ): Promise<AttributionReport> {
     return {
       id: 'report_' + Date.now(),
       timeRange: { start: new Date(), end: new Date() },
-      summary: {
+      summary: {,
         totalJourneys: journeys.length,
         totalConversions: conversions.length,
         totalTouchPoints: journeys.reduce((sum, j) => sum + j.touchPoints.length, 0),
-        averageJourneyLength: journeys.length > 0 ? journeys.reduce(
-          (sum,
+        averageJourneyLength: journeys.length > 0 ? journeys.reduce()
+          (sum,)
           j
         ) => sum + j.touchPoints.length, 0) / journeys.length : 0,
         conversionRate: journeys.length > 0 ? conversions.length / journeys.length : 0
@@ -2091,26 +1962,23 @@ export class AttributionTracker extends EventEmitter {
       generatedAt: new Date()
     };
   }
-
   private async calculateChannelPerformance(journeys: CustomerJourney[]): Promise<ChannelPerformanceReport> {
     return {
       channels: [],
-      summary: {
+      summary: {,
         totalChannels: 0,
         totalTouchPoints: 0,
         totalConversions: 0,
         averageCPA: 0,
-        averageROAS: 0
+        averageROAS: 0,
       },
       timeRange: { start: new Date(), end: new Date() },
       generatedAt: new Date()
     };
   }
-
   private async analyzeConversionPaths(journeys: CustomerJourney[], options: any): Promise<ConversionPath[]> {
     return [];
   }
-
   private async generateInsights(journeys: CustomerJourney[], conversions: Conversion[]): Promise<AttributionInsights> {
     return {
       trends: [],
@@ -2127,7 +1995,7 @@ export class AttributionTracker extends EventEmitter {
 export interface AttributionReport {
   id: string;
   timeRange: { start: Date; end: Date };
-  summary: {
+  summary: {,
     totalJourneys: number;
     totalConversions: number;
     totalTouchPoints: number;
@@ -2143,7 +2011,7 @@ export interface AttributionReport {
 
 export interface ChannelPerformanceReport {
   channels: any[];
-  summary: {
+  summary: {,
     totalChannels: number;
     totalTouchPoints: number;
     totalConversions: number;

@@ -40,7 +40,7 @@ export declare const WSMessageSchema: z.ZodObject<{
 export type WSMessage = z.infer<typeof WSMessageSchema>;
 export declare const SubscriptionConfigSchema: z.ZodObject<{
     subscriptionId: z.ZodString;
-    filter: z.ZodOptional<z.ZodObject<{
+    filter: z.ZodOptional<z.ZodObject<{,
         types: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         categories: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         sources: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -142,7 +142,7 @@ export declare class WebSocketStreamingServer extends EventEmitter {
     private stats;
     private heartbeatTimer;
     private metricsTimer;
-    constructor(
+    constructor()
       eventBus: UnifiedEventBus,
       authService: AnalyticsAuthorizationService,
       config?: Partial<WSServerConfig>

@@ -144,7 +144,7 @@ export declare class AnalyticsAdapterManager {
     /**
      * Migrate data from all legacy systems
      */
-    migrateAllSystems(migrationData: {
+    migrateAllSystems(migrationData: {)
         [systemName: string]: any[];
     }): Promise<{
         [systemName: string]: {

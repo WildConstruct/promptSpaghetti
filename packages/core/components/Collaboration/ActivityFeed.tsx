@@ -17,7 +17,6 @@ import {
 } from 'lucide-react';
 import { useActivityFeed } from '../../hooks/useActivityFeed';
 import { ActivityEvent, ActivityEventType } from '../../types/ActivityTypes';
-
 interface ActivityFeedProps {
   workspaceId?: string;
   projectId?: string;
@@ -28,7 +27,6 @@ interface ActivityFeedProps {
   showSearch?: boolean;
   realTime?: boolean;
 }
-
 const ACTIVITY_ICONS: Record<ActivityEventType, React.ComponentType<unknown>> = {
   'project_created': FileText,
   'project_updated': Edit3,
@@ -53,7 +51,6 @@ const ACTIVITY_ICONS: Record<ActivityEventType, React.ComponentType<unknown>> = 
   'collaboration_started': Users,
   'collaboration_ended': Users
 };
-
 const ACTIVITY_COLORS: Record<ActivityEventType, string> = {
   'project_created': 'text-green-500',
   'project_updated': 'text-blue-500',
@@ -79,9 +76,8 @@ const ACTIVITY_COLORS: Record<ActivityEventType, string> = {
   'collaboration_ended': 'text-gray-500'
 };
 
-export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month' | 'all'>('all');
+export const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month' | 'all'>('all');
   const [actorFilter, setActorFilter] = useState<string>('all');
-
   const {
     activities,
     loading,
@@ -92,7 +88,7 @@ export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month'
     refreshActivities,
     loadMore,
     realTimeConnection
-  } = useActivityFeed({
+  } = useActivityFeed({)
     workspaceId,
     projectId,
     userId,
@@ -102,28 +98,23 @@ export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month'
     actorFilter: actorFilter === 'all' ? undefined : actorFilter,
     realTime
   });
-
   const handleRefresh = useCallback(() => {
     refreshActivities();
   }, [refreshActivities]);
-
   const handleLoadMore = useCallback(() => {
     if (hasMore && !loading) {
       loadMore();
     }
   }, [hasMore, loading, loadMore]);
-
   const renderActivityItem = (activity: ActivityEvent) => {
     const Icon = ACTIVITY_ICONS[activity.type] || Activity;
     const iconColor = ACTIVITY_COLORS[activity.type] || 'text-gray-500';
-
-    return (
+    return ()
       <div key={activity.id} className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
         {/* Icon */}
-        <div className={`flex-shrink-0 p-1 rounded-full bg-gray-100 ${iconColor}`}>
+        <div className={`flex-shrink-0 p-1 rounded-full bg-gray-100 ${iconColor}`}>}
           <Icon className="w-4 h-4" />
         </div>
-
         {/* Content */}
         <div className="flex-1 min-w-0">
           {/* Header */}
@@ -136,13 +127,11 @@ export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month'
                 {activity.description}
               </span>
             </div>
-            
             <div className="flex items-center space-x-2">
               <span className="text-xs text-gray-400">
                 {formatDistanceToNow(new Date(activity.created_at), { addSuffix: true })}
               </span>
-              
-              {activity.resource_url && (
+              {activity.resource_url && ()
                 <button
                   onClick={() => window.open(activity.resource_url, '_blank')}
                   className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
@@ -153,27 +142,25 @@ export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month'
               )}
             </div>
           </div>
-
           {/* Details */}
-          {activity.details && (
+          {activity.details && ()
             <div className="mt-1 text-sm text-gray-600">
-              {typeof activity.details === 'string' ? (
+              {typeof activity.details === 'string' ? ()
                 activity.details
-              ) : (
+              ) : ()
                 <pre className="whitespace-pre-wrap font-sans">
                   {JSON.stringify(activity.details, null, 2)}
                 </pre>
               )}
             </div>
           )}
-
           {/* Metadata */}
-          {(activity.project_name || activity.resource_name) && (
+          {(activity.project_name || activity.resource_name) && ()
             <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500">
-              {activity.project_name && (
+              {activity.project_name && ()
                 <span>Project: {activity.project_name}</span>
               )}
-              {activity.resource_name && (
+              {activity.resource_name && ()
                 <span>Resource: {activity.resource_name}</span>
               )}
             </div>
@@ -182,49 +169,44 @@ export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month'
       </div>
     );
   };
-
-  return (
-    <div className={`bg-white rounded-lg border border-gray-200 ${className}`}>
+  return ()
+    <div className={`bg-white rounded-lg border border-gray-200 ${className}`}>}
       {/* Header */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Activity className="w-5 h-5 text-gray-600" />
             <h3 className="text-lg font-semibold text-gray-900">Activity Feed</h3>
-            
-            {stats && (
+            {stats && ()
               <span className="text-sm text-gray-500">
                 ({stats.total} activities)
               </span>
             )}
           </div>
-
           <div className="flex items-center space-x-2">
             {/* Real-time connection indicator */}
-            {realTime && (
+            {realTime && ()
               <div className={`w-2 h-2 rounded-full ${
                 realTimeConnection?.status === 'connected' ? 'bg-green-400' :
                 realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' :
                 'bg-red-400'
-              }`} title={`Connection: ${realTimeConnection?.status || 'disconnected'}`} />
+              }`} title={`Connection: ${realTimeConnection?.status || 'disconnected'}`} />}
             )}
-
             <button
               onClick={handleRefresh}
               disabled={loading}
               className="p-2 text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
               title="Refresh activities"
             >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
             </button>
           </div>
         </div>
-
         {/* Search and Filters */}
-        {(showSearch || showFilters) && (
+        {(showSearch || showFilters) && ()
           <div className="mt-4 space-y-3">
             {/* Search */}
-            {showSearch && (
+            {showSearch && ()
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
@@ -236,13 +218,11 @@ export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month'
                 />
               </div>
             )}
-
             {/* Filters */}
-            {showFilters && (
+            {showFilters && ()
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <Filter className="w-4 h-4 text-gray-400" />
-                  
                   {/* Type Filter */}
                   <select
                     value={typeFilter}
@@ -258,7 +238,6 @@ export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month'
                     <option value="version_created">Versions</option>
                     <option value="collaboration_started">Collaboration</option>
                   </select>
-
                   {/* Date Filter */}
                   <select
                     value={dateFilter}
@@ -270,16 +249,15 @@ export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month'
                     <option value="week">This Week</option>
                     <option value="month">This Month</option>
                   </select>
-
                   {/* Actor Filter */}
-                  {actors && actors.length > 0 && (
+                  {actors && actors.length > 0 && ()
                     <select
                       value={actorFilter}
                       onChange={(e) => setActorFilter(e.target.value)}
                       className="text-sm border border-gray-300 rounded px-2 py-1"
                     >
                       <option value="all">All Users</option>
-                      {actors.map(actor => (
+                      {actors.map(actor => ()
                         <option key={actor.id} value={actor.id}>
                           {actor.name}
                         </option>
@@ -292,13 +270,12 @@ export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month'
           </div>
         )}
       </div>
-
       {/* Activity List */}
       <div className="overflow-y-auto" style={{ maxHeight }}>
-        {loading && activities.length === 0 && (
+        {loading && activities.length === 0 && ()
           <div className="p-8 text-center">
             <div className="animate-pulse space-y-4">
-              {[...Array(3)].map((_, i) => (
+              {[...Array(3)].map((_, i) => ()
                 <div key={i} className="flex items-start space-x-3 p-3">
                   <div className="w-8 h-8 bg-gray-200 rounded-full" />
                   <div className="flex-1 space-y-2">
@@ -310,8 +287,7 @@ export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month'
             </div>
           </div>
         )}
-
-        {error && (
+        {error && ()
           <div className="p-8 text-center text-red-500">
             <p>Error loading activities: {error.message}</p>
             <button
@@ -322,25 +298,22 @@ export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month'
             </button>
           </div>
         )}
-
-        {!loading && !error && activities.length === 0 && (
+        {!loading && !error && activities.length === 0 && ()
           <div className="p-8 text-center text-gray-500">
             <Activity className="w-12 h-12 mx-auto mb-4 text-gray-300" />
             <p>No activities found</p>
-            {(searchTerm || typeFilter !== 'all' || dateFilter !== 'all') && (
+            {(searchTerm || typeFilter !== 'all' || dateFilter !== 'all') && ()
               <p className="text-sm mt-2">Try adjusting your filters</p>
             )}
           </div>
         )}
-
-        {!loading && !error && activities.length > 0 && (
+        {!loading && !error && activities.length > 0 && ()
           <div className="divide-y divide-gray-100">
             {activities.map(renderActivityItem)}
           </div>
         )}
-
         {/* Load More */}
-        {hasMore && !loading && activities.length > 0 && (
+        {hasMore && !loading && activities.length > 0 && ()
           <div className="p-4 text-center border-t border-gray-200">
             <button
               onClick={handleLoadMore}
@@ -350,8 +323,7 @@ export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month'
             </button>
           </div>
         )}
-
-        {loading && activities.length > 0 && (
+        {loading && activities.length > 0 && ()
           <div className="p-4 text-center border-t border-gray-200">
             <div className="text-sm text-gray-500">Loading more activities...</div>
           </div>

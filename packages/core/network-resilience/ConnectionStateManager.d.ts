@@ -39,7 +39,7 @@ export interface ConnectionStateData {
     totalDowntime: number;
     metrics: ConnectionMetrics;
     networkInfo: NetworkInfo | null;
-    stateHistory: Array<{
+    stateHistory: Array<{,
         state: ConnectionState;
         timestamp: number;
         reason?: string;
@@ -48,12 +48,12 @@ export interface ConnectionStateData {
 export interface ConnectionStateConfig {
     pingInterval: number;
     qualityCheckInterval: number;
-    latencyThreshold: {
+    latencyThreshold: {,
         excellent: number;
         good: number;
         fair: number;
     };
-    packetLossThreshold: {
+    packetLossThreshold: {,
         excellent: number;
         good: number;
         fair: number;

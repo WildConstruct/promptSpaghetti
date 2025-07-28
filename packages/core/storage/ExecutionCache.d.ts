@@ -40,7 +40,7 @@ export declare class ExecutionCache {
     /**
      * Cache execution result with dependency tracking
      */
-    cacheExecutionResult(
+    cacheExecutionResult()
       key: string,
       result: any,
       dependencies: string[],

@@ -1,11 +1,9 @@
 // packages/core/components/VariablePortNodeRenderer.tsx
 // Enhanced NodeRenderer with dynamic variable ports from template parsing
-
 import React, { memo, useMemo } from 'react';
 import { Node, Handle, Position } from 'reactflow';
 import { NodeMeta } from '../Palette';
 import { parseTemplate } from '../utils/templateParser';
-
 interface VariablePortNodeRendererProps {
   id: string;
   data: Record<string, unknown>;
@@ -15,7 +13,7 @@ interface VariablePortNodeRendererProps {
   getCategoryColor: (category: string) => string;
 }
 
-export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
+export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({)
   id,
   data,
   selected = false,
@@ -31,29 +29,25 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
     }
     return { variables: [], errors: [], isValid: true, processedTemplate: '' };
   }, [templateField]);
-
   // Get valid variables for port creation with optimized positioning
   const variablePorts = useMemo(() => {
     const validVariables = parseResult.variables.filter(variable => variable.isValid);
-    
-    return validVariables.map((variable, index) => ({
-      id: `variable-${variable.name}`,
+    return validVariables.map((variable, index) => ({)
+      id: `variable-${variable.name}`,}
       name: variable.name,
       displayName: variable.name.charAt(0).toUpperCase() + variable.name.slice(1),
       position: index,
       yOffset: 30 + (index * 25), // Improved spacing for better visual hierarchy
       inferredType: variable.inferredType || 'string',
-      hasDefault: Boolean(variable.defaultValue)
+      hasDefault: Boolean(variable.defaultValue),
     }));
   }, [parseResult.variables]);
-
   try {
     const hasVariations = data?.variations && data.variations.length > 0;
     const nodeType = data?.nodeType || data?.type || 'WeightedChoice';
     const nodeMeta = getNodeMeta(nodeType);
     const categoryColor = getCategoryColor(nodeMeta.category || 'general');
     const hasVariablePorts = variablePorts.length > 0;
-  
     // Get non-label properties for display (exclude template to avoid clutter)
     const properties = Object.entries(data || {})
       .filter(([k]) => 
@@ -65,8 +59,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
         k !== 'content'
       )
       .slice(0, 2); // Limit to 2 properties since we need space for variable ports
-    
-    return (
+    return ()
       <div
         role="button"
         data-testid={`node-${id}`}
@@ -84,17 +77,17 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
         style={{
           cursor: 'pointer',
           // Professional gradient background inspired by Cinema 4D panels
-          background: `linear-gradient(
+          background: `linear-gradient(),
             135deg,
-            var(--bg-tertiary
+            var(--bg-tertiary)
           ) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%)`,
-          border: selected 
+          border: selected ,
             ? '2px solid var(--accent-orange)' 
             : '1px solid var(--border)',
           borderRadius: 'var(--radius-md)',
           minWidth: 200, // Slightly wider to accommodate variable ports
           minHeight: hasVariablePorts ? 120 : 90, // Taller if we have variable ports
-          boxShadow: selected 
+          boxShadow: selected ,
             ? 'var(--shadow-node-selected)'
             : 'var(--shadow-node)',
           position: 'relative',
@@ -107,7 +100,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
           WebkitTransform: 'translateZ(0)',
           transform: 'translateZ(0)',
           WebkitBackfaceVisibility: 'hidden',
-          backfaceVisibility: 'hidden'
+          backfaceVisibility: 'hidden',
         }}
         onMouseEnter={(e) => {
           if (!selected) {
@@ -127,8 +120,8 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
         }}
         aria-label={(() => {
           const label = data?.label ?? nodeMeta.label;
-          const variableInfo = hasVariablePorts ? `Variables: ${variablePorts.map(v => v.name).join(', ')}` : '';
-          const summary = properties.map(([k, v]) => `${k}: ${String(v)}`).join(', ');
+          const variableInfo = hasVariablePorts ? `Variables: ${variablePorts.map(v => v.name).join(', ')}` : '';}
+          const summary = properties.map(([k, v]) => `${k}: ${String(v)}`).join(', ');}
           return [label, variableInfo, summary].filter(Boolean).join('. ');
         })()}
       >
@@ -136,7 +129,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
         <div
           style={{
             // Cinema 4D inspired header gradient
-            background: `linear-gradient(135deg, ${categoryColor} 0%, ${categoryColor}dd 100%)`,
+            background: `linear-gradient(135deg, ${categoryColor} 0%, ${categoryColor}dd 100%)`,}
             color: '#ffffff',
             padding: 'var(--space-2) var(--space-3)',
             fontSize: 'var(--font-size-xs)',
@@ -158,7 +151,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
             {typeof nodeMeta.icon === 'string' ? nodeMeta.icon : '🔧'}
           </span>
           <span style={{ letterSpacing: '0.01em' }}>{nodeMeta.label}</span>
-          {hasVariations && (
+          {hasVariations && ()
             <div
               style={{
                 marginLeft: 'auto',
@@ -180,7 +173,6 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
             </div>
           )}
         </div>
-
         {/* Content Section */}
         <div style={{ 
           padding: 'var(--space-3)',
@@ -196,15 +188,14 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
             color: 'var(--text-primary)',
             lineHeight: 1.3,
             // Subtle glow for selected state
-            ...(selected && {
+            ...(selected && {)
               textShadow: '0 0 8px var(--accent-orange)40'
             })
           }}>
             {data?.label || nodeMeta.label || nodeType || id}
           </div>
-          
           {/* Variable Ports Indicator */}
-          {hasVariablePorts && (
+          {hasVariablePorts && ()
             <div style={{ 
               fontSize: 'var(--font-size-xs)', 
               color: 'var(--text-secondary)', 
@@ -212,23 +203,23 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
               display: 'flex',
               flexWrap: 'wrap',
               gap: 'var(--space-1)',
-              alignItems: 'center'
+              alignItems: 'center',
             }}>
               <span style={{ 
                 color: 'var(--text-tertiary)', 
-                fontWeight: 500 
+                fontWeight: 500 ,
               }}>Variables:</span>
-              {variablePorts.map((port, idx) => (
+              {variablePorts.map((port, idx) => ()
                 <span
                   key={port.id}
                   style={{
-                    backgroundColor: `${categoryColor}20`,
+                    backgroundColor: `${categoryColor}20`,}
                     color: categoryColor,
                     padding: '2px 6px',
                     borderRadius: 'var(--radius-sm)',
                     fontSize: 10,
                     fontWeight: 500,
-                    border: `1px solid ${categoryColor}40`
+                    border: `1px solid ${categoryColor}40`}
                   }}
                 >
                   {port.displayName}
@@ -236,23 +227,22 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
               ))}
             </div>
           )}
-          
           {/* Properties */}
-          {properties.length > 0 && (
+          {properties.length > 0 && ()
             <div style={{ 
               fontSize: 'var(--font-size-xs)', 
               color: 'var(--text-secondary)', 
               lineHeight: 1.4,
               fontFamily: 'var(--font-mono)' // Monospace for technical properties
             }}>
-              {properties.map(([k, v], idx) => (
+              {properties.map(([k, v], idx) => ()
                 <div key={k} style={{ 
                   marginBottom: idx < properties.length - 1 ? '3px' : 0,
-                  opacity: 0.8
+                  opacity: 0.8,
                 }}>
                   <span style={{ 
                     color: 'var(--text-tertiary)', 
-                    fontWeight: 500 
+                    fontWeight: 500 ,
                   }}>{k}:</span>{' '}
                   <span style={{ color: 'var(--text-secondary)' }}>
                     {String(v).length > 18 ? String(v).slice(0, 18) + '…' : String(v)}
@@ -262,9 +252,8 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
             </div>
           )}
         </div>
-
         {/* Standard Input Handle - Only show if no variable ports */}
-        {!hasVariablePorts && (
+        {!hasVariablePorts && ()
           <Handle
             type="target"
             position={Position.Left}
@@ -278,21 +267,19 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
               cursor: 'crosshair',
               zIndex: 10,
               transition: 'all 0.2s ease',
-              boxShadow: 'var(--shadow-sm)'
+              boxShadow: 'var(--shadow-sm)',
             }}
             isConnectable={true}
           />
         )}
-
         {/* Dynamic Variable Input Ports */}
         {variablePorts.map((port, index) => {
           // Calculate position for multiple ports
           const totalPorts = variablePorts.length;
-          const spacing = totalPorts > 1 ? 60 / (totalPorts - 1) : 0; // Distribute across 60px height
-          const baseOffset = 40; // Start from 40px from top
+          const spacing = totalPorts > 1 ? 60 / (totalPorts - 1) : 0; // Distribute across 60px height;
+          const baseOffset = 40; // Start from 40px from top;
           const yOffset = totalPorts > 1 ? baseOffset + (index * spacing) : baseOffset + 20;
-          
-          return (
+          return ()
             <React.Fragment key={port.id}>
               {/* Variable Port Handle */}
               <Handle
@@ -303,36 +290,35 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
                   width: 12,
                   height: 12,
                   borderRadius: '50%',
-                  background: `${categoryColor}80`,
-                  border: `2px solid ${categoryColor}`,
+                  background: `${categoryColor}80`,}
+                  border: `2px solid ${categoryColor}`,}
                   cursor: 'crosshair',
                   zIndex: 10,
                   transition: 'all 0.2s ease',
-                  boxShadow: `var(--shadow-sm), 0 0 6px ${categoryColor}40`,
-                  top: `${yOffset}px`,
-                  left: '-6px'
+                  boxShadow: `var(--shadow-sm), 0 0 6px ${categoryColor}40`,}
+                  top: `${yOffset}px`,}
+                  left: '-6px',
                 }}
                 isConnectable={true}
               />
-              
               {/* Variable Port Label */}
               <div
                 style={{
                   position: 'absolute',
                   left: 12,
-                  top: `${yOffset - 6}px`,
+                  top: `${yOffset - 6}px`,}
                   fontSize: 9,
                   fontWeight: 600,
                   color: categoryColor,
                   background: 'var(--bg-secondary)',
                   padding: '2px 4px',
                   borderRadius: 'var(--radius-sm)',
-                  border: `1px solid ${categoryColor}40`,
+                  border: `1px solid ${categoryColor}40`,}
                   whiteSpace: 'nowrap',
                   pointerEvents: 'none',
                   zIndex: 5,
                   textShadow: '0 1px 2px rgba(0,0,0,0.5)',
-                  boxShadow: 'var(--shadow-xs)'
+                  boxShadow: 'var(--shadow-xs)',
                 }}
               >
                 {port.displayName}
@@ -340,7 +326,6 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
             </React.Fragment>
           );
         })}
-
         {/* Standard Output Handle */}
         <Handle
           type="source"
@@ -355,7 +340,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
             cursor: 'crosshair',
             zIndex: 10,
             transition: 'all 0.2s ease',
-            boxShadow: 'var(--shadow-sm)'
+            boxShadow: 'var(--shadow-sm)',
           }}
           isConnectable={true}
         />
@@ -364,7 +349,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
   } catch (error) {
     console.error('VariablePortNodeRenderer error:', error, 'Props:', { id, data });
     // Professional error state
-    return (
+    return ()
       <div
         style={{
           cursor: 'pointer',
@@ -380,14 +365,14 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
           justifyContent: 'center',
           fontFamily: 'var(--font-primary)',
           boxShadow: 'var(--shadow-md)',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
       >
         <div>
           <div style={{ 
             fontSize: 'var(--font-size-lg)', 
             marginBottom: 'var(--space-2)',
-            color: 'var(--accent-red)' 
+            color: 'var(--accent-red)' ,
           }}>
             ⚠️
           </div>
@@ -399,5 +384,4 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
     );
   }
 });
-
 VariablePortNodeRenderer.displayName = 'VariablePortNodeRenderer';

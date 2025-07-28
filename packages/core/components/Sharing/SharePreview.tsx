@@ -6,32 +6,28 @@
  * 
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
-
 import React, { useState } from 'react';
 import { ShareConfig, ShareLink, SocialPlatform } from '../../types/sharingTypes';
-
 interface SharePreviewProps {
   shareConfig: ShareConfig;
   shareLink: ShareLink;
   selectedPlatform?: SocialPlatform | 'embed' | 'opengraph';
 }
 
-export const SharePreview: React.FC<SharePreviewProps> = ({
+export const SharePreview: React.FC<SharePreviewProps> = ({)
   shareConfig,
   shareLink,
   selectedPlatform = 'opengraph'
 }) => {
   const [activePreview, setActivePreview] = useState<string>(selectedPlatform);
-
-  const previewOptions = [
+  const previewOptions = [;
     { id: 'opengraph', label: 'Web Preview', icon: '🌐' },
     { id: 'twitter', label: 'Twitter Card', icon: '🐦' },
     { id: 'linkedin', label: 'LinkedIn', icon: '💼' },
     { id: 'discord', label: 'Discord', icon: '💬' },
     { id: 'embed', label: 'Embed Code', icon: '📄' }
   ];
-
-  const renderOpenGraphPreview = () => (
+  const renderOpenGraphPreview = () => (;)
     <div style={{
       border: '1px solid #e1e5e9',
       borderRadius: '8px',
@@ -40,13 +36,13 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
       maxWidth: '500px',
       fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
-      {shareConfig.thumbnailUrl && (
+      {shareConfig.thumbnailUrl && ()
         <div style={{
           width: '100%',
           height: '200px',
-          backgroundImage: `url(${shareConfig.thumbnailUrl})`,
+          backgroundImage: `url(${shareConfig.thumbnailUrl})`,}
           backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          backgroundPosition: 'center',
         }}></div>
       )}
       <div style={{ padding: '16px' }}>
@@ -54,7 +50,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
           fontSize: '12px',
           color: '#65676b',
           textTransform: 'uppercase',
-          marginBottom: '4px'
+          marginBottom: '4px',
         }}>
           {new URL(shareLink.fullUrl).hostname}
         </div>
@@ -63,22 +59,21 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
           fontWeight: '600',
           color: '#1c1e21',
           marginBottom: '4px',
-          lineHeight: '1.2'
+          lineHeight: '1.2',
         }}>
           {shareLink.socialTags.openGraph.title}
         </div>
         <div style={{
           fontSize: '14px',
           color: '#65676b',
-          lineHeight: '1.3'
+          lineHeight: '1.3',
         }}>
           {shareLink.socialTags.openGraph.description}
         </div>
       </div>
     </div>
   );
-
-  const renderTwitterPreview = () => (
+  const renderTwitterPreview = () => (;)
     <div style={{
       border: '1px solid #cfd9de',
       borderRadius: '16px',
@@ -87,13 +82,13 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
       maxWidth: '500px',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
-      {shareConfig.thumbnailUrl && (
+      {shareConfig.thumbnailUrl && ()
         <div style={{
           width: '100%',
           height: '250px',
-          backgroundImage: `url(${shareConfig.thumbnailUrl})`,
+          backgroundImage: `url(${shareConfig.thumbnailUrl})`,}
           backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          backgroundPosition: 'center',
         }}></div>
       )}
       <div style={{ padding: '12px' }}>
@@ -101,7 +96,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
           fontSize: '15px',
           color: '#536471',
           marginBottom: '2px',
-          lineHeight: '1.2'
+          lineHeight: '1.2',
         }}>
           {new URL(shareLink.fullUrl).hostname}
         </div>
@@ -110,22 +105,21 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
           fontWeight: '700',
           color: '#0f1419',
           marginBottom: '2px',
-          lineHeight: '1.2'
+          lineHeight: '1.2',
         }}>
           {shareLink.socialTags.twitter.title}
         </div>
         <div style={{
           fontSize: '15px',
           color: '#536471',
-          lineHeight: '1.3'
+          lineHeight: '1.3',
         }}>
           {shareLink.socialTags.twitter.description}
         </div>
       </div>
     </div>
   );
-
-  const renderLinkedInPreview = () => (
+  const renderLinkedInPreview = () => (;)
     <div style={{
       border: '1px solid #d0d0d0',
       borderRadius: '8px',
@@ -134,13 +128,13 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
       maxWidth: '500px',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
-      {shareConfig.thumbnailUrl && (
+      {shareConfig.thumbnailUrl && ()
         <div style={{
           width: '100%',
           height: '200px',
-          backgroundImage: `url(${shareConfig.thumbnailUrl})`,
+          backgroundImage: `url(${shareConfig.thumbnailUrl})`,}
           backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          backgroundPosition: 'center',
         }}></div>
       )}
       <div style={{ padding: '12px' }}>
@@ -149,7 +143,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
           fontWeight: '600',
           color: '#000000',
           marginBottom: '4px',
-          lineHeight: '1.2'
+          lineHeight: '1.2',
         }}>
           {shareLink.socialTags.openGraph.title}
         </div>
@@ -157,22 +151,21 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
           fontSize: '12px',
           color: '#666666',
           marginBottom: '8px',
-          lineHeight: '1.3'
+          lineHeight: '1.3',
         }}>
           {shareLink.socialTags.openGraph.description}
         </div>
         <div style={{
           fontSize: '12px',
           color: '#666666',
-          textTransform: 'uppercase'
+          textTransform: 'uppercase',
         }}>
           {new URL(shareLink.fullUrl).hostname}
         </div>
       </div>
     </div>
   );
-
-  const renderDiscordPreview = () => (
+  const renderDiscordPreview = () => (;)
     <div style={{
       backgroundColor: '#2f3136',
       padding: '16px',
@@ -186,13 +179,13 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
         backgroundColor: '#36393f',
         borderRadius: '4px',
         padding: '16px',
-        paddingLeft: '12px'
+        paddingLeft: '12px',
       }}>
         <div style={{
           fontSize: '16px',
           fontWeight: '600',
           color: '#00b0f4',
-          marginBottom: '8px'
+          marginBottom: '8px',
         }}>
           {shareLink.socialTags.openGraph.title}
         </div>
@@ -200,26 +193,25 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
           fontSize: '14px',
           color: '#dcddde',
           marginBottom: '12px',
-          lineHeight: '1.3'
+          lineHeight: '1.3',
         }}>
           {shareLink.socialTags.openGraph.description}
         </div>
-        {shareConfig.thumbnailUrl && (
+        {shareConfig.thumbnailUrl && ()
           <div style={{
             width: '100%',
             maxWidth: '400px',
             height: '200px',
-            backgroundImage: `url(${shareConfig.thumbnailUrl})`,
+            backgroundImage: `url(${shareConfig.thumbnailUrl})`,}
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            borderRadius: '4px'
+            borderRadius: '4px',
           }}></div>
         )}
       </div>
     </div>
   );
-
-  const renderEmbedPreview = () => (
+  const renderEmbedPreview = () => (;)
     <div style={{
       backgroundColor: '#f8fafc',
       padding: '16px',
@@ -230,11 +222,10 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
         marginBottom: '12px',
         fontSize: '14px',
         fontWeight: '500',
-        color: '#374151'
+        color: '#374151',
       }}>
         Embed Preview
       </div>
-      
       {/* Responsive Embed Preview */}
       <div style={{
         position: 'relative',
@@ -243,7 +234,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
         overflow: 'hidden',
         backgroundColor: 'white',
         border: '1px solid #d1d5db',
-        borderRadius: '6px'
+        borderRadius: '6px',
       }}>
         <div style={{
           position: 'absolute',
@@ -256,7 +247,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
           justifyContent: 'center',
           backgroundColor: '#f9fafb',
           color: '#6b7280',
-          fontSize: '14px'
+          fontSize: '14px',
         }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{ marginBottom: '8px' }}>📄</div>
@@ -267,7 +258,6 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
           </div>
         </div>
       </div>
-
       {/* Embed Code */}
       <div style={{ marginTop: '16px' }}>
         <label style={{
@@ -275,7 +265,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
           fontSize: '12px',
           fontWeight: '500',
           marginBottom: '8px',
-          color: '#374151'
+          color: '#374151',
         }}>
           Embed Code:
         </label>
@@ -292,13 +282,12 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
             color: '#f9fafb',
             border: '1px solid #374151',
             borderRadius: '4px',
-            resize: 'none'
+            resize: 'none',
           }}
         />
       </div>
     </div>
   );
-
   const renderPreview = () => {
     switch (activePreview) {
     case 'twitter':
@@ -313,8 +302,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
       return renderOpenGraphPreview();
     }
   };
-
-  return (
+  return ()
     <div style={{
       backgroundColor: 'white',
       borderRadius: '12px',
@@ -325,25 +313,24 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
         margin: '0 0 20px 0',
         fontSize: '18px',
         fontWeight: '600',
-        color: '#111827'
+        color: '#111827',
       }}>
         Share Preview
       </h3>
-
       {/* Preview Options */}
       <div style={{
         display: 'flex',
         gap: '8px',
         marginBottom: '24px',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
       }}>
-        {previewOptions.map(option => (
+        {previewOptions.map(option => ()
           <button
             key={option.id}
             onClick={() => setActivePreview(option.id)}
             style={{
               padding: '8px 12px',
-              border: `1px solid ${activePreview === option.id ? '#3b82f6' : '#d1d5db'}`,
+              border: `1px solid ${activePreview === option.id ? '#3b82f6' : '#d1d5db'}`,}
               backgroundColor: activePreview === option.id ? '#eff6ff' : 'white',
               color: activePreview === option.id ? '#3b82f6' : '#6b7280',
               borderRadius: '6px',
@@ -352,7 +339,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
               fontWeight: '500',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
             }}
           >
             <span>{option.icon}</span>
@@ -360,7 +347,6 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
           </button>
         ))}
       </div>
-
       {/* Preview Content */}
       <div style={{
         display: 'flex',
@@ -369,7 +355,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
         backgroundColor: activePreview === 'discord' ? '#36393f' : '#f8fafc',
         borderRadius: '8px',
         minHeight: '200px',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
       }}>
         {renderPreview()}
       </div>

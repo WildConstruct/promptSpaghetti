@@ -14,7 +14,6 @@ interface ResultAction {
   resultIndex: number;
   data?: Record<string, unknown>;
 }
-
 interface LockedResult {
   index: number;
   seed: number;
@@ -28,7 +27,6 @@ interface PreviewResult {
   output?: string;
   error?: string;
 }
-
 interface PreviewModalProps {
   open: boolean;
   loading: boolean;
@@ -46,7 +44,7 @@ interface PreviewModalProps {
   onVarianceSuggestion?: (suggestion: VarianceSuggestion) => void;
 }
 
-export const PreviewModal: React.FC<PreviewModalProps> = ({ 
+export const PreviewModal: React.FC<PreviewModalProps> = ({ )
   open, 
   loading, 
   error, 
@@ -69,28 +67,24 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
     type: 'individual' | 'batch' | 'comparison';
     individualIndex?: number;
   }>({ open: false, type: 'individual' });
-  
   // Check if results have execution path data
-  const hasExecutionPaths = results.length > 0 && 
+  const hasExecutionPaths = results.length > 0 && ;
     results.some(r => 'executionPath' in r && r.executionPath);
-  
   // Helper functions for result management
   const isResultLocked = (index: number) => lockedResults.some(locked => locked.index === index);
   const isResultRegenerating = (index: number) => regeneratingResults.includes(index);
   const isResultSelected = (index: number) => selectedForComparison.includes(index);
-  
   const handleResultAction = (type: ResultAction['type'], index: number, data?: Record<string, unknown>) => {
     if (type === 'export') {
-      setExportDialog({
+      setExportDialog({)
         open: true,
         type: 'individual',
-        individualIndex: index
+        individualIndex: index,
       });
       return;
     }
     onResultAction?.({ type, resultIndex: index, data });
   };
-  
   const toggleComparisonSelection = (index: number) => {
     if (isResultSelected(index)) {
       setSelectedForComparison(prev => prev.filter(i => i !== index));
@@ -98,37 +92,33 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
       setSelectedForComparison(prev => [...prev, index]);
     }
   };
-  
   const clearComparison = () => {
     setSelectedForComparison([]);
     setCompareMode(false);
   };
-  
   const handleExport = async (format: ExportFormat, options: ResultExportOptions) => {
     try {
       let exportResult;
-      
       if (exportDialog.type === 'individual' && typeof exportDialog.individualIndex === 'number') {
         const result = results[exportDialog.individualIndex] as PreviewResultWithPath;
-        exportResult = await resultExportService.exportIndividualResult(
+        exportResult = await resultExportService.exportIndividualResult()
           result,
           exportDialog.individualIndex,
           results.length,
           options
         );
       } else if (exportDialog.type === 'batch') {
-        exportResult = await resultExportService.exportBatchResults(
+        exportResult = await resultExportService.exportBatchResults()
           results as PreviewResultWithPath[],
           selectedForComparison,
           options
         );
       } else {
-        exportResult = await resultExportService.exportComparison(
+        exportResult = await resultExportService.exportComparison()
           results as PreviewResultWithPath[],
           options
         );
       }
-      
       // Handle the export result
       if (exportResult.shouldDownload) {
         downloadExportResult(exportResult, format);
@@ -138,32 +128,27 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
       throw error;
     }
   };
-  
   const downloadExportResult = (exportResult: { data: string; mimeType: string }, format: ExportFormat) => {
     const blob = new Blob([exportResult.data], { type: exportResult.mimeType });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    
     // Generate filename based on format and export type
     const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, '');
     const extension = getFileExtension(format);
-    let filename = `promptscape-${exportDialog.type}-${timestamp}.${extension}`;
-    
+    let filename = `promptscape-${exportDialog.type}-${timestamp}.${extension}`;}
     if (exportDialog.type === 'individual' && typeof exportDialog.individualIndex === 'number') {
       const seed = results[exportDialog.individualIndex].seed;
-      filename = `promptscape-result-seed${seed}-${timestamp}.${extension}`;
+      filename = `promptscape-result-seed${seed}-${timestamp}.${extension}`;}
     } else if (exportDialog.type === 'batch') {
-      filename = `promptscape-batch-${selectedForComparison.length}results-${timestamp}.${extension}`;
+      filename = `promptscape-batch-${selectedForComparison.length}results-${timestamp}.${extension}`;}
     }
-    
     link.download = filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
-  
   const getFileExtension = (format: ExportFormat): string => {
     const extensions: Record<ExportFormat, string> = {
       'plain-text': 'txt',
@@ -185,10 +170,8 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
     };
     return extensions[format] || 'json';
   };
-
   if (!open) return null;
-  
-  return (
+  return ()
     <div role="dialog" aria-modal="true" style={{ 
       position: 'fixed', 
       top: 0, 
@@ -199,7 +182,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
       zIndex: 1000, 
       display: 'flex', 
       alignItems: 'center', 
-      justifyContent: 'center' 
+      justifyContent: 'center' ,
     }}>
       <div style={{ 
         background: professionalColors.background.elevated, 
@@ -210,18 +193,17 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
         maxHeight: '90vh',
         overflow: 'auto',
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3)',
-        color: professionalColors.text.primary
+        color: professionalColors.text.primary,
       }}>
         <div style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center',
-          marginBottom: 16
+          marginBottom: 16,
         }}>
           <h2 style={{ margin: 0 }}>Generated Content</h2>
-          
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            {hasExecutionPaths && (
+            {hasExecutionPaths && ()
               <button
                 onClick={() => setShowExecutionPaths(!showExecutionPaths)}
                 style={{
@@ -232,15 +214,14 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                   padding: '8px 12px',
                   fontSize: 12,
                   fontWeight: 500,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 {showExecutionPaths ? '📊 Hide Paths' : '🔍 Show Paths'}
               </button>
             )}
-            
             {/* Variance Analysis Toggle */}
-            {results.length >= 2 && (
+            {results.length >= 2 && ()
               <button
                 onClick={() => setShowVarianceAnalysis(!showVarianceAnalysis)}
                 style={{
@@ -251,13 +232,12 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                   padding: '8px 12px',
                   fontSize: 12,
                   fontWeight: 500,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 {showVarianceAnalysis ? '📈 Hide Variance' : '📊 Show Variance'}
               </button>
             )}
-            
             {/* Comparison mode toggle */}
             <button
               onClick={() => {
@@ -275,18 +255,17 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 padding: '8px 12px',
                 fontSize: 12,
                 fontWeight: 500,
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               {compareMode ? '⚖️ Exit Compare' : '⚖️ Compare'}
             </button>
-            
             {/* Batch Export Button */}
-            {selectedForComparison.length > 0 && (
+            {selectedForComparison.length > 0 && ()
               <button
-                onClick={() => setExportDialog({
+                onClick={() => setExportDialog({)
                   open: true,
-                  type: 'batch'
+                  type: 'batch',
                 })}
                 style={{
                   background: '#8b5cf6',
@@ -296,19 +275,18 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                   padding: '8px 12px',
                   fontSize: 12,
                   fontWeight: 500,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 💾 Export Selected
               </button>
             )}
-            
             {/* Export All Button */}
-            {!compareMode && results.length > 1 && (
+            {!compareMode && results.length > 1 && ()
               <button
-                onClick={() => setExportDialog({
+                onClick={() => setExportDialog({)
                   open: true,
-                  type: 'comparison'
+                  type: 'comparison',
                 })}
                 style={{
                   background: '#6b7280',
@@ -318,34 +296,31 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                   padding: '8px 12px',
                   fontSize: 12,
                   fontWeight: 500,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 📊 Export All
               </button>
             )}
-            
-            {compareMode && selectedForComparison.length > 0 && (
+            {compareMode && selectedForComparison.length > 0 && ()
               <span style={{
                 fontSize: 11,
                 color: '#4a5568',
                 padding: '4px 8px',
                 background: '#f7fafc',
-                borderRadius: 4
+                borderRadius: 4,
               }}>
                 {selectedForComparison.length}/3 selected
               </span>
             )}
           </div>
         </div>
-
         {loading && <div style={{marginBottom:12}}>✨ Generating content...</div>}
         {error && <div style={{ color: '#c00' }}>⚠️ Something went wrong: {error}</div>}
-        
-        {!loading && !error && (
+        {!loading && !error && ()
           <div>
             {/* Execution Path Visualization */}
-            {showExecutionPaths && hasExecutionPaths && (
+            {showExecutionPaths && hasExecutionPaths && ()
               <div style={{ marginBottom: 20 }}>
                 <ExecutionPathVisualization 
                   results={results as PreviewResultWithPath[]}
@@ -353,14 +328,13 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                   config={{
                     showExecutionOrder: true,
                     showRandomChoices: true,
-                    showPerformanceMetrics: true
+                    showPerformanceMetrics: true,
                   }}
                 />
               </div>
             )}
-            
             {/* Variance Analysis */}
-            {showVarianceAnalysis && results.length >= 2 && (
+            {showVarianceAnalysis && results.length >= 2 && ()
               <div style={{ marginBottom: 20 }}>
                 <VarianceAnalysis 
                   results={results as PreviewResultWithPath[]}
@@ -368,21 +342,20 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 />
               </div>
             )}
-            
             {/* Comparison View */}
-            {compareMode && selectedForComparison.length >= 2 && (
+            {compareMode && selectedForComparison.length >= 2 && ()
               <div style={{ 
                 marginBottom: 20, 
                 padding: 16, 
                 background: '#f0f9ff', 
                 border: '1px solid #0ea5e9', 
-                borderRadius: 8 
+                borderRadius: 8 ,
               }}>
                 <h3 style={{ margin: '0 0 12px 0', color: '#0c4a6e', fontSize: 14 }}>⚖️ Result Comparison</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
-                  {selectedForComparison.map(index => {
+                  {selectedForComparison.map(index => {)
                     const result = results[index];
-                    return (
+                    return ()
                       <div key={index} style={{
                         padding: 8,
                         background: '#fff',
@@ -393,7 +366,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           fontSize: 11,
                           fontWeight: 600,
                           color: '#0c4a6e',
-                          marginBottom: 4
+                          marginBottom: 4,
                         }}>
                           Seed {result.seed}
                         </div>
@@ -403,15 +376,15 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           color: '#374151',
                           maxHeight: 60,
                           overflow: 'hidden',
-                          textOverflow: 'ellipsis'
+                          textOverflow: 'ellipsis',
                         }}>
                           {result.output?.substring(0, 100)}...
                         </div>
-                        {('executionTimeMs' in result) && (
+                        {('executionTimeMs' in result) && ()
                           <div style={{
                             fontSize: 10,
                             color: '#6b7280',
-                            marginTop: 4
+                            marginTop: 4,
                           }}>
                             {result.executionTimeMs}ms
                           </div>
@@ -422,7 +395,6 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 </div>
               </div>
             )}
-            
             {/* Results List */}
             <ul style={{ padding: 0, listStyle: 'none' }}>
               {results.map((res, i) => {
@@ -430,8 +402,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 const locked = isResultLocked(i);
                 const regenerating = isResultRegenerating(i);
                 const selected = isResultSelected(i);
-                
-                return (
+                return ()
                   <li key={i} onMouseEnter={() => onResultHover?.(i)} style={{ 
                     marginBottom: 16, 
                     padding: 12, 
@@ -452,11 +423,10 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                       fontSize:10,
                       padding:'2px 6px',
                       borderRadius:12,
-                      fontWeight:600
+                      fontWeight:600,
                     }}>{res.seed}</span>
-                    
                     {/* Status indicators */}
-                    {locked && (
+                    {locked && ()
                       <span style={{
                         position: 'absolute',
                         top: -10,
@@ -466,13 +436,12 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                         fontSize: 8,
                         padding: '1px 4px',
                         borderRadius: 8,
-                        fontWeight: 600
+                        fontWeight: 600,
                       }}>
                         🔒 LOCKED
                       </span>
                     )}
-                    
-                    {regenerating && (
+                    {regenerating && ()
                       <span style={{
                         position: 'absolute',
                         top: -10,
@@ -488,7 +457,6 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                         ⟳ REGENERATING
                       </span>
                     )}
-                    
                     {/* Action buttons */}
                     <div style={{
                       position: 'absolute',
@@ -496,10 +464,10 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                       right: 8,
                       display: 'flex',
                       gap: 4,
-                      opacity: 0.8
+                      opacity: 0.8,
                     }}>
                       {/* Compare selection */}
-                      {compareMode && (
+                      {compareMode && ()
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -517,13 +485,12 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                             cursor: (!selected && selectedForComparison.length >= 3) ? 'not-allowed' : 'pointer',
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
                           }}
                         >
                           ✓
                         </button>
                       )}
-                      
                       {/* Lock/Unlock button */}
                       <button
                         onClick={(e) => {
@@ -541,12 +508,11 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center'
+                          justifyContent: 'center',
                         }}
                       >
                         {locked ? '🔒' : '🔓'}
                       </button>
-                      
                       {/* Regenerate button */}
                       <button
                         onClick={(e) => {
@@ -567,12 +533,11 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           cursor: (regenerating || locked) ? 'not-allowed' : 'pointer',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center'
+                          justifyContent: 'center',
                         }}
                       >
                         ⟳
                       </button>
-                      
                       {/* Export button */}
                       <button
                         onClick={(e) => {
@@ -590,14 +555,13 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center'
+                          justifyContent: 'center',
                         }}
                       >
                         💾
                       </button>
                     </div>
-                    
-                    {hasPath && (
+                    {hasPath && ()
                       <div style={{
                         position: 'absolute',
                         top: -10,
@@ -607,14 +571,13 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                         fontSize: 9,
                         padding: '2px 4px',
                         borderRadius: 8,
-                        fontWeight: 500
+                        fontWeight: 500,
                       }}>
                         PATH
                       </div>
                     )}
-                    
                     {/* Regenerating overlay */}
-                    {regenerating && (
+                    {regenerating && ()
                       <div style={{
                         position: 'absolute',
                         top: 0,
@@ -628,7 +591,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                         justifyContent: 'center',
                         fontSize: 12,
                         color: '#8b5cf6',
-                        fontWeight: 600
+                        fontWeight: 600,
                       }}>
                         <div style={{ textAlign: 'center' }}>
                           <div style={{ fontSize: 20, marginBottom: 4 }}>⟳</div>
@@ -636,26 +599,24 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                         </div>
                       </div>
                     )}
-                    
                     {/* Result content */}
                     <div style={{ marginTop: 20, marginBottom: 8 }}>
-                      {res.error ? (
+                      {res.error ? ()
                         <div style={{ color: '#dc2626', fontSize: 14 }}>⚠️ {res.error}</div>
-                      ) : (
+                      ) : ()
                         <div style={{ 
                           fontFamily: 'monospace', 
                           whiteSpace:'pre-wrap',
                           fontSize: 13,
                           lineHeight: 1.4,
-                          color: '#374151'
+                          color: '#374151',
                         }}>
                           {res.output || ('output' in res ? res.output : '')}
                         </div>
                       )}
                     </div>
-                    
                     {/* Locked result info */}
-                    {locked && (
+                    {locked && ()
                       <div style={{
                         marginTop: 8,
                         padding: 6,
@@ -663,29 +624,28 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                         border: '1px solid #f59e0b',
                         borderRadius: 4,
                         fontSize: 11,
-                        color: '#92400e'
+                        color: '#92400e',
                       }}>
                         🔒 This result is locked and won't be affected by regeneration
-                        {lockedResults.find(l => l.index === i)?.note && (
+                        {lockedResults.find(l => l.index === i)?.note && ()
                           <div style={{ marginTop: 2, fontStyle: 'italic' }}>
                             Note: {lockedResults.find(l => l.index === i)?.note}
                           </div>
                         )}
                       </div>
                     )}
-                    
                     {/* Execution metadata */}
-                    {hasPath && 'executionTimeMs' in res && (
+                    {hasPath && 'executionTimeMs' in res && ()
                       <div style={{
                         marginTop: 8,
                         padding: 6,
                         background: '#e2e8f0',
                         borderRadius: 4,
                         fontSize: 11,
-                        color: '#4a5568'
+                        color: '#4a5568',
                       }}>
                         Execution: {res.executionTimeMs}ms
-                        {res.executionPath && (
+                        {res.executionPath && ()
                           <span style={{ marginLeft: 8 }}>
                             • {res.executionPath.steps.length} steps
                             • {res.executionPath.randomizationPoints.length} random points
@@ -693,15 +653,14 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                         )}
                       </div>
                     )}
-                    
                     {/* Epic 8.5 Task 6: Enhanced Weight Impact Visualization */}
-                    {hasPath && 'weightChoices' in res && res.weightChoices && res.weightChoices.length > 0 && (
+                    {hasPath && 'weightChoices' in res && res.weightChoices && res.weightChoices.length > 0 && ()
                       <div style={{
                         marginTop: 8,
                         padding: 10,
                         background: 'rgba(77, 124, 255, 0.08)',
                         border: '1px solid rgba(77, 124, 255, 0.25)',
-                        borderRadius: 6
+                        borderRadius: 6,
                       }}>
                         <div style={{
                           fontSize: 11,
@@ -710,7 +669,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           marginBottom: 8,
                           display: 'flex',
                           alignItems: 'center',
-                          gap: 6
+                          gap: 6,
                         }}>
                           🎬 Weight Impact Analysis
                           <span style={{
@@ -719,7 +678,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                             opacity: 0.8,
                             background: 'rgba(77, 124, 255, 0.2)',
                             padding: '1px 4px',
-                            borderRadius: 8
+                            borderRadius: 8,
                           }}>
                             Epic 8.5
                           </span>
@@ -729,8 +688,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           const probabilityPercent = (probability * 100).toFixed(1);
                           const isHighProbability = probability > 0.5;
                           const isMediumProbability = probability > 0.2;
-                          
-                          return (
+                          return ()
                             <div key={idx} style={{
                               fontSize: 10,
                               color: '#374151',
@@ -739,10 +697,10 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                               padding: '4px 6px',
                               background: 'rgba(255, 255, 255, 0.6)',
                               borderRadius: 3,
-                              border: `1px solid ${isHighProbability ? '#10b981' : isMediumProbability ? '#f59e0b' : '#6b7280'}`,
+                              border: `1px solid ${isHighProbability ? '#10b981' : isMediumProbability ? '#f59e0b' : '#6b7280'}`,}
                               display: 'flex',
                               justifyContent: 'space-between',
-                              alignItems: 'center'
+                              alignItems: 'center',
                             }}>
                               <div>
                                 <span style={{ fontWeight: 600, color: '#1f2937' }}>
@@ -752,21 +710,21 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                                   "{choice.selectedOption}"
                                 </span>
                               </div>
-                              {choice.selectionProbability && (
+                              {choice.selectionProbability && ()
                                 <div style={{
                                   display: 'flex',
                                   alignItems: 'center',
-                                  gap: 4
+                                  gap: 4,
                                 }}>
                                   <div style={{
                                     width: 40,
                                     height: 4,
                                     background: '#e5e7eb',
                                     borderRadius: 2,
-                                    overflow: 'hidden'
+                                    overflow: 'hidden',
                                   }}>
                                     <div style={{
-                                      width: `${probability * 100}%`,
+                                      width: `${probability * 100}%`,}
                                       height: '100%',
                                       background: isHighProbability ? '#10b981' : isMediumProbability ? '#f59e0b' : '#6b7280',
                                       transition: 'width 0.3s ease'
@@ -775,7 +733,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                                   <span style={{ 
                                     color: isHighProbability ? '#065f46' : isMediumProbability ? '#92400e' : '#4b5563',
                                     fontWeight: 600,
-                                    fontSize: 9
+                                    fontSize: 9,
                                   }}>
                                     {probabilityPercent}%
                                   </span>
@@ -788,7 +746,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           marginTop: 6,
                           fontSize: 9,
                           color: '#6b7280',
-                          fontStyle: 'italic'
+                          fontStyle: 'italic',
                         }}>
                           Real-time weight impact from Story 8.3 controls
                         </div>
@@ -809,20 +767,19 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
           borderTop: '1px solid #e5e7eb'
         }}>
           <div style={{ fontSize: 12, color: '#6b7280' }}>
-            {lockedResults.length > 0 && (
+            {lockedResults.length > 0 && ()
               <span style={{ marginRight: 16 }}>
                 🔒 {lockedResults.length} locked result{lockedResults.length !== 1 ? 's' : ''}
               </span>
             )}
-            {regeneratingResults.length > 0 && (
+            {regeneratingResults.length > 0 && ()
               <span>
                 ⟳ {regeneratingResults.length} regenerating
               </span>
             )}
           </div>
-          
           <div style={{ display: 'flex', gap: 8 }}>
-            {loading && onCancel && (
+            {loading && onCancel && ()
               <button 
                 onClick={onCancel}
                 style={{
@@ -832,7 +789,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                   border: 'none',
                   borderRadius: 4,
                   cursor: 'pointer',
-                  fontSize: 12
+                  fontSize: 12,
                 }}
               >
                 Cancel
@@ -847,14 +804,13 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 border: 'none',
                 borderRadius: 4,
                 cursor: 'pointer',
-                fontSize: 12
+                fontSize: 12,
               }}
             >
               Close
             </button>
           </div>
         </div>
-        
         {/* Export Options Dialog */}
         <ExportOptionsDialog
           open={exportDialog.open}

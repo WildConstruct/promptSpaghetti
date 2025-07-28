@@ -13,7 +13,7 @@ export interface PaginationOptions {
 }
 export interface PaginatedResult<T> {
     data: T[];
-    pagination: {
+    pagination: {,
         page: number;
         limit: number;
         totalCount: number;
@@ -162,12 +162,12 @@ export type DatabaseValue = Primitive | Record<string, any> | Array<any>;
 export type WhereCondition = Record<string, DatabaseValue>;
 export type UpdateData<T> = Partial<Omit<T, 'id' | 'createdAt' | 'updatedAt'>>;
 export type CreateData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>;
-export declare function createPaginatedResult<T>(
+export declare function createPaginatedResult<T>()
   data: T[],
   totalCount: number,
-  options: PaginationOptions
+  options: PaginationOptions,
 ): PaginatedResult<T>;
-export declare function createOperationResult<T>(
+export declare function createOperationResult<T>()
   success: boolean,
   data?: T,
   error?: string,

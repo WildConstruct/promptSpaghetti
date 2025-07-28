@@ -2,7 +2,6 @@
  * Epic 9.2.1 - Workspace Manager Component
  * Main workspace management interface
  */
-
 import React, { useState, useEffect } from 'react';
 import { WorkspaceList } from './WorkspaceList';
 import { CreateWorkspaceModal } from './CreateWorkspaceModal';
@@ -10,13 +9,12 @@ import { InviteUserModal } from './InviteUserModal';
 import { WorkspaceSettings } from './WorkspaceSettings';
 import { useWorkspaces } from '../../hooks/useWorkspaces';
 import { Workspace, WorkspaceWithMembership } from '../../types/workspace';
-
 interface WorkspaceManagerProps {
   userId: string;
   onWorkspaceSelect?: (workspace: Workspace) => void;
 }
 
-export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
+export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({)
   userId,
   onWorkspaceSelect
 }) => {
@@ -24,7 +22,6 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  
   const {
     workspaces,
     loading,
@@ -35,12 +32,10 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
     inviteUser,
     refreshWorkspaces
   } = useWorkspaces(userId);
-
   const handleWorkspaceSelect = (workspace: WorkspaceWithMembership) => {
     setSelectedWorkspace(workspace);
     onWorkspaceSelect?.(workspace);
   };
-
   const handleCreateWorkspace = async (data: { name: string; description?: string }) => {
     try {
       const newWorkspace = await createWorkspace(data);
@@ -51,10 +46,8 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
       console.error('Failed to create workspace:', error);
     }
   };
-
   const handleInviteUser = async (data: { userId: string; role: string }) => {
     if (!selectedWorkspace) return;
-    
     try {
       await inviteUser(selectedWorkspace.id, data.userId, data.role);
       setShowInviteModal(false);
@@ -63,10 +56,8 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
       console.error('Failed to invite user:', error);
     }
   };
-
   const handleWorkspaceUpdate = async (updates: { name?: string; description?: string }) => {
     if (!selectedWorkspace) return;
-    
     try {
       const updatedWorkspace = await updateWorkspace(selectedWorkspace.id, updates);
       setSelectedWorkspace(updatedWorkspace);
@@ -75,10 +66,8 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
       console.error('Failed to update workspace:', error);
     }
   };
-
   const handleWorkspaceArchive = async () => {
     if (!selectedWorkspace) return;
-    
     try {
       await archiveWorkspace(selectedWorkspace.id);
       setSelectedWorkspace(null);
@@ -88,14 +77,11 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
       console.error('Failed to archive workspace:', error);
     }
   };
-
-  const canManageWorkspace = selectedWorkspace?.role_permissions && 
+  const canManageWorkspace = selectedWorkspace?.role_permissions && ;
     (selectedWorkspace.role_permissions & (1 << 2)) !== 0; // WORKSPACE_ADMIN
-
-  const canInviteUsers = selectedWorkspace?.role_permissions && 
+  const canInviteUsers = selectedWorkspace?.role_permissions && ;
     (selectedWorkspace.role_permissions & (1 << 15)) !== 0; // USER_INVITE
-
-  return (
+  return ()
     <div className="workspace-manager">
       <div className="workspace-manager__header">
         <h2>Workspaces</h2>
@@ -106,14 +92,12 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
           Create Workspace
         </button>
       </div>
-
-      {error && (
+      {error && ()
         <div className="alert alert--error">
           <p>Error loading workspaces: {error}</p>
           <button onClick={refreshWorkspaces}>Retry</button>
         </div>
       )}
-
       <div className="workspace-manager__content">
         <div className="workspace-manager__sidebar">
           <WorkspaceList
@@ -123,22 +107,20 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
             loading={loading}
           />
         </div>
-
         <div className="workspace-manager__main">
-          {selectedWorkspace ? (
+          {selectedWorkspace ? ()
             <div className="workspace-detail">
               <div className="workspace-detail__header">
                 <div className="workspace-detail__info">
                   <h3>{selectedWorkspace.name}</h3>
-                  {selectedWorkspace.description && (
+                  {selectedWorkspace.description && ()
                     <p className="workspace-detail__description">
                       {selectedWorkspace.description}
                     </p>
                   )}
                 </div>
-                
                 <div className="workspace-detail__actions">
-                  {canInviteUsers && (
+                  {canInviteUsers && ()
                     <button
                       className="btn btn--secondary"
                       onClick={() => setShowInviteModal(true)}
@@ -146,8 +128,7 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
                       Invite Users
                     </button>
                   )}
-                  
-                  {canManageWorkspace && (
+                  {canManageWorkspace && ()
                     <button
                       className="btn btn--secondary"
                       onClick={() => setShowSettings(true)}
@@ -157,7 +138,6 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
                   )}
                 </div>
               </div>
-
               <div className="workspace-detail__stats">
                 <div className="stat">
                   <span className="stat__label">Role</span>
@@ -165,7 +145,6 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
                     {selectedWorkspace.owner_id === userId ? 'Owner' : 'Member'}
                   </span>
                 </div>
-                
                 <div className="stat">
                   <span className="stat__label">Joined</span>
                   <span className="stat__value">
@@ -177,7 +156,7 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
                 </div>
               </div>
             </div>
-          ) : (
+          ) : ()
             <div className="workspace-detail--empty">
               <h3>Select a workspace</h3>
               <p>Choose a workspace from the list to view details and manage projects.</p>
@@ -185,16 +164,14 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
           )}
         </div>
       </div>
-
       {/* Modals */}
-      {showCreateModal && (
+      {showCreateModal && ()
         <CreateWorkspaceModal
           onSubmit={handleCreateWorkspace}
           onCancel={() => setShowCreateModal(false)}
         />
       )}
-
-      {showInviteModal && selectedWorkspace && (
+      {showInviteModal && selectedWorkspace && ()
         <InviteUserModal
           workspaceId={selectedWorkspace.id}
           workspaceName={selectedWorkspace.name}
@@ -202,8 +179,7 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
           onCancel={() => setShowInviteModal(false)}
         />
       )}
-
-      {showSettings && selectedWorkspace && (
+      {showSettings && selectedWorkspace && ()
         <WorkspaceSettings
           workspace={selectedWorkspace}
           onUpdate={handleWorkspaceUpdate}

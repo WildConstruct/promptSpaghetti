@@ -13,13 +13,13 @@ export interface PerformanceMetrics {
     startTime: number;
     endTime: number;
     duration: number;
-    memoryUsage: {
+    memoryUsage: {,
         before: number;
         after: number;
         peak: number;
         delta: number;
     };
-    contextSize: {
+    contextSize: {,
         variableCount: number;
         stateCount: number;
         cacheSize: number;
@@ -94,7 +94,7 @@ export declare class PerformanceMonitor extends EventEmitter {
     /**
      * End monitoring a node execution
      */
-    endExecution(
+    endExecution()
       trackingId: string,
       context: AdvancedExecutionContext,
       result?: any,

@@ -3,13 +3,11 @@ export interface BaseNodeData {
   // Core identification
   id: string;
   label: string;
-  
   // Common properties used across editors
   variations?: string[];
   category?: string;
   description?: string;
   tags?: string[];
-  
   // Metadata and configuration
   includeMetadata?: boolean;
   transformations?: string[];
@@ -143,7 +141,7 @@ export function createBaseNodeData(id: string, label: string): BaseNodeData {
     tags: [],
     includeMetadata: false,
     transformations: [],
-    contextHints: []
+    contextHints: [],
   };
 }
 
@@ -152,7 +150,7 @@ export function createWeightedChoiceNodeData(id: string, label: string = 'Weight
     ...createBaseNodeData(id, label),
     type: 'WeightedChoice',
     choices: [],
-    weights: []
+    weights: [],
   };
 }
 
@@ -163,7 +161,7 @@ export function createConcatNodeData(id: string, label: string = 'Concat'): Conc
     separator: ' ',
     joinMode: 'space',
     trimInputs: true,
-    preserveOrder: true
+    preserveOrder: true,
   };
 }
 
@@ -173,7 +171,7 @@ export function createOutputNodeData(id: string, label: string = 'Output'): Outp
     type: 'Output',
     template: '',
     format: 'text',
-    destination: 'stdout'
+    destination: 'stdout',
   };
 }
 
@@ -182,7 +180,7 @@ export function createIncludeNodeData(id: string, label: string = 'Include'): In
     ...createBaseNodeData(id, label),
     type: 'Include',
     name: '',
-    includeType: 'template'
+    includeType: 'template',
   };
 }
 
@@ -195,7 +193,7 @@ export function createSetVariableNodeData(id: string, label: string = 'Set Varia
     variableType: 'auto',
     scope: 'global',
     persistent: false,
-    allowOverwrite: true
+    allowOverwrite: true,
   };
 }
 
@@ -207,7 +205,7 @@ export function createGetVariableNodeData(id: string, label: string = 'Get Varia
     defaultValue: '',
     variableType: 'auto',
     scope: 'global',
-    required: false
+    required: false,
   };
 }
 
@@ -219,7 +217,7 @@ export function createSubjectNodeData(id: string, label: string = 'Subject'): Su
     grammaticalPerson: 'third',
     allowPronouns: false,
     pronouns: [],
-    baseForm: ''
+    baseForm: '',
   };
 }
 
@@ -232,7 +230,7 @@ export function createActionNodeData(id: string, label: string = 'Action'): Acti
     mood: 'indicative',
     requiresObject: false,
     intensity: 'medium',
-    adverbVariations: []
+    adverbVariations: [],
   };
 }
 
@@ -280,47 +278,39 @@ export function serializeForRuntime(nodeData: NodeData): RuntimeNodeData | null 
     // UI-only nodes cannot be serialized for runtime
     return null;
   }
-
   const base: RuntimeNodeData = {
     id: nodeData.id,
     type: nodeData.type as RuntimeNodeType
   };
-
   switch (nodeData.type) {
   case 'WeightedChoice':
     return {
       ...base,
-      choices: (nodeData as WeightedChoiceNodeData).choices.map((choice, index) => ({
+      choices: (nodeData as WeightedChoiceNodeData).choices.map((choice, index) => ({)
         value: choice,
         weight: (nodeData as WeightedChoiceNodeData).weights[index] || 1
       }))
     };
-
   case 'Concat':
     return base; // Concat nodes are handled by the runtime with input connections
-
   case 'Output':
     return base; // Output nodes are handled by the runtime
-
   case 'Include':
     return {
       ...base,
       name: (nodeData as IncludeNodeData).name
     };
-
   case 'SetVariable':
     return {
       ...base,
       key: (nodeData as SetVariableNodeData).variableName,
       value: (nodeData as SetVariableNodeData).value
     };
-
   case 'GetVariable':
     return {
       ...base,
       key: (nodeData as GetVariableNodeData).variableName
     };
-
   default:
     return base;
   }
@@ -331,10 +321,8 @@ export function deserializeFromRuntime(runtimeData: RuntimeNodeData): NodeData |
   if (!isRuntimeNodeType(runtimeData.type)) {
     return null;
   }
-
   const id = runtimeData.id;
   const type = runtimeData.type;
-
   switch (type) {
   case 'WeightedChoice':
     const choices = (runtimeData.choices || []).map((c: any) => c.value || c);
@@ -344,32 +332,26 @@ export function deserializeFromRuntime(runtimeData: RuntimeNodeData): NodeData |
       choices,
       weights
     };
-
   case 'Concat':
     return createConcatNodeData(id);
-
   case 'Output':
     return createOutputNodeData(id);
-
   case 'Include':
     return {
       ...createIncludeNodeData(id),
       name: runtimeData.name || ''
     };
-
   case 'SetVariable':
     return {
       ...createSetVariableNodeData(id),
       variableName: runtimeData.key || '',
       value: runtimeData.value || ''
     };
-
   case 'GetVariable':
     return {
       ...createGetVariableNodeData(id),
       variableName: runtimeData.key || ''
     };
-
   default:
     return null;
   }
@@ -378,19 +360,15 @@ export function deserializeFromRuntime(runtimeData: RuntimeNodeData): NodeData |
 // Validation utilities
 export function validateNodeData(nodeData: Partial<NodeData>): string[] {
   const errors: string[] = [];
-
   if (!nodeData.id) {
     errors.push('Node ID is required');
   }
-
   if (!nodeData.type) {
     errors.push('Node type is required');
   }
-
   if (!nodeData.label) {
     errors.push('Node label is required');
   }
-
   // Type-specific validation
   if (nodeData.type === 'WeightedChoice') {
     const data = nodeData as Partial<WeightedChoiceNodeData>;
@@ -401,21 +379,18 @@ export function validateNodeData(nodeData: Partial<NodeData>): string[] {
       errors.push('WeightedChoice nodes must have matching choices and weights arrays');
     }
   }
-
   if (nodeData.type === 'Include') {
     const data = nodeData as Partial<IncludeNodeData>;
     if (!data.name) {
       errors.push('Include nodes must have a name');
     }
   }
-
   if (nodeData.type === 'SetVariable' || nodeData.type === 'GetVariable') {
     const data = nodeData as Partial<SetVariableNodeData | GetVariableNodeData>;
     if (!data.variableName) {
-      errors.push(`${nodeData.type} nodes must have a variable name`);
+      errors.push(`${nodeData.type} nodes must have a variable name`);}
     }
   }
-
   return errors;
 }
 

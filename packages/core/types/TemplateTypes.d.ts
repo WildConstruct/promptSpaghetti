@@ -30,7 +30,7 @@ export interface GraphAnnotations {
     nodeLabels: Record<string, string>;
     regionGroups: RegionGroup[];
     connectionLabels: Record<string, string>;
-    metadata: {
+    metadata: {,
         author: string;
         created: string;
         modified: string;
@@ -39,13 +39,13 @@ export interface GraphAnnotations {
 }
 export interface StickyNote {
     id: string;
-    position: {
+    position: {,
         x: number;
         y: number;
     };
     content: string;
     color: string;
-    size: {
+    size: {,
         width: number;
         height: number;
     };
@@ -56,7 +56,7 @@ export interface RegionGroup {
     id: string;
     label: string;
     color: string;
-    bounds: {
+    bounds: {,
         x: number;
         y: number;
         width: number;
@@ -135,7 +135,7 @@ export interface TemplateValidation {
     isValid: boolean;
     errors: string[];
     warnings: string[];
-    compatibility: {
+    compatibility: {,
         version: string;
         features: string[];
         missingFeatures: string[];
@@ -220,7 +220,7 @@ export interface TemplateCompatibility {
     supportsNodeTypes: string[];
     requiredFeatures: string[];
     minEditorVersion: string;
-    annotations: {
+    annotations: {,
         stickyNotes: boolean;
         nodeLabels: boolean;
         regionGroups: boolean;

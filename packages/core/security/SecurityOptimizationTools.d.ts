@@ -12,27 +12,27 @@ export interface OptimizationProfile {
     name: string;
     description: string;
     target_system: 'database' | 'cache' | 'query_engine' | 'storage' | 'network' | 'application';
-    config: {
+    config: {,
         optimization_goals: OptimizationGoal[];
         performance_targets: PerformanceTarget[];
         constraints: OptimizationConstraint[];
         analysis_scope: AnalysisScope;
     };
-    analysis: {
+    analysis: {,
         data_collection_period_hours: number;
         benchmark_comparison: boolean;
         historical_analysis: boolean;
         predictive_modeling: boolean;
         real_time_monitoring: boolean;
     };
-    strategies: {
+    strategies: {,
         automated_tuning: boolean;
         manual_recommendations: boolean;
         gradual_rollout: boolean;
         rollback_on_regression: boolean;
         a_b_testing: boolean;
     };
-    results: {
+    results: {,
         baseline_metrics: Record<string, number>;
         current_metrics: Record<string, number>;
         improvement_percentage: Record<string, number>;
@@ -83,16 +83,16 @@ export interface OptimizationTool {
     name: string;
     description: string;
     tool_type: 'analyzer' | 'tuner' | 'monitor' | 'benchmark' | 'predictor' | 'visualizer';
-    capabilities: {
+    capabilities: {,
         supported_systems: string[];
         analysis_types: string[];
         automation_level: 'manual' | 'semi_automated' | 'fully_automated';
         real_time_capable: boolean;
         batch_processing: boolean;
     };
-    config: {
+    config: {,
         execution_timeout_minutes: number;
-        resource_limits: {
+        resource_limits: {,
             max_cpu_percentage: number;
             max_memory_mb: number;
             max_disk_io_mb: number;
@@ -100,7 +100,7 @@ export interface OptimizationTool {
         output_formats: string[];
         integration_apis: string[];
     };
-    usage: {
+    usage: {,
         total_executions: number;
         successful_executions: number;
         failed_executions: number;
@@ -119,7 +119,7 @@ export interface OptimizationJob {
     name: string;
     description: string;
     job_type: 'analysis' | 'tuning' | 'benchmarking' | 'monitoring' | 'prediction' | 'validation';
-    config: {
+    config: {,
         profile_id: string;
         tools_to_use: string[];
         execution_mode: 'sequential' | 'parallel' | 'pipeline';
@@ -127,13 +127,13 @@ export interface OptimizationJob {
         max_retries: number;
         notification_settings: NotificationSettings;
     };
-    schedule: {
+    schedule: {,
         type: 'manual' | 'scheduled' | 'triggered' | 'continuous';
         cron_expression?: string;
         trigger_conditions?: TriggerCondition[];
         continuous_interval_minutes?: number;
     };
-    execution: {
+    execution: {,
         status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled' | 'paused';
         started_at?: number;
         completed_at?: number;
@@ -141,7 +141,7 @@ export interface OptimizationJob {
         current_phase?: string;
         estimated_completion?: number;
     };
-    results: {
+    results: {,
         optimization_recommendations: OptimizationRecommendation[];
         performance_analysis: PerformanceAnalysis;
         cost_benefit_analysis: CostBenefitAnalysis;
@@ -159,21 +159,21 @@ export interface OptimizationRecommendation {
     description: string;
     category: 'configuration' | 'architecture' | 'resource_allocation' | 'algorithm' | 'data_structure' | 'caching';
     priority: 'low' | 'medium' | 'high' | 'critical';
-    impact: {
+    impact: {,
         performance_improvement_percentage: number;
         cost_impact_monthly: number;
         implementation_effort_hours: number;
         risk_level: 'low' | 'medium' | 'high';
         reversibility: 'easy' | 'moderate' | 'difficult';
     };
-    implementation: {
+    implementation: {,
         steps: string[];
         prerequisites: string[];
         validation_tests: string[];
         rollback_procedure: string[];
         estimated_downtime_minutes: number;
     };
-    supporting_data: {
+    supporting_data: {,
         analysis_results: Record<string, any>;
         benchmark_comparisons: Record<string, number>;
         statistical_confidence: number;
@@ -192,50 +192,50 @@ export interface OptimizationRecommendation {
 }
 export interface PerformanceAnalysis {
     analysis_id: string;
-    analysis_period: {
+    analysis_period: {,
         start: number;
         end: number;
     };
-    system_metrics: {
-        throughput: {
+    system_metrics: {,
+        throughput: {,
             current_rps: number;
             peak_rps: number;
             average_rps: number;
             trend_percentage: number;
         };
-        latency: {
+        latency: {,
             p50_ms: number;
             p95_ms: number;
             p99_ms: number;
             max_ms: number;
             trend_percentage: number;
         };
-        resource_utilization: {
+        resource_utilization: {,
             cpu_percentage: number;
             memory_percentage: number;
             disk_io_percentage: number;
             network_percentage: number;
         };
-        error_rates: {
+        error_rates: {,
             total_errors: number;
             error_rate_percentage: number;
             error_types: Record<string, number>;
         };
     };
-    bottlenecks: Array<{
+    bottlenecks: Array<{,
         component: string;
         severity: 'low' | 'medium' | 'high' | 'critical';
         description: string;
         impact_percentage: number;
         recommended_actions: string[];
     }>;
-    capacity_analysis: {
+    capacity_analysis: {,
         current_capacity_utilization: number;
         projected_growth_rate: number;
         time_to_capacity_limit_days: number;
         scaling_recommendations: string[];
     };
-    comparative_analysis: {
+    comparative_analysis: {,
         vs_previous_period: Record<string, number>;
         vs_industry_benchmark: Record<string, number>;
         vs_theoretical_optimal: Record<string, number>;
@@ -243,34 +243,34 @@ export interface PerformanceAnalysis {
 }
 export interface CostBenefitAnalysis {
     analysis_id: string;
-    current_costs: {
+    current_costs: {,
         infrastructure_monthly: number;
         operational_monthly: number;
         personnel_monthly: number;
         licensing_monthly: number;
         total_monthly: number;
     };
-    optimization_costs: {
+    optimization_costs: {,
         implementation_one_time: number;
         additional_infrastructure_monthly: number;
         training_and_support: number;
         risk_mitigation: number;
         total_investment: number;
     };
-    expected_benefits: {
+    expected_benefits: {,
         cost_savings_monthly: number;
         productivity_gains_monthly: number;
         risk_reduction_value: number;
         performance_improvement_value: number;
         total_benefits_monthly: number;
     };
-    financial_metrics: {
+    financial_metrics: {,
         roi_percentage: number;
         payback_period_months: number;
         net_present_value: number;
         break_even_point_months: number;
     };
-    sensitivity_analysis: {
+    sensitivity_analysis: {,
         best_case_scenario: Record<string, number>;
         worst_case_scenario: Record<string, number>;
         most_likely_scenario: Record<string, number>;
@@ -279,7 +279,7 @@ export interface CostBenefitAnalysis {
 }
 export interface RiskAssessment {
     assessment_id: string;
-    risks: Array<{
+    risks: Array<{,
         risk_type: 'performance' | 'security' | 'compliance' | 'operational' | 'financial' | 'technical';
         description: string;
         probability: 'low' | 'medium' | 'high';
@@ -288,13 +288,13 @@ export interface RiskAssessment {
         mitigation_strategies: string[];
         contingency_plans: string[];
     }>;
-    overall_risk: {
+    overall_risk: {,
         risk_level: 'low' | 'medium' | 'high' | 'critical';
         confidence_score: number;
         key_risk_factors: string[];
         recommended_risk_controls: string[];
     };
-    compliance_impact: {
+    compliance_impact: {,
         affected_regulations: string[];
         compliance_risks: string[];
         additional_controls_needed: string[];
@@ -304,27 +304,27 @@ export interface RiskAssessment {
 export interface ExecutionSummary {
     summary_id: string;
     execution_time_minutes: number;
-    statistics: {
+    statistics: {,
         total_tools_executed: number;
         successful_tools: number;
         failed_tools: number;
         warnings_generated: number;
         recommendations_generated: number;
     };
-    resource_usage: {
+    resource_usage: {,
         peak_cpu_percentage: number;
         peak_memory_mb: number;
         total_disk_io_mb: number;
         network_data_mb: number;
         execution_cost: number;
     };
-    quality_metrics: {
+    quality_metrics: {,
         data_completeness_percentage: number;
         analysis_accuracy_score: number;
         recommendation_confidence_score: number;
         user_satisfaction_score?: number;
     };
-    issues: Array<{
+    issues: Array<{,
         severity: 'info' | 'warning' | 'error' | 'critical';
         component: string;
         message: string;
@@ -362,18 +362,18 @@ export interface OptimizationResult {
     result_id: string;
     optimization_job_id: string;
     implemented_at: number;
-    performance_delta: {
+    performance_delta: {,
         before: Record<string, number>;
         after: Record<string, number>;
         improvement_percentage: Record<string, number>;
     };
-    cost_impact: {
+    cost_impact: {,
         implementation_cost: number;
         monthly_savings: number;
         annual_savings: number;
         roi_percentage: number;
     };
-    validation: {
+    validation: {,
         tests_passed: number;
         tests_failed: number;
         performance_regression: boolean;
@@ -394,19 +394,19 @@ export interface OptimizationEvent {
     job_id?: string;
     tool_id?: string;
     recommendation_id?: string;
-    impact: {
+    impact: {,
         affected_systems: string[];
         performance_change: Record<string, number>;
         cost_impact: number;
         user_impact_level: 'none' | 'low' | 'medium' | 'high';
     };
-    context: {
+    context: {,
         system_state: Record<string, any>;
         environmental_factors: string[];
         related_events: string[];
         troubleshooting_hints: string[];
     };
-    response: {
+    response: {,
         acknowledged: boolean;
         acknowledged_by?: string;
         acknowledged_at?: number;
@@ -428,11 +428,11 @@ export declare class SecurityOptimizationTools extends EventEmitter {
     private recommendationInterval?;
     private validationInterval?;
     constructor();
-    createOptimizationProfile(
+    createOptimizationProfile()
       profile: Omit<OptimizationProfile,
       'id' | 'created_at' | 'last_updated' | 'last_analyzed' | 'results'>
     ): Promise<string>;
-    createOptimizationJob(
+    createOptimizationJob()
       job: Omit<OptimizationJob,
       'id' | 'created_at' | 'last_updated' | 'execution' | 'results'>
     ): Promise<string>;

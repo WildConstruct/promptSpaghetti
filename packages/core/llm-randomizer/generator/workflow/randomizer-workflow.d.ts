@@ -15,7 +15,7 @@ export interface WorkflowResult {
     llmOutput?: string;
     errors: WorkflowError[];
     warnings: WorkflowWarning[];
-    metadata: {
+    metadata: {,
         generationTime: number;
         llmProvider: string;
         llmAttempts: number;
@@ -69,7 +69,7 @@ export declare class RandomizerWorkflow {
     /**
      * Generate multiple variations with different parameters
      */
-    generateVariations(
+    generateVariations()
       baseParameters: RandomizerParameters,
       variationCount?: number,
       options?: WorkflowOptions

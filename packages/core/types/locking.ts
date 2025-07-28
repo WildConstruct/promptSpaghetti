@@ -30,27 +30,22 @@ export interface LockPolicy {
   workspace_id: string;
   name: string;
   description?: string;
-  
   // Lock rules
   max_locks_per_user: number;
   max_locks_per_resource: number;
   default_duration_minutes: number;
   max_duration_minutes: number;
-  
   // Auto-lock settings
   auto_lock_on_edit: boolean;
   auto_lock_on_state_change: boolean;
   auto_lock_duration_minutes: number;
-  
   // Lock breaking rules
   allow_lock_breaking: boolean;
   lock_breaking_roles: string[];
   require_justification: boolean;
-  
   // Conflict resolution
   conflict_resolution_strategy: 'queue' | 'reject' | 'notify' | 'escalate';
   escalation_timeout_minutes: number;
-  
   created_at: string;
   updated_at: string;
 }
@@ -102,7 +97,7 @@ export interface LockingStatistics {
   by_user: Record<string, number>;
   avg_lock_duration_minutes: number;
   conflict_rate: number;
-  most_contended_resources: Array<{
+  most_contended_resources: Array<{,
     resource_id: string;
     conflict_count: number;
     avg_wait_time: number;
@@ -126,26 +121,20 @@ export interface LockingActions {
   acquireLock: (request: LockRequest) => Promise<{ success: boolean; error?: string }>;
   releaseLock: (lockId: string, userId: string) => Promise<{ success: boolean; error?: string }>;
   breakLock: (lockId: string, userId: string, justification?: string) => Promise<{ success: boolean; error?: string }>;
-  
   // Conflict management
   fetchConflicts: (workspaceId: string, status?: string) => Promise<void>;
   resolveLockConflict: (conflictId: string, resolution: string, userId: string) => Promise<{ success: boolean; error?: string }>;
-  
   // Queue management
   fetchQueue: (workspaceId: string) => Promise<void>;
   removeFromQueue: (queueId: string, userId: string) => Promise<{ success: boolean; error?: string }>;
-  
   // Notifications
   fetchNotifications: (userId: string, unreadOnly?: boolean) => Promise<void>;
   markNotificationAsRead: (notificationId: string) => Promise<{ success: boolean; error?: string }>;
-  
   // Statistics
   fetchStatistics: (workspaceId: string) => Promise<void>;
-  
   // Policy management
   fetchPolicy: (workspaceId: string) => Promise<void>;
   updatePolicy: (workspaceId: string, policy: Partial<LockPolicy>) => Promise<{ success: boolean; error?: string }>;
-  
   // Utility
   clearError: () => void;
   setLoading: (loading: boolean) => void;

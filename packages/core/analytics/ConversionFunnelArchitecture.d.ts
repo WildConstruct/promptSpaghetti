@@ -14,18 +14,18 @@ import { ConversionEvent, ConversionFunnel } from './ConversionTracker';
 export interface EnhancedConversionEvent extends ConversionEvent {
     deviceFingerprint?: string;
     crossDeviceUserId?: string;
-    attributionData: {
+    attributionData: {,
         touchpoints: TouchPoint[];
         primaryAttribution: AttributionModel;
         assistedAttribution: AttributionModel[];
     };
-    privacyConsent: {
+    privacyConsent: {,
         tracking: boolean;
         analytics: boolean;
         personalization: boolean;
         crossDevice: boolean;
     };
-    realTimeProcessing: {
+    realTimeProcessing: {,
         streamId: string;
         batchId: string;
         processed: boolean;
@@ -55,16 +55,16 @@ export interface AttributionModel {
 export interface EnhancedConversionFunnel extends ConversionFunnel {
     crossDeviceTracking: boolean;
     attributionWindow: number;
-    conversionDefinition: {
+    conversionDefinition: {,
         primaryGoal: ConversionGoal;
         microConversions: ConversionGoal[];
         macroConversions: ConversionGoal[];
     };
-    segmentation: {
+    segmentation: {,
         userSegments: UserSegment[];
         cohortDefinitions: CohortDefinition[];
     };
-    anomalyDetection: {
+    anomalyDetection: {,
         enabled: boolean;
         thresholds: AnomalyThreshold[];
         alerting: AlertingConfig;
@@ -82,7 +82,7 @@ export interface ConversionGoal {
 export interface UserSegment {
     id: string;
     name: string;
-    definition: {
+    definition: {,
         rules: SegmentRule[];
         operator: 'AND' | 'OR';
     };
@@ -120,7 +120,7 @@ export interface CrossDeviceIdentity {
     confidence: number;
     linkingMethod: 'deterministic' | 'probabilistic' | 'hybrid';
     privacyCompliant: boolean;
-    dataRetention: {
+    dataRetention: {,
         createdAt: number;
         expiresAt: number;
         purpose: string;
@@ -147,34 +147,34 @@ export interface FunnelStreamConfig {
     streamName: string;
     batchSize: number;
     flushInterval: number;
-    retryPolicy: {
+    retryPolicy: {,
         maxRetries: number;
         backoffMultiplier: number;
         maxBackoffTime: number;
     };
-    deadLetterQueue: {
+    deadLetterQueue: {,
         enabled: boolean;
         maxAge: number;
     };
-    partitioning: {
+    partitioning: {,
         strategy: 'user_id' | 'session_id' | 'time_based' | 'random';
         partitionCount: number;
     };
 }
 export interface ConversionPatternInsight {
-    pattern: {
+    pattern: {,
         id: string;
         name: string;
         description: string;
         frequency: number;
         averageValue: number;
     };
-    segments: {
+    segments: {,
         high_value: UserJourneyPattern;
         high_converting: UserJourneyPattern;
         at_risk: UserJourneyPattern;
     };
-    recommendations: {
+    recommendations: {,
         optimization: string[];
         targeting: string[];
         personalization: string[];

@@ -5,7 +5,6 @@
  * Handles individual and batch export of preview results with comprehensive
  * format support and metadata inclusion.
  */
-
 import { PreviewResultWithPath, ExecutionPath } from '../types/ExecutionPath';
 import { exportResults, ExportRequest, ExportResult } from '../../../server/src/exporter';
 
@@ -67,7 +66,7 @@ export interface IndividualExportData {
 export interface BatchExportData {
   results: PreviewResultWithPath[];
   selectedIndices: number[];
-  aggregateStats: {
+  aggregateStats: {,
     totalResults: number;
     averageExecutionTime: number;
     uniqueSeeds: number[];
@@ -79,11 +78,10 @@ export interface BatchExportData {
 }
 
 export class ResultExportService {
-  
   /**
    * Export a single preview result in the specified format
    */
-  async exportIndividualResult(
+  async exportIndividualResult()
     result: PreviewResultWithPath,
     resultIndex: number,
     totalResults: number,
@@ -97,25 +95,20 @@ export class ResultExportService {
       exportedAt: new Date().toISOString(),
       sourceGraph
     };
-
     const filename = options.filename || this.generateFilename(options.format, 'individual', result.seed);
-
     return await this.performExport(exportData, options, filename, 'individual');
   }
-
   /**
    * Export multiple selected results as a batch
    */
-  async exportBatchResults(
+  async exportBatchResults()
     results: PreviewResultWithPath[],
     selectedIndices: number[],
     options: ResultExportOptions,
     sourceGraph?: any
   ): Promise<ExportResult> {
     const selectedResults = selectedIndices.map(index => results[index]).filter(Boolean);
-    
     const aggregateStats = this.calculateAggregateStats(selectedResults);
-    
     const exportData: BatchExportData = {
       results: selectedResults,
       selectedIndices,
@@ -123,20 +116,17 @@ export class ResultExportService {
       exportedAt: new Date().toISOString(),
       sourceGraph
     };
-
-    const filename = options.filename || this.generateFilename(
+    const filename = options.filename || this.generateFilename(;)
       options.format,
       'batch',
-      selectedResults.map(r => r.seed
+      selectedResults.map(r => r.seed)
     ));
-
     return await this.performExport(exportData, options, filename, 'batch');
   }
-
   /**
    * Export all results with comparison analysis
    */
-  async exportComparison(
+  async exportComparison()
     results: PreviewResultWithPath[],
     options: ResultExportOptions,
     sourceGraph?: any
@@ -148,12 +138,9 @@ export class ResultExportService {
       exportedAt: new Date().toISOString(),
       sourceGraph
     };
-
     const filename = options.filename || this.generateFilename(options.format, 'comparison', results.map(r => r.seed));
-
     return await this.performExport(comparisonData, options, filename, 'comparison');
   }
-
   /**
    * Get available export formats with descriptions
    */
@@ -172,7 +159,7 @@ export class ResultExportService {
         description: 'Simple text output with basic metadata',
         category: 'text',
         supportsIndividual: true,
-        supportsBatch: true
+        supportsBatch: true,
       },
       {
         format: 'json-simple',
@@ -180,7 +167,7 @@ export class ResultExportService {
         description: 'Basic JSON with output and seed information',
         category: 'data',
         supportsIndividual: true,
-        supportsBatch: true
+        supportsBatch: true,
       },
       {
         format: 'json-complete',
@@ -188,7 +175,7 @@ export class ResultExportService {
         description: 'Full JSON with execution paths, metadata, and debug info',
         category: 'data',
         supportsIndividual: true,
-        supportsBatch: true
+        supportsBatch: true,
       },
       {
         format: 'csv-analysis',
@@ -196,7 +183,7 @@ export class ResultExportService {
         description: 'Tabular data with performance and variance metrics',
         category: 'analysis',
         supportsIndividual: false,
-        supportsBatch: true
+        supportsBatch: true,
       },
       {
         format: 'fountain-script',
@@ -204,7 +191,7 @@ export class ResultExportService {
         description: 'Industry-standard screenplay format',
         category: 'film',
         supportsIndividual: true,
-        supportsBatch: true
+        supportsBatch: true,
       },
       {
         format: 'final-draft',
@@ -212,7 +199,7 @@ export class ResultExportService {
         description: 'Final Draft XML format for professional screenwriting',
         category: 'film',
         supportsIndividual: true,
-        supportsBatch: true
+        supportsBatch: true,
       },
       {
         format: 'controlnet-json',
@@ -220,7 +207,7 @@ export class ResultExportService {
         description: 'VFX-ready format for Stable Diffusion ControlNet',
         category: 'vfx',
         supportsIndividual: true,
-        supportsBatch: true
+        supportsBatch: true,
       },
       {
         format: 'mars-framework',
@@ -228,7 +215,7 @@ export class ResultExportService {
         description: 'VFX professional format with structured tags',
         category: 'vfx',
         supportsIndividual: true,
-        supportsBatch: true
+        supportsBatch: true,
       },
       {
         format: 'zada-natural',
@@ -236,7 +223,7 @@ export class ResultExportService {
         description: 'Director-friendly natural language format',
         category: 'film',
         supportsIndividual: true,
-        supportsBatch: true
+        supportsBatch: true,
       },
       {
         format: 'professional-report',
@@ -244,7 +231,7 @@ export class ResultExportService {
         description: 'Comprehensive analysis with recommendations',
         category: 'analysis',
         supportsIndividual: false,
-        supportsBatch: true
+        supportsBatch: true,
       },
       {
         format: 'execution-timeline',
@@ -252,7 +239,7 @@ export class ResultExportService {
         description: 'Step-by-step execution visualization',
         category: 'analysis',
         supportsIndividual: true,
-        supportsBatch: true
+        supportsBatch: true,
       },
       {
         format: 'variance-report',
@@ -260,47 +247,40 @@ export class ResultExportService {
         description: 'Detailed creative variance analysis',
         category: 'analysis',
         supportsIndividual: false,
-        supportsBatch: true
+        supportsBatch: true,
       }
     ];
   }
-
   /**
    * Validate export options for the given format
    */
   validateExportOptions(format: ExportFormat, options: ResultExportOptions): string[] {
     const errors: string[] = [];
     const formatInfo = this.getAvailableFormats().find(f => f.format === format);
-    
     if (!formatInfo) {
-      errors.push(`Unknown export format: ${format}`);
+      errors.push(`Unknown export format: ${format}`);}
       return errors;
     }
-
     // Film format validations
     if (['fountain-script', 'final-draft'].includes(format)) {
       if (!options.filmOptions?.includeDirectorNotes && !options.includeMetadata) {
         errors.push('Film formats should include either director notes or metadata');
       }
     }
-
     // VFX format validations
     if (['controlnet-json', 'mars-framework'].includes(format)) {
       if (!options.includeExecutionPaths && !options.vfxOptions?.controlNetCompatible) {
         errors.push('VFX formats require execution paths or ControlNet compatibility');
       }
     }
-
     // Analysis format validations
     if (['csv-analysis', 'professional-report', 'variance-report'].includes(format)) {
       if (!options.analysisOptions?.performanceBreakdown && !options.analysisOptions?.varianceAnalysis) {
         errors.push('Analysis formats require performance or variance analysis options');
       }
     }
-
     return errors;
   }
-
   /**
    * Estimate export size for UI feedback
    */
@@ -312,9 +292,7 @@ export class ResultExportService {
     const baseSize = results.reduce((total, result) => {
       return total + (result.output?.length || 0) + 200; // Base overhead
     }, 0);
-
     let multiplier = 1;
-    
     switch (format) {
     case 'plain-text':
       multiplier = 1.1;
@@ -344,10 +322,8 @@ export class ResultExportService {
     default:
       multiplier = 2.0;
     }
-
     const estimatedBytes = baseSize * multiplier;
     const estimatedKB = Math.ceil(estimatedBytes / 1024);
-    
     if (estimatedKB > 1024) {
       return {
         estimatedSize: Math.ceil(estimatedKB / 1024),
@@ -355,19 +331,16 @@ export class ResultExportService {
         warning: estimatedKB > 10240 ? 'Large export size - may take time to generate' : undefined
       };
     }
-
     return {
       estimatedSize: estimatedKB,
       unit: 'KB',
       warning: estimatedKB > 5120 ? 'Large export size - consider reducing options' : undefined
     };
   }
-
   /**
    * Private helper methods
    */
-
-  private async performExport(
+  private async performExport()
     data: IndividualExportData | BatchExportData | any,
     options: ResultExportOptions,
     filename: string,
@@ -380,7 +353,6 @@ export class ResultExportService {
       options: this.transformOptionsForExport(options),
       filename
     };
-
     try {
       return await exportResults(exportRequest);
     } catch (error) {
@@ -388,7 +360,6 @@ export class ResultExportService {
       return await this.handleCustomExport(data, options, filename, exportType);
     }
   }
-
   private mapToExistingFormat(format: ExportFormat): string {
     const formatMap: Record<ExportFormat, string> = {
       'plain-text': 'json-complete', // Will be post-processed
@@ -408,49 +379,39 @@ export class ResultExportService {
       'variance-report': 'json-complete', // Custom handling
       'batch-summary': 'json-complete' // Custom handling
     };
-
     return formatMap[format] || 'json-complete';
   }
-
-  private transformDataForExport(
+  private transformDataForExport()
     data: IndividualExportData | BatchExportData | any,
     options: ResultExportOptions,
-    exportType: string
+    exportType: string,
   ): any {
     const baseData = {
       exportType,
       results: 'results' in data ? data.results : [data.result],
       exportedAt: data.exportedAt,
-      sourceGraph: data.sourceGraph
+      sourceGraph: data.sourceGraph,
     };
-
     if (options.includeMetadata) {
       baseData.metadata = this.extractMetadata(data);
     }
-
     if (options.includeExecutionPaths) {
       baseData.executionPaths = this.extractExecutionPaths(baseData.results);
     }
-
     if (options.includeDebugInfo) {
       baseData.debugInfo = this.extractDebugInfo(baseData.results);
     }
-
     if (options.filmOptions) {
       baseData.filmOptions = options.filmOptions;
     }
-
     if (options.vfxOptions) {
       baseData.vfxData = this.transformVFXData(baseData.results, options.vfxOptions);
     }
-
     if (options.analysisOptions) {
       baseData.analysis = this.generateAnalysis(baseData.results, options.analysisOptions);
     }
-
     return baseData;
   }
-
   private transformOptionsForExport(options: ResultExportOptions): any {
     return {
       includeMetadata: options.includeMetadata,
@@ -458,15 +419,14 @@ export class ResultExportService {
       includeDebugInfo: options.includeDebugInfo,
       filmOptions: options.filmOptions,
       vfxOptions: options.vfxOptions,
-      analysisOptions: options.analysisOptions
+      analysisOptions: options.analysisOptions,
     };
   }
-
-  private async handleCustomExport(
+  private async handleCustomExport()
     data: any,
     options: ResultExportOptions,
     filename: string,
-    exportType: string
+    exportType: string,
   ): Promise<ExportResult> {
     switch (options.format) {
     case 'plain-text':
@@ -483,85 +443,71 @@ export class ResultExportService {
         type: 'text',
         data: JSON.stringify(data, null, 2),
         mimeType: 'application/json',
-        shouldDownload: true
+        shouldDownload: true,
       };
     }
   }
-
   private exportPlainText(data: any, options: ResultExportOptions): ExportResult {
     const results = 'results' in data ? data.results : [data.result];
-    
     let content = `Generated Content Export\n`;
-    content += `Generated: ${data.exportedAt}\n`;
-    content += `Results: ${results.length}\n\n`;
+    content += `Generated: ${data.exportedAt}\n`;}
+    content += `Results: ${results.length}\n\n`;}
     content += '='.repeat(50) + '\n\n';
-
     results.forEach((result: PreviewResultWithPath, index: number) => {
-      content += `Result ${index + 1} (Seed: ${result.seed})\n`;
+      content += `Result ${index + 1} (Seed: ${result.seed})\n`;}
       content += '-'.repeat(30) + '\n';
       content += result.output || result.error || 'No output';
       content += '\n\n';
-
       if (options.includeMetadata && result.executionTimeMs) {
-        content += `Execution Time: ${result.executionTimeMs}ms\n`;
+        content += `Execution Time: ${result.executionTimeMs}ms\n`;}
       }
-
       if (options.includeExecutionPaths && result.executionPath) {
-        content += `Execution Steps: ${result.executionPath.steps.length}\n`;
-        content += `Randomization Points: ${result.executionPath.randomizationPoints.length}\n`;
+        content += `Execution Steps: ${result.executionPath.steps.length}\n`;}
+        content += `Randomization Points: ${result.executionPath.randomizationPoints.length}\n`;}
       }
-
       content += '\n';
     });
-
     return {
       type: 'text',
       data: content,
       mimeType: 'text/plain',
-      shouldDownload: true
+      shouldDownload: true,
     };
   }
-
   private exportExecutionTimeline(data: any, options: ResultExportOptions): ExportResult {
     const results = 'results' in data ? data.results : [data.result];
-    
     const timeline = {
       exportType: 'execution-timeline',
       exportedAt: data.exportedAt,
-      results: results.map((result: PreviewResultWithPath, index: number) => ({
+      results: results.map((result: PreviewResultWithPath, index: number) => ({)
         resultIndex: index,
         seed: result.seed,
         output: result.output,
         timeline: result.executionPath ? this.buildExecutionTimeline(result.executionPath) : null
       }))
     };
-
     return {
       type: 'text',
       data: JSON.stringify(timeline, null, 2),
       mimeType: 'application/json',
-      shouldDownload: true
+      shouldDownload: true,
     };
   }
-
   private exportVarianceReport(data: any, options: ResultExportOptions): ExportResult {
     const results = 'results' in data ? data.results : [data.result];
-    
     const varianceReport = {
       exportType: 'variance-report',
       exportedAt: data.exportedAt,
       analysis: this.generateVarianceAnalysis(results),
-      recommendations: this.generateVarianceRecommendations(results)
+      recommendations: this.generateVarianceRecommendations(results),
     };
-
     return {
       type: 'text',
       data: JSON.stringify(varianceReport, null, 2),
       mimeType: 'application/json',
-      shouldDownload: true
+      shouldDownload: true,
     };
   }
-
   private exportBatchSummary(data: any, options: ResultExportOptions): ExportResult {
     const summary = {
       exportType: 'batch-summary',
@@ -571,23 +517,19 @@ export class ResultExportService {
       aggregateStats: data.aggregateStats || this.calculateAggregateStats(data.results || []),
       breakdown: this.generateBatchBreakdown(data.results || [])
     };
-
     return {
       type: 'text',
       data: JSON.stringify(summary, null, 2),
       mimeType: 'application/json',
-      shouldDownload: true
+      shouldDownload: true,
     };
   }
-
   private generateFilename(format: ExportFormat, type: string, seeds: number | number[]): string {
     const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, '');
-    const seedStr = Array.isArray(seeds) ? `${seeds.length}results` : `seed${seeds}`;
+    const seedStr = Array.isArray(seeds) ? `${seeds.length}results` : `seed${seeds}`;}
     const extension = this.getFileExtension(format);
-    
-    return `promptscape-${type}-${seedStr}-${timestamp}.${extension}`;
+    return `promptscape-${type}-${seedStr}-${timestamp}.${extension}`;}
   }
-
   private getFileExtension(format: ExportFormat): string {
     const extensions: Record<ExportFormat, string> = {
       'plain-text': 'txt',
@@ -607,15 +549,12 @@ export class ResultExportService {
       'variance-report': 'json',
       'batch-summary': 'json'
     };
-
     return extensions[format] || 'json';
   }
-
   private calculateAggregateStats(results: PreviewResultWithPath[]) {
-    const executionTimes = results
+    const executionTimes = results;
       .map(r => r.executionTimeMs)
       .filter((t): t is number => typeof t === 'number');
-
     return {
       totalResults: results.length,
       averageExecutionTime: executionTimes.length > 0 
@@ -623,60 +562,49 @@ export class ResultExportService {
         : 0,
       uniqueSeeds: [...new Set(results.map(r => r.seed))],
       varianceScore: this.calculateVarianceScore(results),
-      commonElements: this.findCommonElements(results)
+      commonElements: this.findCommonElements(results),
     };
   }
-
   private calculateVarianceScore(results: PreviewResultWithPath[]): number {
     if (results.length < 2) return 0;
-
     const outputs = results.map(r => r.output || '').filter(o => o.length > 0);
     if (outputs.length < 2) return 0;
-
     // Simple variance calculation based on output length and word overlap
     const lengths = outputs.map(o => o.length);
     const avgLength = lengths.reduce((sum, len) => sum + len, 0) / lengths.length;
     const lengthVariance = lengths.reduce((sum, len) => sum + Math.pow(len - avgLength, 2), 0) / lengths.length;
-
     // Normalize to 0-100 scale
     return Math.min(100, Math.round((lengthVariance / avgLength) * 100));
   }
-
   private findCommonElements(results: PreviewResultWithPath[]): string[] {
-    const allWords = results
+    const allWords = results;
       .map(r => r.output || '')
       .flatMap(output => output.toLowerCase().split(/\s+/))
       .filter(word => word.length > 3);
-
     const wordCounts = allWords.reduce((counts, word) => {
       counts[word] = (counts[word] || 0) + 1;
       return counts;
     }, {} as Record<string, number>);
-
     return Object.entries(wordCounts)
       .filter(([word, count]) => count > results.length / 2)
       .map(([word]) => word)
       .slice(0, 10);
   }
-
   private generateComparisonAnalysis(results: PreviewResultWithPath[]) {
     return {
       totalResults: results.length,
       averageLength: Math.round(results.reduce((sum, r) => sum + (r.output?.length || 0), 0) / results.length),
       uniqueOutputs: new Set(results.map(r => r.output)).size,
       executionTimeSpread: this.getExecutionTimeSpread(results),
-      randomizationAnalysis: this.analyzeRandomization(results)
+      randomizationAnalysis: this.analyzeRandomization(results),
     };
   }
-
   private getExecutionTimeSpread(results: PreviewResultWithPath[]) {
-    const times = results
+    const times = results;
       .map(r => r.executionTimeMs)
       .filter((t): t is number => typeof t === 'number')
       .sort((a, b) => a - b);
-
     if (times.length === 0) return null;
-
     return {
       min: times[0],
       max: times[times.length - 1],
@@ -684,121 +612,105 @@ export class ResultExportService {
       spread: times[times.length - 1] - times[0]
     };
   }
-
   private analyzeRandomization(results: PreviewResultWithPath[]) {
-    const randomizationCounts = results.map(r => 
+    const randomizationCounts = results.map(r => ;)
       r.executionPath?.randomizationPoints.length || 0
     );
-
     return {
       totalRandomizationPoints: randomizationCounts.reduce((sum, count) => sum + count, 0),
       averagePerResult: Math.round(randomizationCounts.reduce((sum, count) => sum + count, 0) / results.length),
       maxRandomizations: Math.max(...randomizationCounts),
-      minRandomizations: Math.min(...randomizationCounts)
+      minRandomizations: Math.min(...randomizationCounts),
     };
   }
-
   private extractMetadata(data: any) {
     return {
       exportedAt: data.exportedAt,
       totalResults: 'results' in data ? data.results.length : 1,
       exportType: 'results' in data ? 'batch' : 'individual',
-      hasSourceGraph: !!data.sourceGraph
+      hasSourceGraph: !!data.sourceGraph,
     };
   }
-
   private extractExecutionPaths(results: PreviewResultWithPath[]) {
     return results
       .filter(r => r.executionPath)
-      .map(r => ({
+      .map(r => ({)
         seed: r.seed,
         executionPath: r.executionPath,
-        timeline: this.buildExecutionTimeline(r.executionPath!)
+        timeline: this.buildExecutionTimeline(r.executionPath!),
       }));
   }
-
   private extractDebugInfo(results: PreviewResultWithPath[]) {
     return results
       .filter(r => r.debugInfo)
-      .map(r => ({
+      .map(r => ({)
         seed: r.seed,
-        debugInfo: r.debugInfo
+        debugInfo: r.debugInfo,
       }));
   }
-
   private transformVFXData(results: PreviewResultWithPath[], vfxOptions: any) {
     return {
       controlNetCompatible: vfxOptions.controlNetCompatible,
       sceneDataIntegration: vfxOptions.sceneDataIntegration,
       pipeline: 'stable-diffusion',
       resolution: [1920, 1080],
-      results: results.map(r => ({
+      results: results.map(r => ({)
         seed: r.seed,
         prompt: r.output,
-        executionPath: r.executionPath
+        executionPath: r.executionPath,
       }))
     };
   }
-
   private generateAnalysis(results: PreviewResultWithPath[], analysisOptions: any) {
     const analysis: any = {};
-
     if (analysisOptions.varianceAnalysis) {
       analysis.variance = {
         score: this.calculateVarianceScore(results),
-        distribution: this.analyzeVarianceDistribution(results)
+        distribution: this.analyzeVarianceDistribution(results),
       };
     }
-
     if (analysisOptions.performanceBreakdown) {
       analysis.performance = {
         executionTimes: results.map(r => r.executionTimeMs).filter(t => t !== undefined),
         averageTime: this.calculateAggregateStats(results).averageExecutionTime,
-        timeSpread: this.getExecutionTimeSpread(results)
+        timeSpread: this.getExecutionTimeSpread(results),
       };
     }
-
     if (analysisOptions.creativityMetrics) {
       analysis.creativity = {
         uniqueOutputs: new Set(results.map(r => r.output)).size,
         averageLength: Math.round(results.reduce((sum, r) => sum + (r.output?.length || 0), 0) / results.length),
-        vocabularyDiversity: this.calculateVocabularyDiversity(results)
+        vocabularyDiversity: this.calculateVocabularyDiversity(results),
       };
     }
-
     return analysis;
   }
-
   private analyzeVarianceDistribution(results: PreviewResultWithPath[]) {
     const lengths = results.map(r => r.output?.length || 0);
     const mean = lengths.reduce((sum, len) => sum + len, 0) / lengths.length;
-    
     return {
       mean,
-      standardDeviation: Math.sqrt(
+      standardDeviation: Math.sqrt(),
         lengths.reduce((sum, len) => sum + Math.pow(len - mean, 2), 0) / lengths.length
       ),
-      range: {
+      range: {,
         min: Math.min(...lengths),
-        max: Math.max(...lengths)
+        max: Math.max(...lengths),
       }
     };
   }
-
   private calculateVocabularyDiversity(results: PreviewResultWithPath[]): number {
-    const allWords = results
+    const allWords = results;
       .map(r => r.output || '')
       .join(' ')
       .toLowerCase()
       .split(/\s+/)
       .filter(word => word.length > 0);
-    
     const uniqueWords = new Set(allWords);
     return allWords.length > 0 ? uniqueWords.size / allWords.length : 0;
   }
-
   private buildExecutionTimeline(executionPath: ExecutionPath) {
-    return executionPath.steps.map((step, index) => ({
+    return executionPath.steps.map((step, index) => ({)
       stepIndex: index,
       nodeId: step.nodeId,
       nodeType: step.nodeType,
@@ -807,42 +719,36 @@ export class ResultExportService {
       randomChoice: step.randomChoice ? {
         type: step.randomChoice.choiceType,
         selected: step.randomChoice.selectedOption,
-        reason: step.randomChoice.selectionReason
+        reason: step.randomChoice.selectionReason,
       } : null
     }));
   }
-
   private generateVarianceAnalysis(results: PreviewResultWithPath[]) {
     return {
       overallVariance: this.calculateVarianceScore(results),
       distribution: this.analyzeVarianceDistribution(results),
       commonElements: this.findCommonElements(results),
       uniqueElements: this.findUniqueElements(results),
-      recommendations: this.generateVarianceRecommendations(results)
+      recommendations: this.generateVarianceRecommendations(results),
     };
   }
-
   private findUniqueElements(results: PreviewResultWithPath[]): string[] {
-    const allWords = results
+    const allWords = results;
       .map(r => r.output || '')
       .flatMap(output => output.toLowerCase().split(/\s+/))
       .filter(word => word.length > 3);
-
     const wordCounts = allWords.reduce((counts, word) => {
       counts[word] = (counts[word] || 0) + 1;
       return counts;
     }, {} as Record<string, number>);
-
     return Object.entries(wordCounts)
       .filter(([word, count]) => count === 1)
       .map(([word]) => word)
       .slice(0, 20);
   }
-
   private generateVarianceRecommendations(results: PreviewResultWithPath[]): string[] {
     const recommendations: string[] = [];
     const varianceScore = this.calculateVarianceScore(results);
-
     if (varianceScore < 20) {
       recommendations.push('Consider adding more randomization points to increase creative variety');
       recommendations.push('Try using different weight distributions in WeightedChoice nodes');
@@ -852,15 +758,12 @@ export class ResultExportService {
     } else {
       recommendations.push('Good balance of variety and consistency achieved');
     }
-
     const uniqueOutputs = new Set(results.map(r => r.output)).size;
     if (uniqueOutputs < results.length * 0.8) {
       recommendations.push('Some duplicate outputs detected - check for deterministic paths');
     }
-
     return recommendations;
   }
-
   private generateBatchBreakdown(results: PreviewResultWithPath[]) {
     return {
       byExecutionTime: this.groupByExecutionTime(results),
@@ -869,43 +772,34 @@ export class ResultExportService {
       errorRate: results.filter(r => r.error).length / results.length
     };
   }
-
   private groupByExecutionTime(results: PreviewResultWithPath[]) {
     const groups = { fast: 0, medium: 0, slow: 0 };
-    
-    results.forEach(result => {
+    results.forEach(result => {)
       const time = result.executionTimeMs || 0;
       if (time < 100) groups.fast++;
       else if (time < 500) groups.medium++;
       else groups.slow++;
     });
-
     return groups;
   }
-
   private groupByOutputLength(results: PreviewResultWithPath[]) {
     const groups = { short: 0, medium: 0, long: 0 };
-    
-    results.forEach(result => {
+    results.forEach(result => {)
       const length = result.output?.length || 0;
       if (length < 100) groups.short++;
       else if (length < 500) groups.medium++;
       else groups.long++;
     });
-
     return groups;
   }
-
   private groupByRandomizationCount(results: PreviewResultWithPath[]) {
     const groups = { low: 0, medium: 0, high: 0 };
-    
-    results.forEach(result => {
+    results.forEach(result => {)
       const count = result.executionPath?.randomizationPoints.length || 0;
       if (count < 2) groups.low++;
       else if (count < 5) groups.medium++;
       else groups.high++;
     });
-
     return groups;
   }
 }

@@ -16,7 +16,7 @@ export interface UserBehaviorFlowVisualizationProps {
 }
 export interface FlowVisualizationConfig {
     visualizationType: VisualizationType;
-    timeRange: {
+    timeRange: {,
         start: number;
         end: number;
     };
@@ -124,10 +124,10 @@ export interface FlowVisualizationExportData {
     flowData: BehaviorFlowData[];
     analysis: FlowAnalysis | null;
     visualizationConfig: FlowVisualizationConfig;
-    metadata: {
+    metadata: {,
         exportTimestamp: number;
         totalFlows: number;
-        timeRange: {
+        timeRange: {,
             start: number;
             end: number;
         };

@@ -30,18 +30,18 @@ export interface ImagePromptOptimization {
 }
 export interface DALLEResponse {
     created: number;
-    data: Array<{
+    data: Array<{,
         url?: string;
         b64_json?: string;
         revised_prompt?: string;
     }>;
 }
 export interface ImageGenerationResult {
-    images: Array<{
+    images: Array<{,
         url?: string;
         base64?: string;
         revisedPrompt?: string;
-        metadata: {
+        metadata: {,
             size: string;
             quality: string;
             style?: string;
@@ -50,7 +50,7 @@ export interface ImageGenerationResult {
     }>;
     originalPrompt: string;
     optimizedPrompt?: string;
-    usage: {
+    usage: {,
         promptTokens: number;
         totalCost: number;
     };
@@ -66,7 +66,7 @@ export declare class DALLEAdapter extends BaseAIModel {
     cleanup(): Promise<void>;
     estimate(input: unknown, options?: DALLERequestOptions): Promise<CostEstimate>;
     generateVariations(imageUrl: string, options?: Partial<DALLERequestOptions>): Promise<ImageGenerationResult>;
-    editImage(
+    editImage()
       imageUrl: string,
       maskUrl: string,
       prompt: string,

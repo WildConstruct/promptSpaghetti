@@ -1,6 +1,5 @@
 // packages/core/palette/NodeCategory.ts
 // Category system for Epic 7.2 Palette Categorization
-
 import React from 'react';
 import { 
   FiEdit3, 
@@ -14,7 +13,6 @@ import {
   FiSearch,
   FiFolder
 } from 'react-icons/fi';
-
 /**
  * Node category metadata
  */
@@ -33,22 +31,20 @@ export interface NodeCategory {
     usage?: 'common' | 'specialized' | 'experimental';
   };
 }
-
 /**
  * Special category IDs for system categories
  */
 export const SPECIAL_CATEGORIES = {
   FAVORITES: 'favorites',
   SEARCH_RESULTS: 'search-results',
-  ALL: 'all'
+  ALL: 'all',
 } as const;
-
 /**
  * Core node categories definition
  */
 export const NODE_CATEGORIES: Record<string, NodeCategory> = {
   // Content creation nodes
-  content: {
+  content: {,
     id: 'content',
     name: 'Content Building',
     description: 'Basic building blocks for creating content and prompts',
@@ -57,15 +53,14 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
     order: 1,
     collapsible: true,
     defaultExpanded: true,
-    metadata: {
+    metadata: {,
       keywords: ['text', 'content', 'character', 'subject', 'action', 'attribute'],
       difficulty: 'beginner',
-      usage: 'common'
+      usage: 'common',
     }
   },
-
   // Flow control and logic
-  flow: {
+  flow: {,
     id: 'flow',
     name: 'Flow Control',
     description: 'Control how content flows and connects together',
@@ -74,15 +69,14 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
     order: 2,
     collapsible: true,
     defaultExpanded: true,
-    metadata: {
+    metadata: {,
       keywords: ['flow', 'control', 'random', 'choice', 'combine', 'concat'],
       difficulty: 'beginner',
-      usage: 'common'
+      usage: 'common',
     }
   },
-
   // Advanced rule-based nodes
-  advanced: {
+  advanced: {,
     id: 'advanced',
     name: 'Advanced Rules',
     description: 'Sophisticated logic and rule-based content generation',
@@ -91,15 +85,14 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
     order: 3,
     collapsible: true,
     defaultExpanded: false,
-    metadata: {
+    metadata: {,
       keywords: ['advanced', 'rules', 'conditional', 'weighted', 'smart'],
       difficulty: 'advanced',
-      usage: 'specialized'
+      usage: 'specialized',
     }
   },
-
   // Data transformation
-  transform: {
+  transform: {,
     id: 'transform',
     name: 'Transform & Logic',
     description: 'Transform and process data through complex logic',
@@ -108,15 +101,14 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
     order: 4,
     collapsible: true,
     defaultExpanded: false,
-    metadata: {
+    metadata: {,
       keywords: ['transform', 'logic', 'sequential', 'markov', 'process'],
       difficulty: 'intermediate',  
-      usage: 'specialized'
+      usage: 'specialized',
     }
   },
-
   // Output and results
-  output: {
+  output: {,
     id: 'output',
     name: 'Output & Results',
     description: 'Final output nodes and result formatting',
@@ -125,15 +117,14 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
     order: 5,
     collapsible: true,
     defaultExpanded: true,
-    metadata: {
+    metadata: {,
       keywords: ['output', 'result', 'final', 'export'],
       difficulty: 'beginner',
-      usage: 'common'
+      usage: 'common',
     }
   },
-
   // Memory and variables
-  memory: {
+  memory: {,
     id: 'memory',
     name: 'Memory & Variables',
     description: 'Store and retrieve values during execution',
@@ -142,15 +133,14 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
     order: 6,
     collapsible: true,
     defaultExpanded: false,
-    metadata: {
+    metadata: {,
       keywords: ['memory', 'variable', 'store', 'retrieve', 'get', 'set'],
       difficulty: 'intermediate',
-      usage: 'common'
+      usage: 'common',
     }
   },
-
   // Custom processing
-  process: {
+  process: {,
     id: 'process',
     name: 'Custom Processing',
     description: 'Custom scripts and advanced processing capabilities',
@@ -159,13 +149,12 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
     order: 7,
     collapsible: true,
     defaultExpanded: false,
-    metadata: {
+    metadata: {,
       keywords: ['custom', 'script', 'python', 'processing', 'transform'],
       difficulty: 'advanced',
-      usage: 'experimental'
+      usage: 'experimental',
     }
   },
-
   // Special categories
   [SPECIAL_CATEGORIES.FAVORITES]: {
     id: SPECIAL_CATEGORIES.FAVORITES,
@@ -176,13 +165,12 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
     order: 0,
     collapsible: false,
     defaultExpanded: true,
-    metadata: {
+    metadata: {,
       keywords: ['favorites', 'starred', 'bookmarks'],
       difficulty: 'beginner',
-      usage: 'common'
+      usage: 'common',
     }
   },
-
   [SPECIAL_CATEGORIES.SEARCH_RESULTS]: {
     id: SPECIAL_CATEGORIES.SEARCH_RESULTS,
     name: 'Search Results',
@@ -192,13 +180,12 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
     order: -1,
     collapsible: false,
     defaultExpanded: true,
-    metadata: {
+    metadata: {,
       keywords: ['search', 'results', 'filter'],
       difficulty: 'beginner',
-      usage: 'common'
+      usage: 'common',
     }
   },
-
   [SPECIAL_CATEGORIES.ALL]: {
     id: SPECIAL_CATEGORIES.ALL,
     name: 'All Nodes',
@@ -208,14 +195,13 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
     order: 999,
     collapsible: false,
     defaultExpanded: true,
-    metadata: {
+    metadata: {,
       keywords: ['all', 'complete', 'everything'],
       difficulty: 'beginner',
-      usage: 'common'
+      usage: 'common',
     }
   }
 };
-
 /**
  * Node to category mapping
  */
@@ -225,45 +211,36 @@ export const NODE_CATEGORY_MAPPING: Record<string, string[]> = {
   'Connector': ['content'],
   'Attribute': ['content'], 
   'Action': ['content'],
-  
   // Flow Control Tools
   'WeightedChoice': ['flow'],
   'Concat': ['flow'],
   'Include': ['flow'],
-  
   // Advanced Rules
   'WeightedAdvanced': ['advanced'],
   'Conditional': ['advanced'],
-  
   // Transform & Logic
   'Sequential': ['transform'],
   'Markov': ['transform'],
-  
   // Output & Results
   'Output': ['output'],
-  
   // Memory & Variables
   'SetVariable': ['memory'],
   'GetVariable': ['memory'],
-  
   // Custom Processing
   'PythonTransform': ['process']
 };
-
 /**
  * Get categories for a node type
  */
 export function getNodeCategories(nodeId: string): string[] {
   return NODE_CATEGORY_MAPPING[nodeId] || ['content'];
 }
-
 /**
  * Get category metadata by ID
  */
 export function getCategoryById(categoryId: string): NodeCategory | undefined {
   return NODE_CATEGORIES[categoryId];
 }
-
 /**
  * Get all categories sorted by order
  */
@@ -272,50 +249,42 @@ export function getAllCategories(): NodeCategory[] {
     .filter(cat => !Object.values(SPECIAL_CATEGORIES).includes(cat.id as any))
     .sort((a, b) => a.order - b.order);
 }
-
 /**
  * Get categories filtered by difficulty level
  */
 export function getCategoriesByDifficulty(difficulty: 'beginner' | 'intermediate' | 'advanced'): NodeCategory[] {
-  return getAllCategories().filter(cat => 
+  return getAllCategories().filter(cat => )
     cat.metadata?.difficulty === difficulty || cat.metadata?.difficulty === 'beginner'
   );
 }
-
 /**
  * Search categories by keyword
  */
 export function searchCategories(query: string): NodeCategory[] {
   const searchTerm = query.toLowerCase().trim();
   if (!searchTerm) return getAllCategories();
-  
-  return getAllCategories().filter(category => {
-    const searchFields = [
+  return getAllCategories().filter(category => {)
+    const searchFields = [;
       category.name,
       category.description,
       ...(category.metadata?.keywords || [])
     ].map(field => field.toLowerCase());
-    
     return searchFields.some(field => field.includes(searchTerm));
   });
 }
-
 /**
  * Get category color with opacity
  */
 export function getCategoryColor(categoryId: string, opacity: number = 1): string {
   const category = getCategoryById(categoryId);
-  if (!category) return `rgba(107, 114, 128, ${opacity})`; // Default gray
-  
+  if (!category) return `rgba(107, 114, 128, ${opacity})`; // Default gray}
   // Convert hex to rgba
   const hex = category.color.replace('#', '');
   const r = parseInt(hex.substr(0, 2), 16);
-  const g = parseInt(hex.substr(2, 2), 16);  
+  const g = parseInt(hex.substr(2, 2), 16);  ;
   const b = parseInt(hex.substr(4, 2), 16);
-  
-  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;}
 }
-
 /**
  * Category filter options
  */
@@ -324,31 +293,26 @@ export interface CategoryFilterOptions {
   usage?: 'common' | 'specialized' | 'experimental';
   expanded?: boolean;
 }
-
 /**
  * Filter categories by options
  */
 export function filterCategories(options: CategoryFilterOptions): NodeCategory[] {
   let categories = getAllCategories();
-  
   if (options.difficulty) {
-    categories = categories.filter(cat => 
+    categories = categories.filter(cat => )
       cat.metadata?.difficulty === options.difficulty || 
       cat.metadata?.difficulty === 'beginner'
     );
   }
-  
   if (options.usage) {
-    categories = categories.filter(cat => 
+    categories = categories.filter(cat => )
       cat.metadata?.usage === options.usage
     );
   }
-  
   if (options.expanded !== undefined) {
-    categories = categories.filter(cat => 
+    categories = categories.filter(cat => )
       cat.defaultExpanded === options.expanded
     );
   }
-  
   return categories;
 }

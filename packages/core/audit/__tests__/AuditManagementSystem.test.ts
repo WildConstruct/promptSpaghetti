@@ -4,7 +4,6 @@
  * Tests all core functionality of the audit management tools including
  * event creation, querying, analytics, compliance reporting, and anomaly detection.
  */
-
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import {
   AuditManagementSystem,
@@ -16,14 +15,11 @@ import {
   queryAuditEvents,
   generateAuditAnalytics
 } from '../AuditManagementSystem';
-
 describe('AuditManagementSystem', () => {
   let auditSystem: AuditManagementSystem;
-
   beforeEach(() => {
     auditSystem = new AuditManagementSystem();
   });
-
   describe('Event Creation', () => {
     it('should create a basic audit event', () => {
       const eventData = {
@@ -42,11 +38,9 @@ describe('AuditManagementSystem', () => {
         tags: ['login', 'user'],
         alert_triggered: false,
         notification_sent: false,
-        escalation_level: 2
+        escalation_level: 2,
       };
-
       const event = auditSystem.createAuditEvent(eventData);
-
       expect(event).toBeDefined();
       expect(event.id).toBeDefined();
       expect(event.timestamp).toBeInstanceOf(Date);
@@ -55,7 +49,6 @@ describe('AuditManagementSystem', () => {
       expect(event.event_type).toBe(AuditEventType.USER_ACTION);
       expect(event.severity).toBe(AuditSeverity.MEDIUM);
     });
-
     it('should create a high-risk security incident event', () => {
       const eventData = {
         event_type: AuditEventType.SECURITY_INCIDENT,
@@ -78,11 +71,9 @@ describe('AuditManagementSystem', () => {
         tags: ['security', 'breach', 'critical'],
         alert_triggered: true,
         notification_sent: false,
-        escalation_level: 5
+        escalation_level: 5,
       };
-
       const event = auditSystem.createAuditEvent(eventData);
-
       expect(event.severity).toBe(AuditSeverity.CRITICAL);
       expect(event.risk_score).toBe(9.2);
       expect(event.alert_triggered).toBe(true);
@@ -90,7 +81,6 @@ describe('AuditManagementSystem', () => {
       expect(event.compliance_frameworks).toContain(ComplianceFramework.GDPR);
       expect(event.compliance_frameworks).toContain(ComplianceFramework.CCPA);
     });
-
     it('should create compliance-related audit event', () => {
       const eventData = {
         event_type: AuditEventType.COMPLIANCE_CHECK,
@@ -111,21 +101,18 @@ describe('AuditManagementSystem', () => {
         tags: ['gdpr', 'data_subject_request', 'article_15'],
         alert_triggered: false,
         notification_sent: false,
-        escalation_level: 1
+        escalation_level: 1,
       };
-
       const event = auditSystem.createAuditEvent(eventData);
-
       expect(event.event_type).toBe(AuditEventType.COMPLIANCE_CHECK);
       expect(event.regulatory_impact).toBe(true);
       expect(event.compliance_frameworks).toContain(ComplianceFramework.GDPR);
     });
   });
-
   describe('Event Querying', () => {
     beforeEach(() => {
       // Create sample events for querying tests
-      const sampleEvents = [
+      const sampleEvents = [;
         {
           event_type: AuditEventType.USER_ACTION,
           severity: AuditSeverity.LOW,
@@ -143,7 +130,7 @@ describe('AuditManagementSystem', () => {
           tags: ['login', 'success'],
           alert_triggered: false,
           notification_sent: false,
-          escalation_level: 1
+          escalation_level: 1,
         },
         {
           event_type: AuditEventType.SECURITY_INCIDENT,
@@ -162,119 +149,102 @@ describe('AuditManagementSystem', () => {
           tags: ['security', 'brute_force'],
           alert_triggered: true,
           notification_sent: false,
-          escalation_level: 4
+          escalation_level: 4,
         }
       ];
-
       sampleEvents.forEach(eventData => auditSystem.createAuditEvent(eventData));
     });
-
     it('should query all events with default parameters', async () => {
-      const result = await auditSystem.queryAuditEvents({
+      const result = await auditSystem.queryAuditEvents({)
         page: 1,
         limit: 50,
         sort_field: 'timestamp',
-        sort_order: 'desc'
+        sort_order: 'desc',
       });
-
       expect(result.events).toHaveLength(2);
       expect(result.totalCount).toBe(2);
       expect(result.page).toBe(1);
       expect(result.analytics).toBeDefined();
     });
-
     it('should filter events by severity', async () => {
-      const result = await auditSystem.queryAuditEvents({
+      const result = await auditSystem.queryAuditEvents({)
         page: 1,
         limit: 50,
         severities: [AuditSeverity.CRITICAL],
         sort_field: 'timestamp',
-        sort_order: 'desc'
+        sort_order: 'desc',
       });
-
       expect(result.events).toHaveLength(1);
       expect(result.events[0].severity).toBe(AuditSeverity.CRITICAL);
     });
-
     it('should filter events by event type', async () => {
-      const result = await auditSystem.queryAuditEvents({
+      const result = await auditSystem.queryAuditEvents({)
         page: 1,
         limit: 50,
         event_types: [AuditEventType.USER_ACTION],
         sort_field: 'timestamp',
-        sort_order: 'desc'
+        sort_order: 'desc',
       });
-
       expect(result.events).toHaveLength(1);
       expect(result.events[0].event_type).toBe(AuditEventType.USER_ACTION);
     });
-
     it('should filter events by risk score range', async () => {
-      const result = await auditSystem.queryAuditEvents({
+      const result = await auditSystem.queryAuditEvents({)
         page: 1,
         limit: 50,
         min_risk_score: 5,
         max_risk_score: 10,
         sort_field: 'timestamp',
-        sort_order: 'desc'
+        sort_order: 'desc',
       });
-
       expect(result.events).toHaveLength(1);
       expect(result.events[0].risk_score).toBeGreaterThanOrEqual(5);
     });
-
     it('should search events by text', async () => {
-      const result = await auditSystem.queryAuditEvents({
+      const result = await auditSystem.queryAuditEvents({)
         page: 1,
         limit: 50,
         search_text: 'failed login',
         sort_field: 'timestamp',
-        sort_order: 'desc'
+        sort_order: 'desc',
       });
-
       expect(result.events).toHaveLength(1);
       expect(result.events[0].title.toLowerCase()).toContain('failed');
     });
-
     it('should filter by compliance framework', async () => {
-      const result = await auditSystem.queryAuditEvents({
+      const result = await auditSystem.queryAuditEvents({)
         page: 1,
         limit: 50,
         compliance_frameworks: [ComplianceFramework.GDPR],
         sort_field: 'timestamp',
-        sort_order: 'desc'
+        sort_order: 'desc',
       });
-
       expect(result.events).toHaveLength(1);
       expect(result.events[0].compliance_frameworks).toContain(ComplianceFramework.GDPR);
     });
-
     it('should handle pagination correctly', async () => {
-      const page1 = await auditSystem.queryAuditEvents({
+      const page1 = await auditSystem.queryAuditEvents({)
         page: 1,
         limit: 1,
         sort_field: 'timestamp',
-        sort_order: 'desc'
+        sort_order: 'desc',
       });
-
-      const page2 = await auditSystem.queryAuditEvents({
+      const page2 = await auditSystem.queryAuditEvents({)
         page: 2,
         limit: 1,
         sort_field: 'timestamp',
-        sort_order: 'desc'
+        sort_order: 'desc',
       });
-
       expect(page1.events).toHaveLength(1);
       expect(page2.events).toHaveLength(1);
       expect(page1.events[0].id).not.toBe(page2.events[0].id);
       expect(page1.totalPages).toBe(2);
     });
   });
-
   describe('Analytics Generation', () => {
     beforeEach(() => {
       // Create sample events with various characteristics
-      const sampleEvents = [
+      const sampleEvents = [;
         {
           event_type: AuditEventType.USER_ACTION,
           severity: AuditSeverity.LOW,
@@ -292,7 +262,7 @@ describe('AuditManagementSystem', () => {
           tags: ['login'],
           alert_triggered: false,
           notification_sent: false,
-          escalation_level: 1
+          escalation_level: 1,
         },
         {
           event_type: AuditEventType.SECURITY_INCIDENT,
@@ -311,7 +281,7 @@ describe('AuditManagementSystem', () => {
           tags: ['security'],
           alert_triggered: true,
           notification_sent: false,
-          escalation_level: 3
+          escalation_level: 3,
         },
         {
           event_type: AuditEventType.DATA_ACCESS,
@@ -330,63 +300,53 @@ describe('AuditManagementSystem', () => {
           tags: ['export'],
           alert_triggered: false,
           notification_sent: false,
-          escalation_level: 2
+          escalation_level: 2,
         }
       ];
-
       sampleEvents.forEach(eventData => auditSystem.createAuditEvent(eventData));
     });
-
     it('should generate basic analytics', () => {
-      const analytics = auditSystem.generateAuditAnalytics({
+      const analytics = auditSystem.generateAuditAnalytics({)
         timeframe: 'day',
         metrics: ['event_count', 'severity_distribution', 'risk_score_average']
       });
-
       expect(analytics.total_events).toBe(3);
       expect(analytics.metrics.severity_distribution).toBeDefined();
       expect(analytics.metrics.risk_score_average).toBeDefined();
       expect(analytics.metrics.risk_score_average.average).toBeGreaterThan(0);
     });
-
     it('should generate unique users metrics', () => {
-      const analytics = auditSystem.generateAuditAnalytics({
+      const analytics = auditSystem.generateAuditAnalytics({)
         timeframe: 'day',
-        metrics: ['unique_users']
+        metrics: ['unique_users'],
       });
-
       expect(analytics.metrics.unique_users.total).toBe(2); // user-1 and user-2
       expect(analytics.metrics.unique_users.active_users).toContain('user-1');
       expect(analytics.metrics.unique_users.active_users).toContain('user-2');
     });
-
     it('should generate compliance violations report', () => {
-      const analytics = auditSystem.generateAuditAnalytics({
+      const analytics = auditSystem.generateAuditAnalytics({)
         timeframe: 'day',
-        metrics: ['compliance_violations']
+        metrics: ['compliance_violations'],
       });
-
       expect(analytics.metrics.compliance_violations).toBeDefined();
       expect(Array.isArray(analytics.metrics.compliance_violations)).toBe(true);
     });
-
     it('should generate system component activity metrics', () => {
-      const analytics = auditSystem.generateAuditAnalytics({
+      const analytics = auditSystem.generateAuditAnalytics({)
         timeframe: 'day',
-        metrics: ['system_component_activity']
+        metrics: ['system_component_activity'],
       });
-
       expect(analytics.metrics.system_component_activity).toBeDefined();
       expect(analytics.metrics.system_component_activity['auth-service']).toBe(1);
       expect(analytics.metrics.system_component_activity['security-service']).toBe(1);
       expect(analytics.metrics.system_component_activity['data-service']).toBe(1);
     });
   });
-
   describe('Compliance Reporting', () => {
     beforeEach(() => {
       // Create GDPR-related events
-      const gdprEvents = [
+      const gdprEvents = [;
         {
           event_type: AuditEventType.COMPLIANCE_CHECK,
           severity: AuditSeverity.MEDIUM,
@@ -403,7 +363,7 @@ describe('AuditManagementSystem', () => {
           tags: ['gdpr', 'article_15'],
           alert_triggered: false,
           notification_sent: false,
-          escalation_level: 1
+          escalation_level: 1,
         },
         {
           event_type: AuditEventType.SECURITY_INCIDENT,
@@ -421,22 +381,19 @@ describe('AuditManagementSystem', () => {
           tags: ['gdpr', 'breach'],
           alert_triggered: true,
           notification_sent: false,
-          escalation_level: 5
+          escalation_level: 5,
         }
       ];
-
       gdprEvents.forEach(eventData => auditSystem.createAuditEvent(eventData));
     });
-
     it('should generate GDPR compliance report', () => {
-      const report = auditSystem.generateComplianceReport(
+      const report = auditSystem.generateComplianceReport(;)
         ComplianceFramework.GDPR,
         {
           start: new Date(Date.now() - 24 * 60 * 60 * 1000),
           end: new Date()
         }
       );
-
       expect(report.framework).toBe(ComplianceFramework.GDPR);
       expect(report.summary.total_events).toBe(2);
       expect(report.summary.critical_events).toBe(1);
@@ -445,10 +402,9 @@ describe('AuditManagementSystem', () => {
       expect(report.recommendations).toBeDefined();
       expect(Array.isArray(report.recommendations)).toBe(true);
     });
-
     it('should generate SOX compliance report', () => {
       // Create SOX-related event
-      auditSystem.createAuditEvent({
+      auditSystem.createAuditEvent({)
         event_type: AuditEventType.CONFIGURATION_CHANGE,
         severity: AuditSeverity.HIGH,
         status: AuditStatus.ACTIVE,
@@ -464,34 +420,30 @@ describe('AuditManagementSystem', () => {
         tags: ['sox', 'configuration'],
         alert_triggered: true,
         notification_sent: false,
-        escalation_level: 3
+        escalation_level: 3,
       });
-
-      const report = auditSystem.generateComplianceReport(
+      const report = auditSystem.generateComplianceReport(;)
         ComplianceFramework.SOX,
         {
           start: new Date(Date.now() - 24 * 60 * 60 * 1000),
           end: new Date()
         }
       );
-
       expect(report.framework).toBe(ComplianceFramework.SOX);
       expect(report.summary.total_events).toBe(1);
       expect(report.compliance_specific.change_management_events).toBe(1);
     });
   });
-
   describe('Anomaly Detection', () => {
     beforeEach(() => {
       // Create events that should trigger anomaly detection
-      
       // Create multiple failed login events (should trigger brute force detection)
       for (let i = 0; i < 12; i++) {
-        auditSystem.createAuditEvent({
+        auditSystem.createAuditEvent({)
           event_type: AuditEventType.AUTHENTICATION,
           severity: AuditSeverity.MEDIUM,
           status: AuditStatus.ACTIVE,
-          title: `Failed Login Attempt ${i + 1}`,
+          title: `Failed Login Attempt ${i + 1}`,}
           description: 'User failed to authenticate',
           category: 'authentication',
           system_component: 'auth-service',
@@ -504,17 +456,16 @@ describe('AuditManagementSystem', () => {
           metadata: { success: false },
           alert_triggered: false,
           notification_sent: false,
-          escalation_level: 2
+          escalation_level: 2,
         });
       }
-
       // Create high-volume data access events
       for (let i = 0; i < 6; i++) {
-        auditSystem.createAuditEvent({
+        auditSystem.createAuditEvent({)
           event_type: AuditEventType.DATA_ACCESS,
           severity: AuditSeverity.MEDIUM,
           status: AuditStatus.ACTIVE,
-          title: `High Volume Data Access ${i + 1}`,
+          title: `High Volume Data Access ${i + 1}`,}
           description: 'Large volume data access detected',
           category: 'data_access',
           system_component: 'data-service',
@@ -527,17 +478,16 @@ describe('AuditManagementSystem', () => {
           tags: ['data_access', 'high_volume'],
           alert_triggered: false,
           notification_sent: false,
-          escalation_level: 2
+          escalation_level: 2,
         });
       }
-
       // Create privilege escalation events
       for (let i = 0; i < 4; i++) {
-        auditSystem.createAuditEvent({
+        auditSystem.createAuditEvent({)
           event_type: AuditEventType.AUTHORIZATION,
           severity: AuditSeverity.HIGH,
           status: AuditStatus.ACTIVE,
-          title: `Privilege Escalation Attempt ${i + 1}`,
+          title: `Privilege Escalation Attempt ${i + 1}`,}
           description: 'Potential privilege escalation detected',
           category: 'authorization',
           system_component: 'auth-service',
@@ -549,59 +499,49 @@ describe('AuditManagementSystem', () => {
           tags: ['privilege', 'escalation'],
           alert_triggered: false,
           notification_sent: false,
-          escalation_level: 4
+          escalation_level: 4,
         });
       }
     });
-
     it('should detect suspicious login activity', () => {
-      const patterns = auditSystem.detectAnomalousPatterns(3600000); // 1 hour
-
+      const patterns = auditSystem.detectAnomalousPatterns(3600000); // 1 hour;
       const loginPattern = patterns.find(p => p.type === 'suspicious_login_activity');
       expect(loginPattern).toBeDefined();
       expect(loginPattern?.severity).toBe('high');
       expect(loginPattern?.events.length).toBe(12);
     });
-
     it('should detect unusual data access volume', () => {
-      const patterns = auditSystem.detectAnomalousPatterns(3600000); // 1 hour
-
+      const patterns = auditSystem.detectAnomalousPatterns(3600000); // 1 hour;
       const dataAccessPattern = patterns.find(p => p.type === 'unusual_data_access_volume');
       expect(dataAccessPattern).toBeDefined();
       expect(dataAccessPattern?.severity).toBe('medium');
       expect(dataAccessPattern?.events.length).toBe(6);
     });
-
     it('should detect potential privilege escalation', () => {
-      const patterns = auditSystem.detectAnomalousPatterns(3600000); // 1 hour
-
+      const patterns = auditSystem.detectAnomalousPatterns(3600000); // 1 hour;
       const privilegePattern = patterns.find(p => p.type === 'potential_privilege_escalation');
       expect(privilegePattern).toBeDefined();
       expect(privilegePattern?.severity).toBe('critical');
       expect(privilegePattern?.events.length).toBe(4);
     });
-
     it('should return empty array when no patterns detected', () => {
       const cleanSystem = new AuditManagementSystem();
       const patterns = cleanSystem.detectAnomalousPatterns(3600000);
       expect(patterns).toHaveLength(0);
     });
   });
-
   describe('Audit Retention Management', () => {
     beforeEach(() => {
       // Mock the current date to control time-based tests
       jest.useFakeTimers();
       jest.setSystemTime(new Date('2025-07-22'));
     });
-
     afterEach(() => {
       jest.useRealTimers();
     });
-
     it('should manage retention policies correctly', () => {
       // Create events with different ages
-      const oldEvent = auditSystem.createAuditEvent({
+      const oldEvent = auditSystem.createAuditEvent({)
         event_type: AuditEventType.USER_ACTION,
         severity: AuditSeverity.LOW,
         status: AuditStatus.RESOLVED,
@@ -617,30 +557,26 @@ describe('AuditManagementSystem', () => {
         tags: ['test'],
         alert_triggered: false,
         notification_sent: false,
-        escalation_level: 1
+        escalation_level: 1,
       });
-
       // Simulate event being old by manipulating its timestamp
       oldEvent.timestamp = new Date('2024-01-01'); // Very old event
-
       const policies = {
         defaultRetentionDays: 365,
-        complianceRetentionDays: {
+        complianceRetentionDays: {,
           [ComplianceFramework.GDPR]: 2555 // 7 years for GDPR
         },
         archivalStorage: 's3://audit-archive',
-        legalHoldOverride: false
+        legalHoldOverride: false,
       };
-
       // This would normally call a method that processes retention
       expect(() => auditSystem.manageAuditRetention(policies)).not.toThrow();
     });
   });
-
   describe('Error Handling', () => {
     it('should handle invalid event data gracefully', () => {
       expect(() => {
-        auditSystem.createAuditEvent({
+        auditSystem.createAuditEvent({)
           // Missing required fields
           event_type: undefined as any,
           severity: AuditSeverity.LOW,
@@ -657,28 +593,25 @@ describe('AuditManagementSystem', () => {
           tags: [],
           alert_triggered: false,
           notification_sent: false,
-          escalation_level: 0
+          escalation_level: 0,
         });
       }).toThrow();
     });
-
     it('should handle query with invalid parameters', async () => {
-      const result = await auditSystem.queryAuditEvents({
+      const result = await auditSystem.queryAuditEvents({)
         page: -1, // Invalid page number
         limit: 0, // Invalid limit
         sort_field: 'invalid_field',
-        sort_order: 'desc'
+        sort_order: 'desc',
       });
-
       // The system should handle this gracefully and return empty results
       expect(result.events).toBeDefined();
       expect(Array.isArray(result.events)).toBe(true);
     });
   });
-
   describe('Integration Tests', () => {
     it('should integrate with global audit management instance', () => {
-      const event = createAuditEvent({
+      const event = createAuditEvent({)
         event_type: AuditEventType.SYSTEM_EVENT,
         severity: AuditSeverity.LOW,
         status: AuditStatus.ACTIVE,
@@ -694,16 +627,14 @@ describe('AuditManagementSystem', () => {
         tags: ['integration_test'],
         alert_triggered: false,
         notification_sent: false,
-        escalation_level: 1
+        escalation_level: 1,
       });
-
       expect(event).toBeDefined();
       expect(event.title).toBe('System Test Event');
     });
-
     it('should work with query utility function', async () => {
       // Create an event first
-      createAuditEvent({
+      createAuditEvent({)
         event_type: AuditEventType.USER_ACTION,
         severity: AuditSeverity.MEDIUM,
         status: AuditStatus.ACTIVE,
@@ -719,24 +650,21 @@ describe('AuditManagementSystem', () => {
         tags: ['query_test'],
         alert_triggered: false,
         notification_sent: false,
-        escalation_level: 2
+        escalation_level: 2,
       });
-
-      const result = await queryAuditEvents({
+      const result = await queryAuditEvents({)
         page: 1,
         limit: 50,
         search_text: 'Query Test',
         sort_field: 'timestamp',
-        sort_order: 'desc'
+        sort_order: 'desc',
       });
-
       expect(result.events.length).toBeGreaterThan(0);
       expect(result.events[0].title).toBe('Query Test Event');
     });
-
     it('should work with analytics utility function', () => {
       // Create some events for analytics
-      createAuditEvent({
+      createAuditEvent({)
         event_type: AuditEventType.DATA_ACCESS,
         severity: AuditSeverity.HIGH,
         status: AuditStatus.ACTIVE,
@@ -752,14 +680,12 @@ describe('AuditManagementSystem', () => {
         tags: ['analytics_test'],
         alert_triggered: false,
         notification_sent: false,
-        escalation_level: 3
+        escalation_level: 3,
       });
-
-      const analytics = generateAuditAnalytics({
+      const analytics = generateAuditAnalytics({)
         timeframe: 'day',
         metrics: ['event_count', 'severity_distribution', 'risk_score_average']
       });
-
       expect(analytics).toBeDefined();
       expect(analytics.total_events).toBeGreaterThan(0);
       expect(analytics.metrics).toBeDefined();
@@ -771,7 +697,7 @@ describe('AuditManagementSystem', () => {
 describe('Audit Management Utilities', () => {
   describe('createAuditEvent', () => {
     it('should create audit event using utility function', () => {
-      const event = createAuditEvent({
+      const event = createAuditEvent({)
         event_type: AuditEventType.CONFIGURATION_CHANGE,
         severity: AuditSeverity.MEDIUM,
         status: AuditStatus.ACTIVE,
@@ -787,36 +713,31 @@ describe('Audit Management Utilities', () => {
         tags: ['config'],
         alert_triggered: false,
         notification_sent: false,
-        escalation_level: 2
+        escalation_level: 2,
       });
-
       expect(event).toBeDefined();
       expect(event.event_type).toBe(AuditEventType.CONFIGURATION_CHANGE);
     });
   });
-
   describe('queryAuditEvents', () => {
     it('should query events using utility function', async () => {
-      const result = await queryAuditEvents({
+      const result = await queryAuditEvents({)
         page: 1,
         limit: 10,
         sort_field: 'timestamp',
-        sort_order: 'desc'
+        sort_order: 'desc',
       });
-
       expect(result).toBeDefined();
       expect(result.events).toBeDefined();
       expect(Array.isArray(result.events)).toBe(true);
     });
   });
-
   describe('generateAuditAnalytics', () => {
     it('should generate analytics using utility function', () => {
-      const analytics = generateAuditAnalytics({
+      const analytics = generateAuditAnalytics({)
         timeframe: 'week',
-        metrics: ['event_count']
+        metrics: ['event_count'],
       });
-
       expect(analytics).toBeDefined();
       expect(analytics.timeframe).toBe('week');
     });

@@ -4,7 +4,6 @@
  * Professional checklist management for VFX director workflows.
  * Supports hierarchical tasks, team collaboration, asset tracking, and quality assurance.
  */
-
 import React, { useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -233,15 +232,13 @@ const STATUS_CONFIG = {
   rejected: { color: '#ef4444', label: 'Rejected', icon: AlertTriangle },
   blocked: { color: '#8b5cf6', label: 'Blocked', icon: AlertTriangle }
 };
-
 const PRIORITY_CONFIG = {
   low: { color: '#10b981', label: 'Low' },
   medium: { color: '#f59e0b', label: 'Medium' },
   high: { color: '#ef4444', label: 'High' },
   critical: { color: '#dc2626', label: 'Critical' }
 };
-
-const VFX_CATEGORIES = [
+const VFX_CATEGORIES = [;
   { value: 'pre_production', label: 'Pre-Production', icon: FileText },
   { value: 'asset_creation', label: 'Asset Creation', icon: Palette },
   { value: 'animation', label: 'Animation', icon: Film },
@@ -253,8 +250,7 @@ const VFX_CATEGORIES = [
   { value: 'review', label: 'Review', icon: Eye },
   { value: 'delivery', label: 'Delivery', icon: CheckCircle }
 ];
-
-const VFX_PRODUCTION_PHASES = [
+const VFX_PRODUCTION_PHASES = [;
   { value: 'concept', label: 'Concept' },
   { value: 'previs', label: 'Previz' },
   { value: 'asset_build', label: 'Asset Build' },
@@ -267,7 +263,7 @@ const VFX_PRODUCTION_PHASES = [
   { value: 'final', label: 'Final' }
 ];
 
-export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
+export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
   checklist,
   currentUser,
   onChecklistUpdate,
@@ -292,10 +288,9 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
   const [showCompleted, setShowCompleted] = useState(true);
   const [sortBy, setSortBy] = useState<'priority' | 'dueDate' | 'status' | 'progress'>('priority');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-
   // Creation state
   const [isCreating, setIsCreating] = useState(false);
-  const [newItemTemplate, setNewItemTemplate] = useState<Partial<VFXChecklistItem>>({
+  const [newItemTemplate, setNewItemTemplate] = useState<Partial<VFXChecklistItem>>({)
     title: '',
     description: '',
     priority: 'medium',
@@ -303,40 +298,31 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
     vfxPhase: 'asset_build',
     subtasks: [],
     tags: [],
-    dependencies: []
+    dependencies: [],
   });
-
   // Filtered and sorted items
   const filteredItems = useMemo(() => {
-    const filtered = checklist.items.filter(item => {
+    const filtered = checklist.items.filter(item => {)
       // Search filter
       if (searchTerm && !item.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
           !item.description?.toLowerCase().includes(searchTerm.toLowerCase())) {
         return false;
       }
-
       // Status filter
       if (statusFilter !== 'all' && item.status !== statusFilter) return false;
-
       // Priority filter
       if (priorityFilter !== 'all' && item.priority !== priorityFilter) return false;
-
       // Category filter
       if (categoryFilter !== 'all' && item.category !== categoryFilter) return false;
-
       // Assignee filter
       if (assigneeFilter !== 'all' && item.assignee?.id !== assigneeFilter) return false;
-
       // Completed items filter
       if (!showCompleted && item.status === 'approved') return false;
-
       return true;
     });
-
     // Sort items
     filtered.sort((a, b) => {
       let comparison = 0;
-
       switch (sortBy) {
       case 'priority':
         const priorityOrder = ['critical', 'high', 'medium', 'low'];
@@ -355,13 +341,10 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
         comparison = a.completion - b.completion;
         break;
       }
-
       return sortOrder === 'asc' ? comparison : -comparison;
     });
-
     return filtered;
   }, [checklist.items, searchTerm, statusFilter, priorityFilter, categoryFilter, assigneeFilter, showCompleted, sortBy, sortOrder]);
-
   // Statistics
   const statistics = useMemo(() => {
     const total = checklist.items.length;
@@ -370,14 +353,12 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
     const review = checklist.items.filter(item => item.status === 'review').length;
     const blocked = checklist.items.filter(item => item.status === 'blocked').length;
     const critical = checklist.items.filter(item => item.priority === 'critical').length;
-    const overdue = checklist.items.filter(item => 
+    const overdue = checklist.items.filter(item => ;)
       item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved'
     ).length;
-
     const totalEstimated = checklist.items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0);
     const totalActual = checklist.items.reduce((sum, item) => sum + (item.actualHours || 0), 0);
     const avgProgress = total > 0 ? checklist.items.reduce((sum, item) => sum + item.completion, 0) / total : 0;
-
     return {
       total,
       completed,
@@ -392,58 +373,48 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
       efficiency: totalEstimated > 0 ? ((totalEstimated - totalActual) / totalEstimated) * 100 : 0
     };
   }, [checklist.items]);
-
   // Handle item status change
   const handleStatusChange = useCallback((itemId: string, newStatus: VFXChecklistItem['status']) => {
     const updates: Partial<VFXChecklistItem> = { 
       status: newStatus,
       updatedAt: new Date().toISOString()
     };
-
     // Auto-complete when approved
     if (newStatus === 'approved') {
       updates.completion = 100;
     }
-
     onItemUpdate(itemId, updates);
   }, [onItemUpdate]);
-
   // Handle priority change
   const handlePriorityChange = useCallback((itemId: string, newPriority: VFXChecklistItem['priority']) => {
-    onItemUpdate(itemId, { 
+    onItemUpdate(itemId, { )
       priority: newPriority,
       updatedAt: new Date().toISOString()
     });
   }, [onItemUpdate]);
-
   // Handle assignee change
   const handleAssigneeChange = useCallback((itemId: string, assigneeId: string) => {
     const assignee = checklist.team.find(member => member.id === assigneeId);
-    onItemUpdate(itemId, { 
+    onItemUpdate(itemId, { )
       assignee,
       updatedAt: new Date().toISOString()
     });
   }, [checklist.team, onItemUpdate]);
-
   // Handle progress change
   const handleProgressChange = useCallback((itemId: string, completion: number) => {
     const updates: Partial<VFXChecklistItem> = { 
       completion,
       updatedAt: new Date().toISOString()
     };
-
     // Auto-approve when 100% complete
     if (completion === 100 && currentUser.permissions.canApprove) {
       updates.status = 'approved';
     }
-
     onItemUpdate(itemId, updates);
   }, [currentUser.permissions.canApprove, onItemUpdate]);
-
   // Create new item
   const handleCreateItem = useCallback(() => {
     if (!newItemTemplate.title?.trim()) return;
-
     const newItem: Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'> = {
       ...newItemTemplate,
       title: newItemTemplate.title.trim(),
@@ -458,10 +429,9 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
       dependencies: newItemTemplate.dependencies || [],
       tags: newItemTemplate.tags || []
     } as Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>;
-
     onItemCreate(newItem);
     setIsCreating(false);
-    setNewItemTemplate({
+    setNewItemTemplate({)
       title: '',
       description: '',
       priority: 'medium',
@@ -469,12 +439,11 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
       vfxPhase: 'asset_build',
       subtasks: [],
       tags: [],
-      dependencies: []
+      dependencies: [],
     });
   }, [newItemTemplate, currentUser, onItemCreate]);
-
-  return (
-    <div className={`vfx-checklist-system ${className}`}>
+  return ()
+    <div className={`vfx-checklist-system ${className}`}>}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
@@ -492,7 +461,6 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                 {statistics.completed}/{statistics.total} Complete
               </Badge>
             </div>
-            
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -502,8 +470,7 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
               </Button>
-              
-              {!readonly && currentUser.permissions.canCreate && (
+              {!readonly && currentUser.permissions.canCreate && ()
                 <Button
                   variant="default"
                   size="sm"
@@ -515,9 +482,8 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
               )}
             </div>
           </CardTitle>
-
           {/* Statistics Dashboard */}
-          {showStatistics && (
+          {showStatistics && ()
             <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mt-4">
               <div className="bg-blue-50 p-3 rounded-lg text-center">
                 <div className="text-lg font-bold text-blue-900">{statistics.total}</div>
@@ -546,11 +512,10 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
             </div>
           )}
         </CardHeader>
-
         <CardContent>
           <div className="space-y-6">
             {/* Filters */}
-            {showFilters && (
+            {showFilters && ()
               <Card>
                 <CardHeader>
                   <CardTitle className="text-sm">Filters & Search</CardTitle>
@@ -570,7 +535,6 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                         />
                       </div>
                     </div>
-
                     <div>
                       <label className="block text-xs font-medium mb-2">Status</label>
                       <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -579,13 +543,12 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">All Statuses</SelectItem>
-                          {Object.entries(STATUS_CONFIG).map(([status, config]) => (
+                          {Object.entries(STATUS_CONFIG).map(([status, config]) => ()
                             <SelectItem key={status} value={status}>{config.label}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
-
                     <div>
                       <label className="block text-xs font-medium mb-2">Priority</label>
                       <Select value={priorityFilter} onValueChange={setPriorityFilter}>
@@ -594,13 +557,12 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">All Priorities</SelectItem>
-                          {Object.entries(PRIORITY_CONFIG).map(([priority, config]) => (
+                          {Object.entries(PRIORITY_CONFIG).map(([priority, config]) => ()
                             <SelectItem key={priority} value={priority}>{config.label}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
-
                     <div>
                       <label className="block text-xs font-medium mb-2">Category</label>
                       <Select value={categoryFilter} onValueChange={setCategoryFilter}>
@@ -609,14 +571,13 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">All Categories</SelectItem>
-                          {VFX_CATEGORIES.map(category => (
+                          {VFX_CATEGORIES.map(category => ()
                             <SelectItem key={category.value} value={category.value}>{category.label}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
-
                   <div className="flex items-center gap-6 mt-4 pt-4 border-t">
                     <div className="flex items-center gap-2">
                       <Switch
@@ -625,7 +586,6 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                       />
                       <span className="text-sm">Show Completed</span>
                     </div>
-
                     <div className="flex items-center gap-2">
                       <span className="text-sm">Sort by:</span>
                       <Select value={sortBy} onValueChange={(value) => setSortBy(value as any)}>
@@ -639,22 +599,20 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                           <SelectItem value="progress">Progress</SelectItem>
                         </SelectContent>
                       </Select>
-                      
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                       >
-                        <RotateCw className={`w-4 h-4 ${sortOrder === 'desc' ? 'rotate-180' : ''}`} />
+                        <RotateCw className={`w-4 h-4 ${sortOrder === 'desc' ? 'rotate-180' : ''}`} />}
                       </Button>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             )}
-
             {/* Create New Item */}
-            {isCreating && (
+            {isCreating && ()
               <Card>
                 <CardHeader>
                   <CardTitle className="text-sm">Create New Checklist Item</CardTitle>
@@ -671,7 +629,6 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                         placeholder="Enter checklist item title"
                       />
                     </div>
-
                     <div>
                       <label className="block text-xs font-medium mb-2">Priority</label>
                       <Select 
@@ -682,13 +639,12 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {Object.entries(PRIORITY_CONFIG).map(([priority, config]) => (
+                          {Object.entries(PRIORITY_CONFIG).map(([priority, config]) => ()
                             <SelectItem key={priority} value={priority}>{config.label}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
-
                     <div>
                       <label className="block text-xs font-medium mb-2">Category</label>
                       <Select 
@@ -699,13 +655,12 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {VFX_CATEGORIES.map(category => (
+                          {VFX_CATEGORIES.map(category => ()
                             <SelectItem key={category.value} value={category.value}>{category.label}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
-
                     <div>
                       <label className="block text-xs font-medium mb-2">VFX Phase</label>
                       <Select 
@@ -716,14 +671,13 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {VFX_PRODUCTION_PHASES.map(phase => (
+                          {VFX_PRODUCTION_PHASES.map(phase => ()
                             <SelectItem key={phase.value} value={phase.value}>{phase.label}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-xs font-medium mb-2">Description</label>
                     <textarea
@@ -733,7 +687,6 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                       placeholder="Optional description..."
                     />
                   </div>
-
                   <div className="flex items-center justify-end gap-2">
                     <Button
                       variant="outline"
@@ -754,10 +707,9 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                 </CardContent>
               </Card>
             )}
-
             {/* Checklist Items */}
             <div className="space-y-3">
-              {filteredItems.length === 0 ? (
+              {filteredItems.length === 0 ? ()
                 <Card>
                   <CardContent className="flex flex-col items-center justify-center py-12">
                     <CheckSquare className="w-16 h-16 text-gray-400 mb-4" />
@@ -767,7 +719,7 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                         ? 'This checklist doesn\'t have any items yet.' 
                         : 'No items match your current filters.'}
                     </p>
-                    {checklist.items.length === 0 && !readonly && currentUser.permissions.canCreate && (
+                    {checklist.items.length === 0 && !readonly && currentUser.permissions.canCreate && ()
                       <Button
                         variant="default"
                         onClick={() => setIsCreating(true)}
@@ -779,8 +731,8 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                     )}
                   </CardContent>
                 </Card>
-              ) : (
-                filteredItems.map(item => (
+              ) : ()
+                filteredItems.map(item => ()
                   <VFXChecklistItemCard
                     key={item.id}
                     item={item}
@@ -825,8 +777,7 @@ interface VFXChecklistItemCardProps {
   isSelected?: boolean;
   onSelect?: () => void;
 }
-
-const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
+const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({)
   item,
   checklist,
   currentUser,
@@ -844,31 +795,25 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
 }) => {
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState('');
-
   const statusConfig = STATUS_CONFIG[item.status];
   const priorityConfig = PRIORITY_CONFIG[item.priority];
   const StatusIcon = statusConfig.icon;
-
   const isOverdue = item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved';
   const canEdit = !readonly && (currentUser.permissions.canEdit || item.author.id === currentUser.id);
   const ___canApprove = !readonly && currentUser.permissions.___canApprove;
-
   const handleCommentSubmit = useCallback(() => {
     if (!newComment.trim()) return;
-
-    onCommentCreate(item.id, {
+    onCommentCreate(item.id, {)
       content: newComment.trim(),
       author: currentUser,
       type: 'comment',
       mentions: [],
       reactions: {}
     });
-
     setNewComment('');
   }, [newComment, item.id, currentUser, onCommentCreate]);
-
-  return (
-    <Card className={`checklist-item ${isSelected ? 'ring-2 ring-blue-500' : ''} ${isOverdue ? 'border-red-300' : ''}`}>
+  return ()
+    <Card className={`checklist-item ${isSelected ? 'ring-2 ring-blue-500' : ''} ${isOverdue ? 'border-red-300' : ''}`}>}
       <CardContent className="p-4">
         <div className="flex items-start gap-4">
           {/* Checkbox */}
@@ -885,19 +830,17 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
               {item.status === 'approved' && <CheckSquare className="w-3 h-3" />}
             </button>
           </div>
-
           {/* Content */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h3 className={`font-medium ${item.status === 'approved' ? 'line-through text-gray-500' : 'text-gray-900'}`}>
+                <h3 className={`font-medium ${item.status === 'approved' ? 'line-through text-gray-500' : 'text-gray-900'}`}>}
                   {item.title}
                 </h3>
-                {item.description && (
+                {item.description && ()
                   <p className="text-sm text-gray-600 mt-1">{item.description}</p>
                 )}
               </div>
-
               <div className="flex items-center gap-2 ml-4">
                 {/* Status Badge */}
                 <Badge 
@@ -908,7 +851,6 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
                   <StatusIcon className="w-3 h-3" />
                   {statusConfig.label}
                 </Badge>
-
                 {/* Priority Badge */}
                 <Badge 
                   variant="secondary"
@@ -916,8 +858,7 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
                 >
                   {priorityConfig.label}
                 </Badge>
-
-                {isOverdue && (
+                {isOverdue && ()
                   <Badge variant="destructive" className="flex items-center gap-1">
                     <AlertTriangle className="w-3 h-3" />
                     Overdue
@@ -925,9 +866,8 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
                 )}
               </div>
             </div>
-
             {/* Progress Bar */}
-            {!compact && (
+            {!compact && ()
               <div className="mt-3">
                 <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
                   <span>Progress</span>
@@ -941,39 +881,34 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
                 </div>
               </div>
             )}
-
             {/* Metadata */}
-            {!compact && (
+            {!compact && ()
               <div className="flex items-center gap-4 mt-3 text-xs text-gray-500">
-                {item.assignee && (
+                {item.assignee && ()
                   <div className="flex items-center gap-1">
                     <Users className="w-3 h-3" />
                     <span>{item.assignee.name}</span>
                   </div>
                 )}
-                
-                {item.dueDate && (
+                {item.dueDate && ()
                   <div className="flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
                     <span>{new Date(item.dueDate).toLocaleDateString()}</span>
                   </div>
                 )}
-
-                {item.estimatedHours && (
+                {item.estimatedHours && ()
                   <div className="flex items-center gap-1">
                     <Timer className="w-3 h-3" />
                     <span>{item.estimatedHours}h est.</span>
                   </div>
                 )}
-
-                {item.comments.length > 0 && (
+                {item.comments.length > 0 && ()
                   <div className="flex items-center gap-1">
                     <FileText className="w-3 h-3" />
                     <span>{item.comments.length} comments</span>
                   </div>
                 )}
-
-                {item.subtasks.length > 0 && (
+                {item.subtasks.length > 0 && ()
                   <div className="flex items-center gap-1">
                     <CheckSquare className="w-3 h-3" />
                     <span>{item.subtasks.filter(t => t.completed).length}/{item.subtasks.length} subtasks</span>
@@ -981,18 +916,17 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
                 )}
               </div>
             )}
-
             {/* Subtasks */}
-            {!compact && item.subtasks.length > 0 && (
+            {!compact && item.subtasks.length > 0 && ()
               <div className="mt-3 pl-4 border-l-2 border-gray-200">
                 <div className="space-y-1">
-                  {item.subtasks.slice(0, 3).map(subtask => (
+                  {item.subtasks.slice(0, 3).map(subtask => ()
                     <div key={subtask.id} className="flex items-center gap-2 text-sm">
                       <input
                         type="checkbox"
                         checked={subtask.completed}
                         onChange={() => {
-                          const updatedSubtasks = item.subtasks.map(st => 
+                          const updatedSubtasks = item.subtasks.map(st => ;)
                             st.id === subtask.id ? { ...st, completed: !st.completed } : st
                           );
                           onItemUpdate(item.id, { subtasks: updatedSubtasks });
@@ -1005,7 +939,7 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
                       </span>
                     </div>
                   ))}
-                  {item.subtasks.length > 3 && (
+                  {item.subtasks.length > 3 && ()
                     <div className="text-xs text-gray-500">
                       +{item.subtasks.length - 3} more subtasks
                     </div>
@@ -1013,9 +947,8 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
                 </div>
               </div>
             )}
-
             {/* Actions */}
-            {!compact && (
+            {!compact && ()
               <div className="flex items-center justify-between mt-3">
                 <div className="flex items-center gap-2">
                   <Button
@@ -1026,8 +959,7 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
                     <FileText className="w-4 h-4 mr-1" />
                     Comments ({item.comments.length})
                   </Button>
-
-                  {onSelect && (
+                  {onSelect && ()
                     <Button
                       variant="ghost"
                       size="sm"
@@ -1038,8 +970,7 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
                     </Button>
                   )}
                 </div>
-
-                {canEdit && (
+                {canEdit && ()
                   <div className="flex items-center gap-1">
                     <Button variant="ghost" size="sm">
                       <Edit3 className="w-4 h-4" />
@@ -1055,11 +986,10 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
                 )}
               </div>
             )}
-
             {/* Comments Section */}
-            {showComments && (
+            {showComments && ()
               <div className="mt-4 pt-4 border-t space-y-3">
-                {item.comments.map(comment => (
+                {item.comments.map(comment => ()
                   <div key={comment.id} className="flex gap-3">
                     <div className="flex-shrink-0">
                       <div 
@@ -1080,8 +1010,7 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
                     </div>
                   </div>
                 ))}
-
-                {!readonly && (
+                {!readonly && ()
                   <div className="flex gap-3">
                     <div className="flex-shrink-0">
                       <div 

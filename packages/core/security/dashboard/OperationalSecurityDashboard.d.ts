@@ -66,7 +66,7 @@ export interface ThreatIntelligence {
     categories: string[];
 }
 export interface OperationalMetrics {
-    alerts: {
+    alerts: {,
         total: number;
         newLast24h: number;
         byCategory: Record<string, number>;
@@ -74,19 +74,19 @@ export interface OperationalMetrics {
         avgResponseTime: number;
         slaCompliance: number;
     };
-    incidents: {
+    incidents: {,
         active: number;
         resolved24h: number;
         avgResolutionTime: number;
         escalated: number;
     };
-    system: {
+    system: {,
         overallHealth: number;
         componentsOperational: number;
         totalComponents: number;
         criticalIssues: number;
     };
-    team: {
+    team: {,
         onlineAnalysts: number;
         totalAnalysts: number;
         workload: 'low' | 'normal' | 'high' | 'critical';

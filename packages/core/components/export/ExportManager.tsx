@@ -28,15 +28,13 @@ import {
   FiShare2,
   FiUpload
 } from 'react-icons/fi';
-
 interface ExportManagerProps {
   projectId: string;
   className?: string;
 }
-
 type ActiveTab = 'templates' | 'jobs' | 'statistics' | 'shares' | 'wizard';
 
-export const ExportManager: React.FC<ExportManagerProps> = ({
+export const ExportManager: React.FC<ExportManagerProps> = ({)
   projectId,
   className = ''
 }) => {
@@ -46,7 +44,6 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
   const [refreshInterval, setRefreshInterval] = useState<NodeJS.Timer | null>(null);
   const [shareDialogJob, setShareDialogJob] = useState<ExportJob | null>(null);
   const [showImportDialog, setShowImportDialog] = useState(false);
-
   const {
     templates,
     jobs,
@@ -60,29 +57,24 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
     cancelExportJob,
     refetch
   } = useExport(projectId);
-
   useEffect(() => {
     // Initial data fetch
     fetchTemplates();
     fetchJobs();
     fetchStatistics();
-
     // Set up auto-refresh for active jobs
     const interval = setInterval(() => {
       if (jobs.some(job => job.status === 'pending' || job.status === 'processing')) {
         fetchJobs();
       }
     }, 5000);
-
     setRefreshInterval(interval);
-
     return () => {
       if (refreshInterval) {
         clearInterval(refreshInterval);
       }
     };
   }, [projectId]);
-
   const handleQuickExport = async (format: ExportFormat, type: ExportType) => {
     try {
       const exportData: CreateExportJob = {
@@ -92,30 +84,25 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
         export_options: {},
         custom_filters: {}
       };
-
       await createExportJob(exportData);
       setActiveTab('jobs');
     } catch (error) {
       console.error('Quick export failed:', error);
     }
   };
-
   const handleTemplateSelect = (template: ExportTemplate) => {
     setSelectedTemplate(template);
     setShowWizard(true);
   };
-
   const handleWizardComplete = (_____exportData: CreateExportJob) => {
     setShowWizard(false);
     setSelectedTemplate(null);
     setActiveTab('jobs');
   };
-
   const handleWizardCancel = () => {
     setShowWizard(false);
     setSelectedTemplate(null);
   };
-
   const handleShareExport = (job: ExportJob) => {
     if (job.status !== 'completed') {
       alert('Only completed exports can be shared');
@@ -123,17 +110,14 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
     }
     setShareDialogJob(job);
   };
-
   const handleShareDialogClose = () => {
     setShareDialogJob(null);
   };
-
   const handleShareCreated = (_____share: Error) => {
     // Refresh data after creating a share
     fetchJobs();
     fetchStatistics();
   };
-
   const handleImportComplete = (_____result: Record<string, unknown>) => {
     // Refresh data after import
     fetchTemplates();
@@ -141,11 +125,10 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
     fetchStatistics();
     setShowImportDialog(false);
   };
-
   const renderTabContent = () => {
     switch (activeTab) {
     case 'templates':
-      return (
+      return ()
         <ExportTemplateList
           templates={templates}
           onTemplateSelect={handleTemplateSelect}
@@ -155,7 +138,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
         />
       );
     case 'jobs':
-      return (
+      return ()
         <ExportJobList
           jobs={jobs}
           onCancel={cancelExportJob}
@@ -166,7 +149,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
         />
       );
     case 'statistics':
-      return (
+      return ()
         <ExportStatsDashboard
           statistics={statistics}
           loading={loading}
@@ -174,7 +157,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
         />
       );
     case 'shares':
-      return (
+      return ()
         <ShareManager
           projectId={projectId}
         />
@@ -183,19 +166,16 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
       return null;
     }
   };
-
   const getActiveJobsCount = () => {
     return jobs.filter(job => job.status === 'pending' || job.status === 'processing').length;
   };
-
   const getRecentJobsCount = () => {
     const oneDayAgo = new Date();
     oneDayAgo.setDate(oneDayAgo.getDate() - 1);
     return jobs.filter(job => new Date(job.started_at) > oneDayAgo).length;
   };
-
-  return (
-    <div className={`export-manager ${className}`}>
+  return ()
+    <div className={`export-manager ${className}`}>}
       {/* Header */}
       <div className="export-manager-header">
         <div className="flex items-center justify-between mb-6">
@@ -227,12 +207,11 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
               disabled={loading}
               className="flex items-center space-x-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
             >
-              <FiRefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              <FiRefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
               <span>Refresh</span>
             </button>
           </div>
         </div>
-
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
@@ -280,7 +259,6 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
             </div>
           </div>
         </div>
-
         {/* Tab Navigation */}
         <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="flex space-x-8">
@@ -289,7 +267,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
               { id: 'jobs', label: 'Export Jobs', icon: FiDownload },
               { id: 'shares', label: 'Shares', icon: FiShare2 },
               { id: 'statistics', label: 'Statistics', icon: FiBarChart3 }
-            ].map((tab) => (
+            ].map((tab) => ()
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as ActiveTab)}
@@ -306,10 +284,9 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
           </nav>
         </div>
       </div>
-
       {/* Main Content */}
       <div className="export-manager-content">
-        {error && (
+        {error && ()
           <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -323,12 +300,10 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
             </div>
           </div>
         )}
-
         {renderTabContent()}
       </div>
-
       {/* Export Wizard Modal */}
-      {showWizard && (
+      {showWizard && ()
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto mx-4">
             <ExportWizard
@@ -340,9 +315,8 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
           </div>
         </div>
       )}
-
       {/* Share Dialog Modal */}
-      {shareDialogJob && (
+      {shareDialogJob && ()
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4 p-6">
             <ShareDialog
@@ -353,9 +327,8 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
           </div>
         </div>
       )}
-
       {/* Import Dialog Modal */}
-      {showImportDialog && (
+      {showImportDialog && ()
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4 p-6">
             <ImportDialog

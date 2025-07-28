@@ -14,7 +14,7 @@ export interface FilmStudioProfile {
     productionVolume: number;
     primaryGenres: string[];
     distributionChannels: ('theatrical' | 'streaming' | 'tv' | 'digital')[];
-    paymentTerms: {
+    paymentTerms: {,
         preferredBilling: 'monthly' | 'per_project' | 'annual';
         creditLimit: number;
         paymentDays: number;
@@ -27,11 +27,11 @@ export interface FilmStudioProfile {
 export interface ProjectPricingRequest {
     studioId: string;
     projectId: string;
-    projectDetails: {
+    projectDetails: {,
         title: string;
         genre: string;
         budgetRange: 'micro' | 'low' | 'medium' | 'high' | 'blockbuster';
-        timeline: {
+        timeline: {,
             startDate: number;
             endDate: number;
             deliveryDate: number;
@@ -40,7 +40,7 @@ export interface ProjectPricingRequest {
         priority: 'standard' | 'rush' | 'emergency';
         distributionPlan: string[];
     };
-    contentRequirements: {
+    contentRequirements: {,
         scriptAnalysis?: ScriptAnalysisOptions;
         storyboardGeneration?: StoryboardOptions;
         conceptArt?: ConceptArtOptions;
@@ -102,7 +102,7 @@ export interface FilmIndustryPricingResult {
     studioTierAdjustment: number;
     projectComplexityMultiplier: number;
     timelineAdjustment: number;
-    deliverablesPricing: Array<{
+    deliverablesPricing: Array<{,
         deliverable: string;
         quantity: number;
         unitPrice: number;
@@ -136,14 +136,14 @@ export interface PaymentScheduleItem {
 }
 export interface StudioPricingAnalytics {
     studioId: string;
-    period: {
+    period: {,
         start: number;
         end: number;
     };
     totalRevenue: number;
     averageProjectValue: number;
     profitMargin: number;
-    paymentPerformance: {
+    paymentPerformance: {,
         averagePaymentDays: number;
         latePaymentRate: number;
         creditUtilization: number;
@@ -152,18 +152,18 @@ export interface StudioPricingAnalytics {
     projectsByType: Record<string, number>;
     projectsByGenre: Record<string, number>;
     averageProjectTimeline: number;
-    deliveryPerformance: {
+    deliveryPerformance: {,
         onTimeDeliveryRate: number;
         qualityScore: number;
         revisionRate: number;
     };
-    seasonalPatterns: Array<{
+    seasonalPatterns: Array<{,
         period: string;
         volume: number;
         revenue: number;
         averageValue: number;
     }>;
-    growthMetrics: {
+    growthMetrics: {,
         revenueGrowth: number;
         projectVolumeGrowth: number;
         averageValueGrowth: number;
@@ -199,7 +199,7 @@ export declare class FilmIndustryPricingService extends EventEmitter {
         studio: FilmStudioProfile;
         analytics: StudioPricingAnalytics;
         recommendations: string[];
-        benchmarks: {
+        benchmarks: {,
             industryAverage: number;
             tierAverage: number;
             performanceRank: number;
@@ -211,15 +211,15 @@ export declare class FilmIndustryPricingService extends EventEmitter {
     getIndustryTrends(): {
         averagePricing: Record<string, number>;
         growthRates: Record<string, number>;
-        seasonalPatterns: Array<{
+        seasonalPatterns: Array<{,
             period: string;
             multiplier: number;
         }>;
         emergingServices: string[];
-        competitiveLandscape: Array<{
+        competitiveLandscape: Array<{,
             category: string;
             competitorCount: number;
-            priceRange: {
+            priceRange: {,
                 min: number;
                 max: number;
             };
@@ -231,12 +231,12 @@ export declare class FilmIndustryPricingService extends EventEmitter {
     optimizeStudioPricing(studioId: string): Promise<{
         currentPricing: Record<string, number>;
         recommendedPricing: Record<string, number>;
-        expectedImpact: {
+        expectedImpact: {,
             revenueChange: number;
             volumeChange: number;
             marginChange: number;
         };
-        implementationPlan: Array<{
+        implementationPlan: Array<{,
             action: string;
             timeline: string;
             priority: 'high' | 'medium' | 'low';

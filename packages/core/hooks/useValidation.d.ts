@@ -13,7 +13,7 @@ interface UseValidationProps {
     highlightEdgeIds?: Set<string>;
     validateConnection?: (edges: Edge[], nodes: Node[]) => ValidationError[];
 }
-export declare const useValidation: (
+export declare const useValidation: ()
   { edges,
   nodes,
   highlightNodeIds,

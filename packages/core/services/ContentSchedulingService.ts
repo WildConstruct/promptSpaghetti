@@ -17,7 +17,6 @@ export interface ContentItem {
   metadata: ContentMetadata;
   scheduling: ContentScheduling;
   performance: ContentPerformance;
-  
   // Lifecycle tracking
   createdAt: Date;
   updatedAt: Date;
@@ -30,12 +29,10 @@ export interface ContentData {
   body?: string;
   description?: string;
   excerpt?: string;
-  
   // Media content
   images?: MediaAsset[];
   videos?: MediaAsset[];
   documents?: MediaAsset[];
-  
   // Structured data
   fields?: Record<string, any>;
   customData?: Record<string, any>;
@@ -59,21 +56,17 @@ export interface ContentMetadata {
   seoDescription?: string;
   keywords?: string[];
   canonicalUrl?: string;
-  
   // Organization
   categories?: string[];
   tags?: string[];
   collections?: string[];
-  
   // Localization
   language: string;
   localizations?: Record<string, string>; // locale -> contentId
-  
   // Relationships
   relatedContent?: string[];
   parentContent?: string;
   childContent?: string[];
-  
   // Professional workflow
   workflow?: {
     stage: 'draft' | 'review' | 'approved' | 'rejected' | 'final';
@@ -99,20 +92,15 @@ export interface ContentScheduling {
   publishAt?: Date;
   unpublishAt?: Date;
   timezone: string;
-  
   // Recurring patterns
   recurrence?: RecurrencePattern;
-  
   // Promotion scheduling
   promotions?: PromotionSchedule[];
-  
   // Lifecycle management
   archiveAt?: Date;
   deleteAt?: Date;
-  
   // Conditional scheduling
   conditions?: ScheduleCondition[];
-  
   // Dependencies
   prerequisites?: string[]; // content IDs that must be published first
   blocks?: string[]; // content IDs that this blocks from publishing
@@ -158,7 +146,6 @@ export interface ContentPerformance {
   comments: number;
   conversionRate?: number;
   revenue?: number;
-  
   // Time-based metrics
   metrics?: Array<{
     timestamp: Date;
@@ -166,7 +153,6 @@ export interface ContentPerformance {
     engagement: number;
     shares: number;
   }>;
-  
   // A/B testing results
   variants?: Array<{
     id: string;
@@ -223,7 +209,7 @@ export interface ScheduleBatch {
   operation: BatchOperation;
   schedule: BatchSchedule;
   status: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
-  progress: {
+  progress: {,
     total: number;
     completed: number;
     failed: number;
@@ -261,21 +247,19 @@ export interface SchedulingStats {
   scheduledContent: number;
   publishedToday: number;
   unpublishedToday: number;
-  
-  upcomingSchedules: Array<{
+  upcomingSchedules: Array<{,
     date: Date;
     count: number;
-    items: Array<{
+    items: Array<{,
       id: string;
       title: string;
       type: ContentType;
       operation: string;
     }>;
   }>;
-  
-  performanceMetrics: {
+  performanceMetrics: {,
     averageViewsPerPost: number;
-    topPerformingContent: Array<{
+    topPerformingContent: Array<{,
       id: string;
       title: string;
       views: number;
@@ -288,7 +272,6 @@ export interface SchedulingStats {
     }>;
   };
 }
-
 /**
  * Content Scheduling Service
  */
@@ -298,24 +281,21 @@ export class ContentSchedulingService {
   private batches: Map<string, ScheduleBatch> = new Map();
   private listeners: Map<string, (event: SchedulingEvent) => void> = new Map();
   private scheduler: NodeJS.Timeout | null = null;
-
   private constructor() {
     this.startScheduler();
   }
-
   static getInstance(): ContentSchedulingService {
     if (!ContentSchedulingService.instance) {
       ContentSchedulingService.instance = new ContentSchedulingService();
     }
     return ContentSchedulingService.instance;
   }
-
   /**
    * Content Management
    */
-  async createContent(
+  async createContent()
     contentData: Omit<ContentItem, 'id' | 'createdAt' | 'updatedAt' | 'performance'>,
-    createdBy: string
+    createdBy: string,
   ): Promise<ContentItem> {
     const content: ContentItem = {
       ...contentData,
@@ -323,137 +303,114 @@ export class ContentSchedulingService {
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy,
-      performance: {
+      performance: {,
         views: 0,
         engagement: 0,
         shares: 0,
         likes: 0,
-        comments: 0
+        comments: 0,
       }
     };
-
     this.content.set(content.id, content);
     this.notifyListeners('content_created', content);
-
     return content;
   }
-
-  async updateContent(
+  async updateContent()
     contentId: string,
     updates: Partial<ContentItem>,
-    updatedBy: string
+    updatedBy: string,
   ): Promise<ContentItem | null> {
     const content = this.content.get(contentId);
     if (!content) return null;
-
     const updatedContent: ContentItem = {
       ...content,
       ...updates,
       id: contentId, // Ensure ID cannot be changed
       updatedAt: new Date(),
-      lastModifiedBy: updatedBy
+      lastModifiedBy: updatedBy,
     };
-
     this.content.set(contentId, updatedContent);
     this.notifyListeners('content_updated', updatedContent);
-
     return updatedContent;
   }
-
   async deleteContent(contentId: string, deletedBy: string): Promise<boolean> {
     const content = this.content.get(contentId);
     if (!content) return false;
-
     // Mark as deleted instead of hard delete
-    const deletedContent = await this.updateContent(contentId, {
+    const deletedContent = await this.updateContent(contentId, {)
       status: 'deleted',
-      scheduling: {
+      scheduling: {,
         ...content.scheduling,
         deleteAt: new Date()
       }
     }, deletedBy);
-
     if (deletedContent) {
       this.notifyListeners('content_deleted', deletedContent);
       return true;
     }
-
     return false;
   }
-
   /**
    * Scheduling Operations
    */
-  async scheduleContent(
+  async scheduleContent()
     contentId: string,
     scheduling: ContentScheduling,
-    scheduledBy: string
+    scheduledBy: string,
   ): Promise<boolean> {
     const content = this.content.get(contentId);
     if (!content) return false;
-
-    const updatedContent = await this.updateContent(contentId, {
+    const updatedContent = await this.updateContent(contentId, {)
       scheduling,
-      status: 'scheduled'
+      status: 'scheduled',
     }, scheduledBy);
-
     if (updatedContent) {
       this.notifyListeners('content_scheduled', updatedContent);
       return true;
     }
-
     return false;
   }
-
   async publishContent(contentId: string, publishedBy: string): Promise<boolean> {
     const content = this.content.get(contentId);
     if (!content) return false;
-
-    const updatedContent = await this.updateContent(contentId, {
+    const updatedContent = await this.updateContent(contentId, {)
       status: 'published',
-      scheduling: {
+      scheduling: {,
         ...content.scheduling,
         publishAt: new Date()
       }
     }, publishedBy);
-
     if (updatedContent) {
       this.notifyListeners('content_published', updatedContent);
       return true;
     }
-
     return false;
   }
-
   async unpublishContent(contentId: string, unpublishedBy: string): Promise<boolean> {
     const content = this.content.get(contentId);
     if (!content) return false;
-
-    const updatedContent = await this.updateContent(contentId, {
+    const updatedContent = await this.updateContent(contentId, {)
       status: 'unpublished',
-      scheduling: {
+      scheduling: {,
         ...content.scheduling,
         unpublishAt: new Date()
       }
     }, unpublishedBy);
-
     if (updatedContent) {
       this.notifyListeners('content_unpublished', updatedContent);
       return true;
     }
-
     return false;
   }
-
   /**
    * Batch Operations
    */
-  async createBatch(
+  async createBatch()
     name: string,
     contentIds: string[],
     operation: BatchOperation,
     schedule: BatchSchedule,
-    createdBy: string
+    createdBy: string,
   ): Promise<ScheduleBatch> {
     const batch: ScheduleBatch = {
       id: this.generateBatchId(),
@@ -462,81 +419,68 @@ export class ContentSchedulingService {
       operation,
       schedule,
       status: 'pending',
-      progress: {
+      progress: {,
         total: contentIds.length,
         completed: 0,
         failed: 0,
-        errors: []
+        errors: [],
       },
       createdAt: new Date(),
       createdBy
     };
-
     this.batches.set(batch.id, batch);
     this.notifyListeners('batch_created', batch);
-
     // Schedule batch execution if needed
     if (batch.schedule.executeAt) {
       this.scheduleBatchExecution(batch);
     }
-
     return batch;
   }
-
   async executeBatch(batchId: string): Promise<boolean> {
     const batch = this.batches.get(batchId);
     if (!batch || batch.status !== 'pending') return false;
-
     batch.status = 'processing';
     batch.executedAt = new Date();
     this.batches.set(batchId, batch);
-
     this.notifyListeners('batch_started', batch);
-
     try {
       for (const contentId of batch.contentIds) {
         const content = this.content.get(contentId);
         if (!content) {
           batch.progress.failed++;
-          batch.progress.errors.push({
+          batch.progress.errors.push({)
             contentId,
             error: 'Content not found',
             timestamp: new Date()
           });
           continue;
         }
-
         try {
           await this.executeBatchOperation(contentId, batch.operation, batch.createdBy);
           batch.progress.completed++;
-
           // Apply staggering if configured
           if (batch.schedule.staggering?.enabled) {
-            const delay = batch.schedule.staggering.interval * 60 * 1000; // convert to ms
-            const randomDelay = batch.schedule.staggering.randomization 
+            const delay = batch.schedule.staggering.interval * 60 * 1000; // convert to ms;
+            const randomDelay = batch.schedule.staggering.randomization ;
               ? Math.random() * delay * 0.5 
               : 0;
             await this.sleep(delay + randomDelay);
           }
         } catch (error) {
           batch.progress.failed++;
-          batch.progress.errors.push({
+          batch.progress.errors.push({)
             contentId,
             error: error instanceof Error ? error.message : 'Unknown error',
             timestamp: new Date()
           });
         }
-
         this.batches.set(batchId, batch);
       }
-
       batch.status = 'completed';
       batch.completedAt = new Date();
       this.batches.set(batchId, batch);
-
       this.notifyListeners('batch_completed', batch);
       return true;
-
     } catch (error) {
       batch.status = 'failed';
       this.batches.set(batchId, batch);
@@ -544,144 +488,122 @@ export class ContentSchedulingService {
       return false;
     }
   }
-
   /**
    * Data Retrieval
    */
   getContent(filter?: ContentFilter): ContentItem[] {
     let content = Array.from(this.content.values());
-
     if (!filter) return content;
-
     if (filter.types?.length) {
       content = content.filter(c => filter.types!.includes(c.type));
     }
-
     if (filter.statuses?.length) {
       content = content.filter(c => filter.statuses!.includes(c.status));
     }
-
     if (filter.categories?.length) {
-      content = content.filter(c => 
+      content = content.filter(c => )
         c.metadata.categories?.some(cat => filter.categories!.includes(cat))
       );
     }
-
     if (filter.tags?.length) {
-      content = content.filter(c => 
+      content = content.filter(c => )
         c.metadata.tags?.some(tag => filter.tags!.includes(tag))
       );
     }
-
     if (filter.authors?.length) {
       content = content.filter(c => filter.authors!.includes(c.createdBy));
     }
-
     if (filter.dateRange) {
-      content = content.filter(c => {
+      content = content.filter(c => {)
         const date = c.createdAt;
         return (!filter.dateRange!.start || date >= filter.dateRange!.start) &&
                (!filter.dateRange!.end || date <= filter.dateRange!.end);
       });
     }
-
     if (filter.searchQuery) {
       const query = filter.searchQuery.toLowerCase();
-      content = content.filter(c => 
+      content = content.filter(c => )
         c.title.toLowerCase().includes(query) ||
         c.content.description?.toLowerCase().includes(query) ||
         c.metadata.tags?.some(tag => tag.toLowerCase().includes(query))
       );
     }
-
     if (filter.hasSchedule !== undefined) {
-      content = content.filter(c => 
+      content = content.filter(c => )
         filter.hasSchedule 
           ? (c.scheduling.publishAt || c.scheduling.unpublishAt || c.scheduling.recurrence)
           : !(c.scheduling.publishAt || c.scheduling.unpublishAt || c.scheduling.recurrence)
       );
     }
-
     if (filter.scheduledBetween) {
-      content = content.filter(c => {
+      content = content.filter(c => {)
         const publishAt = c.scheduling.publishAt;
         return publishAt && 
                publishAt >= filter.scheduledBetween!.start &&
                publishAt <= filter.scheduledBetween!.end;
       });
     }
-
     return content.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
   }
-
   getSchedulingStats(): SchedulingStats {
     const content = Array.from(this.content.values());
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-
     const scheduledContent = content.filter(c => c.status === 'scheduled');
-    const publishedToday = content.filter(c => 
+    const publishedToday = content.filter(c => ;)
       c.status === 'published' && 
       c.scheduling.publishAt &&
       c.scheduling.publishAt >= today &&
       c.scheduling.publishAt < tomorrow
     );
-
-    const unpublishedToday = content.filter(c => 
+    const unpublishedToday = content.filter(c => ;)
       c.status === 'unpublished' && 
       c.scheduling.unpublishAt &&
       c.scheduling.unpublishAt >= today &&
       c.scheduling.unpublishAt < tomorrow
     );
-
     // Group upcoming schedules by date
     const upcomingSchedules: Map<string, Array<{ id: string; title: string; type: ContentType; operation: string }>> = new Map();
-    
-    scheduledContent.forEach(item => {
+    scheduledContent.forEach(item => {)
       if (item.scheduling.publishAt && item.scheduling.publishAt > now) {
         const dateKey = item.scheduling.publishAt.toDateString();
         if (!upcomingSchedules.has(dateKey)) {
           upcomingSchedules.set(dateKey, []);
         }
-        upcomingSchedules.get(dateKey)!.push({
+        upcomingSchedules.get(dateKey)!.push({)
           id: item.id,
           title: item.title,
           type: item.type,
-          operation: 'publish'
+          operation: 'publish',
         });
       }
     });
-
-    const upcomingArray = Array.from(upcomingSchedules.entries())
-      .map(([dateStr, items]) => ({
+    const upcomingArray = Array.from(upcomingSchedules.entries());
+      .map(([dateStr, items]) => ({)
         date: new Date(dateStr),
         count: items.length,
         items
       }))
       .sort((a, b) => a.date.getTime() - b.date.getTime())
       .slice(0, 10); // Next 10 days
-
     // Calculate performance metrics
     const publishedContent = content.filter(c => c.status === 'published');
     const totalViews = publishedContent.reduce((sum, c) => sum + c.performance.views, 0);
     const averageViewsPerPost = publishedContent.length > 0 ? totalViews / publishedContent.length : 0;
-
-    const topPerformingContent = publishedContent
+    const topPerformingContent = publishedContent;
       .sort((a, b) => b.performance.views - a.performance.views)
       .slice(0, 5)
-      .map(c => ({
+      .map(c => ({)
         id: c.id,
         title: c.title,
         views: c.performance.views,
-        engagement: c.performance.engagement
+        engagement: c.performance.engagement,
       }));
-
     // Content type performance
     const contentTypePerformance: Record<ContentType, { count: number; averageViews: number; averageEngagement: number }> = {} as any;
-    
-    publishedContent.forEach(c => {
+    publishedContent.forEach(c => {)
       if (!contentTypePerformance[c.type]) {
         contentTypePerformance[c.type] = { count: 0, averageViews: 0, averageEngagement: 0 };
       }
@@ -689,49 +611,41 @@ export class ContentSchedulingService {
       contentTypePerformance[c.type].averageViews += c.performance.views;
       contentTypePerformance[c.type].averageEngagement += c.performance.engagement;
     });
-
-    Object.values(contentTypePerformance).forEach(stats => {
+    Object.values(contentTypePerformance).forEach(stats => {)
       if (stats.count > 0) {
         stats.averageViews /= stats.count;
         stats.averageEngagement /= stats.count;
       }
     });
-
     return {
       totalContent: content.length,
       scheduledContent: scheduledContent.length,
       publishedToday: publishedToday.length,
       unpublishedToday: unpublishedToday.length,
       upcomingSchedules: upcomingArray,
-      performanceMetrics: {
+      performanceMetrics: {,
         averageViewsPerPost,
         topPerformingContent,
         contentTypePerformance
       }
     };
   }
-
   getBatches(status?: ScheduleBatch['status']): ScheduleBatch[] {
     let batches = Array.from(this.batches.values());
-    
     if (status) {
       batches = batches.filter(b => b.status === status);
     }
-    
     return batches.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
-
   /**
    * Event Handling
    */
   subscribe(listenerId: string, callback: (event: SchedulingEvent) => void): void {
     this.listeners.set(listenerId, callback);
   }
-
   unsubscribe(listenerId: string): void {
     this.listeners.delete(listenerId);
   }
-
   // Private methods
   private startScheduler(): void {
     // Check for scheduled items every minute
@@ -739,11 +653,9 @@ export class ContentSchedulingService {
       this.processScheduledItems();
     }, 60 * 1000);
   }
-
   private processScheduledItems(): void {
     const now = new Date();
     const scheduledContent = this.getContent({ statuses: ['scheduled'] });
-
     scheduledContent.forEach(async (content) => {
       // Check for publish time
       if (content.scheduling.publishAt && content.scheduling.publishAt <= now) {
@@ -751,61 +663,51 @@ export class ContentSchedulingService {
           await this.publishContent(content.id, 'scheduler');
         }
       }
-
       // Check for unpublish time
       if (content.scheduling.unpublishAt && content.scheduling.unpublishAt <= now) {
         await this.unpublishContent(content.id, 'scheduler');
       }
-
       // Check for archive time
       if (content.scheduling.archiveAt && content.scheduling.archiveAt <= now) {
         await this.updateContent(content.id, { status: 'archived' }, 'scheduler');
       }
     });
-
     // Process scheduled batches
     const pendingBatches = this.getBatches('pending');
-    pendingBatches.forEach(batch => {
+    pendingBatches.forEach(batch => {)
       if (batch.schedule.executeAt && batch.schedule.executeAt <= now) {
         this.executeBatch(batch.id);
       }
     });
   }
-
   private checkScheduleConditions(content: ContentItem): boolean {
     if (!content.scheduling.conditions?.length) return true;
-
-    return content.scheduling.conditions.every(condition => {
+    return content.scheduling.conditions.every(condition => {)
       switch (condition.type) {
       case 'content_published':
         const requiredContentId = condition.parameters.contentId;
         const requiredContent = this.content.get(requiredContentId);
         return requiredContent?.status === 'published';
-        
       case 'date_range':
         const now = new Date();
         const start = new Date(condition.parameters.start);
         const end = new Date(condition.parameters.end);
         return now >= start && now <= end;
-        
       case 'performance_threshold':
         const threshold = condition.parameters.threshold;
         const metric = condition.parameters.metric;
         return content.performance[metric as keyof ContentPerformance] >= threshold;
-        
       case 'approval_received':
         return content.metadata.workflow?.stage === 'approved';
-        
       default:
         return true;
       }
     });
   }
-
-  private async executeBatchOperation(
+  private async executeBatchOperation()
     contentId: string, 
     operation: BatchOperation, 
-    operatorId: string
+    operatorId: string,
   ): Promise<void> {
     switch (operation.type) {
     case 'publish':
@@ -824,17 +726,16 @@ export class ContentSchedulingService {
       if (operation.parameters) {
         const content = this.content.get(contentId);
         if (content) {
-          await this.updateContent(contentId, {
+          await this.updateContent(contentId, {)
             metadata: { ...content.metadata, ...operation.parameters.metadata }
           }, operatorId);
         }
       }
       break;
     default:
-      throw new Error(`Unknown batch operation: ${operation.type}`);
+      throw new Error(`Unknown batch operation: ${operation.type}`);}
     }
   }
-
   private scheduleBatchExecution(batch: ScheduleBatch): void {
     const delay = batch.schedule.executeAt!.getTime() - Date.now();
     if (delay > 0) {
@@ -843,9 +744,8 @@ export class ContentSchedulingService {
       }, delay);
     }
   }
-
   private notifyListeners(eventType: string, data: any): void {
-    this.listeners.forEach(callback => {
+    this.listeners.forEach(callback => {)
       try {
         callback({ type: eventType, data, timestamp: new Date() });
       } catch (error) {
@@ -853,15 +753,12 @@ export class ContentSchedulingService {
       }
     });
   }
-
   private generateContentId(): string {
-    return `content_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `content_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   private generateBatchId(): string {
-    return `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   private sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }

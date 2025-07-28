@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { NodeData } from '../../types/NodeTypes';
 import { NodeSpecificRichEditor } from './RichTextEditor';
-
 interface NodeEditorProps {
   data: NodeData;
   onChange: (field: string, value: any) => void;
@@ -10,7 +9,7 @@ interface NodeEditorProps {
 }
 
 // WeightedChoice Node Editor with drag-and-drop weight adjustment
-export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
+export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({)
   data,
   onChange,
   errors,
@@ -18,42 +17,35 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
 }) => {
   const choices = data.choices || [];
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-
   const addChoice = useCallback(() => {
     const newChoices = [...choices, { text: 'New choice', weight: 1 }];
     onChange('choices', newChoices);
   }, [choices, onChange]);
-
   const updateChoice = useCallback((index: number, field: string, value: any) => {
     const newChoices = [...choices];
     newChoices[index] = { ...newChoices[index], [field]: value };
     onChange('choices', newChoices);
   }, [choices, onChange]);
-
   const removeChoice = useCallback((index: number) => {
     const newChoices = choices.filter((_, i) => i !== index);
     onChange('choices', newChoices);
   }, [choices, onChange]);
-
   const reorderChoices = useCallback((fromIndex: number, toIndex: number) => {
     const newChoices = [...choices];
     const [movedChoice] = newChoices.splice(fromIndex, 1);
     newChoices.splice(toIndex, 0, movedChoice);
     onChange('choices', newChoices);
   }, [choices, onChange]);
-
   // Normalize weights to 100%
   const normalizeWeights = useCallback(() => {
     const totalWeight = choices.reduce((sum, choice) => sum + (choice.weight || 0), 0);
     if (totalWeight === 0) return;
-
-    const normalizedChoices = choices.map(choice => ({
+    const normalizedChoices = choices.map(choice => ({)
       ...choice,
       weight: Math.round((choice.weight / totalWeight) * 100)
     }));
     onChange('choices', normalizedChoices);
   }, [choices, onChange]);
-
   const getThemeColors = () => {
     switch (theme) {
       case 'cinema':
@@ -63,7 +55,7 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
           text: '#e2e8f0',
           accent: '#4299e1',
           success: '#38a169',
-          danger: '#e53e3e'
+          danger: '#e53e3e',
         };
       case 'dark':
         return {
@@ -72,7 +64,7 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
           text: '#f7fafc',
           accent: '#38a169',
           success: '#48bb78',
-          danger: '#f56565'
+          danger: '#f56565',
         };
       case 'light':
       default:
@@ -82,20 +74,18 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
           text: '#2d3748',
           accent: '#3182ce',
           success: '#38a169',
-          danger: '#e53e3e'
+          danger: '#e53e3e',
         };
     }
   };
-
   const colors = getThemeColors();
-
-  return (
+  return ()
     <div>
       <div style={{ 
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center',
-        marginBottom: 12
+        marginBottom: 12,
       }}>
         <label style={{ fontSize: 14, color: colors.text, fontWeight: 600 }}>
           Weighted Choices
@@ -111,7 +101,7 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
               borderRadius: 4,
               cursor: 'pointer',
               fontSize: 11,
-              fontWeight: 600
+              fontWeight: 600,
             }}
             title="Normalize weights to 100%"
           >
@@ -127,16 +117,15 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
               borderRadius: 4,
               cursor: 'pointer',
               fontSize: 11,
-              fontWeight: 600
+              fontWeight: 600,
             }}
           >
             + Add Choice
           </button>
         </div>
       </div>
-      
       <div style={{ maxHeight: 200, overflowY: 'auto', marginBottom: 8 }}>
-        {choices.map((choice, index) => (
+        {choices.map((choice, index) => ()
           <div
             key={index}
             draggable
@@ -155,9 +144,9 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
               alignItems: 'center',
               padding: 8,
               background: draggedIndex === index ? colors.accent + '20' : colors.background,
-              border: `1px solid ${colors.border}`,
+              border: `1px solid ${colors.border}`,}
               borderRadius: 6,
-              cursor: 'move'
+              cursor: 'move',
             }}
           >
             <div style={{
@@ -165,9 +154,8 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
               height: 16,
               background: colors.border,
               borderRadius: 2,
-              cursor: 'grab'
+              cursor: 'grab',
             }} />
-            
             <input
               type="text"
               value={choice.text}
@@ -176,14 +164,13 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
                 flex: 1,
                 padding: 8,
                 background: colors.background,
-                border: `1px solid ${colors.border}`,
+                border: `1px solid ${colors.border}`,}
                 borderRadius: 4,
                 color: colors.text,
-                fontSize: 13
+                fontSize: 13,
               }}
               placeholder="Choice text"
             />
-            
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <input
                 type="range"
@@ -201,17 +188,16 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
                   width: 50,
                   padding: 4,
                   background: colors.background,
-                  border: `1px solid ${colors.border}`,
+                  border: `1px solid ${colors.border}`,}
                   borderRadius: 4,
                   color: colors.text,
                   fontSize: 12,
-                  textAlign: 'center'
+                  textAlign: 'center',
                 }}
                 min="0"
               />
               <span style={{ fontSize: 12, color: colors.text, opacity: 0.7 }}>%</span>
             </div>
-            
             <button
               onClick={() => removeChoice(index)}
               style={{
@@ -222,7 +208,7 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
                 cursor: 'pointer',
                 fontSize: 12,
                 padding: '4px 8px',
-                fontWeight: 600
+                fontWeight: 600,
               }}
               title="Remove choice"
             >
@@ -231,9 +217,8 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
           </div>
         ))}
       </div>
-      
       {/* Weight Distribution Visualization */}
-      {choices.length > 0 && (
+      {choices.length > 0 && ()
         <div style={{ marginTop: 12 }}>
           <div style={{ fontSize: 12, color: colors.text, marginBottom: 4 }}>
             Weight Distribution:
@@ -243,18 +228,17 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
             height: 6, 
             borderRadius: 3,
             overflow: 'hidden',
-            background: colors.border
+            background: colors.border,
           }}>
             {choices.map((choice, index) => {
               const totalWeight = choices.reduce((sum, c) => sum + (c.weight || 0), 0);
               const percentage = totalWeight > 0 ? (choice.weight / totalWeight) * 100 : 0;
-              
-              return (
+              return ()
                 <div
                   key={index}
                   style={{
-                    width: `${percentage}%`,
-                    background: `hsl(${(index * 137.5) % 360}, 70%, 60%)`,
+                    width: `${percentage}%`,}
+                    background: `hsl(${(index * 137.5) % 360}, 70%, 60%)`,}
                     minWidth: percentage > 0 ? 2 : 0
                   }}
                   title={`${choice.text}: ${choice.weight} (${percentage.toFixed(1)}%)`}
@@ -264,8 +248,7 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
           </div>
         </div>
       )}
-      
-      {errors.choices && (
+      {errors.choices && ()
         <span style={{ color: colors.danger, fontSize: 12, marginTop: 4 }}>
           {errors.choices}
         </span>
@@ -275,21 +258,20 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({
 };
 
 // Concat Node Editor with template preview
-export const ConcatEditor: React.FC<NodeEditorProps> = ({
+export const ConcatEditor: React.FC<NodeEditorProps> = ({)
   data,
   onChange,
   errors,
   theme = 'cinema'
 }) => {
   const [previewMode, setPreviewMode] = useState<'edit' | 'preview'>('edit');
-
-  return (
+  return ()
     <div>
       <div style={{ 
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center',
-        marginBottom: 8
+        marginBottom: 8,
       }}>
         <label style={{ fontSize: 14, fontWeight: 600 }}>
           Template
@@ -304,7 +286,7 @@ export const ConcatEditor: React.FC<NodeEditorProps> = ({
               border: 'none',
               borderRadius: 2,
               cursor: 'pointer',
-              fontSize: 11
+              fontSize: 11,
             }}
           >
             Edit
@@ -318,15 +300,14 @@ export const ConcatEditor: React.FC<NodeEditorProps> = ({
               border: 'none',
               borderRadius: 2,
               cursor: 'pointer',
-              fontSize: 11
+              fontSize: 11,
             }}
           >
             Preview
           </button>
         </div>
       </div>
-
-      {previewMode === 'edit' ? (
+      {previewMode === 'edit' ? ()
         <NodeSpecificRichEditor
           nodeType="concat"
           data={data}
@@ -334,7 +315,7 @@ export const ConcatEditor: React.FC<NodeEditorProps> = ({
           onChange={onChange}
           theme={theme}
         />
-      ) : (
+      ) : ()
         <div style={{
           padding: 12,
           background: '#4a5568',
@@ -343,13 +324,12 @@ export const ConcatEditor: React.FC<NodeEditorProps> = ({
           fontSize: 14,
           fontFamily: 'monospace',
           minHeight: 100,
-          color: '#e2e8f0'
+          color: '#e2e8f0',
         }}>
           {data.template || 'No template configured'}
         </div>
       )}
-      
-      {errors.template && (
+      {errors.template && ()
         <span style={{ color: '#e53e3e', fontSize: 12, marginTop: 4 }}>
           {errors.template}
         </span>
@@ -359,21 +339,20 @@ export const ConcatEditor: React.FC<NodeEditorProps> = ({
 };
 
 // Variable Node Editor with scope indicators
-export const VariableEditor: React.FC<NodeEditorProps> = ({
+export const VariableEditor: React.FC<NodeEditorProps> = ({)
   data,
   onChange,
   errors,
   theme = 'cinema'
 }) => {
   const [variableScope, setVariableScope] = useState<'local' | 'global'>('local');
-
-  return (
+  return ()
     <div>
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 8
+        marginBottom: 8,
       }}>
         <label style={{ fontSize: 14, fontWeight: 600 }}>
           Variable Configuration
@@ -389,7 +368,7 @@ export const VariableEditor: React.FC<NodeEditorProps> = ({
               border: '1px solid #718096',
               borderRadius: 4,
               color: 'white',
-              fontSize: 12
+              fontSize: 12,
             }}
           >
             <option value="local">Local</option>
@@ -397,13 +376,12 @@ export const VariableEditor: React.FC<NodeEditorProps> = ({
           </select>
         </div>
       </div>
-
       <div style={{ marginBottom: 12 }}>
         <label style={{ 
           display: 'block', 
           marginBottom: 4, 
           fontSize: 12, 
-          fontWeight: 500
+          fontWeight: 500,
         }}>
           Variable Name
         </label>
@@ -418,23 +396,22 @@ export const VariableEditor: React.FC<NodeEditorProps> = ({
             border: errors.variableName ? '1px solid #e53e3e' : '1px solid #718096',
             borderRadius: 4,
             color: 'white',
-            fontSize: 14
+            fontSize: 14,
           }}
           placeholder="Enter variable name (e.g., userName, itemCount)"
         />
-        {errors.variableName && (
+        {errors.variableName && ()
           <span style={{ color: '#e53e3e', fontSize: 12, marginTop: 4 }}>
             {errors.variableName}
           </span>
         )}
       </div>
-
       <div>
         <label style={{ 
           display: 'block', 
           marginBottom: 4, 
           fontSize: 12, 
-          fontWeight: 500
+          fontWeight: 500,
         }}>
           Default Value (Optional)
         </label>
@@ -449,12 +426,11 @@ export const VariableEditor: React.FC<NodeEditorProps> = ({
             border: '1px solid #718096',
             borderRadius: 4,
             color: 'white',
-            fontSize: 14
+            fontSize: 14,
           }}
           placeholder="Enter default value"
         />
       </div>
-
       {/* Variable Usage Hint */}
       <div style={{
         marginTop: 12,
@@ -462,7 +438,7 @@ export const VariableEditor: React.FC<NodeEditorProps> = ({
         background: '#2d3748',
         border: '1px solid #4299e1',
         borderRadius: 4,
-        fontSize: 12
+        fontSize: 12,
       }}>
         <div style={{ color: '#4299e1', fontWeight: 600, marginBottom: 4 }}>
           Usage:
@@ -476,29 +452,27 @@ export const VariableEditor: React.FC<NodeEditorProps> = ({
 };
 
 // Conditional Node Editor with visual logic builder
-export const ConditionalEditor: React.FC<NodeEditorProps> = ({
+export const ConditionalEditor: React.FC<NodeEditorProps> = ({)
   data,
   onChange,
   errors,
   theme = 'cinema'
 }) => {
   const [conditionMode, setConditionMode] = useState<'simple' | 'advanced'>('simple');
-
-  const commonConditions = [
+  const commonConditions = [;
     { label: 'Variable exists', value: '{{variable}} != null' },
     { label: 'Variable equals', value: '{{variable}} == "value"' },
     { label: 'Variable contains', value: '{{variable}}.includes("text")' },
     { label: 'Number comparison', value: '{{number}} > 0' },
     { label: 'Multiple conditions', value: '{{var1}} && {{var2}}' }
   ];
-
-  return (
+  return ()
     <div>
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 8
+        marginBottom: 8,
       }}>
         <label style={{ fontSize: 14, fontWeight: 600 }}>
           Condition Logic
@@ -513,7 +487,7 @@ export const ConditionalEditor: React.FC<NodeEditorProps> = ({
               border: 'none',
               borderRadius: 2,
               cursor: 'pointer',
-              fontSize: 11
+              fontSize: 11,
             }}
           >
             Simple
@@ -527,21 +501,20 @@ export const ConditionalEditor: React.FC<NodeEditorProps> = ({
               border: 'none',
               borderRadius: 2,
               cursor: 'pointer',
-              fontSize: 11
+              fontSize: 11,
             }}
           >
             Advanced
           </button>
         </div>
       </div>
-
-      {conditionMode === 'simple' ? (
+      {conditionMode === 'simple' ? ()
         <div>
           <label style={{ 
             display: 'block', 
             marginBottom: 4, 
             fontSize: 12,
-            fontWeight: 500
+            fontWeight: 500,
           }}>
             Choose a template:
           </label>
@@ -555,11 +528,11 @@ export const ConditionalEditor: React.FC<NodeEditorProps> = ({
               borderRadius: 4,
               color: 'white',
               fontSize: 13,
-              marginBottom: 8
+              marginBottom: 8,
             }}
           >
             <option value="">Select a condition template...</option>
-            {commonConditions.map((cond, index) => (
+            {commonConditions.map((cond, index) => ()
               <option key={index} value={cond.value}>
                 {cond.label}
               </option>
@@ -567,7 +540,6 @@ export const ConditionalEditor: React.FC<NodeEditorProps> = ({
           </select>
         </div>
       ) : null}
-
       <NodeSpecificRichEditor
         nodeType="conditional"
         data={data}
@@ -575,14 +547,13 @@ export const ConditionalEditor: React.FC<NodeEditorProps> = ({
         onChange={onChange}
         theme={theme}
       />
-
       {/* Condition Testing */}
       <div style={{
         marginTop: 12,
         padding: 8,
         background: '#2d3748',
         border: '1px solid #718096',
-        borderRadius: 4
+        borderRadius: 4,
       }}>
         <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>
           Test Condition:
@@ -596,7 +567,7 @@ export const ConditionalEditor: React.FC<NodeEditorProps> = ({
               border: 'none',
               borderRadius: 4,
               cursor: 'pointer',
-              fontSize: 11
+              fontSize: 11,
             }}
           >
             Validate
@@ -606,8 +577,7 @@ export const ConditionalEditor: React.FC<NodeEditorProps> = ({
           </span>
         </div>
       </div>
-
-      {errors.condition && (
+      {errors.condition && ()
         <span style={{ color: '#e53e3e', fontSize: 12, marginTop: 4 }}>
           {errors.condition}
         </span>
@@ -617,28 +587,27 @@ export const ConditionalEditor: React.FC<NodeEditorProps> = ({
 };
 
 // Output Node Editor with formatting preview
-export const OutputEditor: React.FC<NodeEditorProps> = ({
+export const OutputEditor: React.FC<NodeEditorProps> = ({)
   data,
   onChange,
   errors,
   theme = 'cinema'
 }) => {
-  const formats = [
+  const formats = [;
     { value: 'text', label: 'Plain Text' },
     { value: 'json', label: 'JSON' },
     { value: 'markdown', label: 'Markdown' },
     { value: 'html', label: 'HTML' },
     { value: 'csv', label: 'CSV' }
   ];
-
-  return (
+  return ()
     <div>
       <div style={{ marginBottom: 12 }}>
         <label style={{ 
           display: 'block', 
           marginBottom: 4, 
           fontSize: 12,
-          fontWeight: 500
+          fontWeight: 500,
         }}>
           Output Format
         </label>
@@ -652,23 +621,22 @@ export const OutputEditor: React.FC<NodeEditorProps> = ({
             border: '1px solid #718096',
             borderRadius: 4,
             color: 'white',
-            fontSize: 14
+            fontSize: 14,
           }}
         >
-          {formats.map(format => (
+          {formats.map(format => ()
             <option key={format.value} value={format.value}>
               {format.label}
             </option>
           ))}
         </select>
       </div>
-
       <div style={{ marginBottom: 12 }}>
         <label style={{ 
           display: 'block', 
           marginBottom: 4, 
           fontSize: 12,
-          fontWeight: 500
+          fontWeight: 500,
         }}>
           Output Template
         </label>
@@ -680,9 +648,8 @@ export const OutputEditor: React.FC<NodeEditorProps> = ({
           theme={theme}
         />
       </div>
-
       {/* Format-specific options */}
-      {data.format === 'json' && (
+      {data.format === 'json' && ()
         <div style={{ marginBottom: 12 }}>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <input
@@ -694,14 +661,13 @@ export const OutputEditor: React.FC<NodeEditorProps> = ({
           </label>
         </div>
       )}
-
       {/* Export Options */}
       <div style={{
         marginTop: 12,
         padding: 8,
         background: '#2d3748',
         border: '1px solid #718096',
-        borderRadius: 4
+        borderRadius: 4,
       }}>
         <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
           Export Options:
@@ -715,7 +681,7 @@ export const OutputEditor: React.FC<NodeEditorProps> = ({
               border: 'none',
               borderRadius: 4,
               cursor: 'pointer',
-              fontSize: 11
+              fontSize: 11,
             }}
           >
             Save to File
@@ -728,7 +694,7 @@ export const OutputEditor: React.FC<NodeEditorProps> = ({
               border: 'none',
               borderRadius: 4,
               cursor: 'pointer',
-              fontSize: 11
+              fontSize: 11,
             }}
           >
             Copy to Clipboard

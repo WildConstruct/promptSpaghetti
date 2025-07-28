@@ -4,7 +4,6 @@
  * 
  * Professional inspector panel with 60fps animations and Cinema 4D polish
  */
-
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ZodSchema } from 'zod';
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
@@ -39,7 +38,6 @@ const getFilmmakerFriendlyName = (nodeType: string): string => {
     'WeightedAdvanced': 'Weighted Selection',
     'PythonTransform': 'Text Transform'
   };
-  
   return friendlyNames[nodeType] || nodeType;
 };
 
@@ -54,7 +52,7 @@ export interface SmoothInspectorPanelProps {
   maxWidth?: number;
 }
 
-export const SmoothInspectorPanel = ({ 
+export const SmoothInspectorPanel = ({ )
   node, 
   schema, 
   onChange,
@@ -68,7 +66,6 @@ export const SmoothInspectorPanel = ({
   const [collapsed, setCollapsed] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const resizeRef = useRef<HTMLDivElement>(null);
-
   // UI Settings
   const { 
     debugMode, 
@@ -78,30 +75,24 @@ export const SmoothInspectorPanel = ({
     setComplexityLevel,
     shouldShowAdvancedFeatures
   } = useUISettingsStore();
-
   // Smooth hover states
   const collapseHover = useSmoothHover();
   const debugHover = useSmoothHover();
   const maximizeHover = useSmoothHover();
-
   // Resize handlers with smooth animations
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     setIsResizing(true);
   }, []);
-
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isResizing) return;
-    
     const newWidth = window.innerWidth - e.clientX;
     const clampedWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
     setWidth(clampedWidth);
   }, [isResizing, minWidth, maxWidth]);
-
   const handleMouseUp = useCallback(() => {
     setIsResizing(false);
   }, []);
-
   useEffect(() => {
     if (isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
@@ -114,7 +105,6 @@ export const SmoothInspectorPanel = ({
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
     }
-
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
@@ -122,7 +112,6 @@ export const SmoothInspectorPanel = ({
       document.body.style.userSelect = '';
     };
   }, [isResizing, handleMouseMove, handleMouseUp]);
-
   // Animation styles
   const panelStyle: React.CSSProperties = {
     width: collapsed ? 48 : isMaximized ? '50%' : width,
@@ -135,13 +124,12 @@ export const SmoothInspectorPanel = ({
     position: 'relative',
     zIndex: 10,
     boxShadow: collapsed ? 'none' : '-4px 0 20px rgba(0, 0, 0, 0.1)',
-    ...createSmoothTransition(
+    ...createSmoothTransition()
       ['width', 'min-width', 'box-shadow'], 
       animationDurations.panel,
       easingFunctions.cinema4d.professional
     )
   };
-
   const headerStyle: React.CSSProperties = {
     padding: collapsed ? '8px' : '16px 20px',
     borderBottom: '1px solid #374151',
@@ -152,7 +140,6 @@ export const SmoothInspectorPanel = ({
     backdropFilter: 'blur(8px)',
     ...createSmoothTransition(['padding', 'background'], animationDurations.normal)
   };
-
   const buttonStyle: React.CSSProperties = {
     background: 'rgba(59, 130, 246, 0.1)',
     border: '1px solid rgba(59, 130, 246, 0.2)',
@@ -163,20 +150,18 @@ export const SmoothInspectorPanel = ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    ...createSmoothTransition(
+    ...createSmoothTransition()
       ['background', 'border-color', 'transform', 'box-shadow'],
       animationDurations.micro
     )
   };
-
-  const getHoverButtonStyle = (isHovered: boolean): React.CSSProperties => ({
+  const getHoverButtonStyle = (isHovered: boolean): React.CSSProperties => ({)
     ...buttonStyle,
     background: isHovered ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.1)',
     borderColor: isHovered ? 'rgba(59, 130, 246, 0.4)' : 'rgba(59, 130, 246, 0.2)',
     transform: isHovered ? 'translateY(-1px)' : 'translateY(0)',
     boxShadow: isHovered ? '0 4px 12px rgba(59, 130, 246, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.1)'
   });
-
   // Handle collapse with animation
   const handleCollapse = useCallback(() => {
     setCollapsed(!collapsed);
@@ -184,7 +169,6 @@ export const SmoothInspectorPanel = ({
       setIsMaximized(false);
     }
   }, [collapsed, isMaximized]);
-
   // Handle maximize with animation
   const handleMaximize = useCallback(() => {
     setIsMaximized(!isMaximized);
@@ -192,17 +176,15 @@ export const SmoothInspectorPanel = ({
       setCollapsed(false);
     }
   }, [isMaximized, collapsed]);
-
   // Debug mode toggle with animation
   const handleDebugToggle = useCallback(() => {
     setDebugMode(!debugMode);
   }, [debugMode, setDebugMode]);
-
   if (!node || !schema) {
-    return (
+    return ()
       <aside style={panelStyle}>
         <div style={headerStyle}>
-          {!collapsed && (
+          {!collapsed && ()
             <AnimatedElement 
               animationType="fade" 
               duration={animationDurations.fast}
@@ -213,13 +195,12 @@ export const SmoothInspectorPanel = ({
                 fontSize: 16, 
                 fontWeight: 600, 
                 color: '#f3f4f6',
-                letterSpacing: '0.025em'
+                letterSpacing: '0.025em',
               }}>
                 Inspector
               </h3>
             </AnimatedElement>
           )}
-          
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <button
               {...collapseHover.hoverProps}
@@ -231,8 +212,7 @@ export const SmoothInspectorPanel = ({
             </button>
           </div>
         </div>
-
-        {!collapsed && (
+        {!collapsed && ()
           <AnimatedElement 
             animationType="fade" 
             duration={animationDurations.normal}
@@ -246,7 +226,7 @@ export const SmoothInspectorPanel = ({
               textAlign: 'center',
               marginTop: 60,
               fontSize: 15,
-              lineHeight: 1.6
+              lineHeight: 1.6,
             }}>
               <div style={{ 
                 fontSize: 48, 
@@ -260,7 +240,6 @@ export const SmoothInspectorPanel = ({
             </div>
           </AnimatedElement>
         )}
-
         {/* Resize handle */}
         <div
           ref={resizeRef}
@@ -278,7 +257,6 @@ export const SmoothInspectorPanel = ({
             ...createSmoothTransition(['opacity'], animationDurations.fast)
           }}
         />
-
         {/* Visual resize indicator */}
         <div
           style={{
@@ -294,14 +272,12 @@ export const SmoothInspectorPanel = ({
       </aside>
     );
   }
-
   const nodeTypeName = getFilmmakerFriendlyName(node.type);
-
-  return (
+  return ()
     <aside style={panelStyle} className="inspector-panel">
       {/* Header with smooth animations */}
       <div style={headerStyle}>
-        {!collapsed && (
+        {!collapsed && ()
           <AnimatedElement 
             animationType="slide" 
             duration={animationDurations.normal}
@@ -314,15 +290,15 @@ export const SmoothInspectorPanel = ({
                 fontWeight: 600, 
                 color: '#f3f4f6',
                 letterSpacing: '0.025em',
-                marginBottom: 4
+                marginBottom: 4,
               }}>
                 {nodeTypeName}
               </h3>
-              {debugMode && (
+              {debugMode && ()
                 <div style={{ 
                   fontSize: 12, 
                   color: '#6b7280', 
-                  fontFamily: 'monospace'
+                  fontFamily: 'monospace',
                 }}>
                   ID: {node.id}
                 </div>
@@ -330,9 +306,8 @@ export const SmoothInspectorPanel = ({
             </div>
           </AnimatedElement>
         )}
-        
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          {!collapsed && !isMaximized && (
+          {!collapsed && !isMaximized && ()
             <button
               {...maximizeHover.hoverProps}
               onClick={handleMaximize}
@@ -342,8 +317,7 @@ export const SmoothInspectorPanel = ({
               <Maximize2 size={14} />
             </button>
           )}
-
-          {!collapsed && isMaximized && (
+          {!collapsed && isMaximized && ()
             <button
               {...maximizeHover.hoverProps}
               onClick={handleMaximize}
@@ -353,19 +327,18 @@ export const SmoothInspectorPanel = ({
               <Minimize2 size={14} />
             </button>
           )}
-
-          {!collapsed && (
+          {!collapsed && ()
             <button
               {...debugHover.hoverProps}
               onClick={handleDebugToggle}
               style={{
                 ...getHoverButtonStyle(debugHover.isHovered),
-                background: debugMode 
+                background: debugMode ,
                   ? 'rgba(239, 68, 68, 0.2)' 
                   : debugHover.isHovered 
                     ? 'rgba(59, 130, 246, 0.2)' 
                     : 'rgba(59, 130, 246, 0.1)',
-                borderColor: debugMode 
+                borderColor: debugMode ,
                   ? 'rgba(239, 68, 68, 0.4)' 
                   : debugHover.isHovered 
                     ? 'rgba(59, 130, 246, 0.4)' 
@@ -376,7 +349,6 @@ export const SmoothInspectorPanel = ({
               {debugMode ? '👨‍💻' : '🎭'}
             </button>
           )}
-          
           <button
             {...collapseHover.hoverProps}
             onClick={handleCollapse}
@@ -387,9 +359,8 @@ export const SmoothInspectorPanel = ({
           </button>
         </div>
       </div>
-
       {/* Content with smooth animations */}
-      {!collapsed && (
+      {!collapsed && ()
         <AnimatedElement 
           animationType="slide" 
           duration={animationDurations.panel}
@@ -399,7 +370,7 @@ export const SmoothInspectorPanel = ({
             flex: 1, 
             display: 'flex', 
             flexDirection: 'column',
-            overflow: 'hidden' 
+            overflow: 'hidden' ,
           }}
         >
           <div style={{ 
@@ -413,7 +384,6 @@ export const SmoothInspectorPanel = ({
               onChange={onChange}
             />
           </div>
-          
           <AnimatedElement 
             animationType="fade" 
             duration={animationDurations.normal}
@@ -424,7 +394,6 @@ export const SmoothInspectorPanel = ({
           </AnimatedElement>
         </AnimatedElement>
       )}
-
       {/* Enhanced resize handle with visual feedback */}
       <div
         ref={resizeRef}
@@ -442,7 +411,6 @@ export const SmoothInspectorPanel = ({
         }}
         className="smooth-transition"
       />
-
       {/* Visual resize indicator */}
       <div
         style={{
@@ -451,19 +419,18 @@ export const SmoothInspectorPanel = ({
           top: 0,
           bottom: 0,
           width: 2,
-          background: isResizing 
+          background: isResizing ,
             ? 'linear-gradient(180deg, #3b82f6, #1d4ed8)' 
             : 'transparent',
           boxShadow: isResizing ? '0 0 8px rgba(59, 130, 246, 0.5)' : 'none',
-          ...createSmoothTransition(
+          ...createSmoothTransition()
             ['background', 'box-shadow'], 
             animationDurations.fast
           )
         }}
       />
-
       {/* Subtle glow effect when active */}
-      {(node && !collapsed) && (
+      {(node && !collapsed) && ()
         <div
           style={{
             position: 'absolute',

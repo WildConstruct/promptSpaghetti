@@ -1,8 +1,6 @@
 /**
 import { Plus, FileText, X } from 'lucide-react';
-
 import { Plus } from 'lucide-react';
-
  * Tutorial UI Components (Epic 16)
  *
  * DEPLOYMENT BLOCKER FIX: Comprehensive tutorial UI components for creating
@@ -82,12 +80,12 @@ export interface CodeExample {
 export interface StepValidation {
     type: 'automatic' | 'manual' | 'quiz' | 'checklist';
     criteria: ValidationCriteria[];
-    feedback: {
+    feedback: {,
         success: string;
         failure: string;
         partial: string;
     };
-    retries: {
+    retries: {,
         allowed: number;
         unlimited: boolean;
     };

@@ -1,6 +1,5 @@
 // packages/core/settings/SettingsManager.ts
 // Settings management system for Epic 7.3 Advanced Settings Modal
-
 import { 
   AdvancedSettings,
   AdvancedSettingsSchema,
@@ -14,65 +13,61 @@ import {
   PerformanceSettings,
   UISettings
 } from './types';
-
 /**
  * Settings change listener function type
  */
 export type SettingsChangeListener = (event: SettingsChangeEvent) => void;
-
 /**
  * LocalStorage key for settings persistence
  */
 const SETTINGS_STORAGE_KEY = 'prompt-spaghetti-advanced-settings';
 const SETTINGS_VERSION = '1.0.0';
-
 /**
  * Default settings configuration
  */
 const DEFAULT_SETTINGS: AdvancedSettings = {
-  seed: {
+  seed: {,
     enabled: false,
     history: [],
-    autoGenerate: true
+    autoGenerate: true,
   },
-  temperature: {
+  temperature: {,
     enabled: false,
     value: 1.0,
     showIndicator: true,
-    presets: [
+    presets: [,
       { name: 'Conservative', value: 0.3, description: 'More predictable results' },
       { name: 'Balanced', value: 1.0, description: 'Standard randomness' },
       { name: 'Creative', value: 1.7, description: 'More varied results' }
     ]
   },
-  runCount: {
+  runCount: {,
     value: 5,
     showPerformanceWarning: true,
     presets: [1, 3, 5, 10, 20]
   },
-  batch: {
+  batch: {,
     batchSize: 5,
     outputFormat: 'individual',
     namingPattern: 'result-{seed}-{timestamp}',
     includeMetadata: true,
-    autoDownload: false
+    autoDownload: false,
   },
-  performance: {
+  performance: {,
     showExecutionTimes: false,
     enableCaching: true,
     showMemoryUsage: false,
-    logExecutionSteps: false
+    logExecutionSteps: false,
   },
-  ui: {
+  ui: {,
     theme: 'auto',
     showTooltips: true,
     enableKeyboardShortcuts: true,
     reduceAnimations: false,
-    highContrast: false
+    highContrast: false,
   },
-  version: SETTINGS_VERSION
+  version: SETTINGS_VERSION,
 };
-
 /**
  * Singleton settings manager class
  */
@@ -82,12 +77,10 @@ export class SettingsManager {
   private listeners: Set<SettingsChangeListener> = new Set();
   private autoSaveEnabled = true;
   private debounceTimer: NodeJS.Timeout | null = null;
-
   private constructor() {
     this.settings = this.loadSettings();
     this.setupBeforeUnloadHandler();
   }
-
   /**
    * Get singleton instance
    */
@@ -97,46 +90,40 @@ export class SettingsManager {
     }
     return SettingsManager.instance;
   }
-
   /**
    * Get current settings
    */
   public getSettings(): AdvancedSettings {
     return { ...this.settings };
   }
-
   /**
    * Get specific setting value
    */
   public getSetting<K extends keyof AdvancedSettings>(key: K): AdvancedSettings[K] {
     return this.settings[key];
   }
-
   /**
    * Update settings with validation
    */
-  public updateSettings(
+  public updateSettings()
     newSettings: Partial<AdvancedSettings>,
     source: 'user' | 'system' | 'import' = 'user'
   ): SettingsValidationResult {
     const previousSettings = { ...this.settings };
     const mergedSettings = { ...this.settings, ...newSettings };
-    
     // Validate merged settings
     const validation = this.validateSettings(mergedSettings);
     if (!validation.valid) {
       return validation;
     }
-
     // Update settings
     this.settings = mergedSettings;
     this.settings.lastModified = new Date().toISOString();
-
     // Notify listeners of changes
-    Object.keys(newSettings).forEach(key => {
+    Object.keys(newSettings).forEach(key => {)
       const typedKey = key as keyof AdvancedSettings;
       if (newSettings[typedKey] !== previousSettings[typedKey]) {
-        this.notifyChange({
+        this.notifyChange({)
           key,
           value: newSettings[typedKey],
           previousValue: previousSettings[typedKey],
@@ -145,26 +132,22 @@ export class SettingsManager {
         });
       }
     });
-
     // Auto-save if enabled
     if (this.autoSaveEnabled && source !== 'import') {
       this.debouncedSave();
     }
-
     return { valid: true, errors: [], warnings: [] };
   }
-
   /**
    * Update specific setting
    */
-  public updateSetting<K extends keyof AdvancedSettings>(
+  public updateSetting<K extends keyof AdvancedSettings>()
     key: K, 
     value: AdvancedSettings[K], 
     source: 'user' | 'system' | 'import' = 'user'
   ): SettingsValidationResult {
     return this.updateSettings({ [key]: value } as Partial<AdvancedSettings>, source);
   }
-
   /**
    * Reset settings to defaults
    */
@@ -172,23 +155,20 @@ export class SettingsManager {
     const previousSettings = { ...this.settings };
     this.settings = { ...DEFAULT_SETTINGS };
     this.settings.lastModified = new Date().toISOString();
-
     // Notify listeners
-    Object.keys(DEFAULT_SETTINGS).forEach(key => {
+    Object.keys(DEFAULT_SETTINGS).forEach(key => {)
       const typedKey = key as keyof AdvancedSettings;
-      this.notifyChange({
+      this.notifyChange({)
         key,
         value: DEFAULT_SETTINGS[typedKey],
         previousValue: previousSettings[typedKey],
         timestamp: new Date(),
-        source: 'system'
+        source: 'system',
       });
     });
-
     this.saveSettings();
     return { valid: true, errors: [], warnings: [] };
   }
-
   /**
    * Add settings change listener
    */
@@ -196,14 +176,12 @@ export class SettingsManager {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
   }
-
   /**
    * Remove all listeners
    */
   public clearListeners(): void {
     this.listeners.clear();
   }
-
   /**
    * Save settings to localStorage
    */
@@ -212,7 +190,7 @@ export class SettingsManager {
       const settingsData = {
         settings: this.settings,
         timestamp: new Date().toISOString(),
-        version: SETTINGS_VERSION
+        version: SETTINGS_VERSION,
       };
       localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settingsData));
       return true;
@@ -221,7 +199,6 @@ export class SettingsManager {
       return false;
     }
   }
-
   /**
    * Load settings from localStorage
    */
@@ -231,17 +208,14 @@ export class SettingsManager {
       if (!savedData) {
         return { ...DEFAULT_SETTINGS };
       }
-
       const parsedData = JSON.parse(savedData);
       const loadedSettings = parsedData.settings || parsedData;
-
       // Validate loaded settings
       const validation = AdvancedSettingsSchema.safeParse(loadedSettings);
       if (!validation.success) {
         console.warn('Invalid settings loaded, using defaults:', validation.error);
         return { ...DEFAULT_SETTINGS };
       }
-
       // Merge with defaults to handle missing fields from version upgrades
       return { ...DEFAULT_SETTINGS, ...validation.data };
     } catch (error) {
@@ -249,7 +223,6 @@ export class SettingsManager {
       return { ...DEFAULT_SETTINGS };
     }
   }
-
   /**
    * Validate settings object
    */
@@ -258,19 +231,16 @@ export class SettingsManager {
     if (validation.success) {
       return { valid: true, errors: [], warnings: [] };
     }
-
-    const errors = validation.error.errors.map(err => 
-      `${err.path.join('.')}: ${err.message}`
+    const errors = validation.error.errors.map(err => ;)
+      `${err.path.join('.')}: ${err.message}`}
     );
-    
     return { valid: false, errors, warnings: [] };
   }
-
   /**
    * Notify change listeners
    */
   private notifyChange(event: SettingsChangeEvent): void {
-    this.listeners.forEach(listener => {
+    this.listeners.forEach(listener => {)
       try {
         listener(event);
       } catch (error) {
@@ -278,7 +248,6 @@ export class SettingsManager {
       }
     });
   }
-
   /**
    * Debounced save to avoid excessive localStorage writes
    */
@@ -286,13 +255,11 @@ export class SettingsManager {
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
     }
-    
     this.debounceTimer = setTimeout(() => {
       this.saveSettings();
       this.debounceTimer = null;
     }, 1000);
   }
-
   /**
    * Setup beforeunload handler to save settings
    */
@@ -306,21 +273,19 @@ export class SettingsManager {
       });
     }
   }
-
   /**
    * Export settings for backup/sharing
    */
   public exportSettings(): SettingsExport {
     return {
       settings: this.getSettings(),
-      metadata: {
+      metadata: {,
         exportedAt: new Date().toISOString(),
         version: SETTINGS_VERSION,
         appVersion: '1.0.0' // TODO: Get from package.json
       }
     };
   }
-
   /**
    * Import settings from export
    */
@@ -330,27 +295,23 @@ export class SettingsManager {
       if (!exportData.settings || !exportData.metadata) {
         return { valid: false, errors: ['Invalid export format'], warnings: [] };
       }
-
       // Check version compatibility
       const warnings: string[] = [];
       if (exportData.metadata.version !== SETTINGS_VERSION) {
-        warnings.push(`Settings version mismatch: expected ${SETTINGS_VERSION}, got ${exportData.metadata.version}`);
+        warnings.push(`Settings version mismatch: expected ${SETTINGS_VERSION}, got ${exportData.metadata.version}`);}
       }
-
       // Import settings
       const result = this.updateSettings(exportData.settings, 'import');
       result.warnings.push(...warnings);
-      
       return result;
     } catch (error) {
       return { 
         valid: false, 
-        errors: [`Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`], 
-        warnings: [] 
+        errors: [`Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`], }
+        warnings: [] ,
       };
     }
   }
-
   /**
    * Get settings for executor integration
    */
@@ -367,10 +328,9 @@ export class SettingsManager {
       outputFormat: this.settings.batch.outputFormat,
       includeMetadata: this.settings.batch.includeMetadata,
       autoDownload: this.settings.batch.autoDownload,
-      namingPattern: this.settings.batch.namingPattern
+      namingPattern: this.settings.batch.namingPattern,
     };
   }
-
   /**
    * Get UI-specific settings for interface customization
    */
@@ -380,10 +340,9 @@ export class SettingsManager {
       showTooltips: this.settings.ui.showTooltips,
       enableKeyboardShortcuts: this.settings.ui.enableKeyboardShortcuts,
       reduceAnimations: this.settings.ui.reduceAnimations,
-      highContrast: this.settings.ui.highContrast
+      highContrast: this.settings.ui.highContrast,
     };
   }
-
   /**
    * Check if performance monitoring is enabled
    */
@@ -392,7 +351,6 @@ export class SettingsManager {
            this.settings.performance.showMemoryUsage ||
            this.settings.performance.logExecutionSteps;
   }
-
   /**
    * Get performance monitoring configuration
    */
@@ -402,34 +360,28 @@ export class SettingsManager {
       executionTimes: this.settings.performance.showExecutionTimes,
       memoryUsage: this.settings.performance.showMemoryUsage,
       detailedLogging: this.settings.performance.logExecutionSteps,
-      caching: this.settings.performance.enableCaching
+      caching: this.settings.performance.enableCaching,
     };
   }
-
   /**
    * Add seed to history
    */
   public addSeedToHistory(seed: number): void {
     const currentHistory = [...this.settings.seed.history];
-    
     // Remove if already exists
     const existingIndex = currentHistory.indexOf(seed);
     if (existingIndex !== -1) {
       currentHistory.splice(existingIndex, 1);
     }
-    
     // Add to beginning
     currentHistory.unshift(seed);
-    
     // Keep only last 10
     const newHistory = currentHistory.slice(0, 10);
-    
-    this.updateSetting('seed', {
+    this.updateSetting('seed', {)
       ...this.settings.seed,
-      history: newHistory
+      history: newHistory,
     }, 'system');
   }
-
   /**
    * Generate random seed
    */
@@ -438,7 +390,6 @@ export class SettingsManager {
     this.addSeedToHistory(seed);
     return seed;
   }
-
   /**
    * Enable/disable auto-save
    */

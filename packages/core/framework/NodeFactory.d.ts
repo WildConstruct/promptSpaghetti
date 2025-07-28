@@ -51,7 +51,7 @@ export declare class NodeFactory {
     private templates;
     private nodeCache;
     private creationHistory;
-    constructor(
+    constructor()
       framework: NodeFramework,
       validationService: NodeValidationService,
       config?: Partial<NodeFactoryConfig>
@@ -59,7 +59,7 @@ export declare class NodeFactory {
     /**
      * Create a new node with optional validation and optimization
      */
-    createNode(
+    createNode()
       type: string,
       id: string,
       config: AdvancedNodeConfig,
@@ -69,14 +69,14 @@ export declare class NodeFactory {
     /**
      * Create node from template
      */
-    createFromTemplate(templateId: string, nodeId: string, overrides?: {
+    createFromTemplate(templateId: string, nodeId: string, overrides?: {)
         config?: Partial<AdvancedNodeConfig>;
         data?: any;
     }): Promise<FrameworkNode>;
     /**
      * Bulk create multiple nodes
      */
-    createNodeBatch(specs: Array<{
+    createNodeBatch(specs: Array<{)
         type: string;
         id: string;
         config: AdvancedNodeConfig;
@@ -86,7 +86,7 @@ export declare class NodeFactory {
     /**
      * Clone an existing node with a new ID
      */
-    cloneNode(sourceId: string, newId: string, overrides?: {
+    cloneNode(sourceId: string, newId: string, overrides?: {)
         config?: Partial<AdvancedNodeConfig>;
         data?: any;
     }): Promise<FrameworkNode>;
@@ -116,7 +116,7 @@ export declare class NodeFactory {
         successRate: number;
         averageCreationTime: number;
         typeDistribution: Record<string, number>;
-        recentFailures: Array<{
+        recentFailures: Array<{,
             nodeType: string;
             nodeId: string;
             error: string;

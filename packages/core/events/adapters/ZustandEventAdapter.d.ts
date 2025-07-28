@@ -17,7 +17,7 @@ export interface EventableStore {
  */
 export interface StateChangeEvent extends BaseEvent {
     type: 'state_changed' | 'store_initialized' | 'store_reset';
-    metadata: {
+    metadata: {,
         storeName: string;
         path: string;
         previousValue: unknown;
@@ -122,7 +122,7 @@ export declare const ZustandEventUtils: {
     /**
      * Create event-driven state updater
      */
-    createEventUpdater: <T>(store: {
+    createEventUpdater: <T>(store: {)
         getState: () => T;
         setState: (partial: Partial<T>) => void;
     }, eventTypes: string[]) => string;

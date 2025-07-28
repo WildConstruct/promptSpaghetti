@@ -2,28 +2,24 @@
  * Epic 9.2.1 - Create Workspace Modal Component
  * Modal for creating new workspaces
  */
-
 import React, { useState } from 'react';
-
 interface CreateWorkspaceModalProps {
   onSubmit: (data: { name: string; description?: string }) => void;
   onCancel: () => void;
 }
 
-export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({
+export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({)
   onSubmit,
   onCancel
 }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({)
     name: '',
-    description: ''
+    description: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-
     if (!formData.name.trim()) {
       newErrors.name = 'Workspace name is required';
     } else if (formData.name.length < 3) {
@@ -31,25 +27,20 @@ export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({
     } else if (formData.name.length > 50) {
       newErrors.name = 'Workspace name must be less than 50 characters';
     }
-
     if (formData.description && formData.description.length > 200) {
       newErrors.description = 'Description must be less than 200 characters';
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateForm()) {
       return;
     }
-
     setIsSubmitting(true);
     try {
-      await onSubmit({
+      await onSubmit({)
         name: formData.name.trim(),
         description: formData.description.trim() || undefined
       });
@@ -60,7 +51,6 @@ export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({
       setIsSubmitting(false);
     }
   };
-
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
@@ -68,8 +58,7 @@ export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
-
-  return (
+  return ()
     <div className="modal-overlay">
       <div className="modal modal--medium">
         <div className="modal__header">
@@ -82,7 +71,6 @@ export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({
             ×
           </button>
         </div>
-
         <form onSubmit={handleSubmit} className="modal__content">
           <div className="form-group">
             <label htmlFor="workspace-name" className="form-label">
@@ -98,14 +86,13 @@ export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({
               maxLength={50}
               disabled={isSubmitting}
             />
-            {errors.name && (
+            {errors.name && ()
               <div className="form-error">{errors.name}</div>
             )}
             <div className="form-hint">
               Choose a descriptive name for your workspace
             </div>
           </div>
-
           <div className="form-group">
             <label htmlFor="workspace-description" className="form-label">
               Description (Optional)
@@ -120,14 +107,13 @@ export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({
               maxLength={200}
               disabled={isSubmitting}
             />
-            {errors.description && (
+            {errors.description && ()
               <div className="form-error">{errors.description}</div>
             )}
             <div className="form-hint">
               {formData.description.length}/200 characters
             </div>
           </div>
-
           <div className="workspace-preview">
             <h3>Preview</h3>
             <div className="workspace-item workspace-item--preview">
@@ -138,7 +124,7 @@ export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({
                 <h4 className="workspace-item__name">
                   {formData.name || 'Workspace Name'}
                 </h4>
-                {formData.description && (
+                {formData.description && ()
                   <p className="workspace-item__description">
                     {formData.description}
                   </p>
@@ -150,7 +136,6 @@ export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({
             </div>
           </div>
         </form>
-
         <div className="modal__footer">
           <button
             type="button"

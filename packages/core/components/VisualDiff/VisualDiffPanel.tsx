@@ -1,6 +1,5 @@
 // Visual Diff Panel - Main component for visual graph comparison
 // Story 9.3.2 - Visual Diff Tool
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { ReactFlow, Node, Edge, Controls, Background, Panel } from 'reactflow';
 import { ComparisonToolbar } from './ComparisonToolbar';
@@ -27,8 +26,7 @@ export interface VisualDiffPanelProps {
   onClose?: () => void;
   className?: string;
 }
-
-const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ 
+const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
   graphId, 
   sourceVersionId, 
   initialSourceVersionId, 
@@ -42,7 +40,6 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
   const [showUnchanged, setShowUnchanged] = useState(true);
   const [showMetadata, setShowMetadata] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1.0);
-
   // Hooks
   const { versions, loading: versionsLoading } = useGraphVersions(graphId);
   const { 
@@ -53,77 +50,64 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
     createSession,
     updateSession 
   } = useDiffSession();
-
   // Effects
   useEffect(() => {
     if (sourceVersionId && targetVersionId && sourceVersionId !== targetVersionId) {
-      createSession({
+      createSession({)
         graph_id: graphId,
         source_version_id: sourceVersionId,
         target_version_id: targetVersionId,
         view_mode: viewMode,
-        highlight_mode: highlightMode
+        highlight_mode: highlightMode,
       });
     }
   }, [sourceVersionId, targetVersionId, graphId]);
-
   useEffect(() => {
     if (session) {
-      updateSession(session.id, {
+      updateSession(session.id, {)
         view_mode: viewMode,
         highlight_mode: highlightMode,
         show_unchanged: showUnchanged,
         show_metadata: showMetadata,
-        zoom_level: zoomLevel
+        zoom_level: zoomLevel,
       });
     }
   }, [viewMode, highlightMode, showUnchanged, showMetadata, zoomLevel, session?.id]);
-
   // Handlers
   const handleVersionChange = useCallback((source: string, target: string) => {
     setSourceVersionId(source);
     setTargetVersionId(target);
   }, []);
-
   const handleViewModeChange = useCallback((mode: ViewMode) => {
     setViewMode(mode);
   }, []);
-
   const handleHighlightModeChange = useCallback((mode: HighlightMode) => {
     setHighlightMode(mode);
   }, []);
-
   const handleZoomChange = useCallback((zoom: number) => {
     setZoomLevel(zoom);
   }, []);
-
   // Prepare nodes and edges for visualization
   const prepareVisualizationData = useCallback(() => {
     if (!comparison) return { sourceNodes: [], sourceEdges: [], targetNodes: [], targetEdges: [] };
-
     const sourceNodes = prepareNodes(comparison.source_data.nodes, comparison.node_matches, 'source');
     const sourceEdges = prepareEdges(comparison.source_data.edges, comparison.edge_matches, 'source');
     const targetNodes = prepareNodes(comparison.target_data.nodes, comparison.node_matches, 'target');
     const targetEdges = prepareEdges(comparison.target_data.edges, comparison.edge_matches, 'target');
-
     return { sourceNodes, sourceEdges, targetNodes, targetEdges };
   }, [comparison, highlightMode, showUnchanged]);
-
-  const prepareNodes = useCallback((
+  const prepareNodes = useCallback((;)
     nodes: unknown[],
     nodeMatches: unknown[],
     side: 'source' | 'target'
   ): Node[] => {
     if (!comparison) return [];
-
-    return nodes.map(node => {
-      const match = nodeMatches.find(m => 
+    return nodes.map(node => {)
+      const match = nodeMatches.find(m => ;)
         side === 'source' ? m.source_node_id === node.id : m.target_node_id === node.id
       );
-
       let diffState = 'unchanged';
       let changeDetails = {};
-
       if (match) {
         switch (match.match_type) {
         case 'added':
@@ -142,12 +126,10 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
           break;
         }
       }
-
       // Filter based on highlight mode and show unchanged setting
       if (!showUnchanged && diffState === 'unchanged') {
         return null;
       }
-
       if (highlightMode !== 'all') {
         switch (highlightMode) {
         case 'changes':
@@ -161,12 +143,11 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
           break;
         }
       }
-
       return {
         id: node.id,
         type: 'diffNode',
         position: node.position || { x: 0, y: 0 },
-        data: {
+        data: {,
           ...node.data,
           originalNode: node,
           diffState,
@@ -178,22 +159,18 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
       };
     }).filter(Boolean) as Node[];
   }, [comparison, highlightMode, showUnchanged, showMetadata]);
-
-  const prepareEdges = useCallback((
+  const prepareEdges = useCallback((;)
     edges: unknown[],
     edgeMatches: unknown[],
     side: 'source' | 'target'
   ): Edge[] => {
     if (!comparison) return [];
-
-    return edges.map(edge => {
-      const match = edgeMatches.find(m => 
+    return edges.map(edge => {)
+      const match = edgeMatches.find(m => ;)
         side === 'source' ? m.source_edge_id === edge.id : m.target_edge_id === edge.id
       );
-
       let diffState = 'unchanged';
       let changeDetails = {};
-
       if (match) {
         switch (match.match_type) {
         case 'added':
@@ -212,12 +189,10 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
           break;
         }
       }
-
       // Filter based on highlight mode and show unchanged setting
       if (!showUnchanged && diffState === 'unchanged') {
         return null;
       }
-
       if (highlightMode !== 'all') {
         switch (highlightMode) {
         case 'changes':
@@ -231,13 +206,12 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
           break;
         }
       }
-
       return {
         id: edge.id,
         source: edge.source,
         target: edge.target,
         type: 'diffEdge',
-        data: {
+        data: {,
           ...edge.data,
           originalEdge: edge,
           diffState,
@@ -248,7 +222,6 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
       };
     }).filter(Boolean) as Edge[];
   }, [comparison, highlightMode, showUnchanged]);
-
   // Get node styling based on diff state
   const getDiffNodeStyle = (diffState: string, __highlightMode: HighlightMode) => {
     const baseStyle = {
@@ -256,7 +229,6 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
       borderRadius: '6px',
       transition: 'all 0.2s ease'
     };
-
     switch (diffState) {
     case 'added':
       return { ...baseStyle, borderColor: '#10b981', backgroundColor: '#ecfdf5' };
@@ -268,14 +240,12 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
       return { ...baseStyle, borderColor: '#6b7280', backgroundColor: '#f9fafb' };
     }
   };
-
   // Get edge styling based on diff state
   const getDiffEdgeStyle = (diffState: string, __highlightMode: HighlightMode) => {
     const baseStyle = {
       strokeWidth: 2,
       transition: 'all 0.2s ease'
     };
-
     switch (diffState) {
     case 'added':
       return { ...baseStyle, stroke: '#10b981' };
@@ -287,11 +257,10 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
       return { ...baseStyle, stroke: '#6b7280' };
     }
   };
-
   // Render loading state
   if (versionsLoading || sessionLoading) {
-    return (
-      <div className={`visual-diff-panel ${className}`}>
+    return ()
+      <div className={`visual-diff-panel ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
           <span className="ml-2">Loading comparison...</span>
@@ -299,11 +268,10 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
       </div>
     );
   }
-
   // Render error state
   if (sessionError) {
-    return (
-      <div className={`visual-diff-panel ${className}`}>
+    return ()
+      <div className={`visual-diff-panel ${className}`}>}
         <div className="bg-red-50 border border-red-200 rounded-md p-4">
           <div className="flex">
             <div className="flex-shrink-0">
@@ -320,26 +288,22 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
       </div>
     );
   }
-
   const { sourceNodes, sourceEdges, targetNodes, targetEdges } = prepareVisualizationData();
-
   // Custom node types
   const nodeTypes = {
-    diffNode: DiffNodeRenderer
+    diffNode: DiffNodeRenderer,
   };
-
   // Custom edge types
   const edgeTypes = {
-    diffEdge: DiffEdgeRenderer
+    diffEdge: DiffEdgeRenderer,
   };
-
-  return (
-    <div className={`visual-diff-panel ${className}`}>
+  return ()
+    <div className={`visual-diff-panel ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900">Visual Diff</h2>
-          {onClose && (
+          {onClose && ()
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -350,7 +314,6 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
             </button>
           )}
         </div>
-
         {/* Version Selector */}
         <VersionSelector
           graphId={graphId}
@@ -360,16 +323,14 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
           onVersionChange={handleVersionChange}
           className="mt-3"
         />
-
         {/* Comparison Stats */}
-        {comparison && (
+        {comparison && ()
           <ComparisonStats
             comparison={comparison}
             className="mt-3"
           />
         )}
       </div>
-
       {/* Toolbar */}
       <ComparisonToolbar
         viewMode={viewMode}
@@ -384,10 +345,9 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
         onZoomChange={handleZoomChange}
         className="border-b border-gray-200"
       />
-
       {/* Main Content */}
       <div className="flex-1 relative">
-        {viewMode === 'side-by-side' && (
+        {viewMode === 'side-by-side' && ()
           <div className="flex h-full">
             {/* Source Graph */}
             <div className="flex-1 border-r border-gray-200">
@@ -410,7 +370,6 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
                 </ReactFlow>
               </div>
             </div>
-
             {/* Target Graph */}
             <div className="flex-1">
               <div className="h-full relative">
@@ -434,8 +393,7 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
             </div>
           </div>
         )}
-
-        {viewMode === 'unified' && (
+        {viewMode === 'unified' && ()
           <div className="h-full">
             <ReactFlow
               nodes={[...sourceNodes, ...targetNodes]}
@@ -452,8 +410,7 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
             </ReactFlow>
           </div>
         )}
-
-        {viewMode === 'overlay' && (
+        {viewMode === 'overlay' && ()
           <div className="h-full relative">
             {/* Base layer - source */}
             <div className="absolute inset-0">
@@ -471,7 +428,6 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
                 <Controls showInteractive={false} />
               </ReactFlow>
             </div>
-
             {/* Overlay layer - target */}
             <div className="absolute inset-0 opacity-70">
               <ReactFlow
@@ -489,7 +445,6 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
             </div>
           </div>
         )}
-
         {/* Legend */}
         <DiffLegend
           highlightMode={highlightMode}

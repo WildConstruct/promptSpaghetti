@@ -51,16 +51,14 @@ export const defaultStateConfig: StateSystemConfig = {
   enableCrossDomainSync: true,
   conflictResolutionStrategy: 'last_writer_wins',
   performanceMonitoring: true,
-  securityRules: true
+  securityRules: true,
 };
 
 // State system initialization
 export async function initializeStateSystem(config: Partial<StateSystemConfig> = {}): Promise<void> {
   const finalConfig = { ...defaultStateConfig, ...config };
-  
   // Initialize state orchestrator with domains
   // This would be implemented as the system grows
-  
   console.log('State management system initialized with config:', finalConfig);
 }
 
@@ -73,11 +71,11 @@ export function getStateSystemHealth(): {
 } {
   return {
     orchestrator: globalStateOrchestrator.getHealthStatus(),
-    conflictResolver: {
+    conflictResolver: {,
       activeConflicts: globalConflictResolver.getActiveConflicts().length,
-      resolutionHistory: globalConflictResolver.getResolutionHistory().length
+      resolutionHistory: globalConflictResolver.getResolutionHistory().length,
     },
     domains: globalStateOrchestrator.getRegisteredDomains(),
-    status: 'healthy'
+    status: 'healthy',
   };
 }

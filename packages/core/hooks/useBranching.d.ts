@@ -39,7 +39,7 @@ interface UseBranchingReturn {
     updateReview: (reviewId: string, request: UpdateReviewRequest) => Promise<BranchMergeReview>;
     getMergeRequestReviews: (mergeRequestId: string) => Promise<BranchMergeReview[]>;
     getBranchStats: (projectId: string) => Promise<BranchStatsResponse>;
-    getBranchTimeline: (projectId: string, dateRange?: {
+    getBranchTimeline: (projectId: string, dateRange?: {)
         start: Date;
         end: Date;
     }) => Promise<BranchTimelineResponse>;

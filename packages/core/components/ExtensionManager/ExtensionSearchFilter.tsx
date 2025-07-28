@@ -2,7 +2,6 @@
  * Extension Search Filter - Epic 8.4 Story 8.4.5
  * Search and filter controls for extension manager
  */
-
 import React from 'react';
 
 export interface FilterOptions {
@@ -19,7 +18,7 @@ export interface ExtensionSearchFilterProps {
   viewMode: 'installed' | 'marketplace';
 }
 
-export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
+export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({)
   searchQuery,
   onSearchChange,
   filterOptions,
@@ -27,13 +26,12 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
   viewMode
 }) => {
   const handleFilterChange = (key: keyof FilterOptions, value: string) => {
-    onFilterChange({
+    onFilterChange({)
       ...filterOptions,
       [key]: value
     });
   };
-
-  return (
+  return ()
     <div className="extension-search-filter">
       {/* Search Bar */}
       <div className="search-section">
@@ -46,7 +44,7 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
           />
-          {searchQuery && (
+          {searchQuery && ()
             <button 
               className="clear-search-btn"
               onClick={() => onSearchChange('')}
@@ -57,12 +55,11 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
           )}
         </div>
       </div>
-
       {/* Filter Controls */}
       <div className="filter-section">
         <div className="filter-row">
           {/* Status Filter (only for installed extensions) */}
-          {viewMode === 'installed' && (
+          {viewMode === 'installed' && ()
             <div className="filter-group">
               <label className="filter-label">Status:</label>
               <select
@@ -76,7 +73,6 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
               </select>
             </div>
           )}
-
           {/* Type Filter */}
           <div className="filter-group">
             <label className="filter-label">Type:</label>
@@ -92,7 +88,6 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
               <option value="storage">💾 Storage Extensions</option>
             </select>
           </div>
-
           {/* Sort By */}
           <div className="filter-group">
             <label className="filter-label">Sort by:</label>
@@ -107,7 +102,6 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
               <option value="size">Size</option>
             </select>
           </div>
-
           {/* View Options */}
           <div className="filter-group view-options">
             <button 
@@ -124,12 +118,10 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
             </button>
           </div>
         </div>
-
         {/* Quick Filters */}
         <div className="quick-filters">
           <span className="quick-filter-label">Quick filters:</span>
-          
-          {viewMode === 'installed' && (
+          {viewMode === 'installed' && ()
             <>
               <button 
                 className={`quick-filter-btn ${filterOptions.status === 'enabled' ? 'active' : ''}`}
@@ -151,8 +143,7 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
               </button>
             </>
           )}
-
-          {viewMode === 'marketplace' && (
+          {viewMode === 'marketplace' && ()
             <>
               <button className="quick-filter-btn">
                 ⭐ Featured
@@ -168,7 +159,6 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
               </button>
             </>
           )}
-
           <button 
             className={`quick-filter-btn ${filterOptions.type === 'node' ? 'active' : ''}`}
             onClick={() => handleFilterChange('type', filterOptions.type === 'node' ? 'all' : 'node')}
@@ -194,41 +184,36 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
             💾 Storage
           </button>
         </div>
-
         {/* Active Filters Display */}
-        {(searchQuery || filterOptions.status !== 'all' || filterOptions.type !== 'all') && (
+        {(searchQuery || filterOptions.status !== 'all' || filterOptions.type !== 'all') && ()
           <div className="active-filters">
             <span className="active-filters-label">Active filters:</span>
-            
-            {searchQuery && (
+            {searchQuery && ()
               <span className="active-filter">
                 Search: "{searchQuery}"
                 <button onClick={() => onSearchChange('')}>✕</button>
               </span>
             )}
-
-            {filterOptions.status !== 'all' && (
+            {filterOptions.status !== 'all' && ()
               <span className="active-filter">
                 Status: {filterOptions.status}
                 <button onClick={() => handleFilterChange('status', 'all')}>✕</button>
               </span>
             )}
-
-            {filterOptions.type !== 'all' && (
+            {filterOptions.type !== 'all' && ()
               <span className="active-filter">
                 Type: {filterOptions.type}
                 <button onClick={() => handleFilterChange('type', 'all')}>✕</button>
               </span>
             )}
-
             <button 
               className="clear-all-filters"
               onClick={() => {
                 onSearchChange('');
-                onFilterChange({
+                onFilterChange({)
                   status: 'all',
                   type: 'all',
-                  sortBy: 'name'
+                  sortBy: 'name',
                 });
               }}
             >
@@ -237,7 +222,6 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
           </div>
         )}
       </div>
-
       {/* Filter Results Summary */}
       <div className="filter-results">
         <span className="results-count">

@@ -4,7 +4,7 @@ export interface ParserResult {
     graph?: Graph;
     errors: ParserError[];
     warnings: ParserError[];
-    metadata: {
+    metadata: {,
         parseTime: number;
         tokenCount: number;
         nodeCount: number;
@@ -51,7 +51,7 @@ export declare class GraphParser {
      * Parse with performance profiling
      */
     parseWithProfiling(content: string): Promise<ParserResult & {
-        profiling: {
+        profiling: {,
             lexerTime: number;
             astTime: number;
             semanticTime: number;

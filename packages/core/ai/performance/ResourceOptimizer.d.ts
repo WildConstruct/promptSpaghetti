@@ -5,24 +5,24 @@
  * Intelligent resource management and optimization for AI model operations
  */
 export interface ResourceUsage {
-    memory: {
+    memory: {,
         used: number;
         available: number;
         percentage: number;
         peak: number;
     };
-    cpu: {
+    cpu: {,
         usage: number;
         cores: number;
         load: number[];
     };
-    network: {
+    network: {,
         bytesIn: number;
         bytesOut: number;
         latency: number;
         bandwidth: number;
     };
-    disk: {
+    disk: {,
         used: number;
         available: number;
         ioOperations: number;
@@ -39,7 +39,7 @@ export interface OptimizationStrategy {
     description: string;
     priority: 'low' | 'medium' | 'high';
     category: 'memory' | 'cpu' | 'network' | 'disk' | 'model' | 'caching';
-    estimatedSavings: {
+    estimatedSavings: {,
         memory?: number;
         cpu?: number;
         cost?: number;
@@ -51,13 +51,13 @@ export interface OptimizationStrategy {
 export interface ResourceOptimizationConfig {
     enabled: boolean;
     monitoringInterval: number;
-    optimizationThresholds: {
+    optimizationThresholds: {,
         memoryUsage: number;
         cpuUsage: number;
         diskUsage: number;
         responseTime: number;
     };
-    strategies: {
+    strategies: {,
         memoryOptimization: boolean;
         modelPooling: boolean;
         requestBatching: boolean;
@@ -65,7 +65,7 @@ export interface ResourceOptimizationConfig {
         intelligentCaching: boolean;
         resourcePreemption: boolean;
     };
-    limits: {
+    limits: {,
         maxMemoryUsage: number;
         maxConcurrentRequests: number;
         maxModelInstances: number;
@@ -74,18 +74,18 @@ export interface ResourceOptimizationConfig {
 }
 export interface ModelResourceProfile {
     modelId: string;
-    resourceRequirements: {
+    resourceRequirements: {,
         memory: number;
         cpu: number;
         gpu?: number;
         disk: number;
     };
-    utilizationHistory: Array<{
+    utilizationHistory: Array<{,
         timestamp: number;
         usage: ResourceUsage;
     }>;
     optimizationApplied: string[];
-    efficiency: {
+    efficiency: {,
         requestsPerSecond: number;
         costEfficiency: number;
         resourceEfficiency: number;
@@ -126,7 +126,7 @@ export declare class ResourceOptimizer {
     generateOptimizationPlan(): Promise<{
         currentState: ResourceUsage;
         recommendedOptimizations: OptimizationStrategy[];
-        estimatedImpact: {
+        estimatedImpact: {,
             memoryReduction: number;
             cpuReduction: number;
             costSavings: number;
@@ -136,11 +136,11 @@ export declare class ResourceOptimizer {
     }>;
     applyOptimizationPlan(plan: OptimizationStrategy[]): Promise<{
         applied: string[];
-        failed: Array<{
+        failed: Array<{,
             strategy: string;
             error: string;
         }>;
-        totalImpact: {
+        totalImpact: {,
             memoryFreed: number;
             cpuSaved: number;
             costSaved: number;

@@ -6,7 +6,6 @@
  * Zustand store for managing activity data state in the frontend.
  * Provides reactive state management for activity tracking and monitoring.
  */
-
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { 
@@ -25,29 +24,24 @@ interface ActivityState {
   activities: Activity[];
   currentActivity: Activity | null;
   metrics: ActivityMetrics | null;
-  
   // UI State
   isLoading: boolean;
   error: string | null;
   selectedActivityIds: string[];
-  
   // Query State
   currentQuery: ActivityQuery;
   queryResult: ActivityQueryResult | null;
   lastQueryTime: string | null;
-  
   // Real-time State
   isStreamConnected: boolean;
   streamSubscriptionId: string | null;
   recentActivities: Activity[];
-  
   // Filters and Preferences
   activeFilters: Partial<ActivityQuery>;
   viewMode: 'list' | 'timeline' | 'analytics';
   sortBy: 'timestamp' | 'severity' | 'type' | 'user';
   sortOrder: 'asc' | 'desc';
   groupBy: 'none' | 'type' | 'severity' | 'user' | 'source';
-  
   // Pagination
   currentPage: number;
   pageSize: number;
@@ -64,48 +58,40 @@ interface ActivityActions {
   removeActivity: (id: string) => void;
   setCurrentActivity: (activity: Activity | null) => void;
   setMetrics: (metrics: ActivityMetrics | null) => void;
-  
   // Query Actions
   setQuery: (query: ActivityQuery) => void;
   updateQuery: (updates: Partial<ActivityQuery>) => void;
   setQueryResult: (result: ActivityQueryResult | null) => void;
   clearQuery: () => void;
-  
   // Filter Actions
   setActiveFilters: (filters: Partial<ActivityQuery>) => void;
   addFilter: (key: keyof ActivityQuery, value: any) => void;
   removeFilter: (key: keyof ActivityQuery) => void;
   clearFilters: () => void;
-  
   // Selection Actions
   selectActivity: (id: string) => void;
   deselectActivity: (id: string) => void;
   selectAllActivities: () => void;
   clearSelection: () => void;
   toggleActivitySelection: (id: string) => void;
-  
   // View Actions
   setViewMode: (mode: 'list' | 'timeline' | 'analytics') => void;
   setSorting: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
   setGroupBy: (groupBy: string) => void;
-  
   // Pagination Actions
   setPage: (page: number) => void;
   setPageSize: (size: number) => void;
   nextPage: () => void;
   previousPage: () => void;
-  
   // Real-time Actions
   setStreamConnected: (connected: boolean) => void;
   setStreamSubscriptionId: (id: string | null) => void;
   addRecentActivity: (activity: Activity) => void;
   clearRecentActivities: () => void;
-  
   // Async Actions
   loadActivities: (query?: ActivityQuery) => Promise<void>;
   loadMetrics: (query?: ActivityQuery) => Promise<void>;
   refreshData: () => Promise<void>;
-  
   // Utility Actions
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -121,39 +107,34 @@ const initialState: ActivityState = {
   activities: [],
   currentActivity: null,
   metrics: null,
-  
   // UI State
   isLoading: false,
   error: null,
   selectedActivityIds: [],
-  
   // Query State
-  currentQuery: {
+  currentQuery: {,
     limit: 50,
     offset: 0,
     sortBy: 'timestamp',
-    sortOrder: 'desc'
+    sortOrder: 'desc',
   },
   queryResult: null,
   lastQueryTime: null,
-  
   // Real-time State
   isStreamConnected: false,
   streamSubscriptionId: null,
   recentActivities: [],
-  
   // Filters and Preferences
   activeFilters: {},
   viewMode: 'list',
   sortBy: 'timestamp',
   sortOrder: 'desc',
   groupBy: 'none',
-  
   // Pagination
   currentPage: 1,
   pageSize: 50,
   hasNextPage: false,
-  hasPreviousPage: false
+  hasPreviousPage: false,
 };
 
 // API Service Mock (replace with actual API integration)
@@ -161,41 +142,37 @@ const activityApi = {
   async queryActivities(query: ActivityQuery): Promise<ActivityQueryResult> {
     // Mock implementation - replace with actual API call
     await new Promise(resolve => setTimeout(resolve, 500));
-    
     const mockActivities: Activity[] = [];
     for (let i = 0; i < (query.limit || 10); i++) {
-      mockActivities.push({
-        id: `activity_${Date.now()}_${i}`,
+      mockActivities.push({)
+        id: `activity_${Date.now()}_${i}`,}
         timestamp: new Date(Date.now() - i * 60000).toISOString(),
         type: (['user_action', 'system_event', 'security_event'] as ActivityType[])[i % 3],
         severity: (['info', 'medium', 'high'] as ActivitySeverity[])[i % 3],
         status: 'completed',
-        action: `Action ${i + 1}`,
-        description: `Description for activity ${i + 1}`,
+        action: `Action ${i + 1}`,}
+        description: `Description for activity ${i + 1}`,}
         category: 'general',
-        source: `source_${i % 3}`,
+        source: `source_${i % 3}`,}
         environment: 'development',
         metadata: {},
         tags: [],
         createdAt: new Date().toISOString(),
-        version: 1
+        version: 1,
       } as Activity);
     }
-    
     return {
       activities: mockActivities,
       totalCount: 100,
-      executionTime: 150
+      executionTime: 150,
     };
   },
-
   async getMetrics(query: ActivityQuery): Promise<ActivityMetrics> {
     // Mock implementation
     await new Promise(resolve => setTimeout(resolve, 300));
-    
     return {
       totalActivities: 1000,
-      activitiesByType: {
+      activitiesByType: {,
         user_action: 400,
         system_event: 300,
         admin_action: 100,
@@ -207,167 +184,137 @@ const activityApi = {
         authentication: 2,
         authorization: 1,
         file_operation: 1,
-        workflow_event: 0
+        workflow_event: 0,
       },
-      activitiesBySeverity: {
+      activitiesBySeverity: {,
         critical: 5,
         high: 20,
         medium: 100,
         low: 375,
-        info: 500
+        info: 500,
       },
-      activitiesByStatus: {
+      activitiesByStatus: {,
         pending: 10,
         in_progress: 5,
         completed: 950,
         failed: 30,
-        cancelled: 5
+        cancelled: 5,
       },
       activitiesOverTime: [],
-      topSources: [
+      topSources: [,
         { source: 'user-interface', count: 400, percentage: 40 },
         { source: 'api-gateway', count: 300, percentage: 30 },
         { source: 'background-service', count: 200, percentage: 20 }
       ],
-      topActions: [
+      topActions: [,
         { action: 'view_page', count: 200, percentage: 20 },
         { action: 'api_request', count: 150, percentage: 15 },
         { action: 'login', count: 100, percentage: 10 }
       ],
-      topUsers: [
+      topUsers: [,
         { userId: 'user1', userEmail: 'user1@example.com', count: 100, percentage: 10 },
         { userId: 'user2', userEmail: 'user2@example.com', count: 80, percentage: 8 }
       ],
       errorRate: 3.5,
       averageDuration: 250,
-      performanceMetrics: {
+      performanceMetrics: {,
         p50: 100,
         p95: 500,
-        p99: 1000
+        p99: 1000,
       }
     };
   }
 };
 
 // Create the Zustand store
-export const useActivityStore = create<ActivityStore>()(
-  subscribeWithSelector((set, get) => ({
+export const useActivityStore = create<ActivityStore>()()
+  subscribeWithSelector((set, get) => ({)
     ...initialState,
-
     // Data Actions
     setActivities: (activities) => set({ activities }),
-    
-    addActivity: (activity) => set((state) => ({
+    addActivity: (activity) => set((state) => ({)
       activities: [activity, ...state.activities],
       recentActivities: [activity, ...state.recentActivities.slice(0, 19)] // Keep last 20
     })),
-    
-    updateActivity: (id, updates) => set((state) => ({
-      activities: state.activities.map(activity =>
+    updateActivity: (id, updates) => set((state) => ({)
+      activities: state.activities.map(activity =>)
         activity.id === id ? { ...activity, ...updates } : activity
       ),
       currentActivity: state.currentActivity?.id === id
         ? { ...state.currentActivity, ...updates }
         : state.currentActivity
     })),
-    
-    removeActivity: (id) => set((state) => ({
+    removeActivity: (id) => set((state) => ({)
       activities: state.activities.filter(activity => activity.id !== id),
       selectedActivityIds: state.selectedActivityIds.filter(selectedId => selectedId !== id),
       currentActivity: state.currentActivity?.id === id ? null : state.currentActivity
     })),
-    
     setCurrentActivity: (activity) => set({ currentActivity: activity }),
     setMetrics: (metrics) => set({ metrics }),
-
     // Query Actions
     setQuery: (query) => set({ currentQuery: query }),
-    
-    updateQuery: (updates) => set((state) => ({
+    updateQuery: (updates) => set((state) => ({)
       currentQuery: { ...state.currentQuery, ...updates }
     })),
-    
     setQueryResult: (result) => set({ queryResult: result }),
     clearQuery: () => set({ currentQuery: initialState.currentQuery }),
-
     // Filter Actions
     setActiveFilters: (filters) => set({ activeFilters: filters }),
-    
-    addFilter: (key, value) => set((state) => ({
+    addFilter: (key, value) => set((state) => ({)
       activeFilters: { ...state.activeFilters, [key]: value }
     })),
-    
     removeFilter: (key) => set((state) => {
       const newFilters = { ...state.activeFilters };
       delete newFilters[key];
       return { activeFilters: newFilters };
     }),
-    
     clearFilters: () => set({ activeFilters: {} }),
-
     // Selection Actions
-    selectActivity: (id) => set((state) => ({
-      selectedActivityIds: state.selectedActivityIds.includes(id)
+    selectActivity: (id) => set((state) => ({)
+      selectedActivityIds: state.selectedActivityIds.includes(id),
         ? state.selectedActivityIds
         : [...state.selectedActivityIds, id]
     })),
-    
-    deselectActivity: (id) => set((state) => ({
+    deselectActivity: (id) => set((state) => ({)
       selectedActivityIds: state.selectedActivityIds.filter(selectedId => selectedId !== id)
     })),
-    
-    selectAllActivities: () => set((state) => ({
+    selectAllActivities: () => set((state) => ({)
       selectedActivityIds: state.activities.map(activity => activity.id)
     })),
-    
     clearSelection: () => set({ selectedActivityIds: [] }),
-    
-    toggleActivitySelection: (id) => set((state) => ({
-      selectedActivityIds: state.selectedActivityIds.includes(id)
+    toggleActivitySelection: (id) => set((state) => ({)
+      selectedActivityIds: state.selectedActivityIds.includes(id),
         ? state.selectedActivityIds.filter(selectedId => selectedId !== id)
         : [...state.selectedActivityIds, id]
     })),
-
     // View Actions
     setViewMode: (mode) => set({ viewMode: mode }),
-    
     setSorting: (sortBy, sortOrder) => set({ sortBy, sortOrder }),
-    
     setGroupBy: (groupBy) => set({ groupBy }),
-
     // Pagination Actions
     setPage: (page) => set({ currentPage: page }),
     setPageSize: (size) => set({ pageSize: size }),
-    
-    nextPage: () => set((state) => ({
+    nextPage: () => set((state) => ({)
       currentPage: state.hasNextPage ? state.currentPage + 1 : state.currentPage
     })),
-    
-    previousPage: () => set((state) => ({
+    previousPage: () => set((state) => ({)
       currentPage: state.hasPreviousPage ? state.currentPage - 1 : state.currentPage
     })),
-
     // Real-time Actions
     setStreamConnected: (connected) => set({ isStreamConnected: connected }),
     setStreamSubscriptionId: (id) => set({ streamSubscriptionId: id }),
-    
-    addRecentActivity: (activity) => set((state) => ({
+    addRecentActivity: (activity) => set((state) => ({)
       recentActivities: [activity, ...state.recentActivities.slice(0, 19)]
     })),
-    
     clearRecentActivities: () => set({ recentActivities: [] }),
-
     // Async Actions
     loadActivities: async (query) => {
       const state = get();
       const queryToUse = query || { ...state.currentQuery, ...state.activeFilters };
-      
       set({ isLoading: true, error: null });
-      
       try {
         const result = await activityApi.queryActivities(queryToUse);
-        
-        set({
+        set({)
           activities: result.activities,
           queryResult: result,
           lastQueryTime: new Date().toISOString(),
@@ -376,17 +323,15 @@ export const useActivityStore = create<ActivityStore>()(
           hasPreviousPage: (queryToUse.offset || 0) > 0
         });
       } catch (error) {
-        set({
+        set({)
           error: error instanceof Error ? error.message : 'Failed to load activities',
-          isLoading: false
+          isLoading: false,
         });
       }
     },
-
     loadMetrics: async (query) => {
       const state = get();
       const queryToUse = query || { ...state.currentQuery, ...state.activeFilters };
-      
       try {
         const metrics = await activityApi.getMetrics(queryToUse);
         set({ metrics });
@@ -394,16 +339,13 @@ export const useActivityStore = create<ActivityStore>()(
         set({ error: error instanceof Error ? error.message : 'Failed to load metrics' });
       }
     },
-
     refreshData: async () => {
       const { loadActivities, loadMetrics } = get();
       await Promise.all([loadActivities(), loadMetrics()]);
     },
-
     // Utility Actions
     setLoading: (loading) => set({ isLoading: loading }),
     setError: (error) => set({ error }),
-    
     reset: () => set(initialState)
   }))
 );
@@ -414,46 +356,37 @@ export const activitySelectors = {
   getFilteredActivities: (state: ActivityStore) => {
     return state.activities; // Filtering is done server-side
   },
-
   // Get activities grouped by the specified field
   getGroupedActivities: (state: ActivityStore) => {
     const activities = state.activities;
-    
     if (state.groupBy === 'none') {
       return { 'All Activities': activities };
     }
-
     const grouped = activities.reduce((groups, activity) => {
-      const key = state.groupBy === 'type' ? activity.type :
+      const key = state.groupBy === 'type' ? activity.type :;
         state.groupBy === 'severity' ? activity.severity :
           state.groupBy === 'user' ? (activity.userId || 'System') :
             state.groupBy === 'source' ? activity.source :
               'Other';
-      
       if (!groups[key]) groups[key] = [];
       groups[key].push(activity);
       return groups;
     }, {} as Record<string, Activity[]>);
-
     return grouped;
   },
-
   // Get selected activities
   getSelectedActivities: (state: ActivityStore) => {
-    return state.activities.filter(activity => 
+    return state.activities.filter(activity => )
       state.selectedActivityIds.includes(activity.id)
     );
   },
-
   // Check if there are any active filters
   hasActiveFilters: (state: ActivityStore) => {
     return Object.keys(state.activeFilters).length > 0;
   },
-
   // Get summary statistics
   getSummaryStats: (state: ActivityStore) => {
     const activities = state.activities;
-    
     return {
       total: activities.length,
       byType: activities.reduce((acc, activity) => {
@@ -465,7 +398,7 @@ export const activitySelectors = {
         return acc;
       }, {} as Record<string, number>),
       errors: activities.filter(a => a.status === 'failed').length,
-      recent: activities.filter(a => 
+      recent: activities.filter(a => )
         new Date(a.timestamp) > new Date(Date.now() - 24 * 60 * 60 * 1000)
       ).length
     };
@@ -475,16 +408,14 @@ export const activitySelectors = {
 // Hook for real-time activity streaming
 export const useActivityStream = () => {
   const store = useActivityStore();
-  
   const startStream = React.useCallback(async (filters: ActivityQuery) => {
     // Mock WebSocket connection
     store.setStreamConnected(true);
     store.setStreamSubscriptionId('mock-subscription');
-    
     // Simulate real-time activities
     const interval = setInterval(() => {
       const mockActivity: Activity = {
-        id: `live_${Date.now()}`,
+        id: `live_${Date.now()}`,}
         timestamp: new Date().toISOString(),
         type: 'system_event',
         severity: 'info',
@@ -497,31 +428,26 @@ export const useActivityStream = () => {
         metadata: {},
         tags: [],
         createdAt: new Date().toISOString(),
-        version: 1
+        version: 1,
       };
-      
       store.addRecentActivity(mockActivity);
     }, 10000);
-
     // Store interval for cleanup
     (globalThis as any).__activityStreamInterval = interval;
   }, [store]);
-
   const stopStream = React.useCallback(() => {
     store.setStreamConnected(false);
     store.setStreamSubscriptionId(null);
-    
     if ((globalThis as any).__activityStreamInterval) {
       clearInterval((globalThis as any).__activityStreamInterval);
       delete (globalThis as any).__activityStreamInterval;
     }
   }, [store]);
-
   return {
     startStream,
     stopStream,
     isConnected: store.isStreamConnected,
-    subscriptionId: store.streamSubscriptionId
+    subscriptionId: store.streamSubscriptionId,
   };
 };
 

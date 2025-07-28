@@ -5,8 +5,8 @@ export interface ExportJobListProps {
 }
 
 export const ExportJobList: React.FC<ExportJobListProps> = ({ className = '' }) => {
-  return (
-    <div className={`export-job-list ${className}`}>
+  return ()
+    <div className={`export-job-list ${className}`}>}
       <h3>Export Jobs</h3>
       <p>No active export jobs</p>
     </div>

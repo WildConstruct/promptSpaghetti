@@ -8,7 +8,7 @@
 import { ReactionData, ReactionSummary } from '../components/Reactions/ReactionButton';
 export interface ReactionAnalytics {
     contentId: string;
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };
@@ -19,20 +19,20 @@ export interface ReactionAnalytics {
         percentage: number;
         trend: 'increasing' | 'decreasing' | 'stable';
     }>;
-    sentimentAnalysis: {
+    sentimentAnalysis: {,
         overallScore: number;
         positivePercentage: number;
         neutralPercentage: number;
         negativePercentage: number;
         emotionalDistribution: Record<string, number>;
     };
-    engagementMetrics: {
+    engagementMetrics: {,
         reactionRate: number;
         velocityScore: number;
         viralityIndicator: number;
         retentionScore: number;
     };
-    temporalPatterns: {
+    temporalPatterns: {,
         hourlyDistribution: number[];
         dailyDistribution: number[];
         peakActivityHours: number[];
@@ -42,10 +42,10 @@ export interface ReactionAnalytics {
             change: number;
         }>;
     };
-    comparativeMetrics: {
+    comparativeMetrics: {,
         vsAverageContent: number;
         categoryRanking: number;
-        similarContentComparison: Array<{
+        similarContentComparison: Array<{,
             contentId: string;
             similarity: number;
             reactionPattern: string[];
@@ -54,25 +54,25 @@ export interface ReactionAnalytics {
 }
 export interface ReactionBehaviorInsights {
     userId: string;
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };
     totalReactions: number;
     favoriteReactions: string[];
     reactionFrequency: Record<string, number>;
-    contentAffinity: Array<{
+    contentAffinity: Array<{,
         contentType: string;
         reactionCount: number;
         preferredReactions: string[];
     }>;
-    behaviorPatterns: {
+    behaviorPatterns: {,
         reactsQuickly: boolean;
         consideredReactor: boolean;
         positivityScore: number;
         influencer: boolean;
     };
-    engagementTiming: {
+    engagementTiming: {,
         mostActiveHours: number[];
         averageResponseTime: number;
         burstyBehavior: boolean;
@@ -80,30 +80,30 @@ export interface ReactionBehaviorInsights {
 }
 export interface ReactionTrend {
     reactionType: string;
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };
-    trendData: Array<{
+    trendData: Array<{,
         timestamp: Date;
         count: number;
         cumulativeCount: number;
     }>;
     growthRate: number;
     momentum: 'accelerating' | 'steady' | 'declining' | 'stagnant';
-    peakPeriods: Array<{
+    peakPeriods: Array<{,
         start: Date;
         end: Date;
         intensity: number;
     }>;
-    seasonality: {
+    seasonality: {,
         hasPattern: boolean;
         cycleLength?: number;
         amplitude?: number;
     };
 }
 export interface BulkReactionOperation {
-    operations: Array<{
+    operations: Array<{,
         contentId: string;
         userId: string;
         action: 'add' | 'remove' | 'change';
@@ -130,7 +130,7 @@ export interface ReactionConfig {
     reactionCooldownMs: number;
     enableRealTimeUpdates: boolean;
     analyticsRetentionDays: number;
-    spamDetection: {
+    spamDetection: {,
         enabled: boolean;
         maxReactionsPerMinute: number;
         suspiciousPatternThreshold: number;
@@ -179,14 +179,14 @@ export declare class ReactionService {
     /**
      * Get comprehensive reaction analytics
      */
-    getReactionAnalytics(contentId: string, timeRange?: {
+    getReactionAnalytics(contentId: string, timeRange?: {)
         start: Date;
         end: Date;
     }): Promise<ReactionAnalytics>;
     /**
      * Get user behavior insights
      */
-    getUserBehaviorInsights(userId: string, timeRange?: {
+    getUserBehaviorInsights(userId: string, timeRange?: {)
         start: Date;
         end: Date;
     }): Promise<ReactionBehaviorInsights>;
@@ -196,7 +196,7 @@ export declare class ReactionService {
     executeBulkOperations(operations: BulkReactionOperation): Promise<{
         successful: number;
         failed: number;
-        results: Array<{
+        results: Array<{,
             contentId: string;
             success: boolean;
             error?: string;

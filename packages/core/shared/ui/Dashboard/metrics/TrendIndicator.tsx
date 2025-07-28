@@ -4,7 +4,6 @@
  * 
  * Provides consistent trend visualization across metrics
  */
-
 import React from 'react';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import './TrendIndicator.css';
@@ -22,7 +21,7 @@ export interface TrendIndicatorProps {
   className?: string;
 }
 
-export const TrendIndicator: React.FC<TrendIndicatorProps> = ({
+export const TrendIndicator: React.FC<TrendIndicatorProps> = ({)
   value,
   direction,
   period = 'vs last period',
@@ -42,7 +41,6 @@ export const TrendIndicator: React.FC<TrendIndicatorProps> = ({
     // Default: up trends are positive, down trends are negative
     return direction === 'up';
   };
-
   const getTrendIcon = () => {
     switch (direction) {
       case 'up':
@@ -54,48 +52,40 @@ export const TrendIndicator: React.FC<TrendIndicatorProps> = ({
         return Minus;
     }
   };
-
   const formatTrendValue = () => {
     const absValue = Math.abs(value);
-    
     switch (format) {
       case 'percentage':
-        return `${absValue.toFixed(1)}%`;
+        return `${absValue.toFixed(1)}%`;}
       case 'number':
         return new Intl.NumberFormat('en-US').format(absValue);
       case 'points':
-        return `${absValue.toFixed(1)}pts`;
+        return `${absValue.toFixed(1)}pts`;}
       default:
         return absValue.toString();
     }
   };
-
   const getTrendClass = () => {
     if (direction === 'neutral') return 'trend-neutral';
     return isPositiveTrend() ? 'trend-positive' : 'trend-negative';
   };
-
   const iconSizes = {
     small: 12,
     medium: 14,
-    large: 16
+    large: 16,
   };
-
   const TrendIcon = getTrendIcon();
-
-  return (
-    <div className={`trend-indicator ${getTrendClass()} trend-${size} ${className}`}>
-      {showIcon && (
+  return ()
+    <div className={`trend-indicator ${getTrendClass()} trend-${size} ${className}`}>}
+      {showIcon && ()
         <TrendIcon size={iconSizes[size]} className="trend-icon" />
       )}
-      
-      {showValue && (
+      {showValue && ()
         <span className="trend-value">
           {formatTrendValue()}
         </span>
       )}
-      
-      {showPeriod && period && (
+      {showPeriod && period && ()
         <span className="trend-period">
           {period}
         </span>

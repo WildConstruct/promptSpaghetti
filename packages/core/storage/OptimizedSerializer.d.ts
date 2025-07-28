@@ -43,7 +43,7 @@ export declare class OptimizedSerializer {
     /**
      * Incremental serialization - only serialize changes
      */
-    serializeIncremental(
+    serializeIncremental()
       projectData: PSGFile,
       projectId: string,
       options?: SerializationOptions
@@ -57,7 +57,7 @@ export declare class OptimizedSerializer {
     getMetrics(): {
         averageSerializationTime: number;
         totalSerializations: number;
-        compressionStats: {
+        compressionStats: {,
             averageRatio: number;
             timeSaved: number;
         };

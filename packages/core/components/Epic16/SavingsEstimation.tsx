@@ -5,67 +5,59 @@
  * manual prompt creation, with detailed breakdowns and projections.
  * Part of Epic 16 Case Study Showcase (Story 16.4.4).
  */
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { PiggyBank, Clock, Zap, Target, ArrowRight } from 'lucide-react';
-
 interface SavingsInputs {
   // Usage patterns
   monthlyUsage: number; // number of times template/manual prompts used per month
   projectDuration: number; // months to analyze
-  
   // Template scenario
   templateTokens: number; // average tokens per template use
   templateAccuracy: number; // accuracy rate (0-100%)
   templateSetupTime: number; // minutes to set up and use template
-  
   // Manual scenario  
   manualTokens: number; // average tokens per manual prompt
   manualAccuracy: number; // accuracy rate (0-100%)
   manualCreationTime: number; // minutes to create manual prompt
   manualIterations: number; // average iterations needed
-  
   // Cost factors
   claudeTokenCost: number; // cost per 1K tokens
   hourlyLabourCost: number; // cost per hour for human time
   revisionCost: number; // cost of revision cycles
-  
   // Quality factors
   templateQualityScore: number; // 1-10 quality score
   manualQualityScore: number; // 1-10 quality score
 }
-
 interface SavingsBreakdown {
-  tokenSavings: {
+  tokenSavings: {,
     templateTokenCost: number;
     manualTokenCost: number;
     netTokenSavings: number;
     tokenEfficiency: number;
   };
-  timeSavings: {
+  timeSavings: {,
     templateTimeSpent: number;
     manualTimeSpent: number;
     netTimeSavings: number;
     timeEfficiency: number;
   };
-  qualitySavings: {
+  qualitySavings: {,
     templateQualityValue: number;
     manualQualityValue: number;
     qualityImprovement: number;
   };
-  totalSavings: {
+  totalSavings: {,
     monthlySavings: number;
     yearlySavings: number;
     totalProjectSavings: number;
     savingsPerUse: number;
   };
-  productivity: {
+  productivity: {,
     productivityGain: number;
     capacityIncrease: number;
     errorReduction: number;
   };
 }
-
 interface SavingsEstimationProps {
   className?: string;
   onSavingsChange?: (savings: SavingsBreakdown) => void;
@@ -73,13 +65,13 @@ interface SavingsEstimationProps {
   industryPreset?: 'content' | 'development' | 'marketing' | 'research';
 }
 
-export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
+export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({)
   className = '',
   onSavingsChange,
   comparisonMode = 'detailed',
   industryPreset
 }) => {
-  const [inputs, setInputs] = useState<SavingsInputs>({
+  const [inputs, setInputs] = useState<SavingsInputs>({)
     monthlyUsage: 25,
     projectDuration: 12,
     templateTokens: 1200,
@@ -93,12 +85,11 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
     hourlyLabourCost: 75,
     revisionCost: 25,
     templateQualityScore: 8.5,
-    manualQualityScore: 6.5
+    manualQualityScore: 6.5,
   });
-
   // Industry presets
   const industryPresets = {
-    content: {
+    content: {,
       monthlyUsage: 40,
       templateTokens: 800,
       templateAccuracy: 92,
@@ -109,9 +100,9 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
       manualIterations: 3,
       hourlyLabourCost: 65,
       templateQualityScore: 8.2,
-      manualQualityScore: 6.0
+      manualQualityScore: 6.0,
     },
-    development: {
+    development: {,
       monthlyUsage: 60,
       templateTokens: 1500,
       templateAccuracy: 98,
@@ -122,9 +113,9 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
       manualIterations: 2,
       hourlyLabourCost: 95,
       templateQualityScore: 9.0,
-      manualQualityScore: 7.0
+      manualQualityScore: 7.0,
     },
-    marketing: {
+    marketing: {,
       monthlyUsage: 30,
       templateTokens: 1000,
       templateAccuracy: 90,
@@ -135,9 +126,9 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
       manualIterations: 3.5,
       hourlyLabourCost: 70,
       templateQualityScore: 8.0,
-      manualQualityScore: 5.5
+      manualQualityScore: 5.5,
     },
-    research: {
+    research: {,
       monthlyUsage: 20,
       templateTokens: 2000,
       templateAccuracy: 96,
@@ -148,31 +139,27 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
       manualIterations: 2,
       hourlyLabourCost: 85,
       templateQualityScore: 9.2,
-      manualQualityScore: 7.5
+      manualQualityScore: 7.5,
     }
   };
-
   // Load industry preset
   useEffect(() => {
     if (industryPreset && industryPresets[industryPreset]) {
       const preset = industryPresets[industryPreset];
-      setInputs(prev => ({
+      setInputs(prev => ({)
         ...prev,
         ...preset
       }));
     }
   }, [industryPreset]);
-
   // Calculate savings breakdown
   const savingsBreakdown: SavingsBreakdown = useMemo(() => {
     const totalUsage = inputs.monthlyUsage * inputs.projectDuration;
-
     // Token costs
     const templateTokenCost = (inputs.templateTokens / 1000) * inputs.claudeTokenCost * totalUsage;
     const manualTokenCost = (inputs.manualTokens / 1000) * inputs.claudeTokenCost * totalUsage * inputs.manualIterations;
     const netTokenSavings = manualTokenCost - templateTokenCost;
     const tokenEfficiency = manualTokenCost > 0 ? (netTokenSavings / manualTokenCost) * 100 : 0;
-
     // Time costs
     const templateTimeHours = (inputs.templateSetupTime / 60) * totalUsage;
     const manualTimeHours = (inputs.manualCreationTime / 60) * totalUsage * inputs.manualIterations;
@@ -180,91 +167,80 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
     const manualTimeCost = manualTimeHours * inputs.hourlyLabourCost;
     const netTimeSavings = manualTimeCost - templateTimeCost;
     const timeEfficiency = manualTimeCost > 0 ? (netTimeSavings / manualTimeCost) * 100 : 0;
-
     // Quality value calculation
     const templateQualityValue = inputs.templateQualityScore * inputs.templateAccuracy * 0.01;
     const manualQualityValue = inputs.manualQualityScore * inputs.manualAccuracy * 0.01;
     const qualityImprovement = ((templateQualityValue - manualQualityValue) / manualQualityValue) * 100;
-
     // Total savings
     const totalProjectSavings = netTokenSavings + netTimeSavings;
     const monthlySavings = totalProjectSavings / inputs.projectDuration;
     const yearlySavings = monthlySavings * 12;
     const savingsPerUse = totalProjectSavings / totalUsage;
-
     // Productivity metrics
     const productivityGain = timeEfficiency;
     const capacityIncrease = manualTimeHours > 0 ? ((manualTimeHours - templateTimeHours) / manualTimeHours) * 100 : 0;
     const errorReduction = ((inputs.templateAccuracy - inputs.manualAccuracy) / inputs.manualAccuracy) * 100;
-
     const breakdown: SavingsBreakdown = {
-      tokenSavings: {
+      tokenSavings: {,
         templateTokenCost,
         manualTokenCost,
         netTokenSavings,
         tokenEfficiency
       },
-      timeSavings: {
+      timeSavings: {,
         templateTimeSpent: templateTimeCost,
         manualTimeSpent: manualTimeCost,
         netTimeSavings,
         timeEfficiency
       },
-      qualitySavings: {
+      qualitySavings: {,
         templateQualityValue,
         manualQualityValue,
         qualityImprovement
       },
-      totalSavings: {
+      totalSavings: {,
         monthlySavings,
         yearlySavings,
         totalProjectSavings,
         savingsPerUse
       },
-      productivity: {
+      productivity: {,
         productivityGain,
         capacityIncrease,
         errorReduction
       }
     };
-
     return breakdown;
   }, [inputs]);
-
   // Notify parent of changes
   useEffect(() => {
     onSavingsChange?.(savingsBreakdown);
   }, [savingsBreakdown, onSavingsChange]);
-
   const handleInputChange = (field: keyof SavingsInputs, value: number) => {
-    setInputs(prev => ({
+    setInputs(prev => ({)
       ...prev,
       [field]: value
     }));
   };
-
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-US', {)
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     }).format(amount);
   };
-
   const formatPercentage = (value: number) => {
-    return `${value.toFixed(1)}%`;
+    return `${value.toFixed(1)}%`;}
   };
-
   const formatHours = (hours: number) => {
     if (hours < 1) {
-      return `${Math.round(hours * 60)} min`;
+      return `${Math.round(hours * 60)} min`;}
     }
-    return `${hours.toFixed(1)} hrs`;
+    return `${hours.toFixed(1)} hrs`;}
   };
-
-  return (
-    <div className={`bg-white rounded-lg shadow-lg border border-gray-200 ${className}`}>
+  return ()
+    <div className={`bg-white rounded-lg shadow-lg border border-gray-200 ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 px-6 py-4">
         <div className="flex items-center space-x-3">
@@ -279,16 +255,15 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
           </div>
         </div>
       </div>
-
       <div className="p-6">
         {/* Industry Presets */}
-        {industryPreset === undefined && (
+        {industryPreset === undefined && ()
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-3">
               Industry Presets
             </label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {Object.keys(industryPresets).map((preset) => (
+              {Object.keys(industryPresets).map((preset) => ()
                 <button
                   key={preset}
                   onClick={() => setInputs(prev => ({ ...prev, ...industryPresets[preset as keyof typeof industryPresets] }))}
@@ -300,16 +275,13 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
             </div>
           </div>
         )}
-
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Configuration Panel */}
           <div className="space-y-6">
             <h3 className="text-lg font-medium text-gray-900">Configuration</h3>
-
             {/* Usage Parameters */}
             <div className="space-y-4">
               <h4 className="font-medium text-gray-700">Usage Patterns</h4>
-              
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-1">
                   Monthly Usage
@@ -322,7 +294,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                   min="1"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-1">
                   Analysis Period (months)
@@ -336,7 +307,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                   max="60"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-1">
                   Hourly Labor Cost ($)
@@ -351,12 +321,10 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                 />
               </div>
             </div>
-
             {/* Template vs Manual Comparison */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4">
                 <h4 className="font-medium text-green-700">Template Scenario</h4>
-                
                 <div>
                   <label className="block text-xs text-gray-600 mb-1">Tokens per use</label>
                   <input
@@ -367,7 +335,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                     step="100"
                   />
                 </div>
-
                 <div>
                   <label className="block text-xs text-gray-600 mb-1">Setup time (min)</label>
                   <input
@@ -378,7 +345,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                     step="0.5"
                   />
                 </div>
-
                 <div>
                   <label className="block text-xs text-gray-600 mb-1">Accuracy (%)</label>
                   <input
@@ -391,7 +357,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                     step="1"
                   />
                 </div>
-
                 <div>
                   <label className="block text-xs text-gray-600 mb-1">Quality score (1-10)</label>
                   <input
@@ -405,10 +370,8 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                   />
                 </div>
               </div>
-
               <div className="space-y-4">
                 <h4 className="font-medium text-orange-700">Manual Scenario</h4>
-                
                 <div>
                   <label className="block text-xs text-gray-600 mb-1">Tokens per use</label>
                   <input
@@ -419,7 +382,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                     step="100"
                   />
                 </div>
-
                 <div>
                   <label className="block text-xs text-gray-600 mb-1">Creation time (min)</label>
                   <input
@@ -430,7 +392,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                     step="5"
                   />
                 </div>
-
                 <div>
                   <label className="block text-xs text-gray-600 mb-1">Accuracy (%)</label>
                   <input
@@ -443,7 +404,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                     step="1"
                   />
                 </div>
-
                 <div>
                   <label className="block text-xs text-gray-600 mb-1">Quality score (1-10)</label>
                   <input
@@ -459,11 +419,9 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
               </div>
             </div>
           </div>
-
           {/* Savings Summary */}
           <div className="space-y-6">
             <h3 className="text-lg font-medium text-gray-900">Savings Summary</h3>
-
             {/* Key Metrics */}
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-green-50 rounded-lg p-4">
@@ -477,7 +435,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                   <PiggyBank className="w-5 h-5 text-green-600" />
                 </div>
               </div>
-
               <div className="bg-blue-50 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -489,7 +446,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                   <Target className="w-5 h-5 text-blue-600" />
                 </div>
               </div>
-
               <div className="bg-purple-50 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -501,7 +457,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                   <Clock className="w-5 h-5 text-purple-600" />
                 </div>
               </div>
-
               <div className="bg-orange-50 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -514,12 +469,10 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                 </div>
               </div>
             </div>
-
             {/* Detailed Breakdown */}
-            {comparisonMode === 'detailed' && (
+            {comparisonMode === 'detailed' && ()
               <div className="space-y-4">
                 <h4 className="font-medium text-gray-700">Breakdown by Category</h4>
-                
                 <div className="space-y-3">
                   <div className="bg-gray-50 rounded-lg p-3">
                     <div className="flex justify-between items-center mb-2">
@@ -533,7 +486,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                       <span>Manual: {formatCurrency(savingsBreakdown.tokenSavings.manualTokenCost)}</span>
                     </div>
                   </div>
-
                   <div className="bg-gray-50 rounded-lg p-3">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium text-gray-700">Time Costs</span>
@@ -546,7 +498,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                       <span>Manual: {formatCurrency(savingsBreakdown.timeSavings.manualTimeSpent)}</span>
                     </div>
                   </div>
-
                   <div className="bg-gray-50 rounded-lg p-3">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium text-gray-700">Quality Improvement</span>
@@ -562,7 +513,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                 </div>
               </div>
             )}
-
             {/* Productivity Gains */}
             <div className="bg-blue-50 rounded-lg p-4">
               <h4 className="font-medium text-blue-900 mb-3">Productivity Impact</h4>
@@ -588,15 +538,12 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
               </div>
             </div>
           </div>
-
           {/* Projections */}
           <div className="space-y-6">
             <h3 className="text-lg font-medium text-gray-900">Projections</h3>
-
             {/* Time-based Projections */}
             <div className="space-y-4">
               <h4 className="font-medium text-gray-700">Savings Over Time</h4>
-              
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <span className="text-sm text-gray-600">Monthly Savings</span>
@@ -604,14 +551,12 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                     {formatCurrency(savingsBreakdown.totalSavings.monthlySavings)}
                   </span>
                 </div>
-                
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <span className="text-sm text-gray-600">Annual Savings</span>
                   <span className="font-bold text-green-600">
                     {formatCurrency(savingsBreakdown.totalSavings.yearlySavings)}
                   </span>
                 </div>
-
                 <div className="flex justify-between items-center p-3 bg-green-100 rounded-lg">
                   <span className="text-sm font-medium text-green-800">Project Total</span>
                   <span className="font-bold text-green-800">
@@ -620,11 +565,9 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                 </div>
               </div>
             </div>
-
             {/* Efficiency Metrics */}
             <div className="space-y-4">
               <h4 className="font-medium text-gray-700">Efficiency Comparison</h4>
-              
               <div className="space-y-3">
                 <div className="bg-gray-50 rounded-lg p-3">
                   <div className="flex justify-between items-center mb-2">
@@ -640,7 +583,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                     </span>
                   </div>
                 </div>
-
                 <div className="bg-gray-50 rounded-lg p-3">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm text-gray-600">Tokens per Task</span>
@@ -655,7 +597,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                     </span>
                   </div>
                 </div>
-
                 <div className="bg-gray-50 rounded-lg p-3">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm text-gray-600">Success Rate</span>
@@ -672,7 +613,6 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({
                 </div>
               </div>
             </div>
-
             {/* Impact Summary */}
             <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4">
               <h4 className="font-medium text-gray-900 mb-3">Impact Summary</h4>

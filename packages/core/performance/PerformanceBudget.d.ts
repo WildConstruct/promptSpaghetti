@@ -4,38 +4,38 @@
  */
 import { EventEmitter } from 'events';
 export interface PerformanceBudgetConfig {
-    bundles: {
+    bundles: {,
         main: number;
         vendor: number;
         chunks: number;
         total: number;
     };
-    runtime: {
+    runtime: {,
         firstContentfulPaint: number;
         largestContentfulPaint: number;
         firstInputDelay: number;
         cumulativeLayoutShift: number;
         timeToInteractive: number;
     };
-    api: {
+    api: {,
         graphExecution: number;
         preview: number;
         validation: number;
         authentication: number;
     };
-    memory: {
+    memory: {,
         initialHeap: number;
         peakHeap: number;
         steadyState: number;
         leakThreshold: number;
     };
-    network: {
+    network: {,
         totalRequests: number;
         totalTransferSize: number;
         thirdPartyRequests: number;
         criticalResourceCount: number;
     };
-    build: {
+    build: {,
         buildTime: number;
         typeCheckTime: number;
         lintTime: number;
@@ -57,7 +57,7 @@ export interface BudgetCheckResult {
     passed: boolean;
     score: number;
     violations: BudgetViolation[];
-    summary: {
+    summary: {,
         total: number;
         critical: number;
         high: number;
@@ -69,13 +69,13 @@ export interface BudgetCheckResult {
 }
 export interface PerformanceSnapshot {
     timestamp: number;
-    bundles: {
+    bundles: {,
         main: number;
         vendor: number;
         chunks: number[];
         total: number;
     };
-    runtime: {
+    runtime: {,
         fcp?: number;
         lcp?: number;
         fid?: number;
@@ -83,13 +83,13 @@ export interface PerformanceSnapshot {
         tti?: number;
     };
     api: Record<string, number>;
-    memory: {
+    memory: {,
         used: number;
         total: number;
         peak: number;
         gc: number;
     };
-    network: {
+    network: {,
         requestCount: number;
         transferSize: number;
         thirdParty: number;

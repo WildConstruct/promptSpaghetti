@@ -3,28 +3,25 @@ import {
   NodeTypeEnum,
   WeightedChoiceNodeSchema
 } from '../graphSchema';
-
 describe('graphSchema validation', () => {
   it('accepts a minimal valid graph', () => {
     const valid = {
-      nodes: [
+      nodes: [,
         { id: 'n1', type: 'Output' as const }
       ]
     };
     const result = GraphSchema.safeParse(valid);
     expect(result.success).toBe(true);
   });
-
   it('rejects graph when a node is missing id', () => {
     const invalid = {
-      nodes: [
+      nodes: [,
         { type: 'Output' as const }
       ]
     };
     const result = GraphSchema.safeParse(invalid);
     expect(result.success).toBe(false);
   });
-
   it('validates WeightedChoice node weights as positive numbers', () => {
     const badNode = {
       id: 'w1',
@@ -34,11 +31,10 @@ describe('graphSchema validation', () => {
     const res = WeightedChoiceNodeSchema.safeParse(badNode);
     expect(res.success).toBe(false);
   });
-
   it('discriminates node types correctly', () => {
     const kinds = NodeTypeEnum.options;
     kinds.forEach((k) => {
-      const node: any = { id: `id-${k}`, type: k };
+      const node: any = { id: `id-${k}`, type: k };}
       switch (k) {
       case 'WeightedChoice':
         node.choices = [{ value: 'A', weight: 1 }];

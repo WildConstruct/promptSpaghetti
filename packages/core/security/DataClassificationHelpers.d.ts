@@ -39,7 +39,7 @@ export interface SecurityPolicyEnforcementResult {
     compliant: boolean;
     violations: string[];
     recommendations: string[];
-    requiredActions: {
+    requiredActions: {,
         encryption: boolean;
         accessControl: string[];
         monitoring: string;
@@ -89,7 +89,7 @@ export declare class DataClassificationHelpers {
     /**
      * Enforce security policies based on sensitivity level
      */
-    static enforceSecurityPolicies(element: EnhancedDataElement, currentSecurity: {
+    static enforceSecurityPolicies(element: EnhancedDataElement, currentSecurity: {)
         encrypted: boolean;
         accessControl: string[];
         monitoring: string;
@@ -98,24 +98,24 @@ export declare class DataClassificationHelpers {
     /**
      * Assess security for data transfer between systems
      */
-    static assessDataFlowSecurity(
+    static assessDataFlowSecurity()
       sourceLevel: DataSensitivityLevel,
       targetLevel: DataSensitivityLevel,
       transferMethod: string,
-      encryptionInPlace: boolean
+      encryptionInPlace: boolean,
     ): DataFlowSecurityAssessment;
     /**
      * Generate data handling compliance report
      */
     static generateComplianceReport(elements: EnhancedDataElement[], currentPolicies: Record<string, any>): {
-        summary: {
+        summary: {,
             totalElements: number;
             compliantElements: number;
             highRiskElements: number;
             violationCount: number;
         };
         levelBreakdown: Record<DataSensitivityLevel, number>;
-        violations: Array<{
+        violations: Array<{,
             elementId: string;
             sensitivityLevel: DataSensitivityLevel;
             violations: string[];
@@ -147,7 +147,7 @@ export declare class DataClassifierIntegration {
     /**
      * Create DataElement from enhanced data with sensitivity
      */
-    static createDataElementFromSensitive(
+    static createDataElementFromSensitive()
       id: string,
       fieldName: string,
       value: any,

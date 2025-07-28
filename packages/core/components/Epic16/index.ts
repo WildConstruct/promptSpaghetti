@@ -149,17 +149,17 @@ export interface Epic16ComponentTheme {
   accent: string;
   background: string;
   surface: string;
-  text: {
+  text: {,
     primary: string;
     secondary: string;
     disabled: string;
   };
-  border: {
+  border: {,
     light: string;
     medium: string;
     dark: string;
   };
-  state: {
+  state: {,
     success: string;
     warning: string;
     error: string;
@@ -173,17 +173,17 @@ export const defaultEpic16Theme: Epic16ComponentTheme = {
   accent: '#7c3aed', // violet-600
   background: '#f8fafc', // slate-50
   surface: '#ffffff',
-  text: {
+  text: {,
     primary: '#1e293b', // slate-800
     secondary: '#64748b', // slate-500
     disabled: '#94a3b8' // slate-400
   },
-  border: {
+  border: {,
     light: '#e2e8f0', // slate-200
     medium: '#cbd5e1', // slate-300
     dark: '#94a3b8' // slate-400
   },
-  state: {
+  state: {,
     success: '#10b981', // emerald-500
     warning: '#f59e0b', // amber-500
     error: '#ef4444', // red-500
@@ -193,7 +193,7 @@ export const defaultEpic16Theme: Epic16ComponentTheme = {
 
 // Design system utilities
 export const Epic16DesignTokens = {
-  spacing: {
+  spacing: {,
     xs: '0.25rem', // 4px
     sm: '0.5rem',  // 8px
     md: '1rem',    // 16px
@@ -201,13 +201,13 @@ export const Epic16DesignTokens = {
     xl: '2rem',    // 32px
     '2xl': '3rem' // 48px
   },
-  borderRadius: {
+  borderRadius: {,
     sm: '0.25rem', // 4px
     md: '0.375rem', // 6px
     lg: '0.5rem',   // 8px
     xl: '0.75rem'  // 12px
   },
-  fontSize: {
+  fontSize: {,
     xs: '0.75rem',   // 12px
     sm: '0.875rem',  // 14px
     base: '1rem',    // 16px
@@ -215,13 +215,13 @@ export const Epic16DesignTokens = {
     xl: '1.25rem',   // 20px
     '2xl': '1.5rem' // 24px
   },
-  fontWeight: {
+  fontWeight: {,
     normal: '400',
     medium: '500',
     semibold: '600',
-    bold: '700'
+    bold: '700',
   },
-  boxShadow: {
+  boxShadow: {,
     sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
     md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
     lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',

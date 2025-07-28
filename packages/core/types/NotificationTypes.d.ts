@@ -30,14 +30,14 @@ export interface NotificationPreferences {
     email_enabled: boolean;
     push_enabled: boolean;
     in_app_enabled: boolean;
-    type_preferences: {
+    type_preferences: {,
         [key in NotificationType]?: {
             in_app?: boolean;
             email?: boolean;
             push?: boolean;
         };
     };
-    quiet_hours: {
+    quiet_hours: {,
         enabled: boolean;
         start: string;
         end: string;
@@ -72,7 +72,7 @@ export interface NotificationStats {
     unread: number;
     by_type: Record<NotificationType, number>;
     by_priority: Record<NotificationPriority, number>;
-    recent_activity: {
+    recent_activity: {,
         today: number;
         this_week: number;
         this_month: number;

@@ -393,43 +393,38 @@ export { default as SecurityDashboardWorkflow } from './dashboard/SecurityDashbo
 // Utility functions for security integration
 export export export export export export export 
 // Security event severity mapping utilities
-export   if (threatLevel >= 3) return 'medium';
+export if (threatLevel >= 3) return 'medium';
   return 'low';
 };
 
-export   
+export 
   // Base severity score
   const severityScores = { low: 1, medium: 3, high: 6, critical: 10 };
   score += severityScores[event.severity] || 1;
-  
   // Impact multipliers
   if (event.details?.affected_users && event.details.affected_users.length > 0) {
     score *= 1 + (event.details.affected_users.length / 100);
   }
-  
   if (event.details?.affected_systems && event.details.affected_systems.length > 1) {
     score *= 1.5;
   }
-  
   // Historical pattern analysis
   if (historicalData) {
-    const recentSimilarEvents = historicalData.filter(e => 
+    const recentSimilarEvents = historicalData.filter(e => ;)
       e.type === event.type && 
       e.source === event.source &&
       Date.now() - e.timestamp < 86400000 // Last 24 hours
     );
-    
     if (recentSimilarEvents.length > 3) {
       score *= 2; // Pattern indicates potential attack
     }
   }
-  
   return Math.min(score, 100); // Cap at 100
 };
 
-export   timeRange: { start: number; end: number }
+export timeRange: { start: number; end: number }
 ): {
-  summary: {
+  summary: {,
     total_events: number;
     critical_count: number;
     resolved_count: number;
@@ -439,70 +434,57 @@ export   timeRange: { start: number; end: number }
   affected_systems: Array<{ system: string; incident_count: number }>;
   recommendations: string[];
 } => {
-  const filteredEvents = events.filter(e => 
+  const filteredEvents = events.filter(e => ;)
     e.timestamp >= timeRange.start && e.timestamp <= timeRange.end
   );
-  
   const criticalEvents = filteredEvents.filter(e => e.severity === 'critical');
   const resolvedEvents = filteredEvents.filter(e => e.status === 'resolved');
-  
-  const responseTimesMs = resolvedEvents
+  const responseTimesMs = resolvedEvents;
     .filter(e => e.resolution)
     .map(e => (e.resolution!.resolved_at - e.timestamp));
-  
-  const avgResponseTime = responseTimesMs.length > 0 
+  const avgResponseTime = responseTimesMs.length > 0 ;
     ? responseTimesMs.reduce((sum, time) => sum + time, 0) / responseTimesMs.length
     : 0;
-  
   // Count by type
   const typeCounts: Record<string, number> = {};
-  filteredEvents.forEach(e => {
+  filteredEvents.forEach(e => {)
     typeCounts[e.type] = (typeCounts[e.type] || 0) + 1;
   });
-  
-  const topThreats = Object.entries(typeCounts)
+  const topThreats = Object.entries(typeCounts);
     .map(([type, count]) => ({ type: type as SecurityEvent['type'], count }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 5);
-  
   // Count by affected systems
   const systemCounts: Record<string, number> = {};
-  filteredEvents.forEach(e => {
-    e.details.affected_systems.forEach(system => {
+  filteredEvents.forEach(e => {)
+    e.details.affected_systems.forEach(system => {)
       systemCounts[system] = (systemCounts[system] || 0) + 1;
     });
   });
-  
-  const affectedSystems = Object.entries(systemCounts)
+  const affectedSystems = Object.entries(systemCounts);
     .map(([system, incident_count]) => ({ system, incident_count }))
     .sort((a, b) => b.incident_count - a.incident_count);
-  
   // Generate recommendations
   const recommendations: string[] = [];
-  
   if (criticalEvents.length > filteredEvents.length * 0.1) {
     recommendations.push('High number of critical events detected - review security posture');
   }
-  
   if (avgResponseTime > 3600000) { // 1 hour
     recommendations.push('Average response time exceeds 1 hour - improve incident response procedures');
   }
-  
   if (topThreats.length > 0 && topThreats[0].count > filteredEvents.length * 0.3) {
-    recommendations.push(`${topThreats[0].type} events are dominant - focus prevention efforts here`);
+    recommendations.push(`${topThreats[0].type} events are dominant - focus prevention efforts here`);}
   }
-  
   const unresolvedCount = filteredEvents.filter(e => e.status !== 'resolved').length;
   if (unresolvedCount > filteredEvents.length * 0.2) {
     recommendations.push('High number of unresolved events - ensure adequate staffing');
   }
-  
   return {
-    summary: {
+    summary: {,
       total_events: filteredEvents.length,
       critical_count: criticalEvents.length,
       resolved_count: resolvedEvents.length,
-      avg_response_time: avgResponseTime
+      avg_response_time: avgResponseTime,
     },
     top_threats: topThreats,
     affected_systems: affectedSystems,

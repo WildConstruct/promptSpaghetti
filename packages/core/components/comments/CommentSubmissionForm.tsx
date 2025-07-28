@@ -6,7 +6,6 @@
  * attachment support, real-time validation, and integration with
  * existing comment infrastructure.
  */
-
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
 export interface CommentSubmissionData {
@@ -48,7 +47,7 @@ export interface CommentSubmissionConfig {
   autoSaveDrafts: boolean;
   enableSpellCheck: boolean;
   enablePreview: boolean;
-  moderationSettings: {
+  moderationSettings: {,
     requireApproval: boolean;
     enableAutoModeration: boolean;
     flagSuspiciousContent: boolean;
@@ -70,12 +69,10 @@ export interface CommentSubmissionFormProps {
   autoFocus?: boolean;
   disabled?: boolean;
 }
-
 interface ValidationError {
   field: string;
   message: string;
 }
-
 interface DraftData {
   content: string;
   attachments: CommentAttachment[];
@@ -83,7 +80,6 @@ interface DraftData {
   hashtags: string[];
   lastSaved: Date;
 }
-
 const DEFAULT_CONFIG: CommentSubmissionConfig = {
   enableRichText: true,
   enableMarkdown: true,
@@ -100,14 +96,14 @@ const DEFAULT_CONFIG: CommentSubmissionConfig = {
   autoSaveDrafts: true,
   enableSpellCheck: true,
   enablePreview: true,
-  moderationSettings: {
+  moderationSettings: {,
     requireApproval: false,
     enableAutoModeration: true,
-    flagSuspiciousContent: true
+    flagSuspiciousContent: true,
   }
 };
 
-export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
+export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
   resourceId,
   resourceType,
   parentCommentId,
@@ -123,14 +119,12 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
   disabled = false
 }) => {
   const config = { ...DEFAULT_CONFIG, ...userConfig };
-  
   // State management
   const [content, setContent] = useState('');
   const [contentType, setContentType] = useState<'text' | 'markdown' | 'rich'>('text');
   const [attachments, setAttachments] = useState<CommentAttachment[]>([]);
   const [mentions, setMentions] = useState<string[]>([]);
   const [hashtags, setHashtags] = useState<string[]>([]);
-  
   // UI state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -139,105 +133,87 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [draftSaved, setDraftSaved] = useState(false);
-
   // Refs
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   // Auto-focus on mount
   useEffect(() => {
     if (autoFocus && textareaRef.current) {
       textareaRef.current.focus();
     }
   }, [autoFocus]);
-
   // Auto-save drafts
   useEffect(() => {
     if (config.autoSaveDrafts && content.length > 10) {
       const timer = setTimeout(() => {
         saveDraft();
       }, 2000); // Save after 2 seconds of inactivity
-
       return () => clearTimeout(timer);
     }
   }, [content, attachments, mentions, hashtags, config.autoSaveDrafts]);
-
   // Character count tracking
   useEffect(() => {
     setCharacterCount(content.length);
   }, [content]);
-
   // Content change handler
   const handleContentChange = useCallback((newContent: string) => {
     setContent(newContent);
-    
     // Auto-detect mentions and hashtags
     if (config.enableMentions) {
       const detectedMentions = extractMentions(newContent);
       setMentions(detectedMentions);
     }
-    
     if (config.enableHashtags) {
       const detectedHashtags = extractHashtags(newContent);
       setHashtags(detectedHashtags);
     }
-
     // Clear validation errors when content changes
     setValidationErrors([]);
   }, [config.enableMentions, config.enableHashtags]);
-
   // Validation
   const validateSubmission = useCallback((): ValidationError[] => {
     const errors: ValidationError[] = [];
-
     // Content validation
     if (!content.trim()) {
       errors.push({ field: 'content', message: 'Comment content is required' });
     }
-
     if (content.length > config.maxContentLength) {
-      errors.push({ 
+      errors.push({ )
         field: 'content', 
-        message: `Comment exceeds maximum length of ${config.maxContentLength} characters` 
+        message: `Comment exceeds maximum length of ${config.maxContentLength} characters` }
       });
     }
-
     // Attachment validation
     if (attachments.length > config.maxAttachments) {
-      errors.push({ 
+      errors.push({ )
         field: 'attachments', 
-        message: `Maximum ${config.maxAttachments} attachments allowed` 
+        message: `Maximum ${config.maxAttachments} attachments allowed` }
       });
     }
-
     // File size validation
     for (const attachment of attachments) {
       if (attachment.size && attachment.size > config.maxFileSize) {
-        errors.push({ 
+        errors.push({ )
           field: 'attachments', 
-          message: `File "${attachment.name}" exceeds maximum size of ${formatFileSize(config.maxFileSize)}` 
+          message: `File "${attachment.name}" exceeds maximum size of ${formatFileSize(config.maxFileSize)}` }
         });
       }
     }
-
     // Content moderation checks
     if (config.moderationSettings.flagSuspiciousContent) {
       const suspiciousPatterns = detectSuspiciousContent(content);
       if (suspiciousPatterns.length > 0) {
-        errors.push({ 
+        errors.push({ )
           field: 'content', 
           message: 'Content may require moderation review' 
         });
       }
     }
-
     return errors;
   }, [content, attachments, config]);
-
   // Submit handler
   const handleSubmit = async () => {
     if (disabled || isSubmitting) return;
-
     const errors = validateSubmission();
     if (errors.length > 0) {
       setValidationErrors(errors);
@@ -246,9 +222,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
       }
       return;
     }
-
     setIsSubmitting(true);
-    
     try {
       const submissionData: CommentSubmissionData = {
         content: content.trim(),
@@ -260,7 +234,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
         mentions,
         hashtags,
         attachments,
-        metadata: {
+        metadata: {,
           submittedAt: new Date().toISOString(),
           userAgent: navigator.userAgent,
           contentLength: content.length,
@@ -269,119 +243,97 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
           hasHashtags: hashtags.length > 0
         }
       };
-
       if (onSubmit) {
         await onSubmit(submissionData);
       }
-
       // Clear form after successful submission
       resetForm();
       clearDraft();
-
       console.log('✅ Comment submitted successfully');
-
     } catch (error) {
       console.error('❌ Comment submission failed:', error);
-      setValidationErrors([{ 
+      setValidationErrors([{ )
         field: 'submission', 
-        message: `Failed to submit comment: ${error.message}` 
+        message: `Failed to submit comment: ${error.message}` }
       }]);
     } finally {
       setIsSubmitting(false);
     }
   };
-
   // Cancel handler
   const handleCancel = () => {
     if (content.trim() && config.enableDrafts) {
       saveDraft();
     }
-    
     resetForm();
-    
     if (onCancel) {
       onCancel();
     }
   };
-
   // File upload handler
   const handleFileUpload = async (files: FileList) => {
     if (!config.enableAttachments) return;
-
     const newAttachments: CommentAttachment[] = [];
-
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      
       // Validate file type
       if (!config.allowedFileTypes.includes(file.type)) {
-        setValidationErrors(prev => [...prev, {
+        setValidationErrors(prev => [...prev, {)
           field: 'attachments',
-          message: `File type "${file.type}" is not allowed`
+          message: `File type "${file.type}" is not allowed`}
         }]);
         continue;
       }
-
       // Validate file size
       if (file.size > config.maxFileSize) {
-        setValidationErrors(prev => [...prev, {
+        setValidationErrors(prev => [...prev, {)
           field: 'attachments',
-          message: `File "${file.name}" is too large`
+          message: `File "${file.name}" is too large`}
         }]);
         continue;
       }
-
       // Create attachment
       const attachment: CommentAttachment = {
-        id: `attachment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: `attachment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,}
         name: file.name,
         type: getAttachmentType(file.type),
         url: URL.createObjectURL(file), // In real app, would upload to server
         size: file.size,
         preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
-        metadata: {
+        metadata: {,
           originalFile: file,
           uploadedAt: new Date().toISOString()
         }
       };
-
       newAttachments.push(attachment);
     }
-
     if (attachments.length + newAttachments.length > config.maxAttachments) {
-      setValidationErrors(prev => [...prev, {
+      setValidationErrors(prev => [...prev, {)
         field: 'attachments',
-        message: `Cannot attach more than ${config.maxAttachments} files`
+        message: `Cannot attach more than ${config.maxAttachments} files`}
       }]);
       return;
     }
-
     setAttachments(prev => [...prev, ...newAttachments]);
   };
-
   // Drag and drop handlers
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setDragOver(true);
   };
-
   const handleDragLeave = () => {
     setDragOver(false);
   };
-
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setDragOver(false);
-    
     if (e.dataTransfer.files.length > 0) {
       handleFileUpload(e.dataTransfer.files);
     }
   };
-
   // Draft management
   const saveDraft = () => {
     if (!config.enableDrafts) return;
-
     const draft: DraftData = {
       content,
       attachments,
@@ -389,29 +341,23 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
       hashtags,
       lastSaved: new Date()
     };
-
-    localStorage.setItem(`comment_draft_${resourceId}_${authorId}`, JSON.stringify(draft));
+    localStorage.setItem(`comment_draft_${resourceId}_${authorId}`, JSON.stringify(draft));}
     setDraftSaved(true);
-    
     if (onDraftSave) {
-      onDraftSave({
+      onDraftSave({)
         content,
         attachments,
         mentions,
         hashtags
       });
     }
-
     // Hide draft saved indicator after 3 seconds
     setTimeout(() => setDraftSaved(false), 3000);
   };
-
   const loadDraft = () => {
     if (!config.enableDrafts) return;
-
-    const draftKey = `comment_draft_${resourceId}_${authorId}`;
+    const draftKey = `comment_draft_${resourceId}_${authorId}`;}
     const savedDraft = localStorage.getItem(draftKey);
-    
     if (savedDraft) {
       try {
         const draft: DraftData = JSON.parse(savedDraft);
@@ -424,12 +370,10 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
       }
     }
   };
-
   const clearDraft = () => {
     if (!config.enableDrafts) return;
-    localStorage.removeItem(`comment_draft_${resourceId}_${authorId}`);
+    localStorage.removeItem(`comment_draft_${resourceId}_${authorId}`);}
   };
-
   const resetForm = () => {
     setContent('');
     setAttachments([]);
@@ -439,18 +383,16 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
     setShowPreview(false);
     setCharacterCount(0);
   };
-
   // Load draft on mount
   useEffect(() => {
     loadDraft();
   }, [resourceId, authorId]);
-
-  return (
-    <div className={`comment-submission-form ${className}`} style={{
+  return ()
+    <div className={`comment-submission-form ${className}`} style={{}
       border: '1px solid #e5e7eb',
       borderRadius: '8px',
       backgroundColor: 'white',
-      overflow: 'hidden'
+      overflow: 'hidden',
     }}>
       {/* Header */}
       <div style={{
@@ -459,34 +401,31 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
         borderBottom: '1px solid #e5e7eb',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
       }}>
         <div style={{
           fontSize: '14px',
           fontWeight: '600',
-          color: '#374151'
+          color: '#374151',
         }}>
           {parentCommentId ? '💬 Reply to comment' : '✍️ Add comment'}
         </div>
-
         <div style={{
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
           fontSize: '12px',
-          color: '#6b7280'
+          color: '#6b7280',
         }}>
-          {draftSaved && (
+          {draftSaved && ()
             <span style={{ color: '#059669' }}>
               ✓ Draft saved
             </span>
           )}
-          
           <span>
             {characterCount}/{config.maxContentLength}
           </span>
-
-          {config.enablePreview && (
+          {config.enablePreview && ()
             <button
               onClick={() => setShowPreview(!showPreview)}
               style={{
@@ -496,7 +435,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
                 border: '1px solid #d1d5db',
                 borderRadius: '4px',
                 fontSize: '11px',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Preview
@@ -504,19 +443,18 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
           )}
         </div>
       </div>
-
       {/* Content Area */}
       <div
         style={{
           position: 'relative',
-          minHeight: '120px'
+          minHeight: '120px',
         }}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         {/* Drag overlay */}
-        {dragOver && (
+        {dragOver && ()
           <div style={{
             position: 'absolute',
             top: 0,
@@ -531,14 +469,13 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
             zIndex: 10,
             fontSize: '14px',
             color: '#3b82f6',
-            fontWeight: '500'
+            fontWeight: '500',
           }}>
             📎 Drop files to attach
           </div>
         )}
-
         {/* Text area */}
-        {!showPreview && (
+        {!showPreview && ()
           <textarea
             ref={textareaRef}
             value={content}
@@ -560,18 +497,17 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
             }}
           />
         )}
-
         {/* Preview */}
-        {showPreview && (
+        {showPreview && ()
           <div style={{
             padding: '16px',
             minHeight: '120px',
             fontSize: '14px',
             lineHeight: '1.5',
             color: '#374151',
-            backgroundColor: '#f9fafb'
+            backgroundColor: '#f9fafb',
           }}>
-            {content ? renderPreview(content, contentType) : (
+            {content ? renderPreview(content, contentType) : ()
               <span style={{ color: '#9ca3af', fontStyle: 'italic' }}>
                 Nothing to preview yet...
               </span>
@@ -579,9 +515,8 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
           </div>
         )}
       </div>
-
       {/* Attachments */}
-      {attachments.length > 0 && (
+      {attachments.length > 0 && ()
         <div style={{
           padding: '12px 16px',
           backgroundColor: '#f8fafc',
@@ -591,21 +526,20 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
             fontSize: '12px',
             fontWeight: '500',
             color: '#6b7280',
-            marginBottom: '8px'
+            marginBottom: '8px',
           }}>
             Attachments ({attachments.length})
           </div>
-          
           <div style={{
             display: 'flex',
             flexWrap: 'wrap',
-            gap: '8px'
+            gap: '8px',
           }}>
-            {attachments.map(attachment => (
+            {attachments.map(attachment => ()
               <AttachmentPreview
                 key={attachment.id}
                 attachment={attachment}
-                onRemove={() => setAttachments(prev => 
+                onRemove={() => setAttachments(prev => )
                   prev.filter(a => a.id !== attachment.id)
                 )}
               />
@@ -613,15 +547,14 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
           </div>
         </div>
       )}
-
       {/* Validation Errors */}
-      {validationErrors.length > 0 && (
+      {validationErrors.length > 0 && ()
         <div style={{
           padding: '12px 16px',
           backgroundColor: '#fef2f2',
           borderTop: '1px solid #fecaca'
         }}>
-          {validationErrors.map((error, index) => (
+          {validationErrors.map((error, index) => ()
             <div
               key={index}
               style={{
@@ -635,7 +568,6 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
           ))}
         </div>
       )}
-
       {/* Action Bar */}
       <div style={{
         padding: '12px 16px',
@@ -643,15 +575,15 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
         borderTop: '1px solid #e5e7eb',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
       }}>
         {/* Tools */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '8px'
+          gap: '8px',
         }}>
-          {config.enableAttachments && (
+          {config.enableAttachments && ()
             <>
               <button
                 onClick={() => fileInputRef.current?.click()}
@@ -663,12 +595,11 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
                   border: '1px solid #d1d5db',
                   borderRadius: '4px',
                   cursor: disabled || isSubmitting ? 'not-allowed' : 'pointer',
-                  fontSize: '16px'
+                  fontSize: '16px',
                 }}
               >
                 📎
               </button>
-              
               <input
                 ref={fileInputRef}
                 type="file"
@@ -679,8 +610,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
               />
             </>
           )}
-
-          {config.enableMarkdown && (
+          {config.enableMarkdown && ()
             <button
               onClick={() => setContentType(contentType === 'markdown' ? 'text' : 'markdown')}
               disabled={disabled || isSubmitting}
@@ -693,13 +623,12 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
                 borderRadius: '4px',
                 cursor: disabled || isSubmitting ? 'not-allowed' : 'pointer',
                 fontSize: '11px',
-                fontWeight: '500'
+                fontWeight: '500',
               }}
             >
               MD
             </button>
           )}
-
           <button
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
             disabled={disabled || isSubmitting}
@@ -710,13 +639,12 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
               border: '1px solid #d1d5db',
               borderRadius: '4px',
               cursor: disabled || isSubmitting ? 'not-allowed' : 'pointer',
-              fontSize: '16px'
+              fontSize: '16px',
             }}
           >
             😊
           </button>
-
-          {config.enableDrafts && content.length > 0 && (
+          {config.enableDrafts && content.length > 0 && ()
             <button
               onClick={saveDraft}
               disabled={disabled || isSubmitting}
@@ -728,19 +656,18 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
                 borderRadius: '4px',
                 cursor: disabled || isSubmitting ? 'not-allowed' : 'pointer',
                 fontSize: '11px',
-                color: '#6b7280'
+                color: '#6b7280',
               }}
             >
               💾 Save
             </button>
           )}
         </div>
-
         {/* Actions */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '8px'
+          gap: '8px',
         }}>
           <button
             onClick={handleCancel}
@@ -757,7 +684,6 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
           >
             Cancel
           </button>
-
           <button
             onClick={handleSubmit}
             disabled={disabled || isSubmitting || !content.trim()}
@@ -772,10 +698,10 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
               cursor: disabled || isSubmitting || !content.trim() ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
             }}
           >
-            {isSubmitting && (
+            {isSubmitting && ()
               <div style={{
                 width: '12px',
                 height: '12px',
@@ -789,7 +715,6 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({
           </button>
         </div>
       </div>
-
       {/* CSS for loading spinner */}
       <style>
         {`
@@ -808,9 +733,8 @@ interface AttachmentPreviewProps {
   attachment: CommentAttachment;
   onRemove: () => void;
 }
-
 const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment, onRemove }) => {
-  return (
+  return ()
     <div style={{
       display: 'flex',
       alignItems: 'center',
@@ -819,10 +743,10 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment, onRem
       backgroundColor: 'white',
       border: '1px solid #e5e7eb',
       borderRadius: '6px',
-      fontSize: '12px'
+      fontSize: '12px',
     }}>
       {/* Preview */}
-      {attachment.type === 'image' && attachment.preview ? (
+      {attachment.type === 'image' && attachment.preview ? ()
         <img
           src={attachment.preview}
           alt={attachment.name}
@@ -830,15 +754,14 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment, onRem
             width: '24px',
             height: '24px',
             objectFit: 'cover',
-            borderRadius: '4px'
+            borderRadius: '4px',
           }}
         />
-      ) : (
+      ) : ()
         <span style={{ fontSize: '16px' }}>
           {getFileIcon(attachment.type)}
         </span>
       )}
-
       {/* Name and size */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{
@@ -846,17 +769,16 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment, onRem
           color: '#374151',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap'
+          whiteSpace: 'nowrap',
         }}>
           {attachment.name}
         </div>
-        {attachment.size && (
+        {attachment.size && ()
           <div style={{ color: '#6b7280', fontSize: '11px' }}>
             {formatFileSize(attachment.size)}
           </div>
         )}
       </div>
-
       {/* Remove button */}
       <button
         onClick={onRemove}
@@ -866,7 +788,7 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment, onRem
           border: 'none',
           color: '#6b7280',
           cursor: 'pointer',
-          fontSize: '14px'
+          fontSize: '14px',
         }}
       >
         ×
@@ -881,40 +803,34 @@ function extractMentions(content: string): string[] {
   const matches = content.match(mentionRegex);
   return matches ? matches.map(match => match.substring(1)) : [];
 }
-
 function extractHashtags(content: string): string[] {
   const hashtagRegex = /#(\w+)/g;
   const matches = content.match(hashtagRegex);
   return matches ? matches.map(match => match.substring(1)) : [];
 }
-
 function detectSuspiciousContent(content: string): string[] {
-  const patterns = [
+  const patterns = [;
     /spam/i,
     /buy now/i,
     /click here/i,
     /urgent/i
   ];
-  
   return patterns.filter(pattern => pattern.test(content)).map(p => p.toString());
 }
-
 function getAttachmentType(mimeType: string): 'image' | 'file' | 'link' | 'code' {
   if (mimeType.startsWith('image/')) return 'image';
   if (mimeType.includes('text/') || mimeType.includes('application/json')) return 'code';
   return 'file';
 }
-
 function getFileIcon(type: string): string {
   const icons = {
     image: '🖼️',
     file: '📄',
     link: '🔗',
-    code: '💻'
+    code: '💻',
   };
   return icons[type as keyof typeof icons] || '📄';
 }
-
 function formatFileSize(bytes: number): string {
   if (bytes === 0) return '0 B';
   const k = 1024;
@@ -922,11 +838,10 @@ function formatFileSize(bytes: number): string {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
 }
-
 function renderPreview(content: string, contentType: 'text' | 'markdown' | 'rich'): React.ReactNode {
   // Simple preview - in real app would use proper markdown/rich text renderer
   if (contentType === 'markdown') {
-    return (
+    return ()
       <div style={{ whiteSpace: 'pre-wrap' }}>
         {content
           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -936,7 +851,6 @@ function renderPreview(content: string, contentType: 'text' | 'markdown' | 'rich
       </div>
     );
   }
-  
   return <div style={{ whiteSpace: 'pre-wrap' }}>{content}</div>;
 }
 

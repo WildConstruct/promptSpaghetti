@@ -5,7 +5,6 @@
  * Main gallery component for displaying case studies in grid/list layouts
  * with filtering, sorting, and search capabilities.
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   CaseStudy,
@@ -30,7 +29,7 @@ export interface CaseStudyGalleryProps {
   className?: string;
 }
 
-export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
+export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
   initialFilter = {},
   initialSort = { field: 'publishedAt', direction: 'desc' },
   layout = 'grid',
@@ -53,72 +52,54 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [_____hasMore, setHasMore] = useState(false);
-
   const pageSize = 12;
-
   // Load case studies
   const loadCaseStudies = useCallback(async () => {
     setLoading(true);
     setError(null);
-
     try {
       const params = new URLSearchParams();
-      
       // Add filters
       if (filter.type) {
         const types = Array.isArray(filter.type) ? filter.type : [filter.type];
         types.forEach(type => params.append('type', type));
       }
-      
       if (filter.industry) {
         const industries = Array.isArray(filter.industry) ? filter.industry : [filter.industry];
         industries.forEach(industry => params.append('industry', industry));
       }
-      
       if (filter.difficulty?.length) {
         filter.difficulty.forEach(diff => params.append('difficulty', diff));
       }
-      
       if (filter.tags?.length) {
         filter.tags.forEach(tag => params.append('tags', tag));
       }
-      
       if (filter.featuredOnly) {
         params.append('featured', 'true');
       }
-      
       if (filter.verifiedAuthorsOnly) {
         params.append('verified_authors', 'true');
       }
-      
       if (searchQuery.trim()) {
         params.append('search', searchQuery.trim());
       }
-      
       // Add sorting
       params.append('sort_field', sort.field);
       params.append('sort_direction', sort.direction);
-      
       // Add pagination
       params.append('page', currentPage.toString());
       params.append('limit', pageSize.toString());
-      
       if (maxItems) {
         params.append('max_items', maxItems.toString());
       }
-
-      const response = await fetch(`/api/marketplace/case-studies?${params}`);
-      
+      const response = await fetch(`/api/marketplace/case-studies?${params}`);}
       if (!response.ok) {
-        throw new Error(`Failed to load case studies: ${response.statusText}`);
+        throw new Error(`Failed to load case studies: ${response.statusText}`);}
       }
-
       const data = await response.json();
-      
       setCaseStudies(data.caseStudies || []);
       setTotalCount(data.pagination?.total || 0);
       setHasMore(data.pagination?.hasMore || false);
-      
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load case studies');
       setCaseStudies([]);
@@ -126,45 +107,37 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
       setLoading(false);
     }
   }, [filter, sort, searchQuery, currentPage, maxItems]);
-
   useEffect(() => {
     loadCaseStudies();
   }, [loadCaseStudies]);
-
   // Handle filter changes
   const handleFilterChange = (newFilter: Partial<CaseStudyFilter>) => {
     setFilter(prev => ({ ...prev, ...newFilter }));
     setCurrentPage(1);
   };
-
   // Handle sort change
   const handleSortChange = (newSort: CaseStudySort) => {
     setSort(newSort);
     setCurrentPage(1);
   };
-
   // Handle search
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     setCurrentPage(1);
   };
-
   // Handle pagination
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
   // Clear all filters
   const clearFilters = () => {
     setFilter({});
     setSearchQuery('');
     setCurrentPage(1);
   };
-
   const totalPages = Math.ceil(totalCount / pageSize);
-
-  return (
-    <div className={`case-study-gallery ${currentLayout} ${className}`}>
+  return ()
+    <div className={`case-study-gallery ${currentLayout} ${className}`}>}
       {/* Header */}
       <div className="gallery-header">
         <div className="header-main">
@@ -173,7 +146,6 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
             Real success stories from our community
           </p>
         </div>
-        
         <div className="header-controls">
           {/* Layout Toggle */}
           <div className="layout-toggle">
@@ -201,19 +173,17 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
               </svg>
             </button>
           </div>
-
           {/* Results Count */}
           <div className="results-count">
             {loading ? 'Loading...' : `${totalCount} case studies`}
           </div>
         </div>
       </div>
-
       {/* Search and Filters */}
-      {(showSearch || showFilters || showSort) && (
+      {(showSearch || showFilters || showSort) && ()
         <div className="gallery-controls">
           {/* Search */}
-          {showSearch && (
+          {showSearch && ()
             <div className="search-section">
               <div className="search-input">
                 <svg width="16" height="16" viewBox="0 0 16 16" className="search-icon">
@@ -226,7 +196,7 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
                   value={searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
                 />
-                {searchQuery && (
+                {searchQuery && ()
                   <button
                     onClick={() => handleSearch('')}
                     className="search-clear"
@@ -238,14 +208,13 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
               </div>
             </div>
           )}
-
           {/* Filters */}
-          {showFilters && (
+          {showFilters && ()
             <div className="filters-section">
               {/* Type Filter */}
               <select
                 value={Array.isArray(filter.type) ? '' : (filter.type || '')}
-                onChange={(e) => handleFilterChange({ 
+                onChange={(e) => handleFilterChange({ )
                   type: e.target.value ? e.target.value as CaseStudyType : undefined 
                 })}
                 className="filter-select"
@@ -259,11 +228,10 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
                 <option value="community-highlight">Community</option>
                 <option value="innovation-case">Innovation</option>
               </select>
-
               {/* Industry Filter */}
               <select
                 value={Array.isArray(filter.industry) ? '' : (filter.industry || '')}
-                onChange={(e) => handleFilterChange({ 
+                onChange={(e) => handleFilterChange({ )
                   industry: e.target.value ? e.target.value as IndustryCategory : undefined 
                 })}
                 className="filter-select"
@@ -283,11 +251,10 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
                 <option value="non-profit">Non-profit</option>
                 <option value="other">Other</option>
               </select>
-
               {/* Difficulty Filter */}
               <select
                 value={filter.difficulty?.[0] || ''}
-                onChange={(e) => handleFilterChange({ 
+                onChange={(e) => handleFilterChange({ )
                   difficulty: e.target.value ? [e.target.value as any] : undefined 
                 })}
                 className="filter-select"
@@ -298,7 +265,6 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
                 <option value="advanced">Advanced</option>
                 <option value="expert">Expert</option>
               </select>
-
               {/* Featured Toggle */}
               <label className="filter-checkbox">
                 <input
@@ -308,22 +274,20 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
                 />
                 Featured only
               </label>
-
               {/* Clear Filters */}
               <button onClick={clearFilters} className="clear-filters">
                 Clear filters
               </button>
             </div>
           )}
-
           {/* Sort */}
-          {showSort && (
+          {showSort && ()
             <div className="sort-section">
               <select
                 value={`${sort.field}-${sort.direction}`}
                 onChange={(e) => {
                   const [field, direction] = e.target.value.split('-');
-                  handleSortChange({ 
+                  handleSortChange({ )
                     field: field as any, 
                     direction: direction as 'asc' | 'desc' 
                   });
@@ -342,15 +306,14 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           )}
         </div>
       )}
-
       {/* Content */}
       <div className="gallery-content">
-        {loading ? (
+        {loading ? ()
           <div className="loading-state">
             <div className="loading-spinner"></div>
             <p>Loading case studies...</p>
           </div>
-        ) : error ? (
+        ) : error ? ()
           <div className="error-state">
             <h3>Failed to load case studies</h3>
             <p>{error}</p>
@@ -358,19 +321,19 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
               Try again
             </button>
           </div>
-        ) : caseStudies.length === 0 ? (
+        ) : caseStudies.length === 0 ? ()
           <div className="empty-state">
             <h3>No case studies found</h3>
             <p>Try adjusting your search or filters to find more case studies.</p>
-            {(searchQuery || Object.keys(filter).length > 0) && (
+            {(searchQuery || Object.keys(filter).length > 0) && ()
               <button onClick={clearFilters} className="clear-filters-button">
                 Clear all filters
               </button>
             )}
           </div>
-        ) : (
-          <div className={`case-studies-${currentLayout}`}>
-            {caseStudies.map((caseStudy) => (
+        ) : ()
+          <div className={`case-studies-${currentLayout}`}>}
+            {caseStudies.map((caseStudy) => ()
               <CaseStudyCard
                 key={caseStudy.id}
                 caseStudy={caseStudy}
@@ -384,9 +347,8 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           </div>
         )}
       </div>
-
       {/* Pagination */}
-      {!loading && !error && totalPages > 1 && (
+      {!loading && !error && totalPages > 1 && ()
         <div className="gallery-pagination">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
@@ -395,13 +357,11 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           >
             ← Previous
           </button>
-          
           <div className="page-numbers">
             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
               const page = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
               if (page > totalPages) return null;
-              
-              return (
+              return ()
                 <button
                   key={page}
                   onClick={() => handlePageChange(page)}
@@ -412,7 +372,6 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
               );
             })}
           </div>
-          
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
@@ -422,45 +381,38 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           </button>
         </div>
       )}
-
       <style>{`
         .case-study-gallery {
           padding: 20px 0;
         }
-
         .gallery-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 24px;
         }
-
         .header-main h2 {
           margin: 0 0 4px 0;
           font-size: 28px;
           font-weight: 700;
           color: #1f2937;
         }
-
         .header-main p {
           margin: 0;
           font-size: 16px;
           color: #6b7280;
         }
-
         .header-controls {
           display: flex;
           align-items: center;
           gap: 16px;
         }
-
         .layout-toggle {
           display: flex;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
           overflow: hidden;
         }
-
         .layout-btn {
           background: #ffffff;
           border: none;
@@ -469,22 +421,18 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           color: #6b7280;
           transition: all 0.2s ease;
         }
-
         .layout-btn:hover {
           background: #f9fafb;
         }
-
         .layout-btn.active {
           background: #3b82f6;
           color: #ffffff;
         }
-
         .results-count {
           font-size: 14px;
           color: #6b7280;
           font-weight: 500;
         }
-
         .gallery-controls {
           background: #f8fafc;
           border: 1px solid #e5e7eb;
@@ -495,18 +443,15 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           flex-direction: column;
           gap: 16px;
         }
-
         .search-section {
           display: flex;
           align-items: center;
         }
-
         .search-input {
           position: relative;
           flex: 1;
           max-width: 400px;
         }
-
         .search-icon {
           position: absolute;
           left: 12px;
@@ -514,7 +459,6 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           transform: translateY(-50%);
           color: #9ca3af;
         }
-
         .search-input input {
           width: 100%;
           padding: 10px 12px 10px 36px;
@@ -522,7 +466,6 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           border-radius: 6px;
           font-size: 14px;
         }
-
         .search-clear {
           position: absolute;
           right: 12px;
@@ -540,14 +483,12 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           align-items: center;
           justify-content: center;
         }
-
         .filters-section {
           display: flex;
           flex-wrap: wrap;
           gap: 12px;
           align-items: center;
         }
-
         .filter-select, .sort-select {
           padding: 8px 12px;
           border: 1px solid #d1d5db;
@@ -556,7 +497,6 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           font-size: 14px;
           cursor: pointer;
         }
-
         .filter-checkbox {
           display: flex;
           align-items: center;
@@ -565,7 +505,6 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           color: #4b5563;
           cursor: pointer;
         }
-
         .clear-filters, .clear-filters-button {
           background: #f3f4f6;
           border: 1px solid #d1d5db;
@@ -575,36 +514,29 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           cursor: pointer;
           transition: all 0.2s ease;
         }
-
         .clear-filters:hover, .clear-filters-button:hover {
           background: #e5e7eb;
         }
-
         .sort-section {
           display: flex;
           align-items: center;
         }
-
         .gallery-content {
           min-height: 400px;
         }
-
         .case-studies-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
           gap: 24px;
         }
-
         .case-studies-list {
           display: flex;
           flex-direction: column;
           gap: 16px;
         }
-
         .case-studies-list .case-study-card.list-item {
           max-width: none;
         }
-
         .loading-state, .error-state, .empty-state {
           display: flex;
           flex-direction: column;
@@ -613,7 +545,6 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           padding: 60px 20px;
           text-align: center;
         }
-
         .loading-spinner {
           width: 40px;
           height: 40px;
@@ -623,22 +554,18 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           animation: spin 1s linear infinite;
           margin-bottom: 16px;
         }
-
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-
         .error-state h3, .empty-state h3 {
           margin: 0 0 8px 0;
           color: #1f2937;
         }
-
         .error-state p, .empty-state p {
           margin: 0 0 16px 0;
           color: #6b7280;
         }
-
         .retry-button {
           background: #3b82f6;
           color: #ffffff;
@@ -648,11 +575,9 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           cursor: pointer;
           transition: background 0.2s ease;
         }
-
         .retry-button:hover {
           background: #2563eb;
         }
-
         .gallery-pagination {
           display: flex;
           justify-content: center;
@@ -660,7 +585,6 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           gap: 8px;
           margin-top: 32px;
         }
-
         .page-btn {
           background: #ffffff;
           border: 1px solid #d1d5db;
@@ -670,58 +594,47 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
           font-size: 14px;
           transition: all 0.2s ease;
         }
-
         .page-btn:hover:not(:disabled) {
           background: #f9fafb;
           border-color: #9ca3af;
         }
-
         .page-btn.active {
           background: #3b82f6;
           border-color: #3b82f6;
           color: #ffffff;
         }
-
         .page-btn:disabled {
           opacity: 0.5;
           cursor: not-allowed;
         }
-
         .page-numbers {
           display: flex;
           gap: 4px;
         }
-
         @media (max-width: 768px) {
           .gallery-header {
             flex-direction: column;
             align-items: flex-start;
             gap: 16px;
           }
-
           .header-controls {
             width: 100%;
             justify-content: space-between;
           }
-
           .gallery-controls {
             padding: 12px;
           }
-
           .filters-section {
             flex-direction: column;
             align-items: stretch;
           }
-
           .filter-select, .sort-select {
             width: 100%;
           }
-
           .case-studies-grid {
             grid-template-columns: 1fr;
             gap: 16px;
           }
-
           .page-numbers {
             display: none;
           }

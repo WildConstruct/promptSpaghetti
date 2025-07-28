@@ -8,20 +8,17 @@ export interface PreferenceControlsProps {
   showNodeSpecificControls?: boolean;
   compact?: boolean;
 }
-
 const DISCLOSURE_LEVELS: SelectOption[] = [
   { value: 'basic', label: 'Basic - Essential fields only' },
   { value: 'advanced', label: 'Advanced - Power user options' },
   { value: 'debug', label: 'Expert - Technical details' }
 ];
-
 const INHERITANCE_MODES: SelectOption[] = [
   { value: 'global', label: 'Global - Use same preference for all elements' },
   { value: 'nodeType', label: 'Element Type - Different preferences per element type' },
   { value: 'individual', label: 'Individual - Custom preference per element' }
 ];
-
-const PreferenceControls: React.FC<PreferenceControlsProps> = (
+const PreferenceControls: React.FC<PreferenceControlsProps> = ()
   { nodeId,
   nodeType,
   showNodeSpecificControls = true,
@@ -38,36 +35,29 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
     getEffectiveNodePreferences,
     clearNodePreferences
   } = useUISettingsStore();
-
   const effectiveLevel = nodeId ? getNodeDisclosureLevel(nodeId, nodeType) : globalDisclosureLevel;
   const nodePrefs = nodeId ? getEffectiveNodePreferences(nodeId, nodeType) : null;
-
   const handleGlobalLevelChange = (level: string) => {
     setGlobalDisclosureLevel(level as 'basic' | 'advanced' | 'debug');
   };
-
   const handleNodeLevelChange = (level: string) => {
     if (nodeId) {
       setNodeDisclosureLevel(nodeId, level as 'basic' | 'advanced' | 'debug');
     }
   };
-
   const handleUseGlobalToggle = (useGlobal: boolean) => {
     if (nodeId) {
       setNodeUseGlobalDefault(nodeId, useGlobal);
     }
   };
-
   const handleInheritanceChange = (inheritance: string) => {
     setPreferenceInheritance(inheritance as 'global' | 'nodeType' | 'individual');
   };
-
   const resetAllPreferences = () => {
     clearNodePreferences();
   };
-
   if (compact) {
-    return (
+    return ()
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -76,7 +66,7 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
         background: 'rgba(66, 153, 225, 0.1)',
         border: '1px solid #4a5568',
         borderRadius: 4,
-        fontSize: 11
+        fontSize: 11,
       }}>
         <span style={{ color: '#a0aec0', minWidth: 'fit-content' }}>Level:</span>
         <select
@@ -92,10 +82,10 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
             borderRadius: 2,
             padding: '2px 4px',
             fontSize: 10,
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
-          {DISCLOSURE_LEVELS.map(option => (
+          {DISCLOSURE_LEVELS.map(option => ()
             <option key={option.value} value={option.value}>
               {option.label.split(' - ')[0]}
             </option>
@@ -104,14 +94,13 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
       </div>
     );
   }
-
-  return (
+  return ()
     <div style={{ marginBottom: 16 }}>
       <div style={{
         background: '#1a202c',
         border: '1px solid #4a5568',
         borderRadius: 6,
-        padding: 12
+        padding: 12,
       }}>
         <div style={{
           fontSize: 12,
@@ -120,12 +109,11 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
           marginBottom: 12,
           display: 'flex',
           alignItems: 'center',
-          gap: 8
+          gap: 8,
         }}>
           <span>📋</span>
           Disclosure Preferences
         </div>
-
         {/* Global Settings */}
         <div style={{ marginBottom: 16 }}>
           <label style={{
@@ -133,7 +121,7 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
             fontSize: 11,
             color: '#a0aec0',
             marginBottom: 4,
-            fontWeight: 500
+            fontWeight: 500,
           }}>
             Global Default Level
           </label>
@@ -148,17 +136,16 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
               border: '1px solid #4a5568',
               borderRadius: 4,
               fontSize: 11,
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
-            {DISCLOSURE_LEVELS.map(option => (
+            {DISCLOSURE_LEVELS.map(option => ()
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
         </div>
-
         {/* Inheritance Mode */}
         <div style={{ marginBottom: 16 }}>
           <label style={{
@@ -166,7 +153,7 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
             fontSize: 11,
             color: '#a0aec0',
             marginBottom: 4,
-            fontWeight: 500
+            fontWeight: 500,
           }}>
             Preference Inheritance
           </label>
@@ -181,10 +168,10 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
               border: '1px solid #4a5568',
               borderRadius: 4,
               fontSize: 11,
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
-            {INHERITANCE_MODES.map(option => (
+            {INHERITANCE_MODES.map(option => ()
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -194,36 +181,34 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
             fontSize: 10,
             color: '#6b7280',
             marginTop: 2,
-            lineHeight: 1.4
+            lineHeight: 1.4,
           }}>
             {preferenceInheritance === 'global' && 'All nodes use the global default level'}
             {preferenceInheritance === 'nodeType' && 'Nodes inherit from their type-specific preferences'}
             {preferenceInheritance === 'individual' && 'Each node can have its own disclosure level'}
           </div>
         </div>
-
         {/* Node-Specific Controls */}
-        {showNodeSpecificControls && nodeId && (
+        {showNodeSpecificControls && nodeId && ()
           <div style={{
             borderTop: '1px solid #4a5568',
             paddingTop: 12,
-            marginTop: 12
+            marginTop: 12,
           }}>
             <div style={{
               fontSize: 11,
               fontWeight: 500,
               color: '#e2e8f0',
-              marginBottom: 8
+              marginBottom: 8,
             }}>
               This Node ({nodeType || 'unknown'})
             </div>
-
-            {nodePrefs && (
+            {nodePrefs && ()
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
-                marginBottom: 8
+                marginBottom: 8,
               }}>
                 <label style={{
                   display: 'flex',
@@ -231,7 +216,7 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
                   gap: 6,
                   fontSize: 10,
                   color: '#a0aec0',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}>
                   <input
                     type="checkbox"
@@ -240,21 +225,20 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
                     style={{
                       width: 12,
                       height: 12,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   />
                   Use global default
                 </label>
               </div>
             )}
-
-            {!nodePrefs?.useGlobalDefault && (
+            {!nodePrefs?.useGlobalDefault && ()
               <div style={{ marginBottom: 8 }}>
                 <label style={{
                   display: 'block',
                   fontSize: 10,
                   color: '#a0aec0',
-                  marginBottom: 4
+                  marginBottom: 4,
                 }}>
                   Node-specific level
                 </label>
@@ -269,10 +253,10 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
                     border: '1px solid #4a5568',
                     borderRadius: 3,
                     fontSize: 10,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 >
-                  {DISCLOSURE_LEVELS.map(option => (
+                  {DISCLOSURE_LEVELS.map(option => ()
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -282,7 +266,6 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = (
             )}
           </div>
         )}
-
         {/* Reset Button */}
         <div style={{
           display: 'flex',

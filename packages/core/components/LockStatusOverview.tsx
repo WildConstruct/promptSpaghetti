@@ -1,31 +1,28 @@
 // Epic 9.4.3 - Lock Status Overview Component
 // Overview dashboard for lock statistics and conflicts
-
 import React from 'react';
 import { Lock, Clock, AlertTriangle, Users, Activity, TrendingUp } from 'lucide-react';
 import { LockingStatistics, LockConflict } from '../types/locking';
-
 interface LockStatusOverviewProps {
   statistics: LockingStatistics;
   conflicts: LockConflict[];
   onConflictClick: (conflict: LockConflict) => void;
 }
 
-export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({
+export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({)
   statistics,
   conflicts,
   onConflictClick
 }) => {
   const pendingConflicts = conflicts.filter(c => c.status === 'pending');
   const resolvedConflicts = conflicts.filter(c => c.status === 'resolved');
-
-  const StatCard = ({ title, value, icon: Icon, color, subtext }: {
+  const StatCard = ({ title, value, icon: Icon, color, subtext }: {)
     title: string;
     value: string | number;
     icon: React.ComponentType<{ className?: string }>;
     color: string;
     subtext?: string;
-  }) => (
+  }) => ()
     <div className="bg-white rounded-lg border border-gray-200 p-4">
       <div className="flex items-center justify-between">
         <div>
@@ -33,14 +30,13 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({
           <p className="text-2xl font-semibold text-gray-900">{value}</p>
           {subtext && <p className="text-sm text-gray-400">{subtext}</p>}
         </div>
-        <div className={`p-3 rounded-full ${color}`}>
+        <div className={`p-3 rounded-full ${color}`}>}
           <Icon className="h-6 w-6 text-white" />
         </div>
       </div>
     </div>
   );
-
-  return (
+  return ()
     <div className="space-y-6">
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -73,7 +69,6 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({
           subtext="resolution rate"
         />
       </div>
-
       {/* Lock Type Distribution */}
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Lock Type Distribution</h3>
@@ -85,13 +80,12 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({
               state_change: 'bg-orange-500',
               delete: 'bg-red-500',
               admin: 'bg-purple-500',
-              custom: 'bg-gray-500'
+              custom: 'bg-gray-500',
             };
-            
-            return (
+            return ()
               <div key={type} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <div className={`w-3 h-3 rounded-full ${colorMap[type] || 'bg-gray-400'}`}></div>
+                  <div className={`w-3 h-3 rounded-full ${colorMap[type] || 'bg-gray-400'}`}></div>}
                   <span className="text-sm font-medium text-gray-700 capitalize">
                     {type.replace('_', ' ')}
                   </span>
@@ -112,7 +106,6 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({
           })}
         </div>
       </div>
-
       {/* Top Users */}
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Lock Holders</h3>
@@ -120,7 +113,7 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({
           {Object.entries(statistics.by_user)
             .sort(([, a], [, b]) => b - a)
             .slice(0, 5)
-            .map(([userId, count]) => (
+            .map(([userId, count]) => ()
               <div key={userId} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Users className="h-4 w-4 text-gray-400" />
@@ -133,12 +126,11 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({
             ))}
         </div>
       </div>
-
       {/* Most Contended Resources */}
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Most Contended Resources</h3>
         <div className="space-y-3">
-          {statistics.most_contended_resources.slice(0, 5).map((resource) => (
+          {statistics.most_contended_resources.slice(0, 5).map((resource) => ()
             <div key={resource.resource_id} className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Activity className="h-4 w-4 text-gray-400" />
@@ -159,15 +151,14 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({
           ))}
         </div>
       </div>
-
       {/* Recent Conflicts */}
-      {pendingConflicts.length > 0 && (
+      {pendingConflicts.length > 0 && ()
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             Pending Conflicts ({pendingConflicts.length})
           </h3>
           <div className="space-y-3">
-            {pendingConflicts.slice(0, 10).map((conflict) => (
+            {pendingConflicts.slice(0, 10).map((conflict) => ()
               <div
                 key={conflict.id}
                 className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg cursor-pointer hover:bg-red-100"
@@ -197,9 +188,8 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({
           </div>
         </div>
       )}
-
       {/* No Data State */}
-      {statistics.total_locks === 0 && (
+      {statistics.total_locks === 0 && ()
         <div className="bg-white rounded-lg border border-gray-200 p-8">
           <div className="text-center">
             <Lock className="h-12 w-12 text-gray-400 mx-auto mb-4" />

@@ -4,7 +4,6 @@
  * 
  * Factory for creating and managing AI model adapters
  */
-
 import { 
   BaseAIModel,
   AIModelType,
@@ -40,7 +39,6 @@ export class AIModelFactory implements IAIModelFactory {
   private factoryConfig: FactoryConfig;
   private registeredModels: Map<string, ModelRegistration> = new Map();
   private modelInstances: Map<string, BaseAIModel> = new Map();
-
   constructor(config: FactoryConfig = {}) {
     this.factoryConfig = {
       defaultTimeout: 30000,
@@ -50,49 +48,37 @@ export class AIModelFactory implements IAIModelFactory {
       ...config
     };
   }
-
   async createModel(config: ModelConfiguration): Promise<BaseAIModel> {
     try {
-      this._log('info', `Creating model: ${config.id} (${config.provider})`);
-
+      this._log('info', `Creating model: ${config.id} (${config.provider})`);}
       let model: BaseAIModel;
-
       switch (config.provider) {
         case AIModelProvider.OPENAI:
           model = await this._createOpenAIModel(config);
           break;
-        
         case AIModelProvider.ANTHROPIC:
           model = await this._createAnthropicModel(config);
           break;
-        
         case AIModelProvider.LOCAL:
           model = await this._createLocalModel(config);
           break;
-        
         case AIModelProvider.CUSTOM:
           model = await this._createCustomHTTPModel(config);
           break;
-        
         default:
-          throw new Error(`Unsupported provider: ${config.provider}`);
+          throw new Error(`Unsupported provider: ${config.provider}`);}
       }
-
       // Initialize the model
       await model.initialize();
-
       // Cache the instance
       this.modelInstances.set(config.id, model);
-
-      this._log('info', `Model created successfully: ${config.id}`);
+      this._log('info', `Model created successfully: ${config.id}`);}
       return model;
-
     } catch (error) {
-      this._log('error', `Failed to create model ${config.id}:`, error);
+      this._log('error', `Failed to create model ${config.id}:`, error);}
       throw error;
     }
   }
-
   getSupportedTypes(): AIModelType[] {
     return [
       AIModelType.TEXT,
@@ -102,86 +88,75 @@ export class AIModelFactory implements IAIModelFactory {
       AIModelType.MULTIMODAL
     ];
   }
-
   getDefaultConfiguration(type: AIModelType): ModelConfiguration {
     const baseConfig: ModelConfiguration = {
-      id: `default-${type}-model`,
+      id: `default-${type}-model`,}
       type,
       provider: AIModelProvider.OPENAI,
       parameters: {}
     };
-
     switch (type) {
       case AIModelType.TEXT:
         return {
           ...baseConfig,
           provider: AIModelProvider.OPENAI,
           modelName: 'gpt-3.5-turbo',
-          parameters: {
+          parameters: {,
             temperature: 1,
-            max_tokens: 1000
+            max_tokens: 1000,
           }
         };
-      
       case AIModelType.IMAGE:
         return {
           ...baseConfig,
           provider: AIModelProvider.OPENAI,
           modelName: 'dall-e-3',
-          parameters: {
+          parameters: {,
             size: '1024x1024',
-            quality: 'standard'
+            quality: 'standard',
           }
         };
-      
       case AIModelType.AUDIO:
         return {
           ...baseConfig,
           provider: AIModelProvider.OPENAI,
           modelName: 'tts-1',
-          parameters: {
+          parameters: {,
             voice: 'alloy',
-            speed: 1
+            speed: 1,
           }
         };
-      
       case AIModelType.MULTIMODAL:
         return {
           ...baseConfig,
           provider: AIModelProvider.OPENAI,
           modelName: 'gpt-4-vision-preview',
-          parameters: {
+          parameters: {,
             temperature: 0.7,
-            max_tokens: 1000
+            max_tokens: 1000,
           }
         };
-      
       default:
         return baseConfig;
     }
   }
-
   // Model registration and management
   registerModel(registration: ModelRegistration): void {
     this.registeredModels.set(registration.id, registration);
-    this._log('info', `Registered model: ${registration.id}`);
+    this._log('info', `Registered model: ${registration.id}`);}
   }
-
   unregisterModel(modelId: string): void {
     this.registeredModels.delete(modelId);
-    this._log('info', `Unregistered model: ${modelId}`);
+    this._log('info', `Unregistered model: ${modelId}`);}
   }
-
   getRegisteredModels(): ModelRegistration[] {
     return Array.from(this.registeredModels.values());
   }
-
   async getModel(modelId: string): Promise<BaseAIModel | null> {
     // Return cached instance if available
     if (this.modelInstances.has(modelId)) {
       return this.modelInstances.get(modelId)!;
     }
-
     // Try to create from registration
     const registration = this.registeredModels.get(modelId);
     if (registration) {
@@ -192,32 +167,27 @@ export class AIModelFactory implements IAIModelFactory {
         modelName: registration.modelName,
         parameters: registration.config,
         metadata: registration.metadata,
-        capabilities: registration.capabilities
+        capabilities: registration.capabilities,
       };
-
       return this.createModel(config);
     }
-
     return null;
   }
-
   async destroyModel(modelId: string): Promise<void> {
     const model = this.modelInstances.get(modelId);
     if (model) {
       await model.cleanup();
       this.modelInstances.delete(modelId);
-      this._log('info', `Destroyed model: ${modelId}`);
+      this._log('info', `Destroyed model: ${modelId}`);}
     }
   }
-
   async destroyAllModels(): Promise<void> {
-    const destroyPromises = Array.from(this.modelInstances.keys()).map(id => 
+    const destroyPromises = Array.from(this.modelInstances.keys()).map(id => ;)
       this.destroyModel(id)
     );
     await Promise.all(destroyPromises);
     this._log('info', 'Destroyed all model instances');
   }
-
   // Provider-specific factory methods
   private async _createOpenAIModel(config: ModelConfiguration): Promise<OpenAIAdapter> {
     const openaiConfig: OpenAIConfig = {
@@ -227,10 +197,8 @@ export class AIModelFactory implements IAIModelFactory {
       maxRetries: this.factoryConfig.defaultRetries,
       ...config.parameters
     };
-
     return new OpenAIAdapter(config.id, openaiConfig, config.modelName);
   }
-
   private async _createAnthropicModel(config: ModelConfiguration): Promise<AnthropicAdapter> {
     const anthropicConfig: AnthropicConfig = {
       apiKey: config.apiKey || '',
@@ -239,10 +207,8 @@ export class AIModelFactory implements IAIModelFactory {
       maxRetries: this.factoryConfig.defaultRetries,
       ...config.parameters
     };
-
     return new AnthropicAdapter(config.id, anthropicConfig, config.modelName);
   }
-
   private async _createLocalModel(config: ModelConfiguration): Promise<LocalModelAdapter> {
     const localConfig: LocalModelConfig = {
       endpoint: config.endpoint || 'http://localhost:11434',
@@ -252,10 +218,8 @@ export class AIModelFactory implements IAIModelFactory {
       modelType: 'ollama',
       ...config.parameters
     };
-
     return new LocalModelAdapter(config.id, localConfig);
   }
-
   private async _createCustomHTTPModel(config: ModelConfiguration): Promise<GenericHTTPAdapter> {
     const httpConfig: HTTPConfig = {
       baseURL: config.endpoint || '',
@@ -264,21 +228,18 @@ export class AIModelFactory implements IAIModelFactory {
       maxRetries: this.factoryConfig.defaultRetries,
       ...config.parameters
     };
-
     // Default request mapping for custom models
     const defaultMapping: HTTPRequestMapping = {
       inputPath: 'input',
       outputPath: 'output',
       parametersPath: 'parameters',
       usagePath: 'usage',
-      errorPath: 'error'
+      errorPath: 'error',
     };
-
     // Use registration mapping if available
     const registration = this.registeredModels.get(config.id);
     const requestMapping = registration?.requestMapping || defaultMapping;
-
-    return new GenericHTTPAdapter(
+    return new GenericHTTPAdapter()
       config.id,
       httpConfig,
       config.metadata || {},
@@ -286,7 +247,6 @@ export class AIModelFactory implements IAIModelFactory {
       requestMapping
     );
   }
-
   // Utility methods
   async testModel(modelId: string): Promise<boolean> {
     try {
@@ -294,96 +254,79 @@ export class AIModelFactory implements IAIModelFactory {
       if (!model) {
         return false;
       }
-
       const health = await model.health();
       return health.status === 'ready';
     } catch (error) {
-      this._log('error', `Model test failed for ${modelId}:`, error);
+      this._log('error', `Model test failed for ${modelId}:`, error);}
       return false;
     }
   }
-
   async getModelHealth(modelId: string): Promise<unknown> {
     const model = await this.getModel(modelId);
     if (!model) {
-      throw new Error(`Model not found: ${modelId}`);
+      throw new Error(`Model not found: ${modelId}`);}
     }
-
     return model.health();
   }
-
   getModelMetadata(modelId: string): ModelMetadata | null {
     const model = this.modelInstances.get(modelId);
     if (model) {
       return model.metadata;
     }
-
     const registration = this.registeredModels.get(modelId);
     if (registration?.metadata) {
       return registration.metadata as ModelMetadata;
     }
-
     return null;
   }
-
   // Batch operations
   async createModels(configs: ModelConfiguration[]): Promise<BaseAIModel[]> {
     const createPromises = configs.map(config => this.createModel(config));
     return Promise.all(createPromises);
   }
-
   async testAllModels(): Promise<Record<string, boolean>> {
     const results: Record<string, boolean> = {};
     const testPromises = Array.from(this.modelInstances.keys()).map(async (modelId) => {
       results[modelId] = await this.testModel(modelId);
     });
-
     await Promise.all(testPromises);
     return results;
   }
-
   // Configuration management
   updateFactoryConfig(config: Partial<FactoryConfig>): void {
     this.factoryConfig = { ...this.factoryConfig, ...config };
     this._log('info', 'Factory configuration updated');
   }
-
   getFactoryConfig(): FactoryConfig {
     return { ...this.factoryConfig };
   }
-
   // Statistics and monitoring
   getStatistics(): unknown {
     const totalModels = this.modelInstances.size;
     const totalRegistrations = this.registeredModels.size;
     const providerCounts: Record<string, number> = {};
-
-    Array.from(this.modelInstances.values()).forEach(model => {
+    Array.from(this.modelInstances.values()).forEach(model => {)
       const provider = model.metadata.provider;
       providerCounts[provider] = (providerCounts[provider] || 0) + 1;
     });
-
     return {
       totalModels,
       totalRegistrations,
       providerCounts,
-      factoryConfig: this.factoryConfig
+      factoryConfig: this.factoryConfig,
     };
   }
-
   // Private utility methods
   private _log(level: string, message: string, ...args: unknown[]): void {
     if (!this.factoryConfig.enableLogging) {
       return;
     }
-
     const levels = ['debug', 'info', 'warn', 'error'];
     const currentLevelIndex = levels.indexOf(this.factoryConfig.logLevel || 'info');
     const messageLevelIndex = levels.indexOf(level);
-
     if (messageLevelIndex >= currentLevelIndex) {
       const timestamp = new Date().toISOString();
-      (console as unknown)[level](`[${timestamp}] [AIModelFactory] ${message}`, ...args);
+      (console as unknown)[level](`[${timestamp}] [AIModelFactory] ${message}`, ...args);}
     }
   }
 }

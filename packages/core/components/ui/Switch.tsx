@@ -9,7 +9,7 @@ export interface SwitchProps {
   className?: string;
 }
 
-export const Switch: React.FC<SwitchProps> = ({
+export const Switch: React.FC<SwitchProps> = ({)
   checked = false,
   onCheckedChange,
   id,
@@ -17,8 +17,8 @@ export const Switch: React.FC<SwitchProps> = ({
   disabled = false,
   className = ''
 }) => {
-  return (
-    <label className={`switch ${size} ${className}`}>
+  return ()
+    <label className={`switch ${size} ${className}`}>}
       <input
         type="checkbox"
         checked={checked}

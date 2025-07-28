@@ -2,7 +2,6 @@
  * KPI Dashboard for Epic 18
  * Real-time visualization and reporting system for performance KPIs
  */
-
 import { EventEmitter } from 'events';
 import { 
   corePerformanceKPIs, 
@@ -39,7 +38,7 @@ export interface DashboardLayout {
 }
 
 export interface DashboardMetrics {
-  overview: {
+  overview: {,
     totalKPIs: number;
     monitoredKPIs: number;
     healthyKPIs: number;
@@ -57,7 +56,7 @@ export interface DashboardMetrics {
     critical: number;
     averageScore: number;
   }>;
-  alerts: {
+  alerts: {,
     total: number;
     critical: number;
     high: number;
@@ -65,7 +64,7 @@ export interface DashboardMetrics {
     low: number;
     acknowledged: number;
   };
-  trends: {
+  trends: {,
     improving: KPITrendAnalysis[];
     degrading: KPITrendAnalysis[];
     stable: KPITrendAnalysis[];
@@ -76,26 +75,25 @@ export interface DashboardReport {
   id: string;
   timestamp: number;
   type: 'summary' | 'detailed' | 'trend' | 'alert';
-  period: {
+  period: {,
     start: number;
     end: number;
     duration: string;
   };
   metrics: DashboardMetrics;
-  insights: {
+  insights: {,
     keyFindings: string[];
     recommendations: string[];
     riskAreas: string[];
     improvements: string[];
   };
-  charts: {
+  charts: {,
     performanceScore: Array<{ timestamp: number; score: number }>;
     categoryBreakdown: Record<string, number>;
     alertsOverTime: Array<{ timestamp: number; count: number; severity: string }>;
     topKPIs: Array<{ kpiId: string; name: string; score: number; trend: string }>;
   };
 }
-
 /**
  * KPI Dashboard Service
  * Provides comprehensive dashboard functionality for performance monitoring
@@ -107,26 +105,23 @@ export class KPIDashboard extends EventEmitter {
   private reports: DashboardReport[] = [];
   private config: PerformanceTargetConfig;
   private refreshIntervals: Map<string, NodeJS.Timer> = new Map();
-
-  constructor(
+  constructor()
     monitoringService: KPIMonitoringService,
     baseline: PerformanceBaseline,
     config: PerformanceTargetConfig = {
       environment: 'production',
       userSegment: 'general',
       deviceProfile: 'mid-range',
-      networkProfile: 'average'
+      networkProfile: 'average',
     }
   ) {
     super();
     this.monitoringService = monitoringService;
     this.baseline = baseline;
     this.config = config;
-    
     this.setupDefaultLayouts();
     this.setupEventHandlers();
   }
-
   /**
    * Setup default dashboard layouts
    */
@@ -139,7 +134,7 @@ export class KPIDashboard extends EventEmitter {
       columns: 3,
       autoRefresh: true,
       refreshInterval: 60000, // 1 minute
-      widgets: [
+      widgets: [,
         {
           id: 'performance-score',
           type: 'gauge',
@@ -149,7 +144,7 @@ export class KPIDashboard extends EventEmitter {
           config: { min: 0, max: 100, thresholds: [50, 70, 90] },
           data: null,
           refreshRate: 30000,
-          lastUpdated: 0
+          lastUpdated: 0,
         },
         {
           id: 'critical-alerts',
@@ -160,7 +155,7 @@ export class KPIDashboard extends EventEmitter {
           config: { format: 'number', color: 'red' },
           data: null,
           refreshRate: 30000,
-          lastUpdated: 0
+          lastUpdated: 0,
         },
         {
           id: 'user-experience',
@@ -171,7 +166,7 @@ export class KPIDashboard extends EventEmitter {
           config: { chartType: 'line', timeRange: '24h' },
           data: null,
           refreshRate: 60000,
-          lastUpdated: 0
+          lastUpdated: 0,
         },
         {
           id: 'api-performance',
@@ -182,7 +177,7 @@ export class KPIDashboard extends EventEmitter {
           config: { chartType: 'area', timeRange: '6h' },
           data: null,
           refreshRate: 60000,
-          lastUpdated: 0
+          lastUpdated: 0,
         },
         {
           id: 'top-issues',
@@ -193,11 +188,10 @@ export class KPIDashboard extends EventEmitter {
           config: { maxRows: 5, sortBy: 'severity' },
           data: null,
           refreshRate: 60000,
-          lastUpdated: 0
+          lastUpdated: 0,
         }
       ]
     };
-
     // Technical Detail Layout
     const technicalLayout: DashboardLayout = {
       id: 'technical-detail',
@@ -206,7 +200,7 @@ export class KPIDashboard extends EventEmitter {
       columns: 4,
       autoRefresh: true,
       refreshInterval: 30000, // 30 seconds
-      widgets: [
+      widgets: [,
         {
           id: 'all-kpis-table',
           type: 'table',
@@ -216,7 +210,7 @@ export class KPIDashboard extends EventEmitter {
           config: { sortBy: 'status', groupBy: 'category' },
           data: null,
           refreshRate: 30000,
-          lastUpdated: 0
+          lastUpdated: 0,
         },
         {
           id: 'memory-usage',
@@ -227,7 +221,7 @@ export class KPIDashboard extends EventEmitter {
           config: { chartType: 'line', timeRange: '2h' },
           data: null,
           refreshRate: 30000,
-          lastUpdated: 0
+          lastUpdated: 0,
         },
         {
           id: 'bundle-analysis',
@@ -238,7 +232,7 @@ export class KPIDashboard extends EventEmitter {
           config: { chartType: 'bar' },
           data: null,
           refreshRate: 300000, // 5 minutes
-          lastUpdated: 0
+          lastUpdated: 0,
         },
         {
           id: 'trend-analysis',
@@ -249,11 +243,10 @@ export class KPIDashboard extends EventEmitter {
           config: { timeRange: '7d', showProjections: true },
           data: null,
           refreshRate: 300000, // 5 minutes
-          lastUpdated: 0
+          lastUpdated: 0,
         }
       ]
     };
-
     // Operations Layout
     const operationsLayout: DashboardLayout = {
       id: 'operations',
@@ -262,7 +255,7 @@ export class KPIDashboard extends EventEmitter {
       columns: 3,
       autoRefresh: true,
       refreshInterval: 30000,
-      widgets: [
+      widgets: [,
         {
           id: 'system-health',
           type: 'gauge',
@@ -272,7 +265,7 @@ export class KPIDashboard extends EventEmitter {
           config: { min: 0, max: 100, thresholds: [70, 85, 95] },
           data: null,
           refreshRate: 30000,
-          lastUpdated: 0
+          lastUpdated: 0,
         },
         {
           id: 'alert-timeline',
@@ -283,7 +276,7 @@ export class KPIDashboard extends EventEmitter {
           config: { chartType: 'timeline', timeRange: '24h' },
           data: null,
           refreshRate: 60000,
-          lastUpdated: 0
+          lastUpdated: 0,
         },
         {
           id: 'performance-budget',
@@ -294,7 +287,7 @@ export class KPIDashboard extends EventEmitter {
           config: { chartType: 'bar', showThresholds: true },
           data: null,
           refreshRate: 60000,
-          lastUpdated: 0
+          lastUpdated: 0,
         },
         {
           id: 'active-alerts',
@@ -305,16 +298,14 @@ export class KPIDashboard extends EventEmitter {
           config: { maxAlerts: 10, groupBy: 'severity' },
           data: null,
           refreshRate: 30000,
-          lastUpdated: 0
+          lastUpdated: 0,
         }
       ]
     };
-
     this.layouts.set('executive-summary', executiveLayout);
     this.layouts.set('technical-detail', technicalLayout);
     this.layouts.set('operations', operationsLayout);
   }
-
   /**
    * Setup event handlers
    */
@@ -322,38 +313,32 @@ export class KPIDashboard extends EventEmitter {
     this.monitoringService.on('kpi-snapshot-processed', () => {
       this.refreshDashboardData();
     });
-
     this.monitoringService.on('kpi-alert-created', (alert: KPIAlert) => {
       this.emit('dashboard-alert', alert);
       this.refreshAlertWidgets();
     });
-
     this.baseline.on('baseline-captured', () => {
       this.refreshDashboardData();
     });
   }
-
   /**
    * Get dashboard layout
    */
   getDashboardLayout(layoutId: string): DashboardLayout | null {
     return this.layouts.get(layoutId) || null;
   }
-
   /**
    * Get all available layouts
    */
   getAvailableLayouts(): DashboardLayout[] {
     return Array.from(this.layouts.values());
   }
-
   /**
    * Get dashboard metrics
    */
   getDashboardMetrics(): DashboardMetrics {
     const kpiStatus = this.monitoringService.getCurrentKPIStatus();
     const activeAlerts = this.monitoringService.getActiveAlerts();
-    
     // Calculate overview metrics
     const overview = {
       totalKPIs: corePerformanceKPIs.length,
@@ -366,26 +351,22 @@ export class KPIDashboard extends EventEmitter {
       trendsStable: kpiStatus.filter(k => k.trend === 'stable').length,
       trendsDegrading: kpiStatus.filter(k => k.trend === 'degrading').length
     };
-
     // Calculate category metrics
     const categories: Record<string, any> = {};
     const categoryNames = ['runtime', 'api', 'bundle', 'memory', 'network', 'build', 'user-experience'];
-    
     for (const category of categoryNames) {
       const categoryKPIs = getKPIsByCategory(category);
-      const categoryStatus = kpiStatus.filter(k => 
+      const categoryStatus = kpiStatus.filter(k => ;)
         categoryKPIs.some(kpi => kpi.id === k.kpiId)
       );
-      
       categories[category] = {
         total: categoryKPIs.length,
         healthy: categoryStatus.filter(k => k.status === 'excellent' || k.status === 'good').length,
         warning: categoryStatus.filter(k => k.status === 'warning').length,
         critical: categoryStatus.filter(k => k.status === 'critical').length,
-        averageScore: this.calculateAverageScore(categoryStatus)
+        averageScore: this.calculateAverageScore(categoryStatus),
       };
     }
-
     // Calculate alert metrics
     const alerts = {
       total: activeAlerts.length,
@@ -395,7 +376,6 @@ export class KPIDashboard extends EventEmitter {
       low: activeAlerts.filter(a => a.severity === 'low').length,
       acknowledged: 0 // Active alerts are by definition unacknowledged
     };
-
     // Get trend analyses
     const trendAnalyses = kpiStatus.map(k => this.monitoringService.getKPITrend(k.kpiId));
     const trends = {
@@ -403,7 +383,6 @@ export class KPIDashboard extends EventEmitter {
       degrading: trendAnalyses.filter(t => t.trend === 'degrading'),
       stable: trendAnalyses.filter(t => t.trend === 'stable')
     };
-
     return {
       overview,
       categories,
@@ -411,40 +390,35 @@ export class KPIDashboard extends EventEmitter {
       trends
     };
   }
-
   /**
    * Generate comprehensive dashboard report
    */
-  generateDashboardReport(
+  generateDashboardReport()
     type: DashboardReport['type'] = 'summary',
     periodHours: number = 24
   ): DashboardReport {
     const now = Date.now();
     const start = now - (periodHours * 60 * 60 * 1000);
-    
     const report: DashboardReport = {
-      id: `report-${now}`,
+      id: `report-${now}`,}
       timestamp: now,
       type,
-      period: {
+      period: {,
         start,
         end: now,
-        duration: `${periodHours}h`
+        duration: `${periodHours}h`}
       },
       metrics: this.getDashboardMetrics(),
       insights: this.generateInsights(),
       charts: this.generateChartData(start, now)
     };
-
     this.reports.push(report);
     if (this.reports.length > 50) {
       this.reports = this.reports.slice(-50); // Keep last 50 reports
     }
-
     this.emit('report-generated', report);
     return report;
   }
-
   /**
    * Generate insights for dashboard report
    */
@@ -454,7 +428,6 @@ export class KPIDashboard extends EventEmitter {
     const recommendations: string[] = [];
     const riskAreas: string[] = [];
     const improvements: string[] = [];
-
     // Key findings
     if (metrics.overview.averageScore >= 90) {
       keyFindings.push('🎉 Excellent overall performance with 90+ average score');
@@ -463,58 +436,45 @@ export class KPIDashboard extends EventEmitter {
     } else {
       keyFindings.push('⚠️ Performance needs attention - below 70 average score');
     }
-
     if (metrics.overview.criticalKPIs > 0) {
-      keyFindings.push(`🚨 ${metrics.overview.criticalKPIs} critical performance issues detected`);
+      keyFindings.push(`🚨 ${metrics.overview.criticalKPIs} critical performance issues detected`);}
     }
-
     if (metrics.overview.trendsDegrading > metrics.overview.trendsImproving) {
       keyFindings.push('📉 More KPIs are degrading than improving');
     }
-
     // Recommendations
     if (metrics.alerts.critical > 0) {
       recommendations.push('Address critical alerts immediately');
     }
-
     if (metrics.categories.runtime?.critical > 0) {
       recommendations.push('Focus on frontend performance optimization');
     }
-
     if (metrics.categories.api?.warning > 0 || metrics.categories.api?.critical > 0) {
       recommendations.push('Review API performance and implement caching');
     }
-
     if (metrics.categories.memory?.warning > 0) {
       recommendations.push('Investigate memory usage patterns');
     }
-
     // Risk areas
-    const highRiskCategories = Object.entries(metrics.categories)
+    const highRiskCategories = Object.entries(metrics.categories);
       .filter(([_, cat]) => (cat.critical + cat.warning) / cat.total > 0.5)
       .map(([name]) => name);
-
     if (highRiskCategories.length > 0) {
-      riskAreas.push(`High risk categories: ${highRiskCategories.join(', ')}`);
+      riskAreas.push(`High risk categories: ${highRiskCategories.join(', ')}`);}
     }
-
     if (metrics.trends.degrading.length > 3) {
       riskAreas.push('Multiple KPIs showing degrading trends');
     }
-
     // Improvements
     if (metrics.trends.improving.length > 0) {
-      improvements.push(`${metrics.trends.improving.length} KPIs showing improvement`);
+      improvements.push(`${metrics.trends.improving.length} KPIs showing improvement`);}
     }
-
-    const healthyCategories = Object.entries(metrics.categories)
+    const healthyCategories = Object.entries(metrics.categories);
       .filter(([_, cat]) => cat.healthy / cat.total > 0.8)
       .map(([name]) => name);
-
     if (healthyCategories.length > 0) {
-      improvements.push(`Strong performance in: ${healthyCategories.join(', ')}`);
+      improvements.push(`Strong performance in: ${healthyCategories.join(', ')}`);}
     }
-
     return {
       keyFindings,
       recommendations,
@@ -522,44 +482,38 @@ export class KPIDashboard extends EventEmitter {
       improvements
     };
   }
-
   /**
    * Generate chart data for dashboard report
    */
   private generateChartData(startTime: number, endTime: number): DashboardReport['charts'] {
     const baselineHistory = this.baseline.getBaselineHistory();
-    const periodBaselines = baselineHistory.filter(b => 
+    const periodBaselines = baselineHistory.filter(b => ;)
       b.timestamp >= startTime && b.timestamp <= endTime
     );
-
     // Performance score over time
-    const performanceScore = periodBaselines.map(baseline => ({
+    const performanceScore = periodBaselines.map(baseline => ({)
       timestamp: baseline.timestamp,
-      score: this.calculateBaselineScore(baseline)
+      score: this.calculateBaselineScore(baseline),
     }));
-
     // Category breakdown (current state)
     const metrics = this.getDashboardMetrics();
     const categoryBreakdown: Record<string, number> = {};
     Object.entries(metrics.categories).forEach(([category, data]) => {
       categoryBreakdown[category] = data.averageScore;
     });
-
     // Alerts over time (simulated data)
     const alertsOverTime = this.generateAlertTimelineData(startTime, endTime);
-
     // Top KPIs by performance
     const kpiStatus = this.monitoringService.getCurrentKPIStatus();
-    const topKPIs = kpiStatus
-      .map(k => ({
+    const topKPIs = kpiStatus;
+      .map(k => ({)
         kpiId: k.kpiId,
         name: corePerformanceKPIs.find(kpi => kpi.id === k.kpiId)?.name || k.kpiId,
         score: this.statusToScore(k.status),
-        trend: k.trend
+        trend: k.trend,
       }))
       .sort((a, b) => b.score - a.score)
       .slice(0, 10);
-
     return {
       performanceScore,
       categoryBreakdown,
@@ -567,18 +521,16 @@ export class KPIDashboard extends EventEmitter {
       topKPIs
     };
   }
-
   /**
    * Calculate score for a baseline
    */
   private calculateBaselineScore(baseline: BaselineSnapshot): number {
-    const scores = baseline.kpiSnapshots.map(snapshot => 
+    const scores = baseline.kpiSnapshots.map(snapshot => ;)
       this.statusToScore(snapshot.status)
     );
     return scores.length > 0 ? 
       Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length) : 0;
   }
-
   /**
    * Convert status to numeric score
    */
@@ -591,7 +543,6 @@ export class KPIDashboard extends EventEmitter {
     default: return 70;
     }
   }
-
   /**
    * Generate alert timeline data
    */
@@ -599,57 +550,47 @@ export class KPIDashboard extends EventEmitter {
     // This would be implemented to query actual alert history
     // For now, return simulated data
     const points: Array<{ timestamp: number; count: number; severity: string }> = [];
-    const intervalMs = (endTime - startTime) / 20; // 20 data points
-    
+    const intervalMs = (endTime - startTime) / 20; // 20 data points;
     for (let i = 0; i < 20; i++) {
       const timestamp = startTime + (i * intervalMs);
-      points.push({
+      points.push({)
         timestamp,
         count: Math.floor(Math.random() * 5),
         severity: ['low', 'medium', 'high', 'critical'][Math.floor(Math.random() * 4)]
       });
     }
-    
     return points;
   }
-
   /**
    * Calculate average score from KPI status array
    */
   private calculateAverageScore(kpiStatus: Array<{ status: string }>): number {
     if (kpiStatus.length === 0) return 0;
-    
     const scores = kpiStatus.map(k => this.statusToScore(k.status));
     return Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
   }
-
   /**
    * Refresh dashboard data for all widgets
    */
   private refreshDashboardData(): void {
     this.emit('dashboard-refresh-requested');
   }
-
   /**
    * Refresh alert-specific widgets
    */
   private refreshAlertWidgets(): void {
     this.emit('alert-widgets-refresh-requested');
   }
-
   /**
    * Get widget data
    */
   getWidgetData(layoutId: string, widgetId: string): any {
     const layout = this.layouts.get(layoutId);
     if (!layout) return null;
-
     const widget = layout.widgets.find(w => w.id === widgetId);
     if (!widget) return null;
-
     return this.generateWidgetData(widget);
   }
-
   /**
    * Generate data for a specific widget
    */
@@ -671,10 +612,8 @@ export class KPIDashboard extends EventEmitter {
       return null;
     }
   }
-
   private generateGaugeData(widget: DashboardWidget): any {
     const metrics = this.getDashboardMetrics();
-    
     switch (widget.id) {
     case 'performance-score':
       return {
@@ -698,10 +637,8 @@ export class KPIDashboard extends EventEmitter {
       return { value: 0, min: 0, max: 100 };
     }
   }
-
   private generateMetricData(widget: DashboardWidget): any {
     const metrics = this.getDashboardMetrics();
-    
     switch (widget.id) {
     case 'critical-alerts':
       return {
@@ -714,7 +651,6 @@ export class KPIDashboard extends EventEmitter {
       return { value: 0 };
     }
   }
-
   private generateChartData(widget: DashboardWidget): any {
     // Chart data generation would be implemented based on widget configuration
     return {
@@ -723,26 +659,25 @@ export class KPIDashboard extends EventEmitter {
       type: widget.config.chartType || 'line'
     };
   }
-
   private generateTableData(widget: DashboardWidget): any {
     switch (widget.id) {
     case 'all-kpis-table':
       const kpiStatus = this.monitoringService.getCurrentKPIStatus();
       return {
         headers: ['KPI', 'Category', 'Status', 'Value', 'Trend'],
-        rows: kpiStatus.map(k => {
+        rows: kpiStatus.map(k => {)
           const kpi = corePerformanceKPIs.find(kpi => kpi.id === k.kpiId);
           return [
             kpi?.name || k.kpiId,
             kpi?.category || 'unknown',
             k.status,
-            `${k.value}${kpi?.unit || ''}`,
+            `${k.value}${kpi?.unit || ''}`,}
             k.trend
           ];
         })
       };
     case 'top-issues':
-      const alerts = this.monitoringService.getActiveAlerts()
+      const alerts = this.monitoringService.getActiveAlerts();
         .sort((a, b) => {
           const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
           return severityOrder[b.severity] - severityOrder[a.severity];
@@ -750,24 +685,23 @@ export class KPIDashboard extends EventEmitter {
         .slice(0, 5);
       return {
         headers: ['Issue', 'Severity', 'KPI', 'Value', 'Target'],
-        rows: alerts.map(alert => [
+        rows: alerts.map(alert => [)
           alert.message,
           alert.severity,
           alert.kpiName,
-          `${alert.value}`,
-          `${alert.target}`
+          `${alert.value}`,}
+          `${alert.target}`}
         ])
       };
     default:
       return { headers: [], rows: [] };
     }
   }
-
   private generateAlertData(widget: DashboardWidget): any {
     const activeAlerts = this.monitoringService.getActiveAlerts();
     return {
       alerts: activeAlerts.slice(0, widget.config.maxAlerts || 10),
-      groupedBySeverity: {
+      groupedBySeverity: {,
         critical: activeAlerts.filter(a => a.severity === 'critical'),
         high: activeAlerts.filter(a => a.severity === 'high'),
         medium: activeAlerts.filter(a => a.severity === 'medium'),
@@ -775,11 +709,9 @@ export class KPIDashboard extends EventEmitter {
       }
     };
   }
-
   private generateTrendData(widget: DashboardWidget): any {
     const kpiStatus = this.monitoringService.getCurrentKPIStatus();
     const trends = kpiStatus.map(k => this.monitoringService.getKPITrend(k.kpiId));
-    
     return {
       improving: trends.filter(t => t.trend === 'improving'),
       stable: trends.filter(t => t.trend === 'stable'),
@@ -787,24 +719,19 @@ export class KPIDashboard extends EventEmitter {
       projections: trends.filter(t => t.significance !== 'minor')
     };
   }
-
   /**
    * Start auto-refresh for a layout
    */
   startAutoRefresh(layoutId: string): void {
     const layout = this.layouts.get(layoutId);
     if (!layout || !layout.autoRefresh) return;
-
     // Clear existing interval
     this.stopAutoRefresh(layoutId);
-
     const interval = setInterval(() => {
       this.emit('layout-refresh', layoutId);
     }, layout.refreshInterval);
-
     this.refreshIntervals.set(layoutId, interval);
   }
-
   /**
    * Stop auto-refresh for a layout
    */
@@ -815,56 +742,48 @@ export class KPIDashboard extends EventEmitter {
       this.refreshIntervals.delete(layoutId);
     }
   }
-
   /**
    * Export dashboard configuration
    */
   exportDashboardConfig(): string {
-    return JSON.stringify({
+    return JSON.stringify({)
       layouts: Array.from(this.layouts.entries()),
-      config: this.config
+      config: this.config,
     }, null, 2);
   }
-
   /**
    * Import dashboard configuration
    */
   importDashboardConfig(configJson: string): void {
     try {
       const data = JSON.parse(configJson);
-      
       if (data.layouts) {
         this.layouts.clear();
         data.layouts.forEach(([id, layout]: [string, DashboardLayout]) => {
           this.layouts.set(id, layout);
         });
       }
-      
       if (data.config) {
         this.config = { ...this.config, ...data.config };
       }
-      
       this.emit('dashboard-config-imported');
     } catch (error) {
-      throw new Error(`Failed to import dashboard config: ${error}`);
+      throw new Error(`Failed to import dashboard config: ${error}`);}
     }
   }
-
   /**
    * Get dashboard reports
    */
   getDashboardReports(limit?: number): DashboardReport[] {
-    const reports = [...this.reports].reverse(); // Most recent first
+    const reports = [...this.reports].reverse(); // Most recent first;
     return limit ? reports.slice(0, limit) : reports;
   }
-
   /**
    * Get specific dashboard report
    */
   getDashboardReport(reportId: string): DashboardReport | null {
     return this.reports.find(r => r.id === reportId) || null;
   }
-
   /**
    * Clear old reports
    */

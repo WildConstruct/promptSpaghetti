@@ -1,11 +1,9 @@
 // packages/core/components/Annotations/ConnectionAnnotationPanel.tsx
 // Epic 8.7 Task 4: Connection Label Editing Interface
-
 import React, { useState, useCallback } from 'react';
 // import { Edge } from 'reactflow';
 import { AnnotatedEdge, ConnectionLabelEditor } from './ConnectionAnnotations';
 import { connectionAnnotationPresets, labelTemplates } from '../../hooks/useConnectionAnnotations';
-
 interface ConnectionAnnotationPanelProps {
   edges: AnnotatedEdge[];
   selectedEdgeId: string | null;
@@ -26,7 +24,7 @@ interface ConnectionAnnotationPanelProps {
   getVisibleLabelsCount: () => number;
 }
 
-export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps> = ({
+export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps> = ({)
   edges,
   selectedEdgeId,
   labelEditMode,
@@ -48,36 +46,28 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
   const [showEditor, setShowEditor] = useState(false);
   const [quickLabelInput, setQuickLabelInput] = useState('');
   const [selectedPreset, setSelectedPreset] = useState<keyof typeof connectionAnnotationPresets>('dataFlow');
-
   const selectedEdge = edges.find(edge => edge.id === selectedEdgeId);
   const edgesWithLabels = edges.filter(edge => edge.label && edge.label.trim().length > 0);
   const visibleLabelsCount = getVisibleLabelsCount();
-
   const handleQuickAddLabel = useCallback(() => {
     if (!selectedEdgeId || !quickLabelInput.trim()) return;
-
-    onAddLabel(
+    onAddLabel()
       selectedEdgeId, 
       quickLabelInput.trim(),
       connectionAnnotationPresets[selectedPreset]
     );
-    
     setQuickLabelInput('');
   }, [selectedEdgeId, quickLabelInput, selectedPreset, onAddLabel]);
-
   const handleOpenEditor = useCallback(() => {
     setShowEditor(true);
   }, []);
-
   const handleCloseEditor = useCallback(() => {
     setShowEditor(false);
   }, []);
-
   const handleTemplateSelect = useCallback((template: string) => {
     setQuickLabelInput(template);
   }, []);
-
-  return (
+  return ()
     <div style={{
       position: 'fixed',
       top: 80,
@@ -89,7 +79,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
       padding: 16,
       zIndex: 1000,
       maxHeight: 'calc(100vh - 100px)',
-      overflowY: 'auto'
+      overflowY: 'auto',
     }}>
       {/* Header */}
       <div style={{
@@ -98,31 +88,30 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
         alignItems: 'center',
         marginBottom: 16,
         borderBottom: '1px solid #4a5568',
-        paddingBottom: 8
+        paddingBottom: 8,
       }}>
         <h3 style={{ 
           color: '#e2e8f0', 
           fontSize: 14, 
           margin: 0,
-          fontWeight: 600
+          fontWeight: 600,
         }}>
           Connection Labels
         </h3>
         <div style={{ 
           color: '#a0aec0', 
-          fontSize: 11 
+          fontSize: 11 ,
         }}>
           {visibleLabelsCount} visible
         </div>
       </div>
-
       {/* Quick Actions */}
       <div style={{ marginBottom: 16 }}>
         <div style={{ 
           display: 'grid', 
           gridTemplateColumns: '1fr 1fr', 
           gap: 8, 
-          marginBottom: 8 
+          marginBottom: 8 ,
         }}>
           <button
             onClick={onShowAllLabelsToggle}
@@ -133,12 +122,11 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
               borderRadius: 4,
               color: 'white',
               fontSize: 11,
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             {showAllLabels ? 'Hide All' : 'Show All'}
           </button>
-          
           <button
             onClick={() => onSetLabelEditMode(!labelEditMode)}
             style={{
@@ -148,17 +136,16 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
               borderRadius: 4,
               color: 'white',
               fontSize: 11,
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             {labelEditMode ? 'Edit On' : 'Edit Off'}
           </button>
         </div>
-
         <div style={{ 
           display: 'grid', 
           gridTemplateColumns: '1fr 1fr', 
-          gap: 8 
+          gap: 8 ,
         }}>
           <button
             onClick={onOptimizePositions}
@@ -176,7 +163,6 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
           >
             Optimize
           </button>
-          
           <button
             onClick={onClearAllLabels}
             style={{
@@ -186,28 +172,27 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
               borderRadius: 4,
               color: 'white',
               fontSize: 11,
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             Clear All
           </button>
         </div>
       </div>
-
       {/* Settings */}
       <div style={{ marginBottom: 16 }}>
         <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
           gap: 8, 
-          marginBottom: 8 
+          marginBottom: 8 ,
         }}>
           <label style={{ 
             display: 'flex', 
             alignItems: 'center', 
             color: '#e2e8f0', 
             fontSize: 11, 
-            gap: 4 
+            gap: 4 ,
           }}>
             <input
               type="checkbox"
@@ -218,14 +203,13 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
           </label>
         </div>
       </div>
-
       {/* Quick Add Interface */}
-      {selectedEdgeId && (
+      {selectedEdgeId && ()
         <div style={{ 
           background: '#1a202c', 
           padding: 12, 
           borderRadius: 6, 
-          marginBottom: 16 
+          marginBottom: 16 ,
         }}>
           <h4 style={{ 
             color: '#e2e8f0', 
@@ -234,7 +218,6 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
           }}>
             Add Label to Selected Connection
           </h4>
-
           <div style={{ marginBottom: 8 }}>
             <input
               type="text"
@@ -249,18 +232,17 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
                 border: '1px solid #4a5568',
                 borderRadius: 4,
                 color: '#e2e8f0',
-                fontSize: 11
+                fontSize: 11,
               }}
             />
           </div>
-
           {/* Preset Style Selection */}
           <div style={{ marginBottom: 8 }}>
             <label style={{ 
               display: 'block', 
               color: '#a0aec0', 
               fontSize: 10, 
-              marginBottom: 4 
+              marginBottom: 4 ,
             }}>
               Style Preset
             </label>
@@ -274,7 +256,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
                 border: '1px solid #4a5568',
                 borderRadius: 4,
                 color: '#e2e8f0',
-                fontSize: 11
+                fontSize: 11,
               }}
             >
               <option value="dataFlow">Data Flow</option>
@@ -283,23 +265,22 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
               <option value="error">Error</option>
             </select>
           </div>
-
           {/* Quick Templates */}
           <div style={{ marginBottom: 8 }}>
             <label style={{ 
               display: 'block', 
               color: '#a0aec0', 
               fontSize: 10, 
-              marginBottom: 4 
+              marginBottom: 4 ,
             }}>
               Quick Templates
             </label>
             <div style={{ 
               display: 'grid', 
               gridTemplateColumns: '1fr 1fr 1fr', 
-              gap: 4 
+              gap: 4 ,
             }}>
-              {Object.values(labelTemplates).slice(0, 6).map(template => (
+              {Object.values(labelTemplates).slice(0, 6).map(template => ()
                 <button
                   key={template}
                   onClick={() => handleTemplateSelect(template)}
@@ -310,7 +291,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
                     borderRadius: 2,
                     color: '#e2e8f0',
                     fontSize: 9,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 >
                   {template}
@@ -318,7 +299,6 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
               ))}
             </div>
           </div>
-
           <div style={{ display: 'flex', gap: 8 }}>
             <button
               onClick={handleQuickAddLabel}
@@ -336,8 +316,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
             >
               Add Label
             </button>
-            
-            {selectedEdge && (
+            {selectedEdge && ()
               <button
                 onClick={handleOpenEditor}
                 style={{
@@ -347,7 +326,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
                   borderRadius: 4,
                   color: 'white',
                   fontSize: 11,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 Advanced
@@ -356,7 +335,6 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
           </div>
         </div>
       )}
-
       {/* Existing Labels List */}
       <div>
         <h4 style={{ 
@@ -364,12 +342,11 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
           fontSize: 12, 
           margin: '0 0 8px 0',
           borderBottom: '1px solid #4a5568',
-          paddingBottom: 4
+          paddingBottom: 4,
         }}>
           Labeled Connections ({edgesWithLabels.length})
         </h4>
-
-        {edgesWithLabels.length === 0 ? (
+        {edgesWithLabels.length === 0 ? ()
           <div style={{ 
             color: '#a0aec0', 
             fontSize: 11, 
@@ -380,18 +357,18 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
             No labeled connections.{' '}
             {edges.length > 0 ? 'Select a connection to add labels.' : 'Create connections first.'}
           </div>
-        ) : (
+        ) : ()
           <div style={{ maxHeight: 200, overflowY: 'auto' }}>
-            {edgesWithLabels.map(edge => (
+            {edgesWithLabels.map(edge => ()
               <div
                 key={edge.id}
                 style={{
                   padding: 8,
                   marginBottom: 4,
                   background: selectedEdgeId === edge.id ? '#1a202c' : 'transparent',
-                  border: `1px solid ${selectedEdgeId === edge.id ? '#4299e1' : '#4a5568'}`,
+                  border: `1px solid ${selectedEdgeId === edge.id ? '#4299e1' : '#4a5568'}`,}
                   borderRadius: 4,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
                 onClick={() => onSelectEdge(edge.id)}
               >
@@ -399,7 +376,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
                   display: 'flex', 
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  marginBottom: 4
+                  marginBottom: 4,
                 }}>
                   <div style={{ 
                     color: '#e2e8f0', 
@@ -408,7 +385,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
                     maxWidth: 150,
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
                   }}>
                     "{edge.label}"
                   </div>
@@ -419,15 +396,13 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
                     {edge.showLabel ? 'Visible' : 'Hidden'}
                   </div>
                 </div>
-                
                 <div style={{ 
                   fontSize: 9, 
                   color: '#a0aec0',
-                  marginBottom: 4
+                  marginBottom: 4,
                 }}>
                   {edge.source} → {edge.target}
                 </div>
-
                 <div style={{ display: 'flex', gap: 4 }}>
                   <button
                     onClick={(e) => {
@@ -441,12 +416,11 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
                       borderRadius: 2,
                       color: '#a0aec0',
                       fontSize: 8,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     {edge.showLabel ? 'Hide' : 'Show'}
                   </button>
-                  
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -459,7 +433,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
                       borderRadius: 2,
                       color: '#f56565',
                       fontSize: 8,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     Remove
@@ -470,9 +444,8 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
           </div>
         )}
       </div>
-
       {/* Advanced Label Editor Modal */}
-      {showEditor && selectedEdge && (
+      {showEditor && selectedEdge && ()
         <ConnectionLabelEditor
           edge={selectedEdge}
           onUpdateEdge={onUpdateLabel}
@@ -491,7 +464,7 @@ export const ConnectionAnnotationToolbar: React.FC<{
   onSetLabelEditMode: (enabled: boolean) => void;
   visibleLabelsCount: number;
   totalLabelsCount: number;
-}> = ({
+}> = ({)
   visible,
   onToggle,
   labelEditMode,
@@ -499,7 +472,7 @@ export const ConnectionAnnotationToolbar: React.FC<{
   visibleLabelsCount,
   totalLabelsCount
 }) => {
-  return (
+  return ()
     <div style={{
       position: 'fixed',
       top: 20,
@@ -511,15 +484,14 @@ export const ConnectionAnnotationToolbar: React.FC<{
       padding: '8px 12px',
       borderRadius: 6,
       border: '1px solid #4a5568',
-      zIndex: 999
+      zIndex: 999,
     }}>
       <div style={{ 
         color: '#a0aec0', 
-        fontSize: 11 
+        fontSize: 11 ,
       }}>
         Labels: {visibleLabelsCount}/{totalLabelsCount}
       </div>
-      
       <button
         onClick={() => onSetLabelEditMode(!labelEditMode)}
         style={{
@@ -529,12 +501,11 @@ export const ConnectionAnnotationToolbar: React.FC<{
           borderRadius: 3,
           color: 'white',
           fontSize: 10,
-          cursor: 'pointer'
+          cursor: 'pointer',
         }}
       >
         Edit Mode
       </button>
-      
       <button
         onClick={onToggle}
         style={{
@@ -544,7 +515,7 @@ export const ConnectionAnnotationToolbar: React.FC<{
           borderRadius: 3,
           color: 'white',
           fontSize: 10,
-          cursor: 'pointer'
+          cursor: 'pointer',
         }}
       >
         Panel

@@ -55,13 +55,13 @@ export interface VerificationCodeConfig {
     rateLimitWindow: number;
     rateLimitCount: number;
     cleanupInterval: number;
-    codeFormats: {
+    codeFormats: {,
         [key in VerificationCodeType]: CodeFormat;
     };
-    expirationTimes: {
+    expirationTimes: {,
         [key in VerificationCodeType]: number;
     };
-    retryLimits: {
+    retryLimits: {,
         [key in VerificationCodeType]: number;
     };
     enableSecurityLogging: boolean;
@@ -86,7 +86,7 @@ export interface VerificationCode {
     deliveryAddress: string;
     ipAddress: string;
     userAgent: string;
-    metadata: {
+    metadata: {,
         purpose?: string;
         requestSource?: string;
         deviceFingerprint?: string;
@@ -96,7 +96,7 @@ export interface VerificationCode {
         revocationReason?: string;
         additionalContext?: Record<string, any>;
     };
-    securityFlags: {
+    securityFlags: {,
         highRisk: boolean;
         multipleAttempts: boolean;
         suspiciousActivity: boolean;

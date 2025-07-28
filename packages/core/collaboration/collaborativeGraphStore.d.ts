@@ -33,7 +33,7 @@ export interface CollaborativeGraphState {
     enableCollaboration: (options: CollaborativeGraphOptions) => Promise<void>;
     disableCollaboration: () => void;
     setGraph: (graph: Graph) => void;
-    addNode: (node: Node, position?: {
+    addNode: (node: Node, position?: {)
         x: number;
         y: number;
     }) => void;
@@ -41,12 +41,12 @@ export interface CollaborativeGraphState {
     deleteNode: (nodeId: string) => void;
     addEdge: (edge: Edge) => void;
     deleteEdge: (edgeId: string) => void;
-    updateNodePosition: (nodeId: string, position: {
+    updateNodePosition: (nodeId: string, position: {)
         x: number;
         y: number;
     }) => void;
     updateLocalPresence: (presence: Partial<UserPresence>) => void;
-    updateUserCursor: (nodeId?: string, position?: {
+    updateUserCursor: (nodeId?: string, position?: {)
         x: number;
         y: number;
     }) => void;
@@ -64,7 +64,7 @@ export declare         <U>(selector: (state: CollaborativeGraphState) => U, list
     };
 }>;
 export declare export declare export declare export declare export declare         type: "WeightedChoice";
-        choices: {
+        choices: {,
             value: string;
             weight: number;
         }[];
@@ -279,7 +279,7 @@ export declare export declare export declare export declare export declare      
     seed?: string | number | undefined;
 };
 export declare     disableCollaboration: () => void;
-    addNode: (node: Node, position?: {
+    addNode: (node: Node, position?: {)
         x: number;
         y: number;
     }) => void;
@@ -287,12 +287,12 @@ export declare     disableCollaboration: () => void;
     deleteNode: (nodeId: string) => void;
     addEdge: (edge: Edge) => void;
     deleteEdge: (edgeId: string) => void;
-    updateNodePosition: (nodeId: string, position: {
+    updateNodePosition: (nodeId: string, position: {)
         x: number;
         y: number;
     }) => void;
     updateLocalPresence: (presence: Partial<UserPresence>) => void;
-    updateUserCursor: (nodeId?: string, position?: {
+    updateUserCursor: (nodeId?: string, position?: {)
         x: number;
         y: number;
     }) => void;

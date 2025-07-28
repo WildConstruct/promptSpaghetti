@@ -25,7 +25,7 @@ import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAna
 export interface FunnelChartProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
-    timeRange: {
+    timeRange: {,
         start: number;
         end: number;
     };
@@ -54,17 +54,17 @@ export interface StepMetrics {
     comparisonData?: StepComparisonMetrics;
 }
 export interface StepComparisonMetrics {
-    previousPeriod: {
+    previousPeriod: {,
         conversionRate: number;
         change: number;
         direction: 'improvement' | 'decline' | 'no_change';
     };
-    benchmark: {
+    benchmark: {,
         conversionRate: number;
         percentile: number;
         industry: string;
     };
-    segments: Array<{
+    segments: Array<{,
         segmentId: string;
         segmentName: string;
         conversionRate: number;
@@ -118,7 +118,7 @@ export interface SegmentFunnelComparison {
     segmentId: string;
     segmentName: string;
     overallConversionRate: number;
-    stepPerformance: Array<{
+    stepPerformance: Array<{,
         stepId: string;
         conversionRate: number;
         relativePerformance: number;
@@ -128,14 +128,14 @@ export interface SegmentFunnelComparison {
 export interface ChartExportData {
     chartMode: FunnelChartMode;
     data: FunnelChartData;
-    visualization: {
+    visualization: {,
         svg: string;
         png?: string;
         pdf?: string;
     };
-    metadata: {
+    metadata: {,
         exportedAt: number;
-        timeRange: {
+        timeRange: {,
             start: number;
             end: number;
         };
@@ -145,7 +145,7 @@ export interface ChartExportData {
 export interface InteractionState {
     hoveredStep: string | null;
     selectedStep: string | null;
-    tooltipPosition: {
+    tooltipPosition: {,
         x: number;
         y: number;
     } | null;

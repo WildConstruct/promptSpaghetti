@@ -44,19 +44,17 @@ export type {
 } from '../ContextualHelp/HelpContentManager';
 
 // Helper functions for help system integration
-export     helpInteractions: [] as Array<{ event: string; data: any; timestamp: number; sessionId: string }>,
+export helpInteractions: [] as Array<{ event: string; data: any; timestamp: number; sessionId: string }>,
     userStruggles: [] as Array<{ event: string; data: any; timestamp: number; sessionId: string }>,
     effectiveness: {} as Record<string, { views: number; helpful: number }>
   };
-
   const trackEvent = (event: string, data: Record<string, any>) => {
     const entry = {
       event,
       data,
       timestamp: Date.now(),
-      sessionId: `session_${Date.now()}`
+      sessionId: `session_${Date.now()}`}
     };
-
     switch (event) {
     case 'help_interaction':
     case 'contextual_help_triggered':
@@ -64,11 +62,9 @@ export     helpInteractions: [] as Array<{ event: string; data: any; timestamp: 
     case 'feedback_submitted':
       analytics.helpInteractions.push(entry);
       break;
-      
     case 'user_struggle_detected':
       analytics.userStruggles.push(entry);
       break;
-      
     case 'help_effectiveness':
       const helpId = data.helpId;
       analytics.effectiveness[helpId] = {
@@ -77,41 +73,34 @@ export     helpInteractions: [] as Array<{ event: string; data: any; timestamp: 
       };
       break;
     }
-
     // Optional: Send to analytics service
     if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', event, {
+      (window as any).gtag('event', event, {)
         custom_parameter_1: JSON.stringify(data),
-        event_category: 'help_system'
+        event_category: 'help_system',
       });
     }
   };
-
   const getAnalytics = () => ({ ...analytics });
-  
   const getHelpEffectivenessReport = () => {
-    const report = Object.entries(analytics.effectiveness).map(([helpId, stats]) => ({
+    const report = Object.entries(analytics.effectiveness).map(([helpId, stats]) => ({)
       helpId,
       views: stats.views,
       helpful: stats.helpful,
       effectivenessRate: stats.views > 0 ? (stats.helpful / stats.views) * 100 : 0
     }));
-
     return report.sort((a, b) => b.effectivenessRate - a.effectivenessRate);
   };
-
   const getStruggleReport = () => {
     const struggles = analytics.userStruggles.reduce((acc, entry) => {
       const type = entry.data.struggleType;
       acc[type] = (acc[type] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-
     return Object.entries(struggles)
       .map(([type, count]) => ({ type, count }))
       .sort((a, b) => b.count - a.count);
   };
-
   return {
     trackEvent,
     getAnalytics,

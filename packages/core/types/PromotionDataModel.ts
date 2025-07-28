@@ -8,7 +8,6 @@
  * Task: E17-1753114397315-003606 - Create promotion data model
  * Epic: 17 - Backstage Admin Controls
  */
-
 import { 
   PlacementSlot, 
   ContentPlacement, 
@@ -28,41 +27,32 @@ export interface PromotionCampaign {
   name: string;
   displayName: string;
   description: string;
-  
   // Campaign Strategy
   promotionType: PromotionType;
   promotionStrategy: PromotionStrategy;
   contentSelectionMethod: ContentSelectionMethod;
-  
   // Target Content
   promotedContent: PromotionContent[];
   contentCriteria?: ContentSelectionCriteria;
-  
   // Scheduling and Rotation
   schedule: PromotionSchedule;
   rotationConfig: RotationConfiguration;
-  
   // Performance and Optimization
   performanceGoals: PromotionGoal[];
   optimizationSettings: OptimizationSettings;
   abTestConfig?: ABTestConfiguration;
-  
   // Targeting and Personalization
   targeting: PromotionTargeting;
   personalizationRules?: PersonalizationRule[];
-  
   // Budget and Resources
   budget?: PromotionBudget;
   resourceAllocation: ResourceAllocation;
-  
   // Status and Lifecycle
   status: PromotionStatus;
   lifecycle: PromotionLifecycle;
-  
   // Analytics and Insights
   performanceMetrics?: PromotionMetrics;
   insights?: PromotionInsight[];
-  
   // Metadata and Governance
   createdAt: Date;
   updatedAt: Date;
@@ -71,7 +61,6 @@ export interface PromotionCampaign {
   approvalHistory: ApprovalRecord[];
   tags: string[];
   categories: string[];
-  
   // Integration Points
   integrationConfig?: {
     analyticsTracking: AnalyticsTrackingConfig;
@@ -87,29 +76,24 @@ export enum PromotionType {
   TRENDING_NOW = 'trending_now',
   EDITORS_CHOICE = 'editors_choice',
   SEASONAL_HIGHLIGHTS = 'seasonal_highlights',
-  
   // User-Based Promotions
   PERSONALIZED_RECOMMENDATIONS = 'personalized_recommendations',
   BASED_ON_HISTORY = 'based_on_history',
   COLLABORATIVE_FILTERING = 'collaborative_filtering',
-  
   // Category-Based Promotions
   CATEGORY_SPOTLIGHT = 'category_spotlight',
   CROSS_CATEGORY = 'cross_category',
   NICHE_DISCOVERY = 'niche_discovery',
-  
   // Performance-Based Promotions
   TOP_RATED = 'top_rated',
   BEST_SELLERS = 'best_sellers',
   HIGH_ENGAGEMENT = 'high_engagement',
   RISING_STARS = 'rising_stars',
-  
   // Event-Based Promotions
   LIMITED_TIME_OFFERS = 'limited_time_offers',
   FLASH_PROMOTIONS = 'flash_promotions',
   EXCLUSIVE_ACCESS = 'exclusive_access',
   EARLY_BIRD = 'early_bird',
-  
   // Campaign-Based Promotions
   BRAND_PARTNERSHIPS = 'brand_partnerships',
   CREATOR_SPOTLIGHTS = 'creator_spotlights',
@@ -123,19 +107,16 @@ export enum PromotionStrategy {
   ALGORITHMIC_SELECTION = 'algorithmic_selection',
   PERFORMANCE_DRIVEN = 'performance_driven',
   HYBRID_APPROACH = 'hybrid_approach',
-  
   // Rotation Strategies
   EQUAL_ROTATION = 'equal_rotation',
   WEIGHTED_ROTATION = 'weighted_rotation',
   PERFORMANCE_WEIGHTED = 'performance_weighted',
   TIME_BASED_ROTATION = 'time_based_rotation',
-  
   // Optimization Strategies
   CTR_OPTIMIZATION = 'ctr_optimization',
   CONVERSION_OPTIMIZATION = 'conversion_optimization',
   REVENUE_OPTIMIZATION = 'revenue_optimization',
   ENGAGEMENT_OPTIMIZATION = 'engagement_optimization',
-  
   // Personalization Strategies
   COLLABORATIVE_FILTERING = 'collaborative_filtering',
   CONTENT_BASED_FILTERING = 'content_based_filtering',
@@ -159,9 +140,8 @@ export enum ContentSelectionMethod {
 export interface PromotionContent {
   contentId: string;
   templateId: string;
-  
   // Content Details
-  contentInfo: {
+  contentInfo: {,
     title: string;
     description: string;
     creatorId: string;
@@ -170,9 +150,8 @@ export interface PromotionContent {
     thumbnailUrl?: string;
     previewUrl?: string;
   };
-  
   // Promotion Configuration
-  promotionConfig: {
+  promotionConfig: {,
     priority: number;
     weight?: number;
     customMessage?: string;
@@ -180,25 +159,20 @@ export interface PromotionContent {
     promotionalBadges?: PromotionalBadge[];
     customStyling?: Partial<PlacementStyling>;
   };
-  
   // Performance Data
   performanceScore: number;
   metrics: ContentPromotionMetrics;
-  
   // Scheduling
   startTime?: Date;
   endTime?: Date;
   timezone?: string;
-  
   // Targeting Overrides
   targetingOverrides?: Partial<PromotionTargeting>;
-  
   // Status and Lifecycle
   status: ContentPromotionStatus;
   addedAt: Date;
   lastPromoted?: Date;
   promotionCount: number;
-  
   // A/B Testing
   experimentVariant?: string;
   controlGroup?: boolean;
@@ -284,7 +258,7 @@ export enum ContentPromotionStatus {
 
 export interface ContentSelectionCriteria {
   // Template Attributes
-  templateCriteria: {
+  templateCriteria: {,
     categories?: string[];
     excludeCategories?: string[];
     tags?: string[];
@@ -298,9 +272,8 @@ export interface ContentSelectionCriteria {
       max: number;
     };
   };
-  
   // Performance Requirements
-  performanceCriteria: {
+  performanceCriteria: {,
     minRating?: number;
     minPurchases?: number;
     minRevenue?: number;
@@ -311,9 +284,8 @@ export interface ContentSelectionCriteria {
       max?: number;
     };
   };
-  
   // Quality Standards
-  qualityCriteria: {
+  qualityCriteria: {,
     hasPreview?: boolean;
     hasDocumentation?: boolean;
     isVerified?: boolean;
@@ -323,26 +295,23 @@ export interface ContentSelectionCriteria {
       max?: number;
     };
   };
-  
   // Content Freshness
-  freshnessCriteria: {
+  freshnessCriteria: {,
     preferNew?: boolean;
     newThresholdDays?: number;
     updateRecency?: number; // days
     trendingWeight?: number;
     seasonalRelevance?: string[];
   };
-  
   // Diversity Requirements
-  diversityCriteria: {
+  diversityCriteria: {,
     maxPerCreator?: number;
     maxPerCategory?: number;
     ensureVariety?: boolean;
     balancePopularAndNiche?: number; // ratio
   };
-  
   // Exclusion Rules
-  exclusionRules: {
+  exclusionRules: {,
     recentlyPromoted?: number; // days
     currentlyPromoted?: boolean;
     userPurchaseHistory?: boolean;
@@ -357,24 +326,18 @@ export interface ContentSelectionCriteria {
 
 export interface PromotionSchedule {
   scheduleId: string;
-  
   // Basic Timing
   startDate: Date;
   endDate?: Date;
   timezone: string;
-  
   // Schedule Type
   scheduleType: ScheduleType;
-  
   // Time-Based Rules
   timeRules: TimeBasedRules;
-  
   // Recurrence
   recurrence?: RecurrenceConfig;
-  
   // Dynamic Scheduling
   dynamicRules?: DynamicSchedulingRule[];
-  
   // Status and Tracking
   isActive: boolean;
   nextExecution?: Date;
@@ -394,22 +357,18 @@ export interface TimeBasedRules {
   // Daily Patterns
   hoursOfDay?: number[];
   excludeHours?: number[];
-  
   // Weekly Patterns
   daysOfWeek?: number[];
   excludeDays?: number[];
-  
   // Special Time Periods
   peakHours?: {
     start: string; // "09:00"
     end: string; // "17:00"
     multiplier: number;
   };
-  
   // Geographic Time Zones
   primaryTimezones?: string[];
   followUserTimezone?: boolean;
-  
   // Seasonal Adjustments
   seasonalPatterns?: SeasonalPattern[];
 }
@@ -432,13 +391,13 @@ export interface RecurrenceConfig {
 export interface DynamicSchedulingRule {
   ruleId: string;
   name: string;
-  condition: {
+  condition: {,
     metric: string;
     threshold: number;
     operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
     timeWindow: number; // minutes
   };
-  action: {
+  action: {,
     type: 'extend' | 'pause' | 'rotate' | 'boost' | 'end';
     parameters: Record<string, any>;
   };
@@ -462,29 +421,22 @@ export interface ScheduleExecution {
 
 export interface RotationConfiguration {
   rotationId: string;
-  
   // Rotation Strategy
   strategy: RotationStrategy;
-  
   // Timing Configuration
   rotationFrequency: RotationFrequency;
   rotationTriggers: RotationTrigger[];
-  
   // Content Management
   maxActiveContent: number;
   minActiveContent: number;
   contentBuffer: number; // extra content ready
-  
   // Performance-Based Rotation
   performanceThresholds: PerformanceThreshold[];
-  
   // Weighting System
   weightingFactors: WeightingFactor[];
-  
   // Fallback Rules
   fallbackContent?: string[];
   emergencyContent?: string[];
-  
   // Quality Assurance
   preRotationChecks: QualityCheck[];
   postRotationValidation: QualityCheck[];
@@ -510,7 +462,7 @@ export interface RotationFrequency {
 export interface RotationTrigger {
   triggerId: string;
   type: 'time' | 'performance' | 'user_activity' | 'external_event' | 'manual';
-  condition: {
+  condition: {,
     metric?: string;
     threshold?: number;
     operator?: 'gt' | 'lt' | 'eq';
@@ -559,7 +511,7 @@ export interface QualityCheck {
 
 export interface PromotionTargeting extends PlacementTargetingRules {
   // Advanced User Targeting
-  userTargeting: {
+  userTargeting: {,
     segments: string[];
     excludeSegments?: string[];
     lifeCycleStage?: UserLifeCycleStage[];
@@ -567,9 +519,8 @@ export interface PromotionTargeting extends PlacementTargetingRules {
     engagementLevels?: UserEngagementLevel[];
     purchaseHistory?: PurchaseHistoryTargeting;
   };
-  
   // Contextual Targeting
-  contextualTargeting: {
+  contextualTargeting: {,
     currentPage?: string[];
     referrerSource?: string[];
     searchQuery?: string[];
@@ -577,25 +528,22 @@ export interface PromotionTargeting extends PlacementTargetingRules {
     sessionStage?: SessionStage[];
     deviceCapabilities?: DeviceCapability[];
   };
-  
   // Behavioral Targeting
-  behavioralTargeting: {
+  behavioralTargeting: {,
     browsingPatterns: BrowsingPattern[];
     interactionHistory: InteractionPattern[];
     purchasePatterns: PurchasePattern[];
     contentPreferences: ContentPreference[];
     temporalPatterns: TemporalPattern[];
   };
-  
   // Performance-Based Targeting
-  performanceTargeting: {
+  performanceTargeting: {,
     highValueUsers?: boolean;
     likelyConverters?: boolean;
     activeEngagers?: boolean;
     newUserFocus?: boolean;
     retentionRisk?: boolean;
   };
-  
   // Social and Network Targeting
   socialTargeting?: {
     socialConnections?: string[];
@@ -693,7 +641,7 @@ export interface PurchasePattern {
   frequency: 'impulse' | 'regular' | 'seasonal' | 'occasional';
   timing: 'morning' | 'afternoon' | 'evening' | 'weekend' | 'weekday';
   categories: string[];
-  priceRange: {
+  priceRange: {,
     min: number;
     max: number;
   };
@@ -723,23 +671,18 @@ export interface PersonalizationRule {
   ruleId: string;
   name: string;
   description: string;
-  
   // Rule Configuration
   ruleType: PersonalizationRuleType;
   priority: number;
   isActive: boolean;
-  
   // Conditions
   conditions: PersonalizationCondition[];
-  
   // Actions
   actions: PersonalizationAction[];
-  
   // Performance
   effectivenessScore: number;
   lastOptimized: Date;
   testResults?: ABTestResult[];
-  
   // Metadata
   createdAt: Date;
   createdBy: string;
@@ -779,22 +722,18 @@ export interface PromotionGoal {
   goalId: string;
   name: string;
   type: GoalType;
-  
   // Goal Configuration
   metric: string;
   target: number;
   unit: string;
   timeframe: GoalTimeframe;
-  
   // Progress Tracking
   currentValue: number;
   progress: number; // percentage
   trend: 'improving' | 'declining' | 'stable';
-  
   // Priority and Weight
   priority: GoalPriority;
   weight: number; // for composite scoring
-  
   // Status
   status: GoalStatus;
   achievedAt?: Date;
@@ -836,19 +775,15 @@ export interface OptimizationSettings {
   // Optimization Strategy
   optimizationStrategy: OptimizationStrategy;
   optimizationGoals: string[]; // goal IDs
-  
   // Machine Learning Configuration
   mlConfig?: MachineLearningConfig;
-  
   // Real-Time Optimization
   realTimeOptimization: boolean;
   optimizationFrequency: number; // minutes
   minSampleSize: number;
   confidenceThreshold: number;
-  
   // Constraints
   constraints: OptimizationConstraint[];
-  
   // Fallback Rules
   fallbackRules: FallbackRule[];
 }
@@ -915,29 +850,24 @@ export interface ABTestConfiguration {
   testId: string;
   name: string;
   description: string;
-  
   // Test Design
   testType: ABTestType;
   variants: ABTestVariant[];
   trafficAllocation: TrafficAllocation;
-  
   // Success Metrics
   primaryMetric: string;
   secondaryMetrics: string[];
   minimumDetectableEffect: number;
-  
   // Statistical Configuration
   significanceLevel: number;
   power: number;
   minSampleSize: number;
   maxDuration: number; // days
-  
   // Test Management
   status: ABTestStatus;
   startDate: Date;
   endDate?: Date;
   results?: ABTestResult[];
-  
   // Quality Assurance
   qualityChecks: ABTestQualityCheck[];
   biasDetection: boolean;
@@ -981,7 +911,7 @@ export interface ABTestResult {
   metric: string;
   value: number;
   sampleSize: number;
-  confidenceInterval: {
+  confidenceInterval: {,
     lower: number;
     upper: number;
   };
@@ -1002,33 +932,27 @@ export interface ABTestQualityCheck {
 
 export interface PromotionBudget {
   budgetId: string;
-  
   // Budget Configuration
   totalBudget: number;
   currency: string;
   budgetType: BudgetType;
-  
   // Spending Controls
   dailyBudget?: number;
   weeklyBudget?: number;
   monthlyBudget?: number;
   spendingPace: SpendingPace;
-  
   // Cost Structure
   costModel: CostModel;
   bidStrategy?: BidStrategy;
-  
   // Tracking and Alerts
   spentAmount: number;
   remainingBudget: number;
   spendingRate: number; // per day
   budgetAlerts: BudgetAlert[];
-  
   // Performance
   costPerClick: number;
   costPerConversion: number;
   returnOnAdSpend: number;
-  
   // Allocation
   allocationBySlot: Record<string, number>;
   allocationByTime: Record<string, number>;
@@ -1088,16 +1012,13 @@ export interface ResourceAllocation {
   // Slot Allocation
   slotPriority: Record<string, number>;
   slotBudgetShare: Record<string, number>;
-  
   // Time Allocation
   timeDistribution: TimeDistribution[];
   peakHourMultiplier: number;
-  
   // Content Allocation
   contentRotationRate: number;
   maxContentPerSlot: number;
   contentQualityThreshold: number;
-  
   // Performance Allocation
   performanceBasedReallocation: boolean;
   reallocationThreshold: number;
@@ -1118,13 +1039,11 @@ export interface PromotionMetrics {
   campaignId: string;
   period: MetricsPeriod;
   lastUpdated: Date;
-  
   // Visibility Metrics
   impressions: number;
   reach: number;
   frequency: number;
   shareOfVoice: number;
-  
   // Engagement Metrics
   clicks: number;
   clickThroughRate: number;
@@ -1132,30 +1051,25 @@ export interface PromotionMetrics {
   interactionRate: number;
   timeSpent: number;
   bounceRate: number;
-  
   // Conversion Metrics
   conversions: number;
   conversionRate: number;
   assistedConversions: number;
   attributedRevenue: number;
   averageOrderValue: number;
-  
   // Quality Metrics
   qualityScore: number;
   brandSafety: number;
   userSatisfaction: number;
-  
   // Efficiency Metrics
   costPerImpression: number;
   costPerClick: number;
   costPerConversion: number;
   returnOnAdSpend: number;
-  
   // Performance Comparisons
   performanceVsBaseline: PerformanceComparison;
   performanceVsGoals: GoalComparison[];
   competitiveBenchmarks?: CompetitiveBenchmark[];
-  
   // Segmentation
   performanceBySegment: SegmentPerformance[];
   performanceBySlot: SlotPerformance[];
@@ -1165,7 +1079,6 @@ export interface PromotionMetrics {
 export interface ContentPromotionMetrics {
   contentId: string;
   period: MetricsPeriod;
-  
   // Content-Specific Metrics
   promotionImpressions: number;
   organicImpressions: number;
@@ -1173,19 +1086,16 @@ export interface ContentPromotionMetrics {
   organicClicks: number;
   promotionConversions: number;
   organicConversions: number;
-  
   // Performance Scores
   promotionLift: number;
   engagementLift: number;
   conversionLift: number;
   revenueLift: number;
-  
   // Quality Indicators
   contentQualityScore: number;
   userFeedback: number;
   shareRate: number;
   saveRate: number;
-  
   // Lifecycle Metrics
   promotionFrequency: number;
   totalPromotionTime: number; // hours
@@ -1250,31 +1160,25 @@ export interface TimePerformance {
 export interface PromotionInsight {
   insightId: string;
   campaignId: string;
-  
   // Insight Classification
   category: InsightCategory;
   type: InsightType;
   priority: InsightPriority;
-  
   // Insight Content
   title: string;
   description: string;
   findings: InsightFinding[];
   evidence: InsightEvidence[];
-  
   // Impact and Significance
   impactLevel: ImpactLevel;
   confidence: number;
   statisticalSignificance: boolean;
-  
   // Recommendations
   recommendations: InsightRecommendation[];
-  
   // Metadata
   generatedAt: Date;
   generatedBy: 'system' | 'analyst' | 'ml_model';
   validUntil?: Date;
-  
   // Follow-up
   actionTaken?: boolean;
   actionDate?: Date;
@@ -1541,7 +1445,6 @@ export type {
   ContentPromotionMetrics,
   PromotionInsight,
   PromotionLifecycle,
-  
   // Configuration Objects
   ContentSelectionCriteria,
   PromotionalBadge,
@@ -1556,7 +1459,6 @@ export type {
   TrafficAllocation,
   CostModel,
   BidStrategy,
-  
   // Analytics and Performance
   PerformanceComparison,
   GoalComparison,
@@ -1567,7 +1469,6 @@ export type {
   InsightFinding,
   InsightEvidence,
   InsightRecommendation,
-  
   // Utility Types
   PromotionFilterCriteria,
   PromotionSortOptions,

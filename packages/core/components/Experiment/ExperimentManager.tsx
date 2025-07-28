@@ -2,7 +2,6 @@
  * Epic 14 Story 14.4 - Experiment Management System
  * Comprehensive experiment lifecycle management
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -42,7 +41,6 @@ import {
   Eye,
   ExternalLink
 } from 'lucide-react';
-
 import {
   Experiment,
   ExperimentStatus,
@@ -68,7 +66,6 @@ export interface ExperimentManagerProps {
   onCreateTemplate: (experimentId: string) => Promise<void>;
   className?: string;
 }
-
 interface ManagerState {
   activeTab: string;
   searchQuery: string;
@@ -81,7 +78,7 @@ interface ManagerState {
   showArchived: boolean;
 }
 
-export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
+export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
   experiments,
   templates,
   knowledgeBase,
@@ -98,7 +95,7 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
   onCreateTemplate,
   className = ''
 }) => {
-  const [state, setState] = useState<ManagerState>({
+  const [state, setState] = useState<ManagerState>({)
     activeTab: 'experiments',
     searchQuery: '',
     statusFilter: 'all',
@@ -107,14 +104,13 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
     sortBy: 'updated',
     sortOrder: 'desc',
     selectedExperiments: [],
-    showArchived: false
+    showArchived: false,
   });
-
   /**
    * Filter and sort experiments
    */
   const filteredExperiments = React.useMemo(() => {
-    const filtered = experiments.filter(experiment => {
+    const filtered = experiments.filter(experiment => {)
       // Text search
       if (state.searchQuery) {
         const query = state.searchQuery.toLowerCase();
@@ -124,34 +120,27 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
           return false;
         }
       }
-
       // Status filter
       if (state.statusFilter !== 'all' && experiment.status !== state.statusFilter) {
         return false;
       }
-
       // Type filter
       if (state.typeFilter !== 'all' && experiment.type !== state.typeFilter) {
         return false;
       }
-
       // Tag filter
       if (state.tagFilter && !experiment.tags.includes(state.tagFilter)) {
         return false;
       }
-
       // Archive filter
       if (!state.showArchived && experiment.status === 'archived') {
         return false;
       }
-
       return true;
     });
-
     // Sort
     filtered.sort((a, b) => {
       let aValue, bValue;
-      
       switch (state.sortBy) {
         case 'name':
           aValue = a.name.toLowerCase();
@@ -171,15 +160,12 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
           bValue = b.updatedAt.getTime();
           break;
       }
-
       if (aValue < bValue) return state.sortOrder === 'asc' ? -1 : 1;
       if (aValue > bValue) return state.sortOrder === 'asc' ? 1 : -1;
       return 0;
     });
-
     return filtered;
   }, [experiments, state]);
-
   /**
    * Get experiment statistics
    */
@@ -193,7 +179,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
     };
     return stats;
   }, [experiments]);
-
   /**
    * Get all unique tags
    */
@@ -202,13 +187,11 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
     experiments.forEach(exp => exp.tags.forEach(tag => tags.add(tag)));
     return Array.from(tags).sort();
   }, [experiments]);
-
   /**
    * Handle bulk actions
    */
   const handleBulkAction = useCallback(async (action: string) => {
     if (state.selectedExperiments.length === 0) return;
-
     try {
       switch (action) {
         case 'archive':
@@ -225,19 +208,17 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
       console.error('Bulk action failed:', error);
     }
   }, [state.selectedExperiments, onArchiveExperiment, onExportExperiments]);
-
   /**
    * Toggle experiment selection
    */
   const toggleExperimentSelection = useCallback((experimentId: string) => {
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
-      selectedExperiments: prev.selectedExperiments.includes(experimentId)
+      selectedExperiments: prev.selectedExperiments.includes(experimentId),
         ? prev.selectedExperiments.filter(id => id !== experimentId)
         : [...prev.selectedExperiments, experimentId]
     }));
   }, []);
-
   /**
    * Get status badge variant
    */
@@ -250,7 +231,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
       default: return 'secondary';
     }
   }, []);
-
   /**
    * Format duration
    */
@@ -258,11 +238,10 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
     const end = endDate || new Date();
     const diff = end.getTime() - startDate.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    return `${days} day${days !== 1 ? 's' : ''}`;
+    return `${days} day${days !== 1 ? 's' : ''}`;}
   }, []);
-
-  return (
-    <div className={`experiment-manager ${className}`}>
+  return ()
+    <div className={`experiment-manager ${className}`}>}
       {/* Header */}
       <div className="manager-header">
         <div className="header-info">
@@ -273,7 +252,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
             <span>{experimentStats.completed} Completed</span>
           </div>
         </div>
-        
         <div className="header-actions">
           <Button variant="outline" onClick={() => onExportExperiments('csv')}>
             <Download className="w-4 h-4 mr-2" />
@@ -285,7 +263,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
           </Button>
         </div>
       </div>
-
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <Card>
@@ -299,7 +276,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
             </div>
           </CardContent>
         </Card>
-        
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -311,7 +287,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
             </div>
           </CardContent>
         </Card>
-        
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -323,7 +298,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
             </div>
           </CardContent>
         </Card>
-        
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -340,7 +314,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
           </CardContent>
         </Card>
       </div>
-
       {/* Main Content */}
       <Tabs value={state.activeTab} onValueChange={(tab) => setState(prev => ({ ...prev, activeTab: tab }))}>
         <TabsList className="grid w-full grid-cols-4">
@@ -349,7 +322,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
           <TabsTrigger value="knowledge">Knowledge Base</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
-
         {/* Experiments Tab */}
         <TabsContent value="experiments" className="space-y-4">
           {/* Filters */}
@@ -367,7 +339,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                     />
                   </div>
                 </div>
-                
                 <Select value={state.statusFilter} onValueChange={(value: Error) => setState(prev => ({ ...prev, statusFilter: value }))}>
                   <SelectTrigger>
                     <SelectValue placeholder="Status" />
@@ -381,7 +352,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                     <SelectItem value="archived">Archived</SelectItem>
                   </SelectContent>
                 </Select>
-                
                 <Select value={state.typeFilter} onValueChange={(value: Error) => setState(prev => ({ ...prev, typeFilter: value }))}>
                   <SelectTrigger>
                     <SelectValue placeholder="Type" />
@@ -393,23 +363,21 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                     <SelectItem value="feature_flag">Feature Flag</SelectItem>
                   </SelectContent>
                 </Select>
-                
                 <Select value={state.tagFilter} onValueChange={(value) => setState(prev => ({ ...prev, tagFilter: value }))}>
                   <SelectTrigger>
                     <SelectValue placeholder="Tag" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="">All Tags</SelectItem>
-                    {allTags.map(tag => (
+                    {allTags.map(tag => ()
                       <SelectItem key={tag} value={tag}>{tag}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                
-                <Select value={`${state.sortBy}-${state.sortOrder}`} onValueChange={(value) => {
+                <Select value={`${state.sortBy}-${state.sortOrder}`} onValueChange={(value) => {}
                   const [sortBy, sortOrder] = value.split('-');
-                  setState(
-                    prev => ({ ...prev,
+                  setState()
+                    prev => ({ ...prev,)
                     sortBy: sortBy as 'created' | 'updated' | 'name' | 'status',
                     sortOrder: sortOrder as 'asc' | 'desc' }
                   ));
@@ -425,7 +393,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                   </SelectContent>
                 </Select>
               </div>
-              
               <div className="flex items-center justify-between mt-4">
                 <div className="flex items-center space-x-4">
                   <label className="flex items-center text-sm">
@@ -437,8 +404,7 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                     />
                     Show Archived
                   </label>
-                  
-                  {state.selectedExperiments.length > 0 && (
+                  {state.selectedExperiments.length > 0 && ()
                     <div className="flex items-center space-x-2">
                       <span className="text-sm text-gray-600">
                         {state.selectedExperiments.length} selected
@@ -452,17 +418,15 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                     </div>
                   )}
                 </div>
-                
                 <div className="text-sm text-gray-600">
                   {filteredExperiments.length} of {experiments.length} experiments
                 </div>
               </div>
             </CardContent>
           </Card>
-
           {/* Experiments List */}
           <div className="space-y-3">
-            {filteredExperiments.map((experiment) => (
+            {filteredExperiments.map((experiment) => ()
               <Card key={experiment.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
@@ -473,7 +437,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                         onChange={() => toggleExperimentSelection(experiment.id)}
                         className="rounded"
                       />
-                      
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-1">
                           <h3 className="font-semibold text-lg">{experiment.name}</h3>
@@ -482,11 +445,9 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                           </Badge>
                           <Badge variant="outline">{experiment.type}</Badge>
                         </div>
-                        
                         <p className="text-sm text-gray-600 mb-2 line-clamp-2">
                           {experiment.hypothesis}
                         </p>
-                        
                         <div className="flex items-center space-x-4 text-xs text-gray-500">
                           <span className="flex items-center">
                             <Users className="w-3 h-3 mr-1" />
@@ -498,7 +459,7 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                           </span>
                           <span className="flex items-center">
                             <Clock className="w-3 h-3 mr-1" />
-                            {formatDuration(
+                            {formatDuration()
                               experiment.createdAt,
                               experiment.status === 'completed' ? experiment.schedule?.endAt : undefined
                             )}
@@ -508,11 +469,10 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                             {experiment.updatedAt.toLocaleDateString()}
                           </span>
                         </div>
-                        
-                        {experiment.tags.length > 0 && (
+                        {experiment.tags.length > 0 && ()
                           <div className="flex items-center space-x-1 mt-2">
                             <Tag className="w-3 h-3 text-gray-400" />
-                            {experiment.tags.map(tag => (
+                            {experiment.tags.map(tag => ()
                               <Badge key={tag} variant="outline" className="text-xs">
                                 {tag}
                               </Badge>
@@ -521,33 +481,28 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                         )}
                       </div>
                     </div>
-                    
                     <div className="flex items-center space-x-2">
-                      {experiment.status === 'completed' && (
+                      {experiment.status === 'completed' && ()
                         <Button size="sm" variant="outline" onClick={() => onViewResults(experiment.id)}>
                           <Eye className="w-4 h-4 mr-1" />
                           Results
                         </Button>
                       )}
-                      
-                      {experiment.status === 'draft' && (
+                      {experiment.status === 'draft' && ()
                         <Button size="sm" onClick={() => onStartExperiment(experiment.id)}>
                           <Play className="w-4 h-4 mr-1" />
                           Start
                         </Button>
                       )}
-                      
-                      {experiment.status === 'running' && (
+                      {experiment.status === 'running' && ()
                         <Button size="sm" variant="outline" onClick={() => onPauseExperiment(experiment.id)}>
                           <Pause className="w-4 h-4 mr-1" />
                           Pause
                         </Button>
                       )}
-                      
                       <Button size="sm" variant="outline" onClick={() => onEditExperiment(experiment.id)}>
                         <Edit className="w-4 h-4" />
                       </Button>
-                      
                       <Button size="sm" variant="outline" onClick={() => onDuplicateExperiment(experiment.id)}>
                         <Copy className="w-4 h-4" />
                       </Button>
@@ -557,8 +512,7 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
               </Card>
             ))}
           </div>
-
-          {filteredExperiments.length === 0 && (
+          {filteredExperiments.length === 0 && ()
             <Card>
               <CardContent className="text-center py-8">
                 <div className="text-gray-500">No experiments found matching your criteria</div>
@@ -570,7 +524,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
             </Card>
           )}
         </TabsContent>
-
         {/* Templates Tab */}
         <TabsContent value="templates" className="space-y-4">
           <div className="flex justify-between items-center">
@@ -580,9 +533,8 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
               Import Template
             </Button>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {templates.map((template) => (
+            {templates.map((template) => ()
               <Card key={template.id} className="hover:shadow-md transition-shadow cursor-pointer"
                     onClick={() => onCreateExperiment(template)}>
                 <CardHeader className="pb-3">
@@ -598,13 +550,11 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                   <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                     {template.description}
                   </p>
-                  
                   <div className="flex items-center justify-between text-xs text-gray-500">
                     <span>{template.variants.length} variants</span>
                     <span>{template.timesUsed} uses</span>
                     <Badge variant="outline">{template.category}</Badge>
                   </div>
-                  
                   <div className="mt-3">
                     <div className="text-xs text-gray-500 mb-1">Avg Uplift</div>
                     <Progress value={template.averageUplift} className="h-2" />
@@ -617,7 +567,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
             ))}
           </div>
         </TabsContent>
-
         {/* Knowledge Base Tab */}
         <TabsContent value="knowledge" className="space-y-4">
           <div className="flex justify-between items-center">
@@ -637,9 +586,8 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
               <Input placeholder="Search insights..." className="w-64" />
             </div>
           </div>
-
           <div className="space-y-4">
-            {knowledgeBase.map((entry) => (
+            {knowledgeBase.map((entry) => ()
               <Card key={entry.id}>
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
@@ -654,18 +602,16 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-gray-600 mb-3">{entry.summary}</p>
-                  
-                  {entry.insights.length > 0 && (
+                  {entry.insights.length > 0 && ()
                     <div className="mb-3">
                       <div className="text-sm font-medium mb-1">Key Insights:</div>
                       <ul className="text-sm text-gray-600 list-disc list-inside space-y-1">
-                        {entry.insights.slice(0, 2).map((insight, index) => (
+                        {entry.insights.slice(0, 2).map((insight, index) => ()
                           <li key={index}>{insight}</li>
                         ))}
                       </ul>
                     </div>
                   )}
-                  
                   <div className="flex items-center justify-between text-xs text-gray-500">
                     <span>Confidence: {(entry.confidence * 100).toFixed(0)}%</span>
                     <span>{entry.createdAt.toLocaleDateString()}</span>
@@ -679,7 +625,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
             ))}
           </div>
         </TabsContent>
-
         {/* Analytics Tab */}
         <TabsContent value="analytics" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -694,7 +639,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                 </div>
               </CardContent>
             </Card>
-
             {/* Success Rate by Category */}
             <Card>
               <CardHeader>
@@ -702,13 +646,12 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {['prompt', 'graph', 'feature_flag'].map(type => {
+                  {['prompt', 'graph', 'feature_flag'].map(type => {)
                     const typeExperiments = experiments.filter(e => e.type === type);
-                    const successRate = typeExperiments.length > 0 
+                    const successRate = typeExperiments.length > 0 ;
                       ? (typeExperiments.filter(e => e.status === 'completed').length / typeExperiments.length) * 100
                       : 0;
-                    
-                    return (
+                    return ()
                       <div key={type} className="flex items-center justify-between">
                         <span className="text-sm capitalize">{type}</span>
                         <div className="flex items-center space-x-2">
@@ -724,7 +667,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
               </CardContent>
             </Card>
           </div>
-
           {/* Additional Analytics Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
@@ -737,13 +679,12 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                 </div>
               </CardContent>
             </Card>
-            
             <Card>
               <CardContent className="p-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600">
-                    {Math.round(
-                      experiments.reduce((acc,
+                    {Math.round()
+                      experiments.reduce((acc,)
                       exp
                     ) => acc + exp.variants.length, 0) / experiments.length) || 0}
                   </div>
@@ -751,7 +692,6 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({
                 </div>
               </CardContent>
             </Card>
-            
             <Card>
               <CardContent className="p-4">
                 <div className="text-center">

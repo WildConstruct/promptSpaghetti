@@ -35,7 +35,7 @@ export declare const useRealTimePreview: (graph: GraphData, seedConfig?: SeedCon
     exportVariants: () => {
         template: any;
         variables: any;
-        variants: {
+        variants: {,
             seed: number;
             result: string;
             weights: WeightControlOption[];

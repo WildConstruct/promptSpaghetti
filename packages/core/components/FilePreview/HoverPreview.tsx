@@ -3,29 +3,23 @@
  * 
  * Shows file preview modal positioned relative to the hovered element with smart positioning
  */
-
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FilePreview } from './FilePreview';
 import { PSGFile } from '../../projectManager';
-
 interface HoverPreviewProps {
   /** File data to preview */
   file: PSGFile;
-  
   /** Target element to position relative to */
   targetElement?: Element;
-  
   /** Delay before showing preview (ms) */
   delay?: number;
-  
   /** Callback when preview is clicked */
   onClick?: (file: PSGFile) => void;
-  
   /** Children to render as trigger */
   children: React.ReactNode;
 }
 
-export const HoverPreview: React.FC<HoverPreviewProps> = ({
+export const HoverPreview: React.FC<HoverPreviewProps> = ({)
   file,
   targetElement,
   delay = 300,
@@ -39,45 +33,36 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
-
   // Calculate optimal position for the preview relative to trigger element
   const calculatePosition = useCallback((element: Element) => {
     const rect = element.getBoundingClientRect();
     const previewWidth = 350;
     const previewHeight = 200;
     const gap = 8;
-    
     // Get viewport dimensions
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    
-    let x = rect.right + gap; // Default to right side
+    let x = rect.right + gap; // Default to right side;
     let y = rect.top;
-    
     // Check if there's enough space on the right
     if (x + previewWidth > viewportWidth - gap) {
       // Position to the left instead
       x = rect.left - previewWidth - gap;
     }
-    
     // Ensure we don't go off the left edge
     if (x < gap) {
       x = gap;
     }
-    
     // Check vertical positioning
     if (y + previewHeight > viewportHeight - gap) {
       y = viewportHeight - previewHeight - gap;
     }
-    
     // Ensure we don't go above the top
     if (y < gap) {
       y = gap;
     }
-    
     return { x, y };
   }, []);
-
   // Handle mouse enter
   const handleMouseEnter = useCallback(() => {
     // Clear any hide timeout
@@ -85,7 +70,6 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
       clearTimeout(hideTimeoutRef.current);
       hideTimeoutRef.current = null;
     }
-    
     // Set show timeout
     showTimeoutRef.current = setTimeout(() => {
       const element = targetElement || triggerRef.current;
@@ -96,7 +80,6 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
       }
     }, delay);
   }, [calculatePosition, delay, targetElement]);
-  
   // Handle mouse leave
   const handleMouseLeave = useCallback(() => {
     // Clear any show timeout
@@ -104,29 +87,24 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
       clearTimeout(showTimeoutRef.current);
       showTimeoutRef.current = null;
     }
-    
     // Set hide timeout with small delay to allow moving to preview
     hideTimeoutRef.current = setTimeout(() => {
       setIsVisible(false);
     }, 100);
   }, []);
-  
   // Handle focus (for keyboard accessibility)
   const handleFocus = useCallback(() => {
     handleMouseEnter();
   }, [handleMouseEnter]);
-  
   // Handle blur
   const handleBlur = useCallback(() => {
     handleMouseLeave();
   }, [handleMouseLeave]);
-
   // Handle preview click
   const handlePreviewClick = useCallback(() => {
     onClick?.(file);
     setIsVisible(false);
   }, [onClick, file]);
-  
   // Handle preview mouse enter (prevent hiding)
   const handlePreviewMouseEnter = useCallback(() => {
     if (hideTimeoutRef.current) {
@@ -134,12 +112,10 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
       hideTimeoutRef.current = null;
     }
   }, []);
-  
   // Handle preview mouse leave
   const handlePreviewMouseLeave = useCallback(() => {
     setIsVisible(false);
   }, []);
-
   // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
@@ -151,8 +127,7 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
       }
     };
   }, []);
-
-  return (
+  return ()
     <>
       {/* Trigger Element */}
       <div
@@ -165,16 +140,15 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
       >
         {children}
       </div>
-      
       {/* Preview Portal */}
-      {isVisible && (
+      {isVisible && ()
         <div
           ref={previewRef}
           className="absolute"
           style={{
             position: 'fixed',
-            left: `${position.x}px`,
-            top: `${position.y}px`,
+            left: `${position.x}px`,}
+            top: `${position.y}px`,}
             zIndex: 10000,
             backgroundColor: 'white',
             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
@@ -197,7 +171,6 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
           />
         </div>
       )}
-      
       <style>{`
         @keyframes fadeIn {
           from {
@@ -216,14 +189,13 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
 
 // Memoized component for performance
 const MemoizedHoverPreview = React.memo(HoverPreview, (prevProps, nextProps) => {
-  return (
+  return ()
     prevProps.file.id === nextProps.file.id &&
     prevProps.file.lastModified.getTime() === nextProps.file.lastModified.getTime() &&
     prevProps.delay === nextProps.delay &&
     prevProps.onClick === nextProps.onClick
   );
 });
-
 MemoizedHoverPreview.displayName = 'HoverPreview';
 
 export default HoverPreview;

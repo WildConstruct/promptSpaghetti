@@ -61,7 +61,7 @@ export declare class MutationCoordinator {
     private onConflictDetected?;
     private onConflictResolved?;
     private onBatchCompleted?;
-    constructor(graphCRDT: GraphCRDT, documentId: string, clientId: string, userId: string, options?: {
+    constructor(graphCRDT: GraphCRDT, documentId: string, clientId: string, userId: string, options?: {)
         conflictResolutionStrategy?: ResolutionStrategy;
         maxOperationHistory?: number;
         operationTimeout?: number;
@@ -173,7 +173,7 @@ export declare class MutationCoordinator {
     /**
      * Set event handlers
      */
-    setEventHandlers(handlers: {
+    setEventHandlers(handlers: {)
         onOperationApplied?: (operation: MutationOperation) => void;
         onConflictDetected?: (conflict: ConflictOperation) => void;
         onConflictResolved?: (resolution: ConflictResolution) => void;

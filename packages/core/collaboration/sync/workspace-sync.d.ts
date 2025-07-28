@@ -49,17 +49,17 @@ export declare class WorkspaceStateSync extends EventEmitter {
     private conflictResolvers;
     constructor(dao: WorkspaceDAO);
     private setupEventHandlers;
-    initializeWorkspaceSync(
+    initializeWorkspaceSync()
       workspaceId: WorkspaceId,
       userId: UserId,
       conflictResolution?: ConflictResolution
     ): Promise<Y.Doc>;
     initializeProjectSync(workspaceId: WorkspaceId, projectId: ProjectId, userId: UserId): Promise<Y.Doc>;
-    initializeResourceSync(
+    initializeResourceSync()
       workspaceId: WorkspaceId,
       projectId: ProjectId,
       resourceId: ResourceId,
-      userId: UserId
+      userId: UserId,
     ): Promise<YGraph>;
     private setupDocumentHandlers;
     private handleDocumentUpdate;

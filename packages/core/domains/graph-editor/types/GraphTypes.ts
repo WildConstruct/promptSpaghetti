@@ -4,7 +4,6 @@
  * 
  * Core type definitions for the graph editor domain
  */
-
 import { z } from 'zod';
 
 // Re-export core graph schema types
@@ -52,16 +51,16 @@ export interface PreviewConfiguration {
 }
 
 export interface GraphEditorConfig {
-  autosave: {
+  autosave: {,
     enabled: boolean;
     intervalMs: number;
   };
   preview: PreviewConfiguration;
-  validation: {
+  validation: {,
     realTime: boolean;
     debounceMs: number;
   };
-  ui: {
+  ui: {,
     showMinimap: boolean;
     showGrid: boolean;
     snapToGrid: boolean;

@@ -41,7 +41,7 @@ export interface AdvancedExecutionContext extends ExecutionContext {
     /** Pseudorandom number generator function for deterministic execution */
     prng: () => number;
     /** Execution metadata and debugging info */
-    executionMeta: {
+    executionMeta: {,
         startTime: number;
         executionId: string;
         nodeExecutionOrder: string[];
@@ -119,7 +119,7 @@ export declare class AdvancedExecutionContextImpl implements AdvancedExecutionCo
     evaluationDepth: number;
     cache: Map<string, unknown>;
     prng: () => number;
-    executionMeta: {
+    executionMeta: {,
         startTime: number;
         executionId: string;
         nodeExecutionOrder: string[];
@@ -184,7 +184,7 @@ export declare abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> exten
  * Standard node data serialization helpers
  */
 export declare class SerializationHelpers {
-    static createAdvancedNodeData(
+    static createAdvancedNodeData()
       id: string,
       type: string,
       config: AdvancedNodeConfig,

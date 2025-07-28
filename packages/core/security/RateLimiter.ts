@@ -3,7 +3,6 @@
  * Task: T-1752989143997-184 - Create rate limiter implementation
  * Epic 19: Authentication Enhancement & Security Hardening
  */
-
 import { z } from 'zod';
 
 // ========================================
@@ -89,8 +88,7 @@ export enum RateLimitScope {
 // ========================================
 // Validation Schemas
 // ========================================
-
-const RateLimitConfigSchema = z.object({
+const RateLimitConfigSchema = z.object({)
   windowMs: z.number().min(1000).max(86400000), // 1 second to 24 hours
   maxRequests: z.number().min(1).max(10000),
   skipSuccessfulRequests: z.boolean().optional(),
@@ -99,7 +97,7 @@ const RateLimitConfigSchema = z.object({
   standardHeaders: z.boolean().optional(),
   legacyHeaders: z.boolean().optional(),
   message: z.string().optional(),
-  statusCode: z.number().min(400).max(599).optional()
+  statusCode: z.number().min(400).max(599).optional(),
 });
 
 // ========================================
@@ -109,49 +107,40 @@ const RateLimitConfigSchema = z.object({
 export class MemoryRateLimitStore implements RateLimitStore {
   private store: Map<string, RateLimitData> = new Map();
   private cleanupInterval: NodeJS.Timeout;
-
   constructor(cleanupIntervalMs: number = 60000) {
     // Cleanup expired entries every minute
     this.cleanupInterval = setInterval(() => {
       this.cleanup();
     }, cleanupIntervalMs);
   }
-
   async get(key: string): Promise<RateLimitData | null> {
     const data = this.store.get(key);
     if (!data) return null;
-
     // Check if expired
     if (Date.now() > data.resetTime) {
       this.store.delete(key);
       return null;
     }
-
     return data;
   }
-
   async set(key: string, data: RateLimitData, ttlMs: number): Promise<void> {
-    this.store.set(key, {
+    this.store.set(key, {)
       ...data,
       resetTime: Date.now() + ttlMs
     });
   }
-
   async increment(key: string, windowMs: number): Promise<{ hits: number; resetTime: Date }> {
     const now = Date.now();
     const existing = await this.get(key);
-
     if (!existing || now > existing.resetTime) {
       // Start new window
       const resetTime = now + windowMs;
       const data: RateLimitData = {
         hits: 1,
         resetTime,
-        windowStart: now
+        windowStart: now,
       };
-      
       this.store.set(key, data);
-      
       return {
         hits: 1,
         resetTime: new Date(resetTime)
@@ -160,18 +149,15 @@ export class MemoryRateLimitStore implements RateLimitStore {
       // Increment existing
       existing.hits++;
       this.store.set(key, existing);
-      
       return {
         hits: existing.hits,
         resetTime: new Date(existing.resetTime)
       };
     }
   }
-
   async reset(key: string): Promise<void> {
     this.store.delete(key);
   }
-
   async cleanup(): Promise<void> {
     const now = Date.now();
     for (const [key, data] of this.store.entries()) {
@@ -180,20 +166,17 @@ export class MemoryRateLimitStore implements RateLimitStore {
       }
     }
   }
-
   destroy(): void {
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
     }
     this.store.clear();
   }
-
   getStats(): { totalKeys: number; totalHits: number } {
     let totalHits = 0;
     for (const data of this.store.values()) {
       totalHits += data.hits;
     }
-    
     return {
       totalKeys: this.store.size,
       totalHits
@@ -210,25 +193,22 @@ export class RateLimitKeyGenerator {
    * Generate key based on IP address
    */
   static byIP(context: RateLimitContext): string {
-    return `ip:${context.ip || 'unknown'}`;
+    return `ip:${context.ip || 'unknown'}`;}
   }
-
   /**
    * Generate key based on user ID
    */
   static byUser(context: RateLimitContext): string {
-    return `user:${context.userId || 'anonymous'}`;
+    return `user:${context.userId || 'anonymous'}`;}
   }
-
   /**
    * Generate key based on endpoint
    */
   static byEndpoint(context: RateLimitContext): string {
     const method = context.method || 'GET';
     const path = context.path || '/';
-    return `endpoint:${method}:${path}`;
+    return `endpoint:${method}:${path}`;}
   }
-
   /**
    * Generate key based on IP and endpoint
    */
@@ -236,9 +216,8 @@ export class RateLimitKeyGenerator {
     const ip = context.ip || 'unknown';
     const method = context.method || 'GET';
     const path = context.path || '/';
-    return `ip_endpoint:${ip}:${method}:${path}`;
+    return `ip_endpoint:${ip}:${method}:${path}`;}
   }
-
   /**
    * Generate key based on user and endpoint
    */
@@ -246,30 +225,26 @@ export class RateLimitKeyGenerator {
     const userId = context.userId || 'anonymous';
     const method = context.method || 'GET';
     const path = context.path || '/';
-    return `user_endpoint:${userId}:${method}:${path}`;
+    return `user_endpoint:${userId}:${method}:${path}`;}
   }
-
   /**
    * Generate key based on session
    */
   static bySession(context: RateLimitContext): string {
-    return `session:${context.sessionId || 'unknown'}`;
+    return `session:${context.sessionId || 'unknown'}`;}
   }
-
   /**
    * Generate key based on organization
    */
   static byOrganization(context: RateLimitContext): string {
-    return `org:${context.organizationId || 'unknown'}`;
+    return `org:${context.organizationId || 'unknown'}`;}
   }
-
   /**
    * Generate composite key with multiple factors
    */
   static composite(factors: string[]): (context: RateLimitContext) => string {
     return (context: RateLimitContext): string => {
       const parts: string[] = [];
-      
       for (const factor of factors) {
         switch (factor) {
         case 'ip':
@@ -279,7 +254,7 @@ export class RateLimitKeyGenerator {
           parts.push(context.userId || 'anonymous');
           break;
         case 'endpoint':
-          parts.push(`${context.method || 'GET'}:${context.path || '/'}`);
+          parts.push(`${context.method || 'GET'}:${context.path || '/'}`);}
           break;
         case 'session':
           parts.push(context.sessionId || 'unknown');
@@ -291,7 +266,6 @@ export class RateLimitKeyGenerator {
           parts.push(factor);
         }
       }
-      
       return parts.join(':');
     };
   }
@@ -304,12 +278,10 @@ export class RateLimitKeyGenerator {
 export abstract class RateLimitStrategy {
   protected config: RateLimitConfig;
   protected store: RateLimitStore;
-
   constructor(config: RateLimitConfig, store: RateLimitStore) {
     this.config = config;
     this.store = store;
   }
-
   abstract checkLimit(key: string, context: RateLimitContext): Promise<RateLimitResult>;
   abstract reset(key: string): Promise<void>;
 }
@@ -318,12 +290,10 @@ export class FixedWindowStrategy extends RateLimitStrategy {
   async checkLimit(key: string): Promise<RateLimitResult> {
     try {
       const { hits, resetTime } = await this.store.increment(key, this.config.windowMs);
-      
       const now = new Date();
       const windowStart = new Date(resetTime.getTime() - this.config.windowMs);
       const remainingRequests = Math.max(0, this.config.maxRequests - hits);
       const exceeded = hits > this.config.maxRequests;
-
       const info: RateLimitInfo = {
         totalHits: hits,
         totalHitsInWindow: hits,
@@ -334,9 +304,7 @@ export class FixedWindowStrategy extends RateLimitStrategy {
         exceeded,
         retryAfter: exceeded ? Math.ceil((resetTime.getTime() - now.getTime()) / 1000) : undefined
       };
-
       const headers = this.generateHeaders(info);
-
       return {
         allowed: !exceeded,
         info,
@@ -345,7 +313,6 @@ export class FixedWindowStrategy extends RateLimitStrategy {
       };
     } catch (error) {
       console.error('Rate limit check failed:', error);
-      
       // Fail open - allow request if store is unavailable
       const now = new Date();
       const defaultInfo: RateLimitInfo = {
@@ -355,9 +322,8 @@ export class FixedWindowStrategy extends RateLimitStrategy {
         resetTime: new Date(now.getTime() + this.config.windowMs),
         windowStart: now,
         windowEnd: new Date(now.getTime() + this.config.windowMs),
-        exceeded: false
+        exceeded: false,
       };
-
       return {
         allowed: true,
         info: defaultInfo,
@@ -366,43 +332,34 @@ export class FixedWindowStrategy extends RateLimitStrategy {
       };
     }
   }
-
   async reset(key: string): Promise<void> {
     await this.store.reset(key);
   }
-
   private generateHeaders(info: RateLimitInfo): Record<string, string> {
     const headers: Record<string, string> = {};
-
     if (this.config.standardHeaders) {
       headers['RateLimit-Limit'] = this.config.maxRequests.toString();
       headers['RateLimit-Remaining'] = Math.max(0, info.remainingRequests).toString();
       headers['RateLimit-Reset'] = Math.ceil(info.resetTime.getTime() / 1000).toString();
     }
-
     if (this.config.legacyHeaders) {
       headers['X-RateLimit-Limit'] = this.config.maxRequests.toString();
       headers['X-RateLimit-Remaining'] = Math.max(0, info.remainingRequests).toString();
       headers['X-RateLimit-Reset'] = Math.ceil(info.resetTime.getTime() / 1000).toString();
     }
-
     if (info.exceeded && info.retryAfter) {
       headers['Retry-After'] = info.retryAfter.toString();
     }
-
     return headers;
   }
-
   private generateErrorMessage(info: RateLimitInfo): string {
     if (typeof this.config.message === 'function') {
       return this.config.message(info);
     }
-    
     if (typeof this.config.message === 'string') {
       return this.config.message;
     }
-
-    return `Rate limit exceeded. Try again in ${info.retryAfter} seconds.`;
+    return `Rate limit exceeded. Try again in ${info.retryAfter} seconds.`;}
   }
 }
 
@@ -414,21 +371,16 @@ export class RateLimiter {
   private config: RateLimitConfig;
   private strategy: RateLimitStrategy;
   private keyGenerator: (context: RateLimitContext) => string;
-
   constructor(config: Partial<RateLimitConfig> = {}) {
     // Validate and set default configuration
     this.config = this.createConfig(config);
-    
     // Create store if not provided
     const store = this.config.store || new MemoryRateLimitStore();
-    
     // Create strategy (currently only fixed window implemented)
     this.strategy = new FixedWindowStrategy(this.config, store);
-    
     // Set key generator
     this.keyGenerator = this.config.keyGenerator || RateLimitKeyGenerator.byIP;
   }
-
   private createConfig(customConfig: Partial<RateLimitConfig>): RateLimitConfig {
     const defaultConfig: RateLimitConfig = {
       windowMs: 15 * 60 * 1000, // 15 minutes
@@ -441,19 +393,15 @@ export class RateLimiter {
       statusCode: 429,
       message: 'Too many requests from this IP, please try again later.'
     };
-
     const config = { ...defaultConfig, ...customConfig };
-    
     // Validate configuration
     try {
       RateLimitConfigSchema.parse(config);
     } catch (error) {
-      throw new Error(`Invalid rate limit configuration: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(`Invalid rate limit configuration: ${error instanceof Error ? error.message : 'Unknown error'}`);}
     }
-
     return config;
   }
-
   /**
    * Check if request should be rate limited
    */
@@ -461,7 +409,6 @@ export class RateLimiter {
     const key = this.keyGenerator(context);
     return await this.strategy.checkLimit(key, context);
   }
-
   /**
    * Reset rate limit for a specific key
    */
@@ -469,19 +416,15 @@ export class RateLimiter {
     const key = this.keyGenerator(context);
     await this.strategy.reset(key);
   }
-
   /**
    * Get current rate limit info without incrementing
    */
   async getCurrentInfo(context: RateLimitContext): Promise<RateLimitInfo | null> {
     const key = this.keyGenerator(context);
     const data = await this.config.store?.get(key);
-    
     if (!data) return null;
-
     const resetTime = new Date(data.resetTime);
     const windowStart = new Date(data.windowStart);
-    
     return {
       totalHits: data.hits,
       totalHitsInWindow: data.hits,
@@ -492,26 +435,22 @@ export class RateLimiter {
       exceeded: data.hits > this.config.maxRequests
     };
   }
-
   /**
    * Update configuration
    */
   updateConfig(newConfig: Partial<RateLimitConfig>): void {
     this.config = { ...this.config, ...newConfig };
-    
     // Update key generator if provided
     if (newConfig.keyGenerator) {
       this.keyGenerator = newConfig.keyGenerator;
     }
   }
-
   /**
    * Get current configuration
    */
   getConfig(): RateLimitConfig {
     return { ...this.config };
   }
-
   /**
    * Cleanup resources
    */
@@ -519,7 +458,6 @@ export class RateLimiter {
     if (this.config.store) {
       await this.config.store.cleanup();
     }
-    
     // Cleanup memory store if it's the default one
     if (this.config.store instanceof MemoryRateLimitStore) {
       this.config.store.destroy();
@@ -541,10 +479,9 @@ export class RateLimitPresets {
       maxRequests: 5,
       keyGenerator: RateLimitKeyGenerator.byIP,
       message: 'Too many authentication attempts. Please try again later.',
-      standardHeaders: true
+      standardHeaders: true,
     };
   }
-
   /**
    * Moderate rate limiting for API endpoints
    */
@@ -554,10 +491,9 @@ export class RateLimitPresets {
       maxRequests: 1000,
       keyGenerator: RateLimitKeyGenerator.byUserAndEndpoint,
       standardHeaders: true,
-      skipSuccessfulRequests: false
+      skipSuccessfulRequests: false,
     };
   }
-
   /**
    * Lenient rate limiting for public content
    */
@@ -567,10 +503,9 @@ export class RateLimitPresets {
       maxRequests: 5000,
       keyGenerator: RateLimitKeyGenerator.byIP,
       standardHeaders: true,
-      skipSuccessfulRequests: true
+      skipSuccessfulRequests: true,
     };
   }
-
   /**
    * Very strict rate limiting for password reset
    */
@@ -580,10 +515,9 @@ export class RateLimitPresets {
       maxRequests: 3,
       keyGenerator: RateLimitKeyGenerator.byIP,
       message: 'Too many password reset attempts. Please try again later.',
-      standardHeaders: true
+      standardHeaders: true,
     };
   }
-
   /**
    * Rate limiting for email sending
    */
@@ -593,10 +527,9 @@ export class RateLimitPresets {
       maxRequests: 10,
       keyGenerator: RateLimitKeyGenerator.byUser,
       message: 'Email sending limit reached. Please try again later.',
-      standardHeaders: true
+      standardHeaders: true,
     };
   }
-
   /**
    * Rate limiting for file uploads
    */
@@ -606,10 +539,9 @@ export class RateLimitPresets {
       maxRequests: 50,
       keyGenerator: RateLimitKeyGenerator.byUser,
       message: 'File upload limit reached. Please try again later.',
-      standardHeaders: true
+      standardHeaders: true,
     };
   }
-
   /**
    * Rate limiting for search operations
    */
@@ -619,7 +551,7 @@ export class RateLimitPresets {
       maxRequests: 100,
       keyGenerator: RateLimitKeyGenerator.byUser,
       skipSuccessfulRequests: false,
-      standardHeaders: true
+      standardHeaders: true,
     };
   }
 }
@@ -635,32 +567,28 @@ export class RateLimitUtils {
   static fromPreset(preset: string, customConfig?: Partial<RateLimitConfig>): RateLimiter {
     const presetMethod = (RateLimitPresets as any)[preset];
     if (typeof presetMethod !== 'function') {
-      throw new Error(`Unknown preset: ${preset}`);
+      throw new Error(`Unknown preset: ${preset}`);}
     }
     const presetConfig = presetMethod();
     const finalConfig = { ...presetConfig, ...customConfig };
     return new RateLimiter(finalConfig);
   }
-
   /**
    * Create multiple rate limiters for different endpoints
    */
   static createMultiple(configs: Record<string, Partial<RateLimitConfig>>): Record<string, RateLimiter> {
     const limiters: Record<string, RateLimiter> = {};
-    
     for (const [name, config] of Object.entries(configs)) {
       limiters[name] = new RateLimiter(config);
     }
-    
     return limiters;
   }
-
   /**
    * Extract IP address from various sources
    */
   static extractIP(headers: Record<string, string>): string | undefined {
     // Check common proxy headers
-    const possibleHeaders = [
+    const possibleHeaders = [;
       'cf-connecting-ip',      // Cloudflare
       'x-forwarded-for',       // Standard proxy header
       'x-real-ip',             // Nginx
@@ -668,7 +596,6 @@ export class RateLimitUtils {
       'true-client-ip',        // Cloudflare Enterprise
       'fastly-client-ip'       // Fastly
     ];
-
     for (const header of possibleHeaders) {
       const value = headers[header];
       if (value) {
@@ -679,20 +606,17 @@ export class RateLimitUtils {
         }
       }
     }
-
     return undefined;
   }
-
   /**
    * Format rate limit info for logging
    */
   static formatInfoForLogging(info: RateLimitInfo, key: string): string {
-    return `Rate limit ${info.exceeded ? 'EXCEEDED' : 'OK'} for key="${key}" ` +
-           `hits=${info.totalHits}/${info.totalHitsInWindow} ` +
-           `remaining=${info.remainingRequests} ` +
-           `reset=${info.resetTime.toISOString()}`;
+    return `Rate limit ${info.exceeded ? 'EXCEEDED' : 'OK'} for key="${key}" ` +}
+           `hits=${info.totalHits}/${info.totalHitsInWindow} ` +}
+           `remaining=${info.remainingRequests} ` +}
+           `reset=${info.resetTime.toISOString()}`;}
   }
-
   /**
    * Calculate optimal window size based on expected traffic
    */
@@ -700,8 +624,7 @@ export class RateLimitUtils {
     // Simple heuristic: window should be long enough to smooth traffic spikes
     // but short enough to be responsive to attacks
     const requestsPerMinute = expectedRequestsPerHour / 60;
-    const baseWindow = 15 * 60 * 1000; // 15 minutes
-    
+    const baseWindow = 15 * 60 * 1000; // 15 minutes;
     if (requestsPerMinute > 1000) {
       return 5 * 60 * 1000; // 5 minutes for high traffic
     } else if (requestsPerMinute > 100) {

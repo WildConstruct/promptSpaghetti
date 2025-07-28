@@ -6,7 +6,6 @@ import { EncryptionStatusIcon, EncryptionDetails, EncryptionState } from './Encr
 import { ConnectionState } from '../websocket/WebSocketClient';
 import { RecentProjectsMenu } from './RecentProjects/RecentProjectsMenu';
 import { RecentProjectEntry } from '../managers/RecentProjectsManager';
-
 interface StatusBarProps {
   statusMessage: string;
   errors: ValidationError[];
@@ -45,12 +44,10 @@ interface StatusBarProps {
   onBrowseTemplates?: () => void;
 }
 
-export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(false);
+export const [showEncryptionDetails, setShowEncryptionDetails] = useState(false);
   const wsDetailsRef = useRef<HTMLDivElement>(null);
   const encryptionDetailsRef = useRef<HTMLDivElement>(null);
-  
   const errorCount = errors.length;
-
   // Close details when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -61,14 +58,12 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
         setShowEncryptionDetails(false);
       }
     };
-
     if (showWebSocketDetails || showEncryptionDetails) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [showWebSocketDetails, showEncryptionDetails]);
-
-  return (
+  return ()
     <div style={{ 
       position: 'absolute', 
       bottom: 0, 
@@ -80,13 +75,12 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
       fontSize: 14, 
       display: 'flex', 
       alignItems: 'center', 
-      justifyContent: 'space-between' 
+      justifyContent: 'space-between' ,
     }}>
       <div aria-live="polite">
         {statusMessage && <span style={{ marginRight: 16 }}>{statusMessage}</span>}
-        
         {/* Current Project Indicator */}
-        {currentProjectName && (
+        {currentProjectName && ()
           <span style={{ 
             marginRight: 16, 
             padding: '4px 8px',
@@ -94,12 +88,11 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
             border: '1px solid #dee2e6',
             borderRadius: 3,
             fontSize: '13px',
-            color: '#495057'
+            color: '#495057',
           }}>
             📁 {currentProjectName}{hasUnsavedChanges ? ' •' : ''}
           </span>
         )}
-        
         <button
           onClick={onPreview}
           style={{ 
@@ -110,14 +103,13 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
             border: '1px solid #ccc', 
             borderRadius: 4, 
             fontWeight: 500, 
-            cursor: 'pointer' 
+            cursor: 'pointer' ,
           }}
         >
           Preview
         </button>
-        
         {/* Project Management Buttons */}
-        {onNewProject && (
+        {onNewProject && ()
           <button
             onClick={onNewProject}
             title="Create a new project"
@@ -129,14 +121,13 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
               border: '1px solid #ccc', 
               borderRadius: 4, 
               fontWeight: 500, 
-              cursor: 'pointer' 
+              cursor: 'pointer' ,
             }}
           >
             📄 New
           </button>
         )}
-        
-        {onSaveProject && (
+        {onSaveProject && ()
           <button
             onClick={onSaveProject}
             title="Save project as .psg file"
@@ -148,14 +139,13 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
               border: hasUnsavedChanges ? '1px solid #45a049' : '1px solid #ccc', 
               borderRadius: 4, 
               fontWeight: 500, 
-              cursor: 'pointer' 
+              cursor: 'pointer' ,
             }}
           >
             💾 Save Project{hasUnsavedChanges ? ' *' : ''}
           </button>
         )}
-        
-        {onLoadProject && (
+        {onLoadProject && ()
           <div style={{ display: 'inline-flex', marginRight: 16 }}>
             <button
               onClick={onLoadProject}
@@ -167,17 +157,16 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
                 border: '1px solid #ccc', 
                 borderRadius: '4px 0 0 4px', 
                 fontWeight: 500, 
-                cursor: 'pointer' 
+                cursor: 'pointer' ,
               }}
             >
               📂 Load Project
             </button>
-            {onLoadRecentProject && (
+            {onLoadRecentProject && ()
               <RecentProjectsMenu onLoadRecentProject={onLoadRecentProject} />
             )}
           </div>
         )}
-
         <button
           onClick={onSaveJson}
           style={{ 
@@ -188,13 +177,12 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
             border: '1px solid #ccc', 
             borderRadius: 4, 
             fontWeight: 500, 
-            cursor: 'pointer' 
+            cursor: 'pointer' ,
           }}
         >
           📋 Share Template
         </button>
-
-        {onExportBundle && (
+        {onExportBundle && ()
           <button
             onClick={onExportBundle}
             title="Export for use in production pipeline"
@@ -206,15 +194,14 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
               border: '1px solid #45a049', 
               borderRadius: 4, 
               fontWeight: 500, 
-              cursor: 'pointer' 
+              cursor: 'pointer' ,
             }}
           >
             📦 Export for Pipeline
           </button>
         )}
-
         {/* Template Buttons */}
-        {onSaveTemplate && (
+        {onSaveTemplate && ()
           <button
             onClick={onSaveTemplate}
             title="Save current workflow as reusable template"
@@ -226,14 +213,13 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
               border: '1px solid #7c3aed', 
               borderRadius: 4, 
               fontWeight: 500, 
-              cursor: 'pointer' 
+              cursor: 'pointer' ,
             }}
           >
             💾 Save Template
           </button>
         )}
-
-        {onBrowseTemplates && (
+        {onBrowseTemplates && ()
           <button
             onClick={onBrowseTemplates}
             title="Browse and apply workflow templates"
@@ -245,14 +231,13 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
               border: '1px solid #0891b2', 
               borderRadius: 4, 
               fontWeight: 500, 
-              cursor: 'pointer' 
+              cursor: 'pointer' ,
             }}
           >
             📚 Templates
           </button>
         )}
-        
-        {correctionsEnabled && onCorrections && (
+        {correctionsEnabled && onCorrections && ()
           <button
             onClick={onCorrections}
             style={{ 
@@ -263,14 +248,13 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
               border: '1px solid #ccc', 
               borderRadius: 4, 
               fontWeight: 500, 
-              cursor: 'pointer' 
+              cursor: 'pointer' ,
             }}
           >
             Corrections
           </button>
         )}
-        
-        {correctionsEnabled && onStats && (
+        {correctionsEnabled && onStats && ()
           <button
             onClick={onStats}
             style={{ 
@@ -281,14 +265,13 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
               border: '1px solid #ccc', 
               borderRadius: 4, 
               fontWeight: 500, 
-              cursor: 'pointer' 
+              cursor: 'pointer' ,
             }}
           >
             📊 Stats
           </button>
         )}
-        
-        {onExtensions && (
+        {onExtensions && ()
           <button
             onClick={onExtensions}
             style={{ 
@@ -299,14 +282,13 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
               border: '1px solid #ccc', 
               borderRadius: 4, 
               fontWeight: 500, 
-              cursor: 'pointer' 
+              cursor: 'pointer' ,
             }}
           >
             🧩 Extensions
           </button>
         )}
-        
-        {onOptimization && (
+        {onOptimization && ()
           <button
             data-optimization-button
             onClick={onOptimization}
@@ -319,18 +301,16 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
               border: optimizationEnabled ? '1px solid #138496' : '1px solid #ccc', 
               borderRadius: 4, 
               fontWeight: 500, 
-              cursor: 'pointer' 
+              cursor: 'pointer' ,
             }}
           >
             ⚡ Optimize
           </button>
         )}
-        
         {errorCount === 0 ? 'No errors' : `${errorCount} error${errorCount > 1 ? 's' : ''}`}
-        
-        {errorCount > 0 && (
+        {errorCount > 0 && ()
           <span style={{ marginLeft: 16 }}>
-            {errors.map((err) => (
+            {errors.map((err) => ()
               <span 
                 key={err.edgeId} 
                 style={{ color: '#f00', marginRight: 8 }} 
@@ -342,18 +322,16 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
           </span>
         )}
       </div>
-
       {/* Right side - Status indicators */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative' }}>
         {/* Encryption status */}
-        {encryptionState && (
+        {encryptionState && ()
           <>
             <EncryptionStatusIcon 
               encryptionState={encryptionState}
               onClick={() => setShowEncryptionDetails(!showEncryptionDetails)}
             />
-            
-            {showEncryptionDetails && (
+            {showEncryptionDetails && ()
               <div 
                 ref={encryptionDetailsRef}
                 style={{
@@ -361,7 +339,7 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
                   bottom: '100%',
                   right: '50%',
                   marginBottom: 8,
-                  zIndex: 1000
+                  zIndex: 1000,
                 }}
               >
                 <EncryptionDetails
@@ -374,16 +352,14 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
             )}
           </>
         )}
-
         {/* WebSocket status */}
-        {connectionState && (
+        {connectionState && ()
           <>
             <WebSocketStatusIcon 
               connectionState={connectionState}
               onClick={() => setShowWebSocketDetails(!showWebSocketDetails)}
             />
-            
-            {showWebSocketDetails && (
+            {showWebSocketDetails && ()
               <div 
                 ref={wsDetailsRef}
                 style={{
@@ -391,7 +367,7 @@ export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(fals
                   bottom: '100%',
                   right: 0,
                   marginBottom: 8,
-                  zIndex: 1000
+                  zIndex: 1000,
                 }}
               >
                 <WebSocketDetails

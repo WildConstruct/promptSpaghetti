@@ -4,7 +4,6 @@
  * Comprehensive React UI for managing marketplace and community tickets.
  * Provides full CRUD operations, filtering, status management, and real-time updates.
  */
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   MarketplaceTicket,
@@ -14,14 +13,12 @@ import {
   TicketCategory,
   Epic16TicketIntegrationService
 } from '../../services/Epic16TicketIntegrationService';
-
 interface TicketManagementDashboardProps {
   ticketService: Epic16TicketIntegrationService;
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
   onTicketSelect?: (ticket: MarketplaceTicket) => void;
 }
-
 interface TicketFilters {
   status: TicketStatus[];
   type: MarketplaceTicketType[];
@@ -32,7 +29,7 @@ interface TicketFilters {
   searchQuery: string;
 }
 
-export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps> = ({
+export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps> = ({)
   ticketService,
   userId,
   userRole,
@@ -43,30 +40,25 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
   const [selectedTicket, setSelectedTicket] = useState<MarketplaceTicket | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  const [filters, setFilters] = useState<TicketFilters>({
+  const [filters, setFilters] = useState<TicketFilters>({)
     status: [],
     type: [],
     priority: [],
     category: [],
-    searchQuery: ''
+    searchQuery: '',
   });
-  
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState({)
     page: 0,
     limit: 25,
     total: 0,
-    hasMore: false
+    hasMore: false,
   });
-  
   const [_____showCreateModal, setShowCreateModal] = useState(false);
   const [metrics, setMetrics] = useState<unknown>(null);
-
   // Load tickets
   const loadTickets = useCallback(async () => {
     setLoading(true);
     setError(null);
-    
     try {
       const filterCriteria = {
         status: filters.status.length > 0 ? filters.status : undefined,
@@ -78,22 +70,19 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
         limit: pagination.limit,
         offset: pagination.page * pagination.limit
       };
-      
       const result = await ticketService.getTickets(filterCriteria);
       setTickets(result.tickets);
-      setPagination(prev => ({
+      setPagination(prev => ({)
         ...prev,
         total: result.total,
-        hasMore: result.hasMore
+        hasMore: result.hasMore,
       }));
-      
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load tickets');
     } finally {
       setLoading(false);
     }
   }, [ticketService, filters, pagination.page, pagination.limit]);
-
   // Load metrics
   const loadMetrics = useCallback(async () => {
     try {
@@ -101,42 +90,35 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
         start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
         end: new Date()
       };
-      
       const metricsData = await ticketService.getTicketMetrics(timeRange);
       setMetrics(metricsData);
     } catch (err) {
       console.error('Failed to load metrics:', err);
     }
   }, [ticketService]);
-
   // Effects
   useEffect(() => {
     loadTickets();
   }, [loadTickets]);
-
   useEffect(() => {
     loadMetrics();
   }, [loadMetrics]);
-
   // Filter tickets based on search query
   const filteredTickets = useMemo(() => {
     if (!filters.searchQuery) return tickets;
-    
     const query = filters.searchQuery.toLowerCase();
-    return tickets.filter(ticket =>
+    return tickets.filter(ticket =>)
       ticket.title.toLowerCase().includes(query) ||
       ticket.description.toLowerCase().includes(query) ||
       ticket.id.toLowerCase().includes(query) ||
       ticket.labels.some(label => label.toLowerCase().includes(query))
     );
   }, [tickets, filters.searchQuery]);
-
   // Handle ticket status update
   const handleStatusUpdate = async (ticketId: string, newStatus: TicketStatus) => {
     try {
       await ticketService.updateTicketStatus(ticketId, newStatus, userId);
       await loadTickets();
-      
       if (selectedTicket?.id === ticketId) {
         const updatedTicket = tickets.find(t => t.id === ticketId);
         if (updatedTicket) {
@@ -147,7 +129,6 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
       setError(err instanceof Error ? err.message : 'Failed to update ticket status');
     }
   };
-
   // Handle ticket assignment
   const handleAssignment = async (ticketId: string, assigneeId: string) => {
     try {
@@ -157,7 +138,6 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
       setError(err instanceof Error ? err.message : 'Failed to assign ticket');
     }
   };
-
   // Handle ticket escalation
   const handleEscalation = async (ticketId: string, reason: string) => {
     try {
@@ -167,19 +147,17 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
       setError(err instanceof Error ? err.message : 'Failed to escalate ticket');
     }
   };
-
   // Reset filters
   const resetFilters = () => {
-    setFilters({
+    setFilters({)
       status: [],
       type: [],
       priority: [],
       category: [],
-      searchQuery: ''
+      searchQuery: '',
     });
     setPagination(prev => ({ ...prev, page: 0 }));
   };
-
   // Render status badge
   const renderStatusBadge = (status: TicketStatus) => {
     const colors = {
@@ -195,14 +173,12 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
       [TicketStatus.ESCALATED]: 'bg-red-500 text-white',
       [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700'
     };
-
-    return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>
+    return ()
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>}
         {status.replace('_', ' ').toUpperCase()}
       </span>
     );
   };
-
   // Render priority badge
   const renderPriorityBadge = (priority: TicketPriority) => {
     const colors = {
@@ -212,16 +188,14 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
       [TicketPriority.URGENT]: 'bg-orange-100 text-orange-800',
       [TicketPriority.CRITICAL]: 'bg-red-500 text-white'
     };
-
-    return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>
+    return ()
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>}
         {priority.toUpperCase()}
       </span>
     );
   };
-
   if (loading && tickets.length === 0) {
-    return (
+    return ()
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -230,8 +204,7 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="ticket-management-dashboard h-full flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -242,9 +215,8 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
               Epic 16 Marketplace & Community Support System
             </p>
           </div>
-          
           <div className="flex items-center space-x-3">
-            {userRole === 'admin' && (
+            {userRole === 'admin' && ()
               <button
                 onClick={() => setShowCreateModal(true)}
                 className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
@@ -252,7 +224,6 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
                 Create Ticket
               </button>
             )}
-            
             <button
               onClick={resetFilters}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200"
@@ -261,8 +232,7 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
             </button>
           </div>
         </div>
-
-        {error && (
+        {error && ()
           <div className="mt-4 bg-red-50 border border-red-200 rounded-md p-4">
             <div className="flex">
               <div className="flex-shrink-0">
@@ -277,35 +247,30 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
           </div>
         )}
       </div>
-
       <div className="flex-1 flex">
         {/* Sidebar - Filters and Metrics */}
         <div className="w-80 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
           {/* Metrics Dashboard */}
-          {metrics && (
+          {metrics && ()
             <div className="mb-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Metrics (30 days)</h3>
-              
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div className="bg-white rounded-lg p-3 border">
                   <div className="text-2xl font-bold text-blue-600">{metrics.totalTickets}</div>
                   <div className="text-xs text-gray-600">Total Tickets</div>
                 </div>
-                
                 <div className="bg-white rounded-lg p-3 border">
                   <div className="text-2xl font-bold text-green-600">
                     {(100 - metrics.slaBreachRate).toFixed(1)}%
                   </div>
                   <div className="text-xs text-gray-600">SLA Compliance</div>
                 </div>
-                
                 <div className="bg-white rounded-lg p-3 border">
                   <div className="text-2xl font-bold text-yellow-600">
                     {Math.round(metrics.averageResponseTime)}m
                   </div>
                   <div className="text-xs text-gray-600">Avg Response</div>
                 </div>
-                
                 <div className="bg-white rounded-lg p-3 border">
                   <div className="text-2xl font-bold text-purple-600">{metrics.customerSatisfaction}%</div>
                   <div className="text-xs text-gray-600">Satisfaction</div>
@@ -313,7 +278,6 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
               </div>
             </div>
           )}
-
           {/* Filters */}
           <div className="space-y-4">
             <div>
@@ -326,17 +290,16 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
               <div className="space-y-1 max-h-32 overflow-y-auto">
-                {Object.values(TicketStatus).map((status) => (
+                {Object.values(TicketStatus).map((status) => ()
                   <label key={status} className="flex items-center">
                     <input
                       type="checkbox"
                       checked={filters.status.includes(status)}
                       onChange={(e) => {
-                        const newStatus = e.target.checked
+                        const newStatus = e.target.checked;
                           ? [...filters.status, status]
                           : filters.status.filter(s => s !== status);
                         setFilters({ ...filters, status: newStatus });
@@ -350,17 +313,16 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
                 ))}
               </div>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Priority</label>
               <div className="space-y-1">
-                {Object.values(TicketPriority).map((priority) => (
+                {Object.values(TicketPriority).map((priority) => ()
                   <label key={priority} className="flex items-center">
                     <input
                       type="checkbox"
                       checked={filters.priority.includes(priority)}
                       onChange={(e) => {
-                        const newPriority = e.target.checked
+                        const newPriority = e.target.checked;
                           ? [...filters.priority, priority]
                           : filters.priority.filter(p => p !== priority);
                         setFilters({ ...filters, priority: newPriority });
@@ -374,17 +336,16 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
                 ))}
               </div>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
               <div className="space-y-1 max-h-32 overflow-y-auto">
-                {Object.values(MarketplaceTicketType).map((type) => (
+                {Object.values(MarketplaceTicketType).map((type) => ()
                   <label key={type} className="flex items-center">
                     <input
                       type="checkbox"
                       checked={filters.type.includes(type)}
                       onChange={(e) => {
-                        const newType = e.target.checked
+                        const newType = e.target.checked;
                           ? [...filters.type, type]
                           : filters.type.filter(t => t !== type);
                         setFilters({ ...filters, type: newType });
@@ -400,7 +361,6 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
             </div>
           </div>
         </div>
-
         {/* Main Content - Ticket List */}
         <div className="flex-1 flex flex-col">
           {/* Ticket List Header */}
@@ -409,7 +369,6 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
               <div className="text-sm text-gray-600">
                 Showing {filteredTickets.length} of {pagination.total} tickets
               </div>
-              
               <div className="flex items-center space-x-2">
                 <select
                   value={pagination.limit}
@@ -423,10 +382,9 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
               </div>
             </div>
           </div>
-
           {/* Ticket List */}
           <div className="flex-1 overflow-y-auto">
-            {filteredTickets.length === 0 ? (
+            {filteredTickets.length === 0 ? ()
               <div className="text-center py-12">
                 <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -438,9 +396,9 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
                     : 'Get started by creating your first ticket.'}
                 </p>
               </div>
-            ) : (
+            ) : ()
               <div className="divide-y divide-gray-200">
-                {filteredTickets.map((ticket) => (
+                {filteredTickets.map((ticket) => ()
                   <TicketListItem
                     key={ticket.id}
                     ticket={ticket}
@@ -461,9 +419,8 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
               </div>
             )}
           </div>
-
           {/* Pagination */}
-          {pagination.total > pagination.limit && (
+          {pagination.total > pagination.limit && ()
             <div className="bg-white border-t border-gray-200 px-4 py-3">
               <div className="flex items-center justify-between">
                 <button
@@ -473,11 +430,9 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
                 >
                   Previous
                 </button>
-                
                 <span className="text-sm text-gray-700">
                   Page {pagination.page + 1} of {Math.ceil(pagination.total / pagination.limit)}
                 </span>
-                
                 <button
                   onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
                   disabled={!pagination.hasMore}
@@ -507,8 +462,7 @@ interface TicketListItemProps {
   renderStatusBadge: (status: TicketStatus) => React.ReactNode;
   renderPriorityBadge: (priority: TicketPriority) => React.ReactNode;
 }
-
-const TicketListItem: React.FC<TicketListItemProps> = ({
+const TicketListItem: React.FC<TicketListItemProps> = ({)
   ticket,
   onSelect,
   onStatusUpdate,
@@ -521,13 +475,10 @@ const TicketListItem: React.FC<TicketListItemProps> = ({
   renderPriorityBadge
 }) => {
   const [showActions, setShowActions] = useState(false);
-
   const canModify = userRole === 'admin' || (userRole === 'agent' && ticket.assignedTo === currentUserId);
-
   const isOverdue = ticket.sla.responseTime.deadline < new Date() && !ticket.sla.responseTime.actual;
   const isSLAWarning = ticket.sla.responseTime.deadline.getTime() - Date.now() < (ticket.sla.responseTime.warningThreshold * 60 * 1000);
-
-  return (
+  return ()
     <div
       className={`relative p-4 hover:bg-gray-50 cursor-pointer ${selected ? 'bg-blue-50 border-l-4 border-blue-500' : ''} ${isOverdue ? 'bg-red-50' : isSLAWarning ? 'bg-yellow-50' : ''}`}
       onClick={onSelect}
@@ -538,38 +489,33 @@ const TicketListItem: React.FC<TicketListItemProps> = ({
             <span className="text-sm font-medium text-blue-600">#{ticket.id.split('-').pop()}</span>
             {renderStatusBadge(ticket.status)}
             {renderPriorityBadge(ticket.priority)}
-            
-            {isOverdue && (
+            {isOverdue && ()
               <span className="px-2 py-1 bg-red-500 text-white text-xs font-medium rounded-full">
                 OVERDUE
               </span>
             )}
-            {isSLAWarning && !isOverdue && (
+            {isSLAWarning && !isOverdue && ()
               <span className="px-2 py-1 bg-yellow-500 text-white text-xs font-medium rounded-full">
                 SLA WARNING
               </span>
             )}
           </div>
-          
           <h3 className="text-sm font-medium text-gray-900 truncate">
             {ticket.title}
           </h3>
-          
           <p className="text-sm text-gray-600 line-clamp-2 mt-1">
             {ticket.description}
           </p>
-          
           <div className="flex items-center space-x-4 mt-3 text-xs text-gray-500">
             <span>Type: {ticket.type.replace('_', ' ')}</span>
             {ticket.assignedTo && <span>Assigned: {ticket.assignedTo}</span>}
             <span>Created: {ticket.createdAt.toLocaleDateString()}</span>
-            {ticket.comments.length > 0 && (
+            {ticket.comments.length > 0 && ()
               <span>{ticket.comments.length} comment{ticket.comments.length !== 1 ? 's' : ''}</span>
             )}
           </div>
         </div>
-
-        {canModify && (
+        {canModify && ()
           <div className="flex items-center space-x-1">
             <button
               onClick={(e) => {
@@ -582,8 +528,7 @@ const TicketListItem: React.FC<TicketListItemProps> = ({
                 <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
               </svg>
             </button>
-
-            {showActions && (
+            {showActions && ()
               <div className="absolute right-4 top-12 z-10 bg-white border border-gray-200 rounded-md shadow-lg py-1 min-w-32">
                 <button
                   onClick={(e) => {

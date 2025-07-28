@@ -15,7 +15,7 @@ export interface ProfessionalIntegrationProps {
     onEdgesChange: (edges: Edge[]) => void;
     onNodesSelect: (nodes: Node[]) => void;
     onEdgesSelect: (edges: Edge[]) => void;
-    onNodeCreate: (nodeType: string, position: {
+    onNodeCreate: (nodeType: string, position: {)
         x: number;
         y: number;
     }, data?: Record<string, unknown>) => void;

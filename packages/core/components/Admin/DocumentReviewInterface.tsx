@@ -4,7 +4,6 @@
  * Administrative interface for examining uploaded verification documents
  * Part of Epic 17.5.5 - Verification System
  */
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -72,7 +71,7 @@ export interface ReviewAnnotation {
   timestamp: Date;
 }
 
-export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
+export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
   documents,
   requestId,
   userId,
@@ -91,40 +90,31 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
   const [reviewDecisions, setReviewDecisions] = useState<Record<string, boolean | null>>({});
   const [_____isCreatingAnnotation, _____setIsCreatingAnnotation] = useState(false);
   const [_____selectedText, _____setSelectedText] = useState('');
-
   const currentDocument = documents[currentDocumentIndex];
-
   const handleZoomIn = () => {
     setZoom(prev => Math.min(prev + 25, 300));
   };
-
   const handleZoomOut = () => {
     setZoom(prev => Math.max(prev - 25, 50));
   };
-
   const handleRotate = () => {
     setRotation(prev => (prev + 90) % 360);
   };
-
   const handleNextDocument = () => {
-    setCurrentDocumentIndex(prev => 
+    setCurrentDocumentIndex(prev => )
       prev < documents.length - 1 ? prev + 1 : prev
     );
   };
-
   const handlePrevDocument = () => {
     setCurrentDocumentIndex(prev => prev > 0 ? prev - 1 : prev);
   };
-
   const handleDocumentClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!activeAnnotationType) return;
-
     const rect = event.currentTarget.getBoundingClientRect();
     const x = ((event.clientX - rect.left) / rect.width) * 100;
     const y = ((event.clientY - rect.top) / rect.height) * 100;
-
     const newAnnotation: ReviewAnnotation = {
-      id: `annotation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `annotation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,}
       x,
       y,
       width: 10, // Default size
@@ -134,32 +124,26 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
       reviewer: 'current_admin', // Would come from auth context
       timestamp: new Date()
     };
-
     setAnnotations(prev => [...prev, newAnnotation]);
     setActiveAnnotationType(null);
   };
-
   const handleAnnotationUpdate = (annotationId: string, note: string) => {
-    setAnnotations(prev =>
+    setAnnotations(prev =>)
       prev.map(ann => ann.id === annotationId ? { ...ann, note } : ann)
     );
   };
-
   const handleDocumentReview = (approved: boolean) => {
     const notes = reviewNotes[currentDocument.id] || '';
     if (!notes.trim()) {
       alert('Please provide review notes before making a decision.');
       return;
     }
-
-    setReviewDecisions(prev => ({
+    setReviewDecisions(prev => ({)
       ...prev,
       [currentDocument.id]: approved
     }));
-
     onReviewComplete(currentDocument.id, approved, notes);
   };
-
   const getDocumentTypeIcon = (type: string) => {
     switch (type) {
     case 'image': return Image;
@@ -167,7 +151,6 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
     default: return FileText;
     }
   };
-
   const getAnnotationColor = (type: ReviewAnnotation['type']) => {
     switch (type) {
     case 'highlight': return '#fbbf24';
@@ -178,24 +161,19 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
     default: return '#6b7280';
     }
   };
-
   const formatFileSize = (bytes: number) => {
     const units = ['B', 'KB', 'MB', 'GB'];
     let size = bytes;
     let unitIndex = 0;
-    
     while (size >= 1024 && unitIndex < units.length - 1) {
       size /= 1024;
       unitIndex++;
     }
-    
-    return `${size.toFixed(1)} ${units[unitIndex]}`;
+    return `${size.toFixed(1)} ${units[unitIndex]}`;}
   };
-
   const renderDocumentViewer = () => {
     const DocumentIcon = getDocumentTypeIcon(currentDocument.type);
-
-    return (
+    return ()
       <div className="document-viewer">
         <div className="viewer-toolbar">
           <div className="toolbar-left">
@@ -204,32 +182,25 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
             </span>
             <span className="document-name">{currentDocument.fileName}</span>
           </div>
-          
           <div className="toolbar-center">
             <Button onClick={handlePrevDocument} disabled={currentDocumentIndex === 0} size="sm" variant="outline">
               <ArrowLeft className="w-4 h-4" />
             </Button>
-            
             <Button onClick={handleNextDocument} disabled={currentDocumentIndex === documents.length - 1} size="sm" variant="outline">
               <ArrowRight className="w-4 h-4" />
             </Button>
           </div>
-          
           <div className="toolbar-right">
             <Button onClick={handleZoomOut} disabled={zoom <= 50} size="sm" variant="outline">
               <ZoomOut className="w-4 h-4" />
             </Button>
-            
             <span className="zoom-level">{zoom}%</span>
-            
             <Button onClick={handleZoomIn} disabled={zoom >= 300} size="sm" variant="outline">
               <ZoomIn className="w-4 h-4" />
             </Button>
-            
             <Button onClick={handleRotate} size="sm" variant="outline">
               <RotateCw className="w-4 h-4" />
             </Button>
-            
             <Button 
               onClick={() => setIsFullscreen(!isFullscreen)} 
               size="sm" 
@@ -239,22 +210,21 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
             </Button>
           </div>
         </div>
-
-        <div className={`viewer-container ${isFullscreen ? 'fullscreen' : ''}`}>
+        <div className={`viewer-container ${isFullscreen ? 'fullscreen' : ''}`}>}
           <div
             className="document-display"
             onClick={handleDocumentClick}
             style={{
-              transform: `scale(${zoom / 100}) rotate(${rotation}deg)`
+              transform: `scale(${zoom / 100}) rotate(${rotation}deg)`}
             }}
           >
-            {currentDocument.type === 'image' ? (
+            {currentDocument.type === 'image' ? ()
               <img
                 src={currentDocument.url}
                 alt={currentDocument.fileName}
                 className="document-image"
               />
-            ) : (
+            ) : ()
               <div className="document-placeholder">
                 <DocumentIcon className="w-24 h-24 text-gray-400" />
                 <p>Document viewer for {currentDocument.type} files</p>
@@ -264,19 +234,18 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
                 </Button>
               </div>
             )}
-
             {/* Render annotations */}
-            {annotations.map(annotation => (
+            {annotations.map(annotation => ()
               <div
                 key={annotation.id}
                 className="annotation"
                 style={{
-                  left: `${annotation.x}%`,
-                  top: `${annotation.y}%`,
-                  width: `${annotation.width}%`,
-                  height: `${annotation.height}%`,
+                  left: `${annotation.x}%`,}
+                  top: `${annotation.y}%`,}
+                  width: `${annotation.width}%`,}
+                  height: `${annotation.height}%`,}
                   borderColor: getAnnotationColor(annotation.type),
-                  backgroundColor: `${getAnnotationColor(annotation.type)}20`
+                  backgroundColor: `${getAnnotationColor(annotation.type)}20`}
                 }}
                 title={annotation.note}
               />
@@ -286,8 +255,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
       </div>
     );
   };
-
-  const renderAnnotationTools = () => (
+  const renderAnnotationTools = () => (;)
     <Card className="annotation-tools">
       <CardHeader>
         <CardTitle>Annotation Tools</CardTitle>
@@ -302,7 +270,6 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
             <Search className="w-4 h-4 mr-2" />
             Highlight
           </Button>
-          
           <Button
             onClick={() => setActiveAnnotationType('question')}
             variant={activeAnnotationType === 'question' ? 'default' : 'outline'}
@@ -311,7 +278,6 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
             <Info className="w-4 h-4 mr-2" />
             Question
           </Button>
-          
           <Button
             onClick={() => setActiveAnnotationType('redact')}
             variant={activeAnnotationType === 'redact' ? 'default' : 'outline'}
@@ -320,7 +286,6 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
             <Shield className="w-4 h-4 mr-2" />
             Redact
           </Button>
-          
           <Button
             onClick={() => setActiveAnnotationType('approve')}
             variant={activeAnnotationType === 'approve' ? 'default' : 'outline'}
@@ -330,7 +295,6 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
             <CheckCircle className="w-4 h-4 mr-2" />
             Approve
           </Button>
-          
           <Button
             onClick={() => setActiveAnnotationType('reject')}
             variant={activeAnnotationType === 'reject' ? 'default' : 'outline'}
@@ -341,8 +305,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
             Reject
           </Button>
         </div>
-        
-        {activeAnnotationType && (
+        {activeAnnotationType && ()
           <div className="annotation-help">
             <Info className="w-4 h-4 text-blue-500" />
             <span>Click on the document to place a {activeAnnotationType} annotation</span>
@@ -351,8 +314,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
       </CardContent>
     </Card>
   );
-
-  const renderDocumentMetadata = () => (
+  const renderDocumentMetadata = () => (;)
     <Card className="document-metadata">
       <CardHeader>
         <CardTitle>Document Information</CardTitle>
@@ -363,25 +325,21 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
             <span className="metadata-label">File Name</span>
             <span className="metadata-value">{currentDocument.fileName}</span>
           </div>
-          
           <div className="metadata-item">
             <span className="metadata-label">File Size</span>
             <span className="metadata-value">{formatFileSize(currentDocument.fileSize)}</span>
           </div>
-          
           <div className="metadata-item">
             <span className="metadata-label">Upload Date</span>
             <span className="metadata-value">
               {currentDocument.uploadDate.toLocaleDateString()}
             </span>
           </div>
-          
           <div className="metadata-item">
             <span className="metadata-label">File Type</span>
             <span className="metadata-value">{currentDocument.mimeType}</span>
           </div>
-          
-          {currentDocument.metadata?.dimensions && (
+          {currentDocument.metadata?.dimensions && ()
             <div className="metadata-item">
               <span className="metadata-label">Dimensions</span>
               <span className="metadata-value">
@@ -389,8 +347,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
               </span>
             </div>
           )}
-          
-          {currentDocument.metadata?.quality && (
+          {currentDocument.metadata?.quality && ()
             <div className="metadata-item">
               <span className="metadata-label">Quality</span>
               <Badge className={
@@ -403,13 +360,11 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
             </div>
           )}
         </div>
-        
         <div className="document-actions">
           <Button variant="outline" size="sm">
             <Download className="w-4 h-4 mr-2" />
             Download
           </Button>
-          
           <Button variant="outline" size="sm">
             <Flag className="w-4 h-4 mr-2" />
             Report Issue
@@ -418,8 +373,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
       </CardContent>
     </Card>
   );
-
-  const renderReviewPanel = () => (
+  const renderReviewPanel = () => (;)
     <Card className="review-panel">
       <CardHeader>
         <CardTitle>Document Review</CardTitle>
@@ -430,7 +384,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
             <label>Review Notes</label>
             <Textarea
               value={reviewNotes[currentDocument.id] || ''}
-              onChange={(e) => setReviewNotes(prev => ({
+              onChange={(e) => setReviewNotes(prev => ({)
                 ...prev,
                 [currentDocument.id]: e.target.value
               }))}
@@ -439,16 +393,15 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
               className="form-textarea"
             />
           </div>
-          
           <div className="review-status">
-            {reviewDecisions[currentDocument.id] !== undefined && (
+            {reviewDecisions[currentDocument.id] !== undefined && ()
               <div className="status-display">
-                {reviewDecisions[currentDocument.id] ? (
+                {reviewDecisions[currentDocument.id] ? ()
                   <div className="status approved">
                     <CheckCircle className="w-4 h-4" />
                     <span>Document Approved</span>
                   </div>
-                ) : (
+                ) : ()
                   <div className="status rejected">
                     <XCircle className="w-4 h-4" />
                     <span>Document Rejected</span>
@@ -457,7 +410,6 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
               </div>
             )}
           </div>
-          
           <div className="review-actions">
             <Button
               onClick={() => handleDocumentReview(true)}
@@ -467,7 +419,6 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
               <CheckCircle className="w-4 h-4 mr-2" />
               Approve Document
             </Button>
-            
             <Button
               onClick={() => handleDocumentReview(false)}
               variant="outline"
@@ -482,18 +433,17 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
       </CardContent>
     </Card>
   );
-
-  const renderAnnotationsList = () => (
+  const renderAnnotationsList = () => (;)
     <Card className="annotations-list">
       <CardHeader>
         <CardTitle>Annotations ({annotations.length})</CardTitle>
       </CardHeader>
       <CardContent>
-        {annotations.length === 0 ? (
+        {annotations.length === 0 ? ()
           <p className="no-annotations">No annotations yet. Use the annotation tools to mark areas of interest.</p>
-        ) : (
+        ) : ()
           <div className="annotations">
-            {annotations.map(annotation => (
+            {annotations.map(annotation => ()
               <div key={annotation.id} className="annotation-item">
                 <div className="annotation-header">
                   <div 
@@ -505,7 +455,6 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
                     {annotation.timestamp.toLocaleTimeString()}
                   </span>
                 </div>
-                
                 <Textarea
                   value={annotation.note}
                   onChange={(e) => handleAnnotationUpdate(annotation.id, e.target.value)}
@@ -520,26 +469,22 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
       </CardContent>
     </Card>
   );
-
-  return (
-    <div className={`document-review-interface ${className}`}>
+  return ()
+    <div className={`document-review-interface ${className}`}>}
       <div className="interface-header">
         <Button onClick={onBack} variant="outline">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Queue
         </Button>
-        
         <div className="header-info">
           <h2>Document Review: {documentType}</h2>
           <p>Request ID: {requestId} • User ID: {userId}</p>
         </div>
       </div>
-
       <div className="interface-layout">
         <div className="main-content">
           {renderDocumentViewer()}
         </div>
-        
         <div className="sidebar-content">
           {renderAnnotationTools()}
           {renderDocumentMetadata()}
@@ -547,7 +492,6 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           {renderAnnotationsList()}
         </div>
       </div>
-
       <style>{`
         .document-review-interface {
           max-width: 1600px;
@@ -558,45 +502,38 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           gap: 1.5rem;
           min-height: 100vh;
         }
-
         .interface-header {
           display: flex;
           align-items: center;
           gap: 1rem;
         }
-
         .header-info h2 {
           font-size: 1.5rem;
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 0.25rem;
         }
-
         .header-info p {
           color: #6b7280;
           font-size: 0.875rem;
         }
-
         .interface-layout {
           display: grid;
           grid-template-columns: 1fr 400px;
           gap: 1.5rem;
           flex: 1;
         }
-
         .main-content {
           display: flex;
           flex-direction: column;
           min-height: 0;
         }
-
         .sidebar-content {
           display: flex;
           flex-direction: column;
           gap: 1rem;
           overflow-y: auto;
         }
-
         .document-viewer {
           background: white;
           border: 1px solid #e5e7eb;
@@ -606,7 +543,6 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           flex: 1;
           min-height: 0;
         }
-
         .viewer-toolbar {
           display: flex;
           align-items: center;
@@ -616,19 +552,16 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           background: #f9fafb;
           border-radius: 8px 8px 0 0;
         }
-
         .toolbar-left {
           display: flex;
           align-items: center;
           gap: 1rem;
         }
-
         .document-info {
           font-size: 0.875rem;
           color: #6b7280;
           font-weight: 500;
         }
-
         .document-name {
           font-size: 0.875rem;
           color: #1f2937;
@@ -638,18 +571,15 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           text-overflow: ellipsis;
           white-space: nowrap;
         }
-
         .toolbar-center {
           display: flex;
           gap: 0.5rem;
         }
-
         .toolbar-right {
           display: flex;
           align-items: center;
           gap: 0.5rem;
         }
-
         .zoom-level {
           font-size: 0.875rem;
           color: #374151;
@@ -657,7 +587,6 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           min-width: 40px;
           text-align: center;
         }
-
         .viewer-container {
           flex: 1;
           position: relative;
@@ -668,7 +597,6 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           justify-content: center;
           min-height: 400px;
         }
-
         .viewer-container.fullscreen {
           position: fixed;
           top: 0;
@@ -678,19 +606,16 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           z-index: 1000;
           background: white;
         }
-
         .document-display {
           position: relative;
           transition: transform 0.2s ease;
-          cursor: ${activeAnnotationType ? 'crosshair' : 'default'};
+          cursor: ${activeAnnotationType ? 'crosshair' : 'default'};}
         }
-
         .document-image {
           max-width: 100%;
           max-height: 100%;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-
         .document-placeholder {
           display: flex;
           flex-direction: column;
@@ -700,19 +625,16 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           text-align: center;
           color: #6b7280;
         }
-
         .annotation {
           position: absolute;
           border: 2px solid;
           pointer-events: none;
         }
-
         .annotation-buttons {
           display: flex;
           flex-wrap: wrap;
           gap: 0.5rem;
         }
-
         .annotation-help {
           display: flex;
           align-items: center;
@@ -724,13 +646,11 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           font-size: 0.875rem;
           color: #1e40af;
         }
-
         .metadata-grid {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
         }
-
         .metadata-item {
           display: flex;
           justify-content: space-between;
@@ -738,22 +658,18 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           padding: 0.5rem 0;
           border-bottom: 1px solid #f3f4f6;
         }
-
         .metadata-item:last-child {
           border-bottom: none;
         }
-
         .metadata-label {
           font-weight: 500;
           color: #374151;
           font-size: 0.875rem;
         }
-
         .metadata-value {
           color: #1f2937;
           font-size: 0.875rem;
         }
-
         .document-actions {
           display: flex;
           gap: 0.5rem;
@@ -761,24 +677,20 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           padding-top: 1rem;
           border-top: 1px solid #e5e7eb;
         }
-
         .review-form {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .form-group {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
         }
-
         .form-group label {
           font-weight: 500;
           color: #374151;
         }
-
         .form-textarea {
           padding: 0.5rem;
           border: 1px solid #d1d5db;
@@ -786,17 +698,14 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           font-size: 0.875rem;
           resize: vertical;
         }
-
         .form-textarea:focus {
           outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         }
-
         .review-status {
           margin: 0.5rem 0;
         }
-
         .status-display {
           display: flex;
           align-items: center;
@@ -804,164 +713,135 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
           padding: 1rem;
           border-radius: 6px;
         }
-
         .status.approved {
           background: #d1fae5;
           color: #065f46;
         }
-
         .status.rejected {
           background: #fee2e2;
           color: #991b1b;
         }
-
         .status {
           display: flex;
           align-items: center;
           gap: 0.5rem;
           font-weight: 500;
         }
-
         .review-actions {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
         }
-
         .approve-button {
           background: #059669;
           border-color: #059669;
         }
-
         .approve-button:hover:not(:disabled) {
           background: #047857;
           border-color: #047857;
         }
-
         .reject-button {
           color: #dc2626;
           border-color: #dc2626;
         }
-
         .reject-button:hover:not(:disabled) {
           background: #dc2626;
           color: white;
         }
-
         .no-annotations {
           color: #6b7280;
           font-style: italic;
           text-align: center;
           padding: 2rem;
         }
-
         .annotations {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
         }
-
         .annotation-item {
           border: 1px solid #e5e7eb;
           border-radius: 6px;
           padding: 0.75rem;
         }
-
         .annotation-header {
           display: flex;
           align-items: center;
           gap: 0.5rem;
           margin-bottom: 0.5rem;
         }
-
         .annotation-color {
           width: 12px;
           height: 12px;
           border-radius: 50%;
         }
-
         .annotation-type {
           font-size: 0.75rem;
           font-weight: 500;
           color: #374151;
           flex: 1;
         }
-
         .annotation-time {
           font-size: 0.75rem;
           color: #6b7280;
         }
-
         .annotation-note {
           width: 100%;
           font-size: 0.875rem;
         }
-
         .approve-btn {
           background: #059669;
           border-color: #059669;
           color: white;
         }
-
         .approve-btn:hover {
           background: #047857;
           border-color: #047857;
         }
-
         .reject-btn {
           background: #dc2626;
           border-color: #dc2626;
           color: white;
         }
-
         .reject-btn:hover {
           background: #b91c1c;
           border-color: #b91c1c;
         }
-
         @media (max-width: 1200px) {
           .interface-layout {
             grid-template-columns: 1fr;
           }
-
           .sidebar-content {
             order: -1;
             flex-direction: row;
             overflow-x: auto;
             gap: 0.75rem;
           }
-
           .sidebar-content > * {
             min-width: 300px;
           }
         }
-
         @media (max-width: 768px) {
           .interface-header {
             flex-direction: column;
             align-items: flex-start;
             gap: 0.75rem;
           }
-
           .viewer-toolbar {
             flex-direction: column;
             gap: 0.75rem;
           }
-
           .toolbar-left,
           .toolbar-center,
           .toolbar-right {
             justify-content: center;
           }
-
           .sidebar-content {
             flex-direction: column;
           }
-
           .sidebar-content > * {
             min-width: auto;
           }
-
           .annotation-buttons {
             justify-content: center;
           }

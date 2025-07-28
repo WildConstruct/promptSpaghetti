@@ -8,7 +8,7 @@ import { BaseEvent, EventMiddleware, EventPriority, EventCategory } from '../Eve
 /**
  * Enhanced logging middleware with different log levels
  */
-export declare const createLoggingMiddleware: (options?: {
+export declare const createLoggingMiddleware: (options?: {)
     logLevel?: "debug" | "info" | "warn" | "error";
     includeMetadata?: boolean;
     filterCategories?: EventCategory[];
@@ -17,7 +17,7 @@ export declare const createLoggingMiddleware: (options?: {
 /**
  * Advanced validation middleware
  */
-export declare const createValidationMiddleware: (options?: {
+export declare const createValidationMiddleware: (options?: {)
     strictMode?: boolean;
     requiredFields?: string[];
     customValidators?: Array<(event: BaseEvent) => string | null>;
@@ -25,7 +25,7 @@ export declare const createValidationMiddleware: (options?: {
 /**
  * Rate limiting middleware with different strategies
  */
-export declare const createRateLimitMiddleware: (options: {
+export declare const createRateLimitMiddleware: (options: {)
     maxEventsPerSecond?: number;
     maxEventsPerMinute?: number;
     maxEventsPerHour?: number;
@@ -36,8 +36,8 @@ export declare const createRateLimitMiddleware: (options: {
 /**
  * Event transformation middleware
  */
-export declare const createTransformMiddleware: (options: {
-    transforms: Array<{
+export declare const createTransformMiddleware: (options: {)
+    transforms: Array<{,
         condition: (event: BaseEvent) => boolean;
         transform: (event: BaseEvent) => BaseEvent;
     }>;
@@ -45,7 +45,7 @@ export declare const createTransformMiddleware: (options: {
 /**
  * Security middleware for sensitive data filtering
  */
-export declare const createSecurityMiddleware: (options?: {
+export declare const createSecurityMiddleware: (options?: {)
     sensitiveFields?: string[];
     maskPattern?: string;
     logSensitiveAccess?: boolean;
@@ -54,7 +54,7 @@ export declare const createSecurityMiddleware: (options?: {
 /**
  * Performance monitoring middleware
  */
-export declare const createPerformanceMiddleware: (options?: {
+export declare const createPerformanceMiddleware: (options?: {)
     sampleRate?: number;
     slowEventThreshold?: number;
     trackMemoryUsage?: boolean;
@@ -62,7 +62,7 @@ export declare const createPerformanceMiddleware: (options?: {
 /**
  * Event deduplication middleware
  */
-export declare const createDeduplicationMiddleware: (options: {
+export declare const createDeduplicationMiddleware: (options: {)
     keyGenerator: (event: BaseEvent) => string;
     windowMs: number;
     strategy?: "drop" | "merge" | "latest";
@@ -70,7 +70,7 @@ export declare const createDeduplicationMiddleware: (options: {
 /**
  * Circuit breaker middleware
  */
-export declare const createCircuitBreakerMiddleware: (options: {
+export declare const createCircuitBreakerMiddleware: (options: {)
     failureThreshold: number;
     resetTimeoutMs: number;
     monitorWindowMs: number;

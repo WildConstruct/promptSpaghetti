@@ -4,9 +4,9 @@ export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElemen
   onCheckedChange?: (checked: boolean) => void;
 }
 
-export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
+export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>()
   ({ className, onCheckedChange, onChange, ...props }, ref) => {
-    return (
+    return ()
       <input
         type="checkbox"
         className={`checkbox ${className || ''}`}
@@ -20,5 +20,4 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     );
   }
 );
-
 Checkbox.displayName = 'Checkbox';

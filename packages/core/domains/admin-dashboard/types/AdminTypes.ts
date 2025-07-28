@@ -4,28 +4,27 @@
  * 
  * Type definitions for the admin dashboard domain
  */
-
 import React from 'react';
 
 // Dashboard configuration types
 export interface AdminDashboardConfig {
-  layout: {
+  layout: {,
     columns: number;
     gaps: 'small' | 'medium' | 'large';
     responsive: boolean;
   };
-  widgets: {
+  widgets: {,
     autoRefresh: boolean;
     refreshInterval: number;
     showHeaders: boolean;
     collapsible: boolean;
   };
-  permissions: {
+  permissions: {,
     canEdit: boolean;
     canExport: boolean;
     canViewSensitive: boolean;
   };
-  theme: {
+  theme: {,
     variant: 'light' | 'dark' | 'auto';
     density: 'compact' | 'comfortable' | 'spacious';
   };
@@ -145,7 +144,7 @@ export interface SecurityMetrics {
   failedLogins: number;
   suspiciousActivity: number;
   dataBreaches: number;
-  vulnerabilities: {
+  vulnerabilities: {,
     critical: number;
     high: number;
     medium: number;
@@ -161,11 +160,11 @@ export interface ApiKey {
   key: string;
   userId: string;
   permissions: string[];
-  rateLimit: {
+  rateLimit: {,
     requests: number;
     period: 'minute' | 'hour' | 'day';
   };
-  usage: {
+  usage: {,
     totalRequests: number;
     lastUsed?: Date;
   };
@@ -184,7 +183,7 @@ export interface ApiEndpoint {
     requests: number;
     period: 'minute' | 'hour' | 'day';
   };
-  usage: {
+  usage: {,
     totalRequests: number;
     averageResponseTime: number;
     errorRate: number;
@@ -194,13 +193,13 @@ export interface ApiEndpoint {
 
 // System metrics types
 export interface SystemMetrics {
-  performance: {
+  performance: {,
     cpu: number;
     memory: number;
     disk: number;
     network: number;
   };
-  health: {
+  health: {,
     database: 'healthy' | 'warning' | 'error';
     cache: 'healthy' | 'warning' | 'error';
     api: 'healthy' | 'warning' | 'error';

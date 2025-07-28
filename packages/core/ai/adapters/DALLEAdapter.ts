@@ -4,7 +4,6 @@
  * 
  * Comprehensive adapter for OpenAI DALL-E 3 image generation
  */
-
 import { 
   BaseAIModel,
   AIModelType,
@@ -46,7 +45,7 @@ export interface ImagePromptOptimization {
 
 export interface DALLEResponse {
   created: number;
-  data: Array<{
+  data: Array<{,
     url?: string;
     b64_json?: string;
     revised_prompt?: string;
@@ -54,11 +53,11 @@ export interface DALLEResponse {
 }
 
 export interface ImageGenerationResult {
-  images: Array<{
+  images: Array<{,
     url?: string;
     base64?: string;
     revisedPrompt?: string;
-    metadata: {
+    metadata: {,
       size: string;
       quality: string;
       style?: string;
@@ -67,7 +66,7 @@ export interface ImageGenerationResult {
   }>;
   originalPrompt: string;
   optimizedPrompt?: string;
-  usage: {
+  usage: {,
     promptTokens: number;
     totalCost: number;
   };
@@ -78,25 +77,23 @@ export class DALLEAdapter extends BaseAIModel {
   private config: DALLEConfig;
   private apiEndpoint: string;
   private promptOptimizer: PromptOptimizer;
-
   constructor(id: string, config: DALLEConfig, modelName: string = 'dall-e-3') {
     const metadata: ModelMetadata = {
       name: modelName,
       version: '1.0',
-      description: `OpenAI ${modelName} image generation model`,
+      description: `OpenAI ${modelName} image generation model`,}
       provider: AIModelProvider.OPENAI,
       type: AIModelType.IMAGE,
       costPerRequest: DALLEAdapter.getModelCostPerRequest(modelName),
       averageLatency: DALLEAdapter.getModelAverageLatency(modelName),
       maxConcurrency: 5, // DALL-E has strict rate limits
-      rateLimit: {
+      rateLimit: {,
         requestsPerMinute: modelName === 'dall-e-3' ? 5 : 50,
-        tokensPerMinute: 1000
+        tokensPerMinute: 1000,
       },
       tags: ['image-generation', 'creative', 'artistic'],
       lastUpdated: new Date()
     };
-
     const capabilities: ModelCapabilities = {
       inputTypes: ['text'],
       outputTypes: ['image', 'url', 'base64'],
@@ -105,52 +102,47 @@ export class DALLEAdapter extends BaseAIModel {
       supportsBatch: false,
       supportsStreaming: false,
       supportsAsync: true,
-      customParameters: {
-        size: { 
+      customParameters: {,
+        size: { ,
           type: 'enum', 
           values: modelName === 'dall-e-3' 
             ? ['1024x1024', '1792x1024', '1024x1792'] 
             : ['256x256', '512x512', '1024x1024'],
-          default: '1024x1024' 
+          default: '1024x1024' ,
         },
-        quality: { 
+        quality: { ,
           type: 'enum', 
           values: ['standard', 'hd'], 
           default: 'standard',
           available: modelName === 'dall-e-3'
         },
-        style: { 
+        style: { ,
           type: 'enum', 
           values: ['vivid', 'natural'], 
           default: 'vivid',
           available: modelName === 'dall-e-3'
         },
-        n: { 
+        n: { ,
           type: 'number', 
           min: 1, 
           max: modelName === 'dall-e-3' ? 1 : 10, 
-          default: 1 
+          default: 1 ,
         }
       }
     };
-
     super(id, metadata, capabilities);
     this.config = config;
     this.apiEndpoint = config.baseURL || 'https://api.openai.com/v1';
     this.promptOptimizer = new PromptOptimizer(modelName);
   }
-
   async initialize(): Promise<void> {
     try {
       this._status = AIModelStatus.INITIALIZING;
-      
       if (!this.config.apiKey) {
         throw new Error('OpenAI API key is required for DALL-E');
       }
-
       // Test connectivity
       await this._testConnection();
-      
       this._status = AIModelStatus.READY;
       this._lastActivity = new Date();
     } catch (error) {
@@ -158,19 +150,15 @@ export class DALLEAdapter extends BaseAIModel {
       throw new ModelInitializationError(this._id, error instanceof Error ? error.message : 'Unknown error');
     }
   }
-
   async process(input: unknown, options?: DALLERequestOptions): Promise<ImageGenerationResult> {
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
       }
-
       const startTime = Date.now();
-      
       // Extract and optimize prompt
       const prompt = this._extractPrompt(input);
       const optimization = await this.promptOptimizer.optimizePrompt(prompt, options);
-      
       // Prepare request payload
       const payload = {
         model: options?.model || this._metadata.name,
@@ -182,35 +170,27 @@ export class DALLEAdapter extends BaseAIModel {
         response_format: options?.response_format || 'url',
         ...(options?.user && { user: options.user })
       };
-
       // Validate parameters for model
       this._validateParameters(payload);
-
       const response = await this._makeRequest('/images/generations', payload);
       const generationTime = Date.now() - startTime;
-      
       // Process and return results
       return this._processImageResponse(response, optimization, payload, generationTime);
-
     } catch (error) {
       throw new ModelProcessingError(this._id, error instanceof Error ? error.message : 'Unknown error');
     }
   }
-
   async cleanup(): Promise<void> {
     this._status = AIModelStatus.OFFLINE;
     this._activeRequests.clear();
     this._requestQueue = [];
   }
-
   async estimate(input: unknown, options?: DALLERequestOptions): Promise<CostEstimate> {
     const model = options?.model || this._metadata.name;
     const size = options?.size || '1024x1024';
     const quality = options?.quality || 'standard';
     const n = options?.n || 1;
-    
     let baseCost = this._metadata.costPerRequest || 0;
-    
     // Adjust cost based on parameters
     if (model === 'dall-e-3') {
       if (quality === 'hd') {
@@ -220,28 +200,24 @@ export class DALLEAdapter extends BaseAIModel {
         baseCost *= 2; // Larger sizes cost 2x
       }
     }
-    
     const totalCost = baseCost * n;
-    
     return {
       estimatedCost: totalCost,
       currency: 'USD',
       confidence: 0.95,
-      breakdown: {
+      breakdown: {,
         inputCost: 0,
         outputCost: totalCost,
-        processingCost: 0
+        processingCost: 0,
       }
     };
   }
-
   // Image-specific methods
   async generateVariations(imageUrl: string, options?: Partial<DALLERequestOptions>): Promise<ImageGenerationResult> {
     // Note: Variations are only available for DALL-E 2
     if (this._metadata.name === 'dall-e-3') {
       throw new Error('Image variations are not available for DALL-E 3');
     }
-
     const payload = {
       image: imageUrl,
       n: options?.n || 1,
@@ -249,20 +225,17 @@ export class DALLEAdapter extends BaseAIModel {
       response_format: options?.response_format || 'url',
       ...(options?.user && { user: options.user })
     };
-
     const response = await this._makeRequest('/images/variations', payload);
-    const generationTime = Date.now() - Date.now(); // Placeholder timing
-    
-    return this._processImageResponse(response, {
+    const generationTime = Date.now() - Date.now(); // Placeholder timing;
+    return this._processImageResponse(response, {)
       originalPrompt: 'Image variation',
       optimizedPrompt: 'Image variation',
       optimizations: [],
       styleEnhancements: [],
-      qualityImprovements: []
+      qualityImprovements: [],
     }, payload, generationTime);
   }
-
-  async editImage(
+  async editImage()
     imageUrl: string, 
     maskUrl: string, 
     prompt: string, 
@@ -272,9 +245,7 @@ export class DALLEAdapter extends BaseAIModel {
     if (this._metadata.name === 'dall-e-3') {
       throw new Error('Image editing is not available for DALL-E 3');
     }
-
     const optimization = await this.promptOptimizer.optimizePrompt(prompt, options);
-
     const payload = {
       image: imageUrl,
       mask: maskUrl,
@@ -284,13 +255,10 @@ export class DALLEAdapter extends BaseAIModel {
       response_format: options?.response_format || 'url',
       ...(options?.user && { user: options.user })
     };
-
     const response = await this._makeRequest('/images/edits', payload);
-    const generationTime = Date.now() - Date.now(); // Placeholder timing
-    
+    const generationTime = Date.now() - Date.now(); // Placeholder timing;
     return this._processImageResponse(response, optimization, payload, generationTime);
   }
-
   // Static helper methods
   static getModelCostPerRequest(modelName: string): number {
     const costs: Record<string, number> = {
@@ -299,7 +267,6 @@ export class DALLEAdapter extends BaseAIModel {
     };
     return costs[modelName] || 0.04;
   }
-
   static getModelAverageLatency(modelName: string): number {
     const latencies: Record<string, number> = {
       'dall-e-2': 15000, // ~15 seconds
@@ -307,54 +274,46 @@ export class DALLEAdapter extends BaseAIModel {
     };
     return latencies[modelName] || 20000;
   }
-
   // Private helper methods
   private async _testConnection(): Promise<void> {
     try {
-      const response = await fetch(`${this.apiEndpoint}/models`, {
-        headers: {
-          'Authorization': `Bearer ${this.config.apiKey}`,
+      const response = await fetch(`${this.apiEndpoint}/models`, {)}
+        headers: {,
+          'Authorization': `Bearer ${this.config.apiKey}`,}
           'Content-Type': 'application/json',
           ...(this.config.organization && { 'OpenAI-Organization': this.config.organization })
         }
       });
-
       if (!response.ok) {
-        throw new Error(`OpenAI API test failed: ${response.status} ${response.statusText}`);
+        throw new Error(`OpenAI API test failed: ${response.status} ${response.statusText}`);}
       }
     } catch (error) {
-      throw new Error(`Failed to connect to OpenAI API: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(`Failed to connect to OpenAI API: ${error instanceof Error ? error.message : 'Unknown error'}`);}
     }
   }
-
   private async _makeRequest(endpoint: string, payload: unknown): Promise<DALLEResponse> {
-    const url = `${this.apiEndpoint}${endpoint}`;
-    
+    const url = `${this.apiEndpoint}${endpoint}`;}
     let lastError: Error | null = null;
     const maxRetries = this.config.maxRetries ?? 3;
-
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
-        const response = await fetch(url, {
+        const response = await fetch(url, {)
           method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${this.config.apiKey}`,
+          headers: {,
+            'Authorization': `Bearer ${this.config.apiKey}`,}
             'Content-Type': 'application/json',
             ...(this.config.organization && { 'OpenAI-Organization': this.config.organization })
           },
           body: JSON.stringify(payload),
           signal: AbortSignal.timeout(this.config.timeout || 120000) // 2 minutes default
         });
-
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          throw new Error(`DALL-E API request failed: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
+          throw new Error(`DALL-E API request failed: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);}
         }
-
         return response.json();
       } catch (error) {
         lastError = error instanceof Error ? error : new Error('Unknown error');
-        
         if (attempt < maxRetries) {
           // Exponential backoff with jitter
           const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
@@ -362,94 +321,79 @@ export class DALLEAdapter extends BaseAIModel {
         }
       }
     }
-
     throw lastError || new Error('All retry attempts failed');
   }
-
   private _extractPrompt(input: any): string {
     if (typeof input === 'string') {
       return input;
     }
-    
     if (input && typeof input === 'object') {
       if (input.prompt) return input.prompt;
       if (input.description) return input.description;
       if (input.text) return input.text;
     }
-    
     return JSON.stringify(input);
   }
-
   private _validateParameters(payload: any): void {
     const model = payload.model;
-    
     // DALL-E 3 specific validations
     if (model === 'dall-e-3') {
       if (payload.n > 1) {
         throw new Error('DALL-E 3 can only generate 1 image at a time');
       }
-      
       const validSizes = ['1024x1024', '1792x1024', '1024x1792'];
       if (!validSizes.includes(payload.size)) {
-        throw new Error(`Invalid size for DALL-E 3: ${payload.size}. Valid sizes: ${validSizes.join(', ')}`);
+        throw new Error(`Invalid size for DALL-E 3: ${payload.size}. Valid sizes: ${validSizes.join(', ')}`);}
       }
     }
-    
     // DALL-E 2 specific validations
     if (model === 'dall-e-2') {
       if (payload.quality && payload.quality !== 'standard') {
         throw new Error('Quality parameter is only available for DALL-E 3');
       }
-      
       if (payload.style) {
         throw new Error('Style parameter is only available for DALL-E 3');
       }
-      
       const validSizes = ['256x256', '512x512', '1024x1024'];
       if (!validSizes.includes(payload.size)) {
-        throw new Error(`Invalid size for DALL-E 2: ${payload.size}. Valid sizes: ${validSizes.join(', ')}`);
+        throw new Error(`Invalid size for DALL-E 2: ${payload.size}. Valid sizes: ${validSizes.join(', ')}`);}
       }
     }
-    
     // General validations
     if (payload.prompt.length > 4000) {
       throw new Error('Prompt exceeds maximum length of 4000 characters');
     }
   }
-
-  private _processImageResponse(
+  private _processImageResponse()
     response: DALLEResponse, 
     optimization: ImagePromptOptimization,
     payload: any,
-    generationTime: number
+    generationTime: number,
   ): ImageGenerationResult {
-    const images = response.data.map(item => ({
+    const images = response.data.map(item => ({)
       url: item.url,
       base64: item.b64_json,
       revisedPrompt: item.revised_prompt,
-      metadata: {
+      metadata: {,
         size: payload.size,
         quality: payload.quality || 'standard',
         style: payload.style,
-        model: payload.model
+        model: payload.model,
       }
     }));
-
     // Estimate token usage (rough approximation)
     const promptTokens = Math.ceil(optimization.optimizedPrompt.length / 4);
-    
     return {
       images,
       originalPrompt: optimization.originalPrompt,
       optimizedPrompt: optimization.optimizedPrompt,
-      usage: {
+      usage: {,
         promptTokens,
         totalCost: (this._metadata.costPerRequest || 0) * images.length
       },
       generationTime
     };
   }
-
   protected async _performHealthCheck(): Promise<void> {
     await this._testConnection();
   }
@@ -458,21 +402,17 @@ export class DALLEAdapter extends BaseAIModel {
 // Prompt optimization helper class
 class PromptOptimizer {
   private modelName: string;
-
   constructor(modelName: string) {
     this.modelName = modelName;
   }
-
   async optimizePrompt(prompt: string, options?: DALLERequestOptions): Promise<ImagePromptOptimization> {
     const originalPrompt = prompt;
     let optimizedPrompt = prompt;
     const optimizations: string[] = [];
     const styleEnhancements: string[] = [];
     const qualityImprovements: string[] = [];
-
     // Basic prompt cleaning
     optimizedPrompt = this._cleanPrompt(optimizedPrompt);
-    
     // Add style enhancements based on options
     if (options?.style === 'vivid') {
       optimizedPrompt = this._enhanceForVividStyle(optimizedPrompt);
@@ -481,19 +421,16 @@ class PromptOptimizer {
       optimizedPrompt = this._enhanceForNaturalStyle(optimizedPrompt);
       styleEnhancements.push('Enhanced for natural style');
     }
-    
     // Add quality improvements for HD
     if (options?.quality === 'hd') {
       optimizedPrompt = this._enhanceForHD(optimizedPrompt);
       qualityImprovements.push('Enhanced for HD quality');
     }
-    
     // Model-specific optimizations
     if (this.modelName === 'dall-e-3') {
       optimizedPrompt = this._optimizeForDALLE3(optimizedPrompt);
       optimizations.push('Optimized for DALL-E 3');
     }
-
     return {
       originalPrompt,
       optimizedPrompt,
@@ -502,61 +439,49 @@ class PromptOptimizer {
       qualityImprovements
     };
   }
-
   private _cleanPrompt(prompt: string): string {
     // Remove excessive whitespace
     return prompt.trim().replace(/\s+/g, ' ');
   }
-
   private _enhanceForVividStyle(prompt: string): string {
     // Add vivid descriptors if not present
     const vividKeywords = ['vibrant', 'bold', 'dramatic', 'intense', 'striking'];
-    const hasVividKeywords = vividKeywords.some(keyword => 
+    const hasVividKeywords = vividKeywords.some(keyword => ;)
       prompt.toLowerCase().includes(keyword)
     );
-    
     if (!hasVividKeywords) {
-      return `${prompt}, vibrant and dramatic`;
+      return `${prompt}, vibrant and dramatic`;}
     }
-    
     return prompt;
   }
-
   private _enhanceForNaturalStyle(prompt: string): string {
     // Add natural descriptors if not present
     const naturalKeywords = ['realistic', 'natural', 'subtle', 'soft', 'organic'];
-    const hasNaturalKeywords = naturalKeywords.some(keyword => 
+    const hasNaturalKeywords = naturalKeywords.some(keyword => ;)
       prompt.toLowerCase().includes(keyword)
     );
-    
     if (!hasNaturalKeywords) {
-      return `${prompt}, natural and realistic`;
+      return `${prompt}, natural and realistic`;}
     }
-    
     return prompt;
   }
-
   private _enhanceForHD(prompt: string): string {
     // Add quality descriptors for HD
     const qualityKeywords = ['high detail', 'sharp', 'crisp', 'high resolution'];
-    const hasQualityKeywords = qualityKeywords.some(keyword => 
+    const hasQualityKeywords = qualityKeywords.some(keyword => ;)
       prompt.toLowerCase().includes(keyword)
     );
-    
     if (!hasQualityKeywords) {
-      return `${prompt}, high detail and sharp focus`;
+      return `${prompt}, high detail and sharp focus`;}
     }
-    
     return prompt;
   }
-
   private _optimizeForDALLE3(prompt: string): string {
     // DALL-E 3 specific optimizations
     // Add descriptive elements that work well with DALL-E 3
     if (prompt.length < 50) {
-      return `${prompt}, detailed and professionally rendered`;
+      return `${prompt}, detailed and professionally rendered`;}
     }
-    
     return prompt;
   }
 }

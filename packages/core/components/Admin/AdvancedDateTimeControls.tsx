@@ -7,7 +7,6 @@
  * Task: E17-1753114396815-A5C08F - Create datetime controls
  * Epic: 17 - Backstage Admin Controls
  */
-
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -37,7 +36,6 @@ import {
   Plus,
   X
 } from 'lucide-react';
-
 interface DateTimeSelection {
   date: Date;
   time: string; // HH:MM format
@@ -46,7 +44,6 @@ interface DateTimeSelection {
   avoidWeekends?: boolean;
   smartSuggestion?: boolean;
 }
-
 interface BusinessHours {
   enabled: boolean;
   workdays: number[]; // 0-6 (Sunday-Saturday)
@@ -54,7 +51,6 @@ interface BusinessHours {
   endTime: string; // HH:MM
   timezone: string;
 }
-
 interface ConflictInfo {
   hasConflict: boolean;
   type: 'business_hours' | 'weekend' | 'holiday' | 'maintenance' | 'high_traffic' | 'other';
@@ -63,7 +59,6 @@ interface ConflictInfo {
   suggestion?: string;
   alternativeTimes?: Date[];
 }
-
 interface AdvancedDateTimeControlsProps {
   value?: DateTimeSelection;
   onChange: (selection: DateTimeSelection) => void;
@@ -74,7 +69,6 @@ interface AdvancedDateTimeControlsProps {
   allowPastDates?: boolean;
   className?: string;
 }
-
 const TIMEZONE_GROUPS = {
   'Popular': [
     { value: 'UTC', label: 'UTC (Coordinated Universal Time)', offset: '+00:00' },
@@ -108,19 +102,17 @@ const TIMEZONE_GROUPS = {
     { value: 'Asia/Kolkata', label: 'Mumbai/Kolkata (IST)', offset: '+05:30' }
   ]
 };
-
-const COMMON_BUSINESS_HOURS = [
+const COMMON_BUSINESS_HOURS = [;
   { name: 'Standard (9 AM - 5 PM)', start: '09:00', end: '17:00', workdays: [1, 2, 3, 4, 5] },
   { name: 'Extended (8 AM - 6 PM)', start: '08:00', end: '18:00', workdays: [1, 2, 3, 4, 5] },
   { name: 'Early (7 AM - 3 PM)', start: '07:00', end: '15:00', workdays: [1, 2, 3, 4, 5] },
   { name: '24/7 Operations', start: '00:00', end: '23:59', workdays: [0, 1, 2, 3, 4, 5, 6] },
   { name: 'Weekend Only', start: '09:00', end: '17:00', workdays: [0, 6] }
 ];
-
 const WEEKDAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const WEEKDAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> = ({
+export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> = ({)
   value,
   onChange,
   businessHours,
@@ -136,17 +128,15 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
   const [selectedTimezone, setSelectedTimezone] = useState<string>(value?.timezone || 'UTC');
   const [_____showTimezoneSearch, _____setShowTimezoneSearch] = useState(false);
   const [timezoneSearchQuery, setTimezoneSearchQuery] = useState('');
-  
-  const [currentBusinessHours, setCurrentBusinessHours] = useState<BusinessHours>(
+  const [currentBusinessHours, setCurrentBusinessHours] = useState<BusinessHours>()
     businessHours || {
       enabled: true,
       workdays: [1, 2, 3, 4, 5],
       startTime: '09:00',
       endTime: '17:00',
-      timezone: 'UTC'
+      timezone: 'UTC',
     }
   );
-
   // Calculate current date/time in selected timezone
   const dateTimeInTimezone = useMemo(() => {
     const combined = new Date(selectedDate);
@@ -154,16 +144,13 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
     combined.setHours(parseInt(hours), parseInt(minutes), 0, 0);
     return combined;
   }, [selectedDate, selectedTime]);
-
   // Check for conflicts
   const conflictInfo: ConflictInfo = useMemo(() => {
     if (!conflictDetection) {
       return { hasConflict: false, type: 'other', description: '', severity: 'low' };
     }
-
     const dayOfWeek = dateTimeInTimezone.getDay();
     const timeValue = selectedTime;
-    
     // Check business hours
     if (currentBusinessHours.enabled) {
       if (!currentBusinessHours.workdays.includes(dayOfWeek)) {
@@ -172,21 +159,19 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
           type: 'weekend',
           description: 'Selected time is outside business workdays',
           severity: 'medium',
-          suggestion: `Consider scheduling during workdays: ${currentBusinessHours.workdays.map(d => WEEKDAY_SHORT[d]).join(', ')}`
+          suggestion: `Consider scheduling during workdays: ${currentBusinessHours.workdays.map(d => WEEKDAY_SHORT[d]).join(', ')}`}
         };
       }
-      
       if (timeValue < currentBusinessHours.startTime || timeValue > currentBusinessHours.endTime) {
         return {
           hasConflict: true,
           type: 'business_hours',
-          description: `Selected time is outside business hours (${currentBusinessHours.startTime} - ${currentBusinessHours.endTime})`,
+          description: `Selected time is outside business hours (${currentBusinessHours.startTime} - ${currentBusinessHours.endTime})`,}
           severity: 'medium',
-          suggestion: `Consider scheduling between ${currentBusinessHours.startTime} and ${currentBusinessHours.endTime}`
+          suggestion: `Consider scheduling between ${currentBusinessHours.startTime} and ${currentBusinessHours.endTime}`}
         };
       }
     }
-    
     // Check for past dates
     if (!allowPastDates && dateTimeInTimezone < new Date()) {
       return {
@@ -197,64 +182,51 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
         suggestion: 'Please select a future date and time'
       };
     }
-
     return { hasConflict: false, type: 'other', description: '', severity: 'low' };
   }, [dateTimeInTimezone, selectedTime, currentBusinessHours, allowPastDates, conflictDetection]);
-
   // Smart time suggestions
   const smartTimeSuggestions = useMemo(() => {
     if (!smartSuggestions) return [];
-    
     const suggestions: Date[] = [];
     const baseDate = new Date(selectedDate);
-    
     // Suggest optimal times based on business hours
     if (currentBusinessHours.enabled) {
       const [startHour, startMin] = currentBusinessHours.startTime.split(':').map(Number);
       const [endHour, _____endMin] = currentBusinessHours.endTime.split(':').map(Number);
-      
       // Suggest start of business day
       const startOfDay = new Date(baseDate);
       startOfDay.setHours(startHour, startMin, 0, 0);
       if (startOfDay > new Date()) suggestions.push(startOfDay);
-      
       // Suggest mid-morning
       const midMorning = new Date(baseDate);
       midMorning.setHours(startHour + 1, 0, 0, 0);
       if (midMorning > new Date()) suggestions.push(midMorning);
-      
       // Suggest lunch break end
       const postLunch = new Date(baseDate);
       postLunch.setHours(13, 0, 0, 0);
       if (postLunch > new Date() && postLunch.getHours() <= endHour) suggestions.push(postLunch);
-      
       // Suggest late afternoon
       const lateAfternoon = new Date(baseDate);
       lateAfternoon.setHours(Math.min(15, endHour - 1), 0, 0, 0);
       if (lateAfternoon > new Date()) suggestions.push(lateAfternoon);
     }
-    
     return suggestions.slice(0, 4);
   }, [selectedDate, currentBusinessHours, smartSuggestions]);
-
   // Handle date change
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
     updateSelection({ date, time: selectedTime, timezone: selectedTimezone });
   };
-
   // Handle time change
   const handleTimeChange = (time: string) => {
     setSelectedTime(time);
     updateSelection({ date: selectedDate, time, timezone: selectedTimezone });
   };
-
   // Handle timezone change
   const handleTimezoneChange = (timezone: string) => {
     setSelectedTimezone(timezone);
     updateSelection({ date: selectedDate, time: selectedTime, timezone });
   };
-
   // Update parent component
   const updateSelection = (partial: Partial<DateTimeSelection>) => {
     const newSelection: DateTimeSelection = {
@@ -266,59 +238,52 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
     };
     onChange(newSelection);
   };
-
   // Business hours preset handler
   const applyBusinessHoursPreset = (preset: typeof COMMON_BUSINESS_HOURS[0]) => {
     const newBusinessHours: BusinessHours = {
       ...currentBusinessHours,
       startTime: preset.start,
       endTime: preset.end,
-      workdays: preset.workdays
+      workdays: preset.workdays,
     };
     setCurrentBusinessHours(newBusinessHours);
     onBusinessHoursChange?.(newBusinessHours);
   };
-
   // Format date for display
   const formatDisplayDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {
+    return new Intl.DateTimeFormat('en-US', {)
       weekday: 'long',
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     }).format(date);
   };
-
   // Format time for display
   const formatDisplayTime = (time: string) => {
     const [hours, minutes] = time.split(':');
     const hour24 = parseInt(hours);
     const hour12 = hour24 === 0 ? 12 : hour24 > 12 ? hour24 - 12 : hour24;
     const ampm = hour24 >= 12 ? 'PM' : 'AM';
-    return `${hour12}:${minutes} ${ampm}`;
+    return `${hour12}:${minutes} ${ampm}`;}
   };
-
   // Generate time options
   const timeOptions = useMemo(() => {
     const options = [];
     for (let hour = 0; hour < 24; hour++) {
       for (let minute = 0; minute < 60; minute += 15) {
-        const timeStr = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        const timeStr = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;}
         options.push(timeStr);
       }
     }
     return options;
   }, []);
-
   // Filter timezones based on search
   const filteredTimezones = useMemo(() => {
     if (!timezoneSearchQuery) return TIMEZONE_GROUPS;
-    
     const query = timezoneSearchQuery.toLowerCase();
     const filtered: typeof TIMEZONE_GROUPS = {};
-    
     Object.entries(TIMEZONE_GROUPS).forEach(([group, timezones]) => {
-      const matchingTimezones = timezones.filter(tz => 
+      const matchingTimezones = timezones.filter(tz => ;)
         tz.label.toLowerCase().includes(query) || 
         tz.value.toLowerCase().includes(query)
       );
@@ -326,12 +291,10 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
         filtered[group] = matchingTimezones;
       }
     });
-    
     return filtered;
   }, [timezoneSearchQuery]);
-
-  return (
-    <div className={`space-y-4 ${className}`}>
+  return ()
+    <div className={`space-y-4 ${className}`}>}
       <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="datetime">Date & Time</TabsTrigger>
@@ -339,7 +302,6 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
           <TabsTrigger value="business">Business Hours</TabsTrigger>
           <TabsTrigger value="preview">Preview</TabsTrigger>
         </TabsList>
-
         {/* Date & Time Tab */}
         <TabsContent value="datetime" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -365,7 +327,6 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                 </div>
               </CardContent>
             </Card>
-
             {/* Time Selection */}
             <Card>
               <CardHeader>
@@ -377,7 +338,7 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
               <CardContent>
                 <div className="space-y-3">
                   <Select value={selectedTime} onValueChange={handleTimeChange}>
-                    {timeOptions.map(time => (
+                    {timeOptions.map(time => ()
                       <option key={time} value={time}>
                         {formatDisplayTime(time)}
                       </option>
@@ -390,9 +351,8 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
               </CardContent>
             </Card>
           </div>
-
           {/* Smart Suggestions */}
-          {smartTimeSuggestions.length > 0 && (
+          {smartTimeSuggestions.length > 0 && ()
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -402,15 +362,15 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {smartTimeSuggestions.map((suggestion, index) => (
+                  {smartTimeSuggestions.map((suggestion, index) => ()
                     <Button
                       key={index}
                       variant="outline"
                       size="sm"
                       onClick={() => {
                         setSelectedDate(suggestion);
-                        setSelectedTime(
-                          `${suggestion.getHours().toString().padStart(2, '0')}:${suggestion.getMinutes().toString().padStart(2, '0')}`
+                        setSelectedTime()
+                          `${suggestion.getHours().toString().padStart(2, '0')}:${suggestion.getMinutes().toString().padStart(2, '0')}`}
                         );
                       }}
                     >
@@ -421,22 +381,21 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
               </CardContent>
             </Card>
           )}
-
           {/* Conflict Detection */}
-          {conflictDetection && (
+          {conflictDetection && ()
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  {conflictInfo.hasConflict ? (
+                  {conflictInfo.hasConflict ? ()
                     <AlertTriangle className="h-4 w-4 text-orange-600" />
-                  ) : (
+                  ) : ()
                     <CheckCircle className="h-4 w-4 text-green-600" />
                   )}
                   Conflict Detection
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {conflictInfo.hasConflict ? (
+                {conflictInfo.hasConflict ? ()
                   <div className="space-y-2">
                     <Badge
                       variant={conflictInfo.severity === 'high' ? 'destructive' : 'default'}
@@ -444,18 +403,17 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                       {conflictInfo.severity} priority
                     </Badge>
                     <p className="text-gray-900">{conflictInfo.description}</p>
-                    {conflictInfo.suggestion && (
+                    {conflictInfo.suggestion && ()
                       <p className="text-sm text-blue-600">{conflictInfo.suggestion}</p>
                     )}
                   </div>
-                ) : (
+                ) : ()
                   <p className="text-green-600">No conflicts detected</p>
                 )}
               </CardContent>
             </Card>
           )}
         </TabsContent>
-
         {/* Timezone Tab */}
         <TabsContent value="timezone" className="space-y-4">
           <Card>
@@ -475,7 +433,6 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                     onChange={(e) => setTimezoneSearchQuery(e.target.value)}
                   />
                 </div>
-
                 {/* Current Selection */}
                 <div className="p-3 border rounded-lg bg-blue-50">
                   <p className="font-medium">Current: {selectedTimezone}</p>
@@ -483,14 +440,13 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                     {TIMEZONE_GROUPS.Popular.find(tz => tz.value === selectedTimezone)?.label}
                   </p>
                 </div>
-
                 {/* Timezone Groups */}
                 <div className="space-y-3">
-                  {Object.entries(filteredTimezones).map(([group, timezones]) => (
+                  {Object.entries(filteredTimezones).map(([group, timezones]) => ()
                     <div key={group}>
                       <h4 className="font-medium text-gray-900 mb-2">{group}</h4>
                       <div className="space-y-1">
-                        {timezones.map((timezone) => (
+                        {timezones.map((timezone) => ()
                           <button
                             key={timezone.value}
                             className={`w-full text-left p-2 rounded border hover:bg-gray-50 ${
@@ -514,7 +470,6 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
             </CardContent>
           </Card>
         </TabsContent>
-
         {/* Business Hours Tab */}
         <TabsContent value="business" className="space-y-4">
           <Card>
@@ -541,14 +496,13 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                   Enable business hours restrictions
                 </label>
               </div>
-
-              {currentBusinessHours.enabled && (
+              {currentBusinessHours.enabled && ()
                 <>
                   {/* Presets */}
                   <div>
                     <h4 className="font-medium mb-2">Quick Presets</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {COMMON_BUSINESS_HOURS.map((preset, index) => (
+                      {COMMON_BUSINESS_HOURS.map((preset, index) => ()
                         <Button
                           key={index}
                           variant="outline"
@@ -560,7 +514,6 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                       ))}
                     </div>
                   </div>
-
                   {/* Working Hours */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -575,7 +528,7 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                           onBusinessHoursChange?.(newBusinessHours);
                         }}
                       >
-                        {timeOptions.filter((_, index) => index % 4 === 0).map(time => (
+                        {timeOptions.filter((_, index) => index % 4 === 0).map(time => ()
                           <option key={time} value={time}>
                             {formatDisplayTime(time)}
                           </option>
@@ -594,7 +547,7 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                           onBusinessHoursChange?.(newBusinessHours);
                         }}
                       >
-                        {timeOptions.filter((_, index) => index % 4 === 0).map(time => (
+                        {timeOptions.filter((_, index) => index % 4 === 0).map(time => ()
                           <option key={time} value={time}>
                             {formatDisplayTime(time)}
                           </option>
@@ -602,18 +555,17 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                       </Select>
                     </div>
                   </div>
-
                   {/* Working Days */}
                   <div>
                     <h4 className="font-medium mb-2">Working Days</h4>
                     <div className="flex flex-wrap gap-2">
-                      {WEEKDAY_NAMES.map((day, index) => (
+                      {WEEKDAY_NAMES.map((day, index) => ()
                         <label key={index} className="flex items-center space-x-1 cursor-pointer">
                           <input
                             type="checkbox"
                             checked={currentBusinessHours.workdays.includes(index)}
                             onChange={(e) => {
-                              const newWorkdays = e.target.checked
+                              const newWorkdays = e.target.checked;
                                 ? [...currentBusinessHours.workdays, index]
                                 : currentBusinessHours.workdays.filter(d => d !== index);
                               const newBusinessHours = { ...currentBusinessHours, workdays: newWorkdays.sort() };
@@ -631,7 +583,6 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
             </CardContent>
           </Card>
         </TabsContent>
-
         {/* Preview Tab */}
         <TabsContent value="preview" className="space-y-4">
           <Card>
@@ -652,22 +603,20 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                   <p><strong>Full DateTime:</strong> {dateTimeInTimezone.toISOString()}</p>
                 </div>
               </div>
-
               {/* Time in Other Zones */}
               <div>
                 <h4 className="font-medium mb-2">Time in Other Zones</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {TIMEZONE_GROUPS.Popular.slice(0, 4).map((tz) => {
-                    const timeInZone = new Intl.DateTimeFormat('en-US', {
+                    const timeInZone = new Intl.DateTimeFormat('en-US', {)
                       timeZone: tz.value,
                       weekday: 'short',
                       month: 'short',
                       day: 'numeric',
                       hour: '2-digit',
-                      minute: '2-digit'
+                      minute: '2-digit',
                     }).format(dateTimeInTimezone);
-                    
-                    return (
+                    return ()
                       <div key={tz.value} className="p-2 border rounded text-sm">
                         <p className="font-medium">{tz.value}</p>
                         <p className="text-gray-600">{timeInZone}</p>
@@ -676,18 +625,17 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                   })}
                 </div>
               </div>
-
               {/* Business Hours Status */}
-              {currentBusinessHours.enabled && (
+              {currentBusinessHours.enabled && ()
                 <div>
                   <h4 className="font-medium mb-2">Business Hours Status</h4>
                   <div className="p-3 border rounded-lg">
-                    {conflictInfo.hasConflict ? (
+                    {conflictInfo.hasConflict ? ()
                       <div className="flex items-center gap-2 text-orange-600">
                         <AlertTriangle className="h-4 w-4" />
                         <span>Outside business hours</span>
                       </div>
-                    ) : (
+                    ) : ()
                       <div className="flex items-center gap-2 text-green-600">
                         <CheckCircle className="h-4 w-4" />
                         <span>Within business hours</span>

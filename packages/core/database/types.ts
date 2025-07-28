@@ -16,7 +16,7 @@ export interface PaginationOptions {
 
 export interface PaginatedResult<T> {
   data: T[];
-  pagination: {
+  pagination: {,
     page: number;
     limit: number;
     totalCount: number;
@@ -197,18 +197,17 @@ export type UpdateData<T> = Partial<Omit<T, 'id' | 'createdAt' | 'updatedAt'>>;
 export type CreateData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>;
 
 // Export utility functions for creating pagination results
-export function createPaginatedResult<T>(
+export function createPaginatedResult<T>()
   data: T[],
   totalCount: number,
-  options: PaginationOptions
+  options: PaginationOptions,
 ): PaginatedResult<T> {
   const page = options.page || 1;
   const limit = options.limit || 10;
   const totalPages = Math.ceil(totalCount / limit);
-  
   return {
     data,
-    pagination: {
+    pagination: {,
       page,
       limit,
       totalCount,
@@ -222,7 +221,7 @@ export function createPaginatedResult<T>(
 }
 
 // Export utility function for creating operation results
-export function createOperationResult<T>(
+export function createOperationResult<T>()
   success: boolean,
   data?: T,
   error?: string,

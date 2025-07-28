@@ -1,6 +1,5 @@
 // Comparison Toolbar - Controls for visual diff display options
 // Story 9.3.2 - Visual Diff Tool
-
 import React from 'react';
 import { ViewMode, HighlightMode } from '../../types/comparison';
 
@@ -18,7 +17,7 @@ export interface ComparisonToolbarProps {
   className?: string;
 }
 
-export const ComparisonToolbar: React.FC<ComparisonToolbarProps> = ({
+export const ComparisonToolbar: React.FC<ComparisonToolbarProps> = ({)
   viewMode,
   highlightMode,
   showUnchanged,
@@ -31,8 +30,8 @@ export const ComparisonToolbar: React.FC<ComparisonToolbarProps> = ({
   onZoomChange,
   className = ''
 }) => {
-  return (
-    <div className={`bg-gray-50 px-4 py-3 ${className}`}>
+  return ()
+    <div className={`bg-gray-50 px-4 py-3 ${className}`}>}
       <div className="flex flex-wrap items-center gap-4">
         {/* View Mode */}
         <div className="flex items-center space-x-2">
@@ -47,7 +46,6 @@ export const ComparisonToolbar: React.FC<ComparisonToolbarProps> = ({
             <option value="unified">Unified</option>
           </select>
         </div>
-
         {/* Highlight Mode */}
         <div className="flex items-center space-x-2">
           <label className="text-sm font-medium text-gray-700">Highlight:</label>
@@ -62,7 +60,6 @@ export const ComparisonToolbar: React.FC<ComparisonToolbarProps> = ({
             <option value="all">Show All</option>
           </select>
         </div>
-
         {/* Show Options */}
         <div className="flex items-center space-x-4">
           <label className="flex items-center space-x-1">
@@ -74,7 +71,6 @@ export const ComparisonToolbar: React.FC<ComparisonToolbarProps> = ({
             />
             <span className="text-sm text-gray-700">Show unchanged</span>
           </label>
-
           <label className="flex items-center space-x-1">
             <input
               type="checkbox"
@@ -85,7 +81,6 @@ export const ComparisonToolbar: React.FC<ComparisonToolbarProps> = ({
             <span className="text-sm text-gray-700">Show metadata</span>
           </label>
         </div>
-
         {/* Zoom Control */}
         <div className="flex items-center space-x-2">
           <label className="text-sm font-medium text-gray-700">Zoom:</label>
@@ -107,7 +102,6 @@ export const ComparisonToolbar: React.FC<ComparisonToolbarProps> = ({
             </button>
           </div>
         </div>
-
         {/* Quick Zoom Buttons */}
         <div className="flex items-center space-x-1">
           <button

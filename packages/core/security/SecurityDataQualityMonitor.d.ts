@@ -62,7 +62,7 @@ export declare enum ValidationSeverity {
 export interface DataQualityReport {
     reportId: string;
     generatedAt: Date;
-    period: {
+    period: {,
         start: Date;
         end: Date;
     };
@@ -188,7 +188,7 @@ export interface FieldExpectation {
     uniquenessRequired: boolean;
 }
 export interface StatisticalBaseline {
-    recordCount: {
+    recordCount: {,
         mean: number;
         standardDeviation: number;
         min: number;
@@ -203,7 +203,7 @@ export interface FieldStatistics {
     nullPercent: number;
     uniquePercent: number;
     averageLength?: number;
-    commonValues: Array<{
+    commonValues: Array<{,
         value: unknown;
         frequency: number;
     }>;
@@ -271,7 +271,7 @@ export declare class SecurityDataQualityMonitor extends EventEmitter {
     /**
      * Generate comprehensive data quality report
      */
-    generateQualityReport(period: {
+    generateQualityReport(period: {)
         start: Date;
         end: Date;
     }): Promise<DataQualityReport>;

@@ -143,7 +143,7 @@ export interface PromotionUsageEventData {
     discount_amount_cents: number;
     original_amount_cents: number;
     final_amount_cents: number;
-    affected_items: Array<{
+    affected_items: Array<{,
         item_id: string;
         discount_applied_cents: number;
         final_price_cents: number;
@@ -455,7 +455,7 @@ export interface EventHistoryResult {
 }
 export interface EventAggregation {
     field: string;
-    buckets: Array<{
+    buckets: Array<{,
         key: string;
         count: number;
     }>;
@@ -544,7 +544,7 @@ export interface NotificationDeliveryOptions {
 export interface NotificationResult {
     success: boolean;
     notification_id: string;
-    delivery_results: Array<{
+    delivery_results: Array<{,
         recipient: NotificationRecipient;
         method: EventDeliveryMethod;
         success: boolean;
@@ -596,7 +596,7 @@ export interface NotificationHistoryCriteria {
     offset?: number;
 }
 export interface NotificationHistoryResult {
-    notifications: Array<{
+    notifications: Array<{,
         notification_id: string;
         event_id: string;
         event_type: PromotionEventType;

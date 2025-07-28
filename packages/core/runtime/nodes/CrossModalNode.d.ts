@@ -27,43 +27,43 @@ export interface MultimodalInput {
     };
 }
 export interface CrossModalAnalysis {
-    content_understanding: {
+    content_understanding: {,
         overall_summary: string;
         key_themes: string[];
-        sentiment: {
+        sentiment: {,
             score: number;
             label: string;
         };
         complexity_score: number;
     };
-    modality_insights: Array<{
+    modality_insights: Array<{,
         modality: string;
         confidence: number;
         key_elements: string[];
         dominant_features: string[];
     }>;
-    cross_modal_connections: Array<{
+    cross_modal_connections: Array<{,
         connection_type: 'semantic' | 'temporal' | 'causal' | 'contextual';
         modalities: string[];
         strength: number;
         description: string;
     }>;
-    extracted_information: {
-        entities: Array<{
+    extracted_information: {,
+        entities: Array<{,
             name: string;
             type: string;
             confidence: number;
         }>;
-        topics: Array<{
+        topics: Array<{,
             topic: string;
             relevance: number;
         }>;
-        emotions: Array<{
+        emotions: Array<{,
             emotion: string;
             intensity: number;
             source: string;
         }>;
-        actions: Array<{
+        actions: Array<{,
             action: string;
             confidence: number;
         }>;

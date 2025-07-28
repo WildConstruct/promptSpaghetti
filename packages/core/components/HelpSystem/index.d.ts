@@ -16,13 +16,13 @@ export { HelpContentManager } from '../ContextualHelp/HelpContentManager';
 import { Epic16HelpSystem } from './Epic16HelpSystem';
 export type { UserProfile, LearningPath } from '../ContextualHelp/HelpContentManager';
 export declare     getAnalytics: () => {
-        helpInteractions: Array<{
+        helpInteractions: Array<{,
             event: string;
             data: any;
             timestamp: number;
             sessionId: string;
         }>;
-        userStruggles: Array<{
+        userStruggles: Array<{,
             event: string;
             data: any;
             timestamp: number;

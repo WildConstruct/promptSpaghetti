@@ -37,13 +37,13 @@ export interface DashboardTemplate {
     config: Partial<DashboardConfig>;
     requiredWidgets: string[];
     optionalWidgets: string[];
-    customization: {
+    customization: {,
         allowLayoutChange: boolean;
         allowWidgetAdd: boolean;
         allowWidgetRemove: boolean;
         allowThemeChange: boolean;
     };
-    metadata: {
+    metadata: {,
         version: string;
         author: string;
         createdAt: Date;
@@ -60,14 +60,14 @@ export interface DashboardPreset {
     dashboardType: DashboardType;
     theme: DashboardTheme;
     layout: 'compact' | 'standard' | 'detailed';
-    widgets: {
+    widgets: {,
         id: string;
         type: string;
-        position: {
+        position: {,
             x: number;
             y: number;
         };
-        size: {
+        size: {,
             width: number;
             height: number;
         };

@@ -21,7 +21,7 @@ import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAna
 export interface FunnelSegmentationProps {
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     funnelId: string;
-    timeRange: {
+    timeRange: {,
         start: number;
         end: number;
     };
@@ -121,7 +121,7 @@ export interface TimePattern {
 }
 export interface SeasonalityData {
     pattern: 'weekly' | 'monthly' | 'quarterly';
-    peaks: Array<{
+    peaks: Array<{,
         period: string;
         multiplier: number;
     }>;
@@ -134,52 +134,52 @@ export interface DemographicBreakdown {
     userLifecycle: UserLifecycleDistribution;
 }
 export interface GeographicDistribution {
-    countries: Array<{
+    countries: Array<{,
         country: string;
         percentage: number;
         conversionRate: number;
     }>;
-    regions: Array<{
+    regions: Array<{,
         region: string;
         percentage: number;
         conversionRate: number;
     }>;
-    cities: Array<{
+    cities: Array<{,
         city: string;
         percentage: number;
         conversionRate: number;
     }>;
 }
 export interface DeviceDistribution {
-    types: Array<{
+    types: Array<{,
         type: string;
         percentage: number;
         conversionRate: number;
     }>;
-    browsers: Array<{
+    browsers: Array<{,
         browser: string;
         percentage: number;
         conversionRate: number;
     }>;
-    operatingSystems: Array<{
+    operatingSystems: Array<{,
         os: string;
         percentage: number;
         conversionRate: number;
     }>;
 }
 export interface AcquisitionChannelDistribution {
-    channels: Array<{
+    channels: Array<{,
         channel: string;
         percentage: number;
         conversionRate: number;
         cost: number;
     }>;
-    sources: Array<{
+    sources: Array<{,
         source: string;
         percentage: number;
         conversionRate: number;
     }>;
-    campaigns: Array<{
+    campaigns: Array<{,
         campaign: string;
         percentage: number;
         conversionRate: number;
@@ -187,17 +187,17 @@ export interface AcquisitionChannelDistribution {
     }>;
 }
 export interface UserLifecycleDistribution {
-    stages: Array<{
+    stages: Array<{,
         stage: string;
         percentage: number;
         conversionRate: number;
     }>;
-    tenure: Array<{
+    tenure: Array<{,
         range: string;
         percentage: number;
         conversionRate: number;
     }>;
-    engagementLevel: Array<{
+    engagementLevel: Array<{,
         level: string;
         percentage: number;
         conversionRate: number;

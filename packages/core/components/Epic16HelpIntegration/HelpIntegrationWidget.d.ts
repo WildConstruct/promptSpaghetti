@@ -29,7 +29,7 @@ export interface HelpSession {
     totalSteps: number;
     content: HelpContent[];
     startTime: Date;
-    userProgress: {
+    userProgress: {,
         completedActions: string[];
         skippedContent: string[];
         ratings: Record<string, number>;

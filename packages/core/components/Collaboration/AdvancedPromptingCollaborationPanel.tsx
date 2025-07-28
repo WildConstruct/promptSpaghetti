@@ -4,7 +4,6 @@
  * Professional film industry collaboration interface for advanced prompting
  * methodologies, combining MARS framework, Zada patterns, and VFX integration.
  */
-
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { 
   AdvancedPromptingCollaborationService,
@@ -16,7 +15,6 @@ import {
   PromptingMethodology,
   FilmIndustryWorkflowTemplate
 } from '../../services/AdvancedPromptingCollaborationService';
-
 interface AdvancedPromptingCollaborationPanelProps {
   collaborationService: AdvancedPromptingCollaborationService;
   currentUser: FilmIndustryUser;
@@ -25,8 +23,7 @@ interface AdvancedPromptingCollaborationPanelProps {
   onVFXExport?: (exportData: unknown) => void;
   className?: string;
 }
-
-const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborationPanelProps> = ({ 
+const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborationPanelProps> = ({ )
   collaborationService,
   currentUser,
   onMARSRegionCreate, 
@@ -43,7 +40,6 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
   const [newSessionTitle, setNewSessionTitle] = useState('');
   const [selectedMethodology, setSelectedMethodology] = useState<PromptingMethodology>('hybrid');
   const [activeTab, setActiveTab] = useState<'sessions' | 'mars' | 'zada' | 'workflows' | 'export'>('sessions');
-
   // Initialize data on mount
   useEffect(() => {
     const loadData = async () => {
@@ -52,41 +48,33 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       setZadaPatterns(collaborationService.getZadaPatterns());
       setWorkflowTemplates(collaborationService.getWorkflowTemplates(currentUser.role));
     };
-
     loadData();
-
     // Set up event listeners
     const handleSessionCreated = (session: PromptingMethodologySession) => {
       setSessions(prev => [...prev, session]);
     };
-
     const handleMARSRegionCreated = ({ region }: { region: MARSRegionTemplate }) => {
       setMarsTemplates(prev => [...prev, region]);
       onMARSRegionCreate?.(region);
     };
-
     const handleZadaPatternCreated = ({ pattern }: { pattern: ZadaPromptPattern }) => {
       setZadaPatterns(prev => [...prev, pattern]);
       onZadaPatternCreate?.(pattern);
     };
-
     collaborationService.on('session_created', handleSessionCreated);
     collaborationService.on('mars_region_created', handleMARSRegionCreated);
     collaborationService.on('zada_pattern_created', handleZadaPatternCreated);
-
     return () => {
       collaborationService.off('session_created', handleSessionCreated);
       collaborationService.off('mars_region_created', handleMARSRegionCreated);
       collaborationService.off('zada_pattern_created', handleZadaPatternCreated);
     };
   }, [collaborationService, currentUser.role, onMARSRegionCreate, onZadaPatternCreate]);
-
   // Session management
   const handleCreateSession = useCallback(async () => {
     if (!newSessionTitle.trim()) return;
-
     try {
-      const session = await collaborationService.createCollaborationSession(
+      const session = await collaborationService.createCollaborationSession(;)
         newSessionTitle,
         selectedMethodology,
         currentUser.id
@@ -98,7 +86,6 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       console.error('Failed to create session:', error);
     }
   }, [newSessionTitle, selectedMethodology, currentUser.id, collaborationService]);
-
   const handleJoinSession = useCallback(async (sessionId: string) => {
     try {
       const success = await collaborationService.joinCollaborationSession(sessionId, currentUser.id);
@@ -110,13 +97,11 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       console.error('Failed to join session:', error);
     }
   }, [currentUser.id, collaborationService]);
-
   // VFX Export
   const handleVFXExport = useCallback(async () => {
     if (!currentSession) return;
-
     try {
-      const exportData = await collaborationService.generateVFXExport(
+      const exportData = await collaborationService.generateVFXExport(;)
         currentSession.sessionId,
         currentUser.id
       );
@@ -125,7 +110,6 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       console.error('Failed to generate VFX export:', error);
     }
   }, [currentSession, currentUser.id, collaborationService, onVFXExport]);
-
   // Role-based UI customization
   const getRoleIcon = (role: FilmIndustryRole): string => {
     const icons = {
@@ -135,11 +119,10 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       vfx_artist: '🎨',
       cinematographer: '📹',
       producer: '💼',
-      script_supervisor: '📝'
+      script_supervisor: '📝',
     };
     return icons[role] || '👤';
   };
-
   const getMethodologyColor = (methodology: PromptingMethodology): string => {
     const colors = {
       zada: '#10b981', // Green - Natural language
@@ -149,11 +132,9 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
     };
     return colors[methodology];
   };
-
       return compatibility[role]?.includes(methodology) || false;
   };
-
-  const SessionsTab = () => (
+  const SessionsTab = () => (;)
     <div style={{ padding: 20 }}>
       {/* Session Creation */}
       <div style={{ 
@@ -166,8 +147,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
         <h4 style={{ margin: '0 0 12px 0', color: '#1e293b', fontSize: 16 }}>
           {getRoleIcon(currentUser.role)} Create New Collaboration Session
         </h4>
-        
-        {!isCreatingSession ? (
+        {!isCreatingSession ? ()
           <button
             onClick={() => setIsCreatingSession(true)}
             style={{
@@ -178,12 +158,12 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               borderRadius: 8,
               cursor: 'pointer',
               fontSize: 14,
-              fontWeight: 600
+              fontWeight: 600,
             }}
           >
             + New Collaboration Session
           </button>
-        ) : (
+        ) : ()
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <input
               type="text"
@@ -194,10 +174,9 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                 padding: '8px 12px',
                 border: '1px solid #d1d5db',
                 borderRadius: 6,
-                fontSize: 14
+                fontSize: 14,
               }}
             />
-            
             <select
               value={selectedMethodology}
               onChange={(e) => setSelectedMethodology(e.target.value as PromptingMethodology)}
@@ -205,7 +184,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                 padding: '8px 12px',
                 border: '1px solid #d1d5db',
                 borderRadius: 6,
-                fontSize: 14
+                fontSize: 14,
               }}
             >
               <option value="hybrid">🔄 Hybrid (MARS + Zada)</option>
@@ -213,13 +192,12 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               <option value="mars">🏷️ MARS Framework</option>
               <option value="custom">⚙️ Custom Methodology</option>
             </select>
-            
             <div style={{ display: 'flex', gap: 8 }}>
               <button
                 onClick={handleCreateSession}
                 disabled={!newSessionTitle.trim()}
                 style={{
-                  background: newSessionTitle.trim() 
+                  background: newSessionTitle.trim() ,
                     ? 'linear-gradient(135deg, #10b981, #047857)'
                     : '#9ca3af',
                   color: 'white',
@@ -228,7 +206,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                   borderRadius: 6,
                   cursor: newSessionTitle.trim() ? 'pointer' : 'not-allowed',
                   fontSize: 13,
-                  fontWeight: 500
+                  fontWeight: 500,
                 }}
               >
                 Create Session
@@ -245,7 +223,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                   padding: '8px 16px',
                   borderRadius: 6,
                   cursor: 'pointer',
-                  fontSize: 13
+                  fontSize: 13,
                 }}
               >
                 Cancel
@@ -254,14 +232,12 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
           </div>
         )}
       </div>
-
       {/* Active Sessions */}
       <div>
         <h4 style={{ margin: '0 0 16px 0', color: '#1e293b', fontSize: 16 }}>
           Active Collaboration Sessions
         </h4>
-        
-        {sessions.length === 0 ? (
+        {sessions.length === 0 ? ()
           <div style={{
             padding: 24,
             textAlign: 'center',
@@ -276,16 +252,16 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               Create a new session to start collaborating with your team
             </div>
           </div>
-        ) : (
+        ) : ()
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {sessions.map(session => (
+            {sessions.map(session => ()
               <div
                 key={session.sessionId}
                 style={{
                   background: currentSession?.sessionId === session.sessionId 
                     ? 'rgba(59, 130, 246, 0.1)' 
                     : 'white',
-                  border: `1px solid ${currentSession?.sessionId === session.sessionId 
+                  border: `1px solid ${currentSession?.sessionId === session.sessionId }
                     ? '#3b82f6' 
                     : '#e5e7eb'}`,
                   borderRadius: 8,
@@ -301,7 +277,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                       fontSize: 16, 
                       fontWeight: 600, 
                       color: '#1e293b',
-                      marginBottom: 4
+                      marginBottom: 4,
                     }}>
                       {session.title}
                     </div>
@@ -310,11 +286,11 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                       color: '#6b7280',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8
+                      gap: 8,
                     }}>
                       <span style={{ 
                         color: getMethodologyColor(session.methodology),
-                        fontWeight: 500
+                        fontWeight: 500,
                       }}>
                         {session.methodology.toUpperCase()}
                       </span>
@@ -324,9 +300,8 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                       <span>{session.collaborativeEdits.length} edit{session.collaborativeEdits.length !== 1 ? 's' : ''}</span>
                     </div>
                   </div>
-                  
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    {session.participants.slice(0, 3).map(participant => (
+                    {session.participants.slice(0, 3).map(participant => ()
                       <div
                         key={participant.id}
                         style={{
@@ -340,13 +315,13 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                           color: 'white',
                           fontSize: 12,
                           fontWeight: 500,
-                          title: `${participant.name} (${participant.role})`
+                          title: `${participant.name} (${participant.role})`}
                         }}
                       >
                         {getRoleIcon(participant.role)}
                       </div>
                     ))}
-                    {session.participants.length > 3 && (
+                    {session.participants.length > 3 && ()
                       <div style={{
                         width: 32,
                         height: 32,
@@ -357,7 +332,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                         justifyContent: 'center',
                         fontSize: 10,
                         fontWeight: 600,
-                        color: '#6b7280'
+                        color: '#6b7280',
                       }}>
                         +{session.participants.length - 3}
                       </div>
@@ -371,8 +346,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       </div>
     </div>
   );
-
-  const MARSTab = () => (
+  const MARSTab = () => (;)
     <div style={{ padding: 20 }}>
       <h4 style={{ margin: '0 0 16px 0', color: '#1e293b', fontSize: 16 }}>
         🏷️ MARS Region Templates
@@ -380,17 +354,17 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: 16
+        gap: 16,
       }}>
-        {marsTemplates.map(template => (
+        {marsTemplates.map(template => ()
           <div
             key={template.id}
             style={{
               background: 'white',
-              border: `2px solid ${template.color}20`,
+              border: `2px solid ${template.color}20`,}
               borderRadius: 8,
               padding: 16,
-              position: 'relative'
+              position: 'relative',
             }}
           >
             <div style={{
@@ -402,60 +376,56 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               padding: '4px 8px',
               borderRadius: '0 6px 0 6px',
               fontSize: 10,
-              fontWeight: 600
+              fontWeight: 600,
             }}>
               {template.marsParameters.category}
             </div>
-            
             <div style={{
               fontSize: 16,
               fontWeight: 600,
               color: '#1e293b',
-              marginBottom: 8
+              marginBottom: 8,
             }}>
               {template.title}
             </div>
-            
             <div style={{
               fontSize: 14,
               color: '#6b7280',
               marginBottom: 12,
-              lineHeight: 1.4
+              lineHeight: 1.4,
             }}>
               {template.description}
             </div>
-            
             <div style={{
               display: 'flex',
               flexWrap: 'wrap',
               gap: 4,
-              marginBottom: 12
+              marginBottom: 12,
             }}>
-              {template.tags.map(tag => (
+              {template.tags.map(tag => ()
                 <span
                   key={tag}
                   style={{
-                    background: `${template.color}15`,
+                    background: `${template.color}15`,}
                     color: template.color,
                     fontSize: 11,
                     padding: '2px 6px',
                     borderRadius: 4,
-                    fontWeight: 500
+                    fontWeight: 500,
                   }}
                 >
                   {tag}
                 </span>
               ))}
             </div>
-            
-            {template.vfxCompatible && (
+            {template.vfxCompatible && ()
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: 4,
                 fontSize: 12,
                 color: '#10b981',
-                fontWeight: 500
+                fontWeight: 500,
               }}>
                 ✅ VFX Pipeline Compatible
               </div>
@@ -465,14 +435,13 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       </div>
     </div>
   );
-
-  const ZadaTab = () => (
+  const ZadaTab = () => (;)
     <div style={{ padding: 20 }}>
       <h4 style={{ margin: '0 0 16px 0', color: '#1e293b', fontSize: 16 }}>
         💬 Zada Prompt Patterns
       </h4>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {zadaPatterns.map(pattern => (
+        {zadaPatterns.map(pattern => ()
           <div
             key={pattern.id}
             style={{
@@ -480,7 +449,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               border: '1px solid #e5e7eb',
               borderRadius: 8,
               padding: 20,
-              position: 'relative'
+              position: 'relative',
             }}
           >
             <div style={{
@@ -489,7 +458,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               right: 12,
               display: 'flex',
               alignItems: 'center',
-              gap: 8
+              gap: 8,
             }}>
               <span style={{
                 background: getMethodologyColor(pattern.methodology),
@@ -497,7 +466,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                 fontSize: 10,
                 padding: '2px 6px',
                 borderRadius: 4,
-                fontWeight: 600
+                fontWeight: 600,
               }}>
                 {pattern.methodology.toUpperCase()}
               </span>
@@ -509,30 +478,27 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                 fontSize: 10,
                 padding: '2px 6px',
                 borderRadius: 4,
-                fontWeight: 500
+                fontWeight: 500,
               }}>
                 {pattern.complexity.toUpperCase()}
               </span>
             </div>
-            
             <div style={{
               fontSize: 18,
               fontWeight: 600,
               color: '#1e293b',
-              marginBottom: 8
+              marginBottom: 8,
             }}>
               {pattern.name}
             </div>
-            
             <div style={{
               fontSize: 14,
               color: '#6b7280',
               marginBottom: 12,
-              lineHeight: 1.4
+              lineHeight: 1.4,
             }}>
               {pattern.description}
             </div>
-            
             <div style={{
               background: '#f8fafc',
               border: '1px solid #e2e8f0',
@@ -542,17 +508,16 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               fontSize: 14,
               lineHeight: 1.5,
               fontFamily: 'monospace',
-              color: '#1e293b'
+              color: '#1e293b',
             }}>
               {pattern.pattern}
             </div>
-            
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               fontSize: 12,
-              color: '#6b7280'
+              color: '#6b7280',
             }}>
               <div style={{ display: 'flex', gap: 16 }}>
                 <span>Director Friendly: {pattern.accessibility.directorFriendly ? '✅' : '❌'}</span>
@@ -560,7 +525,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                 <span>Readability: {pattern.accessibility.humanReadableScore}/10</span>
               </div>
               <div style={{ display: 'flex', gap: 4 }}>
-                {pattern.filmGenre.map(genre => (
+                {pattern.filmGenre.map(genre => ()
                   <span
                     key={genre}
                     style={{
@@ -569,7 +534,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                       padding: '2px 6px',
                       borderRadius: 4,
                       fontSize: 10,
-                      textTransform: 'capitalize'
+                      textTransform: 'capitalize',
                     }}
                   >
                     {genre}
@@ -582,42 +547,41 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       </div>
     </div>
   );
-
-  const WorkflowsTab = () => (
+  const WorkflowsTab = () => (;)
     <div style={{ padding: 20 }}>
       <h4 style={{ margin: '0 0 16px 0', color: '#1e293b', fontSize: 16 }}>
         🎬 Film Industry Workflows
       </h4>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {workflowTemplates.map(workflow => (
+        {workflowTemplates.map(workflow => ()
           <div
             key={workflow.id}
             style={{
               background: 'white',
               border: '1px solid #e5e7eb',
               borderRadius: 8,
-              padding: 20
+              padding: 20,
             }}
           >
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: 12
+              marginBottom: 12,
             }}>
               <div>
                 <div style={{
                   fontSize: 18,
                   fontWeight: 600,
                   color: '#1e293b',
-                  marginBottom: 4
+                  marginBottom: 4,
                 }}>
                   {workflow.name}
                 </div>
                 <div style={{
                   fontSize: 14,
                   color: '#6b7280',
-                  lineHeight: 1.4
+                  lineHeight: 1.4,
                 }}>
                   {workflow.description}
                 </div>
@@ -626,7 +590,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'end',
-                gap: 4
+                gap: 4,
               }}>
                 <span style={{
                   background: getMethodologyColor(workflow.methodology),
@@ -634,26 +598,25 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                   fontSize: 12,
                   padding: '4px 8px',
                   borderRadius: 6,
-                  fontWeight: 500
+                  fontWeight: 500,
                 }}>
                   {workflow.methodology.toUpperCase()}
                 </span>
                 <span style={{
                   fontSize: 12,
-                  color: '#6b7280'
+                  color: '#6b7280',
                 }}>
                   ~{workflow.estimatedDuration}min
                 </span>
               </div>
             </div>
-            
             <div style={{
               display: 'flex',
               flexDirection: 'column',
               gap: 8,
-              marginTop: 16
+              marginTop: 16,
             }}>
-              {workflow.phases.map((phase, index) => (
+              {workflow.phases.map((phase, index) => ()
                 <div
                   key={phase.id}
                   style={{
@@ -676,32 +639,30 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: 12,
-                    fontWeight: 600
+                    fontWeight: 600,
                   }}>
                     {index + 1}
                   </div>
-                  
                   <div style={{ flex: 1 }}>
                     <div style={{
                       fontSize: 14,
                       fontWeight: 600,
-                      color: '#1e293b'
+                      color: '#1e293b',
                     }}>
                       {phase.name}
                     </div>
                     <div style={{
                       fontSize: 12,
-                      color: '#6b7280'
+                      color: '#6b7280',
                     }}>
                       {phase.description}
                     </div>
                   </div>
-                  
                   <div style={{
                     display: 'flex',
-                    gap: 4
+                    gap: 4,
                   }}>
-                    {phase.requiredRoles.map(role => (
+                    {phase.requiredRoles.map(role => ()
                       <span
                         key={role}
                         style={{
@@ -709,19 +670,18 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                           padding: '2px 6px',
                           borderRadius: 4,
                           background: '#e5e7eb',
-                          color: '#374151'
+                          color: '#374151',
                         }}
                       >
                         {getRoleIcon(role)}
                       </span>
                     ))}
                   </div>
-                  
                   <div style={{
                     fontSize: 12,
                     color: '#6b7280',
                     minWidth: '50px',
-                    textAlign: 'right'
+                    textAlign: 'right',
                   }}>
                     {phase.duration}min
                   </div>
@@ -733,14 +693,12 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       </div>
     </div>
   );
-
-  const ExportTab = () => (
+  const ExportTab = () => (;)
     <div style={{ padding: 20 }}>
       <h4 style={{ margin: '0 0 16px 0', color: '#1e293b', fontSize: 16 }}>
         🚀 VFX Pipeline Export
       </h4>
-      
-      {!currentSession ? (
+      {!currentSession ? ()
         <div style={{
           padding: 24,
           textAlign: 'center',
@@ -755,14 +713,14 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
             Join or create a collaboration session to enable VFX export
           </div>
         </div>
-      ) : (
+      ) : ()
         <div>
           <div style={{
             background: 'rgba(59, 130, 246, 0.05)',
             border: '1px solid rgba(59, 130, 246, 0.2)',
             borderRadius: 8,
             padding: 16,
-            marginBottom: 20
+            marginBottom: 20,
           }}>
             <h5 style={{ margin: '0 0 8px 0', color: '#1e293b' }}>
               Active Session: {currentSession.title}
@@ -771,7 +729,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               display: 'flex',
               gap: 16,
               fontSize: 12,
-              color: '#6b7280'
+              color: '#6b7280',
             }}>
               <span>Methodology: {currentSession.methodology}</span>
               <span>Participants: {currentSession.participants.length}</span>
@@ -779,18 +737,17 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               <span>Edits: {currentSession.collaborativeEdits.length}</span>
             </div>
           </div>
-
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
             gap: 16,
-            marginBottom: 20
+            marginBottom: 20,
           }}>
             <div style={{
               background: 'white',
               border: '1px solid #e5e7eb',
               borderRadius: 8,
-              padding: 16
+              padding: 16,
             }}>
               <h6 style={{ margin: '0 0 8px 0', color: '#1e293b' }}>
                 Export Configuration
@@ -802,12 +759,11 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                 <div>Include Annotations: {currentSession.vfxExportConfig.includeAnnotations ? '✅' : '❌'}</div>
               </div>
             </div>
-
             <div style={{
               background: 'white',
               border: '1px solid #e5e7eb',
               borderRadius: 8,
-              padding: 16
+              padding: 16,
             }}>
               <h6 style={{ margin: '0 0 8px 0', color: '#1e293b' }}>
                 Pipeline Integration
@@ -820,7 +776,6 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               </div>
             </div>
           </div>
-
           <button
             onClick={handleVFXExport}
             style={{
@@ -834,7 +789,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               fontWeight: 600,
               display: 'flex',
               alignItems: 'center',
-              gap: 8
+              gap: 8,
             }}
           >
             🚀 Generate VFX Pipeline Export
@@ -843,13 +798,12 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       )}
     </div>
   );
-
-  return (
-    <div className={`advanced-prompting-collaboration-panel ${className}`} style={{
+  return ()
+    <div className={`advanced-prompting-collaboration-panel ${className}`} style={{}
       background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       borderRadius: 12,
       border: '1px solid #e2e8f0',
-      overflow: 'hidden'
+      overflow: 'hidden',
     }}>
       {/* Header */}
       <div style={{
@@ -864,24 +818,23 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
           color: '#1e293b',
           display: 'flex',
           alignItems: 'center',
-          gap: 8
+          gap: 8,
         }}>
           🤝 Advanced Prompting Collaboration
         </h3>
         <div style={{
           fontSize: 14,
           color: '#64748b',
-          marginTop: 4
+          marginTop: 4,
         }}>
           {getRoleIcon(currentUser.role)} {currentUser.name} ({currentUser.role.replace('_', ' ')})
-          {currentSession && (
+          {currentSession && ()
             <span style={{ color: '#10b981', fontWeight: 500, marginLeft: 8 }}>
               • Connected to "{currentSession.title}"
             </span>
           )}
         </div>
       </div>
-
       {/* Tab Navigation */}
       <div style={{
         display: 'flex',
@@ -894,7 +847,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
           { id: 'zada', label: '💬 Zada Patterns', icon: '💬' },
           { id: 'workflows', label: '🎬 Workflows', icon: '🎬' },
           { id: 'export', label: '🚀 VFX Export', icon: '🚀' }
-        ].map(tab => (
+        ].map(tab => ()
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
@@ -914,7 +867,6 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
           </button>
         ))}
       </div>
-
       {/* Tab Content */}
       <div style={{ minHeight: 400, overflowY: 'auto' }}>
         {activeTab === 'sessions' && <SessionsTab />}

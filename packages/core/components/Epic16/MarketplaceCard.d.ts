@@ -20,7 +20,7 @@ export interface MarketplaceTemplate {
     compatibility: string[];
     isAiGenerated: boolean;
     status: 'draft' | 'listed' | 'blocked' | 'archived';
-    stats: {
+    stats: {,
         downloads: number;
         views: number;
         likes: number;

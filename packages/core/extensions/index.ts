@@ -48,7 +48,6 @@ export const ExtensionSystemUtils = {
   getExtensionType(extension: any): string {
     return extension?.extensionType || 'unknown';
   },
-
   /**
    * Check if object is an extension
    */
@@ -60,7 +59,6 @@ export const ExtensionSystemUtils = {
            typeof obj.initialize === 'function' && 
            typeof obj.activate === 'function';
   },
-
   /**
    * Get extension metadata
    */
@@ -81,25 +79,20 @@ export const ExtensionSystemUtils = {
       description: extension.description || 'No description'
     };
   },
-
   /**
    * Compare extension versions
    */
   compareVersions(version1: string, version2: string): number {
     const v1Parts = version1.split('.').map(Number);
     const v2Parts = version2.split('.').map(Number);
-    
     for (let i = 0; i < Math.max(v1Parts.length, v2Parts.length); i++) {
       const v1Part = v1Parts[i] || 0;
       const v2Part = v2Parts[i] || 0;
-      
       if (v1Part > v2Part) return 1;
       if (v1Part < v2Part) return -1;
     }
-    
     return 0;
   },
-
   /**
    * Validate semantic version
    */
@@ -107,7 +100,6 @@ export const ExtensionSystemUtils = {
     const semverRegex = /^\d+\.\d+\.\d+$/;
     return semverRegex.test(version);
   },
-
   /**
    * Generate extension ID from name
    */
@@ -123,9 +115,8 @@ export const ExtensionSystemUtils = {
 export const ExtensionSystemConstants = {
   // Extension Types
   EXTENSION_TYPES: ['node', 'ui', 'transform', 'storage'] as const,
-  
   // Lifecycle States
-  LIFECYCLE_STATES: [
+  LIFECYCLE_STATES: [,
     'uninitialized',
     'initializing', 
     'initialized',
@@ -137,12 +128,10 @@ export const ExtensionSystemConstants = {
     'disposed',
     'error'
   ] as const,
-  
   // Health Status Values
   HEALTH_STATUS_VALUES: ['healthy', 'warning', 'error', 'unknown'] as const,
-  
   // Error Types
-  ERROR_TYPES: [
+  ERROR_TYPES: [,
     'initialization_error',
     'activation_error',
     'runtime_error',
@@ -151,12 +140,10 @@ export const ExtensionSystemConstants = {
     'permission_error',
     'configuration_error'
   ] as const,
-  
   // Validation Levels
   VALIDATION_LEVELS: ['error', 'warning', 'info'] as const,
-  
   // Extension Capabilities
-  CAPABILITIES: {
+  CAPABILITIES: {,
     node: ['node-creation', 'node-validation', 'advanced-nodes'],
     ui: ['components', 'themes', 'commands', 'menus', 'keybindings'],
     transform: ['data-transformation', 'pipeline-support', 'validation'],

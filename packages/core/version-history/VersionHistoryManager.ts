@@ -9,32 +9,26 @@ export interface VersionSnapshot {
   branch_name: string;
   version_number: number;
   version_tag?: string;
-  
   // Metadata
   title?: string;
   description?: string;
   changelog?: string;
-  
   // Storage
   s3_uri: string;
   size_bytes: number;
   checksum: string;
   compression_format: string;
-  
   // Author and timing
   created_by: string;
   created_at: string;
-  
   // Type and context
   snapshot_type: 'manual' | 'auto' | 'milestone' | 'backup';
   trigger_event?: string;
   parent_snapshot_id?: string;
-  
   // Statistics
   node_count: number;
   edge_count: number;
   complexity_score?: number;
-  
   // Workflow
   workflow_state: string;
   approval_status?: string;
@@ -47,7 +41,7 @@ export interface VersionDiff {
   diff_type: 'incremental' | 'full' | 'structural';
   diff_format: 'json' | 'binary' | 'text';
   diff_data: any;
-  diff_summary: {
+  diff_summary: {,
     total_changes: number;
     added: number;
     removed: number;
@@ -143,15 +137,13 @@ export class VersionHistoryManager {
   private branches = new Map<string, Branch>();
   private changeEvents: ChangeEvent[] = [];
   private currentSessionId: string;
-
-  constructor(
+  constructor()
     private apiClient: any,
     private projectId: string,
     private userId: string
   ) {
     this.currentSessionId = crypto.randomUUID();
   }
-
   // Snapshot Management
   async createSnapshot(graphData: any, options: SnapshotCreationOptions = {}): Promise<VersionSnapshot> {
     try {
@@ -167,70 +159,58 @@ export class VersionHistoryManager {
         version_tag: options.version_tag,
         workflow_state: options.workflow_state || 'draft',
         approval_status: options.approval_status,
-        created_by: this.userId
+        created_by: this.userId,
       };
-
       const response = await this.apiClient.post('/api/version-snapshots', snapshotData);
       const snapshot = response.data;
-
       // Update local cache
       this.snapshots.set(snapshot.id, snapshot);
-
       // Record change event
-      await this.recordChangeEvent({
+      await this.recordChangeEvent({)
         event_type: 'snapshot_created',
-        event_data: {
+        event_data: {,
           snapshot_id: snapshot.id,
           snapshot_type: snapshot.snapshot_type,
-          version_number: snapshot.version_number
+          version_number: snapshot.version_number,
         },
         affected_nodes: this.extractNodeIds(graphData),
-        change_magnitude: this.calculateChangeMagnitude(graphData)
+        change_magnitude: this.calculateChangeMagnitude(graphData),
       });
-
       return snapshot;
     } catch (error) {
       console.error('Failed to create snapshot:', error);
       throw error;
     }
   }
-
   async getSnapshots(filter: VersionHistoryFilter = {}): Promise<{ snapshots: VersionSnapshot[]; total: number }> {
     try {
       const params = new URLSearchParams();
       params.append('project_id', this.projectId);
-      
       Object.entries(filter).forEach(([key, value]) => {
         if (value !== undefined) {
           params.append(key, String(value));
         }
       });
-
-      const response = await this.apiClient.get(`/api/version-snapshots?${params}`);
+      const response = await this.apiClient.get(`/api/version-snapshots?${params}`);}
       const result = response.data;
-
       // Update local cache
       result.snapshots.forEach((snapshot: VersionSnapshot) => {
         this.snapshots.set(snapshot.id, snapshot);
       });
-
       return result;
     } catch (error) {
       console.error('Failed to get snapshots:', error);
       throw error;
     }
   }
-
   async getSnapshot(snapshotId: string): Promise<VersionSnapshot> {
     try {
       // Check cache first
       if (this.snapshots.has(snapshotId)) {
         return this.snapshots.get(snapshotId)!;
       }
-
-      const response = await this.apiClient.get(`/api/version-snapshots/${snapshotId}`);
+      const response = await this.apiClient.get(`/api/version-snapshots/${snapshotId}`);}
       const snapshot = response.data;
-
       this.snapshots.set(snapshotId, snapshot);
       return snapshot;
     } catch (error) {
@@ -238,62 +218,56 @@ export class VersionHistoryManager {
       throw error;
     }
   }
-
   async getSnapshotData(snapshotId: string): Promise<any> {
     try {
-      const response = await this.apiClient.get(`/api/version-snapshots/${snapshotId}/data`);
+      const response = await this.apiClient.get(`/api/version-snapshots/${snapshotId}/data`);}
       return response.data;
     } catch (error) {
       console.error('Failed to get snapshot data:', error);
       throw error;
     }
   }
-
   async deleteSnapshot(snapshotId: string): Promise<void> {
     try {
-      await this.apiClient.delete(`/api/version-snapshots/${snapshotId}`);
+      await this.apiClient.delete(`/api/version-snapshots/${snapshotId}`);}
       this.snapshots.delete(snapshotId);
-
       // Record change event
-      await this.recordChangeEvent({
+      await this.recordChangeEvent({)
         event_type: 'snapshot_deleted',
         event_data: { snapshot_id: snapshotId },
         affected_nodes: [],
-        change_magnitude: 0
+        change_magnitude: 0,
       });
     } catch (error) {
       console.error('Failed to delete snapshot:', error);
       throw error;
     }
   }
-
   // Diff Management
   async compareFreshSnapshots(fromSnapshotId: string, toSnapshotId: string): Promise<VersionDiff> {
     try {
-      const response = await this.apiClient.get(`/api/version-diffs/${fromSnapshotId}/${toSnapshotId}`);
+      const response = await this.apiClient.get(`/api/version-diffs/${fromSnapshotId}/${toSnapshotId}`);}
       return response.data;
     } catch (error) {
       console.error('Failed to compare snapshots:', error);
       throw error;
     }
   }
-
   async getSnapshotDiff(fromSnapshotId: string, toSnapshotId: string): Promise<VersionDiff> {
     try {
       // Try to get cached diff first
-      const response = await this.apiClient.get(`/api/version-diffs/${fromSnapshotId}/${toSnapshotId}`);
+      const response = await this.apiClient.get(`/api/version-diffs/${fromSnapshotId}/${toSnapshotId}`);}
       return response.data;
     } catch (error) {
       // If not cached, compute diff
       return await this.computeDiff(fromSnapshotId, toSnapshotId);
     }
   }
-
   private async computeDiff(fromSnapshotId: string, toSnapshotId: string): Promise<VersionDiff> {
     try {
-      const response = await this.apiClient.post('/api/version-diffs/compute', {
+      const response = await this.apiClient.post('/api/version-diffs/compute', {)
         from_snapshot_id: fromSnapshotId,
-        to_snapshot_id: toSnapshotId
+        to_snapshot_id: toSnapshotId,
       });
       return response.data;
     } catch (error) {
@@ -301,11 +275,10 @@ export class VersionHistoryManager {
       throw error;
     }
   }
-
   // Branch Management
-  async createBranch(
+  async createBranch()
     name: string,
-    options: {
+    options: {,
       description?: string;
       branch_type?: 'feature' | 'hotfix' | 'experiment';
       parent_branch_id?: string;
@@ -322,120 +295,104 @@ export class VersionHistoryManager {
         parent_branch_id: options.parent_branch_id,
         base_snapshot_id: options.base_snapshot_id,
         visibility: options.visibility || 'workspace',
-        created_by: this.userId
+        created_by: this.userId,
       };
-
       const response = await this.apiClient.post('/api/branches', branchData);
       const branch = response.data;
-
       this.branches.set(branch.id, branch);
-
       // Record change event
-      await this.recordChangeEvent({
+      await this.recordChangeEvent({)
         event_type: 'branch_created',
-        event_data: {
+        event_data: {,
           branch_id: branch.id,
           branch_name: branch.name,
-          branch_type: branch.branch_type
+          branch_type: branch.branch_type,
         },
         affected_nodes: [],
-        change_magnitude: 0
+        change_magnitude: 0,
       });
-
       return branch;
     } catch (error) {
       console.error('Failed to create branch:', error);
       throw error;
     }
   }
-
   async getBranches(): Promise<Branch[]> {
     try {
-      const response = await this.apiClient.get(`/api/branches?project_id=${this.projectId}`);
+      const response = await this.apiClient.get(`/api/branches?project_id=${this.projectId}`);}
       const branches = response.data;
-
       branches.forEach((branch: Branch) => {
         this.branches.set(branch.id, branch);
       });
-
       return branches;
     } catch (error) {
       console.error('Failed to get branches:', error);
       throw error;
     }
   }
-
   async switchBranch(branchName: string): Promise<Branch> {
     try {
-      const response = await this.apiClient.post('/api/branches/switch', {
+      const response = await this.apiClient.post('/api/branches/switch', {)
         project_id: this.projectId,
-        branch_name: branchName
+        branch_name: branchName,
       });
-
       const branch = response.data.branch;
       this.branches.set(branch.id, branch);
-
       // Record change event
-      await this.recordChangeEvent({
+      await this.recordChangeEvent({)
         event_type: 'branch_switched',
-        event_data: {
+        event_data: {,
           branch_name: branchName,
-          head_snapshot_id: branch.head_snapshot_id
+          head_snapshot_id: branch.head_snapshot_id,
         },
         affected_nodes: [],
-        change_magnitude: 0
+        change_magnitude: 0,
       });
-
       return branch;
     } catch (error) {
       console.error('Failed to switch branch:', error);
       throw error;
     }
   }
-
-  async mergeBranch(
+  async mergeBranch()
     sourceBranchId: string,
     targetBranchId: string,
-    options: {
+    options: {,
       merge_message?: string;
       strategy?: 'merge' | 'squash' | 'rebase';
       delete_source?: boolean;
     } = {}
   ): Promise<VersionSnapshot> {
     try {
-      const response = await this.apiClient.post('/api/branches/merge', {
+      const response = await this.apiClient.post('/api/branches/merge', {)
         source_branch_id: sourceBranchId,
         target_branch_id: targetBranchId,
         merge_message: options.merge_message,
         strategy: options.strategy || 'merge',
         delete_source: options.delete_source || false
       });
-
       const mergeSnapshot = response.data;
       this.snapshots.set(mergeSnapshot.id, mergeSnapshot);
-
       // Record change event
-      await this.recordChangeEvent({
+      await this.recordChangeEvent({)
         event_type: 'branch_merged',
-        event_data: {
+        event_data: {,
           source_branch_id: sourceBranchId,
           target_branch_id: targetBranchId,
           merge_snapshot_id: mergeSnapshot.id,
-          strategy: options.strategy
+          strategy: options.strategy,
         },
         affected_nodes: [],
         change_magnitude: 5 // Merges are significant changes
       });
-
       return mergeSnapshot;
     } catch (error) {
       console.error('Failed to merge branch:', error);
       throw error;
     }
   }
-
   // Change Event Tracking
-  async recordChangeEvent(event: {
+  async recordChangeEvent(event: {)
     event_type: string;
     event_data: any;
     affected_nodes: string[];
@@ -457,10 +414,8 @@ export class VersionHistoryManager {
         workflow_state: event.workflow_state,
         approval_required: event.approval_required || false
       };
-
       const response = await this.apiClient.post('/api/change-events', eventData);
       const changeEvent = response.data;
-
       this.changeEvents.push(changeEvent);
       return changeEvent;
     } catch (error) {
@@ -468,8 +423,7 @@ export class VersionHistoryManager {
       throw error;
     }
   }
-
-  async getChangeEvents(filter: {
+  async getChangeEvents(filter: {)
     start_date?: string;
     end_date?: string;
     author_id?: string;
@@ -480,7 +434,6 @@ export class VersionHistoryManager {
     try {
       const params = new URLSearchParams();
       params.append('project_id', this.projectId);
-
       Object.entries(filter).forEach(([key, value]) => {
         if (value !== undefined) {
           if (Array.isArray(value)) {
@@ -490,19 +443,17 @@ export class VersionHistoryManager {
           }
         }
       });
-
-      const response = await this.apiClient.get(`/api/change-events?${params}`);
+      const response = await this.apiClient.get(`/api/change-events?${params}`);}
       return response.data;
     } catch (error) {
       console.error('Failed to get change events:', error);
       throw error;
     }
   }
-
   // Annotation Management
-  async addAnnotation(
+  async addAnnotation()
     snapshotId: string,
-    annotation: {
+    annotation: {,
       annotation_type?: 'comment' | 'review' | 'approval' | 'flag';
       title?: string;
       content_markdown: string;
@@ -520,9 +471,8 @@ export class VersionHistoryManager {
         priority: annotation.priority || 'normal',
         target_element_id: annotation.target_element_id,
         target_coordinates: annotation.target_coordinates,
-        author_id: this.userId
+        author_id: this.userId,
       };
-
       const response = await this.apiClient.post('/api/version-annotations', annotationData);
       return response.data;
     } catch (error) {
@@ -530,22 +480,20 @@ export class VersionHistoryManager {
       throw error;
     }
   }
-
   async getAnnotations(snapshotId: string): Promise<VersionAnnotation[]> {
     try {
-      const response = await this.apiClient.get(`/api/version-annotations?snapshot_id=${snapshotId}`);
+      const response = await this.apiClient.get(`/api/version-annotations?snapshot_id=${snapshotId}`);}
       return response.data;
     } catch (error) {
       console.error('Failed to get annotations:', error);
       throw error;
     }
   }
-
   async resolveAnnotation(annotationId: string, resolutionNote?: string): Promise<VersionAnnotation> {
     try {
-      const response = await this.apiClient.put(`/api/version-annotations/${annotationId}/resolve`, {
+      const response = await this.apiClient.put(`/api/version-annotations/${annotationId}/resolve`, {)}
         resolved_by: this.userId,
-        resolution_note: resolutionNote
+        resolution_note: resolutionNote,
       });
       return response.data;
     } catch (error) {
@@ -553,36 +501,28 @@ export class VersionHistoryManager {
       throw error;
     }
   }
-
   // Utility Methods
   private extractNodeIds(graphData: any): string[] {
     return graphData?.nodes?.map((node: any) => node.id) || [];
   }
-
   private extractAffectedProperties(eventData: any): string[] {
     // Extract property names from event data
     const properties: string[] = [];
-    
     if (eventData.property_changes) {
       properties.push(...Object.keys(eventData.property_changes));
     }
-    
     if (eventData.modified_properties) {
       properties.push(...eventData.modified_properties);
     }
-    
     return properties;
   }
-
   private calculateChangeMagnitude(graphData: any): number {
     // Simple heuristic for change magnitude
     const nodeCount = graphData?.nodes?.length || 0;
     const edgeCount = graphData?.edges?.length || 0;
-    
     // Normalize to 0-10 scale
     return Math.min(10, Math.log10(nodeCount + edgeCount + 1) * 2);
   }
-
   // Statistics and Analytics
   async getVersionStatistics(): Promise<{
     total_snapshots: number;
@@ -593,26 +533,24 @@ export class VersionHistoryManager {
     branch_activity: Array<{ branch_name: string; snapshot_count: number }>;
   }> {
     try {
-      const response = await this.apiClient.get(`/api/version-statistics?project_id=${this.projectId}`);
+      const response = await this.apiClient.get(`/api/version-statistics?project_id=${this.projectId}`);}
       return response.data;
     } catch (error) {
       console.error('Failed to get version statistics:', error);
       throw error;
     }
   }
-
   // Cleanup and Maintenance
   startNewSession(): void {
     this.currentSessionId = crypto.randomUUID();
   }
-
-  async cleanupOldData(options: {
+  async cleanupOldData(options: {)
     days_old?: number;
     keep_milestones?: boolean;
     keep_tagged_versions?: boolean;
   } = {}): Promise<{ deleted_snapshots: number; deleted_diffs: number }> {
     try {
-      const response = await this.apiClient.post('/api/version-cleanup', {
+      const response = await this.apiClient.post('/api/version-cleanup', {)
         project_id: this.projectId,
         days_old: options.days_old || 90,
         keep_milestones: options.keep_milestones !== false,

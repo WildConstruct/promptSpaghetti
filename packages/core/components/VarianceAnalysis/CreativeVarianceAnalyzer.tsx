@@ -4,50 +4,42 @@
  * Professional variance analysis for film industry creative workflows.
  * Provides detailed metrics and insights for creative professionals.
  */
-
 import React, { useState, useMemo } from 'react';
 import { VarianceAnalysis, EnhancedPreviewResult } from '../../hooks/useEnhancedPreview';
-
 interface CreativeVarianceAnalyzerProps {
   results: EnhancedPreviewResult[];
   varianceAnalysis: VarianceAnalysis | null;
   className?: string;
 }
-
 interface AdvancedVarianceMetrics {
   // Content structure analysis
   sentenceLengthVariance: number;
   paragraphCount: { min: number; max: number; avg: number };
   readingComplexity: number; // 0-100 scale
-  
   // Semantic analysis
   vocabularyRichness: number;
   repetitionIndex: number;
   semanticCoherence: number;
-  
   // Creative flow analysis
   ideaDensity: number;
   conceptualLeaps: number;
   narrativeConsistency: number;
-  
   // Professional suitability
   industryReadiness: number;
   clientPresentability: number;
   revisionPotential: number;
 }
 
-export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> = ({
+export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> = ({)
   results,
   varianceAnalysis,
   className = ''
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'content' | 'creative' | 'professional'>('overview');
   const [_____selectedMetric, _____setSelectedMetric] = useState<string | null>(null);
-
   // Calculate advanced metrics from results
   const advancedMetrics = useMemo((): AdvancedVarianceMetrics => {
     const validResults = results.filter(r => !r.error && r.output);
-    
     if (validResults.length < 2) {
       return {
         sentenceLengthVariance: 0,
@@ -61,101 +53,84 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
         narrativeConsistency: 0,
         industryReadiness: 0,
         clientPresentability: 0,
-        revisionPotential: 0
+        revisionPotential: 0,
       };
     }
-
     // Sentence length analysis
-    const sentenceLengths = validResults.flatMap(r => {
+    const sentenceLengths = validResults.flatMap(r => {)
       const sentences = r.output?.split(/[.!?]+/).filter(s => s.trim().length > 0) || [];
       return sentences.map(s => s.trim().split(/\s+/).length);
     });
-    
     const avgSentenceLength = sentenceLengths.reduce((sum, len) => sum + len, 0) / sentenceLengths.length;
-    const sentenceLengthVariance = sentenceLengths.reduce(
+    const sentenceLengthVariance = sentenceLengths.reduce(;)
       (sum, len) => sum + Math.pow(len - avgSentenceLength, 2), 
       0
     ) / sentenceLengths.length;
-
     // Paragraph analysis
-    const paragraphCounts = validResults.map(r => {
+    const paragraphCounts = validResults.map(r => {)
       return r.output?.split(/\n\s*\n/).filter(p => p.trim().length > 0).length || 1;
     });
-    
     const paragraphCount = {
       min: Math.min(...paragraphCounts),
       max: Math.max(...paragraphCounts),
       avg: paragraphCounts.reduce((sum, count) => sum + count, 0) / paragraphCounts.length
     };
-
     // Vocabulary richness (unique words / total words)
-    const allWords = validResults.flatMap(r => 
+    const allWords = validResults.flatMap(r => ;)
       r.output?.toLowerCase().split(/\s+/).filter(w => w.length > 2) || []
     );
     const uniqueWords = new Set(allWords);
     const vocabularyRichness = allWords.length > 0 ? (uniqueWords.size / allWords.length) * 100 : 0;
-
     // Reading complexity (based on sentence length and word complexity)
     const avgWordLength = allWords.reduce((sum, word) => sum + word.length, 0) / allWords.length;
     const readingComplexity = Math.min(100, (avgSentenceLength * 2) + (avgWordLength * 3));
-
     // Repetition index (how much content repeats across results)
     const repetitionScores = [];
     for (let i = 0; i < validResults.length; i++) {
       for (let j = i + 1; j < validResults.length; j++) {
         const text1 = validResults[i].output?.toLowerCase() || '';
         const text2 = validResults[j].output?.toLowerCase() || '';
-        
         // Simple repetition detection based on common phrases
         const phrases1 = text1.match(/\b\w+\s+\w+\s+\w+\b/g) || [];
         const phrases2 = text2.match(/\b\w+\s+\w+\s+\w+\b/g) || [];
         const commonPhrases = phrases1.filter(phrase => phrases2.includes(phrase));
-        
         repetitionScores.push(commonPhrases.length / Math.max(phrases1.length, 1));
       }
     }
-    const repetitionIndex = repetitionScores.length > 0 
+    const repetitionIndex = repetitionScores.length > 0 ;
       ? (repetitionScores.reduce((sum, score) => sum + score, 0) / repetitionScores.length) * 100 
       : 0;
-
     // Semantic coherence (based on word overlap and thematic consistency)
-    const semanticCoherence = varianceAnalysis?.averageSimilarity ? 
+    const semanticCoherence = varianceAnalysis?.averageSimilarity ? ;
       varianceAnalysis.averageSimilarity * 100 : 0;
-
     // Idea density (unique concepts per 100 words)
-    const conceptWords = allWords.filter(word => 
+    const conceptWords = allWords.filter(word => ;)
       word.length > 4 && !['that', 'with', 'have', 'this', 'will', 'your', 'from', 'they', 'know', 'want', 'been', 'good', 'much', 'some', 'time', 'very', 'when', 'come', 'here', 'just', 'like', 'long', 'make', 'many', 'over', 'such', 'take', 'than', 'them', 'well'].includes(word)
     );
     const ideaDensity = allWords.length > 0 ? (conceptWords.length / allWords.length) * 100 : 0;
-
     // Conceptual leaps (variety in content themes)
-    const conceptualLeaps = varianceAnalysis?.diversityIndex ? 
+    const conceptualLeaps = varianceAnalysis?.diversityIndex ? ;
       Math.min(100, varianceAnalysis.diversityIndex * 50) : 0;
-
     // Narrative consistency (inverse of tone variation)
-    const narrativeConsistency = varianceAnalysis?.toneVariation ? 
+    const narrativeConsistency = varianceAnalysis?.toneVariation ? ;
       Math.max(0, 100 - varianceAnalysis.toneVariation) : 50;
-
     // Professional metrics
-    const industryReadiness = Math.min(100,
+    const industryReadiness = Math.min(100,;)
       (vocabularyRichness * 0.3) +
       (readingComplexity * 0.2) +
       (ideaDensity * 0.3) +
       (semanticCoherence * 0.2)
     );
-
-    const clientPresentability = Math.min(100,
+    const clientPresentability = Math.min(100,;)
       (narrativeConsistency * 0.4) +
       ((100 - repetitionIndex) * 0.3) +
       (industryReadiness * 0.3)
     );
-
-    const revisionPotential = Math.min(100,
+    const revisionPotential = Math.min(100,;)
       (varianceAnalysis?.uniquenessScore || 0) * 0.4 +
       (conceptualLeaps * 0.3) +
       (ideaDensity * 0.3)
     );
-
     return {
       sentenceLengthVariance: Math.round(sentenceLengthVariance * 100) / 100,
       paragraphCount,
@@ -168,93 +143,84 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
       narrativeConsistency: Math.round(narrativeConsistency),
       industryReadiness: Math.round(industryReadiness),
       clientPresentability: Math.round(clientPresentability),
-      revisionPotential: Math.round(revisionPotential)
+      revisionPotential: Math.round(revisionPotential),
     };
   }, [results, varianceAnalysis]);
-
   // Generate creative insights
   const creativeInsights = useMemo(() => {
     if (!varianceAnalysis) return [];
-
     const insights = [];
-
     if (varianceAnalysis.uniquenessScore > 80) {
-      insights.push({
+      insights.push({)
         type: 'positive',
         title: 'High Creative Diversity',
         description: 'Results show excellent variation with minimal repetition - perfect for exploring different creative directions.',
         metric: 'uniquenessScore',
-        value: varianceAnalysis.uniquenessScore
+        value: varianceAnalysis.uniquenessScore,
       });
     } else if (varianceAnalysis.uniquenessScore < 40) {
-      insights.push({
+      insights.push({)
         type: 'warning',
         title: 'Low Creative Diversity',
         description: 'Results are quite similar. Consider adjusting prompts or using different seeds for more variation.',
         metric: 'uniquenessScore',
-        value: varianceAnalysis.uniquenessScore
+        value: varianceAnalysis.uniquenessScore,
       });
     }
-
     if (advancedMetrics.industryReadiness > 75) {
-      insights.push({
+      insights.push({)
         type: 'positive',
         title: 'Industry-Ready Content',
         description: 'Content meets professional standards with good vocabulary richness and complexity.',
         metric: 'industryReadiness',
-        value: advancedMetrics.industryReadiness
+        value: advancedMetrics.industryReadiness,
       });
     }
-
     if (advancedMetrics.clientPresentability > 80) {
-      insights.push({
+      insights.push({)
         type: 'positive',
         title: 'Client-Presentable Quality',
         description: 'Results are polished and consistent enough for client presentation.',
         metric: 'clientPresentability',
-        value: advancedMetrics.clientPresentability
+        value: advancedMetrics.clientPresentability,
       });
     } else if (advancedMetrics.clientPresentability < 50) {
-      insights.push({
+      insights.push({)
         type: 'suggestion',
         title: 'Consider Refinement',
         description: 'Content may benefit from additional refinement before client presentation.',
         metric: 'clientPresentability',
-        value: advancedMetrics.clientPresentability
+        value: advancedMetrics.clientPresentability,
       });
     }
-
     if (varianceAnalysis.creativityScore > 70) {
-      insights.push({
+      insights.push({)
         type: 'positive',
         title: 'High Creative Value',
         description: 'Results demonstrate strong creative potential with good conceptual variety.',
         metric: 'creativityScore',
-        value: varianceAnalysis.creativityScore
+        value: varianceAnalysis.creativityScore,
       });
     }
-
     if (advancedMetrics.revisionPotential > 75) {
-      insights.push({
+      insights.push({)
         type: 'info',
         title: 'Strong Revision Potential',
         description: 'These results provide excellent foundation material for further creative development.',
         metric: 'revisionPotential',
-        value: advancedMetrics.revisionPotential
+        value: advancedMetrics.revisionPotential,
       });
     }
-
     return insights;
   }, [varianceAnalysis, advancedMetrics]);
-
   if (!varianceAnalysis || results.length < 2) {
-    return (
-      <div className={`creative-variance-analyzer ${className}`} style={{
+    return ()
+      <div className={`creative-variance-analyzer ${className}`} style={{}
         background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
         borderRadius: 12,
         border: '1px solid #e2e8f0',
         padding: 24,
-        textAlign: 'center'
+        textAlign: 'center',
       }}>
         <div style={{ fontSize: 24, marginBottom: 12 }}>📊</div>
         <div style={{ fontSize: 16, fontWeight: 600, color: '#1e293b', marginBottom: 8 }}>
@@ -266,7 +232,6 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
       </div>
     );
   }
-
   const MetricCard: React.FC<{ 
     title: string; 
     value: number; 
@@ -274,19 +239,19 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
     description: string;
     color: string;
     onClick?: () => void;
-  }> = ({ title, value, suffix = '', description, color, onClick }) => (
+  }> = ({ title, value, suffix = '', description, color, onClick }) => ()
     <div 
       style={{
         background: 'white',
         borderRadius: 8,
-        border: `2px solid ${color}20`,
+        border: `2px solid ${color}20`,}
         padding: 16,
         cursor: onClick ? 'pointer' : 'default',
         transition: 'all 0.2s',
         ':hover': onClick ? {
           borderColor: color,
           transform: 'translateY(-2px)',
-          boxShadow: `0 4px 12px ${color}20`
+          boxShadow: `0 4px 12px ${color}20`}
         } : {}
       }}
       onClick={onClick}
@@ -295,19 +260,19 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 8
+        marginBottom: 8,
       }}>
         <span style={{
           fontSize: 14,
           fontWeight: 600,
-          color: '#374151'
+          color: '#374151',
         }}>
           {title}
         </span>
         <span style={{
           fontSize: 20,
           fontWeight: 700,
-          color: color
+          color: color,
         }}>
           {value}{suffix}
         </span>
@@ -315,35 +280,33 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
       <div style={{
         fontSize: 12,
         color: '#6b7280',
-        lineHeight: 1.4
+        lineHeight: 1.4,
       }}>
         {description}
       </div>
-      
       {/* Progress bar */}
       <div style={{
         marginTop: 8,
         height: 4,
         background: '#f3f4f6',
         borderRadius: 2,
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}>
         <div style={{
           height: '100%',
           background: color,
-          width: `${Math.min(100, value)}%`,
+          width: `${Math.min(100, value)}%`,}
           transition: 'width 0.3s ease'
         }} />
       </div>
     </div>
   );
-
-  return (
-    <div className={`creative-variance-analyzer ${className}`} style={{
+  return ()
+    <div className={`creative-variance-analyzer ${className}`} style={{}
       background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       borderRadius: 12,
       border: '1px solid #e2e8f0',
-      overflow: 'hidden'
+      overflow: 'hidden',
     }}>
       {/* Header */}
       <div style={{
@@ -358,19 +321,18 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
           color: '#1e293b',
           display: 'flex',
           alignItems: 'center',
-          gap: 8
+          gap: 8,
         }}>
           📊 Creative Variance Analysis
         </h3>
         <div style={{
           fontSize: 14,
           color: '#64748b',
-          marginTop: 4
+          marginTop: 4,
         }}>
           Professional insights for {results.length} generated results
         </div>
       </div>
-
       {/* Tab Navigation */}
       <div style={{
         display: 'flex',
@@ -382,7 +344,7 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
           { id: 'content', label: '📝 Content Analysis', icon: '📝' },
           { id: 'creative', label: '🎨 Creative Metrics', icon: '🎨' },
           { id: 'professional', label: '💼 Professional Assessment', icon: '💼' }
-        ].map(tab => (
+        ].map(tab => ()
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
@@ -402,10 +364,9 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
           </button>
         ))}
       </div>
-
       {/* Tab Content */}
       <div style={{ padding: 20 }}>
-        {activeTab === 'overview' && (
+        {activeTab === 'overview' && ()
           <div>
             {/* Key Insights */}
             <div style={{ marginBottom: 24 }}>
@@ -413,12 +374,12 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
                 margin: '0 0 12px 0',
                 fontSize: 14,
                 fontWeight: 600,
-                color: '#374151'
+                color: '#374151',
               }}>
                 🔍 Key Creative Insights
               </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {creativeInsights.slice(0, 3).map((insight, index) => (
+                {creativeInsights.slice(0, 3).map((insight, index) => ()
                   <div key={index} style={{
                     padding: 12,
                     background: insight.type === 'positive' ? '#dcfce7' :
@@ -435,14 +396,14 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
                       fontSize: 13,
                       fontWeight: 600,
                       color: '#1f2937',
-                      marginBottom: 4
+                      marginBottom: 4,
                     }}>
                       {insight.title} ({insight.value}%)
                     </div>
                     <div style={{
                       fontSize: 12,
                       color: '#4b5563',
-                      lineHeight: 1.4
+                      lineHeight: 1.4,
                     }}>
                       {insight.description}
                     </div>
@@ -450,12 +411,11 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
                 ))}
               </div>
             </div>
-
             {/* Quick Stats */}
             <div style={{ 
               display: 'grid', 
               gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', 
-              gap: 12 
+              gap: 12 ,
             }}>
               <MetricCard
                 title="Uniqueness"
@@ -488,12 +448,11 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
             </div>
           </div>
         )}
-
-        {activeTab === 'content' && (
+        {activeTab === 'content' && ()
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: 16 
+            gap: 16 ,
           }}>
             <MetricCard
               title="Word Count Variance"
@@ -538,12 +497,11 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
             />
           </div>
         )}
-
-        {activeTab === 'creative' && (
+        {activeTab === 'creative' && ()
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: 16 
+            gap: 16 ,
           }}>
             <MetricCard
               title="Idea Density"
@@ -589,14 +547,13 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
             />
           </div>
         )}
-
-        {activeTab === 'professional' && (
+        {activeTab === 'professional' && ()
           <div>
             <div style={{ 
               display: 'grid', 
               gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
               gap: 16,
-              marginBottom: 24
+              marginBottom: 24,
             }}>
               <MetricCard
                 title="Industry Readiness"
@@ -627,21 +584,20 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
                 color="#f59e0b"
               />
             </div>
-
             {/* Professional Recommendations */}
             <div>
               <h4 style={{
                 margin: '0 0 12px 0',
                 fontSize: 14,
                 fontWeight: 600,
-                color: '#374151'
+                color: '#374151',
               }}>
                 💼 Professional Recommendations
               </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {creativeInsights.filter(insight => 
+                {creativeInsights.filter(insight => )
                   ['industryReadiness', 'clientPresentability', 'professionalSuitability'].includes(insight.metric)
-                ).map((insight, index) => (
+                ).map((insight, index) => ()
                   <div key={index} style={{
                     padding: 12,
                     background: 'white',
@@ -652,14 +608,14 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
                       fontSize: 13,
                       fontWeight: 600,
                       color: '#1f2937',
-                      marginBottom: 4
+                      marginBottom: 4,
                     }}>
                       {insight.title}
                     </div>
                     <div style={{
                       fontSize: 12,
                       color: '#4b5563',
-                      lineHeight: 1.4
+                      lineHeight: 1.4,
                     }}>
                       {insight.description}
                     </div>

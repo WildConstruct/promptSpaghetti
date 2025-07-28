@@ -4,12 +4,11 @@
  * Integrates with consolidated authentication system from Story 1.2
  * to provide secure event authorization and access control for analytics data.
  */
-
 import { z } from 'zod';
 import { UnifiedAnalyticsEvent, EventFilter } from './UnifiedEventBus';
 
 // Authorization Context Schema
-export const AuthContextSchema = z.object({
+export const AuthContextSchema = z.object({)
   userId: z.string(),
   organizationId: z.string().optional(),
   roles: z.array(z.string()),
@@ -18,7 +17,7 @@ export const AuthContextSchema = z.object({
   workspaceId: z.string().optional(),
   environment: z.string().default('development'),
   tokenType: z.enum(['jwt', 'api_key', 'session']),
-  expiresAt: z.number().optional()
+  expiresAt: z.number().optional(),
 });
 
 export type AuthContext = z.infer<typeof AuthContextSchema>;
@@ -30,23 +29,19 @@ export enum AnalyticsPermission {
   VIEW_EVENTS = 'analytics:view_events',
   VIEW_ALL_EVENTS = 'analytics:view_all_events',
   DELETE_EVENTS = 'analytics:delete_events',
-  
   // Data permissions
   VIEW_ANALYTICS = 'analytics:view_analytics',
   VIEW_ORGANIZATION_ANALYTICS = 'analytics:view_org_analytics',
   EXPORT_ANALYTICS = 'analytics:export_analytics',
   VIEW_SENSITIVE_DATA = 'analytics:view_sensitive_data',
-  
   // Dashboard permissions
   VIEW_DASHBOARD = 'analytics:view_dashboard',
   VIEW_ADMIN_DASHBOARD = 'analytics:view_admin_dashboard',
   MANAGE_DASHBOARDS = 'analytics:manage_dashboards',
-  
   // System permissions
   MANAGE_ANALYTICS = 'analytics:manage_analytics',
   VIEW_SYSTEM_METRICS = 'analytics:view_system_metrics',
   CONFIGURE_RETENTION = 'analytics:configure_retention',
-  
   // Integration permissions
   MANAGE_INTEGRATIONS = 'analytics:manage_integrations',
   VIEW_INTEGRATION_ANALYTICS = 'analytics:view_integration_analytics'
@@ -64,7 +59,7 @@ export interface AuthorizationPolicy {
 
 export interface AuthorizationRule {
   id: string;
-  condition: {
+  condition: {,
     eventTypes?: string[];
     categories?: string[];
     sources?: string[];
@@ -90,7 +85,6 @@ export interface AuthorizationResult {
   redactedFields?: string[];
   appliedRules?: string[];
 }
-
 /**
  * Analytics Authorization Service
  * 
@@ -100,137 +94,130 @@ export interface AuthorizationResult {
 export class AnalyticsAuthorizationService {
   private policies: Map<string, AuthorizationPolicy> = new Map();
   private authService: unknown; // Integration with AuthenticationService from Story 1.2
-
   constructor(authService?: unknown) {
     this.authService = authService;
     this.initializeDefaultPolicies();
   }
-
   /**
    * Initialize default authorization policies
    */
   private initializeDefaultPolicies(): void {
     // User Data Policy - Users can only access their own data
-    this.addPolicy({
+    this.addPolicy({)
       id: 'user-data-policy',
       name: 'User Data Access Policy',
       description: 'Users can only access their own analytics data',
       priority: 100,
       enabled: true,
-      rules: [
+      rules: [,
         {
           id: 'user-self-access',
-          condition: {
+          condition: {,
             userMatch: 'self',
-            requiredPermissions: [AnalyticsPermission.VIEW_EVENTS]
+            requiredPermissions: [AnalyticsPermission.VIEW_EVENTS],
           },
-          action: 'allow'
+          action: 'allow',
         },
         {
           id: 'user-other-deny',
-          condition: {
+          condition: {,
             userMatch: 'any',
-            requiredPermissions: [AnalyticsPermission.VIEW_EVENTS]
+            requiredPermissions: [AnalyticsPermission.VIEW_EVENTS],
           },
-          action: 'deny'
+          action: 'deny',
         }
       ]
     });
-
     // Organization Policy - Organization members can access org data
-    this.addPolicy({
+    this.addPolicy({)
       id: 'organization-policy',
       name: 'Organization Data Access Policy',
       description: 'Organization members can access organization analytics',
       priority: 90,
       enabled: true,
-      rules: [
+      rules: [,
         {
           id: 'org-member-access',
-          condition: {
+          condition: {,
             organizationMatch: 'self',
-            requiredPermissions: [AnalyticsPermission.VIEW_ORGANIZATION_ANALYTICS]
+            requiredPermissions: [AnalyticsPermission.VIEW_ORGANIZATION_ANALYTICS],
           },
-          action: 'allow'
+          action: 'allow',
         }
       ]
     });
-
     // Admin Policy - Admins can access all data
-    this.addPolicy({
+    this.addPolicy({)
       id: 'admin-policy',
       name: 'Administrator Access Policy',
       description: 'Administrators can access all analytics data',
       priority: 200,
       enabled: true,
-      rules: [
+      rules: [,
         {
           id: 'admin-full-access',
-          condition: {
+          condition: {,
             requiredRoles: ['admin', 'super_admin'],
-            requiredPermissions: [AnalyticsPermission.VIEW_ALL_EVENTS]
+            requiredPermissions: [AnalyticsPermission.VIEW_ALL_EVENTS],
           },
-          action: 'allow'
+          action: 'allow',
         }
       ]
     });
-
     // Sensitive Data Policy - Restricts access to sensitive information
-    this.addPolicy({
+    this.addPolicy({)
       id: 'sensitive-data-policy',
       name: 'Sensitive Data Protection Policy',
       description: 'Protects sensitive data in analytics events',
       priority: 150,
       enabled: true,
-      rules: [
+      rules: [,
         {
           id: 'sensitive-data-redaction',
-          condition: {
+          condition: {,
             severities: ['critical', 'error'],
-            requiredPermissions: [AnalyticsPermission.VIEW_SENSITIVE_DATA]
+            requiredPermissions: [AnalyticsPermission.VIEW_SENSITIVE_DATA],
           },
           action: 'allow',
-          fields: {
+          fields: {,
             redacted: ['data.password', 'data.token', 'data.apiKey', 'data.secret']
           }
         },
         {
           id: 'security-events-restriction',
-          condition: {
+          condition: {,
             eventTypes: ['security_event', 'fraud_detection'],
-            requiredPermissions: [AnalyticsPermission.VIEW_SENSITIVE_DATA]
+            requiredPermissions: [AnalyticsPermission.VIEW_SENSITIVE_DATA],
           },
-          action: 'deny'
+          action: 'deny',
         }
       ]
     });
-
     // Integration Policy - Controls integration analytics access
-    this.addPolicy({
+    this.addPolicy({)
       id: 'integration-policy',
       name: 'Integration Analytics Policy',
       description: 'Controls access to integration analytics data',
       priority: 80,
       enabled: true,
-      rules: [
+      rules: [,
         {
           id: 'integration-access',
-          condition: {
+          condition: {,
             categories: ['integration'],
-            requiredPermissions: [AnalyticsPermission.VIEW_INTEGRATION_ANALYTICS]
+            requiredPermissions: [AnalyticsPermission.VIEW_INTEGRATION_ANALYTICS],
           },
-          action: 'allow'
+          action: 'allow',
         }
       ]
     });
   }
-
   /**
    * Authorize event publication
    */
-  async authorizeEventPublication(
+  async authorizeEventPublication()
     event: Partial<UnifiedAnalyticsEvent>,
-    authContext: AuthContext
+    authContext: AuthContext,
   ): Promise<AuthorizationResult> {
     try {
       // Check basic publish permission
@@ -240,10 +227,8 @@ export class AnalyticsAuthorizationService {
           reason: 'Insufficient permissions to publish analytics events'
         };
       }
-
       // Apply authorization policies
       const result = await this.applyPolicies(event, authContext, 'publish');
-
       // Additional validation for event publication
       if (result.allowed) {
         // Ensure event has proper authorization context
@@ -252,35 +237,32 @@ export class AnalyticsAuthorizationService {
           userId: event.userId || authContext.userId,
           organizationId: event.organizationId || authContext.organizationId,
           sessionId: event.sessionId || authContext.sessionId,
-          metadata: {
+          metadata: {,
             ...event.metadata,
             authorizedBy: authContext.userId,
             authorizedAt: Date.now(),
-            tokenType: authContext.tokenType
+            tokenType: authContext.tokenType,
           }
         };
-
         return {
           ...result,
-          filteredEvent: authorizedEvent
+          filteredEvent: authorizedEvent,
         };
       }
-
       return result;
     } catch (error) {
       return {
         allowed: false,
-        reason: `Authorization error: ${error instanceof Error ? error.message : String(error)}`
+        reason: `Authorization error: ${error instanceof Error ? error.message : String(error)}`}
       };
     }
   }
-
   /**
    * Authorize event access/viewing
    */
-  async authorizeEventAccess(
+  async authorizeEventAccess()
     event: UnifiedAnalyticsEvent,
-    authContext: AuthContext
+    authContext: AuthContext,
   ): Promise<AuthorizationResult> {
     try {
       // Check basic view permission
@@ -290,23 +272,21 @@ export class AnalyticsAuthorizationService {
           reason: 'Insufficient permissions to view analytics events'
         };
       }
-
       // Apply authorization policies
       return await this.applyPolicies(event, authContext, 'view');
     } catch (error) {
       return {
         allowed: false,
-        reason: `Authorization error: ${error instanceof Error ? error.message : String(error)}`
+        reason: `Authorization error: ${error instanceof Error ? error.message : String(error)}`}
       };
     }
   }
-
   /**
    * Authorize analytics query with filtering
    */
-  async authorizeAnalyticsQuery(
+  async authorizeAnalyticsQuery()
     filter: EventFilter,
-    authContext: AuthContext
+    authContext: AuthContext,
   ): Promise<{ allowed: boolean; filteredQuery?: EventFilter; reason?: string }> {
     try {
       // Check analytics viewing permission
@@ -316,26 +296,21 @@ export class AnalyticsAuthorizationService {
           reason: 'Insufficient permissions to query analytics data'
         };
       }
-
       // Apply user/organization restrictions
       const filteredQuery = { ...filter };
-
       // If user doesn't have organization-wide access, restrict to their data
       if (!this.hasPermission(authContext, AnalyticsPermission.VIEW_ORGANIZATION_ANALYTICS)) {
         filteredQuery.userId = authContext.userId;
       }
-
       // If user doesn't have all-events access, restrict to their organization
       if (!this.hasPermission(authContext, AnalyticsPermission.VIEW_ALL_EVENTS)) {
         filteredQuery.organizationId = authContext.organizationId;
       }
-
       // Apply environment restrictions
-      if (authContext.environment !== 'production' || 
+      if (authContext.environment !== 'production' || )
           !this.hasPermission(authContext, AnalyticsPermission.VIEW_SYSTEM_METRICS)) {
         filteredQuery.environment = authContext.environment;
       }
-
       return {
         allowed: true,
         filteredQuery
@@ -343,47 +318,43 @@ export class AnalyticsAuthorizationService {
     } catch (error) {
       return {
         allowed: false,
-        reason: `Authorization error: ${error instanceof Error ? error.message : String(error)}`
+        reason: `Authorization error: ${error instanceof Error ? error.message : String(error)}`}
       };
     }
   }
-
   /**
    * Authorize dashboard access
    */
-  async authorizeDashboardAccess(
+  async authorizeDashboardAccess()
     dashboardType: 'user' | 'organization' | 'admin' | 'system',
-    authContext: AuthContext
+    authContext: AuthContext,
   ): Promise<AuthorizationResult> {
     try {
       const requiredPermissions = {
         user: [AnalyticsPermission.VIEW_DASHBOARD],
         organization: [AnalyticsPermission.VIEW_DASHBOARD, AnalyticsPermission.VIEW_ORGANIZATION_ANALYTICS],
         admin: [AnalyticsPermission.VIEW_ADMIN_DASHBOARD],
-        system: [AnalyticsPermission.VIEW_SYSTEM_METRICS]
+        system: [AnalyticsPermission.VIEW_SYSTEM_METRICS],
       };
-
       const permissions = requiredPermissions[dashboardType];
-      const hasAccess = permissions.every(permission => 
+      const hasAccess = permissions.every(permission => ;)
         this.hasPermission(authContext, permission)
       );
-
       return {
         allowed: hasAccess,
-        reason: hasAccess ? undefined : `Insufficient permissions for ${dashboardType} dashboard access`
+        reason: hasAccess ? undefined : `Insufficient permissions for ${dashboardType} dashboard access`}
       };
     } catch (error) {
       return {
         allowed: false,
-        reason: `Authorization error: ${error instanceof Error ? error.message : String(error)}`
+        reason: `Authorization error: ${error instanceof Error ? error.message : String(error)}`}
       };
     }
   }
-
   /**
    * Apply authorization policies to event
    */
-  private async applyPolicies(
+  private async applyPolicies()
     event: Partial<UnifiedAnalyticsEvent>,
     authContext: AuthContext,
     // action: 'publish' | 'view'
@@ -392,20 +363,16 @@ export class AnalyticsAuthorizationService {
     let finalResult: AuthorizationResult = { allowed: false };
     let filteredEvent = { ...event };
     const redactedFields: string[] = [];
-
     // Get applicable policies sorted by priority
-    const policies = Array.from(this.policies.values())
+    const policies = Array.from(this.policies.values());
       .filter(policy => policy.enabled)
       .sort((a, b) => b.priority - a.priority);
-
     for (const policy of policies) {
       for (const rule of policy.rules) {
         if (this.ruleMatches(rule, event, authContext)) {
           appliedRules.push(rule.id);
-
           if (rule.action === 'allow') {
             finalResult = { allowed: true };
-
             // Apply field filtering/redaction
             if (rule.fields) {
               if (rule.fields.redacted) {
@@ -414,11 +381,9 @@ export class AnalyticsAuthorizationService {
                   redactedFields.push(field);
                 }
               }
-
               if (rule.fields.allowed) {
                 filteredEvent = this.filterFields(filteredEvent, rule.fields.allowed, 'allow');
               }
-
               if (rule.fields.denied) {
                 filteredEvent = this.filterFields(filteredEvent, rule.fields.denied, 'deny');
               }
@@ -426,14 +391,13 @@ export class AnalyticsAuthorizationService {
           } else if (rule.action === 'deny') {
             return {
               allowed: false,
-              reason: `Access denied by policy: ${policy.name} (rule: ${rule.id})`,
+              reason: `Access denied by policy: ${policy.name} (rule: ${rule.id})`,}
               appliedRules
             };
           }
         }
       }
     }
-
     return {
       ...finalResult,
       filteredEvent: finalResult.allowed ? filteredEvent : undefined,
@@ -441,37 +405,31 @@ export class AnalyticsAuthorizationService {
       appliedRules
     };
   }
-
   /**
    * Check if rule matches event and context
    */
-  private ruleMatches(
+  private ruleMatches()
     rule: AuthorizationRule,
     event: Partial<UnifiedAnalyticsEvent>,
-    authContext: AuthContext
+    authContext: AuthContext,
   ): boolean {
     const condition = rule.condition;
-
     // Check event type matching
     if (condition.eventTypes && event.type && !condition.eventTypes.includes(event.type)) {
       return false;
     }
-
     // Check category matching
     if (condition.categories && event.category && !condition.categories.includes(event.category)) {
       return false;
     }
-
     // Check source matching
     if (condition.sources && event.source && !condition.sources.includes(event.source)) {
       return false;
     }
-
     // Check severity matching
     if (condition.severities && event.severity && !condition.severities.includes(event.severity)) {
       return false;
     }
-
     // Check user matching
     if (condition.userMatch) {
       switch (condition.userMatch) {
@@ -484,60 +442,51 @@ export class AnalyticsAuthorizationService {
         // 'any' allows all users
       }
     }
-
     // Check organization matching
     if (condition.organizationMatch === 'self') {
       if (event.organizationId && event.organizationId !== authContext.organizationId) return false;
     }
-
     // Check required permissions
     if (condition.requiredPermissions) {
-      const hasAllPermissions = condition.requiredPermissions.every(permission =>
+      const hasAllPermissions = condition.requiredPermissions.every(permission =>;)
         this.hasPermission(authContext, permission)
       );
       if (!hasAllPermissions) return false;
     }
-
     // Check required roles
     if (condition.requiredRoles) {
-      const hasRequiredRole = condition.requiredRoles.some(role =>
+      const hasRequiredRole = condition.requiredRoles.some(role =>;)
         authContext.roles.includes(role)
       );
       if (!hasRequiredRole) return false;
     }
-
     return true;
   }
-
   /**
    * Check if user has permission
    */
   private hasPermission(authContext: AuthContext, permission: string): boolean {
     return authContext.permissions.includes(permission);
   }
-
   /**
    * Redact sensitive field from event
    */
   private redactField(event: Record<string, unknown>, fieldPath: string): void {
     const parts = fieldPath.split('.');
     let current = event;
-
     for (let i = 0; i < parts.length - 1; i++) {
       if (!current[parts[i]]) return;
       current = current[parts[i]];
     }
-
     const finalKey = parts[parts.length - 1];
     if (current[finalKey]) {
       current[finalKey] = '[REDACTED]';
     }
   }
-
   /**
    * Filter event fields
    */
-  private filterFields(
+  private filterFields()
     event: Record<string,
     unknown>,
     fields: string[],
@@ -553,35 +502,30 @@ export class AnalyticsAuthorizationService {
     }
     return event; // Allow mode would keep only specified fields
   }
-
   /**
    * Add authorization policy
    */
   addPolicy(policy: AuthorizationPolicy): void {
     this.policies.set(policy.id, policy);
   }
-
   /**
    * Remove authorization policy
    */
   removePolicy(policyId: string): boolean {
     return this.policies.delete(policyId);
   }
-
   /**
    * Get authorization policy
    */
   getPolicy(policyId: string): AuthorizationPolicy | undefined {
     return this.policies.get(policyId);
   }
-
   /**
    * List all policies
    */
   listPolicies(): AuthorizationPolicy[] {
     return Array.from(this.policies.values());
   }
-
   /**
    * Validate auth context
    */
@@ -592,7 +536,6 @@ export class AnalyticsAuthorizationService {
       return null;
     }
   }
-
   /**
    * Create auth context from authentication service
    */
@@ -600,15 +543,12 @@ export class AnalyticsAuthorizationService {
     if (!this.authService) {
       throw new Error('Authentication service not configured');
     }
-
     try {
       // Integration with AuthenticationService from Story 1.2
       const session = await this.authService.validateSession(token);
       if (!session) return null;
-
       const user = await this.authService.getUserById(session.userId);
       if (!user) return null;
-
       return {
         userId: user.id,
         organizationId: user.organizationId,
@@ -618,14 +558,13 @@ export class AnalyticsAuthorizationService {
         workspaceId: user.workspaceId,
         environment: process.env.NODE_ENV || 'development',
         tokenType: 'session' as const,
-        expiresAt: session.expiresAt
+        expiresAt: session.expiresAt,
       };
     } catch (error) {
       console.error('Failed to create auth context:', error);
       return null;
     }
   }
-
   /**
    * Get authorization summary for user
    */
@@ -634,7 +573,7 @@ export class AnalyticsAuthorizationService {
     organizationId?: string;
     roles: string[];
     permissions: string[];
-    capabilities: {
+    capabilities: {,
       canPublishEvents: boolean;
       canViewEvents: boolean;
       canViewAllEvents: boolean;
@@ -649,7 +588,7 @@ export class AnalyticsAuthorizationService {
       organizationId: authContext.organizationId,
       roles: authContext.roles,
       permissions: authContext.permissions,
-      capabilities: {
+      capabilities: {,
         canPublishEvents: this.hasPermission(authContext, AnalyticsPermission.PUBLISH_EVENTS),
         canViewEvents: this.hasPermission(authContext, AnalyticsPermission.VIEW_EVENTS),
         canViewAllEvents: this.hasPermission(authContext, AnalyticsPermission.VIEW_ALL_EVENTS),

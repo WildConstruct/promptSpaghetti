@@ -2,10 +2,8 @@
  * Epic 9.2.6 - Template Customization Dialog
  * Allows users to customize template variables and customization points before instantiation
  */
-
 import React, { useState, useEffect } from 'react';
 import { ProjectTemplate, TemplateVariable, CustomizationPoint } from '../../templates/ProjectTemplateManager';
-
 interface TemplateCustomizationDialogProps {
   template: ProjectTemplate;
   isOpen: boolean;
@@ -14,7 +12,7 @@ interface TemplateCustomizationDialogProps {
   onPreview: (customizations: Record<string, any>) => void;
 }
 
-export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogProps> = ({
+export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogProps> = ({)
   template,
   isOpen,
   onClose,
@@ -24,95 +22,78 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
   const [customizations, setCustomizations] = useState<Record<string, any>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState<'variables' | 'customization'>('variables');
-
   useEffect(() => {
     if (isOpen) {
       // Initialize customizations with default values
       const initialCustomizations: Record<string, any> = {};
-      
-      template.variables.forEach(variable => {
+      template.variables.forEach(variable => {)
         initialCustomizations[variable.id] = variable.default_value;
       });
-      
-      template.customization_points.forEach(point => {
+      template.customization_points.forEach(point => {)
         initialCustomizations[point.id] = undefined;
       });
-      
       setCustomizations(initialCustomizations);
       setErrors({});
     }
   }, [isOpen, template]);
-
   const validateCustomizations = (): boolean => {
     const newErrors: Record<string, string> = {};
-
     // Validate variables
-    template.variables.forEach(variable => {
+    template.variables.forEach(variable => {)
       const value = customizations[variable.id];
-      
       if (variable.required && (value === undefined || value === '' || value === null)) {
-        newErrors[variable.id] = `${variable.label} is required`;
+        newErrors[variable.id] = `${variable.label} is required`;}
         return;
       }
-
       if (value !== undefined && value !== '' && variable.validation) {
         const validation = variable.validation;
-        
         if (variable.type === 'number') {
           const numValue = Number(value);
           if (isNaN(numValue)) {
-            newErrors[variable.id] = `${variable.label} must be a number`;
+            newErrors[variable.id] = `${variable.label} must be a number`;}
           } else if (validation.min !== undefined && numValue < validation.min) {
-            newErrors[variable.id] = `${variable.label} must be at least ${validation.min}`;
+            newErrors[variable.id] = `${variable.label} must be at least ${validation.min}`;}
           } else if (validation.max !== undefined && numValue > validation.max) {
-            newErrors[variable.id] = `${variable.label} must be at most ${validation.max}`;
+            newErrors[variable.id] = `${variable.label} must be at most ${validation.max}`;}
           }
         }
-        
         if (variable.type === 'text' && validation.pattern) {
           const regex = new RegExp(validation.pattern);
           if (!regex.test(String(value))) {
-            newErrors[variable.id] = `${variable.label} format is invalid`;
+            newErrors[variable.id] = `${variable.label} format is invalid`;}
           }
         }
       }
     });
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleCustomizationChange = (id: string, value: Error) => {
-    setCustomizations(prev => ({
+    setCustomizations(prev => ({)
       ...prev,
       [id]: value
     }));
-    
     // Clear error for this field
     if (errors[id]) {
-      setErrors(prev => {
+      setErrors(prev => {)
         const newErrors = { ...prev };
         delete newErrors[id];
         return newErrors;
       });
     }
   };
-
   const handlePreview = () => {
     if (validateCustomizations()) {
       onPreview(customizations);
     }
   };
-
   const handleConfirm = () => {
     if (validateCustomizations()) {
       onConfirm(customizations);
     }
   };
-
   if (!isOpen) return null;
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
@@ -132,7 +113,6 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
             </button>
           </div>
         </div>
-
         {/* Tabs */}
         <div className="border-b border-gray-200">
           <nav className="flex px-6">
@@ -158,16 +138,14 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
             </button>
           </nav>
         </div>
-
         {/* Content */}
         <div className="px-6 py-4 overflow-y-auto max-h-[60vh]">
-          {activeTab === 'variables' && (
+          {activeTab === 'variables' && ()
             <div className="space-y-6">
               <p className="text-sm text-gray-600">
                 Configure the variables that will be used throughout the template.
               </p>
-              
-              {template.variables.map(variable => (
+              {template.variables.map(variable => ()
                 <VariableEditor
                   key={variable.id}
                   variable={variable}
@@ -176,22 +154,19 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
                   onChange={(value) => handleCustomizationChange(variable.id, value)}
                 />
               ))}
-              
-              {template.variables.length === 0 && (
+              {template.variables.length === 0 && ()
                 <div className="text-center py-8 text-gray-500">
                   This template has no configurable variables.
                 </div>
               )}
             </div>
           )}
-
-          {activeTab === 'customization' && (
+          {activeTab === 'customization' && ()
             <div className="space-y-6">
               <p className="text-sm text-gray-600">
                 Customize the appearance and behavior of specific parts of the template.
               </p>
-              
-              {template.customization_points.map(point => (
+              {template.customization_points.map(point => ()
                 <CustomizationPointEditor
                   key={point.id}
                   point={point}
@@ -199,8 +174,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
                   onChange={(value) => handleCustomizationChange(point.id, value)}
                 />
               ))}
-              
-              {template.customization_points.length === 0 && (
+              {template.customization_points.length === 0 && ()
                 <div className="text-center py-8 text-gray-500">
                   This template has no customization points.
                 </div>
@@ -208,7 +182,6 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
             </div>
           )}
         </div>
-
         {/* Footer */}
         <div className="border-t border-gray-200 px-6 py-4 flex justify-between">
           <div className="flex items-center text-sm text-gray-600">
@@ -217,7 +190,6 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
             </svg>
             Estimated time: {template.estimated_time} minutes
           </div>
-          
           <div className="flex space-x-3">
             <button
               onClick={onClose}
@@ -243,19 +215,17 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
     </div>
   );
 };
-
 interface VariableEditorProps {
   variable: TemplateVariable;
   value: Error;
   error?: string;
   onChange: (value: Error) => void;
 }
-
 const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error, onChange }) => {
   const renderInput = () => {
     switch (variable.type) {
     case 'text':
-      return (
+      return ()
         <input
           type="text"
           value={value || ''}
@@ -266,9 +236,8 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
           }`}
         />
       );
-
     case 'textarea':
-      return (
+      return ()
         <textarea
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
@@ -279,9 +248,8 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
           }`}
         />
       );
-
     case 'number':
-      return (
+      return ()
         <input
           type="number"
           value={value || ''}
@@ -294,9 +262,8 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
           }`}
         />
       );
-
     case 'boolean':
-      return (
+      return ()
         <label className="flex items-center">
           <input
             type="checkbox"
@@ -307,9 +274,8 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
           <span className="ml-2 text-sm text-gray-700">{variable.description}</span>
         </label>
       );
-
     case 'select':
-      return (
+      return ()
         <select
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
@@ -318,48 +284,41 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
           }`}
         >
           <option value="">Select an option</option>
-          {variable.validation?.options?.map(option => (
+          {variable.validation?.options?.map(option => ()
             <option key={option} value={option}>{option}</option>
           ))}
         </select>
       );
-
     default:
       return null;
     }
   };
-
-  return (
+  return ()
     <div className="space-y-2">
       <label className="block text-sm font-medium text-gray-700">
         {variable.label}
         {variable.required && <span className="text-red-500 ml-1">*</span>}
       </label>
-      
       {renderInput()}
-      
-      {error && (
+      {error && ()
         <p className="text-sm text-red-600">{error}</p>
       )}
-      
-      {variable.description && variable.type !== 'boolean' && (
+      {variable.description && variable.type !== 'boolean' && ()
         <p className="text-xs text-gray-500">{variable.description}</p>
       )}
     </div>
   );
 };
-
 interface CustomizationPointEditorProps {
   point: CustomizationPoint;
   value: Error;
   onChange: (value: Error) => void;
 }
-
 const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ point, value, onChange }) => {
   const renderInput = () => {
     switch (point.ui_component) {
     case 'input':
-      return (
+      return ()
         <input
           type="text"
           value={value || ''}
@@ -368,9 +327,8 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       );
-
     case 'select':
-      return (
+      return ()
         <select
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
@@ -380,9 +338,8 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
           {/* Options would be dynamically loaded based on the customization point */}
         </select>
       );
-
     case 'color_picker':
-      return (
+      return ()
         <div className="flex items-center space-x-2">
           <input
             type="color"
@@ -399,9 +356,8 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
           />
         </div>
       );
-
     case 'slider':
-      return (
+      return ()
         <div className="space-y-2">
           <input
             type="range"
@@ -414,9 +370,8 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
           <div className="text-center text-sm text-gray-600">{value || 50}</div>
         </div>
       );
-
     case 'toggle':
-      return (
+      return ()
         <label className="flex items-center">
           <input
             type="checkbox"
@@ -427,22 +382,17 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
           <span className="ml-2 text-sm text-gray-700">Enable {point.name}</span>
         </label>
       );
-
     default:
       return null;
     }
   };
-
-  return (
+  return ()
     <div className="space-y-2">
       <label className="block text-sm font-medium text-gray-700">
         {point.name}
       </label>
-      
       {renderInput()}
-      
       <p className="text-xs text-gray-500">{point.description}</p>
-      
       <div className="text-xs text-gray-400">
         Affects: {point.target_nodes.join(', ')} • Type: {point.type}
       </div>

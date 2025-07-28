@@ -88,84 +88,77 @@ export type {
   StateChangeEvent,
   ZustandEventConfig
 } from './adapters/ZustandEventAdapter';
-
 /**
  * Event System Configuration and Setup Utilities
  */
 
 // Environment-specific configurations
 export const EventSystemConfigs = {
-  production: {
-    middleware: [
+  production: {,
+    middleware: [,
       createValidationMiddleware({ strictMode: false }),
       createSecurityMiddleware(),
-      createRateLimitMiddleware({
+      createRateLimitMiddleware({)
         maxEventsPerSecond: 100,
         maxEventsPerMinute: 2000,
-        strategy: 'drop'
+        strategy: 'drop',
       }),
-      createPerformanceMiddleware({
+      createPerformanceMiddleware({)
         sampleRate: 0.1,
-        slowEventThreshold: 500
+        slowEventThreshold: 500,
       }),
-      createLoggingMiddleware({
+      createLoggingMiddleware({)
         logLevel: 'warn',
         filterPriorities: [EventPriority.HIGH, EventPriority.CRITICAL]
       })
     ],
-    eventBusOptions: {
+    eventBusOptions: {,
       maxHistorySize: 5000,
-      enableHistory: true
+      enableHistory: true,
     }
   },
-
-  development: {
-    middleware: [
+  development: {,
+    middleware: [,
       createValidationMiddleware({ strictMode: true }),
-      createPerformanceMiddleware({
+      createPerformanceMiddleware({)
         sampleRate: 1.0,
         slowEventThreshold: 100,
-        trackMemoryUsage: true
+        trackMemoryUsage: true,
       }),
-      createLoggingMiddleware({
+      createLoggingMiddleware({)
         logLevel: 'debug',
-        includeMetadata: true
+        includeMetadata: true,
       })
     ],
-    eventBusOptions: {
+    eventBusOptions: {,
       maxHistorySize: 1000,
-      enableHistory: true
+      enableHistory: true,
     }
   },
-
-  testing: {
-    middleware: [
+  testing: {,
+    middleware: [,
       createValidationMiddleware({ strictMode: true }),
       createLoggingMiddleware({ logLevel: 'error' })
     ],
-    eventBusOptions: {
+    eventBusOptions: {,
       maxHistorySize: 100,
-      enableHistory: false
+      enableHistory: false,
     }
   }
 };
-
 /**
  * Initialize event system with environment-specific configuration
  */
-export const initializeEventSystem = (
+export const initializeEventSystem = ()
   environment: 'production' | 'development' | 'testing' = 'development'
 ) => {
   const config = EventSystemConfigs[environment];
-  
   // Clear existing middleware
   globalEventBus.removeAllListeners();
-  
   // Apply middleware
-  config.middleware.forEach(middleware => {
+  config.middleware.forEach(middleware => {)
     globalEventBus.use(middleware);
   });
-  
   // Set up global error handling
   globalEventBus.on('handler_error', (error: any) => {
     if (environment === 'production') {
@@ -174,10 +167,8 @@ export const initializeEventSystem = (
       console.error('Event handler error:', error);
     }
   });
-
   return globalEventBus;
 };
-
 /**
  * Event system health check utility
  */
@@ -188,61 +179,51 @@ export const performEventSystemHealthCheck = () => {
     stats,
     issues: [] as string[]
   };
-
   // Check for excessive subscriptions
   if (stats.subscriptions > 1000) {
     health.issues.push('High subscription count may impact performance');
     health.status = 'degraded';
   }
-
   // Check history size
   if (stats.historySize > 8000) {
     health.issues.push('Event history is near capacity limit');
     health.status = 'degraded';
   }
-
   // Check event type diversity
   if (stats.eventTypes.length > 200) {
     health.issues.push('Large number of event types may indicate schema issues');
     health.status = 'degraded';
   }
-
   return health;
 };
-
 /**
  * Event system metrics collection utility
  */
 export const collectEventSystemMetrics = () => {
   const stats = globalEventBus.getStats();
   const history = globalEventBus.getHistory(undefined, 100);
-  
   // Calculate metrics
   const eventsByType = history.reduce((acc, event) => {
     acc[event.type] = (acc[event.type] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
-
   const eventsByCategory = history.reduce((acc, event) => {
     const category = event.metadata?.category || 'unknown';
     acc[category] = (acc[category] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
-
   const eventsByPriority = history.reduce((acc, event) => {
     const priority = event.metadata?.priority || 'unknown';
     acc[priority] = (acc[priority] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
-
-  const avgEventsPerMinute = history.length > 0 ? 
+  const avgEventsPerMinute = history.length > 0 ? ;
     (history.length / ((Date.now() - history[0].timestamp.getTime()) / 60000)) : 0;
-
   return {
     ...stats,
-    metrics: {
+    metrics: {,
       avgEventsPerMinute,
-      topEventTypes: Object.entries(eventsByType)
+      topEventTypes: Object.entries(eventsByType),
         .sort(([,a], [,b]) => b - a)
         .slice(0, 10),
       eventsByCategory,
@@ -250,7 +231,6 @@ export const collectEventSystemMetrics = () => {
     }
   };
 };
-
 /**
  * Predefined event system setups for common use cases
  */
@@ -262,59 +242,56 @@ export const EventSystemPresets = {
     globalEventBus.use(createValidationMiddleware());
     globalEventBus.use(createLoggingMiddleware({ logLevel: 'error' }));
   },
-
   /**
    * Analytics-focused setup
    */
   analytics: () => {
     globalEventBus.use(createValidationMiddleware());
     globalEventBus.use(createPerformanceMiddleware({ sampleRate: 1.0 }));
-    globalEventBus.use(createLoggingMiddleware({
+    globalEventBus.use(createLoggingMiddleware({)
       logLevel: 'info',
-      filterCategories: [EventCategory.ANALYTICS]
+      filterCategories: [EventCategory.ANALYTICS],
     }));
-    globalEventBus.use(createRateLimitMiddleware({
+    globalEventBus.use(createRateLimitMiddleware({)
       maxEventsPerSecond: 200,
-      strategy: 'drop'
+      strategy: 'drop',
     }));
   },
-
   /**
    * High-security setup
    */
   security: () => {
     globalEventBus.use(createValidationMiddleware({ strictMode: true }));
-    globalEventBus.use(createSecurityMiddleware({
+    globalEventBus.use(createSecurityMiddleware({)
       sensitiveFields: ['password', 'token', 'secret', 'key', 'ssn', 'creditCard', 'auth'],
-      logSensitiveAccess: true
+      logSensitiveAccess: true,
     }));
-    globalEventBus.use(createRateLimitMiddleware({
+    globalEventBus.use(createRateLimitMiddleware({)
       maxEventsPerSecond: 50,
-      strategy: 'error'
+      strategy: 'error',
     }));
-    globalEventBus.use(createLoggingMiddleware({
+    globalEventBus.use(createLoggingMiddleware({)
       logLevel: 'info',
-      includeMetadata: false
+      includeMetadata: false,
     }));
   },
-
   /**
    * High-performance setup
    */
   performance: () => {
     globalEventBus.use(createValidationMiddleware({ strictMode: false }));
-    globalEventBus.use(createDeduplicationMiddleware({
-      keyGenerator: (event) => `${event.source}-${event.type}`,
+    globalEventBus.use(createDeduplicationMiddleware({)
+      keyGenerator: (event) => `${event.source}-${event.type}`,}
       windowMs: 100,
-      strategy: 'drop'
+      strategy: 'drop',
     }));
-    globalEventBus.use(createRateLimitMiddleware({
+    globalEventBus.use(createRateLimitMiddleware({)
       maxEventsPerSecond: 500,
-      strategy: 'drop'
+      strategy: 'drop',
     }));
-    globalEventBus.use(createPerformanceMiddleware({
+    globalEventBus.use(createPerformanceMiddleware({)
       sampleRate: 0.05,
-      slowEventThreshold: 1000
+      slowEventThreshold: 1000,
     }));
   }
 };

@@ -16,7 +16,7 @@ interface UseAttributionReturn {
     recordAttribution: (request: CreateAttributionRequest) => Promise<ChangeAttribution>;
     getAttributionStats: (request: AttributionStatsRequest) => Promise<AttributionStatsResponse>;
     getAttributionTimeline: (projectId: string, filter: AttributionFilter) => Promise<AttributionTimelineResponse>;
-    getContributorStats: (projectId: string, dateRange?: {
+    getContributorStats: (projectId: string, dateRange?: {)
         start: Date;
         end: Date;
     }) => Promise<ContributorStatsResponse>;
@@ -26,12 +26,12 @@ interface UseAttributionReturn {
     updatePrivacySettings: (request: UpdatePrivacySettingsRequest) => Promise<AttributionPrivacySettings>;
     getPrivacySettings: (projectId: string) => Promise<AttributionPrivacySettings | null>;
     cleanupOldData: (projectId: string) => Promise<void>;
-    getResourceAttribution: (
+    getResourceAttribution: (),
       projectId: string,
       resourceType: string,
-      resourceId: string
+      resourceId: string,
     ) => Promise<ChangeAttribution[]>;
-    getAuthorAttribution: (projectId: string, authorId: string, dateRange?: {
+    getAuthorAttribution: (projectId: string, authorId: string, dateRange?: {)
         start: Date;
         end: Date;
     }) => Promise<ChangeAttribution[]>;

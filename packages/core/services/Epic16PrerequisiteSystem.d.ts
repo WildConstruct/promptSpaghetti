@@ -29,7 +29,7 @@ export interface PrerequisiteResult {
     checkDuration?: number;
 }
 export interface PrerequisiteReport {
-    overall: {
+    overall: {,
         passed: boolean;
         totalChecks: number;
         passedChecks: number;
@@ -65,7 +65,7 @@ export interface Epic16PrerequisiteConfig {
     retryAttempts: number;
     saveReports: boolean;
     reportRetentionDays: number;
-    services: {
+    services: {,
         authService?: string;
         analyticsService?: string;
         experimentationService?: string;

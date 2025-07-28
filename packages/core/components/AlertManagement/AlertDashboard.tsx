@@ -4,7 +4,6 @@
  * Comprehensive interface for managing alerts, viewing statistics,
  * and configuring alert rules.
  */
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -27,7 +26,6 @@ import {
   Info,
   Zap
 } from 'lucide-react';
-
 import { 
   alertSystem,
   Alert as AlertType,
@@ -38,75 +36,72 @@ import {
   AlertType as AlertTypeEnum,
   AlertCategory
 } from '../../services/AlertSystem';
-
 interface AlertDashboardProps {
   className?: string;
 }
-
 /**
  * Severity configurations for UI styling
  */
 const SEVERITY_CONFIG = {
-  critical: {
+  critical: {,
     color: 'text-red-700 bg-red-50 border-red-200',
     badgeColor: 'bg-red-100 text-red-800',
     icon: AlertOctagon,
-    priority: 5
+    priority: 5,
   },
-  high: {
+  high: {,
     color: 'text-orange-700 bg-orange-50 border-orange-200',
     badgeColor: 'bg-orange-100 text-orange-800',
     icon: AlertTriangle,
-    priority: 4
+    priority: 4,
   },
-  medium: {
+  medium: {,
     color: 'text-yellow-700 bg-yellow-50 border-yellow-200',
     badgeColor: 'bg-yellow-100 text-yellow-800',
     icon: Shield,
-    priority: 3
+    priority: 3,
   },
-  low: {
+  low: {,
     color: 'text-blue-700 bg-blue-50 border-blue-200',
     badgeColor: 'bg-blue-100 text-blue-800',
     icon: Info,
-    priority: 2
+    priority: 2,
   },
-  info: {
+  info: {,
     color: 'text-gray-700 bg-gray-50 border-gray-200',
     badgeColor: 'bg-gray-100 text-gray-800',
     icon: Info,
-    priority: 1
+    priority: 1,
   }
 };
-
 /**
  * Status configurations for UI styling
  */
 const STATUS_CONFIG = {
-  active: {
+  active: {,
     color: 'text-red-600 bg-red-50',
     badgeColor: 'bg-red-100 text-red-800',
-    icon: Bell
+    icon: Bell,
   },
-  acknowledged: {
+  acknowledged: {,
     color: 'text-yellow-600 bg-yellow-50',
     badgeColor: 'bg-yellow-100 text-yellow-800',
-    icon: CheckCircle
+    icon: CheckCircle,
   },
-  resolved: {
+  resolved: {,
     color: 'text-green-600 bg-green-50',
     badgeColor: 'bg-green-100 text-green-800',
-    icon: CheckCircle
+    icon: CheckCircle,
   },
-  suppressed: {
+  suppressed: {,
     color: 'text-purple-600 bg-purple-50',
     badgeColor: 'bg-purple-100 text-purple-800',
-    icon: XCircle
+    icon: XCircle,
   },
-  expired: {
+  expired: {,
     color: 'text-gray-600 bg-gray-50',
     badgeColor: 'bg-gray-100 text-gray-800',
-    icon: Clock
+    icon: Clock,
   }
 };
 
@@ -117,39 +112,32 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
   const [filter, setFilter] = useState<AlertFilter>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAlert, setSelectedAlert] = useState<AlertType | null>(null);
-
   // Load alerts and stats
   useEffect(() => {
     const loadData = () => {
       setAlerts(alertSystem.getAlerts(filter));
       setStats(alertSystem.getAlertStats());
     };
-
     loadData();
-
     // Subscribe to real-time updates
     alertSystem.subscribe('alert-dashboard', (alert) => {
       loadData(); // Refresh data when alerts change
     });
-
     return () => {
       alertSystem.unsubscribe('alert-dashboard');
     };
   }, [filter]);
-
   // Filter alerts based on search query
   const filteredAlerts = useMemo(() => {
     if (!searchQuery) return alerts;
-    
     const query = searchQuery.toLowerCase();
-    return alerts.filter(alert =>
+    return alerts.filter(alert =>)
       alert.title.toLowerCase().includes(query) ||
       alert.message.toLowerCase().includes(query) ||
       alert.source.toLowerCase().includes(query) ||
       alert.tags.some(tag => tag.toLowerCase().includes(query))
     );
   }, [alerts, searchQuery]);
-
   // Group alerts by severity for overview
   const alertsBySeverity = useMemo(() => {
     const grouped: Record<AlertSeverity, AlertType[]> = {
@@ -157,38 +145,31 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
       high: [],
       medium: [],
       low: [],
-      info: []
+      info: [],
     };
-
-    filteredAlerts.forEach(alert => {
+    filteredAlerts.forEach(alert => {)
       if (alert.status === 'active' || alert.status === 'acknowledged') {
         grouped[alert.severity].push(alert);
       }
     });
-
     return grouped;
   }, [filteredAlerts]);
-
   // Handle alert actions
   const handleAcknowledgeAlert = (alertId: string) => {
     alertSystem.acknowledgeAlert(alertId, 'user', 'Acknowledged via dashboard');
   };
-
   const handleResolveAlert = (alertId: string) => {
     alertSystem.resolveAlert(alertId, 'user', 'Resolved via dashboard');
   };
-
   const handleSuppressAlert = (alertId: string) => {
     alertSystem.suppressAlert(alertId, 'user', 60, 'Suppressed for 1 hour via dashboard');
   };
-
   // Update filter
   const updateFilter = (updates: Partial<AlertFilter>) => {
     setFilter(prev => ({ ...prev, ...updates }));
   };
-
-  return (
-    <div className={`alert-dashboard space-y-6 ${className}`}>
+  return ()
+    <div className={`alert-dashboard space-y-6 ${className}`}>}
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
@@ -206,9 +187,8 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
           </Button>
         </div>
       </div>
-
       {/* Statistics Cards */}
-      {stats && (
+      {stats && ()
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <Card>
             <CardContent className="p-4">
@@ -223,7 +203,6 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center">
@@ -237,7 +216,6 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center">
@@ -251,7 +229,6 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center">
@@ -265,7 +242,6 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center">
@@ -283,7 +259,6 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
           </Card>
         </div>
       )}
-
       {/* Main Content */}
       <Card>
         <CardHeader>
@@ -305,7 +280,7 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
               <Select
                 value={filter.severities?.[0] || 'all'}
                 onValueChange={(value) => 
-                  updateFilter({ 
+                  updateFilter({ )
                     severities: value === 'all' ? undefined : [value as AlertSeverity] 
                   })
                 }
@@ -320,7 +295,7 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
               <Select
                 value={filter.statuses?.[0] || 'all'}
                 onValueChange={(value) => 
-                  updateFilter({ 
+                  updateFilter({ )
                     statuses: value === 'all' ? undefined : [value as AlertStatus] 
                   })
                 }
@@ -341,13 +316,12 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
               <TabsTrigger value="all">All Alerts</TabsTrigger>
               <TabsTrigger value="active">Active ({stats?.active || 0})</TabsTrigger>
             </TabsList>
-
             <TabsContent value="overview" className="mt-6">
               <div className="space-y-6">
                 {Object.entries(alertsBySeverity)
                   .sort(([, a], [, b]) => b.length - a.length)
                   .filter(([, alerts]) => alerts.length > 0)
-                  .map(([severity, severityAlerts]) => (
+                  .map(([severity, severityAlerts]) => ()
                     <div key={severity}>
                       <div className="flex items-center mb-3">
                         <Badge className={SEVERITY_CONFIG[severity as AlertSeverity].badgeColor}>
@@ -355,7 +329,7 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
                         </Badge>
                       </div>
                       <div className="space-y-2">
-                        {severityAlerts.slice(0, 5).map(alert => (
+                        {severityAlerts.slice(0, 5).map(alert => ()
                           <AlertCard
                             key={alert.id}
                             alert={alert}
@@ -365,7 +339,7 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
                             onClick={setSelectedAlert}
                           />
                         ))}
-                        {severityAlerts.length > 5 && (
+                        {severityAlerts.length > 5 && ()
                           <div className="text-sm text-gray-500 text-center py-2">
                             and {severityAlerts.length - 5} more...
                           </div>
@@ -375,7 +349,6 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
                   ))}
               </div>
             </TabsContent>
-
             <TabsContent value="all" className="mt-6">
               <AlertList
                 alerts={filteredAlerts}
@@ -385,7 +358,6 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
                 onSelectAlert={setSelectedAlert}
               />
             </TabsContent>
-
             <TabsContent value="active" className="mt-6">
               <AlertList
                 alerts={filteredAlerts.filter(a => a.status === 'active')}
@@ -398,9 +370,8 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
           </Tabs>
         </CardContent>
       </Card>
-
       {/* Alert Detail Modal */}
-      {selectedAlert && (
+      {selectedAlert && ()
         <AlertDetailModal
           alert={selectedAlert}
           onClose={() => setSelectedAlert(null)}
@@ -412,7 +383,6 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
     </div>
   );
 };
-
 /**
  * Alert Card Component
  */
@@ -423,8 +393,7 @@ interface AlertCardProps {
   onSuppress: (id: string) => void;
   onClick: (alert: AlertType) => void;
 }
-
-const AlertCard: React.FC<AlertCardProps> = ({
+const AlertCard: React.FC<AlertCardProps> = ({)
   alert,
   onAcknowledge,
   onResolve,
@@ -435,8 +404,7 @@ const AlertCard: React.FC<AlertCardProps> = ({
   const statusConfig = STATUS_CONFIG[alert.status];
   const SeverityIcon = severityConfig.icon;
   const _____StatusIcon = statusConfig.icon;
-
-  return (
+  return ()
     <div 
       className={`border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer ${severityConfig.color}`}
       onClick={() => onClick(alert)}
@@ -458,14 +426,13 @@ const AlertCard: React.FC<AlertCardProps> = ({
             <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500">
               <span>{alert.source}</span>
               <span>{new Date(alert.triggeredAt).toLocaleString()}</span>
-              {alert.occurrenceCount > 1 && (
+              {alert.occurrenceCount > 1 && ()
                 <span>{alert.occurrenceCount} occurrences</span>
               )}
             </div>
           </div>
         </div>
-        
-        {alert.status === 'active' && (
+        {alert.status === 'active' && ()
           <div className="flex space-x-1 ml-4">
             <Button 
               size="sm" 
@@ -487,7 +454,6 @@ const AlertCard: React.FC<AlertCardProps> = ({
     </div>
   );
 };
-
 /**
  * Alert List Component
  */
@@ -498,8 +464,7 @@ interface AlertListProps {
   onSuppress: (id: string) => void;
   onSelectAlert: (alert: AlertType) => void;
 }
-
-const AlertList: React.FC<AlertListProps> = ({
+const AlertList: React.FC<AlertListProps> = ({)
   alerts,
   onAcknowledge,
   onResolve,
@@ -507,7 +472,7 @@ const AlertList: React.FC<AlertListProps> = ({
   onSelectAlert
 }) => {
   if (alerts.length === 0) {
-    return (
+    return ()
       <div className="text-center py-8">
         <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No alerts found</h3>
@@ -515,10 +480,9 @@ const AlertList: React.FC<AlertListProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="space-y-3">
-      {alerts.map(alert => (
+      {alerts.map(alert => ()
         <AlertCard
           key={alert.id}
           alert={alert}
@@ -531,7 +495,6 @@ const AlertList: React.FC<AlertListProps> = ({
     </div>
   );
 };
-
 /**
  * Alert Detail Modal Component
  */
@@ -542,8 +505,7 @@ interface AlertDetailModalProps {
   onResolve: (id: string) => void;
   onSuppress: (id: string) => void;
 }
-
-const AlertDetailModal: React.FC<AlertDetailModalProps> = ({
+const AlertDetailModal: React.FC<AlertDetailModalProps> = ({)
   alert,
   onClose,
   onAcknowledge,
@@ -552,14 +514,13 @@ const AlertDetailModal: React.FC<AlertDetailModalProps> = ({
 }) => {
   const severityConfig = SEVERITY_CONFIG[alert.severity];
   const SeverityIcon = severityConfig.icon;
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-auto">
         <div className="p-6">
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center space-x-3">
-              <SeverityIcon className={`w-6 h-6 ${severityConfig.color.split(' ')[0]}`} />
+              <SeverityIcon className={`w-6 h-6 ${severityConfig.color.split(' ')[0]}`} />}
               <div>
                 <h2 className="text-xl font-bold text-gray-900">{alert.title}</h2>
                 <div className="flex items-center space-x-2 mt-1">
@@ -576,20 +537,17 @@ const AlertDetailModal: React.FC<AlertDetailModalProps> = ({
               ✕
             </Button>
           </div>
-
           <div className="space-y-6">
             <div>
               <h3 className="text-sm font-medium text-gray-900 mb-2">Message</h3>
               <p className="text-gray-700">{alert.message}</p>
             </div>
-
-            {alert.description && (
+            {alert.description && ()
               <div>
                 <h3 className="text-sm font-medium text-gray-900 mb-2">Description</h3>
                 <p className="text-gray-700">{alert.description}</p>
               </div>
             )}
-
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <h3 className="text-sm font-medium text-gray-900 mb-2">Details</h3>
@@ -605,21 +563,20 @@ const AlertDetailModal: React.FC<AlertDetailModalProps> = ({
                 <div className="text-sm text-gray-600 space-y-1">
                   <div><span className="font-medium">Triggered:</span> {new Date(alert.triggeredAt).toLocaleString()}</div>
                   <div><span className="font-medium">Occurrences:</span> {alert.occurrenceCount}</div>
-                  {alert.acknowledgedAt && (
+                  {alert.acknowledgedAt && ()
                     <div><span className="font-medium">Acknowledged:</span> {new Date(alert.acknowledgedAt).toLocaleString()}</div>
                   )}
-                  {alert.resolvedAt && (
+                  {alert.resolvedAt && ()
                     <div><span className="font-medium">Resolved:</span> {new Date(alert.resolvedAt).toLocaleString()}</div>
                   )}
                 </div>
               </div>
             </div>
-
-            {alert.tags.length > 0 && (
+            {alert.tags.length > 0 && ()
               <div>
                 <h3 className="text-sm font-medium text-gray-900 mb-2">Tags</h3>
                 <div className="flex flex-wrap gap-1">
-                  {alert.tags.map(tag => (
+                  {alert.tags.map(tag => ()
                     <Badge key={tag} variant="outline" size="sm">
                       {tag}
                     </Badge>
@@ -627,8 +584,7 @@ const AlertDetailModal: React.FC<AlertDetailModalProps> = ({
                 </div>
               </div>
             )}
-
-            {Object.keys(alert.metadata).length > 0 && (
+            {Object.keys(alert.metadata).length > 0 && ()
               <div>
                 <h3 className="text-sm font-medium text-gray-900 mb-2">Metadata</h3>
                 <pre className="text-xs bg-gray-100 p-3 rounded overflow-auto">
@@ -637,8 +593,7 @@ const AlertDetailModal: React.FC<AlertDetailModalProps> = ({
               </div>
             )}
           </div>
-
-          {alert.status === 'active' && (
+          {alert.status === 'active' && ()
             <div className="flex justify-end space-x-2 mt-6 pt-6 border-t">
               <Button 
                 variant="outline" 

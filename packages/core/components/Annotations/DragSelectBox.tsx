@@ -5,9 +5,7 @@
  * Interactive drag-to-select rectangle for creating region groups
  * by selecting multiple nodes through mouse drag operation.
  */
-
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-
 interface DragSelectBoxProps {
   onSelectionComplete: (bounds: { x: number; y: number; width: number; height: number }) => void;
   onSelectionCancel: () => void;
@@ -16,7 +14,7 @@ interface DragSelectBoxProps {
   isActive: boolean;
 }
 
-export const DragSelectBox: React.FC<DragSelectBoxProps> = ({
+export const DragSelectBox: React.FC<DragSelectBoxProps> = ({)
   onSelectionComplete,
   onSelectionCancel,
   canvasOffset,
@@ -27,14 +25,12 @@ export const DragSelectBox: React.FC<DragSelectBoxProps> = ({
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0 });
   const [currentPoint, setCurrentPoint] = useState({ x: 0, y: 0 });
   const overlayRef = useRef<HTMLDivElement>(null);
-
   // Calculate selection bounds
   const getSelectionBounds = useCallback(() => {
     const minX = Math.min(startPoint.x, currentPoint.x);
     const minY = Math.min(startPoint.y, currentPoint.y);
     const maxX = Math.max(startPoint.x, currentPoint.x);
     const maxY = Math.max(startPoint.y, currentPoint.y);
-
     return {
       x: (minX - canvasOffset.x) / zoom,
       y: (minY - canvasOffset.y) / zoom,
@@ -42,44 +38,32 @@ export const DragSelectBox: React.FC<DragSelectBoxProps> = ({
       height: (maxY - minY) / zoom
     };
   }, [startPoint, currentPoint, canvasOffset, zoom]);
-
   // Handle mouse down to start selection
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (!isActive) return;
-    
     e.preventDefault();
     e.stopPropagation();
-    
     const rect = overlayRef.current?.getBoundingClientRect();
     if (!rect) return;
-    
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    
     setStartPoint({ x, y });
     setCurrentPoint({ x, y });
     setIsDragging(true);
   }, [isActive]);
-
   // Handle mouse move during selection
   useEffect(() => {
     if (!isDragging) return;
-
     const handleMouseMove = (e: MouseEvent) => {
       const rect = overlayRef.current?.getBoundingClientRect();
       if (!rect) return;
-      
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      
       setCurrentPoint({ x, y });
     };
-
     const handleMouseUp = (e: MouseEvent) => {
       setIsDragging(false);
-      
       const bounds = getSelectionBounds();
-      
       // Only create selection if it's large enough
       if (bounds.width > 20 && bounds.height > 20) {
         onSelectionComplete(bounds);
@@ -87,36 +71,30 @@ export const DragSelectBox: React.FC<DragSelectBoxProps> = ({
         onSelectionCancel();
       }
     };
-
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setIsDragging(false);
         onSelectionCancel();
       }
     };
-
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('keydown', handleKeyDown);
-    
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isDragging, getSelectionBounds, onSelectionComplete, onSelectionCancel]);
-
   // Don't render if not active
   if (!isActive) return null;
-
   const selectionStyle = isDragging ? {
     left: Math.min(startPoint.x, currentPoint.x),
     top: Math.min(startPoint.y, currentPoint.y),
     width: Math.abs(currentPoint.x - startPoint.x),
     height: Math.abs(currentPoint.y - startPoint.y)
   } : { display: 'none' };
-
-  return (
+  return ()
     <>
       {/* Full-screen overlay to capture mouse events */}
       <div
@@ -130,7 +108,7 @@ export const DragSelectBox: React.FC<DragSelectBoxProps> = ({
           bottom: 0,
           zIndex: 10000,
           cursor: 'crosshair',
-          pointerEvents: 'all'
+          pointerEvents: 'all',
         }}
         onMouseDown={handleMouseDown}
       >
@@ -147,9 +125,8 @@ export const DragSelectBox: React.FC<DragSelectBoxProps> = ({
             ...selectionStyle
           }}
         />
-        
         {/* Instructions */}
-        {!isDragging && (
+        {!isDragging && ()
           <div
             style={{
               position: 'absolute',
@@ -177,14 +154,13 @@ export const DragSelectBox: React.FC<DragSelectBoxProps> = ({
                 background: 'rgba(255, 255, 255, 0.2)', 
                 padding: '2px 6px', 
                 borderRadius: '3px',
-                fontSize: '11px'
+                fontSize: '11px',
               }}>Esc</kbd> to cancel
             </div>
           </div>
         )}
-
         {/* Selection info during drag */}
-        {isDragging && (
+        {isDragging && ()
           <div
             style={{
               position: 'absolute',
@@ -197,7 +173,7 @@ export const DragSelectBox: React.FC<DragSelectBoxProps> = ({
               fontSize: '11px',
               fontFamily: 'system-ui, -apple-system, sans-serif',
               pointerEvents: 'none',
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
             }}
           >
             {Math.round(Math.abs(currentPoint.x - startPoint.x) / zoom)} × {Math.round(Math.abs(currentPoint.y - startPoint.y) / zoom)}

@@ -31,7 +31,7 @@ export interface StorageProvider {
     exists(key: string): Promise<boolean>;
     clear(): Promise<void>;
     getMany<T>(keys: string[]): Promise<Array<T | undefined>>;
-    setMany<T>(entries: Array<{
+    setMany<T>(entries: Array<{)
         key: string;
         value: T;
         options?: StorageSetOptions;
@@ -405,39 +405,39 @@ export interface StorageQueryCondition {
 }
 export interface StorageQueryJoin {
     collection: string;
-    on: {
+    on: {,
         left: string;
         right: string;
     };
     type: 'inner' | 'left' | 'right' | 'full';
 }
 export interface StorageStats {
-    connections: {
+    connections: {,
         total: number;
         active: number;
         idle: number;
     };
-    operations: {
+    operations: {,
         total: number;
         reads: number;
         writes: number;
         deletes: number;
         errors: number;
     };
-    performance: {
+    performance: {,
         averageLatency: number;
         throughput: number;
         errorRate: number;
         cacheHitRate?: number;
     };
-    storage: {
+    storage: {,
         totalSize: number;
         usedSize: number;
         availableSize: number;
         keyCount: number;
         collectionCount?: number;
     };
-    memory: {
+    memory: {,
         used: number;
         available: number;
         cached: number;

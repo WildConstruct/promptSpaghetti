@@ -4,7 +4,6 @@
  * 
  * Cinema 4D-inspired menu bar with File, Edit, View, Debug, Help sections
  */
-
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
 import { PSGFile } from '../../projectManager';
@@ -19,7 +18,6 @@ export interface MenuBarProps {
   onExport?: (format: 'json' | 'png' | 'svg' | 'pdf') => void;
   onRecentFileLoad?: (file: PSGFile) => void;
   onQuit?: () => void;
-  
   // Edit operations
   onUndo?: () => void;
   onRedo?: () => void;
@@ -29,7 +27,6 @@ export interface MenuBarProps {
   onSelectAll?: () => void;
   onFind?: () => void;
   onPreferences?: () => void;
-  
   // View operations
   onZoomIn?: () => void;
   onZoomOut?: () => void;
@@ -39,20 +36,17 @@ export interface MenuBarProps {
   onToggleInspector?: () => void;
   onToggleFullscreen?: () => void;
   onToggleTheme?: (theme: 'light' | 'dark' | 'cinema') => void;
-  
   // Debug operations
   onDevTools?: () => void;
   onValidateGraph?: () => void;
   onPerformanceMonitor?: () => void;
   onConsoleToggle?: () => void;
-  
   // Help operations
   onDocumentation?: () => void;
   onKeyboardShortcuts?: () => void;
   onAbout?: () => void;
   onSupport?: () => void;
   onReportBug?: () => void;
-  
   // Application state
   canUndo?: boolean;
   canRedo?: boolean;
@@ -66,7 +60,6 @@ export interface MenuBarProps {
   inspectorVisible?: boolean;
   recentFiles?: PSGFile[];
 }
-
 interface MenuItemProps {
   label: string;
   shortcut?: string;
@@ -75,7 +68,6 @@ interface MenuItemProps {
   divider?: boolean;
   submenu?: MenuItemProps[];
 }
-
 interface MenuProps {
   label: string;
   items: MenuItemProps[];
@@ -83,19 +75,18 @@ interface MenuProps {
   onToggle: () => void;
   onClose: () => void;
 }
-
 const professionalColors = {
-  background: {
+  background: {,
     primary: '#1e1e1e',
     secondary: '#2a2a2a',
     tertiary: '#353535',
   },
-  text: {
+  text: {,
     primary: '#e8e8e8',
     secondary: '#b8b8b8',
     accent: '#ff7c00',
   },
-  ui: {
+  ui: {,
     border: '#404040',
     borderHover: '#5a5a5a',
     borderActive: '#ff7c00',
@@ -103,8 +94,7 @@ const professionalColors = {
     selection: '#ff7c0040',
   }
 };
-
-const MenuItem: React.FC<MenuItemProps> = ({ 
+const MenuItem: React.FC<MenuItemProps> = ({ )
   label, 
   shortcut, 
   onClick, 
@@ -114,9 +104,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
 }) => {
   const [showSubmenu, setShowSubmenu] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
-
   if (divider) {
-    return (
+    return ()
       <div style={{
         height: '1px',
         backgroundColor: professionalColors.ui.border,
@@ -124,26 +113,22 @@ const MenuItem: React.FC<MenuItemProps> = ({
       }} />
     );
   }
-
   const handleClick = useCallback(() => {
     if (!disabled && onClick) {
       onClick();
     }
   }, [disabled, onClick]);
-
   const handleMouseEnter = useCallback(() => {
     if (submenu) {
       setShowSubmenu(true);
     }
   }, [submenu]);
-
   const handleMouseLeave = useCallback(() => {
     if (submenu) {
       setShowSubmenu(false);
     }
   }, [submenu]);
-
-  return (
+  return ()
     <div
       ref={itemRef}
       style={{
@@ -175,7 +160,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
     >
       <span>{label}</span>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        {shortcut && (
+        {shortcut && ()
           <span style={{
             fontSize: '11px',
             color: professionalColors.text.secondary,
@@ -184,7 +169,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
             {shortcut}
           </span>
         )}
-        {submenu && (
+        {submenu && ()
           <span style={{
             fontSize: '10px',
             color: professionalColors.text.secondary,
@@ -193,22 +178,21 @@ const MenuItem: React.FC<MenuItemProps> = ({
           </span>
         )}
       </div>
-      
       {/* Submenu */}
-      {submenu && showSubmenu && (
+      {submenu && showSubmenu && ()
         <div style={{
           position: 'absolute',
           top: 0,
           left: '100%',
           minWidth: '200px',
           backgroundColor: professionalColors.background.secondary,
-          border: `1px solid ${professionalColors.ui.border}`,
+          border: `1px solid ${professionalColors.ui.border}`,}
           borderRadius: '4px',
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
           zIndex: 1002,
           padding: '4px 0',
         }}>
-          {submenu.map((item, index) => (
+          {submenu.map((item, index) => ()
             <MenuItem key={index} {...item} />
           ))}
         </div>
@@ -216,24 +200,20 @@ const MenuItem: React.FC<MenuItemProps> = ({
     </div>
   );
 };
-
 const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) => {
   const menuRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         onClose();
       }
     };
-
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [isOpen, onClose]);
-
-  return (
+  return ()
     <div ref={menuRef} style={{ position: 'relative' }}>
       <button
         onClick={onToggle}
@@ -261,21 +241,20 @@ const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) 
       >
         {label}
       </button>
-      
-      {isOpen && (
+      {isOpen && ()
         <div style={{
           position: 'absolute',
           top: '100%',
           left: 0,
           minWidth: '220px',
           backgroundColor: professionalColors.background.secondary,
-          border: `1px solid ${professionalColors.ui.border}`,
+          border: `1px solid ${professionalColors.ui.border}`,}
           borderRadius: '4px',
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
           zIndex: 1001,
           padding: '4px 0',
         }}>
-          {items.map((item, index) => (
+          {items.map((item, index) => ()
             <MenuItem key={index} {...item} />
           ))}
         </div>
@@ -284,7 +263,7 @@ const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) 
   );
 };
 
-export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
+export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({)
   // File operations
   onNew,
   onOpen,
@@ -294,7 +273,6 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
   onExport,
   onRecentFileLoad,
   onQuit,
-  
   // Edit operations
   onUndo,
   onRedo,
@@ -304,7 +282,6 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
   onSelectAll,
   onFind,
   onPreferences,
-  
   // View operations
   onZoomIn,
   onZoomOut,
@@ -314,20 +291,17 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
   onToggleInspector,
   onToggleFullscreen,
   onToggleTheme,
-  
   // Debug operations
   onDevTools,
   onValidateGraph,
   onPerformanceMonitor,
   onConsoleToggle,
-  
   // Help operations
   onDocumentation,
   onKeyboardShortcuts,
   onAbout,
   onSupport,
   onReportBug,
-  
   // Application state
   canUndo = false,
   canRedo = false,
@@ -342,15 +316,12 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
   recentFiles = [],
 }) => {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
-
   const handleMenuToggle = useCallback((menuName: string) => {
     setOpenMenu(openMenu === menuName ? null : menuName);
   }, [openMenu]);
-
   const handleMenuClose = useCallback(() => {
     setOpenMenu(null);
   }, []);
-
   // File menu items
   const fileMenuItems: MenuItemProps[] = [
     { label: 'New', shortcut: '⌘N', onClick: onNew },
@@ -362,23 +333,23 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
     { label: 'Import...', shortcut: '⌘I', onClick: onImport },
     { 
       label: 'Export', 
-      submenu: [
+      submenu: [,
         { label: 'Export as JSON', onClick: () => onExport?.('json') },
         { label: 'Export as PNG', onClick: () => onExport?.('png') },
         { label: 'Export as SVG', onClick: () => onExport?.('svg') },
         { label: 'Export as PDF', onClick: () => onExport?.('pdf') },
       ]
     },
-    ...(recentFiles.length > 0 ? [
+    ...(recentFiles.length > 0 ? [)
       { divider: true },
       { 
         label: 'Recent Files', 
-        submenu: [
-          ...recentFiles.slice(0, 10).map((file, index) => ({
-            label: `${index + 1}. ${file.metadata.title || file.name.replace('.psg', '')}`,
+        submenu: [,
+          ...recentFiles.slice(0, 10).map((file, index) => ({)
+            label: `${index + 1}. ${file.metadata.title || file.name.replace('.psg', '')}`,}
             onClick: () => onRecentFileLoad?.(file)
           })),
-          ...(recentFiles.length > 0 ? [
+          ...(recentFiles.length > 0 ? [)
             { divider: true },
             { label: 'Clear Recent Files', onClick: () => {
               // TODO: Implement clear recent files
@@ -391,7 +362,6 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
     { divider: true },
     { label: 'Quit', shortcut: '⌘Q', onClick: onQuit },
   ];
-
   // Edit menu items
   const editMenuItems: MenuItemProps[] = [
     { label: 'Undo', shortcut: '⌘Z', onClick: onUndo, disabled: !canUndo },
@@ -406,7 +376,6 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
     { divider: true },
     { label: 'Preferences...', shortcut: '⌘,', onClick: onPreferences },
   ];
-
   // View menu items
   const viewMenuItems: MenuItemProps[] = [
     { label: 'Zoom In', shortcut: '⌘+', onClick: onZoomIn },
@@ -414,36 +383,35 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
     { label: 'Fit View', shortcut: '⌘0', onClick: onFitView },
     { divider: true },
     { 
-      label: `${gridVisible ? 'Hide' : 'Show'} Grid`, 
+      label: `${gridVisible ? 'Hide' : 'Show'} Grid`, }
       shortcut: '⌘G', 
-      onClick: onToggleGrid 
+      onClick: onToggleGrid ,
     },
     { 
-      label: `${minimapVisible ? 'Hide' : 'Show'} Minimap`, 
+      label: `${minimapVisible ? 'Hide' : 'Show'} Minimap`, }
       shortcut: '⌘M', 
-      onClick: onToggleMinimap 
+      onClick: onToggleMinimap ,
     },
     { 
-      label: `${inspectorVisible ? 'Hide' : 'Show'} Inspector`, 
+      label: `${inspectorVisible ? 'Hide' : 'Show'} Inspector`, }
       shortcut: '⌘⇧I', 
-      onClick: onToggleInspector 
+      onClick: onToggleInspector ,
     },
     { divider: true },
     { 
       label: isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen', 
       shortcut: 'Alt+F', 
-      onClick: onToggleFullscreen 
+      onClick: onToggleFullscreen ,
     },
     { 
       label: 'Theme', 
-      submenu: [
+      submenu: [,
         { label: '🌙 Dark', onClick: () => onToggleTheme?.('dark') },
         { label: '☀️ Light', onClick: () => onToggleTheme?.('light') },
         { label: '🎬 Cinema 4D', onClick: () => onToggleTheme?.('cinema') },
       ]
     },
   ];
-
   // Debug menu items
   const debugMenuItems: MenuItemProps[] = [
     { label: 'Open DevTools', shortcut: 'F12', onClick: onDevTools },
@@ -451,7 +419,6 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
     { label: 'Performance Monitor', onClick: onPerformanceMonitor },
     { label: 'Toggle Console', shortcut: '⌘⇧C', onClick: onConsoleToggle },
   ];
-
   // Help menu items
   const helpMenuItems: MenuItemProps[] = [
     { label: 'Documentation', shortcut: 'F1', onClick: onDocumentation },
@@ -462,14 +429,13 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
     { divider: true },
     { label: 'About', onClick: onAbout },
   ];
-
-  return (
+  return ()
     <div style={{
       display: 'flex',
       alignItems: 'center',
       height: '32px',
       backgroundColor: professionalColors.background.secondary,
-      borderBottom: `1px solid ${professionalColors.ui.border}`,
+      borderBottom: `1px solid ${professionalColors.ui.border}`,}
       padding: '0 8px',
       position: 'relative',
       zIndex: 1000,
@@ -485,7 +451,6 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
       }}>
         Prompt Spaghetti
       </div>
-
       {/* Menu Items */}
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <Menu
@@ -524,7 +489,6 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
           onClose={handleMenuClose}
         />
       </div>
-
       {/* Status Indicator */}
       <div style={{
         marginLeft: 'auto',

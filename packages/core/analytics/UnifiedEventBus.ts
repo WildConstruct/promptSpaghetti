@@ -4,7 +4,6 @@
  * Consolidates 12+ analytics systems into a unified pub/sub event bus
  * with comprehensive event routing, filtering, and persistence.
  */
-
 import { EventEmitter } from 'events';
 import { z } from 'zod';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -20,29 +19,24 @@ export enum AnalyticsEventType {
   TOKEN_USAGE = 'token_usage',
   USER_INTERACTION = 'user_interaction',
   PERFORMANCE_METRIC = 'performance_metric',
-  
   // Integration Analytics Events  
   INTEGRATION_EVENT = 'integration_event',
   INTEGRATION_HEALTH = 'integration_health',
   INTEGRATION_COST = 'integration_cost',
-  
   // Behavior Analytics Events
   USER_BEHAVIOR = 'user_behavior',
   SESSION_EVENT = 'session_event',
   CANVAS_INTERACTION = 'canvas_interaction',
-  
   // Security and Monitoring Events
   SECURITY_EVENT = 'security_event',
   FRAUD_DETECTION = 'fraud_detection',
   TRANSACTION_EVENT = 'transaction_event',
   SYSTEM_HEALTH = 'system_health',
   AUTH_EVENT = 'auth_event',
-  
   // Business Analytics Events
   REVENUE_EVENT = 'revenue_event',
   SEARCH_EVENT = 'search_event',
   FILE_BROWSER_EVENT = 'file_browser_event',
-  
   // System Events
   ERROR_EVENT = 'error_event',
   WARNING_EVENT = 'warning_event',
@@ -68,7 +62,7 @@ export enum EventCategory {
 }
 
 // Base Event Schema with Zod validation
-export const BaseEventSchema = z.object({
+export const BaseEventSchema = z.object({)
   id: z.string().uuid(),
   type: z.nativeEnum(AnalyticsEventType),
   category: z.nativeEnum(EventCategory),
@@ -76,28 +70,25 @@ export const BaseEventSchema = z.object({
   timestamp: z.number(),
   source: z.string(),
   version: z.string().default('1.0.0'),
-  
   // Context Information
   sessionId: z.string().optional(),
   userId: z.string().optional(),
   organizationId: z.string().optional(),
   requestId: z.string().optional(),
   traceId: z.string().optional(),
-  
   // Event Data
   data: z.record(z.unknown()),
   metadata: z.record(z.unknown()).default({}),
-  
   // Analytics Enrichment
   tags: z.array(z.string()).default([]),
   environment: z.string().default('development'),
-  region: z.string().optional()
+  region: z.string().optional(),
 });
 
 export type UnifiedAnalyticsEvent = z.infer<typeof BaseEventSchema>;
 
 // Event Filter Schema
-export const EventFilterSchema = z.object({
+export const EventFilterSchema = z.object({)
   types: z.array(z.nativeEnum(AnalyticsEventType)).optional(),
   categories: z.array(z.nativeEnum(EventCategory)).optional(),
   severities: z.array(z.nativeEnum(EventSeverity)).optional(),
@@ -108,7 +99,7 @@ export const EventFilterSchema = z.object({
   startTime: z.number().optional(),
   endTime: z.number().optional(),
   tags: z.array(z.string()).optional(),
-  environment: z.string().optional()
+  environment: z.string().optional(),
 });
 
 export type EventFilter = z.infer<typeof EventFilterSchema>;
@@ -147,7 +138,6 @@ export interface EventBusMetrics {
   queueDepth: number;
   lastEventTime: number;
 }
-
 /**
  * Unified Event Bus Implementation
  * 
@@ -162,10 +152,8 @@ export class UnifiedEventBus extends EventEmitter {
   private eventQueue: UnifiedAnalyticsEvent[] = [];
   private processingQueue: boolean = false;
   private flushTimer: NodeJS.Timeout | null = null;
-
   constructor(config: Partial<EventBusConfig> = {}) {
     super();
-    
     this.config = {
       maxEventHistory: 10000,
       enablePersistence: true,
@@ -175,7 +163,6 @@ export class UnifiedEventBus extends EventEmitter {
       metricsEnabled: true,
       ...config
     };
-
     this.metrics = {
       eventsPublished: 0,
       eventsProcessed: 0,
@@ -183,13 +170,11 @@ export class UnifiedEventBus extends EventEmitter {
       subscribersActive: 0,
       averageProcessingTime: 0,
       queueDepth: 0,
-      lastEventTime: 0
+      lastEventTime: 0,
     };
-
     this.startFlushTimer();
     this.emit('bus:initialized', { config: this.config });
   }
-
   /**
    * Publish an analytics event to the unified bus
    */
@@ -201,33 +186,26 @@ export class UnifiedEventBus extends EventEmitter {
         timestamp: Date.now(),
         ...eventData
       };
-
       // Validate event schema
       const validatedEvent = BaseEventSchema.parse(event);
-
       // Add to processing queue
       this.eventQueue.push(validatedEvent);
       this.metrics.eventsPublished++;
       this.metrics.queueDepth = this.eventQueue.length;
       this.metrics.lastEventTime = Date.now();
-
       // Emit event for immediate processing if queue is small
       if (this.eventQueue.length <= 10) {
         this.processEventQueue();
       }
-
       this.emit('event:published', { eventId: event.id, type: event.type, category: event.category });
-      
       return event.id;
     } catch (error) {
       this.metrics.eventsFailed++;
       this.emit('event:error', { error, eventData });
-      
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      throw new Error(`Failed to publish event: ${errorMessage}`);
+      throw new Error(`Failed to publish event: ${errorMessage}`);}
     }
   }
-
   /**
    * Subscribe to analytics events with filtering
    */
@@ -239,29 +217,22 @@ export class UnifiedEventBus extends EventEmitter {
       priority: subscriber.priority ?? 100,
       enabled: subscriber.enabled ?? true
     };
-
     this.subscribers.set(subscriberId, fullSubscriber);
     this.metrics.subscribersActive = this.subscribers.size;
-
     this.emit('subscriber:added', { subscriberId, name: subscriber.name, filter: subscriber.filter });
-    
     return subscriberId;
   }
-
   /**
    * Unsubscribe from analytics events
    */
   unsubscribe(subscriberId: string): boolean {
     const removed = this.subscribers.delete(subscriberId);
     this.metrics.subscribersActive = this.subscribers.size;
-
     if (removed) {
       this.emit('subscriber:removed', { subscriberId });
     }
-
     return removed;
   }
-
   /**
    * Get filtered events from history
    */
@@ -269,38 +240,32 @@ export class UnifiedEventBus extends EventEmitter {
     const filteredEvents = this.eventHistory.filter(event => this.matchesFilter(event, filter));
     return filteredEvents.slice(offset, offset + limit);
   }
-
   /**
    * Get real-time event stream for dashboards
    */
   getEventStream(filter: EventFilter): EventEmitter {
     const stream = new EventEmitter();
-    
-    const subscriberId = this.subscribe({
-      name: `stream_${Date.now()}`,
+    const subscriberId = this.subscribe({)
+      name: `stream_${Date.now()}`,}
       filter,
       handler: (event) => {
         stream.emit('event', event);
       },
       priority: 1000, // High priority for streams
-      enabled: true
+      enabled: true,
     });
-
     // Clean up subscription when stream is closed
     stream.on('close', () => {
       this.unsubscribe(subscriberId);
     });
-
     return stream;
   }
-
   /**
    * Get event bus metrics
    */
   getMetrics(): EventBusMetrics {
     return { ...this.metrics };
   }
-
   /**
    * Get event bus health status
    */
@@ -311,60 +276,53 @@ export class UnifiedEventBus extends EventEmitter {
   } {
     const issues: string[] = [];
     let status: 'healthy' | 'degraded' | 'unhealthy' = 'healthy';
-
     // Check queue depth
     if (this.metrics.queueDepth > 1000) {
       issues.push('High queue depth detected');
       status = 'degraded';
     }
-
     // Check error rate
-    const errorRate = this.metrics.eventsPublished > 0 
+    const errorRate = this.metrics.eventsPublished > 0 ;
       ? (this.metrics.eventsFailed / this.metrics.eventsPublished) * 100 
       : 0;
-    
     if (errorRate > 5) {
       issues.push('High error rate detected');
       status = errorRate > 20 ? 'unhealthy' : 'degraded';
     }
-
     // Check processing lag
     const processingLag = Date.now() - this.metrics.lastEventTime;
     if (processingLag > 30000) { // 30 seconds
       issues.push('Processing lag detected');
       status = 'degraded';
     }
-
     return { status, metrics: this.metrics, issues };
   }
-
   /**
    * Migrate analytics data from existing systems
    */
-  async migrateFromLegacySystem(
+  async migrateFromLegacySystem()
     systemName: string, 
     events: unknown[], 
     transformer: (legacyEvent: unknown) => Partial<UnifiedAnalyticsEvent>
   ): Promise<{ migrated: number; failed: number; errors: string[] }> {
     const results = { migrated: 0, failed: 0, errors: [] as string[] };
-
     for (const legacyEvent of events) {
       try {
         const transformedEvent = transformer(legacyEvent);
-        await this.publishEvent({
+        await this.publishEvent({)
           source: systemName,
           category: EventCategory.SYSTEM,
           severity: EventSeverity.INFO,
           type: AnalyticsEventType.INFO_EVENT,
-          data: transformedEvent.data || (
+          data: transformedEvent.data || ()
             typeof legacyEvent === 'object' && legacyEvent !== null ? legacyEvent as Record<string,
             unknown> : {}
           ),
-          metadata: {
+          metadata: {,
             ...transformedEvent.metadata,
             migrated: true,
             originalSystem: systemName,
-            migrationTime: Date.now()
+            migrationTime: Date.now(),
           },
           ...transformedEvent
         });
@@ -372,14 +330,12 @@ export class UnifiedEventBus extends EventEmitter {
       } catch (error) {
         results.failed++;
         const errorMessage = error instanceof Error ? error.message : 'Unknown migration error';
-        results.errors.push(`Failed to migrate event: ${errorMessage}`);
+        results.errors.push(`Failed to migrate event: ${errorMessage}`);}
       }
     }
-
     this.emit('migration:completed', { systemName, results });
     return results;
   }
-
   /**
    * Process event queue in batches
    */
@@ -387,40 +343,34 @@ export class UnifiedEventBus extends EventEmitter {
     if (this.processingQueue || this.eventQueue.length === 0) {
       return;
     }
-
     this.processingQueue = true;
     const startTime = Date.now();
-
     try {
       const batchSize = Math.min(this.config.batchSize, this.eventQueue.length);
       const batch = this.eventQueue.splice(0, batchSize);
-
       // Process each event in the batch
       for (const event of batch) {
         await this.processEvent(event);
       }
-
       // Update metrics
       const processingTime = Date.now() - startTime;
       this.metrics.averageProcessingTime = 
         (this.metrics.averageProcessingTime + processingTime) / 2;
       this.metrics.queueDepth = this.eventQueue.length;
-
     } catch (error) {
       const errorDetails = {
         error: error instanceof Error ? {
           message: error.message,
-          stack: error.stack
+          stack: error.stack,
         } : { message: 'Unknown queue processing error' },
         queueLength: this.eventQueue.length,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
       this.emit('queue:error', errorDetails);
     } finally {
       this.processingQueue = false;
     }
   }
-
   /**
    * Process individual event through subscribers
    */
@@ -432,12 +382,10 @@ export class UnifiedEventBus extends EventEmitter {
         this.eventHistory.shift();
       }
     }
-
     // Get matching subscribers sorted by priority
-    const matchingSubscribers = Array.from(this.subscribers.values())
+    const matchingSubscribers = Array.from(this.subscribers.values());
       .filter(sub => sub.enabled && this.matchesFilter(event, sub.filter))
       .sort((a, b) => b.priority - a.priority);
-
     // Process through subscribers
     for (const subscriber of matchingSubscribers) {
       try {
@@ -450,22 +398,19 @@ export class UnifiedEventBus extends EventEmitter {
           eventId: event.id,
           error: error instanceof Error ? {
             message: error.message,
-            stack: error.stack
+            stack: error.stack,
           } : { message: 'Unknown subscriber error' },
-          timestamp: Date.now()
+          timestamp: Date.now(),
         };
         this.emit('subscriber:error', errorDetails);
-
         // Handle retry logic if configured
         if (subscriber.retryConfig) {
           await this.retrySubscriber(event, subscriber, error);
         }
       }
     }
-
     this.emit('event:processed', { eventId: event.id, subscriberCount: matchingSubscribers.length });
   }
-
   /**
    * Process event through individual subscriber
    */
@@ -475,17 +420,15 @@ export class UnifiedEventBus extends EventEmitter {
       await result;
     }
   }
-
   /**
    * Retry failed subscriber processing
    */
-  private async retrySubscriber(
+  private async retrySubscriber()
     event: UnifiedAnalyticsEvent, 
     subscriber: EventSubscriber, 
-    originalError: unknown
+    originalError: unknown,
   ): Promise<void> {
     if (!subscriber.retryConfig) return;
-
     for (let attempt = 1; attempt <= subscriber.retryConfig.maxRetries; attempt++) {
       try {
         await new Promise(resolve => setTimeout(resolve, (subscriber.retryConfig?.backoffMs ?? 1000) * attempt));
@@ -499,20 +442,19 @@ export class UnifiedEventBus extends EventEmitter {
             attempts: attempt,
             originalError: originalError instanceof Error ? {
               message: originalError.message,
-              stack: originalError.stack
+              stack: originalError.stack,
             } : { message: 'Unknown original error' },
             finalError: retryError instanceof Error ? {
               message: retryError.message,
-              stack: retryError.stack
+              stack: retryError.stack,
             } : { message: 'Unknown retry error' },
-            timestamp: Date.now()
+            timestamp: Date.now(),
           };
           this.emit('subscriber:retry_exhausted', retryExhaustedDetails);
         }
       }
     }
   }
-
   /**
    * Check if event matches filter criteria
    */
@@ -527,15 +469,12 @@ export class UnifiedEventBus extends EventEmitter {
     if (filter.environment && event.environment !== filter.environment) return false;
     if (filter.startTime && event.timestamp < filter.startTime) return false;
     if (filter.endTime && event.timestamp > filter.endTime) return false;
-    
     // Tag matching (event must have all specified tags)
     if (filter.tags?.length && !filter.tags.every(tag => event.tags.includes(tag))) {
       return false;
     }
-
     return true;
   }
-
   /**
    * Start flush timer for batch processing
    */
@@ -546,7 +485,6 @@ export class UnifiedEventBus extends EventEmitter {
       }
     }, this.config.flushIntervalMs);
   }
-
   /**
    * Cleanup and shutdown
    */
@@ -554,36 +492,29 @@ export class UnifiedEventBus extends EventEmitter {
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
     }
-
     // Process remaining events
     while (this.eventQueue.length > 0) {
       await this.processEventQueue();
     }
-
     this.subscribers.clear();
     this.eventHistory = [];
-    
     this.emit('bus:shutdown');
   }
 }
-
 /**
  * Event Bus Factory for dependency injection
  */
 export class EventBusFactory {
   private static instance: UnifiedEventBus | null = null;
-
   static getInstance(config?: Partial<EventBusConfig>): UnifiedEventBus {
     if (!this.instance) {
       this.instance = new UnifiedEventBus(config);
     }
     return this.instance;
   }
-
   static createInstance(config?: Partial<EventBusConfig>): UnifiedEventBus {
     return new UnifiedEventBus(config);
   }
-
   static async shutdown(): Promise<void> {
     if (this.instance) {
       await this.instance.shutdown();

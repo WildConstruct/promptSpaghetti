@@ -7,7 +7,6 @@
  * 
  * Task: E31-1753313263537-6F9DAE
  */
-
 import { EventEmitter } from 'events';
 
 // ==========================================
@@ -691,50 +690,39 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
   private abuseDetectionResults: Map<string, AbuseDetectionResult> = new Map();
   private usageHistory: Map<string, UsageDataPoint[]> = new Map();
   private isAnalyzing: boolean = false;
-
   constructor(config: QuotaRecommendationConfig) {
     super();
     this.config = config;
-    
     this.initializeRecommendationEngine();
     if (this.config.enablePatternAnalysis) {
       this.startAnalysisLoop();
     }
   }
-
   // ==========================================
   // PUBLIC METHODS
   // ==========================================
-
   public async analyzeUsagePatterns(userId: string, apiEndpoint?: string): Promise<UsagePattern[]> {
     const usageData = await this.collectUsageData(userId, apiEndpoint);
     const patterns: UsagePattern[] = [];
-
     for (const patternConfig of this.config.usagePatterns) {
       if (!patternConfig.enabled) continue;
-
       const detectedPattern = await this.detectPattern(usageData, patternConfig);
       if (detectedPattern) {
         patterns.push(detectedPattern);
         this.usagePatterns.set(detectedPattern.patternId, detectedPattern);
       }
     }
-
-    this.emit('patternsAnalyzed', { 
+    this.emit('patternsAnalyzed', { )
       userId, 
       apiEndpoint, 
-      patternsFound: patterns.length 
+      patternsFound: patterns.length ,
     });
-
     return patterns;
   }
-
   public async generateQuotaRecommendations(userId: string): Promise<QuotaRecommendation[]> {
-    const userPatterns = Array.from(this.usagePatterns.values())
+    const userPatterns = Array.from(this.usagePatterns.values());
       .filter(pattern => pattern.userId === userId);
-
     const recommendations: QuotaRecommendation[] = [];
-
     for (const pattern of userPatterns) {
       const recommendation = await this.generateRecommendationFromPattern(pattern);
       if (recommendation) {
@@ -742,39 +730,30 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         this.quotaRecommendations.set(recommendation.recommendationId, recommendation);
       }
     }
-
     // Apply fairness adjustments
     const fairnessAdjustedRecommendations = await this.applyFairnessAdjustments(recommendations);
-
-    this.emit('recommendationsGenerated', { 
+    this.emit('recommendationsGenerated', { )
       userId, 
-      recommendationsCount: fairnessAdjustedRecommendations.length 
+      recommendationsCount: fairnessAdjustedRecommendations.length ,
     });
-
     return fairnessAdjustedRecommendations;
   }
-
   public async applyRecommendation(recommendationId: string): Promise<boolean> {
     const recommendation = this.quotaRecommendations.get(recommendationId);
     if (!recommendation) {
-      throw new Error(`Recommendation ${recommendationId} not found`);
+      throw new Error(`Recommendation ${recommendationId} not found`);}
     }
-
     try {
       // Apply the quota changes
       await this.applyQuotaChanges(recommendation);
-      
       recommendation.status = RecommendationStatus.APPLIED;
       recommendation.appliedAt = new Date();
-
       // Start monitoring the impact
       this.startImpactMonitoring(recommendation);
-
-      this.emit('recommendationApplied', { 
+      this.emit('recommendationApplied', { )
         recommendationId, 
-        userId: recommendation.userId 
+        userId: recommendation.userId ,
       });
-
       return true;
     } catch (error) {
       recommendation.status = RecommendationStatus.REJECTED;
@@ -782,16 +761,14 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       return false;
     }
   }
-
   public async performFairnessAnalysis(): Promise<FairnessAnalysis> {
     const allUsers = this.getAllUsers();
     const fairnessMetrics = await this.calculateFairnessMetrics(allUsers);
     const inequalityIssues = this.identifyInequalityIssues(fairnessMetrics);
     const redistributionOpportunities = await this.findRedistributionOpportunities(allUsers);
     const recommendations = this.generateFairnessRecommendations(inequalityIssues, redistributionOpportunities);
-
     const analysis: FairnessAnalysis = {
-      analysisId: `fairness_${Date.now()}`,
+      analysisId: `fairness_${Date.now()}`,}
       timestamp: new Date(),
       overallFairnessScore: this.calculateOverallFairnessScore(fairnessMetrics),
       fairnessMetrics,
@@ -799,78 +776,59 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       redistributionOpportunities,
       recommendations
     };
-
     this.fairnessAnalysisHistory.push(analysis);
-    
     // Keep only recent analysis
     if (this.fairnessAnalysisHistory.length > 100) {
       this.fairnessAnalysisHistory = this.fairnessAnalysisHistory.slice(-100);
     }
-
     this.emit('fairnessAnalysisCompleted', analysis);
     return analysis;
   }
-
   public async detectAbuse(userId: string): Promise<AbuseDetectionResult[]> {
     const userUsageData = await this.collectUsageData(userId);
     const detectionResults: AbuseDetectionResult[] = [];
-
     for (const abusePattern of this.config.abuseDetectionConfig.abusePatterns) {
       if (!abusePattern.enabled) continue;
-
       const detection = await this.detectAbusePattern(userUsageData, abusePattern);
       if (detection) {
         detectionResults.push(detection);
         this.abuseDetectionResults.set(detection.detectionId, detection);
-        
         // Apply response actions if configured
         await this.applyAbuseResponseActions(detection);
       }
     }
-
-    this.emit('abuseDetected', { 
+    this.emit('abuseDetected', { )
       userId, 
-      detectionsCount: detectionResults.length 
+      detectionsCount: detectionResults.length ,
     });
-
     return detectionResults;
   }
-
   public getUsagePattern(patternId: string): UsagePattern | null {
     return this.usagePatterns.get(patternId) || null;
   }
-
   public getRecommendation(recommendationId: string): QuotaRecommendation | null {
     return this.quotaRecommendations.get(recommendationId) || null;
   }
-
   public getRecommendationsForUser(userId: string): QuotaRecommendation[] {
     return Array.from(this.quotaRecommendations.values())
       .filter(rec => rec.userId === userId);
   }
-
   public getFairnessHistory(days?: number): FairnessAnalysis[] {
     const cutoff = days ? Date.now() - (days * 24 * 60 * 60 * 1000) : 0;
-    
     return this.fairnessAnalysisHistory
       .filter(analysis => analysis.timestamp.getTime() > cutoff)
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
   }
-
   public getAbuseDetections(userId?: string): AbuseDetectionResult[] {
     const detections = Array.from(this.abuseDetectionResults.values());
-    
     if (userId) {
       return detections.filter(detection => detection.userId === userId);
     }
-    
     return detections.sort((a, b) => b.detectedAt.getTime() - a.detectedAt.getTime());
   }
-
   public async optimizeQuotaDistribution(): Promise<OptimizationResult> {
     const fairnessAnalysis = await this.performFairnessAnalysis();
     const optimizationActions: OptimizationAction[] = [];
-
     // Apply redistribution opportunities
     for (const opportunity of fairnessAnalysis.redistributionOpportunities) {
       const action = await this.executeRedistribution(opportunity);
@@ -878,7 +836,6 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         optimizationActions.push(action);
       }
     }
-
     // Apply fairness recommendations
     for (const recommendation of fairnessAnalysis.recommendations) {
       const action = await this.executeFairnessRecommendation(recommendation);
@@ -886,42 +843,35 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         optimizationActions.push(action);
       }
     }
-
     const result: OptimizationResult = {
-      optimizationId: `opt_${Date.now()}`,
+      optimizationId: `opt_${Date.now()}`,}
       timestamp: new Date(),
       actionsApplied: optimizationActions.length,
       fairnessImprovement: this.calculateFairnessImprovement(fairnessAnalysis),
       affectedUsers: this.getAffectedUsers(optimizationActions),
-      estimatedBenefit: this.calculateOptimizationBenefit(optimizationActions)
+      estimatedBenefit: this.calculateOptimizationBenefit(optimizationActions),
     };
-
     this.emit('quotaOptimizationCompleted', result);
     return result;
   }
-
   // ==========================================
   // PRIVATE METHODS
   // ==========================================
-
   private initializeRecommendationEngine(): void {
     // Start usage data collection
     setInterval(() => {
       this.collectAndStoreUsageData();
     }, 60000); // Collect every minute
-
     // Cleanup old data
     setInterval(() => {
       this.cleanupOldData();
     }, 3600000); // Cleanup every hour
-
     // Periodic fairness analysis
     if (this.config.fairnessConfig.enableFairnessAnalysis) {
       setInterval(() => {
         this.performFairnessAnalysis();
       }, 4 * 60 * 60 * 1000); // Every 4 hours
     }
-
     // Abuse detection monitoring
     if (this.config.abuseDetectionConfig.enableAbuseDetection) {
       setInterval(() => {
@@ -929,7 +879,6 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       }, 15 * 60 * 1000); // Every 15 minutes
     }
   }
-
   private startAnalysisLoop(): void {
     setInterval(async () => {
       if (!this.isAnalyzing) {
@@ -937,18 +886,14 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       }
     }, this.config.recommendationInterval * 60 * 1000);
   }
-
   private async runPeriodicAnalysis(): Promise<void> {
     this.isAnalyzing = true;
-    
     try {
       // Analyze patterns for all active users
       const activeUsers = this.getActiveUsers();
-      
       for (const userId of activeUsers) {
         await this.analyzeUsagePatterns(userId);
         const recommendations = await this.generateQuotaRecommendations(userId);
-        
         // Auto-apply low-risk recommendations
         for (const recommendation of recommendations) {
           if (this.isLowRiskRecommendation(recommendation)) {
@@ -956,48 +901,38 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
           }
         }
       }
-      
       // Run abuse detection
       for (const userId of activeUsers) {
         await this.detectAbuse(userId);
       }
-      
     } catch (error) {
       this.emit('analysisError', { error });
     } finally {
       this.isAnalyzing = false;
     }
   }
-
   private async collectUsageData(userId: string, apiEndpoint?: string): Promise<UsageDataPoint[]> {
     const windowHours = this.config.analysisWindow;
     const cutoff = Date.now() - (windowHours * 60 * 60 * 1000);
-    
     // Get user's usage history
     const userHistory = this.usageHistory.get(userId) || [];
-    
     return userHistory
       .filter(dataPoint => dataPoint.timestamp.getTime() > cutoff)
       .filter(dataPoint => !apiEndpoint || dataPoint.apiEndpoint === apiEndpoint);
   }
-
-  private async detectPattern(
+  private async detectPattern()
     usageData: UsageDataPoint[],
-    patternConfig: UsagePatternConfig
+    patternConfig: UsagePatternConfig,
   ): Promise<UsagePattern | null> {
     const metrics = this.calculatePatternMetrics(usageData);
     const characteristics = this.analyzePatternCharacteristics(usageData, metrics);
-    
     // Check if pattern matches detection rules
     const confidence = this.evaluatePatternDetectionRules(usageData, patternConfig.detectionRules);
-    
     if (confidence < 0.7) return null; // Not confident enough
-
     const forecast = await this.generateUsageForecast(usageData, characteristics);
     const recommendations = this.generatePatternRecommendations(patternConfig, metrics, characteristics);
-
     return {
-      patternId: `${patternConfig.patternId}_${Date.now()}`,
+      patternId: `${patternConfig.patternId}_${Date.now()}`,}
       userId: usageData[0]?.userId || '',
       apiEndpoint: usageData[0]?.apiEndpoint || '',
       patternType: patternConfig.patternType,
@@ -1009,7 +944,6 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       recommendations
     };
   }
-
   private calculatePatternMetrics(usageData: UsageDataPoint[]): PatternMetrics {
     if (usageData.length === 0) {
       return {
@@ -1019,29 +953,25 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         errorRate: 0,
         quotaUtilization: 0,
         responseTimeDistribution: [],
-        timingPattern: {
+        timingPattern: {,
           peakHours: [],
           peakDays: [],
           seasonality: { hasSeasonality: false, period: 0, amplitude: 0, phase: 0 },
           burstFrequency: 0,
-          steadyStateRatio: 0
+          steadyStateRatio: 0,
         }
       };
     }
-
     const requestRates = usageData.map(d => d.requestCount);
     const averageRequestRate = requestRates.reduce((sum, rate) => sum + rate, 0) / requestRates.length;
     const peakRequestRate = Math.max(...requestRates);
     const requestVariance = this.calculateVariance(requestRates);
-    
     const totalRequests = usageData.reduce((sum, d) => sum + d.requestCount, 0);
     const errorRequests = usageData.reduce((sum, d) => sum + d.errorCount, 0);
     const errorRate = totalRequests > 0 ? (errorRequests / totalRequests) * 100 : 0;
-
     const quotaUtilization = usageData.reduce((sum, d) => sum + d.quotaUtilization, 0) / usageData.length;
     const responseTimeDistribution = usageData.map(d => d.averageResponseTime);
     const timingPattern = this.analyzeTimingPattern(usageData);
-
     return {
       averageRequestRate,
       peakRequestRate,
@@ -1052,7 +982,6 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       timingPattern
     };
   }
-
   private analyzePatternCharacteristics(usageData: UsageDataPoint[], metrics: PatternMetrics): PatternCharacteristics {
     const predictability = this.calculatePredictability(usageData);
     const volatility = Math.sqrt(metrics.requestVariance) / metrics.averageRequestRate;
@@ -1060,7 +989,6 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
     const burstiness = this.calculateBurstiness(usageData);
     const efficiency = this.calculateEfficiency(usageData);
     const consistency = this.calculateConsistency(usageData);
-
     return {
       predictability,
       volatility,
@@ -1070,26 +998,20 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       consistency
     };
   }
-
   private evaluatePatternDetectionRules(usageData: UsageDataPoint[], rules: PatternDetectionRule[]): number {
     let totalWeight = 0;
     let matchedWeight = 0;
-
     for (const rule of rules.filter(r => r.enabled)) {
       totalWeight += rule.weight;
-      
       if (this.evaluateDetectionRule(usageData, rule)) {
         matchedWeight += rule.weight;
       }
     }
-
     return totalWeight > 0 ? matchedWeight / totalWeight : 0;
   }
-
   private evaluateDetectionRule(usageData: UsageDataPoint[], rule: PatternDetectionRule): boolean {
     // Evaluate rule condition against usage data
     // This would contain complex logic to evaluate patterns
-    
     switch (rule.condition) {
       case 'burst_detected':
         return this.detectBurstPattern(usageData, rule.threshold, rule.timeWindow);
@@ -1103,19 +1025,15 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         return false;
     }
   }
-
   private async generateRecommendationFromPattern(pattern: UsagePattern): Promise<QuotaRecommendation | null> {
     const currentQuota = await this.getCurrentQuota(pattern.userId, pattern.apiEndpoint);
     const recommendedQuota = this.calculateRecommendedQuota(pattern, currentQuota);
-    
     if (this.quotasAreEquivalent(currentQuota, recommendedQuota)) {
       return null; // No change needed
     }
-
     const expectedImpact = await this.analyzeQuotaImpact(pattern, currentQuota, recommendedQuota);
-    
     return {
-      recommendationId: `rec_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+      recommendationId: `rec_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,}
       userId: pattern.userId,
       apiEndpoint: pattern.apiEndpoint,
       currentQuota,
@@ -1125,71 +1043,59 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       expectedImpact,
       validUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       priority: this.calculateRecommendationPriority(pattern, expectedImpact),
-      status: RecommendationStatus.PROPOSED
+      status: RecommendationStatus.PROPOSED,
     };
   }
-
   private calculateRecommendedQuota(pattern: UsagePattern, currentQuota: QuotaAllocation): QuotaAllocation {
     const patternConfig = this.config.usagePatterns.find(p => p.patternType === pattern.patternType);
     if (!patternConfig) return currentQuota;
-
     const impact = patternConfig.quotaImpact;
     const multiplier = impact.quotaMultiplier;
-
     // Apply pattern-specific adjustments
     const newQuota = { ...currentQuota };
-
     switch (impact.adjustmentType) {
       case QuotaAdjustmentType.INCREASE:
-        newQuota.requestsPerSecond = Math.min(
+        newQuota.requestsPerSecond = Math.min()
           currentQuota.requestsPerSecond * multiplier,
           currentQuota.requestsPerSecond + impact.maxAdjustment
         );
         newQuota.requestsPerMinute = newQuota.requestsPerSecond * 60;
         newQuota.requestsPerHour = newQuota.requestsPerSecond * 3600;
         break;
-
       case QuotaAdjustmentType.DECREASE:
-        newQuota.requestsPerSecond = Math.max(
+        newQuota.requestsPerSecond = Math.max()
           currentQuota.requestsPerSecond / multiplier,
           currentQuota.requestsPerSecond - impact.maxAdjustment
         );
         newQuota.requestsPerMinute = newQuota.requestsPerSecond * 60;
         newQuota.requestsPerHour = newQuota.requestsPerSecond * 3600;
         break;
-
       case QuotaAdjustmentType.TEMPORARY_BOOST:
-        newQuota.burstAllowance = Math.max(
+        newQuota.burstAllowance = Math.max()
           currentQuota.burstAllowance,
           pattern.metrics.peakRequestRate * 1.2
         );
         break;
     }
-
     // Apply pattern-specific optimizations
     if (pattern.characteristics.burstiness > 0.7) {
       newQuota.burstAllowance = Math.max(newQuota.burstAllowance, pattern.metrics.peakRequestRate * 1.5);
     }
-
     if (pattern.characteristics.consistency > 0.8) {
       // For consistent patterns, we can reduce burst allowance
       newQuota.burstAllowance = Math.min(newQuota.burstAllowance, newQuota.requestsPerSecond * 2);
     }
-
     return newQuota;
   }
-
   private async applyFairnessAdjustments(recommendations: QuotaRecommendation[]): Promise<QuotaRecommendation[]> {
     const fairnessAnalysis = await this.performFairnessAnalysis();
-    
     // Adjust recommendations based on fairness concerns
     for (const recommendation of recommendations) {
       // Check if this recommendation would worsen fairness
       const fairnessImpact = this.calculateFairnessImpact(recommendation, fairnessAnalysis);
-      
       if (fairnessImpact < -0.1) { // Negative impact on fairness
         // Reduce the recommended increase or increase the recommended decrease
-        recommendation.recommendedQuota = this.adjustForFairness(
+        recommendation.recommendedQuota = this.adjustForFairness()
           recommendation.recommendedQuota,
           recommendation.currentQuota,
           fairnessImpact
@@ -1197,64 +1103,52 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         recommendation.reason += ` (Adjusted for fairness considerations)`;
       }
     }
-
     return recommendations;
   }
-
   private async applyQuotaChanges(recommendation: QuotaRecommendation): Promise<void> {
     // In real implementation, this would update the actual quota system
-    this.emit('quotaChanged', {
+    this.emit('quotaChanged', {)
       userId: recommendation.userId,
       apiEndpoint: recommendation.apiEndpoint,
       oldQuota: recommendation.currentQuota,
-      newQuota: recommendation.recommendedQuota
+      newQuota: recommendation.recommendedQuota,
     });
   }
-
   private startImpactMonitoring(recommendation: QuotaRecommendation): void {
     // Monitor the impact of the applied recommendation
     const monitoringInterval = setInterval(() => {
       this.monitorRecommendationImpact(recommendation.recommendationId);
     }, 5 * 60 * 1000); // Monitor every 5 minutes
-
     // Stop monitoring after 24 hours
     setTimeout(() => {
       clearInterval(monitoringInterval);
       recommendation.status = RecommendationStatus.MONITORING;
     }, 24 * 60 * 60 * 1000);
   }
-
   private async monitorRecommendationImpact(recommendationId: string): Promise<void> {
     const recommendation = this.quotaRecommendations.get(recommendationId);
     if (!recommendation || recommendation.status !== RecommendationStatus.APPLIED) return;
-
     // Collect current metrics and compare with expected impact
     const currentUsage = await this.collectUsageData(recommendation.userId, recommendation.apiEndpoint);
     const actualImpact = this.calculateActualImpact(recommendation, currentUsage);
-    
     // Check if impact is as expected
     const impactDeviation = this.compareImpacts(recommendation.expectedImpact, actualImpact);
-    
     if (impactDeviation > 0.5) { // Significant deviation
-      this.emit('impactDeviation', {
+      this.emit('impactDeviation', {)
         recommendationId,
         expectedImpact: recommendation.expectedImpact,
         actualImpact,
-        deviation: impactDeviation
+        deviation: impactDeviation,
       });
     }
   }
-
   private async calculateFairnessMetrics(users: string[]): Promise<FairnessMetricResult[]> {
     const results: FairnessMetricResult[] = [];
-    
     for (const metricConfig of this.config.fairnessConfig.fairnessMetrics) {
       if (!metricConfig.enabled) continue;
-
       const metricValue = await this.calculateFairnessMetric(users, metricConfig);
       const deviation = Math.abs(metricValue - metricConfig.targetValue) / metricConfig.targetValue;
-      
-      results.push({
+      results.push({)
         metricId: metricConfig.metricId,
         metricName: metricConfig.metricName,
         currentValue: metricValue,
@@ -1263,41 +1157,33 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         severity: this.classifyMetricSeverity(deviation, metricConfig.tolerance)
       });
     }
-
     return results;
   }
-
   private async calculateFairnessMetric(users: string[], metricConfig: FairnessMetric): Promise<number> {
     switch (metricConfig.metricType) {
       case FairnessMetricType.GINI_COEFFICIENT:
         return this.calculateGiniCoefficient(users);
-      
       case FairnessMetricType.QUOTA_UTILIZATION_VARIANCE:
         return this.calculateQuotaUtilizationVariance(users);
-      
       case FairnessMetricType.REQUEST_DISTRIBUTION:
         return this.calculateRequestDistributionMetric(users);
-      
       default:
         return 0;
     }
   }
-
-  private async detectAbusePattern(
+  private async detectAbusePattern()
     usageData: UsageDataPoint[],
-    abusePattern: AbusePattern
+    abusePattern: AbusePattern,
   ): Promise<AbuseDetectionResult | null> {
     const evidence: AbuseEvidence[] = [];
     let totalConfidence = 0;
     let totalWeight = 0;
-
     for (const rule of abusePattern.detectionRules) {
       const ruleResult = this.evaluateAbuseRule(usageData, rule);
       totalWeight += rule.weight;
-      
       if (ruleResult.detected) {
         totalConfidence += rule.weight;
-        evidence.push({
+        evidence.push({)
           evidenceType: this.mapRuleToEvidenceType(rule.ruleType),
           description: ruleResult.description,
           data: ruleResult.data,
@@ -1306,16 +1192,12 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         });
       }
     }
-
     const confidence = totalWeight > 0 ? totalConfidence / totalWeight : 0;
-    
     if (confidence < abusePattern.confidence) return null;
-
     const impact = this.calculateAbuseImpact(usageData, evidence);
     const responseActions = await this.determineResponseActions(abusePattern, confidence, impact);
-
     return {
-      detectionId: `abuse_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+      detectionId: `abuse_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,}
       userId: usageData[0]?.userId || '',
       detectedAt: new Date(),
       abuseType: this.mapPatternToAbuseType(abusePattern),
@@ -1324,37 +1206,31 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       evidence,
       impact,
       responseActions,
-      status: AbuseStatus.DETECTED
+      status: AbuseStatus.DETECTED,
     };
   }
-
   private evaluateAbuseRule(usageData: UsageDataPoint[], rule: AbuseDetectionRule): AbuseRuleResult {
     switch (rule.ruleType) {
       case AbuseRuleType.RATE_SPIKE:
         return this.evaluateRateSpikeRule(usageData, rule);
-      
       case AbuseRuleType.QUOTA_EXHAUSTION:
         return this.evaluateQuotaExhaustionRule(usageData, rule);
-      
       case AbuseRuleType.ERROR_FLOOD:
         return this.evaluateErrorFloodRule(usageData, rule);
-      
       default:
         return { detected: false, strength: 0, description: '', data: {} };
     }
   }
-
   private async applyAbuseResponseActions(detection: AbuseDetectionResult): Promise<void> {
     for (const action of detection.responseActions) {
       if (action.status !== ActionStatus.PENDING) continue;
-
       try {
         await this.executeAbuseResponseAction(detection.userId, action);
         action.status = ActionStatus.APPLIED;
         action.appliedAt = new Date();
       } catch (error) {
         action.status = ActionStatus.FAILED;
-        this.emit('abuseActionFailed', { 
+        this.emit('abuseActionFailed', { )
           detectionId: detection.detectionId, 
           actionId: action.actionId, 
           error 
@@ -1362,7 +1238,6 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       }
     }
   }
-
   // Helper methods
   private calculateVariance(values: number[]): number {
     if (values.length === 0) return 0;
@@ -1370,14 +1245,12 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
     const squaredDiffs = values.map(val => Math.pow(val - mean, 2));
     return squaredDiffs.reduce((sum, diff) => sum + diff, 0) / values.length;
   }
-
   private analyzeTimingPattern(usageData: UsageDataPoint[]): TimingPattern {
     const peakHours = this.findPeakHours(usageData);
     const peakDays = this.findPeakDays(usageData);
     const seasonality = this.detectSeasonality(usageData);
     const burstFrequency = this.calculateBurstFrequency(usageData);
     const steadyStateRatio = this.calculateSteadyStateRatio(usageData);
-
     return {
       peakHours,
       peakDays,
@@ -1386,50 +1259,39 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       steadyStateRatio
     };
   }
-
   private findPeakHours(usageData: UsageDataPoint[]): number[] {
     const hourlyUsage = new Array(24).fill(0);
-    
-    usageData.forEach(dataPoint => {
+    usageData.forEach(dataPoint => {)
       const hour = dataPoint.timestamp.getHours();
       hourlyUsage[hour] += dataPoint.requestCount;
     });
-
     const avgUsage = hourlyUsage.reduce((sum, usage) => sum + usage, 0) / 24;
     const peakThreshold = avgUsage * 1.5;
-
     return hourlyUsage
       .map((usage, hour) => ({ hour, usage }))
       .filter(({ usage }) => usage > peakThreshold)
       .map(({ hour }) => hour);
   }
-
   private findPeakDays(usageData: UsageDataPoint[]): number[] {
     const dailyUsage = new Array(7).fill(0);
-    
-    usageData.forEach(dataPoint => {
+    usageData.forEach(dataPoint => {)
       const day = dataPoint.timestamp.getDay();
       dailyUsage[day] += dataPoint.requestCount;
     });
-
     const avgUsage = dailyUsage.reduce((sum, usage) => sum + usage, 0) / 7;
     const peakThreshold = avgUsage * 1.2;
-
     return dailyUsage
       .map((usage, day) => ({ day, usage }))
       .filter(({ usage }) => usage > peakThreshold)
       .map(({ day }) => day);
   }
-
   private detectSeasonality(usageData: UsageDataPoint[]): SeasonalityInfo {
     // Simplified seasonality detection
     if (usageData.length < 48) { // Need at least 48 hours of data
       return { hasSeasonality: false, period: 0, amplitude: 0, phase: 0 };
     }
-
     // Check for daily pattern (24-hour cycle)
     const dailyCorrelation = this.calculateSeasonalCorrelation(usageData, 24);
-    
     if (dailyCorrelation > 0.6) {
       return {
         hasSeasonality: true,
@@ -1438,66 +1300,50 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         phase: this.calculateSeasonalPhase(usageData, 24)
       };
     }
-
     return { hasSeasonality: false, period: 0, amplitude: 0, phase: 0 };
   }
-
   private calculateSeasonalCorrelation(usageData: UsageDataPoint[], period: number): number {
     // Simplified correlation calculation
     const values = usageData.map(d => d.requestCount);
     if (values.length < period * 2) return 0;
-
     let correlation = 0;
     const cycles = Math.floor(values.length / period);
-    
     for (let i = 0; i < cycles - 1; i++) {
       const cycle1 = values.slice(i * period, (i + 1) * period);
       const cycle2 = values.slice((i + 1) * period, (i + 2) * period);
       correlation += this.calculatePearsonCorrelation(cycle1, cycle2);
     }
-
     return correlation / Math.max(cycles - 1, 1);
   }
-
   private calculatePearsonCorrelation(x: number[], y: number[]): number {
     if (x.length !== y.length || x.length === 0) return 0;
-
     const n = x.length;
     const sumX = x.reduce((sum, val) => sum + val, 0);
     const sumY = y.reduce((sum, val) => sum + val, 0);
     const sumXY = x.reduce((sum, val, i) => sum + val * y[i], 0);
     const sumX2 = x.reduce((sum, val) => sum + val * val, 0);
     const sumY2 = y.reduce((sum, val) => sum + val * val, 0);
-
     const numerator = n * sumXY - sumX * sumY;
     const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
-
     return denominator === 0 ? 0 : numerator / denominator;
   }
-
   private calculateSeasonalPhase(usageData: UsageDataPoint[], period: number): number {
     // Find the hour/time of peak activity
     const hourlyTotals = new Array(period).fill(0);
-    
-    usageData.forEach(dataPoint => {
+    usageData.forEach(dataPoint => {)
       const position = dataPoint.timestamp.getHours() % period;
       hourlyTotals[position] += dataPoint.requestCount;
     });
-
     const maxIndex = hourlyTotals.indexOf(Math.max(...hourlyTotals));
     return (maxIndex / period) * 2 * Math.PI; // Convert to radians
   }
-
   private calculateBurstFrequency(usageData: UsageDataPoint[]): number {
     if (usageData.length < 10) return 0;
-
     const requestRates = usageData.map(d => d.requestCount);
     const avgRate = requestRates.reduce((sum, rate) => sum + rate, 0) / requestRates.length;
     const burstThreshold = avgRate * 2;
-
     let burstCount = 0;
     let inBurst = false;
-
     for (const rate of requestRates) {
       if (rate > burstThreshold && !inBurst) {
         burstCount++;
@@ -1506,319 +1352,258 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         inBurst = false;
       }
     }
-
     return burstCount / (usageData.length / 60); // Bursts per hour
   }
-
   private calculateSteadyStateRatio(usageData: UsageDataPoint[]): number {
     if (usageData.length === 0) return 0;
-
     const requestRates = usageData.map(d => d.requestCount);
     const avgRate = requestRates.reduce((sum, rate) => sum + rate, 0) / requestRates.length;
-    const steadyThreshold = avgRate * 0.2; // Within 20% of average
-
-    const steadyCount = requestRates.filter(rate => 
+    const steadyThreshold = avgRate * 0.2; // Within 20% of average;
+    const steadyCount = requestRates.filter(rate => ;)
       Math.abs(rate - avgRate) <= steadyThreshold
     ).length;
-
     return steadyCount / requestRates.length;
   }
-
   private calculatePredictability(usageData: UsageDataPoint[]): number {
     // Simple predictability based on variance
     const requestRates = usageData.map(d => d.requestCount);
     const variance = this.calculateVariance(requestRates);
     const avgRate = requestRates.reduce((sum, rate) => sum + rate, 0) / requestRates.length;
-    
     if (avgRate === 0) return 0;
-    
     const coefficientOfVariation = Math.sqrt(variance) / avgRate;
     return Math.max(0, 1 - coefficientOfVariation); // Higher predictability = lower variation
   }
-
   private calculateGrowthRate(usageData: UsageDataPoint[]): number {
     if (usageData.length < 2) return 0;
-
     const firstHalf = usageData.slice(0, Math.floor(usageData.length / 2));
     const secondHalf = usageData.slice(Math.floor(usageData.length / 2));
-
     const firstAvg = firstHalf.reduce((sum, d) => sum + d.requestCount, 0) / firstHalf.length;
     const secondAvg = secondHalf.reduce((sum, d) => sum + d.requestCount, 0) / secondHalf.length;
-
     if (firstAvg === 0) return secondAvg > 0 ? 100 : 0;
-    
     return ((secondAvg - firstAvg) / firstAvg) * 100;
   }
-
   private calculateBurstiness(usageData: UsageDataPoint[]): number {
     const requestRates = usageData.map(d => d.requestCount);
     if (requestRates.length < 2) return 0;
-
     const avgRate = requestRates.reduce((sum, rate) => sum + rate, 0) / requestRates.length;
     const maxRate = Math.max(...requestRates);
-
     return avgRate > 0 ? (maxRate - avgRate) / avgRate : 0;
   }
-
   private calculateEfficiency(usageData: UsageDataPoint[]): number {
     if (usageData.length === 0) return 0;
-
     const totalRequests = usageData.reduce((sum, d) => sum + d.requestCount, 0);
     const totalErrors = usageData.reduce((sum, d) => sum + d.errorCount, 0);
     const avgQuotaUtilization = usageData.reduce((sum, d) => sum + d.quotaUtilization, 0) / usageData.length;
-
     const errorRate = totalRequests > 0 ? totalErrors / totalRequests : 0;
     const successRate = 1 - errorRate;
-
     // Efficiency combines success rate and quota utilization
     return (successRate + avgQuotaUtilization / 100) / 2;
   }
-
   private calculateConsistency(usageData: UsageDataPoint[]): number {
     const requestRates = usageData.map(d => d.requestCount);
     if (requestRates.length < 2) return 1;
-
     const variance = this.calculateVariance(requestRates);
     const avgRate = requestRates.reduce((sum, rate) => sum + rate, 0) / requestRates.length;
-
     if (avgRate === 0) return 1;
-
     const coefficientOfVariation = Math.sqrt(variance) / avgRate;
     return Math.max(0, 1 - coefficientOfVariation);
   }
-
   // Pattern detection methods
   private detectBurstPattern(usageData: UsageDataPoint[], threshold: number, timeWindow: number): boolean {
     const windowMs = timeWindow * 60 * 1000;
     const now = Date.now();
-    
     const recentData = usageData.filter(d => now - d.timestamp.getTime() < windowMs);
     if (recentData.length === 0) return false;
-
     const avgRate = recentData.reduce((sum, d) => sum + d.requestCount, 0) / recentData.length;
     const maxRate = Math.max(...recentData.map(d => d.requestCount));
-
     return maxRate > avgRate * threshold;
   }
-
   private detectSteadyState(usageData: UsageDataPoint[], threshold: number): boolean {
     const requestRates = usageData.map(d => d.requestCount);
     const avgRate = requestRates.reduce((sum, rate) => sum + rate, 0) / requestRates.length;
-    
-    const steadyCount = requestRates.filter(rate => 
+    const steadyCount = requestRates.filter(rate => ;)
       Math.abs(rate - avgRate) / avgRate < (threshold / 100)
     ).length;
-
     return (steadyCount / requestRates.length) > 0.8; // 80% of data points are steady
   }
-
   private detectGrowthPattern(usageData: UsageDataPoint[], threshold: number): boolean {
     const growthRate = this.calculateGrowthRate(usageData);
     return growthRate > threshold;
   }
-
   private detectCyclicalPattern(usageData: UsageDataPoint[], timeWindow: number): boolean {
     const seasonality = this.detectSeasonality(usageData);
     return seasonality.hasSeasonality && seasonality.amplitude > 0.6;
   }
-
-  private async generateUsageForecast(
+  private async generateUsageForecast()
     usageData: UsageDataPoint[],
-    characteristics: PatternCharacteristics
+    characteristics: PatternCharacteristics,
   ): Promise<UsageForecast> {
-    const forecastHorizon = 24; // 24 hours
+    const forecastHorizon = 24; // 24 hours;
     const forecastPoints: ForecastPoint[] = [];
-    
     // Simple linear forecast based on recent trend
     const recentTrend = this.calculateRecentTrend(usageData);
-    const baseRate = usageData.length > 0 ? 
+    const baseRate = usageData.length > 0 ? ;
       usageData[usageData.length - 1].requestCount : 0;
-
     for (let i = 1; i <= forecastHorizon; i++) {
       const timestamp = new Date(Date.now() + i * 60 * 60 * 1000);
       const trendAdjustment = recentTrend * i;
       const seasonalAdjustment = this.getSeasonalAdjustment(timestamp, characteristics);
-      
       const requestRate = Math.max(0, baseRate + trendAdjustment + seasonalAdjustment);
-      const quotaUtilization = Math.min(100, (requestRate / baseRate) * 80); // Estimate
-      
-      forecastPoints.push({
+      const quotaUtilization = Math.min(100, (requestRate / baseRate) * 80); // Estimate;
+      forecastPoints.push({)
         timestamp,
         requestRate,
         quotaUtilization,
         confidence: Math.max(0.3, characteristics.predictability - (i * 0.02))
       });
     }
-
     return {
       forecastHorizon,
       predictedUsage: forecastPoints,
       confidence: characteristics.predictability,
       uncertaintyBounds: this.calculateUncertaintyBounds(forecastPoints, characteristics),
-      scenarioForecasts: []
+      scenarioForecasts: [],
     };
   }
-
   private calculateRecentTrend(usageData: UsageDataPoint[]): number {
     if (usageData.length < 5) return 0;
-
-    const recentData = usageData.slice(-5); // Last 5 data points
+    const recentData = usageData.slice(-5); // Last 5 data points;
     const firstRate = recentData[0].requestCount;
     const lastRate = recentData[recentData.length - 1].requestCount;
-    
     return (lastRate - firstRate) / recentData.length;
   }
-
   private getSeasonalAdjustment(timestamp: Date, characteristics: PatternCharacteristics): number {
     // Simple seasonal adjustment based on hour of day
     const hour = timestamp.getHours();
-    const peakHours = [9, 10, 11, 14, 15, 16]; // Business hours
-    
+    const peakHours = [9, 10, 11, 14, 15, 16]; // Business hours;
     if (peakHours.includes(hour)) {
       return characteristics.burstiness * 10; // Higher usage during peak hours
     } else if (hour >= 22 || hour <= 6) {
       return -characteristics.consistency * 5; // Lower usage during night
     }
-    
     return 0;
   }
-
-  private calculateUncertaintyBounds(
+  private calculateUncertaintyBounds()
     forecastPoints: ForecastPoint[],
-    characteristics: PatternCharacteristics
+    characteristics: PatternCharacteristics,
   ): UncertaintyBounds {
     const uncertainty = 1 - characteristics.predictability;
     const upperBound = forecastPoints.map(point => point.requestRate * (1 + uncertainty));
     const lowerBound = forecastPoints.map(point => point.requestRate * (1 - uncertainty));
-    
     return {
       upperBound,
       lowerBound,
-      confidenceInterval: 95
+      confidenceInterval: 95,
     };
   }
-
-  private generatePatternRecommendations(
+  private generatePatternRecommendations()
     patternConfig: UsagePatternConfig,
     metrics: PatternMetrics,
-    characteristics: PatternCharacteristics
+    characteristics: PatternCharacteristics,
   ): PatternRecommendation[] {
     const recommendations: PatternRecommendation[] = [];
-
     // Generate recommendations based on pattern type
     switch (patternConfig.patternType) {
       case UsagePatternType.BURST_PATTERN:
         if (characteristics.burstiness > 0.7) {
-          recommendations.push({
+          recommendations.push({)
             recommendationId: 'burst_allowance',
             recommendationType: RecommendationType.BURST_ALLOWANCE,
             priority: 1,
             description: 'Increase burst allowance for high burstiness pattern',
-            rationale: `Pattern shows high burstiness (${characteristics.burstiness.toFixed(2)})`,
+            rationale: `Pattern shows high burstiness (${characteristics.burstiness.toFixed(2)})`,}
             expectedBenefit: 'Improved user experience during traffic spikes',
             implementationCost: ImplementationCost.LOW,
             riskLevel: RiskLevel.LOW,
-            actionItems: [
+            actionItems: [,
               {
                 itemId: 'increase_burst',
                 description: 'Increase burst allowance by 50%',
                 actionType: 'quota_adjustment',
                 parameters: { burstMultiplier: 1.5 },
                 estimatedTime: 5,
-                dependencies: []
+                dependencies: [],
               }
             ]
           });
         }
         break;
-
       case UsagePatternType.STEADY_STATE:
         if (characteristics.consistency > 0.8) {
-          recommendations.push({
+          recommendations.push({)
             recommendationId: 'optimize_quota',
             recommendationType: RecommendationType.QUOTA_DECREASE,
             priority: 2,
             description: 'Optimize quota for consistent usage pattern',
-            rationale: `Pattern shows high consistency (${characteristics.consistency.toFixed(2)})`,
+            rationale: `Pattern shows high consistency (${characteristics.consistency.toFixed(2)})`,}
             expectedBenefit: 'Cost savings through optimized resource allocation',
             implementationCost: ImplementationCost.LOW,
             riskLevel: RiskLevel.LOW,
-            actionItems: [
+            actionItems: [,
               {
                 itemId: 'optimize_quota',
                 description: 'Reduce base quota by 10% and increase burst allowance',
                 actionType: 'quota_rebalancing',
                 parameters: { baseReduction: 0.1, burstIncrease: 0.2 },
                 estimatedTime: 10,
-                dependencies: []
+                dependencies: [],
               }
             ]
           });
         }
         break;
-
       case UsagePatternType.GROWTH_PATTERN:
         if (characteristics.growthRate > 20) {
-          recommendations.push({
+          recommendations.push({)
             recommendationId: 'plan_scaling',
             recommendationType: RecommendationType.QUOTA_INCREASE,
             priority: 1,
             description: 'Plan for continued growth in usage',
-            rationale: `Pattern shows ${characteristics.growthRate.toFixed(1)}% growth rate`,
+            rationale: `Pattern shows ${characteristics.growthRate.toFixed(1)}% growth rate`,}
             expectedBenefit: 'Proactive scaling to prevent quota exhaustion',
             implementationCost: ImplementationCost.MEDIUM,
             riskLevel: RiskLevel.MEDIUM,
-            actionItems: [
+            actionItems: [,
               {
                 itemId: 'gradual_increase',
                 description: 'Implement gradual quota increases over time',
                 actionType: 'scheduled_scaling',
                 parameters: { growthRate: characteristics.growthRate },
                 estimatedTime: 30,
-                dependencies: ['monitoring_setup']
+                dependencies: ['monitoring_setup'],
               }
             ]
           });
         }
         break;
     }
-
     return recommendations;
   }
-
   private getAllUsers(): string[] {
     const users = new Set<string>();
-    
     // Collect users from usage history
     for (const userHistory of this.usageHistory.values()) {
       userHistory.forEach(dataPoint => users.add(dataPoint.userId));
     }
-    
     // Collect users from patterns
     for (const pattern of this.usagePatterns.values()) {
       users.add(pattern.userId);
     }
-
     return Array.from(users);
   }
-
   private getActiveUsers(): string[] {
-    const activeThreshold = Date.now() - (24 * 60 * 60 * 1000); // Last 24 hours
+    const activeThreshold = Date.now() - (24 * 60 * 60 * 1000); // Last 24 hours;
     const activeUsers = new Set<string>();
-
     for (const [userId, userHistory] of this.usageHistory) {
-      const hasRecentActivity = userHistory.some(dataPoint => 
+      const hasRecentActivity = userHistory.some(dataPoint => ;)
         dataPoint.timestamp.getTime() > activeThreshold
       );
-      
       if (hasRecentActivity) {
         activeUsers.add(userId);
       }
     }
-
     return Array.from(activeUsers);
   }
-
   private async getCurrentQuota(userId: string, apiEndpoint: string): Promise<QuotaAllocation> {
     // In real implementation, this would fetch from quota management system
     return {
@@ -1828,75 +1613,66 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       requestsPerDay: 864000,
       concurrentConnections: 50,
       burstAllowance: 20,
-      specialLimits: []
+      specialLimits: [],
     };
   }
-
   private quotasAreEquivalent(quota1: QuotaAllocation, quota2: QuotaAllocation): boolean {
-    const tolerance = 0.05; // 5% tolerance
-    
+    const tolerance = 0.05; // 5% tolerance;
     return Math.abs(quota1.requestsPerSecond - quota2.requestsPerSecond) / quota1.requestsPerSecond < tolerance &&
            Math.abs(quota1.burstAllowance - quota2.burstAllowance) / quota1.burstAllowance < tolerance;
   }
-
-  private generateRecommendationReason(
+  private generateRecommendationReason()
     pattern: UsagePattern,
     current: QuotaAllocation,
-    recommended: QuotaAllocation
+    recommended: QuotaAllocation,
   ): string {
     const reasons: string[] = [];
-    
     if (recommended.requestsPerSecond > current.requestsPerSecond) {
-      reasons.push(
-        `Usage pattern shows need for higher base quota (current: ${current.requestsPerSecond}/s,
+      reasons.push()
+        `Usage pattern shows need for higher base quota (current: ${current.requestsPerSecond}/s,)}
         pattern peak: ${pattern.metrics.peakRequestRate}
       )`);
     }
-    
     if (recommended.burstAllowance > current.burstAllowance) {
-      reasons.push(`High burstiness (${pattern.characteristics.burstiness.toFixed(2)}) requires increased burst allowance`);
+      reasons.push(`High burstiness (${pattern.characteristics.burstiness.toFixed(2)}) requires increased burst allowance`);}
     }
-    
     if (pattern.patternType === UsagePatternType.GROWTH_PATTERN) {
-      reasons.push(`Growth pattern detected (${pattern.characteristics.growthRate.toFixed(1)}% growth rate)`);
+      reasons.push(`Growth pattern detected (${pattern.characteristics.growthRate.toFixed(1)}% growth rate)`);}
     }
-
     return reasons.join('; ') || 'Pattern analysis suggests quota optimization';
   }
-
-  private async analyzeQuotaImpact(
+  private async analyzeQuotaImpact()
     pattern: UsagePattern,
     current: QuotaAllocation,
-    recommended: QuotaAllocation
+    recommended: QuotaAllocation,
   ): Promise<QuotaImpactAnalysis> {
     const quotaChangeRatio = recommended.requestsPerSecond / current.requestsPerSecond;
-    
     return {
-      performanceImpact: {
+      performanceImpact: {,
         responseTimeChange: quotaChangeRatio > 1 ? -10 : 5, // Better performance with higher quota
         throughputChange: (quotaChangeRatio - 1) * 100,
         errorRateChange: quotaChangeRatio > 1 ? -20 : 10,
         availabilityChange: quotaChangeRatio > 1 ? 0.1 : -0.05
       },
-      businessImpact: {
+      businessImpact: {,
         revenueImpact: 0, // Would require business context
         userSatisfactionChange: quotaChangeRatio > 1 ? 10 : -5,
         churnRiskChange: quotaChangeRatio > 1 ? -5 : 2,
         competitiveAdvantage: quotaChangeRatio > 1 ? 'Improved service reliability' : 'Cost optimization'
       },
-      systemImpact: {
+      systemImpact: {,
         resourceUtilizationChange: (quotaChangeRatio - 1) * 80,
         capacityRequirementChange: (quotaChangeRatio - 1) * 90,
         scalingImplications: quotaChangeRatio > 1.2 ? ['May require infrastructure scaling'] : [],
         infrastructureCost: (quotaChangeRatio - 1) * 100 // Dollar amount
       },
-      userExperienceImpact: {
+      userExperienceImpact: {,
         satisfactionScore: quotaChangeRatio > 1 ? 85 : 70,
         frustractionEvents: quotaChangeRatio > 1 ? -2 : 1,
         engagementChange: (quotaChangeRatio - 1) * 15,
         feedbackSentiment: quotaChangeRatio > 1 ? 'positive' : 'neutral'
       },
-      costImpact: {
+      costImpact: {,
         operationalCostChange: (quotaChangeRatio - 1) * 50,
         infrastructureCostChange: (quotaChangeRatio - 1) * 75,
         supportCostChange: quotaChangeRatio > 1 ? -20 : 10,
@@ -1904,19 +1680,14 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       }
     };
   }
-
   private calculateRecommendationPriority(pattern: UsagePattern, impact: QuotaImpactAnalysis): number {
-    let priority = 5; // Default priority
-
+    let priority = 5; // Default priority;
     // Higher priority for patterns with high confidence
     if (pattern.confidence > 0.9) priority -= 1;
-    
     // Higher priority for significant performance impact
     if (Math.abs(impact.performanceImpact.responseTimeChange) > 20) priority -= 1;
-    
     // Higher priority for business impact
     if (Math.abs(impact.businessImpact.userSatisfactionChange) > 15) priority -= 1;
-    
     // Pattern-specific priority adjustments
     switch (pattern.patternType) {
       case UsagePatternType.ABUSE_PATTERN:
@@ -1929,13 +1700,10 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         if (pattern.characteristics.burstiness > 0.8) priority = Math.min(priority, 3);
         break;
     }
-
     return Math.max(1, priority);
   }
-
   private isLowRiskRecommendation(recommendation: QuotaRecommendation): boolean {
     const impact = recommendation.expectedImpact;
-    
     // Consider low risk if:
     // 1. Small cost impact
     // 2. High confidence
@@ -1944,38 +1712,30 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
            recommendation.confidence > 0.8 &&
            impact.userExperienceImpact.satisfactionScore > 75;
   }
-
   private calculateFairnessImpact(recommendation: QuotaRecommendation, fairnessAnalysis: FairnessAnalysis): number {
     // Calculate how this recommendation would affect overall fairness
     // Negative values indicate worsening fairness
-    
         const quotaChange = recommendation.recommendedQuota.requestsPerSecond / recommendation.currentQuota.requestsPerSecond;
-    
     // Large quota increases for already high-quota users worsen fairness
     if (quotaChange > 1.5 && recommendation.currentQuota.requestsPerSecond > 100) {
       return -0.2;
     }
-    
     // Small increases or decreases are generally neutral
     if (quotaChange > 0.9 && quotaChange < 1.1) {
       return 0;
     }
-    
     // Quota decreases for high-usage users improve fairness
     if (quotaChange < 0.9 && recommendation.currentQuota.requestsPerSecond > 50) {
       return 0.1;
     }
-    
     return 0;
   }
-
-  private adjustForFairness(
+  private adjustForFairness()
     recommended: QuotaAllocation,
     current: QuotaAllocation,
-    fairnessImpact: number
+    fairnessImpact: number,
   ): QuotaAllocation {
-    const adjustmentFactor = 1 + fairnessImpact; // Negative impact reduces the adjustment
-    
+    const adjustmentFactor = 1 + fairnessImpact; // Negative impact reduces the adjustment;
     return {
       ...recommended,
       requestsPerSecond: current.requestsPerSecond + 
@@ -1986,129 +1746,104 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         (recommended.requestsPerHour - current.requestsPerHour) * adjustmentFactor
     };
   }
-
   private calculateOverallFairnessScore(metrics: FairnessMetricResult[]): number {
     if (metrics.length === 0) return 100;
-    
     let weightedScore = 0;
     let totalWeight = 0;
-    
     for (const metric of metrics) {
-      const metricScore = 100 - (metric.deviation * 100); // Convert deviation to score
+      const metricScore = 100 - (metric.deviation * 100); // Convert deviation to score;
       const weight = this.getFairnessMetricWeight(metric.metricId);
-      
       weightedScore += metricScore * weight;
       totalWeight += weight;
     }
-    
     return totalWeight > 0 ? weightedScore / totalWeight : 100;
   }
-
   private getFairnessMetricWeight(metricId: string): number {
-    const metricConfig = this.config.fairnessConfig.fairnessMetrics
+    const metricConfig = this.config.fairnessConfig.fairnessMetrics;
       .find(m => m.metricId === metricId);
-    
     return metricConfig ? metricConfig.weight : 1;
   }
-
   private identifyInequalityIssues(metrics: FairnessMetricResult[]): InequalityIssue[] {
     const issues: InequalityIssue[] = [];
-    
     for (const metric of metrics) {
-      if (metric.severity === MetricSeverity.MAJOR_CONCERN || 
+      if (metric.severity === MetricSeverity.MAJOR_CONCERN || )
           metric.severity === MetricSeverity.CRITICAL_ISSUE) {
-        
-        issues.push({
-          issueId: `issue_${metric.metricId}`,
+        issues.push({)
+          issueId: `issue_${metric.metricId}`,}
           issueType: this.mapMetricToInequalityType(metric.metricId),
-          description: `${metric.metricName} shows significant inequality (deviation: ${metric.deviation.toFixed(2)})`,
+          description: `${metric.metricName} shows significant inequality (deviation: ${metric.deviation.toFixed(2)})`,}
           affectedUsers: [], // Would be populated with actual affected users
           severity: metric.severity === MetricSeverity.CRITICAL_ISSUE ? AbuseSeverity.CRITICAL : AbuseSeverity.HIGH,
           measuredImpact: metric.deviation * 100,
-          suggestedActions: this.generateInequalityActions(metric)
+          suggestedActions: this.generateInequalityActions(metric),
         });
       }
     }
-    
     return issues;
   }
-
   private async findRedistributionOpportunities(users: string[]): Promise<RedistributionOpportunity[]> {
     const opportunities: RedistributionOpportunity[] = [];
-    
     // Find users with low utilization (potential sources)
     const lowUtilizationUsers = await this.findLowUtilizationUsers(users);
-    
     // Find users with high utilization (potential targets)
     const highUtilizationUsers = await this.findHighUtilizationUsers(users);
-    
     if (lowUtilizationUsers.length > 0 && highUtilizationUsers.length > 0) {
-      opportunities.push({
-        opportunityId: `redist_${Date.now()}`,
+      opportunities.push({)
+        opportunityId: `redist_${Date.now()}`,}
         sourceUsers: lowUtilizationUsers.slice(0, 5), // Top 5 sources
         targetUsers: highUtilizationUsers.slice(0, 3), // Top 3 targets
         redistributableQuota: 100, // Would calculate actual amount
         expectedBenefit: 25, // Percentage improvement in fairness
         riskAssessment: 'Low risk - users selected based on utilization patterns',
-        implementationPlan: [
+        implementationPlan: [,
           'Reduce quota for low-utilization users by 20%',
           'Increase quota for high-utilization users by 30%',
           'Monitor impact for 7 days'
         ]
       });
     }
-    
     return opportunities;
   }
-
-  private generateFairnessRecommendations(
+  private generateFairnessRecommendations()
     issues: InequalityIssue[],
-    opportunities: RedistributionOpportunity[]
+    opportunities: RedistributionOpportunity[],
   ): FairnessRecommendation[] {
     const recommendations: FairnessRecommendation[] = [];
-    
     // Generate recommendations for each inequality issue
     for (const issue of issues) {
-      recommendations.push({
-        recommendationId: `fairness_${issue.issueId}`,
+      recommendations.push({)
+        recommendationId: `fairness_${issue.issueId}`,}
         category: FairnessCategory.QUOTA_REBALANCING,
-        title: `Address ${issue.issueType}`,
+        title: `Address ${issue.issueType}`,}
         description: issue.description,
         priority: issue.severity === AbuseSeverity.CRITICAL ? 1 : 2,
         expectedImprovement: issue.measuredImpact * 0.6, // Expect 60% improvement
-        actionItems: issue.suggestedActions
+        actionItems: issue.suggestedActions,
       });
     }
-    
     // Generate recommendations for redistribution opportunities
     for (const opportunity of opportunities) {
-      recommendations.push({
-        recommendationId: `redist_${opportunity.opportunityId}`,
+      recommendations.push({)
+        recommendationId: `redist_${opportunity.opportunityId}`,}
         category: FairnessCategory.QUOTA_REBALANCING,
         title: 'Redistribute Quota for Better Fairness',
-        description: `Redistribute ${opportunity.redistributableQuota} quota units from ${opportunity.sourceUsers.length} under-utilized users to ${opportunity.targetUsers.length} over-utilized users`,
+        description: `Redistribute ${opportunity.redistributableQuota} quota units from ${opportunity.sourceUsers.length} under-utilized users to ${opportunity.targetUsers.length} over-utilized users`,}
         priority: 3,
         expectedImprovement: opportunity.expectedBenefit,
-        actionItems: opportunity.implementationPlan
+        actionItems: opportunity.implementationPlan,
       });
     }
-    
     return recommendations;
   }
-
   // Additional helper methods would continue here...
   // This is a comprehensive implementation but truncated for length
-
   private async collectAndStoreUsageData(): Promise<void> {
     // In real implementation, this would collect actual usage data
     // For now, we'll generate some sample data
-    
     const users = this.getActiveUsers();
     const now = new Date();
-    
     for (const userId of users) {
       const userHistory = this.usageHistory.get(userId) || [];
-      
       // Add new data point
       const dataPoint: UsageDataPoint = {
         userId,
@@ -2119,34 +1854,27 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         averageResponseTime: 100 + Math.random() * 200,
         quotaUtilization: Math.random() * 100
       };
-      
       userHistory.push(dataPoint);
-      
       // Keep only recent data
-      const cutoff = Date.now() - (7 * 24 * 60 * 60 * 1000); // 7 days
+      const cutoff = Date.now() - (7 * 24 * 60 * 60 * 1000); // 7 days;
       const recentData = userHistory.filter(d => d.timestamp.getTime() > cutoff);
-      
       this.usageHistory.set(userId, recentData);
     }
   }
-
   private cleanupOldData(): void {
-    const cutoff = Date.now() - (30 * 24 * 60 * 60 * 1000); // 30 days
-    
+    const cutoff = Date.now() - (30 * 24 * 60 * 60 * 1000); // 30 days;
     // Cleanup usage patterns
     for (const [id, pattern] of this.usagePatterns) {
       if (pattern.detectedAt.getTime() < cutoff) {
         this.usagePatterns.delete(id);
       }
     }
-    
     // Cleanup recommendations
     for (const [id, recommendation] of this.quotaRecommendations) {
       if (recommendation.validUntil.getTime() < Date.now()) {
         this.quotaRecommendations.delete(id);
       }
     }
-    
     // Cleanup abuse detections
     for (const [id, detection] of this.abuseDetectionResults) {
       if (detection.detectedAt.getTime() < cutoff) {
@@ -2154,55 +1882,44 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       }
     }
   }
-
   private async runAbuseDetectionScan(): Promise<void> {
     const activeUsers = this.getActiveUsers();
-    
     for (const userId of activeUsers) {
       await this.detectAbuse(userId);
     }
   }
-
   // Simplified implementations of remaining methods
   private calculateGiniCoefficient(users: string[]): number {
     // Simplified Gini coefficient calculation
     return Math.random() * 0.5; // Placeholder
   }
-
   private calculateQuotaUtilizationVariance(users: string[]): number {
     // Calculate variance in quota utilization across users
     return Math.random() * 20; // Placeholder
   }
-
   private calculateRequestDistributionMetric(users: string[]): number {
     // Calculate how evenly requests are distributed
     return Math.random() * 30; // Placeholder
   }
-
   private classifyMetricSeverity(deviation: number, tolerance: number): MetricSeverity {
     if (deviation <= tolerance) return MetricSeverity.ACCEPTABLE;
     if (deviation <= tolerance * 2) return MetricSeverity.MINOR_CONCERN;
     if (deviation <= tolerance * 4) return MetricSeverity.MAJOR_CONCERN;
     return MetricSeverity.CRITICAL_ISSUE;
   }
-
   // Additional method stubs for completeness
   private mapMetricToInequalityType(metricId: string): InequalityType {
     return InequalityType.QUOTA_DISPARITY;
   }
-
   private generateInequalityActions(metric: FairnessMetricResult): string[] {
     return ['Review quota allocations', 'Implement fairness adjustments'];
   }
-
   private async findLowUtilizationUsers(users: string[]): Promise<string[]> {
     return users.slice(0, 3); // Placeholder
   }
-
   private async findHighUtilizationUsers(users: string[]): Promise<string[]> {
     return users.slice(-3); // Placeholder
   }
-
   private mapRuleToEvidenceType(ruleType: AbuseRuleType): EvidenceType {
     switch (ruleType) {
       case AbuseRuleType.RATE_SPIKE: return EvidenceType.RATE_ANOMALY;
@@ -2210,11 +1927,9 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       default: return EvidenceType.BEHAVIORAL_ANOMALY;
     }
   }
-
   private mapPatternToAbuseType(pattern: AbusePattern): AbuseType {
     return AbuseType.RATE_ABUSE; // Simplified mapping
   }
-
   private calculateAbuseImpact(usageData: UsageDataPoint[], evidence: AbuseEvidence[]): AbuseImpact {
     return {
       systemImpact: Math.random() * 100,
@@ -2224,124 +1939,101 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       resourceConsumption: Math.random() * 100
     };
   }
-
-  private async determineResponseActions(
+  private async determineResponseActions()
     pattern: AbusePattern,
     confidence: number,
-    impact: AbuseImpact
+    impact: AbuseImpact,
   ): Promise<ResponseAction[]> {
     const actions: ResponseAction[] = [];
-    
-    const responseConfigs = this.config.abuseDetectionConfig.responseActions
+    const responseConfigs = this.config.abuseDetectionConfig.responseActions;
       .filter(action => action.severity === pattern.severity);
-    
     for (const config of responseConfigs) {
       if (config.autoExecute || confidence > 0.9) {
-        actions.push({
-          actionId: `action_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+        actions.push({)
+          actionId: `action_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,}
           actionType: config.actionType,
           appliedAt: new Date(),
           duration: typeof config.parameters.duration === 'number' ? config.parameters.duration : 60,
           parameters: config.parameters,
           effectiveness: 0,
-          status: ActionStatus.PENDING
+          status: ActionStatus.PENDING,
         });
       }
     }
-    
     return actions;
   }
-
   private evaluateRateSpikeRule(usageData: UsageDataPoint[], rule: AbuseDetectionRule): AbuseRuleResult {
-    const recentData = usageData.slice(-5); // Last 5 data points
+    const recentData = usageData.slice(-5); // Last 5 data points;
     if (recentData.length === 0) return { detected: false, strength: 0, description: '', data: {} };
-    
     const avgRate = recentData.reduce((sum, d) => sum + d.requestCount, 0) / recentData.length;
     const maxRate = Math.max(...recentData.map(d => d.requestCount));
-    
     const spikeRatio = maxRate / avgRate;
     const detected = spikeRatio > rule.threshold;
-    
     return {
       detected,
       strength: detected ? Math.min(1, spikeRatio / rule.threshold) : 0,
-      description: detected ? `Rate spike detected: ${spikeRatio.toFixed(2)}x average` : '',
+      description: detected ? `Rate spike detected: ${spikeRatio.toFixed(2)}x average` : '',}
       data: { spikeRatio, avgRate, maxRate }
     };
   }
-
   private evaluateQuotaExhaustionRule(usageData: UsageDataPoint[], rule: AbuseDetectionRule): AbuseRuleResult {
-    const recentData = usageData.slice(-10); // Last 10 data points
+    const recentData = usageData.slice(-10); // Last 10 data points;
     const exhaustionCount = recentData.filter(d => d.quotaUtilization > 95).length;
     const exhaustionRate = exhaustionCount / recentData.length;
-    
     const detected = exhaustionRate > (rule.threshold / 100);
-    
     return {
       detected,
       strength: detected ? exhaustionRate : 0,
-      description: detected ? `High quota exhaustion rate: ${(exhaustionRate * 100).toFixed(1)}%` : '',
+      description: detected ? `High quota exhaustion rate: ${(exhaustionRate * 100).toFixed(1)}%` : '',}
       data: { exhaustionRate, exhaustionCount, totalDataPoints: recentData.length }
     };
   }
-
   private evaluateErrorFloodRule(usageData: UsageDataPoint[], rule: AbuseDetectionRule): AbuseRuleResult {
     const recentData = usageData.slice(-5);
     const totalRequests = recentData.reduce((sum, d) => sum + d.requestCount, 0);
     const totalErrors = recentData.reduce((sum, d) => sum + d.errorCount, 0);
-    
     const errorRate = totalRequests > 0 ? (totalErrors / totalRequests) * 100 : 0;
     const detected = errorRate > rule.threshold;
-    
     return {
       detected,
       strength: detected ? Math.min(1, errorRate / rule.threshold) : 0,
-      description: detected ? `High error rate: ${errorRate.toFixed(1)}%` : '',
+      description: detected ? `High error rate: ${errorRate.toFixed(1)}%` : '',}
       data: { errorRate, totalErrors, totalRequests }
     };
   }
-
   private async executeAbuseResponseAction(userId: string, action: ResponseAction): Promise<void> {
     // In real implementation, this would execute the actual response action
-    this.emit('abuseActionExecuted', {
+    this.emit('abuseActionExecuted', {)
       userId,
       actionType: action.actionType,
-      parameters: action.parameters
+      parameters: action.parameters,
     });
   }
-
-
-  private calculateActualImpact(
+  private calculateActualImpact()
     recommendation: QuotaRecommendation,
-    currentUsage: UsageDataPoint[]
+    currentUsage: UsageDataPoint[],
   ): QuotaImpactAnalysis {
     // Calculate actual impact based on current usage data
     return recommendation.expectedImpact; // Placeholder
   }
-
   private compareImpacts(expected: QuotaImpactAnalysis, actual: QuotaImpactAnalysis): number {
     // Compare expected vs actual impact and return deviation score
     return 0.1; // Placeholder
   }
-
   private async executeRedistribution(opportunity: RedistributionOpportunity): Promise<OptimizationAction | null> {
     // Execute quota redistribution
     return null; // Placeholder
   }
-
   private async executeFairnessRecommendation(recommendation: FairnessRecommendation): Promise<OptimizationAction | null> {
     // Execute fairness recommendation
     return null; // Placeholder
   }
-
   private calculateFairnessImprovement(analysis: FairnessAnalysis): number {
     return 10; // Placeholder percentage improvement
   }
-
   private getAffectedUsers(actions: OptimizationAction[]): string[] {
     return []; // Placeholder
   }
-
   private calculateOptimizationBenefit(actions: OptimizationAction[]): number {
     return 100; // Placeholder benefit score
   }
@@ -2350,7 +2042,6 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
 // ==========================================
 // SUPPORTING INTERFACES
 // ==========================================
-
 interface UsageDataPoint {
   userId: string;
   apiEndpoint: string;
@@ -2360,14 +2051,12 @@ interface UsageDataPoint {
   averageResponseTime: number;
   quotaUtilization: number;
 }
-
 interface AbuseRuleResult {
   detected: boolean;
   strength: number;
   description: string;
   data: Record<string, unknown>;
 }
-
 interface OptimizationResult {
   optimizationId: string;
   timestamp: Date;
@@ -2376,7 +2065,6 @@ interface OptimizationResult {
   affectedUsers: string[];
   estimatedBenefit: number;
 }
-
 interface OptimizationAction {
   actionId: string;
   actionType: string;
@@ -2394,60 +2082,60 @@ export class ApiUsagePatternQuotaRecommendationsFactory {
       enablePatternAnalysis: true,
       analysisWindow: 24,
       recommendationInterval: 60,
-      usagePatterns: [
+      usagePatterns: [,
         {
           patternId: 'burst_pattern',
           patternName: 'Burst Pattern',
           patternType: UsagePatternType.BURST_PATTERN,
-          detectionRules: [
+          detectionRules: [,
             {
               ruleId: 'burst_detection',
               condition: 'burst_detected',
               threshold: 3.0,
               timeWindow: 15,
               weight: 1.0,
-              enabled: true
+              enabled: true,
             }
           ],
-          quotaImpact: {
+          quotaImpact: {,
             quotaMultiplier: 1.5,
             adjustmentType: QuotaAdjustmentType.TEMPORARY_BOOST,
             maxAdjustment: 100,
             minAdjustment: 10,
-            confidenceThreshold: 0.7
+            confidenceThreshold: 0.7,
           },
           priority: 1,
-          enabled: true
+          enabled: true,
         },
         {
           patternId: 'steady_state',
           patternName: 'Steady State',
           patternType: UsagePatternType.STEADY_STATE,
-          detectionRules: [
+          detectionRules: [,
             {
               ruleId: 'steady_detection',
               condition: 'steady_state',
               threshold: 10,
               timeWindow: 60,
               weight: 1.0,
-              enabled: true
+              enabled: true,
             }
           ],
-          quotaImpact: {
+          quotaImpact: {,
             quotaMultiplier: 0.9,
             adjustmentType: QuotaAdjustmentType.DECREASE,
             maxAdjustment: 50,
             minAdjustment: 5,
-            confidenceThreshold: 0.8
+            confidenceThreshold: 0.8,
           },
           priority: 3,
-          enabled: true
+          enabled: true,
         }
       ],
       quotaAdjustmentRules: [],
-      fairnessConfig: {
+      fairnessConfig: {,
         enableFairnessAnalysis: true,
-        fairnessMetrics: [
+        fairnessMetrics: [,
           {
             metricId: 'gini_coefficient',
             metricName: 'Gini Coefficient',
@@ -2455,56 +2143,55 @@ export class ApiUsagePatternQuotaRecommendationsFactory {
             targetValue: 0.3,
             tolerance: 0.1,
             weight: 1.0,
-            enabled: true
+            enabled: true,
           }
         ],
         redistributionRules: [],
-        priorityTiers: []
+        priorityTiers: [],
       },
-      abuseDetectionConfig: {
+      abuseDetectionConfig: {,
         enableAbuseDetection: true,
-        abusePatterns: [
+        abusePatterns: [,
           {
             patternId: 'rate_abuse',
             patternName: 'Rate Abuse',
             description: 'Unusually high request rates',
-            detectionRules: [
+            detectionRules: [,
               {
                 ruleId: 'rate_spike',
                 ruleType: AbuseRuleType.RATE_SPIKE,
                 threshold: 5.0,
                 timeWindow: 10,
                 condition: 'rate > threshold * average',
-                weight: 1.0
+                weight: 1.0,
               }
             ],
             severity: AbuseSeverity.HIGH,
             confidence: 0.8,
-            enabled: true
+            enabled: true,
           }
         ],
         detectionSensitivity: 0.7,
-        responseActions: [
+        responseActions: [,
           {
             actionId: 'temp_limit',
             severity: AbuseSeverity.HIGH,
             actionType: AbuseActionType.TEMPORARY_QUOTA_REDUCTION,
             parameters: { reduction: 0.5, duration: 60 },
             autoExecute: true,
-            escalation: false
+            escalation: false,
           }
         ],
-        whitelistRules: []
+        whitelistRules: [],
       },
-      alertingConfig: {
+      alertingConfig: {,
         enableAlerting: true,
         alertThresholds: [],
         notificationChannels: [],
-        escalationRules: []
+        escalationRules: [],
       }
     };
   }
-
   public static createHighSensitivityConfig(): QuotaRecommendationConfig {
     const config = this.createDefaultConfig();
     config.abuseDetectionConfig.detectionSensitivity = 0.9;
@@ -2512,7 +2199,6 @@ export class ApiUsagePatternQuotaRecommendationsFactory {
     config.recommendationInterval = 30; // More frequent recommendations
     return config;
   }
-
   public static createRecommendationEngine(config?: Partial<QuotaRecommendationConfig>): ApiUsagePatternQuotaRecommendations {
     const fullConfig = { ...this.createDefaultConfig(), ...config };
     return new ApiUsagePatternQuotaRecommendations(fullConfig);

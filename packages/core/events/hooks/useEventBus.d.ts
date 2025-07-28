@@ -8,7 +8,7 @@ import { BaseEvent, EventFilter, EventHandler, EventPriority } from '../EventSys
 /**
  * Hook for subscribing to events with automatic cleanup
  */
-export declare function useEventSubscription<T extends BaseEvent = BaseEvent>(filter: EventFilter, handler: EventHandler<T>, options?: {
+export declare function useEventSubscription<T extends BaseEvent = BaseEvent>(filter: EventFilter, handler: EventHandler<T>, options?: {)
     priority?: EventPriority;
     once?: boolean;
     enabled?: boolean;

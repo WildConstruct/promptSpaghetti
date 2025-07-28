@@ -5,7 +5,6 @@
  * Executive-level security analytics dashboard with real-time threat monitoring,
  * behavioral analysis, and predictive security insights for Wild Construct platform.
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   SecurityEventAnalytics, 
@@ -26,7 +25,6 @@ export interface SecurityAnalyticsDashboardProps {
   onThreatDetected?: (threat: SecurityPattern) => void;
   onCriticalAlert?: (insight: SecurityInsight) => void;
 }
-
 interface DashboardState {
   summary: SecurityMetricsSummary | null;
   insights: SecurityInsight[];
@@ -37,11 +35,10 @@ interface DashboardState {
   selectedCategory: ThreatCategory | 'all';
   alertsEnabled: boolean;
 }
-
 /**
  * Comprehensive security analytics dashboard for executive and operational use
  */
-export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProps> = ({
+export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProps> = ({)
   analytics,
   theme = 'cinema',
   refreshInterval = 5,
@@ -50,7 +47,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
   onThreatDetected,
   onCriticalAlert
 }) => {
-  const [state, setState] = useState<DashboardState>({
+  const [state, setState] = useState<DashboardState>({)
     summary: null,
     insights: [],
     patterns: [],
@@ -58,13 +55,12 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
     lastUpdate: null,
     selectedTimeframe: '24h',
     selectedCategory: 'all',
-    alertsEnabled: true
+    alertsEnabled: true,
   });
-
   // Theme configuration
   const themeStyles = useMemo(() => {
     const themes = {
-      light: {
+      light: {,
         background: '#ffffff',
         secondary: '#f8fafc',
         tertiary: '#f1f5f9',
@@ -76,9 +72,9 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
         success: '#10b981',
         warning: '#f59e0b',
         danger: '#ef4444',
-        critical: '#dc2626'
+        critical: '#dc2626',
       },
-      dark: {
+      dark: {,
         background: '#0f172a',
         secondary: '#1e293b',
         tertiary: '#334155',
@@ -90,9 +86,9 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
         success: '#34d399',
         warning: '#fbbf24',
         danger: '#f87171',
-        critical: '#ef4444'
+        critical: '#ef4444',
       },
-      cinema: {
+      cinema: {,
         background: '#0d1117',
         secondary: '#161b22',
         tertiary: '#21262d',
@@ -104,52 +100,44 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
         success: '#238636',
         warning: '#d29922',
         danger: '#da3633',
-        critical: '#f85149'
+        critical: '#f85149',
       }
     };
     return themes[theme];
   }, [theme]);
-
   // Load analytics data
   const loadAnalyticsData = useCallback(async () => {
     setState(prev => ({ ...prev, isLoading: true }));
-
     try {
       const timeframe = getTimeframeRange(state.selectedTimeframe);
       const summary = await analytics.analyzeSecurityEvents(timeframe);
-      
-      let insights = analytics.getSecurityInsights(
+      let insights = analytics.getSecurityInsights(;)
         state.selectedCategory === 'all' ? undefined : state.selectedCategory,
         undefined,
         100
       );
-
       // Filter insights based on allowed categories
       if (allowedInsights && allowedInsights.length > 0) {
         insights = insights.filter(insight => allowedInsights.includes(insight.category));
       }
-
-      const patterns = analytics.getSecurityPatterns(
+      const patterns = analytics.getSecurityPatterns(;)
         state.selectedCategory === 'all' ? undefined : state.selectedCategory
       );
-
       // Check for critical alerts
       const criticalInsights = insights.filter(insight => insight.severity === RiskLevel.CRITICAL);
       if (criticalInsights.length > 0 && state.alertsEnabled) {
-        criticalInsights.forEach(insight => {
+        criticalInsights.forEach(insight => {)
           onCriticalAlert?.(insight);
         });
       }
-
       // Check for new threat patterns
       const highRiskPatterns = patterns.filter(pattern => pattern.riskScore > 80);
       if (highRiskPatterns.length > 0) {
-        highRiskPatterns.forEach(pattern => {
+        highRiskPatterns.forEach(pattern => {)
           onThreatDetected?.(pattern);
         });
       }
-
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
         summary,
         insights,
@@ -157,31 +145,25 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
         isLoading: false,
         lastUpdate: new Date()
       }));
-
     } catch (error) {
       console.error('Failed to load analytics data:', error);
       setState(prev => ({ ...prev, isLoading: false }));
     }
   }, [analytics, state.selectedTimeframe, state.selectedCategory, state.alertsEnabled, allowedInsights, onCriticalAlert, onThreatDetected]);
-
   // Auto-refresh data
   useEffect(() => {
     loadAnalyticsData();
-
     const interval = setInterval(loadAnalyticsData, refreshInterval * 60 * 1000);
     return () => clearInterval(interval);
   }, [loadAnalyticsData, refreshInterval]);
-
   // Handle timeframe change
   const handleTimeframeChange = useCallback((timeframe: DashboardState['selectedTimeframe']) => {
     setState(prev => ({ ...prev, selectedTimeframe: timeframe }));
   }, []);
-
   // Handle category change
   const handleCategoryChange = useCallback((category: ThreatCategory | 'all') => {
     setState(prev => ({ ...prev, selectedCategory: category }));
   }, []);
-
   // Risk level color mapping
   const getRiskColor = useCallback((level: RiskLevel) => {
     switch (level) {
@@ -192,16 +174,14 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
     default: return themeStyles.textMuted;
     }
   }, [themeStyles]);
-
   // Format numbers for display
   const formatNumber = useCallback((num: number) => {
-    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
-    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;}
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;}
     return num.toString();
   }, []);
-
   if (state.isLoading && !state.summary) {
-    return (
+    return ()
       <div style={{
         display: 'flex',
         justifyContent: 'center',
@@ -215,8 +195,8 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           <div style={{
             width: '40px',
             height: '40px',
-            border: `4px solid ${themeStyles.border}`,
-            borderTop: `4px solid ${themeStyles.primary}`,
+            border: `4px solid ${themeStyles.border}`,}
+            borderTop: `4px solid ${themeStyles.primary}`,}
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 16px'
@@ -226,14 +206,13 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
       </div>
     );
   }
-
-  return (
+  return ()
     <div style={{
       background: themeStyles.background,
       color: themeStyles.text,
       fontFamily: 'Inter, system-ui, sans-serif',
       padding: '24px',
-      minHeight: '100vh'
+      minHeight: '100vh',
     }}>
       {/* Header */}
       <div style={{
@@ -242,32 +221,31 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
         alignItems: 'center',
         marginBottom: '32px',
         paddingBottom: '16px',
-        borderBottom: `1px solid ${themeStyles.border}`
+        borderBottom: `1px solid ${themeStyles.border}`}
       }}>
         <div>
           <h1 style={{
             margin: '0 0 8px 0',
             fontSize: executiveMode ? '32px' : '28px',
             fontWeight: 700,
-            color: themeStyles.primary
+            color: themeStyles.primary,
           }}>
             🛡️ Security Analytics Dashboard
           </h1>
           <p style={{
             margin: 0,
             color: themeStyles.textSecondary,
-            fontSize: '16px'
+            fontSize: '16px',
           }}>
             {executiveMode ? 'Executive Security Overview' : 'Operational Security Monitoring'} • 
             Wild Construct Platform
-            {state.lastUpdate && (
+            {state.lastUpdate && ()
               <span style={{ marginLeft: '16px', fontSize: '14px' }}>
                 Last updated: {state.lastUpdate.toLocaleTimeString()}
               </span>
             )}
           </p>
         </div>
-
         {/* Controls */}
         <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
           {/* Timeframe Selector */}
@@ -276,11 +254,11 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
             onChange={(e) => handleTimeframeChange(e.target.value as DashboardState['selectedTimeframe'])}
             style={{
               background: themeStyles.secondary,
-              border: `1px solid ${themeStyles.border}`,
+              border: `1px solid ${themeStyles.border}`,}
               borderRadius: '6px',
               padding: '8px 12px',
               color: themeStyles.text,
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           >
             <option value="1h">Last Hour</option>
@@ -288,28 +266,26 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
             <option value="7d">Last 7 Days</option>
             <option value="30d">Last 30 Days</option>
           </select>
-
           {/* Category Filter */}
           <select
             value={state.selectedCategory}
             onChange={(e) => handleCategoryChange(e.target.value as ThreatCategory | 'all')}
             style={{
               background: themeStyles.secondary,
-              border: `1px solid ${themeStyles.border}`,
+              border: `1px solid ${themeStyles.border}`,}
               borderRadius: '6px',
               padding: '8px 12px',
               color: themeStyles.text,
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           >
             <option value="all">All Categories</option>
-            {Object.values(ThreatCategory).map(category => (
+            {Object.values(ThreatCategory).map(category => ()
               <option key={category} value={category}>
                 {category.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </option>
             ))}
           </select>
-
           {/* Refresh Button */}
           <button
             onClick={loadAnalyticsData}
@@ -330,30 +306,29 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           </button>
         </div>
       </div>
-
       {/* Executive Summary Cards */}
-      {state.summary && (
+      {state.summary && ()
         <div style={{
           display: 'grid',
-          gridTemplateColumns: executiveMode 
+          gridTemplateColumns: executiveMode ,
             ? 'repeat(auto-fit, minmax(250px, 1fr))' 
             : 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '24px',
-          marginBottom: '32px'
+          marginBottom: '32px',
         }}>
           {/* Overall Risk */}
           <div style={{
             background: themeStyles.secondary,
-            border: `1px solid ${themeStyles.border}`,
+            border: `1px solid ${themeStyles.border}`,}
             borderRadius: '12px',
             padding: '20px',
-            borderLeft: `4px solid ${getRiskColor(state.summary.overallRisk.level)}`
+            borderLeft: `4px solid ${getRiskColor(state.summary.overallRisk.level)}`}
           }}>
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: '12px'
+              marginBottom: '12px',
             }}>
               <h3 style={{ margin: 0, fontSize: '14px', color: themeStyles.textSecondary, fontWeight: 600 }}>
                 OVERALL RISK
@@ -361,10 +336,10 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               <span style={{
                 fontSize: '12px',
                 padding: '2px 8px',
-                background: `${getRiskColor(state.summary.overallRisk.level)}20`,
+                background: `${getRiskColor(state.summary.overallRisk.level)}20`,}
                 color: getRiskColor(state.summary.overallRisk.level),
                 borderRadius: '4px',
-                fontWeight: 600
+                fontWeight: 600,
               }}>
                 {state.summary.overallRisk.trend.toUpperCase()}
               </span>
@@ -373,24 +348,23 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               fontSize: executiveMode ? '36px' : '32px',
               fontWeight: 800,
               color: getRiskColor(state.summary.overallRisk.level),
-              marginBottom: '8px'
+              marginBottom: '8px',
             }}>
               {state.summary.overallRisk.level.toUpperCase()}
             </div>
             <div style={{
               fontSize: '14px',
-              color: themeStyles.textSecondary
+              color: themeStyles.textSecondary,
             }}>
               Score: {state.summary.overallRisk.score}/100
             </div>
           </div>
-
           {/* Security Events */}
           <div style={{
             background: themeStyles.secondary,
-            border: `1px solid ${themeStyles.border}`,
+            border: `1px solid ${themeStyles.border}`,}
             borderRadius: '12px',
-            padding: '20px'
+            padding: '20px',
           }}>
             <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', color: themeStyles.textSecondary, fontWeight: 600 }}>
               SECURITY EVENTS
@@ -399,7 +373,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               fontSize: executiveMode ? '36px' : '32px',
               fontWeight: 800,
               color: themeStyles.text,
-              marginBottom: '8px'
+              marginBottom: '8px',
             }}>
               {formatNumber(state.summary.eventVolume.total)}
             </div>
@@ -407,19 +381,18 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               fontSize: '14px',
               color: themeStyles.textSecondary,
               display: 'flex',
-              gap: '12px'
+              gap: '12px',
             }}>
               <span>Critical: {state.summary.eventVolume.bySeverity.critical || 0}</span>
               <span>High: {state.summary.eventVolume.bySeverity.high || 0}</span>
             </div>
           </div>
-
           {/* Active Threats */}
           <div style={{
             background: themeStyles.secondary,
-            border: `1px solid ${themeStyles.border}`,
+            border: `1px solid ${themeStyles.border}`,}
             borderRadius: '12px',
-            padding: '20px'
+            padding: '20px',
           }}>
             <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', color: themeStyles.textSecondary, fontWeight: 600 }}>
               ACTIVE THREATS
@@ -428,24 +401,23 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               fontSize: executiveMode ? '36px' : '32px',
               fontWeight: 800,
               color: state.summary.threatLandscape.activeThreats > 5 ? themeStyles.danger : themeStyles.text,
-              marginBottom: '8px'
+              marginBottom: '8px',
             }}>
               {state.summary.threatLandscape.activeThreats}
             </div>
             <div style={{
               fontSize: '14px',
-              color: themeStyles.textSecondary
+              color: themeStyles.textSecondary,
             }}>
               New: {state.summary.threatLandscape.newPatterns}
             </div>
           </div>
-
           {/* Security Posture */}
           <div style={{
             background: themeStyles.secondary,
-            border: `1px solid ${themeStyles.border}`,
+            border: `1px solid ${themeStyles.border}`,}
             borderRadius: '12px',
-            padding: '20px'
+            padding: '20px',
           }}>
             <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', color: themeStyles.textSecondary, fontWeight: 600 }}>
               SECURITY POSTURE
@@ -455,32 +427,31 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               fontWeight: 800,
               color: state.summary.systemHealth.securityPosture >= 80 ? themeStyles.success :
                 state.summary.systemHealth.securityPosture >= 60 ? themeStyles.warning : themeStyles.danger,
-              marginBottom: '8px'
+              marginBottom: '8px',
             }}>
               {state.summary.systemHealth.securityPosture}%
             </div>
             <div style={{
               fontSize: '14px',
-              color: themeStyles.textSecondary
+              color: themeStyles.textSecondary,
             }}>
               Compliance: {state.summary.systemHealth.complianceScore}%
             </div>
           </div>
         </div>
       )}
-
       {/* Main Content Grid */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: executiveMode ? '2fr 1fr' : '1fr 1fr',
-        gap: '24px'
+        gap: '24px',
       }}>
         {/* Threat Patterns */}
         <div style={{
           background: themeStyles.secondary,
-          border: `1px solid ${themeStyles.border}`,
+          border: `1px solid ${themeStyles.border}`,}
           borderRadius: '12px',
-          padding: '24px'
+          padding: '24px',
         }}>
           <h3 style={{
             margin: '0 0 20px 0',
@@ -489,7 +460,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
             color: themeStyles.text,
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '8px',
           }}>
             🎯 Active Threat Patterns
             <span style={{
@@ -498,29 +469,28 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               color: state.patterns.length > 0 ? themeStyles.danger : themeStyles.success,
               padding: '2px 8px',
               borderRadius: '4px',
-              fontWeight: 600
+              fontWeight: 600,
             }}>
               {state.patterns.length}
             </span>
           </h3>
-
-          {state.patterns.length === 0 ? (
+          {state.patterns.length === 0 ? ()
             <div style={{
               textAlign: 'center',
               padding: '40px 20px',
-              color: themeStyles.textMuted
+              color: themeStyles.textMuted,
             }}>
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>✅</div>
               <div>No active threat patterns detected</div>
             </div>
-          ) : (
+          ) : ()
             <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
-              {state.patterns.slice(0, executiveMode ? 5 : 10).map(pattern => (
+              {state.patterns.slice(0, executiveMode ? 5 : 10).map(pattern => ()
                 <div
                   key={pattern.id}
                   style={{
                     background: themeStyles.tertiary,
-                    border: `1px solid ${themeStyles.border}`,
+                    border: `1px solid ${themeStyles.border}`,}
                     borderRadius: '8px',
                     padding: '16px',
                     marginBottom: '12px',
@@ -535,24 +505,24 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
-                    marginBottom: '8px'
+                    marginBottom: '8px',
                   }}>
                     <h4 style={{
                       margin: 0,
                       fontSize: '16px',
                       fontWeight: 600,
-                      color: themeStyles.text
+                      color: themeStyles.text,
                     }}>
                       {pattern.name}
                     </h4>
                     <div style={{
                       display: 'flex',
                       gap: '8px',
-                      alignItems: 'center'
+                      alignItems: 'center',
                     }}>
                       <span style={{
                         fontSize: '12px',
-                        background: `${pattern.riskScore >= 80 ? themeStyles.critical : 
+                        background: `${pattern.riskScore >= 80 ? themeStyles.critical : }
                           pattern.riskScore >= 60 ? themeStyles.danger :
                             pattern.riskScore >= 40 ? themeStyles.warning : themeStyles.success}20`,
                         color: pattern.riskScore >= 80 ? themeStyles.critical :
@@ -560,34 +530,32 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
                             pattern.riskScore >= 40 ? themeStyles.warning : themeStyles.success,
                         padding: '2px 6px',
                         borderRadius: '4px',
-                        fontWeight: 600
+                        fontWeight: 600,
                       }}>
                         {pattern.riskScore}
                       </span>
                       <span style={{
                         fontSize: '12px',
-                        color: themeStyles.textMuted
+                        color: themeStyles.textMuted,
                       }}>
                         {pattern.occurrences}x
                       </span>
                     </div>
                   </div>
-                  
                   <p style={{
                     margin: '0 0 12px 0',
                     fontSize: '14px',
                     color: themeStyles.textSecondary,
-                    lineHeight: 1.4
+                    lineHeight: 1.4,
                   }}>
                     {pattern.description}
                   </p>
-                  
                   <div style={{
                     display: 'flex',
                     gap: '8px',
-                    flexWrap: 'wrap'
+                    flexWrap: 'wrap',
                   }}>
-                    {pattern.indicators.slice(0, 3).map(indicator => (
+                    {pattern.indicators.slice(0, 3).map(indicator => ()
                       <span
                         key={indicator}
                         style={{
@@ -595,7 +563,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
                           background: themeStyles.primary + '20',
                           color: themeStyles.primary,
                           padding: '2px 6px',
-                          borderRadius: '4px'
+                          borderRadius: '4px',
                         }}
                       >
                         {indicator}
@@ -607,13 +575,12 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
             </div>
           )}
         </div>
-
         {/* Security Insights */}
         <div style={{
           background: themeStyles.secondary,
-          border: `1px solid ${themeStyles.border}`,
+          border: `1px solid ${themeStyles.border}`,}
           borderRadius: '12px',
-          padding: '24px'
+          padding: '24px',
         }}>
           <h3 style={{
             margin: '0 0 20px 0',
@@ -622,7 +589,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
             color: themeStyles.text,
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '8px',
           }}>
             💡 Security Insights
             <span style={{
@@ -631,76 +598,73 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               color: themeStyles.primary,
               padding: '2px 8px',
               borderRadius: '4px',
-              fontWeight: 600
+              fontWeight: 600,
             }}>
               {state.insights.length}
             </span>
           </h3>
-
-          {state.insights.length === 0 ? (
+          {state.insights.length === 0 ? ()
             <div style={{
               textAlign: 'center',
               padding: '40px 20px',
-              color: themeStyles.textMuted
+              color: themeStyles.textMuted,
             }}>
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
               <div>Analyzing security patterns...</div>
             </div>
-          ) : (
+          ) : ()
             <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
-              {state.insights.slice(0, executiveMode ? 3 : 8).map(insight => (
+              {state.insights.slice(0, executiveMode ? 3 : 8).map(insight => ()
                 <div
                   key={insight.id}
                   style={{
                     background: themeStyles.tertiary,
-                    border: `1px solid ${themeStyles.border}`,
+                    border: `1px solid ${themeStyles.border}`,}
                     borderRadius: '8px',
                     padding: '16px',
                     marginBottom: '12px',
-                    borderLeft: `4px solid ${getRiskColor(insight.severity)}`
+                    borderLeft: `4px solid ${getRiskColor(insight.severity)}`}
                   }}
                 >
                   <div style={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
-                    marginBottom: '8px'
+                    marginBottom: '8px',
                   }}>
                     <h4 style={{
                       margin: 0,
                       fontSize: '14px',
                       fontWeight: 600,
-                      color: themeStyles.text
+                      color: themeStyles.text,
                     }}>
                       {getInsightIcon(insight.type)} {insight.title}
                     </h4>
                     <span style={{
                       fontSize: '12px',
-                      background: `${getRiskColor(insight.severity)}20`,
+                      background: `${getRiskColor(insight.severity)}20`,}
                       color: getRiskColor(insight.severity),
                       padding: '2px 6px',
                       borderRadius: '4px',
-                      fontWeight: 600
+                      fontWeight: 600,
                     }}>
                       {insight.severity.toUpperCase()}
                     </span>
                   </div>
-                  
                   <p style={{
                     margin: '0 0 12px 0',
                     fontSize: '13px',
                     color: themeStyles.textSecondary,
-                    lineHeight: 1.4
+                    lineHeight: 1.4,
                   }}>
                     {insight.description}
                   </p>
-                  
-                  {!executiveMode && insight.recommendations.immediate.length > 0 && (
+                  {!executiveMode && insight.recommendations.immediate.length > 0 && ()
                     <div style={{ marginTop: '8px' }}>
                       <div style={{
                         fontSize: '12px',
                         color: themeStyles.textMuted,
-                        marginBottom: '4px'
+                        marginBottom: '4px',
                       }}>
                         Immediate Actions:
                       </div>
@@ -708,9 +672,9 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
                         margin: 0,
                         paddingLeft: '16px',
                         fontSize: '12px',
-                        color: themeStyles.textSecondary
+                        color: themeStyles.textSecondary,
                       }}>
-                        {insight.recommendations.immediate.slice(0, 2).map((rec, index) => (
+                        {insight.recommendations.immediate.slice(0, 2).map((rec, index) => ()
                           <li key={index}>{rec}</li>
                         ))}
                       </ul>
@@ -722,30 +686,28 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           )}
         </div>
       </div>
-
       {/* Executive Summary (Executive Mode Only) */}
-      {executiveMode && state.summary && (
+      {executiveMode && state.summary && ()
         <div style={{
           marginTop: '32px',
           background: themeStyles.secondary,
-          border: `1px solid ${themeStyles.border}`,
+          border: `1px solid ${themeStyles.border}`,}
           borderRadius: '12px',
-          padding: '24px'
+          padding: '24px',
         }}>
           <h3 style={{
             margin: '0 0 20px 0',
             fontSize: '18px',
             fontWeight: 600,
-            color: themeStyles.text
+            color: themeStyles.text,
           }}>
             📋 Executive Summary
           </h3>
-
           <div style={{
             fontSize: '16px',
             lineHeight: 1.6,
             color: themeStyles.textSecondary,
-            marginBottom: '20px'
+            marginBottom: '20px',
           }}>
             Current security posture shows <strong style={{ color: getRiskColor(state.summary.overallRisk.level) }}>
               {state.summary.overallRisk.level.toUpperCase()}
@@ -753,27 +715,26 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
             <strong> {state.summary.threatLandscape.activeThreats}</strong> active threat patterns identified. 
             <strong> {state.summary.userBehavior.highRiskUsers.length}</strong> users require elevated monitoring.
           </div>
-
           {/* Key Recommendations */}
           {(state.insights.filter(i => i.severity === RiskLevel.CRITICAL).length > 0 ||
-            state.summary.systemHealth.securityPosture < 70) && (
+            state.summary.systemHealth.securityPosture < 70) && ()
             <div style={{
               background: themeStyles.tertiary,
-              borderLeft: `4px solid ${themeStyles.critical}`,
+              borderLeft: `4px solid ${themeStyles.critical}`,}
               padding: '16px',
-              borderRadius: '8px'
+              borderRadius: '8px',
             }}>
               <h4 style={{ margin: '0 0 12px 0', color: themeStyles.critical, fontSize: '16px' }}>
                 🚨 Immediate Action Required
               </h4>
               <ul style={{ margin: 0, paddingLeft: '20px', color: themeStyles.textSecondary }}>
-                {state.insights.filter(i => i.severity === RiskLevel.CRITICAL).length > 0 && (
+                {state.insights.filter(i => i.severity === RiskLevel.CRITICAL).length > 0 && ()
                   <li>Address {state.insights.filter(i => i.severity === RiskLevel.CRITICAL).length} critical security insights</li>
                 )}
-                {state.summary.systemHealth.securityPosture < 70 && (
+                {state.summary.systemHealth.securityPosture < 70 && ()
                   <li>Improve security posture (currently {state.summary.systemHealth.securityPosture}%)</li>
                 )}
-                {state.summary.threatLandscape.activeThreats > 5 && (
+                {state.summary.threatLandscape.activeThreats > 5 && ()
                   <li>Mitigate {state.summary.threatLandscape.activeThreats} active threat patterns</li>
                 )}
               </ul>
@@ -781,7 +742,6 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           )}
         </div>
       )}
-
       {/* CSS for animations */}
       <style>
         {`
@@ -799,7 +759,6 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
 function getTimeframeRange(timeframe: DashboardState['selectedTimeframe']): { start: Date; end: Date } {
   const end = new Date();
   const start = new Date();
-
   switch (timeframe) {
   case '1h':
     start.setHours(start.getHours() - 1);
@@ -814,10 +773,8 @@ function getTimeframeRange(timeframe: DashboardState['selectedTimeframe']): { st
     start.setDate(start.getDate() - 30);
     break;
   }
-
   return { start, end };
 }
-
 function getInsightIcon(type: SecurityInsight['type']): string {
   switch (type) {
   case 'trend': return '📈';

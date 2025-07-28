@@ -4,7 +4,6 @@
  * 
  * Domain-specific state management for graph editing functionality
  */
-
 import { 
   BaseStateContainer,
   StateChange,
@@ -20,46 +19,40 @@ export interface GraphState {
   nodes: Record<string, GraphNode>;
   edges: Record<string, GraphEdge>;
   metadata: GraphMetadata;
-  
   // UI state
-  selection: {
+  selection: {,
     selectedNodes: string[];
     selectedEdges: string[];
     isMultiSelect: boolean;
   };
-  
   // View state
-  viewport: {
+  viewport: {,
     x: number;
     y: number;
     zoom: number;
   };
-  
   // Execution state
-  execution: {
+  execution: {,
     isRunning: boolean;
     currentNodeId?: string;
     results: Record<string, any>;
     errors: ExecutionError[];
   };
-  
   // History and undo/redo
-  history: {
+  history: {,
     canUndo: boolean;
     canRedo: boolean;
     currentIndex: number;
     maxSize: number;
   };
-  
   // Collaboration state
-  collaboration: {
+  collaboration: {,
     isConnected: boolean;
     activeUsers: CollaboratorInfo[];
     cursors: Record<string, CursorPosition>;
   };
-  
   // Performance metrics
-  performance: {
+  performance: {,
     nodeCount: number;
     edgeCount: number;
     lastRenderTime: number;
@@ -117,7 +110,7 @@ export interface GraphMetadata {
   tags: string[];
   isPublic: boolean;
   schema: GraphSchema;
-  settings: {
+  settings: {,
     snapToGrid: boolean;
     gridSize: number;
     showGrid: boolean;
@@ -184,9 +177,8 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
   private activeTransaction?: GraphTransaction;
   private nodePositionCache = new Map<string, { x: number; y: number }>();
   private validationCache = new Map<string, ValidationResult>();
-
   constructor(initialGraph?: Partial<GraphState>) {
-    super({
+    super({)
       enableValidation: true,
       enableHistory: true,
       maxHistorySize: 200,
@@ -195,23 +187,20 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
       enableDebug: true,
       enableDevTools: true,
       enableTimeTravel: true,
-      enablePerformanceProfiling: true
+      enablePerformanceProfiling: true,
     });
-
     // Initialize with provided graph or empty state
     if (initialGraph) {
       this.state = { ...this.getInitialState(), ...initialGraph };
     }
-
     this.setupEventHandlers();
   }
-
   // Abstract method implementations
   getInitialState(): GraphState {
     return {
       nodes: {},
       edges: {},
-      metadata: {
+      metadata: {,
         id: this.generateId(),
         name: 'Untitled Graph',
         version: '1.0.0',
@@ -221,166 +210,151 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
         tags: [],
         isPublic: false,
         schema: { version: '1.0', nodeTypes: [], edgeTypes: [] },
-        settings: {
+        settings: {,
           snapToGrid: true,
           gridSize: 20,
           showGrid: true,
           nodeSpacing: 100,
-          autoLayout: false
+          autoLayout: false,
         }
       },
-      selection: {
+      selection: {,
         selectedNodes: [],
         selectedEdges: [],
-        isMultiSelect: false
+        isMultiSelect: false,
       },
-      viewport: {
+      viewport: {,
         x: 0,
         y: 0,
-        zoom: 1
+        zoom: 1,
       },
-      execution: {
+      execution: {,
         isRunning: false,
         results: {},
-        errors: []
+        errors: [],
       },
-      history: {
+      history: {,
         canUndo: false,
         canRedo: false,
         currentIndex: 0,
-        maxSize: 100
+        maxSize: 100,
       },
-      collaboration: {
+      collaboration: {,
         isConnected: false,
         activeUsers: [],
         cursors: {}
       },
-      performance: {
+      performance: {,
         nodeCount: 0,
         edgeCount: 0,
         lastRenderTime: 0,
-        memoryUsage: 0
+        memoryUsage: 0,
       }
     };
   }
-
   validateState(state: GraphState): ValidationResult {
     const errors: ValidationError[] = [];
     const warnings: any[] = [];
-
     // Validate nodes
-    Object.values(state.nodes).forEach(node => {
+    Object.values(state.nodes).forEach(node => {)
       if (!node.id || !node.type) {
-        errors.push({
-          field: `nodes.${node.id}`,
+        errors.push({)
+          field: `nodes.${node.id}`,}
           message: 'Node must have id and type',
           value: node,
-          code: 'INVALID_NODE'
+          code: 'INVALID_NODE',
         });
       }
-
       if (!node.position || typeof node.position.x !== 'number' || typeof node.position.y !== 'number') {
-        errors.push({
-          field: `nodes.${node.id}.position`,
+        errors.push({)
+          field: `nodes.${node.id}.position`,}
           message: 'Node must have valid position coordinates',
           value: node.position,
-          code: 'INVALID_POSITION'
+          code: 'INVALID_POSITION',
         });
       }
     });
-
     // Validate edges
-    Object.values(state.edges).forEach(edge => {
+    Object.values(state.edges).forEach(edge => {)
       if (!edge.id || !edge.source || !edge.target) {
-        errors.push({
-          field: `edges.${edge.id}`,
+        errors.push({)
+          field: `edges.${edge.id}`,}
           message: 'Edge must have id, source, and target',
           value: edge,
-          code: 'INVALID_EDGE'
+          code: 'INVALID_EDGE',
         });
       }
-
       // Check if source and target nodes exist
       if (!state.nodes[edge.source]) {
-        errors.push({
-          field: `edges.${edge.id}.source`,
+        errors.push({)
+          field: `edges.${edge.id}.source`,}
           message: 'Edge source node does not exist',
           value: edge.source,
-          code: 'MISSING_SOURCE_NODE'
+          code: 'MISSING_SOURCE_NODE',
         });
       }
-
       if (!state.nodes[edge.target]) {
-        errors.push({
-          field: `edges.${edge.id}.target`,
+        errors.push({)
+          field: `edges.${edge.id}.target`,}
           message: 'Edge target node does not exist',
           value: edge.target,
-          code: 'MISSING_TARGET_NODE'
+          code: 'MISSING_TARGET_NODE',
         });
       }
     });
-
     // Validate selection consistency
-    state.selection.selectedNodes.forEach(nodeId => {
+    state.selection.selectedNodes.forEach(nodeId => {)
       if (!state.nodes[nodeId]) {
-        warnings.push({
+        warnings.push({)
           field: 'selection.selectedNodes',
-          message: `Selected node ${nodeId} does not exist`,
+          message: `Selected node ${nodeId} does not exist`,}
           suggestion: 'Remove from selection'
         });
       }
     });
-
-    state.selection.selectedEdges.forEach(edgeId => {
+    state.selection.selectedEdges.forEach(edgeId => {)
       if (!state.edges[edgeId]) {
-        warnings.push({
+        warnings.push({)
           field: 'selection.selectedEdges',
-          message: `Selected edge ${edgeId} does not exist`,
+          message: `Selected edge ${edgeId} does not exist`,}
           suggestion: 'Remove from selection'
         });
       }
     });
-
     // Check for cycles (warning only)
     if (this.detectCycles(state)) {
-      warnings.push({
+      warnings.push({)
         field: 'graph',
         message: 'Graph contains cycles',
         suggestion: 'Consider removing cyclic dependencies'
       });
     }
-
     // Performance validation
     const nodeCount = Object.keys(state.nodes).length;
     const edgeCount = Object.keys(state.edges).length;
-
     if (nodeCount > 1000) {
-      warnings.push({
+      warnings.push({)
         field: 'performance',
-        message: `Large number of nodes (${nodeCount})`,
+        message: `Large number of nodes (${nodeCount})`,}
         suggestion: 'Consider using virtualization for better performance'
       });
     }
-
     if (edgeCount > 2000) {
-      warnings.push({
+      warnings.push({)
         field: 'performance',
-        message: `Large number of edges (${edgeCount})`,
+        message: `Large number of edges (${edgeCount})`,}
         suggestion: 'Consider simplifying the graph structure'
       });
     }
-
     return {
       valid: errors.length === 0,
       errors,
       warnings
     };
   }
-
   getDomainName(): string {
     return 'graph-editor';
   }
-
   // Graph-specific operations
   async applyOperation(operation: GraphOperation, userId?: string): Promise<void> {
     const change: StateChange<GraphState> = {
@@ -389,46 +363,38 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
       type: operation.type,
       payload: operation,
       userId,
-      source: 'local'
+      source: 'local',
     };
-
     this.setState(prevState => this.applyOperationToState(prevState, operation), change);
   }
-
   async applyTransaction(transaction: GraphTransaction): Promise<void> {
     this.activeTransaction = transaction;
-
     try {
       // Apply all operations in the transaction atomically
-      const finalState = transaction.operations.reduce(
+      const finalState = transaction.operations.reduce(;)
         (state, operation) => this.applyOperationToState(state, operation),
         this.getState()
       );
-
       const change: StateChange<GraphState> = {
         id: transaction.id,
         timestamp: transaction.timestamp,
         type: 'BATCH_OPERATION',
         payload: transaction,
         userId: transaction.userId,
-        source: 'local'
+        source: 'local',
       };
-
       this.setState(() => finalState, change);
     } finally {
       this.activeTransaction = undefined;
     }
   }
-
   private applyOperationToState(state: GraphState, operation: GraphOperation): GraphState {
     const newState = { ...state };
-
     switch (operation.type) {
       case 'ADD_NODE':
         newState.nodes = { ...state.nodes, [operation.node.id]: operation.node };
         newState.performance.nodeCount = Object.keys(newState.nodes).length;
         break;
-
       case 'UPDATE_NODE':
         if (state.nodes[operation.nodeId]) {
           newState.nodes = {
@@ -437,27 +403,22 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
           };
         }
         break;
-
       case 'DELETE_NODE':
         newState.nodes = { ...state.nodes };
         delete newState.nodes[operation.nodeId];
-        
         // Remove edges connected to this node
-        newState.edges = Object.fromEntries(
+        newState.edges = Object.fromEntries()
           Object.entries(state.edges).filter(([, edge]) => 
             edge.source !== operation.nodeId && edge.target !== operation.nodeId
           )
         );
-        
         newState.performance.nodeCount = Object.keys(newState.nodes).length;
         newState.performance.edgeCount = Object.keys(newState.edges).length;
         break;
-
       case 'ADD_EDGE':
         newState.edges = { ...state.edges, [operation.edge.id]: operation.edge };
         newState.performance.edgeCount = Object.keys(newState.edges).length;
         break;
-
       case 'UPDATE_EDGE':
         if (state.edges[operation.edgeId]) {
           newState.edges = {
@@ -466,61 +427,53 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
           };
         }
         break;
-
       case 'DELETE_EDGE':
         newState.edges = { ...state.edges };
         delete newState.edges[operation.edgeId];
         newState.performance.edgeCount = Object.keys(newState.edges).length;
         break;
-
       case 'SELECT_NODES':
         newState.selection = {
           ...state.selection,
-          selectedNodes: operation.append 
+          selectedNodes: operation.append ,
             ? [...state.selection.selectedNodes, ...operation.nodeIds]
             : operation.nodeIds,
           selectedEdges: operation.append ? state.selection.selectedEdges : []
         };
         break;
-
       case 'SELECT_EDGES':
         newState.selection = {
           ...state.selection,
-          selectedEdges: operation.append 
+          selectedEdges: operation.append ,
             ? [...state.selection.selectedEdges, ...operation.edgeIds]
             : operation.edgeIds,
           selectedNodes: operation.append ? state.selection.selectedNodes : []
         };
         break;
-
       case 'CLEAR_SELECTION':
         newState.selection = {
           ...state.selection,
           selectedNodes: [],
-          selectedEdges: []
+          selectedEdges: [],
         };
         break;
-
       case 'UPDATE_VIEWPORT':
         newState.viewport = { ...state.viewport, ...operation.viewport };
         break;
-
       case 'START_EXECUTION':
         newState.execution = {
           ...state.execution,
           isRunning: true,
           currentNodeId: operation.nodeId,
-          errors: []
+          errors: [],
         };
         break;
-
       case 'EXECUTION_RESULT':
         newState.execution = {
           ...state.execution,
           results: { ...state.execution.results, [operation.nodeId]: operation.result }
         };
         break;
-
       case 'EXECUTION_ERROR':
         newState.execution = {
           ...state.execution,
@@ -528,83 +481,68 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
           errors: [...state.execution.errors, operation.error]
         };
         break;
-
       case 'UPDATE_COLLABORATION':
         newState.collaboration = { ...state.collaboration, ...operation.updates };
         break;
     }
-
     // Update modification timestamp
     newState.metadata = {
       ...newState.metadata,
-      modified: Date.now()
+      modified: Date.now(),
     };
-
     return newState;
   }
-
   // DomainStateContainer interface implementation
   async applyExternalChange(change: DomainStateChange): Promise<void> {
     // Apply changes from other domains or remote sources
     if (change.operation === 'update' && change.path) {
-      this.setState(prevState => {
+      this.setState(prevState => {)
         const newState = { ...prevState };
         this.setNestedProperty(newState, change.path, change.value);
         return newState;
       });
     }
   }
-
   canAcceptChange(change: DomainStateChange): boolean {
     // Check if this container can accept the external change
     if (change.domain !== this.getDomainName()) {
       return false;
     }
-
     // Additional validation logic
     return true;
   }
-
   async prepareForTransaction(transactionId: string): Promise<void> {
     // Prepare for cross-domain transaction
     this.emit('transactionPrepared', { transactionId, domain: this.getDomainName() });
   }
-
   async commitTransaction(transactionId: string): Promise<void> {
     // Commit cross-domain transaction
     this.emit('transactionCommitted', { transactionId, domain: this.getDomainName() });
   }
-
   async rollbackTransaction(transactionId: string): Promise<void> {
     // Rollback cross-domain transaction
     this.emit('transactionRolledBack', { transactionId, domain: this.getDomainName() });
   }
-
   // Graph-specific query methods
   getSelectedNodes(): GraphNode[] {
     return this.state.selection.selectedNodes
       .map(id => this.state.nodes[id])
       .filter(Boolean);
   }
-
   getSelectedEdges(): GraphEdge[] {
     return this.state.selection.selectedEdges
       .map(id => this.state.edges[id])
       .filter(Boolean);
   }
-
   getNodeById(nodeId: string): GraphNode | undefined {
     return this.state.nodes[nodeId];
   }
-
   getEdgeById(edgeId: string): GraphEdge | undefined {
     return this.state.edges[edgeId];
   }
-
   getConnectedNodes(nodeId: string): GraphNode[] {
     const connectedNodeIds = new Set<string>();
-    
-    Object.values(this.state.edges).forEach(edge => {
+    Object.values(this.state.edges).forEach(edge => {)
       if (edge.source === nodeId) {
         connectedNodeIds.add(edge.target);
       }
@@ -612,121 +550,99 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
         connectedNodeIds.add(edge.source);
       }
     });
-
     return Array.from(connectedNodeIds)
       .map(id => this.state.nodes[id])
       .filter(Boolean);
   }
-
   getExecutionResults(): Record<string, any> {
     return { ...this.state.execution.results };
   }
-
   // Utility methods
   private detectCycles(state: GraphState): boolean {
     // Simplified cycle detection using DFS
     const visited = new Set<string>();
     const recStack = new Set<string>();
-
     const hasCycleDFS = (nodeId: string): boolean => {
       if (recStack.has(nodeId)) return true;
       if (visited.has(nodeId)) return false;
-
       visited.add(nodeId);
       recStack.add(nodeId);
-
       const outgoingEdges = Object.values(state.edges).filter(edge => edge.source === nodeId);
       for (const edge of outgoingEdges) {
         if (hasCycleDFS(edge.target)) {
           return true;
         }
       }
-
       recStack.delete(nodeId);
       return false;
     };
-
     for (const nodeId of Object.keys(state.nodes)) {
       if (!visited.has(nodeId) && hasCycleDFS(nodeId)) {
         return true;
       }
     }
-
     return false;
   }
-
   private setNestedProperty(obj: any, path: string, value: any): void {
     const keys = path.split('.');
     let current = obj;
-    
     for (let i = 0; i < keys.length - 1; i++) {
       if (!(keys[i] in current)) {
         current[keys[i]] = {};
       }
       current = current[keys[i]];
     }
-    
     current[keys[keys.length - 1]] = value;
   }
-
   private setupEventHandlers(): void {
     // Set up internal event handlers
     this.on('stateChanged', (event) => {
       // Update performance metrics
       this.updatePerformanceMetrics();
-      
       // Emit domain-specific events
       this.emitDomainEvents(event);
     });
   }
-
   private updatePerformanceMetrics(): void {
     const state = this.getState();
     const now = performance.now();
-    
-    this.setState(prevState => ({
+    this.setState(prevState => ({)
       ...prevState,
-      performance: {
+      performance: {,
         ...prevState.performance,
         nodeCount: Object.keys(state.nodes).length,
         edgeCount: Object.keys(state.edges).length,
         lastRenderTime: now,
-        memoryUsage: this.estimateMemoryUsage(state)
+        memoryUsage: this.estimateMemoryUsage(state),
       }
     }));
   }
-
   private estimateMemoryUsage(state: GraphState): number {
     // Rough estimate of memory usage
     return JSON.stringify(state).length * 2; // Approximate bytes
   }
-
   private emitDomainEvents(event: any): void {
     // Emit specific events based on the change type
     const changeType = event.change?.type;
-    
     if (changeType?.startsWith('ADD_NODE') || changeType?.startsWith('DELETE_NODE')) {
-      this.emit('graphStructureChanged', {
+      this.emit('graphStructureChanged', {)
         domain: this.getDomainName(),
         nodeCount: Object.keys(this.state.nodes).length,
-        edgeCount: Object.keys(this.state.edges).length
+        edgeCount: Object.keys(this.state.edges).length,
       });
     }
-    
     if (changeType?.startsWith('SELECT_')) {
-      this.emit('selectionChanged', {
+      this.emit('selectionChanged', {)
         domain: this.getDomainName(),
         selectedNodes: this.state.selection.selectedNodes,
-        selectedEdges: this.state.selection.selectedEdges
+        selectedEdges: this.state.selection.selectedEdges,
       });
     }
   }
-
   private generateId(): string {
-    return `graph_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `graph_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   private generateChangeId(): string {
-    return `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
 }

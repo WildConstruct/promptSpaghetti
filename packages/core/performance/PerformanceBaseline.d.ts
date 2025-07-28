@@ -7,7 +7,7 @@ import { EventEmitter } from 'events';
 export interface BaselineSnapshot {
     id: string;
     timestamp: number;
-    environment: {
+    environment: {,
         userAgent?: string;
         viewport?: {
             width: number;
@@ -18,12 +18,12 @@ export interface BaselineSnapshot {
         hardwareConcurrency?: number;
     };
     kpiSnapshots: KPISnapshot[];
-    systemInfo: {
+    systemInfo: {,
         nodeVersion?: string;
         platform?: string;
         memoryUsage?: NodeJS.MemoryUsage;
     };
-    testConditions: {
+    testConditions: {,
         graphComplexity: 'simple' | 'medium' | 'complex';
         dataSize: 'small' | 'medium' | 'large';
         concurrentUsers: number;
@@ -33,13 +33,13 @@ export interface BaselineSummary {
     capturedAt: number;
     totalKPIs: number;
     criticalKPIs: number;
-    kpisByStatus: {
+    kpisByStatus: {,
         excellent: number;
         good: number;
         warning: number;
         critical: number;
     };
-    averageScores: {
+    averageScores: {,
         runtime: number;
         api: number;
         bundle: number;

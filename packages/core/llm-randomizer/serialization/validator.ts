@@ -1,7 +1,6 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.1 - Serialization Format Design
 // Validation system for LLM-generated graph format
-
 import { NodeTypeEnum } from '../../graphSchema';
 
 export interface ValidationResult {
@@ -50,7 +49,6 @@ export class FormatValidator {
   private static readonly SUPPORTED_VERSIONS = ['1.0.0'];
   private static readonly REQUIRED_SECTIONS = ['---NODES---', '---END---'];
   private static readonly VALID_NODE_TYPES = NodeTypeEnum.options;
-
   /**
    * Validate serialized graph format
    */
@@ -58,35 +56,28 @@ export class FormatValidator {
     const result: ValidationResult = {
       isValid: true,
       errors: [],
-      warnings: []
+      warnings: [],
     };
-
     try {
       // Parse the content
       const parsed = this.parseContent(content);
-      
       // Validate structure
       this.validateStructure(parsed, result);
-      
       // Validate semantics
       this.validateSemantics(parsed, result);
-      
       // Check for optimizations
       this.checkOptimizations(parsed, result);
-
     } catch (error) {
       result.isValid = false;
-      result.errors.push({
+      result.errors.push({)
         type: 'syntax',
-        message: `Parse error: ${error.message}`,
-        severity: 'error'
+        message: `Parse error: ${error.message}`,}
+        severity: 'error',
       });
     }
-
     result.isValid = result.errors.filter(e => e.severity === 'error').length === 0;
     return result;
   }
-
   /**
    * Parse the serialized content into structured data
    */
@@ -95,20 +86,16 @@ export class FormatValidator {
     const parsed: ParsedGraph = {
       version: '',
       nodes: [],
-      edges: []
+      edges: [],
     };
-
     let currentSection = 'header';
     let currentNode: Partial<ParsedNode> | null = null;
     let currentProps: Record<string, any> = {};
     let propsDepth = 0;
-
     for (let i = 0; i < lines.length; i++) {
       const rawLine = lines[i];
       const trimmedLine = rawLine.trim();
-      
       if (!trimmedLine || trimmedLine.startsWith('#')) continue; // Skip empty lines and comments
-
       // Detect section boundaries
       if (trimmedLine === '---NODES---') {
         currentSection = 'nodes';
@@ -127,12 +114,10 @@ export class FormatValidator {
         }
         break;
       }
-
       // Parse header section
       if (currentSection === 'header') {
         const [key, ...valueParts] = trimmedLine.split(':');
         const value = valueParts.join(':').trim();
-        
         if (key === 'version') {
           parsed.version = value;
         } else if (key === 'checksum') {
@@ -142,7 +127,6 @@ export class FormatValidator {
         }
         continue;
       }
-
       // Parse nodes section
       if (currentSection === 'nodes') {
         // Check if this is a new node (no leading whitespace and ends with colon)
@@ -154,7 +138,6 @@ export class FormatValidator {
             }
             parsed.nodes.push(currentNode as ParsedNode);
           }
-          
           // Start new node
           currentNode = {
             id: trimmedLine.slice(0, -1), // Remove colon
@@ -165,13 +148,11 @@ export class FormatValidator {
           propsDepth = 0;
           continue;
         }
-
         // Parse node properties
         if (currentNode && rawLine.startsWith('  ')) {
           const propLine = rawLine.substring(2);
           const [key, ...valueParts] = propLine.split(':');
           const value = valueParts.join(':').trim();
-
           if (key.trim() === 'type') {
             currentNode.type = value;
           } else if (key.trim() === 'inputs') {
@@ -186,7 +167,6 @@ export class FormatValidator {
         }
         continue;
       }
-
       // Parse edges section
       if (currentSection === 'edges') {
         if (trimmedLine.includes(' -> ')) {
@@ -196,21 +176,17 @@ export class FormatValidator {
         continue;
       }
     }
-
     return parsed;
   }
-
   /**
    * Parse a value from YAML-like format
    */
   private static parseValue(value: string): any {
     if (!value) return null;
-
     // Handle arrays
     if (value.startsWith('[') && value.endsWith(']')) {
       return this.parseArrayValue(value);
     }
-
     // Handle objects
     if (value.startsWith('{') && value.endsWith('}')) {
       try {
@@ -219,25 +195,20 @@ export class FormatValidator {
         return value;
       }
     }
-
     // Handle quoted strings
     if ((value.startsWith('"') && value.endsWith('"')) || 
         (value.startsWith('\'') && value.endsWith('\''))) {
       return value.slice(1, -1);
     }
-
     // Handle numbers
     if (/^\d+\.?\d*$/.test(value)) {
       return parseFloat(value);
     }
-
     // Handle booleans
     if (value === 'true') return true;
     if (value === 'false') return false;
-
     return value;
   }
-
   /**
    * Parse array value from string representation
    */
@@ -245,140 +216,125 @@ export class FormatValidator {
     if (!value.startsWith('[') || !value.endsWith(']')) {
       return [];
     }
-
     const content = value.slice(1, -1).trim();
     if (!content) return [];
-
     return content.split(',').map(item => this.parseValue(item.trim()));
   }
-
   /**
    * Validate overall structure and format
    */
   private static validateStructure(parsed: ParsedGraph, result: ValidationResult): void {
     // Check version
     if (!parsed.version) {
-      result.errors.push({
+      result.errors.push({)
         type: 'schema',
         message: 'Missing required version field',
-        severity: 'error'
+        severity: 'error',
       });
     } else if (!this.SUPPORTED_VERSIONS.includes(parsed.version)) {
-      result.errors.push({
+      result.errors.push({)
         type: 'schema',
-        message: `Unsupported version: ${parsed.version}. Supported versions: ${this.SUPPORTED_VERSIONS.join(', ')}`,
-        severity: 'error'
+        message: `Unsupported version: ${parsed.version}. Supported versions: ${this.SUPPORTED_VERSIONS.join(', ')}`,}
+        severity: 'error',
       });
     }
-
     // Check nodes
     if (parsed.nodes.length === 0) {
-      result.errors.push({
+      result.errors.push({)
         type: 'schema',
         message: 'Graph must contain at least one node',
-        severity: 'error'
+        severity: 'error',
       });
     }
-
     // Validate node structure
-    parsed.nodes.forEach(node => {
+    parsed.nodes.forEach(node => {)
       if (!node.id) {
-        result.errors.push({
+        result.errors.push({)
           type: 'schema',
           message: 'Node missing required id field',
-          severity: 'error'
+          severity: 'error',
         });
       }
-
       if (!node.type) {
-        result.errors.push({
+        result.errors.push({)
           type: 'schema',
-          message: `Node ${node.id} missing required type field`,
+          message: `Node ${node.id} missing required type field`,}
           nodeId: node.id,
-          severity: 'error'
+          severity: 'error',
         });
       } else if (!this.VALID_NODE_TYPES.includes(node.type as any)) {
-        result.errors.push({
+        result.errors.push({)
           type: 'schema',
-          message: `Node ${node.id} has invalid type: ${node.type}`,
+          message: `Node ${node.id} has invalid type: ${node.type}`,}
           nodeId: node.id,
-          severity: 'error'
+          severity: 'error',
         });
       }
-
       // Validate node ID format
       if (node.id && !/^[a-zA-Z0-9_-]+$/.test(node.id)) {
-        result.errors.push({
+        result.errors.push({)
           type: 'schema',
-          message: `Node ID ${node.id} contains invalid characters. Use only alphanumeric, underscore, and hyphen.`,
+          message: `Node ID ${node.id} contains invalid characters. Use only alphanumeric, underscore, and hyphen.`,}
           nodeId: node.id,
-          severity: 'error'
+          severity: 'error',
         });
       }
     });
   }
-
   /**
    * Validate semantic correctness
    */
   private static validateSemantics(parsed: ParsedGraph, result: ValidationResult): void {
     const nodeIds = new Set(parsed.nodes.map(n => n.id));
-    
     // Check for duplicate node IDs
-    const duplicates = parsed.nodes
+    const duplicates = parsed.nodes;
       .map(n => n.id)
       .filter((id, index, arr) => arr.indexOf(id) !== index);
-    
-    duplicates.forEach(id => {
-      result.errors.push({
+    duplicates.forEach(id => {)
+      result.errors.push({)
         type: 'semantic',
-        message: `Duplicate node ID: ${id}`,
+        message: `Duplicate node ID: ${id}`,}
         nodeId: id,
-        severity: 'error'
+        severity: 'error',
       });
     });
-
     // Validate edge references
-    parsed.edges.forEach(edge => {
+    parsed.edges.forEach(edge => {)
       if (!nodeIds.has(edge.source)) {
-        result.errors.push({
+        result.errors.push({)
           type: 'semantic',
-          message: `Edge references non-existent source node: ${edge.source}`,
-          severity: 'error'
+          message: `Edge references non-existent source node: ${edge.source}`,}
+          severity: 'error',
         });
       }
       if (!nodeIds.has(edge.target)) {
-        result.errors.push({
+        result.errors.push({)
           type: 'semantic',
-          message: `Edge references non-existent target node: ${edge.target}`,
-          severity: 'error'
+          message: `Edge references non-existent target node: ${edge.target}`,}
+          severity: 'error',
         });
       }
     });
-
     // Validate node input references
-    parsed.nodes.forEach(node => {
+    parsed.nodes.forEach(node => {)
       if (node.inputs) {
-        node.inputs.forEach(inputId => {
+        node.inputs.forEach(inputId => {)
           if (!nodeIds.has(inputId)) {
-            result.errors.push({
+            result.errors.push({)
               type: 'semantic',
-              message: `Node ${node.id} references non-existent input: ${inputId}`,
+              message: `Node ${node.id} references non-existent input: ${inputId}`,}
               nodeId: node.id,
-              severity: 'error'
+              severity: 'error',
             });
           }
         });
       }
     });
-
     // Check for cycles
     this.detectCycles(parsed, result);
-
     // Validate node-specific properties
     this.validateNodeProperties(parsed, result);
   }
-
   /**
    * Detect cycles in the graph
    */
@@ -386,25 +342,21 @@ export class FormatValidator {
     const nodeMap = new Map(parsed.nodes.map(n => [n.id, n]));
     const visited = new Set<string>();
     const recursionStack = new Set<string>();
-
     const dfs = (nodeId: string, path: string[]): boolean => {
       if (recursionStack.has(nodeId)) {
-        result.errors.push({
+        result.errors.push({)
           type: 'semantic',
-          message: `Cycle detected: ${path.join(' -> ')} -> ${nodeId}`,
+          message: `Cycle detected: ${path.join(' -> ')} -> ${nodeId}`,}
           nodeId: nodeId,
-          severity: 'error'
+          severity: 'error',
         });
         return true;
       }
-      
       if (visited.has(nodeId)) {
         return false;
       }
-
       visited.add(nodeId);
       recursionStack.add(nodeId);
-
       const node = nodeMap.get(nodeId);
       if (node?.inputs) {
         for (const inputId of node.inputs) {
@@ -413,163 +365,146 @@ export class FormatValidator {
           }
         }
       }
-
       recursionStack.delete(nodeId);
       return false;
     };
-
     for (const node of parsed.nodes) {
       if (!visited.has(node.id)) {
         dfs(node.id, []);
       }
     }
   }
-
   /**
    * Validate node-specific properties
    */
   private static validateNodeProperties(parsed: ParsedGraph, result: ValidationResult): void {
-    parsed.nodes.forEach(node => {
+    parsed.nodes.forEach(node => {)
       switch (node.type) {
       case 'WeightedChoice':
       case 'WeightedAdvanced':
         if (!node.props?.choices || !Array.isArray(node.props.choices)) {
-          result.errors.push({
+          result.errors.push({)
             type: 'schema',
-            message: `${node.type} node ${node.id} missing required choices array`,
+            message: `${node.type} node ${node.id} missing required choices array`,}
             nodeId: node.id,
-            severity: 'error'
+            severity: 'error',
           });
         } else {
           node.props.choices.forEach((choice: any, index: number) => {
             if (typeof choice.value !== 'string') {
-              result.errors.push({
+              result.errors.push({)
                 type: 'schema',
-                message: `${node.type} node ${node.id} choice ${index} missing value`,
+                message: `${node.type} node ${node.id} choice ${index} missing value`,}
                 nodeId: node.id,
-                severity: 'error'
+                severity: 'error',
               });
             }
             if (typeof choice.weight !== 'number' || choice.weight < 0) {
-              result.errors.push({
+              result.errors.push({)
                 type: 'schema',
-                message: `${node.type} node ${node.id} choice ${index} has invalid weight`,
+                message: `${node.type} node ${node.id} choice ${index} has invalid weight`,}
                 nodeId: node.id,
-                severity: 'error'
+                severity: 'error',
               });
             }
           });
         }
         break;
-
       case 'SetVariable':
       case 'GetVariable':
         if (!node.props?.key) {
-          result.errors.push({
+          result.errors.push({)
             type: 'schema',
-            message: `${node.type} node ${node.id} missing required key property`,
+            message: `${node.type} node ${node.id} missing required key property`,}
             nodeId: node.id,
-            severity: 'error'
+            severity: 'error',
           });
         }
         break;
-
       case 'Include':
         if (!node.props?.name) {
-          result.errors.push({
+          result.errors.push({)
             type: 'schema',
-            message: `Include node ${node.id} missing required name property`,
+            message: `Include node ${node.id} missing required name property`,}
             nodeId: node.id,
-            severity: 'error'
+            severity: 'error',
           });
         }
         break;
       }
     });
   }
-
   /**
    * Check for optimization opportunities
    */
   private static checkOptimizations(parsed: ParsedGraph, result: ValidationResult): void {
     // Check for isolated nodes
     const connectedNodes = new Set<string>();
-    parsed.edges.forEach(edge => {
+    parsed.edges.forEach(edge => {)
       connectedNodes.add(edge.source);
       connectedNodes.add(edge.target);
     });
-
-    parsed.nodes.forEach(node => {
+    parsed.nodes.forEach(node => {)
       if (!connectedNodes.has(node.id) && (!node.inputs || node.inputs.length === 0)) {
-        result.warnings.push({
+        result.warnings.push({)
           type: 'optimization',
-          message: `Node ${node.id} appears to be isolated`,
+          message: `Node ${node.id} appears to be isolated`,}
           suggestion: 'Consider connecting this node or removing it',
-          nodeId: node.id
+          nodeId: node.id,
         });
       }
     });
-
     // Check for missing output nodes
     const hasOutputNode = parsed.nodes.some(node => node.type === 'Output');
     if (!hasOutputNode) {
-      result.warnings.push({
+      result.warnings.push({)
         type: 'best-practice',
         message: 'Graph has no Output nodes',
         suggestion: 'Add at least one Output node to generate results'
       });
     }
-
     // Check for unreachable nodes
     this.checkReachability(parsed, result);
   }
-
   /**
    * Check for unreachable nodes
    */
   private static checkReachability(parsed: ParsedGraph, result: ValidationResult): void {
     const nodeMap = new Map(parsed.nodes.map(n => [n.id, n]));
     const reachable = new Set<string>();
-
     // Find all root nodes (no inputs)
     const rootNodes = parsed.nodes.filter(node => !node.inputs || node.inputs.length === 0);
-
     const dfs = (nodeId: string) => {
       if (reachable.has(nodeId)) return;
       reachable.add(nodeId);
-
       // Find all nodes that depend on this node
-      parsed.nodes.forEach(node => {
+      parsed.nodes.forEach(node => {)
         if (node.inputs?.includes(nodeId)) {
           dfs(node.id);
         }
       });
     };
-
     // Mark all reachable nodes
     rootNodes.forEach(node => dfs(node.id));
-
     // Check for unreachable nodes
-    parsed.nodes.forEach(node => {
+    parsed.nodes.forEach(node => {)
       if (!reachable.has(node.id)) {
-        result.warnings.push({
+        result.warnings.push({)
           type: 'optimization',
-          message: `Node ${node.id} is unreachable from root nodes`,
+          message: `Node ${node.id} is unreachable from root nodes`,}
           suggestion: 'Ensure this node is connected to the graph flow',
-          nodeId: node.id
+          nodeId: node.id,
         });
       }
     });
   }
 }
-
 /**
  * Utility function for easy validation
  */
 export function validateFormat(content: string): ValidationResult {
   return FormatValidator.validate(content);
 }
-
 /**
  * Check if content is valid (no errors)
  */

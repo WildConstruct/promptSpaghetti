@@ -4,7 +4,6 @@
  * 
  * Integrates all professional features into a unified Cinema 4D-inspired interface
  */
-
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Node, Edge, useReactFlow } from 'reactflow';
 import { CommandPalette } from './CommandPalette';
@@ -30,7 +29,7 @@ export interface ProfessionalIntegrationProps {
   theme?: 'light' | 'dark' | 'cinema';
 }
 
-export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = ({
+export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = ({)
   nodes,
   edges,
   selectedNodes,
@@ -48,78 +47,66 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
 }) => {
   // Command Palette State
   const [showCommandPalette, setShowCommandPalette] = useState(false);
-  
   // Professional Feature Managers
   const undoRedoRef = useRef<UndoRedoSystem>();
   const reactFlowInstance = useReactFlow();
-
   // Initialize undo/redo system
   useEffect(() => {
     if (!undoRedoRef.current) {
       undoRedoRef.current = new UndoRedoSystem(50);
     }
   }, []);
-
   // Track changes for undo/redo
   useEffect(() => {
     if (undoRedoRef.current && (nodes.length > 0 || edges.length > 0)) {
-      undoRedoRef.current.addState(nodes, edges, `Graph updated: ${nodes.length} nodes, ${edges.length} edges`);
+      undoRedoRef.current.addState(nodes, edges, `Graph updated: ${nodes.length} nodes, ${edges.length} edges`);}
     }
   }, [nodes, edges]);
-
   // Command Palette Actions
   const handleCommandPalette = useCallback(() => {
     setShowCommandPalette(true);
   }, []);
-
-  const handleGenerationStart = useCallback(
-    async (flow: { nodes: Node[]; edges: Edge[] },
+  const handleGenerationStart = useCallback(;)
+    async (flow: { nodes: Node[]; edges: Edge[] },)
     params: Record<string,
     unknown>
   ) => {
     console.log('Starting generation flow:', flow.name, params);
     // Implementation would go here - this is a demo
-    
     // Simulate graph generation
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
     // Example: Create a character generation chain
     if (flow.id === 'character-development') {
       const characterName = params['character-name'] || 'Generated Character';
       const characterRole = params['character-role'] || 'protagonist';
-      
       const viewport = reactFlowInstance?.getViewport();
       const centerX = viewport ? -viewport.x + 400 : 400;
       const centerY = viewport ? -viewport.y + 200 : 200;
-      
       // Create character profile node
-      onNodeCreate('text', { x: centerX, y: centerY }, {
-        label: `${characterName} Profile`,
-        description: `${characterRole} character profile with traits and background`,
-        category: 'character'
+      onNodeCreate('text', { x: centerX, y: centerY }, {)
+        label: `${characterName} Profile`,}
+        description: `${characterRole} character profile with traits and background`,}
+        category: 'character',
       });
-      
       // Create traits node
-      onNodeCreate('logic', { x: centerX + 300, y: centerY }, {
+      onNodeCreate('logic', { x: centerX + 300, y: centerY }, {)
         label: 'Character Traits',
         description: 'Personality traits and characteristics',
         category: 'character',
-        options: [
+        options: [,
           { label: 'Brave and determined', value: 'brave', weight: 1 },
           { label: 'Intelligent and analytical', value: 'intelligent', weight: 1 },
           { label: 'Compassionate and caring', value: 'compassionate', weight: 1 }
         ]
       });
-      
       // Create dialogue node
-      onNodeCreate('output', { x: centerX + 600, y: centerY }, {
+      onNodeCreate('output', { x: centerX + 600, y: centerY }, {)
         label: 'Character Dialogue',
         description: 'Generated dialogue samples',
-        category: 'character'
+        category: 'character',
       });
     }
   }, [onNodeCreate, reactFlowInstance]);
-
   // Undo/Redo Actions
   const handleUndo = useCallback(() => {
     if (undoRedoRef.current) {
@@ -130,7 +117,6 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
       }
     }
   }, [onNodesChange, onEdgesChange]);
-
   const handleRedo = useCallback(() => {
     if (undoRedoRef.current) {
       const state = undoRedoRef.current.redo();
@@ -140,42 +126,35 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
       }
     }
   }, [onNodesChange, onEdgesChange]);
-
   // Selection Actions
   const handleSelectAll = useCallback(() => {
     onNodesSelect(nodes);
     onEdgesSelect(edges);
   }, [nodes, edges, onNodesSelect, onEdgesSelect]);
-
   const handleDelete = useCallback(() => {
     if (selectedNodes.length > 0) {
       onNodeDelete(selectedNodes.map(n => n.id));
     }
   }, [selectedNodes, onNodeDelete]);
-
   const handleDuplicate = useCallback(() => {
-    selectedNodes.forEach(node => {
+    selectedNodes.forEach(node => {)
       const position = { x: node.position.x + 50, y: node.position.y + 50 };
-      onNodeCreate(node.type || 'text', position, {
+      onNodeCreate(node.type || 'text', position, {)
         ...node.data,
-        label: `${node.data?.label || 'Node'} (Copy)`
+        label: `${node.data?.label || 'Node'} (Copy)`}
       });
     });
   }, [selectedNodes, onNodeCreate]);
-
   // View Actions
   const handleFitView = useCallback(() => {
     reactFlowInstance?.fitView({ padding: 0.1 });
   }, [reactFlowInstance]);
-
   const handleZoomIn = useCallback(() => {
     reactFlowInstance?.zoomIn();
   }, [reactFlowInstance]);
-
   const handleZoomOut = useCallback(() => {
     reactFlowInstance?.zoomOut();
   }, [reactFlowInstance]);
-
   const handleToggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
@@ -183,32 +162,27 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
       document.exitFullscreen();
     }
   }, []);
-
   // Generation Actions
   const handleGenerateCharacter = useCallback(() => {
     setShowCommandPalette(true);
     // The command palette will show generation flows
   }, []);
-
   // Template Actions
   const handleTemplateApply = useCallback((templateId: string) => {
     console.log('Applying template:', templateId);
     // Template application logic would go here
   }, []);
-
   // Autosave Restore
   const handleAutosaveRestore = useCallback((autosaveState: { nodes: Node[]; edges: Edge[] }) => {
     onNodesChange(autosaveState.nodes);
     onEdgesChange(autosaveState.edges);
   }, [onNodesChange, onEdgesChange]);
-
   // Selection Change Handler
   const handleSelectionChange = useCallback((selection: { nodes: Node[]; edges: Edge[] }) => {
     onNodesSelect(selection.nodes);
     onEdgesSelect(selection.edges);
   }, [onNodesSelect, onEdgesSelect]);
-
-  return (
+  return ()
     <>
       {/* Command Palette */}
       <CommandPalette
@@ -224,7 +198,6 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
         onTemplateApply={handleTemplateApply}
         theme={theme}
       />
-
       {/* Professional Toolbar */}
       <div
         style={{
@@ -234,7 +207,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
           zIndex: 1000,
           display: 'flex',
           gap: '8px',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         {/* Undo/Redo Manager */}
@@ -246,7 +219,6 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
           theme={theme}
         />
       </div>
-
       {/* Multi-Selection Manager */}
       <MultiSelectionManager
         nodes={nodes}
@@ -258,7 +230,6 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
         onSelectionChange={handleSelectionChange}
         theme={theme}
       />
-
       {/* Autosave Manager */}
       <AutosaveManager
         nodes={nodes}
@@ -268,7 +239,6 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
         interval={30000} // 30 seconds
         maxVersions={10}
       />
-
       {/* Keyboard Shortcuts Manager */}
       <KeyboardShortcutsManager
         onCommandPalette={handleCommandPalette}
@@ -287,7 +257,6 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
         onToggleFullscreen={handleToggleFullscreen}
         theme={theme}
       />
-
       {/* Professional Status Indicator */}
       <div
         style={{
@@ -304,7 +273,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
           fontFamily: 'var(--font-family-primary)',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px'
+          gap: '8px',
         }}
       >
         <div
@@ -324,9 +293,8 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
         <span style={{ opacity: 0.7 }}>|</span>
         <span>Press ⌘K for commands</span>
       </div>
-
       {/* Professional Welcome Hint */}
-      {nodes.length === 0 && (
+      {nodes.length === 0 && ()
         <div
           style={{
             position: 'absolute',
@@ -336,7 +304,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
             textAlign: 'center',
             color: 'var(--color-text-secondary)',
             fontFamily: 'var(--font-family-primary)',
-            zIndex: 999
+            zIndex: 999,
           }}
         >
           <div style={{ fontSize: '64px', marginBottom: '16px', opacity: 0.5 }}>🎬</div>
@@ -344,7 +312,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
             fontSize: '24px',
             fontWeight: '600',
             color: 'var(--color-text-primary)',
-            marginBottom: '8px'
+            marginBottom: '8px',
           }}>
             Professional Graph Editor
           </h2>
@@ -352,7 +320,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
             fontSize: '16px',
             marginBottom: '20px',
             maxWidth: '400px',
-            lineHeight: 1.5
+            lineHeight: 1.5,
           }}>
             Create professional prompt generation workflows with Cinema 4D-inspired tools and shortcuts.
           </p>
@@ -362,14 +330,14 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
             justifyContent: 'center',
             flexWrap: 'wrap',
             fontSize: '14px',
-            color: 'var(--color-text-secondary)'
+            color: 'var(--color-text-secondary)',
           }}>
             <div>Press <kbd style={{
               background: 'var(--color-bg-primary)',
               padding: '2px 6px',
               borderRadius: '3px',
               border: '1px solid var(--color-ui-border)',
-              fontFamily: 'monospace'
+              fontFamily: 'monospace',
             }}>⌘K</kbd> for commands</div>
             <div>•</div>
             <div>Drag nodes from the palette</div>
@@ -379,33 +347,28 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
               padding: '2px 6px',
               borderRadius: '3px',
               border: '1px solid var(--color-ui-border)',
-              fontFamily: 'monospace'
+              fontFamily: 'monospace',
             }}>?</kbd> for help</div>
           </div>
         </div>
       )}
-
       {/* Professional Animations */}
       <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
         }
-        
         /* Smooth node animations */
         .react-flow__node {
           transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
         .react-flow__node.selected {
           transform: scale(1.02);
         }
-        
         /* Professional edge animations */
         .react-flow__edge {
           transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
         .react-flow__edge:hover {
           stroke-width: 3px !important;
         }

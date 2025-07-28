@@ -46,7 +46,7 @@ export interface MetricsServiceConfig {
     throttlingEngine?: AdaptiveThrottlingRulesEngine;
     options?: UseRateLimitingMetricsOptions;
 }
-export declare const useRateLimitingMetrics: (
+export declare const useRateLimitingMetrics: ()
   { rateLimitingService,
   throttlingEngine,
   options }: MetricsServiceConfig

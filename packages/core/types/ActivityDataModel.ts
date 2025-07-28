@@ -33,33 +33,27 @@ export interface BaseActivity {
   type: ActivityType;
   severity: ActivitySeverity;
   status: ActivityStatus;
-  
   // Actor Information
   userId?: string;
   userEmail?: string;
   userRole?: string;
   sessionId?: string;
-  
   // System Context
   source: string; // Component/service that generated the activity
   sourceVersion?: string;
   environment: 'development' | 'staging' | 'production';
-  
   // Core Activity Data
   action: string;
   description: string;
   category: string;
-  
   // Resource Information
   resourceType?: string;
   resourceId?: string;
   resourceName?: string;
-  
   // Request Context
   requestId?: string;
   correlationId?: string;
   parentActivityId?: string;
-  
   // Network Context
   ipAddress?: string;
   userAgent?: string;
@@ -69,19 +63,15 @@ export interface BaseActivity {
     city?: string;
     coordinates?: [number, number]; // [lat, lon]
   };
-  
   // Timing Information
   duration?: number; // milliseconds
   startTime?: string;
   endTime?: string;
-  
   // Metadata
   metadata: Record<string, any>;
   tags: string[];
-  
   // Change Tracking
   changes?: ActivityChange[];
-  
   // Error Information (for failed activities)
   error?: {
     code?: string;
@@ -89,7 +79,6 @@ export interface BaseActivity {
     stack?: string;
     details?: Record<string, any>;
   };
-  
   // Audit Trail
   createdAt: string;
   updatedAt?: string;
@@ -107,16 +96,13 @@ export interface ActivityChange {
 // User Action Activities
 export interface UserActivity extends BaseActivity {
   type: 'user_action';
-  
   // UI Context
   page?: string;
   component?: string;
   elementId?: string;
-  
   // User Journey
   previousAction?: string;
   userJourneyId?: string;
-  
   // Performance Data
   renderTime?: number;
   interactionDelay?: number;
@@ -125,7 +111,6 @@ export interface UserActivity extends BaseActivity {
 // System Event Activities
 export interface SystemActivity extends BaseActivity {
   type: 'system_event';
-  
   // System Metrics
   systemMetrics?: {
     cpuUsage?: number;
@@ -133,7 +118,6 @@ export interface SystemActivity extends BaseActivity {
     diskUsage?: number;
     networkLatency?: number;
   };
-  
   // Health Check Data
   healthStatus?: 'healthy' | 'warning' | 'critical' | 'unknown';
   componentStatus?: Record<string, string>;
@@ -142,16 +126,13 @@ export interface SystemActivity extends BaseActivity {
 // Admin Action Activities
 export interface AdminActivity extends BaseActivity {
   type: 'admin_action';
-  
   // Administrative Context
   adminLevel: 'super_admin' | 'admin' | 'moderator' | 'support';
   targetUserId?: string;
   targetUserEmail?: string;
-  
   // Policy Context
   policyId?: string;
   policyVersion?: string;
-  
   // Approval Workflow
   requiresApproval?: boolean;
   approvalStatus?: 'pending' | 'approved' | 'rejected';
@@ -162,22 +143,18 @@ export interface AdminActivity extends BaseActivity {
 // Security Event Activities
 export interface SecurityActivity extends BaseActivity {
   type: 'security_event';
-  
   // Threat Information
   threatType?: string;
   threatLevel: 'low' | 'medium' | 'high' | 'critical';
   threatSource?: string;
-  
   // Detection Information
   detectionMethod?: string;
   detectionTime?: string;
   detectionConfidence?: number; // 0-1
-  
   // Response Information
   responseAction?: string;
   responseTime?: string;
   blocked?: boolean;
-  
   // Forensic Data
   forensicData?: {
     requestHeaders?: Record<string, string>;
@@ -190,20 +167,16 @@ export interface SecurityActivity extends BaseActivity {
 // API Call Activities
 export interface ApiActivity extends BaseActivity {
   type: 'api_call';
-  
   // HTTP Context
   method: string;
   endpoint: string;
   statusCode: number;
-  
   // Request/Response Data
   requestSize?: number;
   responseSize?: number;
-  
   // API Metadata
   apiVersion?: string;
   rateLimitRemaining?: number;
-  
   // Performance Metrics
   processingTime?: number;
   databaseTime?: number;
@@ -213,16 +186,13 @@ export interface ApiActivity extends BaseActivity {
 // Data Change Activities
 export interface DataActivity extends BaseActivity {
   type: 'data_change';
-  
   // Database Context
   database?: string;
   table?: string;
   primaryKey?: string | number;
-  
   // Change Details
   operationType: 'insert' | 'update' | 'delete' | 'bulk_update' | 'bulk_delete';
   affectedRows?: number;
-  
   // Data Validation
   validationErrors?: string[];
   businessRules?: string[];
@@ -231,9 +201,8 @@ export interface DataActivity extends BaseActivity {
 // Performance Event Activities
 export interface PerformanceActivity extends BaseActivity {
   type: 'performance_event';
-  
   // Performance Metrics
-  metrics: {
+  metrics: {,
     responseTime?: number;
     throughput?: number;
     errorRate?: number;
@@ -242,11 +211,9 @@ export interface PerformanceActivity extends BaseActivity {
     diskIo?: number;
     networkIo?: number;
   };
-  
   // Threshold Information
   thresholds?: Record<string, number>;
   thresholdViolations?: string[];
-  
   // Performance Context
   loadLevel?: 'low' | 'medium' | 'high' | 'peak';
   concurrentUsers?: number;
@@ -255,23 +222,18 @@ export interface PerformanceActivity extends BaseActivity {
 // Authentication Activities
 export interface AuthenticationActivity extends BaseActivity {
   type: 'authentication';
-  
   // Authentication Method
   authMethod: 'password' | 'oauth' | 'saml' | 'mfa' | 'api_key' | 'jwt';
-  
   // MFA Information
   mfaUsed?: boolean;
   mfaMethod?: string;
-  
   // Device Information
   deviceId?: string;
   deviceType?: string;
   deviceFingerprint?: string;
-  
   // Login Context
   loginAttempts?: number;
   lastSuccessfulLogin?: string;
-  
   // Risk Assessment
   riskScore?: number; // 0-100
   riskFactors?: string[];
@@ -280,21 +242,17 @@ export interface AuthenticationActivity extends BaseActivity {
 // File Operation Activities
 export interface FileActivity extends BaseActivity {
   type: 'file_operation';
-  
   // File Information
   fileName: string;
   filePath: string;
   fileSize?: number;
   fileType?: string;
   mimeType?: string;
-  
   // Operation Details
   operation: 'create' | 'read' | 'update' | 'delete' | 'copy' | 'move' | 'rename';
-  
   // File Security
   filePermissions?: string;
   accessLevel?: string;
-  
   // File Versioning
   version?: string;
   previousVersion?: string;
@@ -303,25 +261,20 @@ export interface FileActivity extends BaseActivity {
 // Workflow Event Activities
 export interface WorkflowActivity extends BaseActivity {
   type: 'workflow_event';
-  
   // Workflow Information
   workflowId: string;
   workflowName: string;
   workflowVersion: string;
-  
   // Step Information
   stepId?: string;
   stepName?: string;
   stepType?: string;
-  
   // Execution Context
   executionId: string;
   executionStatus: 'started' | 'running' | 'completed' | 'failed' | 'cancelled';
-  
   // Input/Output Data
   inputs?: Record<string, any>;
   outputs?: Record<string, any>;
-  
   // Performance Data
   stepDuration?: number;
   totalDuration?: number;
@@ -345,41 +298,32 @@ export interface ActivityQuery {
   // Time Range
   startTime?: string;
   endTime?: string;
-  
   // Basic Filters
   types?: ActivityType[];
   severities?: ActivitySeverity[];
   statuses?: ActivityStatus[];
   sources?: string[];
-  
   // User Filters
   userIds?: string[];
   userEmails?: string[];
   userRoles?: string[];
-  
   // Resource Filters
   resourceTypes?: string[];
   resourceIds?: string[];
-  
   // Text Search
   searchTerm?: string;
   searchFields?: string[];
-  
   // Metadata Filters
   metadataFilters?: Record<string, any>;
   tags?: string[];
-  
   // Pagination
   limit?: number;
   offset?: number;
-  
   // Sorting
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-  
   // Aggregation
   aggregateBy?: string[];
-  
   // Including Relations
   include?: string[];
 }
@@ -436,22 +380,22 @@ export interface ActivityMetrics {
   activitiesByType: Record<ActivityType, number>;
   activitiesBySeverity: Record<ActivitySeverity, number>;
   activitiesByStatus: Record<ActivityStatus, number>;
-  activitiesOverTime: Array<{
+  activitiesOverTime: Array<{,
     timestamp: string;
     count: number;
     types: Record<ActivityType, number>;
   }>;
-  topSources: Array<{
+  topSources: Array<{,
     source: string;
     count: number;
     percentage: number;
   }>;
-  topActions: Array<{
+  topActions: Array<{,
     action: string;
     count: number;
     percentage: number;
   }>;
-  topUsers: Array<{
+  topUsers: Array<{,
     userId: string;
     userEmail?: string;
     count: number;
@@ -459,7 +403,7 @@ export interface ActivityMetrics {
   }>;
   errorRate: number;
   averageDuration: number;
-  performanceMetrics: {
+  performanceMetrics: {,
     p50: number;
     p95: number;
     p99: number;
@@ -471,25 +415,20 @@ export interface ActivityRetentionPolicy {
   id: string;
   name: string;
   description: string;
-  
   // Retention Rules
   retentionPeriod: number; // days
   activityTypes: ActivityType[];
   severities: ActivitySeverity[];
-  
   // Archive Configuration
   archiveEnabled: boolean;
   archiveLocation?: string;
   compressionEnabled?: boolean;
-  
   // Cleanup Configuration
   cleanupEnabled: boolean;
   cleanupSchedule?: string; // cron expression
-  
   // Compliance
   complianceRequirement?: string;
   legalHoldEnabled?: boolean;
-  
   createdAt: string;
   updatedAt: string;
   isActive: boolean;
@@ -529,5 +468,5 @@ export const ACTIVITY_SEVERITY_COLORS: Record<ActivitySeverity, string> = {
   high: '#ea580c',
   medium: '#d97706',
   low: '#65a30d',
-  info: '#2563eb'
+  info: '#2563eb',
 };

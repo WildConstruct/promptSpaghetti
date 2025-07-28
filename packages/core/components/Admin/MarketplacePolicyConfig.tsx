@@ -4,7 +4,6 @@
  * Configuration system for marketplace-specific policy use cases
  * Part of Epic 17.5.4 - Policy Enforcement (Backstage Admin Controls)
  */
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -46,7 +45,7 @@ export interface MarketplacePolicyTemplate {
   rules: PolicyRule[];
   defaultSeverity: 'low' | 'medium' | 'high' | 'critical';
   isSystemTemplate: boolean;
-  configurable: {
+  configurable: {,
     thresholds: Record<string, number>;
     timeframes: Record<string, number>;
     actions: string[];
@@ -57,15 +56,14 @@ export interface MarketplacePolicyConfigProps {
   className?: string;
 }
 
-export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = ({
+export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = ({)
   className = ''
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('creator');
   const [editingTemplate, setEditingTemplate] = useState<MarketplacePolicyTemplate | null>(null);
   const [_____isCreatingNew, setIsCreatingNew] = useState(false);
-
   // Marketplace-specific policy templates
-  const [policyTemplates] = useState<MarketplacePolicyTemplate[]>([
+  const [policyTemplates] = useState<MarketplacePolicyTemplate[]>([)
     {
       templateId: 'creator-trust-policy',
       name: 'Creator Trust Score Policy',
@@ -73,7 +71,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
       category: 'creator',
       defaultSeverity: 'high',
       isSystemTemplate: false,
-      rules: [
+      rules: [,
         {
           id: 'trust-minimum',
           name: 'Minimum Trust Score',
@@ -81,7 +79,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           condition: 'user.trustScore >= {minTrustScore}',
           action: 'suspend_marketplace_access',
           enabled: true,
-          priority: 1
+          priority: 1,
         },
         {
           id: 'trust-warning',
@@ -90,16 +88,16 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           condition: 'user.trustScore < {warningThreshold} AND user.trustTrend == "declining"',
           action: 'send_warning_notification',
           enabled: true,
-          priority: 2
+          priority: 2,
         }
       ],
-      configurable: {
-        thresholds: {
+      configurable: {,
+        thresholds: {,
           minTrustScore: 60,
           warningThreshold: 70,
-          criticalThreshold: 50
+          criticalThreshold: 50,
         },
-        timeframes: {
+        timeframes: {,
           evaluationPeriod: 7, // days
           warningCooldown: 24 // hours
         },
@@ -113,7 +111,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
       category: 'template',
       defaultSeverity: 'medium',
       isSystemTemplate: false,
-      rules: [
+      rules: [,
         {
           id: 'quality-rating',
           name: 'Minimum Quality Rating',
@@ -121,7 +119,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           condition: 'template.qualityScore >= {minQualityScore}',
           action: 'hide_from_marketplace',
           enabled: true,
-          priority: 1
+          priority: 1,
         },
         {
           id: 'review-count',
@@ -130,16 +128,16 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           condition: 'template.reviewCount >= {minReviews}',
           action: 'flag_for_promotion',
           enabled: false,
-          priority: 3
+          priority: 3,
         }
       ],
-      configurable: {
-        thresholds: {
+      configurable: {,
+        thresholds: {,
           minQualityScore: 3.5,
           minReviews: 5,
           maxRefundRate: 10 // percentage
         },
-        timeframes: {
+        timeframes: {,
           evaluationPeriod: 30, // days
           gracePeriod: 7 // days
         },
@@ -153,7 +151,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
       category: 'transaction',
       defaultSeverity: 'critical',
       isSystemTemplate: true,
-      rules: [
+      rules: [,
         {
           id: 'velocity-check',
           name: 'Transaction Velocity Check',
@@ -161,7 +159,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           condition: 'user.transactionsLast24h > {maxTransactions24h}',
           action: 'block_transactions',
           enabled: true,
-          priority: 1
+          priority: 1,
         },
         {
           id: 'payment-failure',
@@ -170,16 +168,16 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           condition: 'user.failedPaymentsLast1h > {maxFailures1h}',
           action: 'temporary_block',
           enabled: true,
-          priority: 1
+          priority: 1,
         }
       ],
-      configurable: {
-        thresholds: {
+      configurable: {,
+        thresholds: {,
           maxTransactions24h: 20,
           maxFailures1h: 3,
-          maxChargebacks: 2
+          maxChargebacks: 2,
         },
-        timeframes: {
+        timeframes: {,
           velocityWindow: 24, // hours
           cooldownPeriod: 1 // hours
         },
@@ -193,7 +191,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
       category: 'buyer',
       defaultSeverity: 'medium',
       isSystemTemplate: false,
-      rules: [
+      rules: [,
         {
           id: 'dispute-rate',
           name: 'Maximum Dispute Rate',
@@ -201,22 +199,21 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           condition: 'buyer.disputeRate > {maxDisputeRate}',
           action: 'require_payment_verification',
           enabled: true,
-          priority: 2
+          priority: 2,
         }
       ],
-      configurable: {
-        thresholds: {
+      configurable: {,
+        thresholds: {,
           maxDisputeRate: 15, // percentage
           maxRefundRate: 25 // percentage
         },
-        timeframes: {
+        timeframes: {,
           evaluationPeriod: 90 // days
         },
         actions: ['require_payment_verification', 'limit_purchases', 'flag_for_review']
       }
     }
   ]);
-
   const getCategoryIcon = (category: string) => {
     switch (category) {
     case 'creator': return Users;
@@ -227,7 +224,6 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
     default: return Shield;
     }
   };
-
   const getCategoryColor = (category: string) => {
     switch (category) {
     case 'creator': return 'text-blue-600 bg-blue-100';
@@ -238,19 +234,16 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-
-  const filteredTemplates = policyTemplates.filter(template => 
+  const filteredTemplates = policyTemplates.filter(template => ;)
     selectedCategory === 'all' || template.category === selectedCategory
   );
-
-  const renderCategoryFilter = () => (
+  const renderCategoryFilter = () => (;)
     <div className="category-filter">
       <div className="filter-buttons">
-        {['creator', 'buyer', 'template', 'transaction', 'system'].map(category => {
+        {['creator', 'buyer', 'template', 'transaction', 'system'].map(category => {)
           const Icon = getCategoryIcon(category);
           const count = policyTemplates.filter(t => t.category === category).length;
-          
-          return (
+          return ()
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
@@ -265,8 +258,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
       </div>
     </div>
   );
-
-  const renderTemplateCard = (template: MarketplacePolicyTemplate) => (
+  const renderTemplateCard = (template: MarketplacePolicyTemplate) => (;)
     <Card key={template.templateId} className="template-card">
       <CardHeader>
         <div className="template-header">
@@ -277,7 +269,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
                 <Badge className={getCategoryColor(template.category)}>
                   {template.category.toUpperCase()}
                 </Badge>
-                {template.isSystemTemplate && (
+                {template.isSystemTemplate && ()
                   <Badge className="text-purple-600 bg-purple-100">
                     <Shield className="w-3 h-3 mr-1" />
                     SYSTEM
@@ -287,7 +279,6 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
             </div>
             <p className="template-description">{template.description}</p>
           </div>
-          
           <div className="template-actions">
             <Button
               onClick={() => setEditingTemplate(template)}
@@ -324,26 +315,25 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
             </Badge>
           </div>
         </div>
-        
         <div className="template-rules">
           <h5>Policy Rules</h5>
           <div className="rules-list">
-            {template.rules.slice(0, 3).map(rule => (
+            {template.rules.slice(0, 3).map(rule => ()
               <div key={rule.id} className="rule-item">
                 <div className="rule-info">
                   <span className="rule-name">{rule.name}</span>
                   <span className="rule-description">{rule.description}</span>
                 </div>
                 <div className="rule-status">
-                  {rule.enabled ? (
+                  {rule.enabled ? ()
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                  ) : (
+                  ) : ()
                     <X className="w-4 h-4 text-gray-400" />
                   )}
                 </div>
               </div>
             ))}
-            {template.rules.length > 3 && (
+            {template.rules.length > 3 && ()
               <div className="more-rules">
                 +{template.rules.length - 3} more rules
               </div>
@@ -353,11 +343,9 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
       </CardContent>
     </Card>
   );
-
   const renderTemplateEditor = () => {
     if (!editingTemplate) return null;
-
-    return (
+    return ()
       <div className="template-editor-overlay">
         <Card className="template-editor">
           <CardHeader>
@@ -382,7 +370,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
               <div className="editor-section">
                 <h4>Threshold Configuration</h4>
                 <div className="thresholds-grid">
-                  {Object.entries(editingTemplate.configurable.thresholds).map(([key, value]) => (
+                  {Object.entries(editingTemplate.configurable.thresholds).map(([key, value]) => ()
                     <div key={key} className="threshold-item">
                       <label className="threshold-label">
                         {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
@@ -397,11 +385,10 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
                   ))}
                 </div>
               </div>
-
               <div className="editor-section">
                 <h4>Timeframe Settings</h4>
                 <div className="timeframes-grid">
-                  {Object.entries(editingTemplate.configurable.timeframes).map(([key, value]) => (
+                  {Object.entries(editingTemplate.configurable.timeframes).map(([key, value]) => ()
                     <div key={key} className="timeframe-item">
                       <label className="timeframe-label">
                         {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
@@ -421,11 +408,10 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
                   ))}
                 </div>
               </div>
-
               <div className="editor-section">
                 <h4>Policy Rules</h4>
                 <div className="rules-editor">
-                  {editingTemplate.rules.map(rule => (
+                  {editingTemplate.rules.map(rule => ()
                     <div key={rule.id} className="rule-editor-item">
                       <div className="rule-editor-header">
                         <div className="rule-editor-info">
@@ -443,7 +429,6 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
                           </label>
                         </div>
                       </div>
-                      
                       <div className="rule-editor-details">
                         <div className="rule-condition">
                           <label>Condition</label>
@@ -452,7 +437,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
                         <div className="rule-action">
                           <label>Action</label>
                           <select className="action-select" value={rule.action} readOnly>
-                            {editingTemplate.configurable.actions.map(action => (
+                            {editingTemplate.configurable.actions.map(action => ()
                               <option key={action} value={action}>
                                 {action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                               </option>
@@ -464,7 +449,6 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
                   ))}
                 </div>
               </div>
-
               <div className="editor-actions">
                 <Button className="save-button">
                   <Save className="w-4 h-4 mr-2" />
@@ -481,15 +465,13 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
       </div>
     );
   };
-
-  return (
-    <div className={`marketplace-policy-config ${className}`}>
+  return ()
+    <div className={`marketplace-policy-config ${className}`}>}
       <div className="config-header">
         <div className="header-info">
           <h2>Marketplace Policy Configuration</h2>
           <p>Configure and customize policies for marketplace operations</p>
         </div>
-        
         <div className="header-actions">
           <Button onClick={() => setIsCreatingNew(true)}>
             <Plus className="w-4 h-4 mr-2" />
@@ -497,17 +479,13 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           </Button>
         </div>
       </div>
-
       {renderCategoryFilter()}
-
       <div className="templates-section">
         <div className="templates-grid">
           {filteredTemplates.map(template => renderTemplateCard(template))}
         </div>
       </div>
-
       {editingTemplate && renderTemplateEditor()}
-
       <div className="config-info">
         <Card>
           <CardHeader>
@@ -522,7 +500,6 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
                   <p>Select a policy category to view available templates. Each template contains pre-configured rules that can be customized for your marketplace needs.</p>
                 </div>
               </div>
-              
               <div className="guide-section">
                 <Zap className="w-5 h-5 text-orange-500" />
                 <div>
@@ -530,7 +507,6 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
                   <p>Policy rules use expressions to evaluate conditions. Variables like user.trustScore and template.qualityScore are automatically populated from your system data.</p>
                 </div>
               </div>
-              
               <div className="guide-section">
                 <Shield className="w-5 h-5 text-green-500" />
                 <div>
@@ -542,7 +518,6 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           </CardContent>
         </Card>
       </div>
-
       <style>{`
         .marketplace-policy-config {
           max-width: 1400px;
@@ -552,37 +527,31 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .config-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
         }
-
         .header-info h2 {
           font-size: 1.875rem;
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 0.5rem;
         }
-
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
         }
-
         .category-filter {
           padding: 1rem;
           background: #f9fafb;
           border-radius: 8px;
         }
-
         .filter-buttons {
           display: flex;
           gap: 0.5rem;
           flex-wrap: wrap;
         }
-
         .category-button {
           display: flex;
           align-items: center;
@@ -594,68 +563,56 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           cursor: pointer;
           transition: all 0.2s ease;
         }
-
         .category-button:hover {
           border-color: #3b82f6;
           background: #f8fafc;
         }
-
         .category-button.active {
           border-color: #3b82f6;
           background: #eff6ff;
           color: #1e40af;
         }
-
         .count-badge {
           font-size: 0.75rem;
           padding: 0.125rem 0.375rem;
         }
-
         .templates-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
           gap: 1rem;
         }
-
         .template-card .card-header {
           padding-bottom: 0;
         }
-
         .template-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           gap: 1rem;
         }
-
         .template-info {
           flex: 1;
         }
-
         .template-title {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
           margin-bottom: 0.75rem;
         }
-
         .template-title h4 {
           font-weight: 600;
           color: #1f2937;
           margin: 0;
         }
-
         .template-badges {
           display: flex;
           gap: 0.5rem;
         }
-
         .template-description {
           color: #6b7280;
           font-size: 0.875rem;
           margin: 0;
         }
-
         .template-stats {
           display: flex;
           justify-content: space-between;
@@ -665,39 +622,33 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           background: #f9fafb;
           border-radius: 6px;
         }
-
         .stat-item {
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 0.25rem;
         }
-
         .stat-label {
           font-size: 0.75rem;
           color: #6b7280;
           font-weight: 500;
         }
-
         .stat-value {
           font-size: 0.875rem;
           color: #1f2937;
           font-weight: 600;
         }
-
         .template-rules h5 {
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 0.75rem;
           margin-top: 0;
         }
-
         .rules-list {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
         }
-
         .rule-item {
           display: flex;
           align-items: center;
@@ -706,25 +657,21 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           border: 1px solid #e5e7eb;
           border-radius: 4px;
         }
-
         .rule-info {
           flex: 1;
           display: flex;
           flex-direction: column;
           gap: 0.125rem;
         }
-
         .rule-name {
           font-size: 0.875rem;
           font-weight: 500;
           color: #1f2937;
         }
-
         .rule-description {
           font-size: 0.75rem;
           color: #6b7280;
         }
-
         .more-rules {
           padding: 0.5rem;
           text-align: center;
@@ -732,7 +679,6 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           color: #6b7280;
           font-style: italic;
         }
-
         .template-editor-overlay {
           position: fixed;
           top: 0;
@@ -746,116 +692,97 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           z-index: 1000;
           padding: 1rem;
         }
-
         .template-editor {
           width: 100%;
           max-width: 800px;
           max-height: 90vh;
           overflow-y: auto;
         }
-
         .editor-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-
         .editor-title {
           display: flex;
           align-items: center;
           gap: 0.75rem;
         }
-
         .editor-title h3 {
           font-weight: 600;
           color: #1f2937;
           margin: 0;
         }
-
         .editor-content {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .editor-section h4 {
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 0.75rem;
           margin-top: 0;
         }
-
         .thresholds-grid, .timeframes-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 1rem;
         }
-
         .threshold-item, .timeframe-item {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
         }
-
         .threshold-label, .timeframe-label {
           font-size: 0.875rem;
           font-weight: 500;
           color: #374151;
         }
-
         .threshold-input, .timeframe-input {
           padding: 0.5rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
         }
-
         .timeframe-input-group {
           display: flex;
           align-items: center;
           gap: 0.5rem;
         }
-
         .timeframe-input {
           flex: 1;
         }
-
         .timeframe-unit {
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .rules-editor {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .rule-editor-item {
           border: 1px solid #e5e7eb;
           border-radius: 8px;
           padding: 1rem;
         }
-
         .rule-editor-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 0.75rem;
         }
-
         .rule-editor-info h5 {
           font-weight: 600;
           color: #1f2937;
           margin: 0 0 0.25rem 0;
         }
-
         .rule-editor-info p {
           font-size: 0.875rem;
           color: #6b7280;
           margin: 0;
         }
-
         .rule-toggle {
           display: flex;
           align-items: center;
@@ -863,13 +790,11 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           font-size: 0.875rem;
           color: #374151;
         }
-
         .rule-editor-details {
           display: grid;
           grid-template-columns: 2fr 1fr;
           gap: 1rem;
         }
-
         .rule-condition label, .rule-action label {
           display: block;
           font-size: 0.875rem;
@@ -877,7 +802,6 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           color: #374151;
           margin-bottom: 0.5rem;
         }
-
         .condition-code {
           display: block;
           padding: 0.5rem;
@@ -888,7 +812,6 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           font-size: 0.75rem;
           color: #374151;
         }
-
         .action-select {
           width: 100%;
           padding: 0.5rem;
@@ -896,7 +819,6 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           border-radius: 6px;
           font-size: 0.875rem;
         }
-
         .editor-actions {
           display: flex;
           gap: 0.75rem;
@@ -904,85 +826,69 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           padding-top: 1rem;
           border-top: 1px solid #e5e7eb;
         }
-
         .save-button {
           background: #059669;
           border-color: #059669;
         }
-
         .save-button:hover {
           background: #047857;
           border-color: #047857;
         }
-
         .config-info {
           margin-top: 2rem;
         }
-
         .guide-content {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .guide-section {
           display: flex;
           align-items: flex-start;
           gap: 0.75rem;
         }
-
         .guide-section h4 {
           font-weight: 600;
           color: #1f2937;
           margin: 0 0 0.25rem 0;
         }
-
         .guide-section p {
           color: #6b7280;
           font-size: 0.875rem;
           margin: 0;
         }
-
         @media (max-width: 1200px) {
           .templates-grid {
             grid-template-columns: 1fr;
           }
-          
           .rule-editor-details {
             grid-template-columns: 1fr;
           }
         }
-
         @media (max-width: 768px) {
           .config-header {
             flex-direction: column;
             align-items: stretch;
             gap: 1rem;
           }
-          
           .filter-buttons {
             flex-direction: column;
           }
-          
           .category-button {
             justify-content: center;
           }
-          
           .template-header {
             flex-direction: column;
             gap: 0.75rem;
           }
-          
           .template-stats {
             flex-direction: column;
             gap: 0.5rem;
           }
-          
           .stat-item {
             flex-direction: row;
             justify-content: space-between;
           }
-          
           .thresholds-grid,
           .timeframes-grid {
             grid-template-columns: 1fr;

@@ -14,7 +14,6 @@ export enum TokenType {
   CHECKSUM = 'CHECKSUM',
   METADATA = 'METADATA',
   SECTION_DELIMITER = 'SECTION_DELIMITER',
-  
   // YAML tokens
   KEY = 'KEY',
   VALUE = 'VALUE',
@@ -22,19 +21,16 @@ export enum TokenType {
   DASH = 'DASH',
   ARRAY_START = 'ARRAY_START',
   ARRAY_END = 'ARRAY_END',
-  
   // Content tokens
   STRING = 'STRING',
   NUMBER = 'NUMBER',
   BOOLEAN = 'BOOLEAN',
   NULL = 'NULL',
-  
   // Special tokens
   NEWLINE = 'NEWLINE',
   INDENT = 'INDENT',
   DEDENT = 'DEDENT',
   EDGE_ARROW = 'EDGE_ARROW',
-  
   // Control tokens
   EOF = 'EOF',
   ERROR = 'ERROR'
@@ -62,11 +58,9 @@ export class GraphLexer {
   private errors: LexerError[] = [];
   private indentStack: number[] = [0];
   private currentSection: string | null = null;
-
   constructor(input: string) {
     this.input = input.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
   }
-
   /**
    * Tokenize the entire input
    */
@@ -78,31 +72,25 @@ export class GraphLexer {
     this.column = 1;
     this.indentStack = [0];
     this.currentSection = null;
-
     while (!this.isAtEnd()) {
       this.scanToken();
     }
-
     // Emit final dedents
     while (this.indentStack.length > 1) {
       this.indentStack.pop();
       this.addToken(TokenType.DEDENT, '');
     }
-
     this.addToken(TokenType.EOF, '');
-    
     return {
       tokens: this.tokens,
-      errors: this.errors
+      errors: this.errors,
     };
   }
-
   /**
    * Scan and classify the next token
    */
   private scanToken(): void {
     const char = this.advance();
-
     // Skip whitespace (except newlines)
     if (char === ' ' || char === '\t') {
       // Handle indentation at start of line
@@ -111,7 +99,6 @@ export class GraphLexer {
       }
       return;
     }
-
     // Handle newlines
     if (char === '\n') {
       this.addToken(TokenType.NEWLINE, '\n');
@@ -119,32 +106,27 @@ export class GraphLexer {
       this.column = 1;
       return;
     }
-
     // Skip comments
     if (char === '#') {
       this.skipComment();
       return;
     }
-
     // Handle section delimiters
     if (char === '-' && this.peek() === '-' && this.peekNext() === '-') {
       this.scanSectionDelimiter();
       return;
     }
-
     // Handle edge arrows in edges section
     if (this.currentSection === 'EDGES' && char === '-' && this.peek() === '>') {
       this.advance(); // consume '>'
       this.addToken(TokenType.EDGE_ARROW, '->');
       return;
     }
-
     // Handle YAML structure
     switch (char) {
     case ':':
       this.addToken(TokenType.COLON, ':');
       break;
-
     case '-':
       if (this.isWhitespace(this.peek())) {
         this.addToken(TokenType.DASH, '-');
@@ -152,39 +134,33 @@ export class GraphLexer {
         this.scanString();
       }
       break;
-
     case '[':
       this.addToken(TokenType.ARRAY_START, '[');
       break;
-
     case ']':
       this.addToken(TokenType.ARRAY_END, ']');
       break;
-
     case '"':
     case '\'':
       this.scanQuotedString(char);
       break;
-
     default:
       if (this.isDigit(char)) {
         this.scanNumber();
       } else if (this.isAlpha(char)) {
         this.scanIdentifier();
       } else {
-        this.addError(`Unexpected character: ${char}`, 'Check for typos or invalid characters');
+        this.addError(`Unexpected character: ${char}`, 'Check for typos or invalid characters');}
       }
       break;
     }
   }
-
   /**
    * Handle indentation tracking
    */
   private handleIndentation(): void {
     let indent = 0;
-    const start = this.position - 1; // Go back to include current space/tab
-
+    const start = this.position - 1; // Go back to include current space/tab;
     // Count indentation
     for (let i = start; i < this.input.length; i++) {
       const char = this.input[i];
@@ -196,9 +172,7 @@ export class GraphLexer {
         break;
       }
     }
-
     const currentIndent = this.indentStack[this.indentStack.length - 1];
-
     if (indent > currentIndent) {
       // Increased indentation
       this.indentStack.push(indent);
@@ -209,7 +183,6 @@ export class GraphLexer {
         this.indentStack.pop();
         this.addToken(TokenType.DEDENT, '');
       }
-
       // Check for indentation error - temporarily disabled for debugging
       // TODO: Fix indentation validation logic
       // if (this.indentStack[this.indentStack.length - 1] !== indent) {
@@ -220,22 +193,18 @@ export class GraphLexer {
       // }
     }
   }
-
   /**
    * Scan section delimiter (---NODES---, ---EDGES---, etc.)
    */
   private scanSectionDelimiter(): void {
     const start = this.position - 1;
-    
     // Skip the '---' we already detected
     this.advance(); // second -
     this.advance(); // third -
-
     let sectionName = '';
     while (!this.isAtEnd() && this.peek() !== '-') {
       sectionName += this.advance();
     }
-
     // Expect closing '---'
     if (this.peek() === '-' && this.peekNext() === '-' && this.input[this.position + 2] === '-') {
       this.advance(); // first -
@@ -244,21 +213,17 @@ export class GraphLexer {
     } else {
       this.addError('Incomplete section delimiter', 'Section delimiters must end with ---');
     }
-
     const fullDelimiter = this.input.substring(start, this.position);
     this.addToken(TokenType.SECTION_DELIMITER, fullDelimiter);
-    
     // Track current section
     this.currentSection = sectionName;
   }
-
   /**
    * Scan quoted string
    */
   private scanQuotedString(quote: string): void {
     let value = '';
     let escaped = false;
-
     while (!this.isAtEnd() && (this.peek() !== quote || escaped)) {
       if (escaped) {
         // Handle escape sequences
@@ -280,31 +245,25 @@ export class GraphLexer {
         value += this.advance();
       }
     }
-
     if (this.isAtEnd()) {
       this.addError('Unterminated string', 'Add closing quote');
       return;
     }
-
     // Consume closing quote
     this.advance();
-
     this.addToken(TokenType.STRING, value);
   }
-
   /**
    * Scan unquoted string/identifier
    */
   private scanString(): void {
     const start = this.position - 1;
     let value = this.input[start];
-
     while (!this.isAtEnd() && !this.isLineTerminator(this.peek()) && 
            this.peek() !== ':' && this.peek() !== '[' && this.peek() !== ']' &&
            this.peek() !== ',' && !this.isWhitespace(this.peek())) {
       value += this.advance();
     }
-
     // Determine if this is a key or value based on context
     if (this.isAtLineStart() || this.isAfterIndent()) {
       this.addToken(TokenType.KEY, value.trim());
@@ -312,38 +271,31 @@ export class GraphLexer {
       this.addToken(TokenType.VALUE, value.trim());
     }
   }
-
   /**
    * Scan identifier (unquoted key/value)
    */
   private scanIdentifier(): void {
     const start = this.position - 1;
     let value = this.input[start];
-
     while (!this.isAtEnd() && (this.isAlpha(this.peek()) || this.isDigit(this.peek()) || 
            this.peek() === '_' || this.peek() === '-' || this.peek() === '.')) {
       value += this.advance();
     }
-
     // Check for special keywords
     const tokenType = this.getKeywordType(value);
     this.addToken(tokenType, value);
   }
-
   /**
    * Scan numeric value
    */
   private scanNumber(): void {
     const start = this.position - 1;
     let value = this.input[start];
-
     while (!this.isAtEnd() && (this.isDigit(this.peek()) || this.peek() === '.')) {
       value += this.advance();
     }
-
     this.addToken(TokenType.NUMBER, value);
   }
-
   /**
    * Skip comment to end of line
    */
@@ -352,7 +304,6 @@ export class GraphLexer {
       this.advance();
     }
   }
-
   /**
    * Get token type for keywords
    */
@@ -368,37 +319,34 @@ export class GraphLexer {
       return this.isAtLineStart() || this.isAfterIndent() ? TokenType.KEY : TokenType.VALUE;
     }
   }
-
   /**
    * Add token to list
    */
   private addToken(type: TokenType, value: string): void {
-    this.tokens.push({
+    this.tokens.push({)
       type,
       value,
-      position: {
+      position: {,
         line: this.line,
         column: this.column - value.length,
         offset: this.position - value.length
       }
     });
   }
-
   /**
    * Add error to list
    */
   private addError(message: string, suggestion?: string): void {
-    this.errors.push({
+    this.errors.push({)
       message,
-      position: {
+      position: {,
         line: this.line,
         column: this.column,
-        offset: this.position
+        offset: this.position,
       },
       suggestion
     });
   }
-
   /**
    * Helper methods
    */
@@ -407,42 +355,33 @@ export class GraphLexer {
     this.column++;
     return this.input[this.position++];
   }
-
   private peek(): string {
     if (this.isAtEnd()) return '\0';
     return this.input[this.position];
   }
-
   private peekNext(): string {
     if (this.position + 1 >= this.input.length) return '\0';
     return this.input[this.position + 1];
   }
-
   private isAtEnd(): boolean {
     return this.position >= this.input.length;
   }
-
   private isDigit(char: string): boolean {
     return char >= '0' && char <= '9';
   }
-
   private isAlpha(char: string): boolean {
     return (char >= 'a' && char <= 'z') || 
            (char >= 'A' && char <= 'Z');
   }
-
   private isWhitespace(char: string): boolean {
     return char === ' ' || char === '\t';
   }
-
   private isLineTerminator(char: string): boolean {
     return char === '\n' || char === '\r';
   }
-
   private isAtLineStart(): boolean {
     // Check if we're at the beginning of a line (after newline and optional whitespace)
     if (this.position === 0) return true;
-    
     for (let i = this.position - 1; i >= 0; i--) {
       const char = this.input[i];
       if (char === '\n') return true;
@@ -450,7 +389,6 @@ export class GraphLexer {
     }
     return true;
   }
-
   private isAfterIndent(): boolean {
     // Check if we're immediately after indentation
     if (this.tokens.length === 0) return false;

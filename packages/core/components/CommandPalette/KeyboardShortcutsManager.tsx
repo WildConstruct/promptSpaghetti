@@ -4,7 +4,6 @@
  * 
  * Cinema 4D-inspired keyboard shortcuts with customization and help overlay
  */
-
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 
@@ -39,7 +38,7 @@ export interface KeyboardShortcutsManagerProps {
   disabled?: boolean;
 }
 
-export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> = ({
+export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> = ({)
   onCommandPalette,
   onUndo,
   onRedo,
@@ -62,9 +61,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
   const [isRecording, setIsRecording] = useState<string | null>(null);
   const [shortcuts, setShortcuts] = useState<KeyboardShortcut[]>([]);
-  
   const recordingTimeoutRef = useRef<NodeJS.Timeout>();
-
   // Default shortcuts configuration
   const defaultShortcuts: KeyboardShortcut[] = [
     // Command Palette
@@ -76,9 +73,8 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       description: 'Open Command Palette',
       category: 'editing',
       enabled: true,
-      global: true
+      global: true,
     },
-    
     // File Operations
     {
       id: 'save',
@@ -88,7 +84,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       description: 'Save Graph',
       category: 'file',
       enabled: true,
-      global: true
+      global: true,
     },
     {
       id: 'load',
@@ -98,7 +94,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       description: 'Load Graph',
       category: 'file',
       enabled: true,
-      global: true
+      global: true,
     },
     {
       id: 'export',
@@ -108,9 +104,8 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       description: 'Export Graph',
       category: 'file',
       enabled: true,
-      global: true
+      global: true,
     },
-    
     // Edit Operations
     {
       id: 'undo',
@@ -120,7 +115,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       description: 'Undo',
       category: 'editing',
       enabled: true,
-      global: true
+      global: true,
     },
     {
       id: 'redo',
@@ -130,7 +125,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       description: 'Redo',
       category: 'editing',
       enabled: true,
-      global: true
+      global: true,
     },
     {
       id: 'redo-alt',
@@ -140,9 +135,8 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       description: 'Redo (Alternative)',
       category: 'editing',
       enabled: true,
-      global: true
+      global: true,
     },
-    
     // Selection Operations
     {
       id: 'select-all',
@@ -151,7 +145,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       action: onSelectAll,
       description: 'Select All',
       category: 'selection',
-      enabled: true
+      enabled: true,
     },
     {
       id: 'delete',
@@ -160,7 +154,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       action: onDelete,
       description: 'Delete Selected',
       category: 'editing',
-      enabled: true
+      enabled: true,
     },
     {
       id: 'delete-alt',
@@ -169,7 +163,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       action: onDelete,
       description: 'Delete Selected (Alternative)',
       category: 'editing',
-      enabled: true
+      enabled: true,
     },
     {
       id: 'duplicate',
@@ -178,9 +172,8 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       action: onDuplicate,
       description: 'Duplicate Selected',
       category: 'editing',
-      enabled: true
+      enabled: true,
     },
-    
     // View Operations
     {
       id: 'fit-view',
@@ -189,7 +182,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       action: onFitView,
       description: 'Fit View',
       category: 'view',
-      enabled: true
+      enabled: true,
     },
     {
       id: 'zoom-in',
@@ -198,7 +191,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       action: onZoomIn,
       description: 'Zoom In',
       category: 'view',
-      enabled: true
+      enabled: true,
     },
     {
       id: 'zoom-out',
@@ -207,7 +200,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       action: onZoomOut,
       description: 'Zoom Out',
       category: 'view',
-      enabled: true
+      enabled: true,
     },
     {
       id: 'fullscreen',
@@ -216,9 +209,8 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       action: onToggleFullscreen,
       description: 'Toggle Fullscreen',
       category: 'view',
-      enabled: true
+      enabled: true,
     },
-    
     // Generation
     {
       id: 'generate-character',
@@ -227,9 +219,8 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       action: onGenerateCharacter,
       description: 'Generate Character',
       category: 'generation',
-      enabled: true
+      enabled: true,
     },
-    
     // Help
     {
       id: 'show-help',
@@ -239,7 +230,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       description: 'Show Keyboard Shortcuts',
       category: 'navigation',
       enabled: true,
-      global: true
+      global: true,
     },
     {
       id: 'show-help-alt',
@@ -249,45 +240,35 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       description: 'Show Help (F1)',
       category: 'navigation',
       enabled: true,
-      global: true
+      global: true,
     }
   ];
-
   // Initialize shortcuts
   useEffect(() => {
     setShortcuts([...defaultShortcuts, ...customShortcuts]);
   }, [customShortcuts]);
-
   // Keyboard event handler
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (disabled) return;
-
       const key = e.key;
       const modifiers: ('ctrl' | 'meta' | 'shift' | 'alt')[] = [];
-      
       if (e.ctrlKey || e.metaKey) modifiers.push(e.ctrlKey ? 'ctrl' : 'meta');
       if (e.shiftKey) modifiers.push('shift');
       if (e.altKey) modifiers.push('alt');
-
       // Update pressed keys for visual feedback
       setPressedKeys(prev => new Set([...prev, key]));
-
       // Find matching shortcut
-      const matchingShortcut = shortcuts.find(shortcut => {
+      const matchingShortcut = shortcuts.find(shortcut => {)
         if (!shortcut.enabled) return false;
-        
         const keyMatch = shortcut.key.toLowerCase() === key.toLowerCase();
-        const modifiersMatch = shortcut.modifiers.length === modifiers.length &&
+        const modifiersMatch = shortcut.modifiers.length === modifiers.length &&;
           shortcut.modifiers.every(mod => modifiers.includes(mod));
-        
         return keyMatch && modifiersMatch;
       });
-
       if (matchingShortcut) {
         e.preventDefault();
         e.stopPropagation();
-        
         try {
           matchingShortcut.action();
         } catch (error) {
@@ -295,43 +276,34 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
         }
       }
     };
-
     const handleKeyUp = (e: KeyboardEvent) => {
-      setPressedKeys(prev => {
+      setPressedKeys(prev => {)
         const next = new Set(prev);
         next.delete(e.key);
         return next;
       });
     };
-
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
-
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
     };
   }, [shortcuts, disabled]);
-
   // Clear pressed keys on window blur
   useEffect(() => {
     const handleBlur = () => setPressedKeys(new Set());
-    
     window.addEventListener('blur', handleBlur);
     return () => window.removeEventListener('blur', handleBlur);
   }, []);
-
   // Update shortcut
     }, []);
-
   // Start recording new shortcut
-      
     // Auto-cancel recording after 5 seconds
     recordingTimeoutRef.current = setTimeout(() => {
       setIsRecording(null);
     }, 5000);
   }, []);
-
   // Stop recording
   const stopRecording = useCallback(() => {
     setIsRecording(null);
@@ -339,7 +311,6 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       clearTimeout(recordingTimeoutRef.current);
     }
   }, []);
-
   // Format shortcut for display
   const formatShortcut = useCallback((shortcut: KeyboardShortcut) => {
     const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
@@ -349,19 +320,16 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       shift: '⇧',
       alt: isMac ? '⌥' : 'Alt'
     };
-
-    const parts = [
+    const parts = [;
       ...shortcut.modifiers.map(mod => modifierSymbols[mod]),
       shortcut.key === ' ' ? 'Space' : shortcut.key.toUpperCase()
     ];
-
     return parts.join(isMac ? '' : '+');
   }, []);
-
   // Theme styles
   const getThemeStyles = () => {
     const themes = {
-      light: {
+      light: {,
         background: '#ffffff',
         secondary: '#f8fafc',
         border: '#e5e7eb',
@@ -369,9 +337,9 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
         textSecondary: '#6b7280',
         accent: '#3b82f6',
         hover: '#f3f4f6',
-        key: '#f1f5f9'
+        key: '#f1f5f9',
       },
-      dark: {
+      dark: {,
         background: '#1f2937',
         secondary: '#111827',
         border: '#4b5563',
@@ -379,9 +347,9 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
         textSecondary: '#9ca3af',
         accent: '#60a5fa',
         hover: '#374151',
-        key: '#374151'
+        key: '#374151',
       },
-      cinema: {
+      cinema: {,
         background: 'var(--color-bg-secondary)',
         secondary: 'var(--color-bg-tertiary)',
         border: 'var(--color-ui-border)',
@@ -389,14 +357,12 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
         textSecondary: 'var(--color-text-secondary)',
         accent: 'var(--color-accent-orange)',
         hover: 'var(--color-ui-hover)',
-        key: 'var(--color-bg-primary)'
+        key: 'var(--color-bg-primary)',
       }
     };
     return themes[theme];
   };
-
   const styles = getThemeStyles();
-
   // Category icons
   const categoryIcons: Record<string, string> = {
     editing: '✏️',
@@ -404,13 +370,12 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
     selection: '🎯',
     view: '👁️',
     file: '📁',
-    generation: '✨'
+    generation: '✨',
   };
-
-  return (
+  return ()
     <>
       {/* Help Overlay */}
-      {showHelp && (
+      {showHelp && ()
         <div
           style={{
             position: 'fixed',
@@ -423,20 +388,20 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 10001,
-            fontFamily: 'var(--font-family-primary)'
+            fontFamily: 'var(--font-family-primary)',
           }}
           onClick={() => setShowHelp(false)}
         >
           <div
             style={{
               background: styles.background,
-              border: `1px solid ${styles.border}`,
+              border: `1px solid ${styles.border}`,}
               borderRadius: '16px',
               width: '90%',
               maxWidth: '800px',
               maxHeight: '90%',
               overflow: 'hidden',
-              boxShadow: 'var(--shadow-xl)'
+              boxShadow: 'var(--shadow-xl)',
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -444,20 +409,20 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
             <div
               style={{
                 padding: '24px',
-                borderBottom: `1px solid ${styles.border}`,
-                background: styles.secondary
+                borderBottom: `1px solid ${styles.border}`,}
+                background: styles.secondary,
               }}
             >
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
               }}>
                 <h2 style={{
                   margin: 0,
                   fontSize: '24px',
                   fontWeight: '600',
-                  color: styles.text
+                  color: styles.text,
                 }}>
                   ⌨️ Keyboard Shortcuts
                 </h2>
@@ -469,7 +434,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                     color: styles.textSecondary,
                     fontSize: '28px',
                     cursor: 'pointer',
-                    padding: '4px'
+                    padding: '4px',
                   }}
                 >
                   ×
@@ -478,27 +443,26 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
               <p style={{
                 margin: '8px 0 0 0',
                 color: styles.textSecondary,
-                fontSize: '16px'
+                fontSize: '16px',
               }}>
                 Master the graph editor with these professional keyboard shortcuts
               </p>
             </div>
-
             {/* Shortcuts Grid */}
             <div
               style={{
                 padding: '24px',
                 maxHeight: '600px',
-                overflowY: 'auto'
+                overflowY: 'auto',
               }}
             >
-              {Object.entries(
+              {Object.entries()
                 shortcuts.reduce((acc, shortcut) => {
                   if (!acc[shortcut.category]) acc[shortcut.category] = [];
                   acc[shortcut.category].push(shortcut);
                   return acc;
                 }, {} as Record<string, KeyboardShortcut[]>)
-              ).map(([category, categoryShortcuts]) => (
+              ).map(([category, categoryShortcuts]) => ()
                 <div key={category} style={{ marginBottom: '32px' }}>
                   <h3 style={{
                     color: styles.accent,
@@ -508,19 +472,18 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                     textTransform: 'capitalize',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px'
+                    gap: '8px',
                   }}>
                     {categoryIcons[category]} {category}
                   </h3>
-                  
                   <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                    gap: '12px'
+                    gap: '12px',
                   }}>
                     {categoryShortcuts
                       .filter(shortcut => shortcut.enabled)
-                      .map(shortcut => (
+                      .map(shortcut => ()
                         <div
                           key={shortcut.id}
                           style={{
@@ -529,7 +492,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                             justifyContent: 'space-between',
                             padding: '12px 16px',
                             background: styles.secondary,
-                            border: `1px solid ${styles.border}`,
+                            border: `1px solid ${styles.border}`,}
                             borderRadius: '8px',
                             transition: 'all var(--transition-fast)'
                           }}
@@ -537,19 +500,18 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                           <div style={{
                             color: styles.text,
                             fontSize: '14px',
-                            fontWeight: '500'
+                            fontWeight: '500',
                           }}>
                             {shortcut.description}
                           </div>
-                          
                           <div style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '4px'
+                            gap: '4px',
                           }}>
                             {formatShortcut(shortcut).split(/(\+|⌘|⇧|⌥|Ctrl|Alt)/).map((part, index) => {
                               if (part === '+') {
-                                return (
+                                return ()
                                   <span key={index} style={{
                                     color: styles.textSecondary,
                                     fontSize: '12px',
@@ -559,13 +521,12 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                                   </span>
                                 );
                               }
-                              
-                              return (
+                              return ()
                                 <kbd
                                   key={index}
                                   style={{
                                     background: styles.key,
-                                    border: `1px solid ${styles.border}`,
+                                    border: `1px solid ${styles.border}`,}
                                     borderRadius: '4px',
                                     padding: '4px 8px',
                                     fontSize: '11px',
@@ -586,30 +547,28 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                 </div>
               ))}
             </div>
-
             {/* Footer */}
             <div
               style={{
                 padding: '20px 24px',
-                borderTop: `1px solid ${styles.border}`,
+                borderTop: `1px solid ${styles.border}`,}
                 background: styles.secondary,
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
               }}
             >
               <div style={{
                 fontSize: '12px',
-                color: styles.textSecondary
+                color: styles.textSecondary,
               }}>
                 Press <kbd style={{
                   background: styles.key,
                   padding: '2px 6px',
                   borderRadius: '3px',
-                  fontSize: '11px'
+                  fontSize: '11px',
                 }}>Esc</kbd> or click outside to close
               </div>
-              
               <button
                 onClick={() => setShowHelp(false)}
                 style={{
@@ -620,7 +579,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                   color: styles.background,
                   fontSize: '14px',
                   fontWeight: '500',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 Got it!
@@ -629,9 +588,8 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
           </div>
         </div>
       )}
-
       {/* Recording Indicator */}
-      {isRecording && (
+      {isRecording && ()
         <div
           style={{
             position: 'fixed',
@@ -639,19 +597,19 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
             left: '50%',
             transform: 'translate(-50%, -50%)',
             background: styles.background,
-            border: `2px solid ${styles.accent}`,
+            border: `2px solid ${styles.accent}`,}
             borderRadius: '12px',
             padding: '24px',
             boxShadow: 'var(--shadow-xl)',
             zIndex: 10002,
             textAlign: 'center',
-            fontFamily: 'var(--font-family-primary)'
+            fontFamily: 'var(--font-family-primary)',
           }}
         >
           <div style={{
             color: styles.accent,
             fontSize: '48px',
-            marginBottom: '16px'
+            marginBottom: '16px',
           }}>
             ⌨️
           </div>
@@ -659,14 +617,14 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
             color: styles.text,
             fontSize: '18px',
             fontWeight: '600',
-            marginBottom: '8px'
+            marginBottom: '8px',
           }}>
             Recording new shortcut...
           </div>
           <div style={{
             color: styles.textSecondary,
             fontSize: '14px',
-            marginBottom: '16px'
+            marginBottom: '16px',
           }}>
             Press the key combination you want to use
           </div>
@@ -675,11 +633,11 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
             style={{
               padding: '8px 16px',
               background: 'transparent',
-              border: `1px solid ${styles.border}`,
+              border: `1px solid ${styles.border}`,}
               borderRadius: '6px',
               color: styles.text,
               fontSize: '12px',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             Cancel

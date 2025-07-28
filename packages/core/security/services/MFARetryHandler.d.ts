@@ -65,7 +65,7 @@ export interface CircuitBreakerConfig {
     halfOpenMaxAttempts: number;
 }
 export interface MFARetryConfig {
-    operationConfigs: {
+    operationConfigs: {,
         [key in MFAOperation]: RetryConfig;
     };
     circuitBreaker: CircuitBreakerConfig;
@@ -108,7 +108,7 @@ export interface RetryMetrics {
     averageAttempts: number;
     averageDuration: number;
     circuitBreakerTrips: number;
-    operationMetrics: {
+    operationMetrics: {,
         [key in MFAOperation]: {
             count: number;
             successRate: number;
@@ -116,7 +116,7 @@ export interface RetryMetrics {
             averageDuration: number;
         };
     };
-    errorMetrics: {
+    errorMetrics: {,
         [key in FailureType]: number;
     };
 }
@@ -132,9 +132,9 @@ export declare class MFARetryHandler extends EventEmitter {
     /**
      * Execute an MFA operation with retry and timeout handling
      */
-    executeWithRetry<T>(
+    executeWithRetry<T>()
       operation: MFAOperation,
-      operationFn: (
+      operationFn: (),
     ) => Promise<T>, context?: Partial<OperationContext>): Promise<OperationResult<T>>;
     /**
      * Check if an operation should be attempted based on circuit breaker state

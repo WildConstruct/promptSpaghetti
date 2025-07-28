@@ -9,7 +9,6 @@ import { TemplateEditor } from '../TemplateEditor';
 export interface ActionEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Action specific props can be added here
 }
-
 const VERB_TENSES: SelectOption[] = [
   { value: 'present', label: 'Present (walk, walks)' },
   { value: 'past', label: 'Past (walked)' },
@@ -19,7 +18,6 @@ const VERB_TENSES: SelectOption[] = [
   { value: 'present_perfect', label: 'Present Perfect (has walked)' },
   { value: 'any', label: 'Any tense' }
 ];
-
 const VERB_MOODS: SelectOption[] = [
   { value: 'indicative', label: 'Indicative (statement)' },
   { value: 'imperative', label: 'Imperative (command)' },
@@ -27,7 +25,6 @@ const VERB_MOODS: SelectOption[] = [
   { value: 'conditional', label: 'Conditional (would/could)' },
   { value: 'any', label: 'Any mood' }
 ];
-
 const ACTION_TYPES: SelectOption[] = [
   { value: 'physical', label: 'Physical Action', group: 'Action Types' },
   { value: 'mental', label: 'Mental Action', group: 'Action Types' },
@@ -53,32 +50,24 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
   const requiresObject = (nodeData.requiresObject as boolean) ?? false;
   const adverbVariations = (nodeData.adverbVariations as string[]) || [];
   const contextHints = (nodeData.contextHints as string[]) || [];
-
   // No state needed - ProgressiveDisclosureSection handles collapse state automatically
-
   const handleFieldChange = (field: string, value: unknown) => {
     onChange({ [field]: value });
   };
-
   const handleVariationsChange = (newVariations: string[]) => {
     handleFieldChange('variations', newVariations);
   };
-
   const handleAdverbVariationsChange = (newAdverbs: string[]) => {
     handleFieldChange('adverbVariations', newAdverbs);
   };
-
   const handleContextHintsChange = (newHints: string[]) => {
     handleFieldChange('contextHints', newHints);
   };
-
   // Auto-generate verb forms based on base form
   const generateVerbForms = () => {
     if (!baseForm.trim()) return;
-    
     const base = baseForm.trim().toLowerCase();
     const generated = [base];
-    
     // Add basic conjugations (simplified)
     if (base.endsWith('e')) {
       generated.push(base + 'd'); // past: love -> loved
@@ -97,12 +86,10 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
       generated.push(base + 's'); // 3rd person: walk -> walks
       generated.push(base + 'ing'); // present continuous: walk -> walking
     }
-    
     // Remove duplicates and update variations
     handleVariationsChange([...new Set([...variations, ...generated])]);
   };
-
-  return (
+  return ()
     <div className="action-editor">
       {/* BASIC LEVEL: Essential action configuration */}
       <ProgressiveDisclosureSection
@@ -121,7 +108,6 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
           onChange={(value) => handleFieldChange('label', value)}
           placeholder="Enter a name for this action node..."
         />
-
         <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
           <div style={{ flex: 1 }}>
             <TextFieldEditor
@@ -145,13 +131,12 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
               color: 'white',
               cursor: baseForm.trim() ? 'pointer' : 'not-allowed',
               marginBottom: 16,
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
             }}
           >
             Generate Forms
           </button>
         </div>
-
         <SelectEditor
           label="Action Type"
           value={actionType}
@@ -161,7 +146,6 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
           onChange={(value) => handleFieldChange('actionType', value)}
         />
       </ProgressiveDisclosureSection>
-
       {/* BASIC LEVEL: Template Input */}
       <ProgressiveDisclosureSection
         title="Action Template"
@@ -177,7 +161,7 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
             fontSize: 12,
             fontWeight: 500,
             color: '#e2e8f0',
-            marginBottom: 6
+            marginBottom: 6,
           }}>
             Action Template (optional)
           </label>
@@ -198,7 +182,7 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
             fontSize: 10,
             color: '#a0aec0',
             marginTop: 4,
-            lineHeight: 1.4
+            lineHeight: 1.4,
           }}>
             Use {'{variable}'} syntax for dynamic actions. Variables will appear as connection ports.
             <br />
@@ -206,7 +190,6 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* BASIC LEVEL: Verb Variations */}
       <ProgressiveDisclosureSection
         title="Verb Forms"
@@ -222,7 +205,7 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
             fontWeight: 500, 
             marginBottom: 8,
             color: '#e2e8f0',
-            fontSize: 12
+            fontSize: 12,
           }}>
             Verb Variations
           </label>
@@ -253,13 +236,12 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
             fontSize: 10,
             color: '#a0aec0',
             marginTop: 4,
-            lineHeight: 1.4
+            lineHeight: 1.4,
           }}>
             Include different tenses, persons, and numbers: walk, walks, walked, walking, etc.
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* ADVANCED LEVEL: Grammatical Properties */}
       <ProgressiveDisclosureSection
         title="Grammatical Properties"
@@ -277,7 +259,6 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
           zodType={null as any}
           onChange={(value) => handleFieldChange('tense', value)}
         />
-
         <SelectEditor
           label="Mood"
           value={mood}
@@ -286,7 +267,6 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
           zodType={null as any}
           onChange={(value) => handleFieldChange('mood', value)}
         />
-
         <div style={{ marginBottom: 16 }}>
           <label style={{
             display: 'flex',
@@ -294,7 +274,7 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
             gap: 8,
             fontSize: 12,
             color: '#e2e8f0',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}>
             <input
               type="checkbox"
@@ -303,7 +283,7 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
               style={{
                 width: 14,
                 height: 14,
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             />
             Requires direct object (transitive)
@@ -312,13 +292,12 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
             fontSize: 10,
             color: '#a0aec0',
             marginTop: 2,
-            marginLeft: 22
+            marginLeft: 22,
           }}>
             E.g., "eat" requires an object ("eat food"), while "sleep" doesn't
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* ADVANCED LEVEL: Intensity and Adverbs */}
       <ProgressiveDisclosureSection
         title="Intensity & Modifiers"
@@ -334,7 +313,7 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
             fontWeight: 500, 
             marginBottom: 8,
             color: '#e2e8f0',
-            fontSize: 12
+            fontSize: 12,
           }}>
             Intensity Level: {intensity}/10
           </label>
@@ -346,28 +325,27 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
             onChange={(e) => handleFieldChange('intensity', parseInt(e.target.value))}
             style={{
               width: '100%',
-              marginBottom: 4
+              marginBottom: 4,
             }}
           />
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
             fontSize: 10,
-            color: '#a0aec0'
+            color: '#a0aec0',
           }}>
             <span>Gentle</span>
             <span>Moderate</span>
             <span>Intense</span>
           </div>
         </div>
-
         <div style={{ marginBottom: 12 }}>
           <label style={{ 
             display: 'block', 
             fontWeight: 500, 
             marginBottom: 8,
             color: '#e2e8f0',
-            fontSize: 12
+            fontSize: 12,
           }}>
             Adverb Modifiers
           </label>
@@ -398,13 +376,12 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
             fontSize: 10,
             color: '#a0aec0',
             marginTop: 4,
-            lineHeight: 1.4
+            lineHeight: 1.4,
           }}>
             Adverbs that can be randomly selected to modify this action
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* ADVANCED LEVEL: Context Hints */}
       <ProgressiveDisclosureSection
         title="Context Hints"
@@ -420,7 +397,7 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
             fontWeight: 500, 
             marginBottom: 8,
             color: '#e2e8f0',
-            fontSize: 12
+            fontSize: 12,
           }}>
             Context Hints
           </label>
@@ -451,13 +428,12 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
             fontSize: 10,
             color: '#a0aec0',
             marginTop: 4,
-            lineHeight: 1.4
+            lineHeight: 1.4,
           }}>
             Hints help other nodes understand the context and requirements of this action
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* DEBUG LEVEL: Configuration Preview */}
       <ProgressiveDisclosureSection
         title="Configuration Preview"
@@ -473,12 +449,11 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
           borderRadius: 4,
           padding: 12,
           fontSize: 12,
-          color: '#e2e8f0'
+          color: '#e2e8f0',
         }}>
           <div style={{ marginBottom: 8, fontWeight: 500 }}>
             Action Configuration:
           </div>
-          
           <div style={{ marginBottom: 4 }}>
             <span style={{ color: '#a0aec0' }}>Type:</span> {ACTION_TYPES.find(t => t.value === actionType)?.label}
           </div>
@@ -494,25 +469,24 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
           <div style={{ marginBottom: 4 }}>
             <span style={{ color: '#a0aec0' }}>Requires Object:</span> {requiresObject ? 'Yes' : 'No'}
           </div>
-
-          {variations.length > 0 && (
+          {variations.length > 0 && ()
             <div style={{ 
               marginTop: 8, 
               padding: 8, 
               background: 'rgba(66, 153, 225, 0.1)',
-              borderRadius: 2
+              borderRadius: 2,
             }}>
               <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                 Verb forms ({variations.length}):
               </div>
               <div style={{ fontSize: 11 }}>
-                {variations.slice(0, 4).map((variation, index) => (
+                {variations.slice(0, 4).map((variation, index) => ()
                   <span key={index}>
                     "{variation}"
                     {index < Math.min(3, variations.length - 1) ? ', ' : ''}
                   </span>
                 ))}
-                {variations.length > 4 && (
+                {variations.length > 4 && ()
                   <span style={{ color: '#a0aec0', fontStyle: 'italic' }}>
                     ... +{variations.length - 4} more
                   </span>
@@ -520,13 +494,12 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
               </div>
             </div>
           )}
-
-          {adverbVariations.length > 0 && (
+          {adverbVariations.length > 0 && ()
             <div style={{ 
               marginTop: 8, 
               padding: 8, 
               background: 'rgba(34, 197, 94, 0.1)',
-              borderRadius: 2
+              borderRadius: 2,
             }}>
               <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                 Available adverbs:

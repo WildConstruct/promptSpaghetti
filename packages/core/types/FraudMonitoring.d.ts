@@ -592,7 +592,7 @@ export interface FraudAnalyticsRecommendation {
     title: string;
     description: string;
     expectedImpact: string;
-    implementation: {
+    implementation: {,
         effort: 'low' | 'medium' | 'high';
         timeline: string;
         resources: string[];

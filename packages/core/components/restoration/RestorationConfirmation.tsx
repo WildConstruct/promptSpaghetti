@@ -27,9 +27,7 @@ import {
   RestorationConfig,
   CONFLICT_DESCRIPTIONS
 } from '../../types/restoration';
-
 const { Title, Text } = Typography;
-
 interface RestorationConfirmationProps {
   preview: RestorationPreviewResponse;
   config: RestorationConfig;
@@ -37,7 +35,7 @@ interface RestorationConfirmationProps {
   onCancel: () => void;
 }
 
-export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = ({
+export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = ({)
   preview,
   config,
   onConfirm,
@@ -46,10 +44,8 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
   const hasConflicts = preview.summary.totalConflicts > 0;
   const isHighRisk = preview.summary.riskLevel === 'high';
   const totalChanges = preview.summary.totalChanges;
-
   const getActionSummary = () => {
     const actions = [];
-    
     if (preview.preview.nodesToAdd.length > 0) {
       actions.push({ type: 'add', count: preview.preview.nodesToAdd.length, item: 'nodes' });
     }
@@ -68,23 +64,19 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
     if (preview.preview.edgesToDelete.length > 0) {
       actions.push({ type: 'delete', count: preview.preview.edgesToDelete.length, item: 'edges' });
     }
-
     return actions;
   };
-
   const getConflictSummary = () => {
     const conflictTypes = preview.conflicts.reduce((acc, conflict) => {
       acc[conflict.conflictType] = (acc[conflict.conflictType] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-
-    return Object.entries(conflictTypes).map(([type, count]) => ({
+    return Object.entries(conflictTypes).map(([type, count]) => ({)
       type,
       count,
       description: CONFLICT_DESCRIPTIONS[type as keyof typeof CONFLICT_DESCRIPTIONS]
     }));
   };
-
   const getActionIcon = (type: string) => {
     switch (type) {
     case 'add':
@@ -97,7 +89,6 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
       return <InfoCircleOutlined />;
     }
   };
-
   const _____getActionColor = (type: string) => {
     switch (type) {
     case 'add':
@@ -110,23 +101,21 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
       return 'default';
     }
   };
-
   const formatDuration = (milliseconds: number) => {
     if (milliseconds < 1000) {
-      return `${milliseconds}ms`;
+      return `${milliseconds}ms`;}
     }
     const seconds = Math.floor(milliseconds / 1000);
     if (seconds < 60) {
-      return `${seconds}s`;
+      return `${seconds}s`;}
     }
     const minutes = Math.floor(seconds / 60);
-    return `${minutes}m ${seconds % 60}s`;
+    return `${minutes}m ${seconds % 60}s`;}
   };
-
-  return (
+  return ()
     <div>
       {/* Risk Assessment */}
-      {isHighRisk && (
+      {isHighRisk && ()
         <Alert
           type="error"
           message="High Risk Operation"
@@ -135,8 +124,7 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
           style={{ marginBottom: '16px' }}
         />
       )}
-
-      {hasConflicts && (
+      {hasConflicts && ()
         <Alert
           type="warning"
           message="Conflicts Require Resolution"
@@ -145,7 +133,6 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
           style={{ marginBottom: '16px' }}
         />
       )}
-
       {/* Summary Statistics */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={6}>
@@ -190,7 +177,6 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
           </Card>
         </Col>
       </Row>
-
       <Row gutter={16}>
         <Col span={12}>
           {/* Action Summary */}
@@ -198,7 +184,7 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
             <List
               size="small"
               dataSource={getActionSummary()}
-              renderItem={(action) => (
+              renderItem={(action) => ()
                 <List.Item>
                   <Space>
                     {getActionIcon(action.type)}
@@ -209,11 +195,10 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
                 </List.Item>
               )}
             />
-            {totalChanges === 0 && (
+            {totalChanges === 0 && ()
               <Text type="secondary">No changes will be made.</Text>
             )}
           </Card>
-
           {/* Configuration Summary */}
           <Card title="Configuration" style={{ marginBottom: '16px' }}>
             <Space direction="vertical" size="small" style={{ width: '100%' }}>
@@ -246,15 +231,14 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
             </Space>
           </Card>
         </Col>
-
         <Col span={12}>
           {/* Conflict Summary */}
-          {hasConflicts && (
+          {hasConflicts && ()
             <Card title="Conflicts Detected" style={{ marginBottom: '16px' }}>
               <List
                 size="small"
                 dataSource={getConflictSummary()}
-                renderItem={(conflict) => (
+                renderItem={(conflict) => ()
                   <List.Item>
                     <Space>
                       <WarningOutlined style={{ color: '#fa8c16' }} />
@@ -268,7 +252,6 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
               />
             </Card>
           )}
-
           {/* Safety Measures */}
           <Card title="Safety Measures" style={{ marginBottom: '16px' }}>
             <List
@@ -295,7 +278,7 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
                   icon: <InfoCircleOutlined />
                 }
               ]}
-              renderItem={(item) => (
+              renderItem={(item) => ()
                 <List.Item>
                   <Space>
                     {item.icon}
@@ -315,9 +298,7 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
           </Card>
         </Col>
       </Row>
-
       <Divider />
-
       {/* Final Confirmation */}
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
         <Title level={4}>
@@ -327,7 +308,6 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
           This action cannot be undone. {config.createBackup && 'A backup will be created before making changes.'}
         </Text>
       </div>
-
       {/* Action Buttons */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
         <Button size="large" onClick={onCancel}>

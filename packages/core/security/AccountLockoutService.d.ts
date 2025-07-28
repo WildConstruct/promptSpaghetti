@@ -60,7 +60,7 @@ export interface AccountLockout {
     unlockTime?: Date;
     failedAttempts: number;
     securityEvents: string[];
-    metadata: {
+    metadata: {,
         ipAddress?: string;
         userAgent?: string;
         geolocation?: string;
@@ -138,7 +138,7 @@ export declare class AccountLockoutService extends EventEmitter {
     /**
      * Create a new account lockout
      */
-    createLockout(
+    createLockout()
       userId: string,
       userEmail: string,
       reason: LockoutReason,
@@ -162,7 +162,7 @@ export declare class AccountLockoutService extends EventEmitter {
     /**
      * Approve pending unlock request
      */
-    approveUnlock(
+    approveUnlock()
       lockoutId: string,
       adminActionId: string,
       approverId: string,
@@ -195,7 +195,7 @@ export declare class AccountLockoutService extends EventEmitter {
     /**
      * Get lockout statistics and reports
      */
-    getLockoutStatistics(dateRange?: {
+    getLockoutStatistics(dateRange?: {)
         start: Date;
         end: Date;
     }): {
@@ -205,7 +205,7 @@ export declare class AccountLockoutService extends EventEmitter {
         averageLockoutDuration: number;
         adminUnlocks: number;
         emergencyUnlocks: number;
-        topAffectedUsers: Array<{
+        topAffectedUsers: Array<{,
             userId: string;
             count: number;
         }>;

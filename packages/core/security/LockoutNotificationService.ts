@@ -12,7 +12,6 @@
  * - Administrative notification routing
  * - Localization support
  */
-
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
 import {
@@ -102,19 +101,19 @@ export interface RetryPolicy {
 // User Notification Preferences
 export interface UserNotificationPreferences {
   userId: string;
-  channels: {
+  channels: {,
     email: boolean;
     sms: boolean;
     push: boolean;
   };
   language: string;
   timezone: string;
-  quietHours: {
+  quietHours: {,
     enabled: boolean;
     start: string; // HH:MM format
     end: string;   // HH:MM format
   };
-  frequency: {
+  frequency: {,
     immediate: boolean;
     digest: boolean;
     digestFrequency: 'daily' | 'weekly';
@@ -144,7 +143,7 @@ export interface NotificationDelivery {
   recipient: string;
   status: NotificationStatus;
   attempts: number;
-  content: {
+  content: {,
     subject?: string;
     body: string;
     html?: string;
@@ -160,11 +159,11 @@ export interface NotificationDelivery {
 // Admin Notification Rules
 export interface AdminNotificationRule {
   id: string;
-  trigger: {
+  trigger: {,
     event: string;
     conditions: Record<string, any>;
   };
-  recipients: {
+  recipients: {,
     roles: AdminRole[];
     emails: string[];
     slackChannels?: string[];
@@ -173,7 +172,6 @@ export interface AdminNotificationRule {
   priority: NotificationPriority;
   enabled: boolean;
 }
-
 /**
  * Comprehensive lockout notification service
  */
@@ -183,27 +181,23 @@ export class LockoutNotificationService extends EventEmitter {
   private notifications: Map<string, NotificationRequest> = new Map();
   private deliveries: Map<string, NotificationDelivery> = new Map();
   private adminRules: Map<string, AdminNotificationRule> = new Map();
-  
   constructor() {
     super();
     this.initializeDefaultTemplates();
     this.initializeAdminRules();
     this.startDeliveryProcessor();
   }
-  
   /**
    * Send lockout notification to user
    */
-  public async sendLockoutNotification(
+  public async sendLockoutNotification()
     lockout: AccountLockout,
     channels?: NotificationChannel[]
   ): Promise<string> {
     const userPrefs = this.getUserPreferences(lockout.userId);
     const effectiveChannels = channels || this.getPreferredChannels(userPrefs);
-    
     const variables = this.buildTemplateVariables(lockout);
     const templateId = this.selectTemplate(NotificationType.LOCKOUT_NOTIFICATION, userPrefs.language);
-    
     const request: NotificationRequest = {
       id: crypto.randomUUID(),
       type: NotificationType.LOCKOUT_NOTIFICATION,
@@ -213,29 +207,25 @@ export class LockoutNotificationService extends EventEmitter {
       templateId,
       variables,
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
-      metadata: {
+      metadata: {,
         lockoutId: lockout.id,
         userId: lockout.userId,
-        reason: lockout.reason
+        reason: lockout.reason,
       }
     };
-    
     return await this.queueNotification(request);
   }
-  
   /**
    * Send unlock notification to user
    */
-  public async sendUnlockNotification(
+  public async sendUnlockNotification()
     lockout: AccountLockout,
     adminName?: string
   ): Promise<string> {
     const userPrefs = this.getUserPreferences(lockout.userId);
     const channels = this.getPreferredChannels(userPrefs);
-    
     const variables = this.buildTemplateVariables(lockout, { adminName });
     const templateId = this.selectTemplate(NotificationType.UNLOCK_NOTIFICATION, userPrefs.language);
-    
     const request: NotificationRequest = {
       id: crypto.randomUUID(),
       type: NotificationType.UNLOCK_NOTIFICATION,
@@ -244,29 +234,25 @@ export class LockoutNotificationService extends EventEmitter {
       priority: NotificationPriority.HIGH,
       templateId,
       variables,
-      metadata: {
+      metadata: {,
         lockoutId: lockout.id,
         userId: lockout.userId,
         adminName
       }
     };
-    
     return await this.queueNotification(request);
   }
-  
   /**
    * Send security alert notification
    */
-  public async sendSecurityAlert(
+  public async sendSecurityAlert()
     lockout: AccountLockout,
     alertDetails: Record<string, any>
   ): Promise<string> {
     const userPrefs = this.getUserPreferences(lockout.userId);
-    const channels = [NotificationChannel.EMAIL, NotificationChannel.PUSH]; // Security alerts always use multiple channels
-    
+    const channels = [NotificationChannel.EMAIL, NotificationChannel.PUSH]; // Security alerts always use multiple channels;
     const variables = this.buildTemplateVariables(lockout, alertDetails);
     const templateId = this.selectTemplate(NotificationType.SECURITY_ALERT, userPrefs.language);
-    
     const request: NotificationRequest = {
       id: crypto.randomUUID(),
       type: NotificationType.SECURITY_ALERT,
@@ -275,34 +261,29 @@ export class LockoutNotificationService extends EventEmitter {
       priority: NotificationPriority.URGENT,
       templateId,
       variables,
-      metadata: {
+      metadata: {,
         lockoutId: lockout.id,
         userId: lockout.userId,
         alertDetails
       }
     };
-    
     return await this.queueNotification(request);
   }
-  
   /**
    * Send admin notification for approval required
    */
-  public async sendAdminNotification(
+  public async sendAdminNotification()
     type: NotificationType,
     lockout: AccountLockout,
     adminRoles: AdminRole[],
     details: Record<string, any>
   ): Promise<string[]> {
     const notifications: string[] = [];
-    
     for (const role of adminRoles) {
       const recipients = this.getAdminRecipients(role);
-      
       for (const recipient of recipients) {
         const variables = this.buildAdminTemplateVariables(lockout, details);
-        const templateId = this.selectTemplate(type, 'en'); // Admin notifications in English by default
-        
+        const templateId = this.selectTemplate(type, 'en'); // Admin notifications in English by default;
         const request: NotificationRequest = {
           id: crypto.randomUUID(),
           type,
@@ -311,42 +292,37 @@ export class LockoutNotificationService extends EventEmitter {
           priority: NotificationPriority.HIGH,
           templateId,
           variables,
-          metadata: {
+          metadata: {,
             lockoutId: lockout.id,
             adminRole: role,
             details
           }
         };
-        
         const notificationId = await this.queueNotification(request);
         notifications.push(notificationId);
       }
     }
-    
     return notifications;
   }
-  
   /**
    * Update user notification preferences
    */
-  public updateUserPreferences(
+  public updateUserPreferences()
     userId: string,
-    preferences: Partial<UserNotificationPreferences>
+    preferences: Partial<UserNotificationPreferences>,
   ): void {
     const current = this.getUserPreferences(userId);
     const updated = { ...current, ...preferences, userId };
-    
     this.preferences.set(userId, updated);
     this.emit('preferencesUpdated', { userId, preferences: updated });
   }
-  
   /**
    * Get notification delivery status
    */
   public getNotificationStatus(notificationId: string): {
     request: NotificationRequest | null;
     deliveries: NotificationDelivery[];
-    summary: {
+    summary: {,
       totalDeliveries: number;
       successful: number;
       failed: number;
@@ -354,27 +330,24 @@ export class LockoutNotificationService extends EventEmitter {
     };
   } {
     const request = this.notifications.get(notificationId) || null;
-    const deliveries = Array.from(this.deliveries.values())
+    const deliveries = Array.from(this.deliveries.values());
       .filter(d => d.requestId === notificationId);
-    
     const summary = {
       totalDeliveries: deliveries.length,
       successful: deliveries.filter(d => d.status === NotificationStatus.DELIVERED).length,
       failed: deliveries.filter(d => d.status === NotificationStatus.FAILED).length,
-      pending: deliveries.filter(d => [
+      pending: deliveries.filter(d => [)
         NotificationStatus.PENDING,
         NotificationStatus.QUEUED,
         NotificationStatus.SENDING
       ].includes(d.status)).length
     };
-    
     return { request, deliveries, summary };
   }
-  
   /**
    * Get user notification history
    */
-  public getUserNotificationHistory(
+  public getUserNotificationHistory()
     userId: string,
     limit: number = 50
   ): NotificationRequest[] {
@@ -383,7 +356,6 @@ export class LockoutNotificationService extends EventEmitter {
       .sort((a, b) => b.metadata.createdAt - a.metadata.createdAt)
       .slice(0, limit);
   }
-  
   /**
    * Create custom notification template
    */
@@ -393,21 +365,18 @@ export class LockoutNotificationService extends EventEmitter {
       id,
       ...template
     };
-    
     this.templates.set(id, fullTemplate);
     this.emit('templateCreated', fullTemplate);
-    
     return id;
   }
-  
   /**
    * Test notification delivery
    */
-  public async testNotification(
+  public async testNotification()
     recipient: string,
     channel: NotificationChannel,
     templateId: string,
-    variables: TemplateVariables
+    variables: TemplateVariables,
   ): Promise<string> {
     const request: NotificationRequest = {
       id: crypto.randomUUID(),
@@ -417,15 +386,13 @@ export class LockoutNotificationService extends EventEmitter {
       priority: NotificationPriority.LOW,
       templateId,
       variables,
-      metadata: {
+      metadata: {,
         test: true,
-        testTimestamp: Date.now()
+        testTimestamp: Date.now(),
       }
     };
-    
     return await this.queueNotification(request);
   }
-  
   /**
    * Get notification statistics
    */
@@ -440,49 +407,39 @@ export class LockoutNotificationService extends EventEmitter {
   } {
     let notifications = Array.from(this.notifications.values());
     let deliveries = Array.from(this.deliveries.values());
-    
     if (dateRange) {
-      notifications = notifications.filter(n => {
+      notifications = notifications.filter(n => {)
         const createdAt = new Date(n.metadata.createdAt);
         return createdAt >= dateRange.start && createdAt <= dateRange.end;
       });
-      
       const notificationIds = new Set(notifications.map(n => n.id));
       deliveries = deliveries.filter(d => notificationIds.has(d.requestId));
     }
-    
     const byType: Record<NotificationType, number> = {} as any;
     const byChannel: Record<NotificationChannel, number> = {} as any;
     const byStatus: Record<NotificationStatus, number> = {} as any;
     const failureReasons: { [key: string]: number } = {};
-    
-    notifications.forEach(n => {
+    notifications.forEach(n => {)
       byType[n.type] = (byType[n.type] || 0) + 1;
     });
-    
-    deliveries.forEach(d => {
+    deliveries.forEach(d => {)
       byChannel[d.channel] = (byChannel[d.channel] || 0) + 1;
       byStatus[d.status] = (byStatus[d.status] || 0) + 1;
-      
       if (d.status === NotificationStatus.FAILED && d.failureReason) {
         failureReasons[d.failureReason] = (failureReasons[d.failureReason] || 0) + 1;
       }
     });
-    
     const successfulDeliveries = deliveries.filter(d => d.status === NotificationStatus.DELIVERED);
     const deliveryRate = deliveries.length > 0 ? (successfulDeliveries.length / deliveries.length) * 100 : 0;
-    
     const totalDeliveryTime = successfulDeliveries.reduce((sum, d) => {
       if (d.sentAt && d.deliveredAt) {
         return sum + (d.deliveredAt.getTime() - d.sentAt.getTime());
       }
       return sum;
     }, 0);
-    
-    const averageDeliveryTime = successfulDeliveries.length > 0 
+    const averageDeliveryTime = successfulDeliveries.length > 0 ;
       ? totalDeliveryTime / successfulDeliveries.length 
       : 0;
-    
     return {
       totalNotifications: notifications.length,
       byType,
@@ -490,20 +447,16 @@ export class LockoutNotificationService extends EventEmitter {
       byStatus,
       deliveryRate,
       averageDeliveryTime,
-      failureReasons: Object.entries(failureReasons)
+      failureReasons: Object.entries(failureReasons),
         .map(([reason, count]) => ({ reason, count }))
         .sort((a, b) => b.count - a.count)
     };
   }
-  
   // Private helper methods
-  
   private async queueNotification(request: NotificationRequest): Promise<string> {
     request.metadata.createdAt = Date.now();
     request.metadata.queuedAt = Date.now();
-    
     this.notifications.set(request.id, request);
-    
     // Create delivery records for each channel
     for (const channel of request.channels) {
       const delivery: NotificationDelivery = {
@@ -514,74 +467,58 @@ export class LockoutNotificationService extends EventEmitter {
         status: NotificationStatus.QUEUED,
         attempts: 0,
         content: await this.renderTemplate(request.templateId, request.variables, channel),
-        metadata: {
+        metadata: {,
           priority: request.priority,
-          type: request.type
+          type: request.type,
         }
       };
-      
       this.deliveries.set(delivery.id, delivery);
     }
-    
     this.emit('notificationQueued', request);
-    
     // Process immediately for high priority
     if (request.priority === NotificationPriority.URGENT || request.priority === NotificationPriority.CRITICAL) {
       setImmediate(() => this.processNotification(request.id));
     }
-    
     return request.id;
   }
-  
   private async processNotification(requestId: string): Promise<void> {
     const request = this.notifications.get(requestId);
     if (!request) return;
-    
-    const deliveries = Array.from(this.deliveries.values())
+    const deliveries = Array.from(this.deliveries.values());
       .filter(d => d.requestId === requestId && d.status === NotificationStatus.QUEUED);
-    
     for (const delivery of deliveries) {
       await this.attemptDelivery(delivery);
     }
   }
-  
   private async attemptDelivery(delivery: NotificationDelivery): Promise<void> {
     delivery.status = NotificationStatus.SENDING;
     delivery.attempts++;
-    
     try {
       // Simulate delivery based on channel
       const success = await this.simulateDelivery(delivery);
-      
       if (success) {
         delivery.status = NotificationStatus.SENT;
         delivery.sentAt = new Date();
-        
         // Simulate delivery confirmation after a delay
         setTimeout(() => {
           delivery.status = NotificationStatus.DELIVERED;
           delivery.deliveredAt = new Date();
           this.emit('notificationDelivered', delivery);
         }, 1000 + Math.random() * 2000);
-        
       } else {
         delivery.status = NotificationStatus.FAILED;
         delivery.failureReason = 'Simulated delivery failure';
         this.emit('notificationFailed', delivery);
-        
         // Schedule retry if applicable
         await this.scheduleRetry(delivery);
       }
-      
     } catch (error) {
       delivery.status = NotificationStatus.FAILED;
       delivery.failureReason = error instanceof Error ? error.message : 'Unknown error';
       this.emit('notificationFailed', delivery);
-      
       await this.scheduleRetry(delivery);
     }
   }
-  
   private async simulateDelivery(delivery: NotificationDelivery): Promise<boolean> {
     // Simulate different success rates based on channel
     const successRates: Record<NotificationChannel, number> = {
@@ -592,63 +529,50 @@ export class LockoutNotificationService extends EventEmitter {
       [NotificationChannel.SLACK]: 0.97,
       [NotificationChannel.TEAMS]: 0.96
     };
-    
     const successRate = successRates[delivery.channel] || 0.95;
     const random = Math.random();
-    
     // Add small delay to simulate network latency
     await new Promise(resolve => setTimeout(resolve, 100 + Math.random() * 200));
-    
     return random < successRate;
   }
-  
   private async scheduleRetry(delivery: NotificationDelivery): Promise<void> {
     const template = this.templates.get(this.notifications.get(delivery.requestId)?.templateId || '');
     if (!template || delivery.attempts >= template.retryPolicy.maxAttempts) {
       return;
     }
-    
-    const delay = Math.min(
+    const delay = Math.min(;)
       template.retryPolicy.baseDelaySeconds * Math.pow(template.retryPolicy.backoffMultiplier, delivery.attempts - 1),
       template.retryPolicy.maxDelaySeconds
     ) * 1000;
-    
     delivery.status = NotificationStatus.RETRYING;
-    
     setTimeout(() => {
       this.attemptDelivery(delivery);
     }, delay);
   }
-  
-  private async renderTemplate(
+  private async renderTemplate()
     templateId: string,
     variables: TemplateVariables,
-    channel: NotificationChannel
+    channel: NotificationChannel,
   ): Promise<{ subject?: string; body: string; html?: string }> {
     const template = this.templates.get(templateId);
     if (!template) {
-      throw new Error(`Template not found: ${templateId}`);
+      throw new Error(`Template not found: ${templateId}`);}
     }
-    
     let subject = template.subject;
     let body = template.bodyText;
     let html = template.bodyHtml;
-    
     // Replace variables in all fields
     const variableMap = variables as any;
     for (const [key, value] of Object.entries(variableMap)) {
-      const placeholder = `{{${key}}}`;
+      const placeholder = `{{${key}}}`;}
       const stringValue = String(value);
-      
       if (subject) subject = subject.replace(new RegExp(placeholder, 'g'), stringValue);
       body = body.replace(new RegExp(placeholder, 'g'), stringValue);
       if (html) html = html.replace(new RegExp(placeholder, 'g'), stringValue);
     }
-    
     return { subject, body, html };
   }
-  
-  private buildTemplateVariables(
+  private buildTemplateVariables()
     lockout: AccountLockout,
     additional: Record<string, any> = {}
   ): TemplateVariables {
@@ -664,7 +588,7 @@ export class LockoutNotificationService extends EventEmitter {
       lockoutId: lockout.id,
       companyName: 'SecureAuth Corp',
       appName: 'SecureAuth Platform',
-      securityTips: [
+      securityTips: [,
         'Use a strong, unique password',
         'Enable two-factor authentication',
         'Keep your software updated',
@@ -675,15 +599,14 @@ export class LockoutNotificationService extends EventEmitter {
       ...additional
     };
   }
-  
-  private buildAdminTemplateVariables(
+  private buildAdminTemplateVariables()
     lockout: AccountLockout,
     details: Record<string, any>
   ): TemplateVariables {
     const base = this.buildTemplateVariables(lockout, details);
     return {
       ...base,
-      nextSteps: [
+      nextSteps: [,
         'Review lockout details',
         'Verify user identity if needed',
         'Make unlock decision',
@@ -691,7 +614,6 @@ export class LockoutNotificationService extends EventEmitter {
       ]
     };
   }
-  
   private getLockoutReasonText(reason: LockoutReason): string {
     const reasonMap: Record<LockoutReason, string> = {
       [LockoutReason.EXCESSIVE_FAILED_ATTEMPTS]: 'multiple failed login attempts',
@@ -701,10 +623,8 @@ export class LockoutNotificationService extends EventEmitter {
       [LockoutReason.SYSTEM_SECURITY_ALERT]: 'system security alert',
       [LockoutReason.COMPLIANCE_REQUIREMENT]: 'compliance requirement'
     };
-    
     return reasonMap[reason] || 'security concerns';
   }
-  
   private getNextSteps(reason: LockoutReason): string[] {
     const stepMap: Record<LockoutReason, string[]> = {
       [LockoutReason.EXCESSIVE_FAILED_ATTEMPTS]: [
@@ -738,10 +658,8 @@ export class LockoutNotificationService extends EventEmitter {
         'Complete any pending verification steps'
       ]
     };
-    
     return stepMap[reason] || ['Contact support for assistance'];
   }
-  
   private getEstimatedResolution(reason: LockoutReason): string {
     const resolutionMap: Record<LockoutReason, string> = {
       [LockoutReason.EXCESSIVE_FAILED_ATTEMPTS]: '30 minutes (automatic)',
@@ -751,10 +669,8 @@ export class LockoutNotificationService extends EventEmitter {
       [LockoutReason.SYSTEM_SECURITY_ALERT]: '1 hour (automatic)',
       [LockoutReason.COMPLIANCE_REQUIREMENT]: '3-5 business days'
     };
-    
     return resolutionMap[reason] || 'Unknown - contact support';
   }
-  
   private calculatePriority(lockout: AccountLockout): NotificationPriority {
     const priorityMap: Record<LockoutReason, NotificationPriority> = {
       [LockoutReason.EXCESSIVE_FAILED_ATTEMPTS]: NotificationPriority.MEDIUM,
@@ -764,64 +680,54 @@ export class LockoutNotificationService extends EventEmitter {
       [LockoutReason.SYSTEM_SECURITY_ALERT]: NotificationPriority.URGENT,
       [LockoutReason.COMPLIANCE_REQUIREMENT]: NotificationPriority.HIGH
     };
-    
     return priorityMap[lockout.reason] || NotificationPriority.MEDIUM;
   }
-  
   private getUserPreferences(userId: string): UserNotificationPreferences {
     return this.preferences.get(userId) || {
       userId,
-      channels: {
+      channels: {,
         email: true,
         sms: false,
-        push: true
+        push: true,
       },
       language: 'en',
       timezone: 'UTC',
-      quietHours: {
+      quietHours: {,
         enabled: false,
         start: '22:00',
-        end: '08:00'
+        end: '08:00',
       },
-      frequency: {
+      frequency: {,
         immediate: true,
         digest: false,
-        digestFrequency: 'daily'
+        digestFrequency: 'daily',
       },
       metadata: {}
     };
   }
-  
   private getPreferredChannels(preferences: UserNotificationPreferences): NotificationChannel[] {
     const channels: NotificationChannel[] = [];
-    
     if (preferences.channels.email) channels.push(NotificationChannel.EMAIL);
     if (preferences.channels.sms) channels.push(NotificationChannel.SMS);
     if (preferences.channels.push) channels.push(NotificationChannel.PUSH);
-    
     return channels.length > 0 ? channels : [NotificationChannel.EMAIL];
   }
-  
   private selectTemplate(type: NotificationType, language: string): string {
-    const templateKey = `${type}_${language}`;
-    const fallbackKey = `${type}_en`;
-    
+    const templateKey = `${type}_${language}`;}
+    const fallbackKey = `${type}_en`;}
     for (const [id, template] of this.templates) {
       if (template.type === type && template.language === language) {
         return id;
       }
     }
-    
     // Fallback to English
     for (const [id, template] of this.templates) {
       if (template.type === type && template.language === 'en') {
         return id;
       }
     }
-    
-    throw new Error(`No template found for type ${type} and language ${language}`);
+    throw new Error(`No template found for type ${type} and language ${language}`);}
   }
-  
   private getAdminRecipients(role: AdminRole): string[] {
     // In production, this would query an admin directory service
     const adminMap: Record<AdminRole, string[]> = {
@@ -831,22 +737,18 @@ export class LockoutNotificationService extends EventEmitter {
       [AdminRole.HELP_DESK]: ['helpdesk@company.com'],
       [AdminRole.COMPLIANCE_OFFICER]: ['compliance@company.com']
     };
-    
     return adminMap[role] || [];
   }
-  
   private initializeDefaultTemplates(): void {
     // Lockout notification template
-    this.templates.set('lockout_en', {
+    this.templates.set('lockout_en', {)
       id: 'lockout_en',
       type: NotificationType.LOCKOUT_NOTIFICATION,
       channel: NotificationChannel.EMAIL,
       language: 'en',
       subject: 'Account Temporarily Locked - {{appName}}',
       bodyText: `Dear {{userName}},
-
 Your account has been temporarily locked due to {{lockoutReason}}.
-
 Details:
 - Account: {{userEmail}}
 - Locked at: {{lockoutTime}}
@@ -854,32 +756,24 @@ Details:
 {{#expiryTime}}
 - Automatic unlock: {{expiryTime}}
 {{/expiryTime}}
-
 Next steps:
 {{#nextSteps}}
 - {{.}}
 {{/nextSteps}}
-
 Estimated resolution: {{estimatedResolution}}
-
 If you believe this is an error or need immediate assistance, please contact our support team:
 - Email: {{supportEmail}}
 - Phone: {{supportPhone}}
-
 Security tips:
 {{#securityTips}}
 - {{.}}
 {{/securityTips}}
-
 Best regards,
 {{companyName}} Security Team`,
       bodyHtml: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
   <h2 style="color: #d32f2f;">Account Temporarily Locked</h2>
-  
   <p>Dear <strong>{{userName}}</strong>,</p>
-  
   <p>Your account has been temporarily locked due to <strong>{{lockoutReason}}</strong>.</p>
-  
   <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
     <h3>Details:</h3>
     <ul>
@@ -889,14 +783,11 @@ Best regards,
       {{#expiryTime}}<li><strong>Automatic unlock:</strong> {{expiryTime}}</li>{{/expiryTime}}
     </ul>
   </div>
-  
   <h3>Next steps:</h3>
   <ul>
     {{#nextSteps}}<li>{{.}}</li>{{/nextSteps}}
   </ul>
-  
   <p><strong>Estimated resolution:</strong> {{estimatedResolution}}</p>
-  
   <div style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0;">
     <h4>Need help?</h4>
     <p>Contact our support team:</p>
@@ -905,12 +796,11 @@ Best regards,
       <li>Phone: {{supportPhone}}</li>
     </ul>
   </div>
-  
   <p>Best regards,<br>{{companyName}} Security Team</p>
 </div>`,
       variables: ['userName', 'userEmail', 'lockoutReason', 'lockoutTime', 'lockoutId', 'expiryTime', 'nextSteps', 'estimatedResolution', 'supportEmail', 'supportPhone', 'securityTips', 'companyName', 'appName'],
       priority: NotificationPriority.HIGH,
-      retryPolicy: {
+      retryPolicy: {,
         maxAttempts: 3,
         backoffMultiplier: 2,
         baseDelaySeconds: 30,
@@ -920,18 +810,15 @@ Best regards,
       expiryMinutes: 60,
       metadata: {}
     });
-    
     // Unlock notification template
-    this.templates.set('unlock_en', {
+    this.templates.set('unlock_en', {)
       id: 'unlock_en',
       type: NotificationType.UNLOCK_NOTIFICATION,
       channel: NotificationChannel.EMAIL,
       language: 'en',
       subject: 'Account Unlocked - {{appName}}',
       bodyText: `Dear {{userName}},
-
 Good news! Your account has been unlocked and you can now access {{appName}} normally.
-
 Details:
 - Account: {{userEmail}}
 - Unlocked at: {{unlockTime}}
@@ -939,24 +826,19 @@ Details:
 - Unlocked by: {{adminName}}
 {{/adminName}}
 - Reference ID: {{lockoutId}}
-
 You can now log in at your convenience. We recommend taking the following security steps:
-
 {{#securityTips}}
 - {{.}}
 {{/securityTips}}
-
 If you have any questions or concerns, please contact our support team:
 - Email: {{supportEmail}}
 - Phone: {{supportPhone}}
-
 Thank you for your patience.
-
 Best regards,
 {{companyName}} Security Team`,
       variables: ['userName', 'userEmail', 'unlockTime', 'adminName', 'lockoutId', 'securityTips', 'supportEmail', 'supportPhone', 'companyName', 'appName'],
       priority: NotificationPriority.HIGH,
-      retryPolicy: {
+      retryPolicy: {,
         maxAttempts: 3,
         backoffMultiplier: 2,
         baseDelaySeconds: 30,
@@ -966,42 +848,33 @@ Best regards,
       expiryMinutes: 60,
       metadata: {}
     });
-    
     // Security alert template
-    this.templates.set('security_alert_en', {
+    this.templates.set('security_alert_en', {)
       id: 'security_alert_en',
       type: NotificationType.SECURITY_ALERT,
       channel: NotificationChannel.EMAIL,
       language: 'en',
       subject: 'URGENT: Security Alert - {{appName}}',
       bodyText: `SECURITY ALERT
-
 Dear {{userName}},
-
 We have detected suspicious activity on your account and have temporarily locked it for your protection.
-
 IMMEDIATE ACTIONS REQUIRED:
 {{#nextSteps}}
 - {{.}}
 {{/nextSteps}}
-
 Account details:
 - Email: {{userEmail}}
 - Alert time: {{lockoutTime}}
 - Reference ID: {{lockoutId}}
-
 This is a security-critical notification. Please take immediate action to secure your account.
-
 Contact our security team immediately:
 - Email: {{supportEmail}}
 - Phone: {{supportPhone}} (24/7 security hotline)
-
 DO NOT IGNORE THIS MESSAGE.
-
 {{companyName}} Security Team`,
       variables: ['userName', 'userEmail', 'lockoutTime', 'lockoutId', 'nextSteps', 'supportEmail', 'supportPhone', 'companyName', 'appName'],
       priority: NotificationPriority.URGENT,
-      retryPolicy: {
+      retryPolicy: {,
         maxAttempts: 5,
         backoffMultiplier: 1.5,
         baseDelaySeconds: 10,
@@ -1012,34 +885,31 @@ DO NOT IGNORE THIS MESSAGE.
       metadata: {}
     });
   }
-  
   private initializeAdminRules(): void {
     // High-priority lockouts require immediate admin notification
-    this.adminRules.set('urgent_lockout_alert', {
+    this.adminRules.set('urgent_lockout_alert', {)
       id: 'urgent_lockout_alert',
-      trigger: {
+      trigger: {,
         event: 'account_locked',
-        conditions: {
+        conditions: {,
           reason: [LockoutReason.SUSPICIOUS_ACTIVITY, LockoutReason.SYSTEM_SECURITY_ALERT],
-          threatLevel: 'high'
+          threatLevel: 'high',
         }
       },
-      recipients: {
+      recipients: {,
         roles: [AdminRole.SECURITY_ADMIN, AdminRole.SUPER_ADMIN],
-        emails: ['security-alerts@company.com']
+        emails: ['security-alerts@company.com'],
       },
       template: 'admin_urgent_alert_en',
       priority: NotificationPriority.URGENT,
-      enabled: true
+      enabled: true,
     });
   }
-  
   private startDeliveryProcessor(): void {
     // Process queued notifications every 30 seconds
     setInterval(() => {
-      const queuedDeliveries = Array.from(this.deliveries.values())
+      const queuedDeliveries = Array.from(this.deliveries.values());
         .filter(d => d.status === NotificationStatus.QUEUED);
-      
       for (const delivery of queuedDeliveries) {
         this.attemptDelivery(delivery);
       }

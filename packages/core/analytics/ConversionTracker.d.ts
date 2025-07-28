@@ -20,7 +20,7 @@ export interface ConversionEvent {
     category: ConversionCategory;
     value?: number;
     properties: Record<string, unknown>;
-    metadata: {
+    metadata: {,
         userAgent: string;
         referrer: string;
         campaignSource?: string;
@@ -47,22 +47,22 @@ export interface ConversionStep {
 }
 export interface ConversionMetrics {
     funnel: string;
-    period: {
+    period: {,
         start: number;
         end: number;
     };
-    metrics: {
+    metrics: {,
         totalUsers: number;
         conversions: number;
         conversionRate: number;
         averageTimeToConvert: number;
-        dropoffPoints: {
+        dropoffPoints: {,
             step: string;
             dropoffRate: number;
             users: number;
         }[];
     };
-    segmentBreakdown: {
+    segmentBreakdown: {,
         [segment: string]: {
             users: number;
             conversions: number;
@@ -92,7 +92,7 @@ export declare class ConversionTracker {
     /**
      * Track user engagement events
      */
-    trackEngagement(
+    trackEngagement()
       engagementType: 'feature_usage' | 'help_interaction' | 'collaboration' | 'content_creation',
       details?: Record<string,
       any>
@@ -100,7 +100,7 @@ export declare class ConversionTracker {
     /**
      * Track business conversion events
      */
-    trackBusinessEvent(
+    trackBusinessEvent()
       eventType: 'trial_started' | 'subscription_upgraded' | 'payment_completed' | 'subscription_cancelled',
       value: number,
       metadata?: Record<string,
@@ -114,13 +114,13 @@ export declare class ConversionTracker {
      * Get real-time conversion dashboard data
      */
     getDashboardData(): {
-        realTimeMetrics: {
+        realTimeMetrics: {,
             activeUsers: number;
             conversionsLast24h: number;
             topConvertingFunnel: string;
             averageSessionDuration: number;
         };
-        funnelPerformance: {
+        funnelPerformance: {,
             [funnelId: string]: {
                 conversionRate: number;
                 trend: 'up' | 'down' | 'stable';
@@ -132,7 +132,7 @@ export declare class ConversionTracker {
     /**
      * A/B testing integration
      */
-    trackExperimentConversion(
+    trackExperimentConversion()
       experimentId: string,
       variantId: string,
       eventType: ConversionEventType,

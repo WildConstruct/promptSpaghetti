@@ -71,7 +71,7 @@ export declare class GraphCRDTAdapter {
     /**
      * Public API: Add a node collaboratively
      */
-    addNode(node: Node, position?: {
+    addNode(node: Node, position?: {)
         x: number;
         y: number;
     }): void;
@@ -94,14 +94,14 @@ export declare class GraphCRDTAdapter {
     /**
      * Public API: Update node position (for React Flow integration)
      */
-    updateNodePosition(nodeId: string, position: {
+    updateNodePosition(nodeId: string, position: {)
         x: number;
         y: number;
     }): void;
     /**
      * Public API: Set user presence
      */
-    setUserPresence(presence: {
+    setUserPresence(presence: {)
         cursor?: {
             nodeId?: string;
             position?: {
@@ -146,7 +146,7 @@ export declare class GraphCRDTAdapter {
 /**
  * Factory function to create collaborative graph adapter
  */
-export declare function createCollaborativeGraph(
+export declare function createCollaborativeGraph()
   options: CollaborativeGraphOptions,
   initialGraph?: Graph
 ): GraphCRDTAdapter;

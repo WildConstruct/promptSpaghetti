@@ -2,10 +2,8 @@
  * Epic 9.3.2 - Visual Diff Viewer Component
  * Advanced visual comparison of graph versions with side-by-side and overlay views
  */
-
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { GraphDiffEngine, GraphDiff, DiffChange, GraphData } from './GraphDiffEngine';
-
 interface VisualDiffViewerProps {
   fromGraphData: GraphData;
   toGraphData: GraphData;
@@ -16,11 +14,10 @@ interface VisualDiffViewerProps {
   onRejectChange?: (changeId: string) => void;
   className?: string;
 }
-
 type ViewMode = 'side-by-side' | 'overlay' | 'changes-only';
 type FilterMode = 'all' | 'structural' | 'properties' | 'positions' | 'significant';
 
-export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
+export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({)
   fromGraphData,
   toGraphData,
   diff: externalDiff,
@@ -40,19 +37,16 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
   const [loading, setLoading] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  
-  const diffEngine = useRef(new GraphDiffEngine({
+  const diffEngine = useRef(new GraphDiffEngine({)
     ignore_position_changes: false,
     ignore_style_changes: false,
-    deep_property_comparison: true
+    deep_property_comparison: true,
   }));
-
   useEffect(() => {
     if (isOpen && !diff) {
       computeDiff();
     }
   }, [isOpen, fromGraphData, toGraphData]);
-
   const computeDiff = async () => {
     try {
       setLoading(true);
@@ -64,23 +58,21 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
       setLoading(false);
     }
   };
-
   const filteredChanges = useMemo(() => {
     if (!diff) return [];
-
     switch (filterMode) {
     case 'structural':
-      return GraphDiffEngine.filterChanges(diff, {
+      return GraphDiffEngine.filterChanges(diff, {)
         change_types: ['added', 'removed'],
         element_types: ['node', 'edge']
       });
     case 'properties':
-      return GraphDiffEngine.filterChanges(diff, {
-        element_types: ['property']
+      return GraphDiffEngine.filterChanges(diff, {)
+        element_types: ['property'],
       });
     case 'positions':
-      return GraphDiffEngine.filterChanges(diff, {
-        change_types: ['moved']
+      return GraphDiffEngine.filterChanges(diff, {)
+        change_types: ['moved'],
       });
     case 'significant':
       return GraphDiffEngine.getSignificantChanges(diff, 0.6);
@@ -88,7 +80,6 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
       return diff.changes;
     }
   }, [diff, filterMode]);
-
   const getChangeColor = (change: DiffChange): string => {
     switch (change.type) {
     case 'added': return '#10B981'; // green
@@ -98,7 +89,6 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
     default: return '#6B7280'; // gray
     }
   };
-
   const getChangeIcon = (change: DiffChange): string => {
     switch (change.type) {
     case 'added': return '+';
@@ -108,24 +98,20 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
     default: return '?';
     }
   };
-
   const getSignificanceLevel = (significance: number): string => {
     if (significance >= 0.8) return 'High';
     if (significance >= 0.5) return 'Medium';
     if (significance >= 0.2) return 'Low';
     return 'Minimal';
   };
-
   const getSignificanceColor = (significance: number): string => {
     if (significance >= 0.8) return 'text-red-600';
     if (significance >= 0.5) return 'text-orange-600';
     if (significance >= 0.2) return 'text-yellow-600';
     return 'text-gray-600';
   };
-
   const handleChangeClick = (changeId: string) => {
     setSelectedChange(selectedChange === changeId ? null : changeId);
-    
     if (highlightSimilar && diff) {
       // Highlight similar changes
       const selectedChangeData = diff.changes.find(c => c.element_id === changeId);
@@ -135,8 +121,7 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
       }
     }
   };
-
-  const renderChangesList = () => (
+  const renderChangesList = () => (;)
     <div className="h-full flex flex-col">
       {/* Changes Header */}
       <div className="p-4 border-b border-gray-200">
@@ -148,7 +133,6 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
             </span>
           </div>
         </div>
-
         {/* Filter Controls */}
         <div className="flex flex-wrap gap-2 mb-3">
           {[
@@ -157,7 +141,7 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
             { key: 'properties', label: 'Properties', count: diff?.summary.property_changes || 0 },
             { key: 'positions', label: 'Positions', count: diff?.summary.moved_nodes || 0 },
             { key: 'significant', label: 'Significant', count: GraphDiffEngine.getSignificantChanges(diff || { changes: [] } as GraphDiff, 0.6).length }
-          ].map(filter => (
+          ].map(filter => ()
             <button
               key={filter.key}
               onClick={() => setFilterMode(filter.key as FilterMode)}
@@ -171,7 +155,6 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
             </button>
           ))}
         </div>
-
         {/* View Options */}
         <div className="flex items-center space-x-4 text-sm">
           <label className="flex items-center">
@@ -203,22 +186,21 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
           </label>
         </div>
       </div>
-
       {/* Changes List */}
       <div className="flex-1 overflow-y-auto">
-        {loading ? (
+        {loading ? ()
           <div className="flex justify-center items-center py-8">
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
           </div>
-        ) : filteredChanges.length === 0 ? (
+        ) : filteredChanges.length === 0 ? ()
           <div className="text-center py-8 text-gray-500">
             <div className="text-4xl mb-2">🔍</div>
             <h4 className="font-medium text-gray-900 mb-1">No changes found</h4>
             <p className="text-sm">Try adjusting your filters to see different types of changes.</p>
           </div>
-        ) : (
+        ) : ()
           <div className="divide-y divide-gray-100">
-            {filteredChanges.map((change, index) => (
+            {filteredChanges.map((change, index) => ()
               <ChangeItem
                 key={`${change.element_id}-${index}`}
                 change={change}
@@ -237,13 +219,11 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
       </div>
     </div>
   );
-
   const renderSummaryStats = () => {
     if (!diff) return null;
-
-    const stats = [
-      { label: 'Similarity', value: `${Math.round(diff.summary.similarity_score * 100)}%`, color: 'text-green-600' },
-      { label: 'Complexity', value: `${diff.summary.complexity_score.toFixed(1)}/10`, color: 'text-blue-600' },
+    const stats = [;
+      { label: 'Similarity', value: `${Math.round(diff.summary.similarity_score * 100)}%`, color: 'text-green-600' },}
+      { label: 'Complexity', value: `${diff.summary.complexity_score.toFixed(1)}/10`, color: 'text-blue-600' },}
       { label: 'Total Changes', value: diff.summary.total_changes.toString(), color: 'text-gray-900' },
       { label: 'Nodes Added', value: diff.summary.added_nodes.toString(), color: 'text-green-600' },
       { label: 'Nodes Removed', value: diff.summary.removed_nodes.toString(), color: 'text-red-600' },
@@ -253,23 +233,20 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
       { label: 'Edges Removed', value: diff.summary.removed_edges.toString(), color: 'text-red-600' },
       { label: 'Properties Changed', value: diff.summary.property_changes.toString(), color: 'text-blue-600' }
     ];
-
-    return (
+    return ()
       <div className="grid grid-cols-2 gap-3 p-4 bg-gray-50 border-b border-gray-200">
-        {stats.map(stat => (
+        {stats.map(stat => ()
           <div key={stat.label} className="text-center">
-            <div className={`text-lg font-semibold ${stat.color}`}>{stat.value}</div>
+            <div className={`text-lg font-semibold ${stat.color}`}>{stat.value}</div>}
             <div className="text-xs text-gray-600">{stat.label}</div>
           </div>
         ))}
       </div>
     );
   };
-
   if (!isOpen) return null;
-
-  return (
-    <div className={`visual-diff-viewer ${className} fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4`}>
+  return ()
+    <div className={`visual-diff-viewer ${className} fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4`}>}
       <div className="bg-white rounded-lg shadow-xl max-w-7xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="p-4 border-b border-gray-200">
@@ -284,14 +261,13 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
               </svg>
             </button>
           </div>
-
           {/* View Mode Selector */}
           <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
             {[
               { key: 'side-by-side', label: 'Side by Side', icon: '⫸' },
               { key: 'overlay', label: 'Overlay', icon: '⬚' },
               { key: 'changes-only', label: 'Changes Only', icon: '📝' }
-            ].map(mode => (
+            ].map(mode => ()
               <button
                 key={mode.key}
                 onClick={() => setViewMode(mode.key as ViewMode)}
@@ -307,20 +283,17 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
             ))}
           </div>
         </div>
-
         {/* Summary Stats */}
         {renderSummaryStats()}
-
         {/* Main Content */}
         <div className="flex-1 flex overflow-hidden">
           {/* Changes Panel */}
           <div className="w-80 border-r border-gray-200 bg-white">
             {renderChangesList()}
           </div>
-
           {/* Diff Visualization */}
           <div className="flex-1 bg-gray-50 relative">
-            {viewMode === 'side-by-side' && (
+            {viewMode === 'side-by-side' && ()
               <SideBySideView
                 fromGraph={fromGraphData}
                 toGraph={toGraphData}
@@ -334,8 +307,7 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
                 onPanChange={setPan}
               />
             )}
-
-            {viewMode === 'overlay' && (
+            {viewMode === 'overlay' && ()
               <OverlayView
                 fromGraph={fromGraphData}
                 toGraph={toGraphData}
@@ -349,8 +321,7 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
                 onPanChange={setPan}
               />
             )}
-
-            {viewMode === 'changes-only' && (
+            {viewMode === 'changes-only' && ()
               <ChangesOnlyView
                 diff={diff}
                 filteredChanges={filteredChanges}
@@ -359,7 +330,6 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
                 getChangeIcon={getChangeIcon}
               />
             )}
-
             {/* Zoom Controls */}
             <div className="absolute bottom-4 right-4 flex flex-col space-y-2">
               <button
@@ -393,7 +363,6 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
 };
 
 // Sub-components (simplified versions - would need full implementations)
-
 interface ChangeItemProps {
   change: DiffChange;
   isSelected: boolean;
@@ -405,8 +374,7 @@ interface ChangeItemProps {
   getSignificanceLevel: (significance: number) => string;
   getSignificanceColor: (significance: number) => string;
 }
-
-const ChangeItem: React.FC<ChangeItemProps> = ({
+const ChangeItem: React.FC<ChangeItemProps> = ({)
   change,
   isSelected,
   onClick,
@@ -418,20 +386,16 @@ const ChangeItem: React.FC<ChangeItemProps> = ({
   getSignificanceColor
 }) => {
   const renderChangeDescription = () => {
-    const baseDesc = `${change.type} ${change.element_type}`;
-    
+    const baseDesc = `${change.type} ${change.element_type}`;}
     if (change.property_path) {
-      return `${baseDesc}: ${change.property_path}`;
+      return `${baseDesc}: ${change.property_path}`;}
     }
-    
     if (change.type === 'moved' && change.position_change) {
-      return `${baseDesc} (moved ${Math.round(change.position_change.distance)}px)`;
+      return `${baseDesc} (moved ${Math.round(change.position_change.distance)}px)`;}
     }
-    
     return baseDesc;
   };
-
-  return (
+  return ()
     <div
       className={`p-3 cursor-pointer transition-colors ${
         isSelected ? 'bg-blue-50 border-l-4 border-l-blue-500' : 'hover:bg-gray-50'
@@ -445,22 +409,19 @@ const ChangeItem: React.FC<ChangeItemProps> = ({
         >
           {getChangeIcon(change)}
         </div>
-        
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-1">
             <h4 className="text-sm font-medium text-gray-900 truncate">
               {change.element_id}
             </h4>
-            <span className={`text-xs ${getSignificanceColor(change.significance)}`}>
+            <span className={`text-xs ${getSignificanceColor(change.significance)}`}>}
               {getSignificanceLevel(change.significance)}
             </span>
           </div>
-          
           <p className="text-xs text-gray-600 mb-2">
             {renderChangeDescription()}
           </p>
-          
-          {change.old_value !== undefined && change.new_value !== undefined && (
+          {change.old_value !== undefined && change.new_value !== undefined && ()
             <div className="text-xs space-y-1">
               <div className="text-red-600">
                 − {JSON.stringify(change.old_value).slice(0, 50)}
@@ -470,10 +431,9 @@ const ChangeItem: React.FC<ChangeItemProps> = ({
               </div>
             </div>
           )}
-          
-          {(onApply || onReject) && isSelected && (
+          {(onApply || onReject) && isSelected && ()
             <div className="flex space-x-2 mt-2">
-              {onApply && (
+              {onApply && ()
                 <button
                   onClick={(e) => { e.stopPropagation(); onApply(); }}
                   className="text-xs px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
@@ -481,7 +441,7 @@ const ChangeItem: React.FC<ChangeItemProps> = ({
                   Apply
                 </button>
               )}
-              {onReject && (
+              {onReject && ()
                 <button
                   onClick={(e) => { e.stopPropagation(); onReject(); }}
                   className="text-xs px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
@@ -498,7 +458,7 @@ const ChangeItem: React.FC<ChangeItemProps> = ({
 };
 
 // Placeholder components for different view modes
-const SideBySideView: React.FC<unknown> = ({ _____fromGraph, _____toGraph, _____diff, _____selectedChange, _____showRegions, _____showPaths, _____zoom, _____pan, _____onZoomChange, _____onPanChange }) => (
+const SideBySideView: React.FC<unknown> = ({ _____fromGraph, _____toGraph, _____diff, _____selectedChange, _____showRegions, _____showPaths, _____zoom, _____pan, _____onZoomChange, _____onPanChange }) => ()
   <div className="h-full flex">
     <div className="flex-1 border-r border-gray-300 bg-white">
       <div className="h-8 bg-gray-100 border-b border-gray-300 flex items-center px-3 text-sm font-medium text-gray-700">
@@ -518,8 +478,7 @@ const SideBySideView: React.FC<unknown> = ({ _____fromGraph, _____toGraph, _____
     </div>
   </div>
 );
-
-const OverlayView: React.FC<unknown> = ({ _____fromGraph, _____toGraph, _____diff, _____selectedChange, _____showRegions, _____showPaths, _____zoom, _____pan, _____onZoomChange, _____onPanChange }) => (
+const OverlayView: React.FC<unknown> = ({ _____fromGraph, _____toGraph, _____diff, _____selectedChange, _____showRegions, _____showPaths, _____zoom, _____pan, _____onZoomChange, _____onPanChange }) => ()
   <div className="h-full bg-white">
     <div className="h-8 bg-gray-100 border-b border-gray-300 flex items-center px-3 text-sm font-medium text-gray-700">
       Overlay View
@@ -529,12 +488,11 @@ const OverlayView: React.FC<unknown> = ({ _____fromGraph, _____toGraph, _____dif
     </div>
   </div>
 );
-
-const ChangesOnlyView: React.FC<unknown> = ({ _____diff, filteredChanges, _____selectedChange, getChangeColor, getChangeIcon }) => (
+const ChangesOnlyView: React.FC<unknown> = ({ _____diff, filteredChanges, _____selectedChange, getChangeColor, getChangeIcon }) => ()
   <div className="h-full bg-white p-4">
     <h3 className="text-lg font-medium text-gray-900 mb-4">Changes Summary</h3>
     <div className="space-y-4">
-      {filteredChanges.map((change, index) => (
+      {filteredChanges.map((change, index) => ()
         <div key={index} className="border border-gray-200 rounded-lg p-4">
           <div className="flex items-center space-x-3">
             <div

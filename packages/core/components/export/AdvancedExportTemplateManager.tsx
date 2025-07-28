@@ -5,7 +5,6 @@
  * Professional template management system for advanced export workflows with
  * template creation, customization, sharing, and collaboration features.
  */
-
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { 
   ExportTemplate, 
@@ -17,7 +16,6 @@ import {
   validateExportOptions
 } from '../../types/export';
 import { useExport } from '../../hooks/useExport';
-
 interface AdvancedExportTemplateManagerProps {
   visible?: boolean;
   onClose?: () => void;
@@ -27,7 +25,6 @@ interface AdvancedExportTemplateManagerProps {
   enableCollaboration?: boolean;
   className?: string;
 }
-
 interface TemplateFilter {
   format?: ExportFormat;
   type?: TemplateType;
@@ -36,7 +33,6 @@ interface TemplateFilter {
   search?: string;
   tags?: string[];
 }
-
 interface TemplateStats {
   id: string;
   usageCount: number;
@@ -45,7 +41,6 @@ interface TemplateStats {
   totalRatings: number;
   successRate: number;
 }
-
 interface TemplateCustomization {
   templateId: string;
   parameters: Record<string, unknown>;
@@ -53,7 +48,7 @@ interface TemplateCustomization {
   previewData?: unknown;
 }
 
-export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManagerProps> = ({
+export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManagerProps> = ({)
   visible = true,
   onClose,
   projectId = '',
@@ -70,19 +65,16 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'table'>('grid');
   const [sortBy, setSortBy] = useState<'name' | 'created' | 'usage' | 'rating'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  
   // Template management state
   const [isCreating, setIsCreating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<ExportTemplate | null>(null);
   const [customization, setCustomization] = useState<TemplateCustomization | null>(null);
-  
   // UI state
   const [activeTab, setActiveTab] = useState<'browse' | 'create' | 'shared' | 'collaborate'>('browse');
   const [showPreview, setShowPreview] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   // Hooks
   const { 
     getTemplates, 
@@ -92,25 +84,20 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
     shareTemplate,
     getTemplateStats
   } = useExport(projectId);
-
   // Load templates and stats
   useEffect(() => {
     loadTemplates();
   }, [filter, sortBy, sortOrder]);
-
   const loadTemplates = useCallback(async () => {
     setLoading(true);
     setError(null);
-    
     try {
-      const templatesData = await getTemplates({
+      const templatesData = await getTemplates({)
         ...filter,
         sortBy,
         sortOrder
       });
-      
       setTemplates(templatesData);
-      
       // Load stats for each template
       const statsMap = new Map<string, TemplateStats>();
       for (const template of templatesData) {
@@ -118,49 +105,41 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
           const stats = await getTemplateStats(template.id);
           statsMap.set(template.id, stats);
         } catch (err) {
-          console.warn(`Failed to load stats for template ${template.id}:`, err);
+          console.warn(`Failed to load stats for template ${template.id}:`, err);}
         }
       }
       setTemplateStats(statsMap);
-      
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load templates');
     } finally {
       setLoading(false);
     }
   }, [filter, sortBy, sortOrder, getTemplates, getTemplateStats]);
-
   // Filtered and sorted templates
   const filteredTemplates = useMemo(() => {
     let filtered = templates;
-
     // Apply search filter
     if (filter.search) {
       const searchLower = filter.search.toLowerCase();
-      filtered = filtered.filter(template => 
+      filtered = filtered.filter(template => )
         template.name.toLowerCase().includes(searchLower) ||
         template.description?.toLowerCase().includes(searchLower)
       );
     }
-
     // Apply format filter
     if (filter.format) {
       filtered = filtered.filter(template => template.export_format === filter.format);
     }
-
     // Apply type filter
     if (filter.type) {
       filtered = filtered.filter(template => template.template_type === filter.type);
     }
-
     // Apply public/private filter
     if (filter.isPublic !== undefined) {
       filtered = filtered.filter(template => template.is_public === filter.isPublic);
     }
-
     return filtered;
   }, [templates, filter]);
-
   // Template creation handler
         setTemplates(prev => [...prev, newTemplate]);
       setIsCreating(false);
@@ -171,7 +150,6 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
       setLoading(false);
     }
   }, [createTemplate]);
-
   // Template update handler
         setTemplates(prev => prev.map(t => t.id === templateId ? updatedTemplate : t));
       setIsEditing(false);
@@ -183,11 +161,9 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
       setLoading(false);
     }
   }, [updateTemplate]);
-
   // Template deletion handler
   const handleDeleteTemplate = useCallback(async (templateId: string) => {
     if (!confirm('Are you sure you want to delete this template?')) return;
-    
     setLoading(true);
     try {
       await deleteTemplate(templateId);
@@ -202,7 +178,6 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
       setLoading(false);
     }
   }, [deleteTemplate, selectedTemplate]);
-
   // Template selection handler
   const handleSelectTemplate = useCallback((template: ExportTemplate) => {
     setSelectedTemplate(template);
@@ -210,25 +185,22 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
       onTemplateSelect(template);
     }
   }, [onTemplateSelect]);
-
   // Template customization handler
   const handleCustomizeTemplate = useCallback((template: ExportTemplate) => {
-    setCustomization({
+    setCustomization({)
       templateId: template.id,
       parameters: template.format_options || {},
       customFields: {}
     });
     setShowPreview(true);
   }, []);
-
   // Template sharing handler
   const handleShareTemplate = useCallback(async (templateId: string, isPublic: boolean) => {
     if (!enableSharing) return;
-    
     setLoading(true);
     try {
       await shareTemplate(templateId, { is_public: isPublic });
-      setTemplates(prev => prev.map(t => 
+      setTemplates(prev => prev.map(t => )
         t.id === templateId ? { ...t, is_public: isPublic } : t
       ));
       setError(null);
@@ -238,32 +210,26 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
       setLoading(false);
     }
   }, [enableSharing, shareTemplate]);
-
   // Get template rating display
   const getTemplateRating = useCallback((templateId: string) => {
     const stats = templateStats.get(templateId);
     if (!stats || stats.totalRatings === 0) return null;
-    
     return {
       average: Math.round(stats.averageRating * 10) / 10,
-      count: stats.totalRatings
+      count: stats.totalRatings,
     };
   }, [templateStats]);
-
   // Format display helpers
   const formatUsageCount = useCallback((count: number) => {
     if (count < 1000) return count.toString();
-    if (count < 1000000) return `${Math.round(count / 100) / 10}K`;
-    return `${Math.round(count / 100000) / 10}M`;
+    if (count < 1000000) return `${Math.round(count / 100) / 10}K`;}
+    return `${Math.round(count / 100000) / 10}M`;}
   }, []);
-
   const formatDate = useCallback((dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   }, []);
-
   if (!visible) return null;
-
-  return (
+  return ()
     <div
       className={`advanced-export-template-manager ${className}`}
       style={{
@@ -286,7 +252,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
           padding: '20px 24px',
           borderBottom: '1px solid #e2e8f0',
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white'
+          color: 'white',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -298,8 +264,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
               {templates.length} templates • {filteredTemplates.length} filtered
             </div>
           </div>
-          
-          {onClose && (
+          {onClose && ()
             <button
               onClick={onClose}
               style={{
@@ -313,7 +278,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '18px'
+                fontSize: '18px',
               }}
             >
               ×
@@ -321,13 +286,12 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
           )}
         </div>
       </div>
-
       {/* Navigation Tabs */}
       <div
         style={{
           padding: '16px 24px',
           borderBottom: '1px solid #e2e8f0',
-          background: '#f8fafc'
+          background: '#f8fafc',
         }}
       >
         <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
@@ -336,7 +300,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
             { key: 'create', label: '➕ Create Template', desc: 'Build new templates' },
             ...(enableSharing ? [{ key: 'shared', label: '🌐 Shared Templates', desc: 'Community templates' }] : []),
             ...(enableCollaboration ? [{ key: 'collaborate', label: '👥 Collaborate', desc: 'Team templates' }] : [])
-          ].map(tab => (
+          ].map(tab => ()
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as 'browse' | 'create' | 'shared' | 'collaborate')}
@@ -357,9 +321,8 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
             </button>
           ))}
         </div>
-
         {/* Filter Controls */}
-        {activeTab === 'browse' && (
+        {activeTab === 'browse' && ()
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
             <input
               type="text"
@@ -371,10 +334,9 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                 border: '1px solid #e2e8f0',
                 borderRadius: '6px',
                 fontSize: '14px',
-                minWidth: '200px'
+                minWidth: '200px',
               }}
             />
-            
             <select
               value={filter.format || ''}
               onChange={(e) => setFilter(prev => ({ ...prev, format: e.target.value as ExportFormat || undefined }))}
@@ -382,7 +344,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                 padding: '8px 12px',
                 border: '1px solid #e2e8f0',
                 borderRadius: '6px',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             >
               <option value="">All Formats</option>
@@ -396,7 +358,6 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
               <option value="zip">ZIP</option>
               <option value="vfx">VFX Pipeline</option>
             </select>
-            
             <select
               value={filter.type || ''}
               onChange={(e) => setFilter(prev => ({ ...prev, type: e.target.value as TemplateType || undefined }))}
@@ -404,7 +365,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                 padding: '8px 12px',
                 border: '1px solid #e2e8f0',
                 borderRadius: '6px',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             >
               <option value="">All Types</option>
@@ -413,10 +374,9 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
               <option value="diff">Differential</option>
               <option value="custom">Custom</option>
             </select>
-            
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               <label style={{ fontSize: '14px', color: '#6b7280' }}>View:</label>
-              {['grid', 'list', 'table'].map(mode => (
+              {['grid', 'list', 'table'].map(mode => ()
                 <button
                   key={mode}
                   onClick={() => setViewMode(mode as 'grid' | 'list' | 'table')}
@@ -427,14 +387,13 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                     borderRadius: '4px',
                     cursor: 'pointer',
                     fontSize: '12px',
-                    textTransform: 'capitalize'
+                    textTransform: 'capitalize',
                   }}
                 >
                   {mode}
                 </button>
               ))}
             </div>
-            
             <select
               value={`${sortBy}-${sortOrder}`}
               onChange={(e) => {
@@ -446,7 +405,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                 padding: '8px 12px',
                 border: '1px solid #e2e8f0',
                 borderRadius: '6px',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             >
               <option value="name-asc">Name A-Z</option>
@@ -461,12 +420,11 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
           </div>
         )}
       </div>
-
       {/* Content Area */}
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
         {/* Main Content */}
         <div style={{ flex: 1, overflow: 'auto', padding: '20px 24px' }}>
-          {error && (
+          {error && ()
             <div
               style={{
                 padding: '12px 16px',
@@ -475,35 +433,33 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                 borderRadius: '8px',
                 color: '#dc2626',
                 marginBottom: '20px',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             >
               <strong>Error:</strong> {error}
             </div>
           )}
-
-          {loading && (
+          {loading && ()
             <div
               style={{
                 padding: '40px',
                 textAlign: 'center',
-                color: '#6b7280'
+                color: '#6b7280',
               }}
             >
               <div style={{ fontSize: '24px', marginBottom: '12px' }}>⏳</div>
               <div>Loading templates...</div>
             </div>
           )}
-
           {/* Browse Templates Tab */}
-          {activeTab === 'browse' && !loading && (
+          {activeTab === 'browse' && !loading && ()
             <div>
-              {filteredTemplates.length === 0 ? (
+              {filteredTemplates.length === 0 ? ()
                 <div
                   style={{
                     padding: '60px 20px',
                     textAlign: 'center',
-                    color: '#9ca3af'
+                    color: '#9ca3af',
                   }}
                 >
                   <div style={{ fontSize: '48px', marginBottom: '16px' }}>📋</div>
@@ -515,30 +471,29 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                     }
                   </div>
                 </div>
-              ) : (
+              ) : ()
                 <div
                   style={{
                     display: viewMode === 'grid' ? 'grid' : 'flex',
                     gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                     flexDirection: viewMode === 'list' ? 'column' : undefined,
-                    gap: '16px'
+                    gap: '16px',
                   }}
                 >
-                  {filteredTemplates.map(template => {
+                  {filteredTemplates.map(template => {)
                     const stats = templateStats.get(template.id);
                     const rating = getTemplateRating(template.id);
-                    
-                    return (
+                    return ()
                       <div
                         key={template.id}
                         style={{
                           background: selectedTemplate?.id === template.id ? '#f0f9ff' : 'white',
-                          border: `2px solid ${selectedTemplate?.id === template.id ? '#0ea5e9' : '#e2e8f0'}`,
+                          border: `2px solid ${selectedTemplate?.id === template.id ? '#0ea5e9' : '#e2e8f0'}`,}
                           borderRadius: '8px',
                           padding: '16px',
                           cursor: 'pointer',
                           transition: 'all 0.2s ease',
-                          position: 'relative'
+                          position: 'relative',
                         }}
                         onClick={() => handleSelectTemplate(template)}
                       >
@@ -553,8 +508,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                               {template.is_public && <span> • Public</span>}
                             </div>
                           </div>
-                          
-                          {template.is_system_template && (
+                          {template.is_system_template && ()
                             <span
                               style={{
                                 background: '#dbeafe',
@@ -562,16 +516,15 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                                 padding: '2px 6px',
                                 borderRadius: '4px',
                                 fontSize: '10px',
-                                fontWeight: '600'
+                                fontWeight: '600',
                               }}
                             >
                               SYSTEM
                             </span>
                           )}
                         </div>
-                        
                         {/* Template Description */}
-                        {template.description && (
+                        {template.description && ()
                           <p style={{ 
                             margin: '0 0 12px', 
                             fontSize: '14px', 
@@ -580,18 +533,17 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                             display: '-webkit-box',
                             WebkitLineClamp: 2,
                             WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden'
+                            overflow: 'hidden',
                           }}>
                             {template.description}
                           </p>
                         )}
-                        
                         {/* Template Stats */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px', fontSize: '12px', color: '#6b7280' }}>
-                          {stats && (
+                          {stats && ()
                             <>
                               <span>📊 {formatUsageCount(stats.usageCount)} uses</span>
-                              {rating && (
+                              {rating && ()
                                 <span>⭐ {rating.average} ({rating.count})</span>
                               )}
                               <span>✅ {Math.round(stats.successRate * 100)}% success</span>
@@ -599,7 +551,6 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                           )}
                           <span>📅 {formatDate(template.created_at)}</span>
                         </div>
-                        
                         {/* Template Actions */}
                         <div style={{ display: 'flex', gap: '8px' }}>
                           <button
@@ -614,13 +565,12 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                               borderRadius: '4px',
                               cursor: 'pointer',
                               fontSize: '12px',
-                              color: '#374151'
+                              color: '#374151',
                             }}
                           >
                             🔧 Customize
                           </button>
-                          
-                          {enableSharing && (
+                          {enableSharing && ()
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -639,8 +589,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                               {template.is_public ? '🔒 Make Private' : '🌐 Make Public'}
                             </button>
                           )}
-                          
-                          {!template.is_system_template && (
+                          {!template.is_system_template && ()
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -653,7 +602,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                                 borderRadius: '4px',
                                 cursor: 'pointer',
                                 fontSize: '12px',
-                                color: '#dc2626'
+                                color: '#dc2626',
                               }}
                             >
                               🗑️ Delete
@@ -667,15 +616,14 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
               )}
             </div>
           )}
-
           {/* Create Template Tab */}
-          {activeTab === 'create' && (
+          {activeTab === 'create' && ()
             <div>
               <div
                 style={{
                   padding: '40px',
                   textAlign: 'center',
-                  color: '#6b7280'
+                  color: '#6b7280',
                 }}
               >
                 <div style={{ fontSize: '48px', marginBottom: '16px' }}>🛠️</div>
@@ -683,7 +631,6 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                 <div style={{ fontSize: '14px', marginBottom: '20px' }}>
                   Create custom export templates with advanced options and parameterization
                 </div>
-                
                 <button
                   onClick={() => setIsCreating(true)}
                   style={{
@@ -694,7 +641,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                     borderRadius: '8px',
                     cursor: 'pointer',
                     fontSize: '16px',
-                    fontWeight: '600'
+                    fontWeight: '600',
                   }}
                 >
                   ➕ Create New Template
@@ -702,14 +649,13 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
               </div>
             </div>
           )}
-
           {/* Shared Templates Tab */}
-          {activeTab === 'shared' && (
+          {activeTab === 'shared' && ()
             <div
               style={{
                 padding: '40px',
                 textAlign: 'center',
-                color: '#6b7280'
+                color: '#6b7280',
               }}
             >
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>🌐</div>
@@ -719,14 +665,13 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
               </div>
             </div>
           )}
-
           {/* Collaborate Tab */}
-          {activeTab === 'collaborate' && (
+          {activeTab === 'collaborate' && ()
             <div
               style={{
                 padding: '40px',
                 textAlign: 'center',
-                color: '#6b7280'
+                color: '#6b7280',
               }}
             >
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>👥</div>
@@ -737,22 +682,20 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
             </div>
           )}
         </div>
-
         {/* Side Panel */}
-        {selectedTemplate && (
+        {selectedTemplate && ()
           <div
             style={{
               width: '350px',
               borderLeft: '1px solid #e2e8f0',
               background: '#f8fafc',
-              overflow: 'auto'
+              overflow: 'auto',
             }}
           >
             <div style={{ padding: '20px' }}>
               <h3 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: '600' }}>
                 Template Details
               </h3>
-              
               <div style={{ marginBottom: '20px' }}>
                 <h4 style={{ margin: '0 0 8px', fontSize: '16px', color: '#374151' }}>
                   {selectedTemplate.name}
@@ -761,15 +704,14 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                   {selectedTemplate.export_format.toUpperCase()} • {selectedTemplate.template_type}
                   {selectedTemplate.is_public && <span> • Public</span>}
                 </div>
-                {selectedTemplate.description && (
+                {selectedTemplate.description && ()
                   <p style={{ margin: '0', fontSize: '14px', color: '#6b7280', lineHeight: '1.4' }}>
                     {selectedTemplate.description}
                   </p>
                 )}
               </div>
-              
               {/* Template Statistics */}
-              {templateStats.has(selectedTemplate.id) && (
+              {templateStats.has(selectedTemplate.id) && ()
                 <div style={{ marginBottom: '20px' }}>
                   <h5 style={{ margin: '0 0 8px', fontSize: '14px', fontWeight: '600', color: '#374151' }}>
                     Usage Statistics
@@ -778,7 +720,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                     {(() => {
                       const stats = templateStats.get(selectedTemplate.id)!;
                       const rating = getTemplateRating(selectedTemplate.id);
-                      return (
+                      return ()
                         <>
                           <div>📊 {formatUsageCount(stats.usageCount)} total uses</div>
                           {rating && <div>⭐ {rating.average}/5.0 ({rating.count} ratings)</div>}
@@ -790,7 +732,6 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                   </div>
                 </div>
               )}
-              
               {/* Template Metadata */}
               <div style={{ marginBottom: '20px' }}>
                 <h5 style={{ margin: '0 0 8px', fontSize: '14px', fontWeight: '600', color: '#374151' }}>
@@ -803,9 +744,8 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                   {selectedTemplate.is_system_template && <div>🔧 System Template</div>}
                 </div>
               </div>
-              
               {/* Template Options Preview */}
-              {Object.keys(selectedTemplate.format_options || {}).length > 0 && (
+              {Object.keys(selectedTemplate.format_options || {}).length > 0 && ()
                 <div style={{ marginBottom: '20px' }}>
                   <h5 style={{ margin: '0 0 8px', fontSize: '14px', fontWeight: '600', color: '#374151' }}>
                     Format Options
@@ -820,7 +760,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                       color: '#374151',
                       fontFamily: 'monospace',
                       overflow: 'auto',
-                      maxHeight: '150px'
+                      maxHeight: '150px',
                     }}
                   >
                     <pre style={{ margin: 0 }}>
@@ -829,7 +769,6 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                   </div>
                 </div>
               )}
-              
               {/* Actions */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <button
@@ -842,12 +781,11 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                     borderRadius: '6px',
                     cursor: 'pointer',
                     fontSize: '14px',
-                    fontWeight: '600'
+                    fontWeight: '600',
                   }}
                 >
                   📤 Use This Template
                 </button>
-                
                 <button
                   onClick={() => handleCustomizeTemplate(selectedTemplate)}
                   style={{
@@ -857,13 +795,12 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                     border: '1px solid #e2e8f0',
                     borderRadius: '6px',
                     cursor: 'pointer',
-                    fontSize: '14px'
+                    fontSize: '14px',
                   }}
                 >
                   🔧 Customize Template
                 </button>
-                
-                {!selectedTemplate.is_system_template && (
+                {!selectedTemplate.is_system_template && ()
                   <button
                     onClick={() => {
                       setEditingTemplate(selectedTemplate);
@@ -876,7 +813,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                       border: '1px solid #fed7aa',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '14px'
+                      fontSize: '14px',
                     }}
                   >
                     ✏️ Edit Template

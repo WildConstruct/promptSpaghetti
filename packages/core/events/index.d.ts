@@ -18,7 +18,7 @@ export declare /**
  */
 export declare const performEventSystemHealthCheck: () => {
     status: "healthy" | "degraded" | "unhealthy";
-    stats: {
+    stats: {,
         subscriptions: number;
         middleware: number;
         historySize: number;
@@ -30,7 +30,7 @@ export declare const performEventSystemHealthCheck: () => {
  * Event system metrics collection utility
  */
 export declare const collectEventSystemMetrics: () => {
-    metrics: {
+    metrics: {,
         avgEventsPerMinute: number;
         topEventTypes: [string, number][];
         eventsByCategory: Record<string, number>;
@@ -67,7 +67,7 @@ declare const _default: {
     globalEventBus: import("./EventSystem").EventBus;
     EventFactory: any;
     initializeEventSystem: (environment?: "production" | "development" | "testing") => import("./EventSystem").EventBus;
-    EventSystemPresets: {
+    EventSystemPresets: {,
         /**
          * Minimal setup for simple applications
          */
@@ -87,7 +87,7 @@ declare const _default: {
     };
     performEventSystemHealthCheck: () => {
         status: "healthy" | "degraded" | "unhealthy";
-        stats: {
+        stats: {,
             subscriptions: number;
             middleware: number;
             historySize: number;
@@ -96,7 +96,7 @@ declare const _default: {
         issues: string[];
     };
     collectEventSystemMetrics: () => {
-        metrics: {
+        metrics: {,
             avgEventsPerMinute: number;
             topEventTypes: [string, number][];
             eventsByCategory: Record<string, number>;

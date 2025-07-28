@@ -59,13 +59,13 @@ export interface ConversionContext {
     deviceId: string;
     timestamp: number;
     touchpoints: TouchPoint[];
-    privacyConsent: {
+    privacyConsent: {,
         tracking: boolean;
         analytics: boolean;
         personalization: boolean;
         crossDevice: boolean;
     };
-    attribution: {
+    attribution: {,
         source: string;
         medium: string;
         campaign?: string;
@@ -88,10 +88,10 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
     private isOnline;
     private recentEventHashes;
     private trackingMetrics;
-    constructor(
+    constructor()
       config: ConversionTrackingConfig,
       conversionArchitecture: ConversionArchitectureManager,
-      sessionManager: SessionTrackingManager
+      sessionManager: SessionTrackingManager,
     );
     private initializeTracking;
     private setupEventListeners;
@@ -100,7 +100,7 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
     /**
      * Track conversion event with enhanced capabilities
      */
-    trackConversionEvent(
+    trackConversionEvent()
       eventType: string,
       properties?: Record<string,
       any>,
@@ -114,7 +114,7 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
     /**
      * Track attribution touchpoint
      */
-    trackTouchpoint(
+    trackTouchpoint()
       channel: string,
       source: string,
       medium: string,
@@ -124,7 +124,7 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
     /**
      * Update user consent preferences
      */
-    updateConsentPreferences(consent: {
+    updateConsentPreferences(consent: {)
         tracking?: boolean;
         analytics?: boolean;
         personalization?: boolean;

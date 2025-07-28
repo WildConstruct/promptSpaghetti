@@ -7,7 +7,6 @@
  * Factory class for creating and configuring unified security protection systems
  * that combine rate limiting, adaptive throttling, and security analytics.
  */
-
 import { RateLimitingService } from './RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from './AdaptiveThrottlingRules';
 import { ApiUsagePatternQuotaRecommendations } from './ApiUsagePatternQuotaRecommendations';
@@ -26,43 +25,39 @@ import {
 
 export interface UnifiedSecurityConfig {
   // Rate limiting configuration
-  rateLimiting: {
+  rateLimiting: {,
     enabled: boolean;
     strictMode: boolean;
     customEndpoints?: Record<string, any>;
   };
-  
   // Adaptive throttling configuration
-  throttling: {
+  throttling: {,
     enabled: boolean;
     analyticsEnabled: boolean;
     defaultRules: boolean;
   };
-  
   // Integration configuration
-  integration: {
+  integration: {,
     mode: IntegrationMode;
     strategy: CoordinationStrategy;
     fallback: FallbackBehavior;
-    priorities: {
+    priorities: {,
       rateLimiting: number;
       throttling: number;
     };
   };
-  
   // Analytics integration
-  analytics: {
+  analytics: {,
     enableUsagePatterns: boolean;
     enableScalingAnalytics: boolean;
     enableCrossSystemLearning: boolean;
     enableAnalyticsInsights: boolean;
   };
-  
   // Monitoring and alerting
-  monitoring: {
+  monitoring: {,
     enableMetrics: boolean;
     enableHealthChecks: boolean;
-    alertThresholds: {
+    alertThresholds: {,
       errorRate: number;
       responseTime: number;
       systemHealth: number;
@@ -83,11 +78,10 @@ export enum SecurityProfile {
 // ========================================
 
 export class UnifiedSecurityProtectionFactory {
-  
   /**
    * Create a complete unified security protection system
    */
-  public static createUnifiedProtection(
+  public static createUnifiedProtection()
     profile: SecurityProfile = SecurityProfile.PRODUCTION,
     customConfig?: Partial<UnifiedSecurityConfig>
   ): {
@@ -101,33 +95,27 @@ export class UnifiedSecurityProtectionFactory {
   } {
     // Generate configuration based on profile
     const config = this.generateConfiguration(profile, customConfig);
-    
     // Create rate limiting service
     const rateLimitingService = new RateLimitingService();
-    
     // Create analytics services if enabled
     let usagePatternAnalytics: ApiUsagePatternQuotaRecommendations | undefined;
     let scalingAnalytics: ApiScalingAnalyticsIntegration | undefined;
-    
     if (config.analytics.enableUsagePatterns) {
       usagePatternAnalytics = this.createUsagePatternAnalytics(profile);
     }
-    
     if (config.analytics.enableScalingAnalytics) {
       scalingAnalytics = this.createScalingAnalytics(profile);
     }
-    
     // Create adaptive throttling engine with analytics integration
-    const throttlingEngine = new AdaptiveThrottlingRulesEngine(
+    const throttlingEngine = new AdaptiveThrottlingRulesEngine(;)
       rateLimitingService,
       config.throttling.defaultRules,
       {
         usagePatternAnalytics,
         scalingAnalytics,
-        enableAnalytics: config.analytics.enableAnalyticsInsights
+        enableAnalytics: config.analytics.enableAnalyticsInsights,
       }
     );
-    
     // Create integration configuration
     const integrationConfig: IntegrationConfig = {
       enableUnifiedProtection: true,
@@ -137,43 +125,38 @@ export class UnifiedSecurityProtectionFactory {
       coordinationStrategy: config.integration.strategy,
       fallbackBehavior: config.integration.fallback,
       analyticsIntegration: config.analytics.enableAnalyticsInsights,
-      crossSystemLearning: config.analytics.enableCrossSystemLearning
+      crossSystemLearning: config.analytics.enableCrossSystemLearning,
     };
-    
     // Create unified integration
-    const integration = new AdaptiveRateLimitingIntegration(
+    const integration = new AdaptiveRateLimitingIntegration(;)
       rateLimitingService,
       throttlingEngine,
       integrationConfig
     );
-    
     return {
       rateLimitingService,
       throttlingEngine,
       integration,
-      analytics: {
+      analytics: {,
         usagePatterns: usagePatternAnalytics,
         scalingAnalytics
       }
     };
   }
-  
   /**
    * Create a lightweight rate limiting only system
    */
   public static createRateLimitingOnly(): RateLimitingService {
     return new RateLimitingService();
   }
-  
   /**
    * Create an adaptive throttling only system
    */
-  public static createThrottlingOnly(
+  public static createThrottlingOnly()
     enableAnalytics: boolean = false
   ): AdaptiveThrottlingRulesEngine {
     const rateLimitingService = new RateLimitingService();
-    
-    return new AdaptiveThrottlingRulesEngine(
+    return new AdaptiveThrottlingRulesEngine()
       rateLimitingService,
       true, // Initialize default rules
       {
@@ -181,44 +164,38 @@ export class UnifiedSecurityProtectionFactory {
       }
     );
   }
-  
   /**
    * Create usage pattern analytics service
    */
-  private static createUsagePatternAnalytics(
-    profile: SecurityProfile
+  private static createUsagePatternAnalytics()
+    profile: SecurityProfile,
   ): ApiUsagePatternQuotaRecommendations {
     const config = this.getUsagePatternConfig(profile);
     return new ApiUsagePatternQuotaRecommendations(config);
   }
-  
   /**
    * Create scaling analytics service
    */
-  private static createScalingAnalytics(
-    profile: SecurityProfile
+  private static createScalingAnalytics()
+    profile: SecurityProfile,
   ): ApiScalingAnalyticsIntegration {
     const config = this.getScalingAnalyticsConfig(profile);
     return new ApiScalingAnalyticsIntegration(config);
   }
-  
   /**
    * Generate configuration based on security profile
    */
-  private static generateConfiguration(
+  private static generateConfiguration()
     profile: SecurityProfile,
     customConfig?: Partial<UnifiedSecurityConfig>
   ): UnifiedSecurityConfig {
     const baseConfig = this.getBaseConfiguration(profile);
-    
     // Merge with custom configuration
     if (customConfig) {
       return this.mergeConfigurations(baseConfig, customConfig);
     }
-    
     return baseConfig;
   }
-  
   /**
    * Get base configuration for security profile
    */
@@ -226,194 +203,188 @@ export class UnifiedSecurityProtectionFactory {
     switch (profile) {
       case SecurityProfile.DEVELOPMENT:
         return {
-          rateLimiting: {
+          rateLimiting: {,
             enabled: true,
             strictMode: false,
           },
-          throttling: {
+          throttling: {,
             enabled: true,
             analyticsEnabled: false,
-            defaultRules: true
+            defaultRules: true,
           },
-          integration: {
+          integration: {,
             mode: IntegrationMode.PARALLEL,
             strategy: CoordinationStrategy.LEAST_RESTRICTIVE,
             fallback: FallbackBehavior.ALLOW,
-            priorities: {
+            priorities: {,
               rateLimiting: 50,
-              throttling: 60
+              throttling: 60,
             }
           },
-          analytics: {
+          analytics: {,
             enableUsagePatterns: false,
             enableScalingAnalytics: false,
             enableCrossSystemLearning: false,
-            enableAnalyticsInsights: false
+            enableAnalyticsInsights: false,
           },
-          monitoring: {
+          monitoring: {,
             enableMetrics: true,
             enableHealthChecks: false,
-            alertThresholds: {
+            alertThresholds: {,
               errorRate: 20,
               responseTime: 5000,
-              systemHealth: 60
+              systemHealth: 60,
             }
           }
         };
-        
       case SecurityProfile.STAGING:
         return {
-          rateLimiting: {
+          rateLimiting: {,
             enabled: true,
             strictMode: false,
           },
-          throttling: {
+          throttling: {,
             enabled: true,
             analyticsEnabled: true,
-            defaultRules: true
+            defaultRules: true,
           },
-          integration: {
+          integration: {,
             mode: IntegrationMode.HIERARCHICAL,
             strategy: CoordinationStrategy.WEIGHTED_AVERAGE,
             fallback: FallbackBehavior.USE_THROTTLING,
-            priorities: {
+            priorities: {,
               rateLimiting: 60,
-              throttling: 70
+              throttling: 70,
             }
           },
-          analytics: {
+          analytics: {,
             enableUsagePatterns: true,
             enableScalingAnalytics: true,
             enableCrossSystemLearning: true,
-            enableAnalyticsInsights: true
+            enableAnalyticsInsights: true,
           },
-          monitoring: {
+          monitoring: {,
             enableMetrics: true,
             enableHealthChecks: true,
-            alertThresholds: {
+            alertThresholds: {,
               errorRate: 15,
               responseTime: 3000,
-              systemHealth: 70
+              systemHealth: 70,
             }
           }
         };
-        
       case SecurityProfile.PRODUCTION:
         return {
-          rateLimiting: {
+          rateLimiting: {,
             enabled: true,
             strictMode: true,
           },
-          throttling: {
+          throttling: {,
             enabled: true,
             analyticsEnabled: true,
-            defaultRules: true
+            defaultRules: true,
           },
-          integration: {
+          integration: {,
             mode: IntegrationMode.HIERARCHICAL,
             strategy: CoordinationStrategy.MOST_RESTRICTIVE,
             fallback: FallbackBehavior.BLOCK,
-            priorities: {
+            priorities: {,
               rateLimiting: 80,
-              throttling: 85
+              throttling: 85,
             }
           },
-          analytics: {
+          analytics: {,
             enableUsagePatterns: true,
             enableScalingAnalytics: true,
             enableCrossSystemLearning: true,
-            enableAnalyticsInsights: true
+            enableAnalyticsInsights: true,
           },
-          monitoring: {
+          monitoring: {,
             enableMetrics: true,
             enableHealthChecks: true,
-            alertThresholds: {
+            alertThresholds: {,
               errorRate: 10,
               responseTime: 2000,
-              systemHealth: 85
+              systemHealth: 85,
             }
           }
         };
-        
       case SecurityProfile.HIGH_SECURITY:
         return {
-          rateLimiting: {
+          rateLimiting: {,
             enabled: true,
             strictMode: true,
           },
-          throttling: {
+          throttling: {,
             enabled: true,
             analyticsEnabled: true,
-            defaultRules: true
+            defaultRules: true,
           },
-          integration: {
+          integration: {,
             mode: IntegrationMode.SEQUENTIAL,
             strategy: CoordinationStrategy.MOST_RESTRICTIVE,
             fallback: FallbackBehavior.BLOCK,
-            priorities: {
+            priorities: {,
               rateLimiting: 95,
-              throttling: 90
+              throttling: 90,
             }
           },
-          analytics: {
+          analytics: {,
             enableUsagePatterns: true,
             enableScalingAnalytics: true,
             enableCrossSystemLearning: true,
-            enableAnalyticsInsights: true
+            enableAnalyticsInsights: true,
           },
-          monitoring: {
+          monitoring: {,
             enableMetrics: true,
             enableHealthChecks: true,
-            alertThresholds: {
+            alertThresholds: {,
               errorRate: 5,
               responseTime: 1500,
-              systemHealth: 95
+              systemHealth: 95,
             }
           }
         };
-        
       case SecurityProfile.HIGH_VOLUME:
         return {
-          rateLimiting: {
+          rateLimiting: {,
             enabled: true,
             strictMode: false,
           },
-          throttling: {
+          throttling: {,
             enabled: true,
             analyticsEnabled: true,
-            defaultRules: true
+            defaultRules: true,
           },
-          integration: {
+          integration: {,
             mode: IntegrationMode.PARALLEL,
             strategy: CoordinationStrategy.DYNAMIC_SELECTION,
             fallback: FallbackBehavior.USE_THROTTLING,
-            priorities: {
+            priorities: {,
               rateLimiting: 70,
-              throttling: 80
+              throttling: 80,
             }
           },
-          analytics: {
+          analytics: {,
             enableUsagePatterns: true,
             enableScalingAnalytics: true,
             enableCrossSystemLearning: true,
-            enableAnalyticsInsights: true
+            enableAnalyticsInsights: true,
           },
-          monitoring: {
+          monitoring: {,
             enableMetrics: true,
             enableHealthChecks: true,
-            alertThresholds: {
+            alertThresholds: {,
               errorRate: 8,
               responseTime: 1000,
-              systemHealth: 80
+              systemHealth: 80,
             }
           }
         };
-        
       default:
         return this.getBaseConfiguration(SecurityProfile.PRODUCTION);
     }
   }
-  
   /**
    * Get usage pattern analytics configuration
    */
@@ -426,30 +397,29 @@ export class UnifiedSecurityProtectionFactory {
       recommendationInterval: profile === SecurityProfile.HIGH_SECURITY ? 5 : 15, // minutes
       usagePatterns: [],
       quotaAdjustmentRules: [],
-      fairnessConfig: {
+      fairnessConfig: {,
         enableFairnessAnalysis: true,
         fairnessThreshold: 0.8,
         fairnessMetrics: ['quota_utilization', 'request_distribution'],
         adjustmentStrategies: ['gradual_increase', 'priority_based']
       },
-      abuseDetectionConfig: {
+      abuseDetectionConfig: {,
         enableAbuseDetection: true,
         detectionAlgorithms: ['statistical_anomaly', 'pattern_based', 'threshold_based'],
         abuseThreshold: profile === SecurityProfile.HIGH_SECURITY ? 0.7 : 0.8,
         responseActions: ['throttle', 'temporary_block', 'alert_admin']
       },
-      alertingConfig: {
+      alertingConfig: {,
         enableAlerting: true,
         alertChannels: ['email', 'webhook'],
-        alertThresholds: {
+        alertThresholds: {,
           highUsage: 0.8,
           potentialAbuse: 0.9,
-          systemOverload: 0.95
+          systemOverload: 0.95,
         }
       }
     };
   }
-  
   /**
    * Get scaling analytics configuration
    */
@@ -459,90 +429,90 @@ export class UnifiedSecurityProtectionFactory {
     return {
       enableRealTimeAnalytics: true,
       analysisInterval: profile === SecurityProfile.HIGH_VOLUME ? 2 : 5, // minutes
-      scalingThresholds: {
-        cpuUtilizationPercent: {
+      scalingThresholds: {,
+        cpuUtilizationPercent: {,
           scaleUp: profile === SecurityProfile.HIGH_VOLUME ? 60 : 70,
-          scaleDown: 30
+          scaleDown: 30,
         },
-        memoryUtilizationPercent: {
+        memoryUtilizationPercent: {,
           scaleUp: profile === SecurityProfile.HIGH_VOLUME ? 70 : 80,
-          scaleDown: 40
+          scaleDown: 40,
         },
-        responseTimeMs: {
+        responseTimeMs: {,
           scaleUp: profile === SecurityProfile.HIGH_SECURITY ? 500 : 1000,
-          scaleDown: 200
+          scaleDown: 200,
         },
-        throughputRps: {
+        throughputRps: {,
           scaleUp: 1000,
-          scaleDown: 100
+          scaleDown: 100,
         },
-        errorRatePercent: {
+        errorRatePercent: {,
           scaleUp: profile === SecurityProfile.HIGH_SECURITY ? 2 : 5,
-          scaleDown: 1
+          scaleDown: 1,
         },
-        queueDepth: {
+        queueDepth: {,
           scaleUp: 100,
-          scaleDown: 10
+          scaleDown: 10,
         },
-        connectionCount: {
+        connectionCount: {,
           scaleUp: 1000,
-          scaleDown: 100
+          scaleDown: 100,
         }
       },
-      loadBalancingConfig: {
+      loadBalancingConfig: {,
         enableIntelligentRouting: true,
         routingAlgorithm: 'adaptive',
-        healthCheckConfig: {
+        healthCheckConfig: {,
           enableHealthChecks: true,
           healthCheckInterval: 30,
           healthCheckTimeout: 5,
           healthCheckPath: '/health',
           unhealthyThreshold: 3,
           healthyThreshold: 2,
-          customHealthChecks: []
+          customHealthChecks: [],
         },
-        stickySessionConfig: {
+        stickySessionConfig: {,
           enableStickySession: false,
           sessionAffinityDuration: 3600,
-          sessionIdHeader: 'X-Session-ID'
+          sessionIdHeader: 'X-Session-ID',
         },
-        circuitBreakerConfig: {
+        circuitBreakerConfig: {,
           enableCircuitBreaker: true,
           failureThreshold: 5,
           recoveryTimeout: 60000,
-          halfOpenRequests: 3
+          halfOpenRequests: 3,
         },
-        trafficShaping: {
+        trafficShaping: {,
           enableTrafficShaping: true,
           maxConcurrentRequests: 1000,
-          queueTimeout: 30000
+          queueTimeout: 30000,
         }
       },
-      predictiveScalingConfig: {
+      predictiveScalingConfig: {,
         enablePredictiveScaling: profile !== SecurityProfile.DEVELOPMENT,
         predictionWindow: 30, // minutes
         scalingModels: ['linear_regression', 'time_series'],
-        confidenceThreshold: 0.8
+        confidenceThreshold: 0.8,
       },
-      performanceTargets: {
+      performanceTargets: {,
         targetResponseTime: profile === SecurityProfile.HIGH_SECURITY ? 200 : 500,
         targetThroughput: profile === SecurityProfile.HIGH_VOLUME ? 10000 : 1000,
         targetErrorRate: profile === SecurityProfile.HIGH_SECURITY ? 0.1 : 1.0,
         targetAvailability: profile === SecurityProfile.HIGH_SECURITY ? 99.9 : 99.5
       },
-      costOptimizationConfig: {
+      costOptimizationConfig: {,
         enableCostOptimization: profile === SecurityProfile.HIGH_VOLUME,
-        costThresholds: {
+        costThresholds: {,
           maxHourlyCost: 100,
-          costPerRequest: 0.001
+          costPerRequest: 0.001,
         },
         optimizationStrategies: ['right_sizing', 'spot_instances', 'auto_shutdown']
       },
-      alertingConfig: {
+      alertingConfig: {,
         enableAlerting: true,
         alertChannels: ['email', 'slack', 'webhook'],
-        escalationPolicy: {
-          levels: [
+        escalationPolicy: {,
+          levels: [,
             { threshold: 0.8, delay: 5 },
             { threshold: 0.9, delay: 2 },
             { threshold: 0.95, delay: 0 }
@@ -551,113 +521,103 @@ export class UnifiedSecurityProtectionFactory {
       }
     };
   }
-  
   /**
    * Merge configurations with deep merge
    */
-  private static mergeConfigurations(
+  private static mergeConfigurations()
     base: UnifiedSecurityConfig,
-    custom: Partial<UnifiedSecurityConfig>
+    custom: Partial<UnifiedSecurityConfig>,
   ): UnifiedSecurityConfig {
     const merged = { ...base };
-    
     if (custom.rateLimiting) {
       merged.rateLimiting = { ...merged.rateLimiting, ...custom.rateLimiting };
     }
-    
     if (custom.throttling) {
       merged.throttling = { ...merged.throttling, ...custom.throttling };
     }
-    
     if (custom.integration) {
       merged.integration = { ...merged.integration, ...custom.integration };
       if (custom.integration.priorities) {
         merged.integration.priorities = { ...merged.integration.priorities, ...custom.integration.priorities };
       }
     }
-    
     if (custom.analytics) {
       merged.analytics = { ...merged.analytics, ...custom.analytics };
     }
-    
     if (custom.monitoring) {
       merged.monitoring = { ...merged.monitoring, ...custom.monitoring };
       if (custom.monitoring.alertThresholds) {
         merged.monitoring.alertThresholds = { ...merged.monitoring.alertThresholds, ...custom.monitoring.alertThresholds };
       }
     }
-    
     return merged;
   }
-  
   /**
    * Create preset configurations for common use cases
    */
   public static createPresetConfigurations(): Record<string, UnifiedSecurityConfig> {
     return {
       // API Gateway protection
-      apiGateway: {
+      apiGateway: {,
         rateLimiting: { enabled: true, strictMode: true },
         throttling: { enabled: true, analyticsEnabled: true, defaultRules: true },
-        integration: {
+        integration: {,
           mode: IntegrationMode.HIERARCHICAL,
           strategy: CoordinationStrategy.MOST_RESTRICTIVE,
           fallback: FallbackBehavior.BLOCK,
           priorities: { rateLimiting: 85, throttling: 80 }
         },
-        analytics: {
+        analytics: {,
           enableUsagePatterns: true,
           enableScalingAnalytics: true,
           enableCrossSystemLearning: true,
-          enableAnalyticsInsights: true
+          enableAnalyticsInsights: true,
         },
-        monitoring: {
+        monitoring: {,
           enableMetrics: true,
           enableHealthChecks: true,
           alertThresholds: { errorRate: 5, responseTime: 1000, systemHealth: 90 }
         }
       },
-      
       // Authentication service protection
-      authentication: {
+      authentication: {,
         rateLimiting: { enabled: true, strictMode: true },
         throttling: { enabled: true, analyticsEnabled: true, defaultRules: true },
-        integration: {
+        integration: {,
           mode: IntegrationMode.SEQUENTIAL,
           strategy: CoordinationStrategy.MOST_RESTRICTIVE,
           fallback: FallbackBehavior.BLOCK,
           priorities: { rateLimiting: 95, throttling: 85 }
         },
-        analytics: {
+        analytics: {,
           enableUsagePatterns: true,
           enableScalingAnalytics: false,
           enableCrossSystemLearning: true,
-          enableAnalyticsInsights: true
+          enableAnalyticsInsights: true,
         },
-        monitoring: {
+        monitoring: {,
           enableMetrics: true,
           enableHealthChecks: true,
           alertThresholds: { errorRate: 2, responseTime: 500, systemHealth: 95 }
         }
       },
-      
       // Microservices protection
-      microservices: {
+      microservices: {,
         rateLimiting: { enabled: true, strictMode: false },
         throttling: { enabled: true, analyticsEnabled: true, defaultRules: true },
-        integration: {
+        integration: {,
           mode: IntegrationMode.PARALLEL,
           strategy: CoordinationStrategy.DYNAMIC_SELECTION,
           fallback: FallbackBehavior.USE_THROTTLING,
           priorities: { rateLimiting: 70, throttling: 80 }
         },
-        analytics: {
+        analytics: {,
           enableUsagePatterns: true,
           enableScalingAnalytics: true,
           enableCrossSystemLearning: true,
-          enableAnalyticsInsights: true
+          enableAnalyticsInsights: true,
         },
-        monitoring: {
+        monitoring: {,
           enableMetrics: true,
           enableHealthChecks: true,
           alertThresholds: { errorRate: 8, responseTime: 2000, systemHealth: 80 }
@@ -665,7 +625,6 @@ export class UnifiedSecurityProtectionFactory {
       }
     };
   }
-  
   /**
    * Validate configuration
    */
@@ -676,39 +635,31 @@ export class UnifiedSecurityProtectionFactory {
   } {
     const errors: string[] = [];
     const warnings: string[] = [];
-    
     // Validate priorities
     if (config.integration.priorities.rateLimiting < 0 || config.integration.priorities.rateLimiting > 100) {
       errors.push('Rate limiting priority must be between 0 and 100');
     }
-    
     if (config.integration.priorities.throttling < 0 || config.integration.priorities.throttling > 100) {
       errors.push('Throttling priority must be between 0 and 100');
     }
-    
     // Validate alert thresholds
     if (config.monitoring.alertThresholds.errorRate < 0 || config.monitoring.alertThresholds.errorRate > 100) {
       errors.push('Error rate threshold must be between 0 and 100');
     }
-    
     if (config.monitoring.alertThresholds.responseTime < 0) {
       errors.push('Response time threshold must be positive');
     }
-    
     if (config.monitoring.alertThresholds.systemHealth < 0 || config.monitoring.alertThresholds.systemHealth > 100) {
       errors.push('System health threshold must be between 0 and 100');
     }
-    
     // Warnings for potentially problematic configurations
-    if (config.integration.strategy === CoordinationStrategy.LEAST_RESTRICTIVE && 
+    if (config.integration.strategy === CoordinationStrategy.LEAST_RESTRICTIVE && )
         config.integration.fallback === FallbackBehavior.ALLOW) {
       warnings.push('Least restrictive strategy with allow fallback may be too permissive for production');
     }
-    
     if (config.analytics.enableAnalyticsInsights && !config.analytics.enableUsagePatterns) {
       warnings.push('Analytics insights enabled but usage patterns disabled - limited insights available');
     }
-    
     return {
       isValid: errors.length === 0,
       errors,

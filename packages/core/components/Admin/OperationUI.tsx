@@ -11,7 +11,6 @@
  * - Operation templates and favorites
  * - Batch operation management
  */
-
 import React, { useState, useCallback, useMemo } from 'react';
 import { 
   OperationType, 
@@ -35,7 +34,7 @@ export interface OperationUIProps {
   showAdvanced?: boolean;
 }
 
-export const OperationUI: React.FC<OperationUIProps> = ({
+export const OperationUI: React.FC<OperationUIProps> = ({)
   operationType,
   initialParameters = {},
   onExecute,
@@ -49,58 +48,47 @@ export const OperationUI: React.FC<OperationUIProps> = ({
   const [execution, setExecution] = useState<OperationExecution | null>(null);
   const [isExecuting, setIsExecuting] = useState(false);
   const [showParameters, setShowParameters] = useState(true);
-
   // Parameter validation
   const validateParameters = useCallback((params: Record<string, any>) => {
     const errors: Record<string, string> = {};
-
-    operationType.parameters.forEach(param => {
+    operationType.parameters.forEach(param => {)
       const value = params[param.name];
-
       // Required validation
       if (param.required && (value === undefined || value === null || value === '')) {
-        errors[param.name] = `${param.displayName} is required`;
+        errors[param.name] = `${param.displayName} is required`;}
         return;
       }
-
       // Skip further validation if value is empty and not required
       if (!value && !param.required) return;
-
       // Type validation
       if (!validateParameterType(value, param.type)) {
-        errors[param.name] = `${param.displayName} must be of type ${param.type}`;
+        errors[param.name] = `${param.displayName} must be of type ${param.type}`;}
         return;
       }
-
       // Constraint validation
-      param.constraints.forEach(constraint => {
+      param.constraints.forEach(constraint => {)
         const result = validateConstraint(value, constraint);
         if (!result.isValid) {
           errors[param.name] = result.message;
         }
       });
     });
-
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   }, [operationType.parameters]);
-
   // Handle parameter changes
   const handleParameterChange = useCallback((name: string, value: Error) => {
     const newParameters = { ...parameters, [name]: value };
     setParameters(newParameters);
     onParametersChange?.(newParameters);
-    
     // Validate on change
     setTimeout(() => validateParameters(newParameters), 100);
   }, [parameters, onParametersChange, validateParameters]);
-
   // Execute operation
   const handleExecute = useCallback(async () => {
     if (!validateParameters(parameters)) {
       return;
     }
-
     setIsExecuting(true);
     try {
       const executionResult = await onExecute(parameters);
@@ -112,7 +100,6 @@ export const OperationUI: React.FC<OperationUIProps> = ({
       setIsExecuting(false);
     }
   }, [parameters, onExecute, validateParameters]);
-
   // Cancel execution
   const handleCancel = useCallback(async () => {
     if (execution && onCancel) {
@@ -124,18 +111,15 @@ export const OperationUI: React.FC<OperationUIProps> = ({
       }
     }
   }, [execution, onCancel]);
-
-  const isValid = useMemo(() => 
+  const isValid = useMemo(() => ;
     Object.keys(validationErrors).length === 0, 
   [validationErrors]
   );
-
-  const canExecute = useMemo(() => 
+  const canExecute = useMemo(() => ;
     !readonly && !isExecuting && isValid && !execution,
   [readonly, isExecuting, isValid, execution]
   );
-
-  return (
+  return ()
     <div className="operation-ui">
       <OperationHeader 
         operationType={operationType}
@@ -143,8 +127,7 @@ export const OperationUI: React.FC<OperationUIProps> = ({
         onToggleParameters={() => setShowParameters(!showParameters)}
         showParameters={showParameters}
       />
-
-      {showParameters && (
+      {showParameters && ()
         <OperationParametersForm
           parameters={operationType.parameters}
           values={parameters}
@@ -154,7 +137,6 @@ export const OperationUI: React.FC<OperationUIProps> = ({
           showAdvanced={showAdvanced}
         />
       )}
-
       <OperationActions
         operationType={operationType}
         canExecute={canExecute}
@@ -163,8 +145,7 @@ export const OperationUI: React.FC<OperationUIProps> = ({
         onExecute={handleExecute}
         onCancel={handleCancel}
       />
-
-      {execution && (
+      {execution && ()
         <OperationProgress
           execution={execution}
           operationType={operationType}
@@ -182,8 +163,7 @@ interface OperationHeaderProps {
   onToggleParameters: () => void;
   showParameters: boolean;
 }
-
-const OperationHeader: React.FC<OperationHeaderProps> = ({
+const OperationHeader: React.FC<OperationHeaderProps> = ({)
   operationType,
   execution,
   onToggleParameters,
@@ -198,8 +178,7 @@ const OperationHeader: React.FC<OperationHeaderProps> = ({
     default: return 'gray';
     }
   };
-
-  return (
+  return ()
     <div className="operation-header">
       <div className="operation-title">
         <div className="operation-icon" style={{ color: operationType.uiConfig.color }}>
@@ -210,21 +189,19 @@ const OperationHeader: React.FC<OperationHeaderProps> = ({
           <p className="operation-description">{operationType.description}</p>
         </div>
       </div>
-      
       <div className="operation-metadata">
-        <span className={`risk-badge risk-${operationType.riskLevel}`}>
+        <span className={`risk-badge risk-${operationType.riskLevel}`}>}
           {operationType.riskLevel.toUpperCase()} RISK
         </span>
         <span className="category-badge">
           {operationType.category.replace('_', ' ').toUpperCase()}
         </span>
-        {execution && (
-          <span className={`status-badge status-${execution.status}`}>
+        {execution && ()
+          <span className={`status-badge status-${execution.status}`}>}
             {execution.status.toUpperCase()}
           </span>
         )}
       </div>
-
       <button 
         className="toggle-parameters-btn"
         onClick={onToggleParameters}
@@ -244,8 +221,7 @@ interface OperationParametersFormProps {
   readonly: boolean;
   showAdvanced: boolean;
 }
-
-const OperationParametersForm: React.FC<OperationParametersFormProps> = ({
+const OperationParametersForm: React.FC<OperationParametersFormProps> = ({)
   parameters,
   values,
   errors,
@@ -254,21 +230,17 @@ const OperationParametersForm: React.FC<OperationParametersFormProps> = ({
   showAdvanced
 }) => {
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
-
   const parametersByGroup = useMemo(() => {
     const groups: Record<string, OperationParameter[]> = {};
-    
-    parameters.forEach(param => {
-      const group = param.name.includes('advanced') && !showAdvanced 
+    parameters.forEach(param => {)
+      const group = param.name.includes('advanced') && !showAdvanced ;
         ? 'advanced' 
         : 'basic';
       if (!groups[group]) groups[group] = [];
       groups[group].push(param);
     });
-
     return groups;
   }, [parameters, showAdvanced]);
-
   const toggleSection = (section: string) => {
     const newCollapsed = new Set(collapsedSections);
     if (newCollapsed.has(section)) {
@@ -278,24 +250,22 @@ const OperationParametersForm: React.FC<OperationParametersFormProps> = ({
     }
     setCollapsedSections(newCollapsed);
   };
-
-  return (
+  return ()
     <div className="operation-parameters-form">
-      {Object.entries(parametersByGroup).map(([group, groupParams]) => (
+      {Object.entries(parametersByGroup).map(([group, groupParams]) => ()
         <div key={group} className="parameter-group">
           <div 
             className="parameter-group-header"
             onClick={() => toggleSection(group)}
           >
             <h4>{group === 'advanced' ? 'Advanced Options' : 'Parameters'}</h4>
-            <span className={`collapse-icon ${collapsedSections.has(group) ? 'collapsed' : ''}`}>
+            <span className={`collapse-icon ${collapsedSections.has(group) ? 'collapsed' : ''}`}>}
               ▼
             </span>
           </div>
-          
-          {!collapsedSections.has(group) && (
+          {!collapsedSections.has(group) && ()
             <div className="parameter-group-content">
-              {groupParams.map(parameter => (
+              {groupParams.map(parameter => ()
                 <ParameterInput
                   key={parameter.name}
                   parameter={parameter}
@@ -321,8 +291,7 @@ interface ParameterInputProps {
   onChange: (value: Error) => void;
   readonly: boolean;
 }
-
-const ParameterInput: React.FC<ParameterInputProps> = ({
+const ParameterInput: React.FC<ParameterInputProps> = ({)
   parameter,
   value,
   error,
@@ -338,25 +307,21 @@ const ParameterInput: React.FC<ParameterInputProps> = ({
       placeholder: parameter.placeholder,
       className: error ? 'error' : ''
     };
-
     switch (parameter.inputType) {
     case InputType.TEXT:
       return <input type="text" {...commonProps} />;
-      
     case InputType.TEXTAREA:
       return <textarea {...commonProps} rows={4} />;
-      
     case InputType.NUMBER:
-      return (
+      return ()
         <input 
           type="number" 
           {...commonProps}
           onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
         />
       );
-      
     case InputType.CHECKBOX:
-      return (
+      return ()
         <input
           type="checkbox"
           checked={Boolean(value)}
@@ -365,12 +330,11 @@ const ParameterInput: React.FC<ParameterInputProps> = ({
           className={error ? 'error' : ''}
         />
       );
-      
     case InputType.SELECT:
-      return (
+      return ()
         <select {...commonProps}>
           <option value="">Select...</option>
-          {parameter.options?.map(option => (
+          {parameter.options?.map(option => ()
             <option 
               key={option.value} 
               value={option.value}
@@ -381,11 +345,10 @@ const ParameterInput: React.FC<ParameterInputProps> = ({
           ))}
         </select>
       );
-      
     case InputType.MULTISELECT:
-      return (
+      return ()
         <div className="multiselect">
-          {parameter.options?.map(option => (
+          {parameter.options?.map(option => ()
             <label key={option.value} className="multiselect-option">
               <input
                 type="checkbox"
@@ -405,9 +368,8 @@ const ParameterInput: React.FC<ParameterInputProps> = ({
           ))}
         </div>
       );
-      
     case InputType.DATE_PICKER:
-      return (
+      return ()
         <input
           type="date"
           value={value ? new Date(value).toISOString().split('T')[0] : ''}
@@ -416,9 +378,8 @@ const ParameterInput: React.FC<ParameterInputProps> = ({
           className={error ? 'error' : ''}
         />
       );
-      
     case InputType.DATETIME_PICKER:
-      return (
+      return ()
         <input
           type="datetime-local"
           value={value ? new Date(value).toISOString().slice(0, -1) : ''}
@@ -427,9 +388,8 @@ const ParameterInput: React.FC<ParameterInputProps> = ({
           className={error ? 'error' : ''}
         />
       );
-      
     case InputType.FILE_UPLOAD:
-      return (
+      return ()
         <input
           type="file"
           onChange={(e) => {
@@ -442,25 +402,22 @@ const ParameterInput: React.FC<ParameterInputProps> = ({
           className={error ? 'error' : ''}
         />
       );
-      
     default:
       return <input type="text" {...commonProps} />;
     }
   };
-
-  return (
+  return ()
     <div className="parameter-input">
       <label className="parameter-label">
         {parameter.displayName}
         {parameter.required && <span className="required">*</span>}
       </label>
-      
       <div className="parameter-control">
         {renderInput()}
-        {parameter.helpText && (
+        {parameter.helpText && ()
           <div className="parameter-help">{parameter.helpText}</div>
         )}
-        {error && (
+        {error && ()
           <div className="parameter-error">{error}</div>
         )}
       </div>
@@ -477,8 +434,7 @@ interface OperationActionsProps {
   onExecute: () => void;
   onCancel: () => void;
 }
-
-const OperationActions: React.FC<OperationActionsProps> = ({
+const OperationActions: React.FC<OperationActionsProps> = ({)
   operationType,
   canExecute,
   isExecuting,
@@ -487,7 +443,6 @@ const OperationActions: React.FC<OperationActionsProps> = ({
   onCancel
 }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
-
   const handleExecute = () => {
     if (operationType.uiConfig.confirmationRequired) {
       setShowConfirmation(true);
@@ -495,16 +450,14 @@ const OperationActions: React.FC<OperationActionsProps> = ({
       onExecute();
     }
   };
-
   const confirmExecution = () => {
     setShowConfirmation(false);
     onExecute();
   };
-
-  return (
+  return ()
     <div className="operation-actions">
       <div className="primary-actions">
-        {!execution && (
+        {!execution && ()
           <button
             className={`execute-btn risk-${operationType.riskLevel}`}
             onClick={handleExecute}
@@ -513,8 +466,7 @@ const OperationActions: React.FC<OperationActionsProps> = ({
             {isExecuting ? 'Executing...' : `Execute ${operationType.displayName}`}
           </button>
         )}
-        
-        {execution && execution.status === ExecutionStatus.RUNNING && operationType.uiConfig.allowCancel && (
+        {execution && execution.status === ExecutionStatus.RUNNING && operationType.uiConfig.allowCancel && ()
           <button
             className="cancel-btn"
             onClick={onCancel}
@@ -523,14 +475,12 @@ const OperationActions: React.FC<OperationActionsProps> = ({
           </button>
         )}
       </div>
-
       <div className="secondary-actions">
         <button className="template-btn">Save as Template</button>
         <button className="schedule-btn">Schedule</button>
         <button className="dry-run-btn">Dry Run</button>
       </div>
-
-      {showConfirmation && (
+      {showConfirmation && ()
         <div className="confirmation-modal">
           <div className="confirmation-content">
             <h4>Confirm Operation</h4>
@@ -560,8 +510,7 @@ interface OperationProgressProps {
   operationType: OperationType;
   onCancel: () => void;
 }
-
-const OperationProgress: React.FC<OperationProgressProps> = ({
+const OperationProgress: React.FC<OperationProgressProps> = ({)
   execution,
   operationType,
   onCancel
@@ -570,12 +519,10 @@ const OperationProgress: React.FC<OperationProgressProps> = ({
     const seconds = Math.floor(ms / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
-    
-    if (hours > 0) return `${hours}h ${minutes % 60}m`;
-    if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
-    return `${seconds}s`;
+    if (hours > 0) return `${hours}h ${minutes % 60}m`;}
+    if (minutes > 0) return `${minutes}m ${seconds % 60}s`;}
+    return `${seconds}s`;}
   };
-
   const getStatusColor = (status: ExecutionStatus) => {
     switch (status) {
     case ExecutionStatus.RUNNING: return 'blue';
@@ -585,32 +532,29 @@ const OperationProgress: React.FC<OperationProgressProps> = ({
     default: return 'gray';
     }
   };
-
-  return (
+  return ()
     <div className="operation-progress">
       <div className="progress-header">
         <h4>Operation Progress</h4>
-        <span className={`status status-${execution.status}`}>
+        <span className={`status status-${execution.status}`}>}
           {execution.status.toUpperCase()}
         </span>
       </div>
-
-      {operationType.uiConfig.showProgressBar && (
+      {operationType.uiConfig.showProgressBar && ()
         <div className="progress-bar-container">
           <div className="progress-bar">
             <div 
               className="progress-fill"
               style={{ 
-                width: `${execution.progress.percentage}%`,
-                backgroundColor: getStatusColor(execution.status)
+                width: `${execution.progress.percentage}%`,}
+                backgroundColor: getStatusColor(execution.status),
               }}
             />
           </div>
           <span className="progress-text">{execution.progress.percentage.toFixed(1)}%</span>
         </div>
       )}
-
-      {operationType.uiConfig.showDetailedProgress && (
+      {operationType.uiConfig.showDetailedProgress && ()
         <div className="progress-details">
           <div className="progress-stats">
             <div className="stat">
@@ -634,14 +578,13 @@ const OperationProgress: React.FC<OperationProgressProps> = ({
               <span>{execution.errorCount}</span>
             </div>
           </div>
-
-          {execution.duration && (
+          {execution.duration && ()
             <div className="timing-info">
               <div className="stat">
                 <label>Duration:</label>
                 <span>{formatDuration(execution.duration)}</span>
               </div>
-              {execution.progress.estimatedTimeRemaining && (
+              {execution.progress.estimatedTimeRemaining && ()
                 <div className="stat">
                   <label>ETA:</label>
                   <span>{formatDuration(execution.progress.estimatedTimeRemaining)}</span>
@@ -651,13 +594,12 @@ const OperationProgress: React.FC<OperationProgressProps> = ({
           )}
         </div>
       )}
-
-      {execution.logs && execution.logs.length > 0 && (
+      {execution.logs && execution.logs.length > 0 && ()
         <div className="operation-logs">
           <h5>Recent Activity</h5>
           <div className="logs-container">
-            {execution.logs.slice(-5).map((log, index) => (
-              <div key={index} className={`log-entry log-${log.level}`}>
+            {execution.logs.slice(-5).map((log, index) => ()
+              <div key={index} className={`log-entry log-${log.level}`}>}
                 <span className="log-timestamp">
                   {new Date(log.timestamp).toLocaleTimeString()}
                 </span>
@@ -667,12 +609,11 @@ const OperationProgress: React.FC<OperationProgressProps> = ({
           </div>
         </div>
       )}
-
-      {execution.errors && execution.errors.length > 0 && (
+      {execution.errors && execution.errors.length > 0 && ()
         <div className="operation-errors">
           <h5>Errors</h5>
           <div className="errors-container">
-            {execution.errors.slice(-3).map((error, index) => (
+            {execution.errors.slice(-3).map((error, index) => ()
               <div key={index} className="error-entry">
                 <span className="error-code">{error.code}</span>
                 <span className="error-message">{error.message}</span>
@@ -703,7 +644,6 @@ function validateParameterType(value: Error, type: ParameterType): boolean {
     return true;
   }
 }
-
 function validateConstraint(_____value: Error, _____constraint: unknown): { isValid: boolean; message: string } {
   // Implementation would match the server-side validation
   return { isValid: true, message: '' };

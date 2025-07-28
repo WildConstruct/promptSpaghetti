@@ -12,7 +12,7 @@ export interface DataPipeline {
     name: string;
     description: string;
     type: 'ingestion' | 'transformation' | 'enrichment' | 'aggregation' | 'export' | 'analytics' | 'ml_processing';
-    configuration: {
+    configuration: {,
         source: DataSource;
         destinations: DataDestination[];
         processing_stages: ProcessingStage[];
@@ -21,7 +21,7 @@ export interface DataPipeline {
         retry_policy: RetryPolicy;
         error_handling: ErrorHandlingStrategy;
     };
-    performance: {
+    performance: {,
         target_throughput_records_per_second: number;
         target_latency_ms: number;
         max_memory_usage_mb: number;
@@ -29,7 +29,7 @@ export interface DataPipeline {
         parallelization_factor: number;
         buffer_size_mb: number;
     };
-    quality: {
+    quality: {,
         data_validation_enabled: boolean;
         schema_enforcement: boolean;
         duplicate_detection: boolean;
@@ -37,14 +37,14 @@ export interface DataPipeline {
         freshness_requirements_minutes: number;
         quality_thresholds: QualityThresholds;
     };
-    monitoring: {
+    monitoring: {,
         metrics_collection_enabled: boolean;
         alerting_enabled: boolean;
         sampling_rate: number;
         detailed_logging: boolean;
         trace_processing: boolean;
     };
-    status: {
+    status: {,
         state: 'running' | 'paused' | 'stopped' | 'error' | 'maintenance';
         last_execution: number;
         next_execution: number;
@@ -62,7 +62,7 @@ export interface DataSource {
     id: string;
     name: string;
     type: 'database' | 'file_system' | 'api' | 'stream' | 'queue' | 'webhook' | 's3' | 'kafka';
-    connection: {
+    connection: {,
         endpoint: string;
         authentication: Record<string, string>;
         connection_pool_size: number;
@@ -71,11 +71,11 @@ export interface DataSource {
     };
     data_format: 'json' | 'csv' | 'xml' | 'parquet' | 'avro' | 'binary' | 'log_format';
     schema_definition?: string;
-    monitoring: {
+    monitoring: {,
         availability_check_interval_ms: number;
         data_freshness_check_enabled: boolean;
         volume_monitoring_enabled: boolean;
-        expected_volume_range: {
+        expected_volume_range: {,
             min: number;
             max: number;
         };
@@ -85,7 +85,7 @@ export interface DataDestination {
     id: string;
     name: string;
     type: 'database' | 'file_system' | 'api' | 'stream' | 'queue' | 'webhook' | 's3' | 'elasticsearch' | 'data_warehouse';
-    connection: {
+    connection: {,
         endpoint: string;
         authentication: Record<string, string>;
         batch_size: number;
@@ -94,7 +94,7 @@ export interface DataDestination {
     };
     data_format: 'json' | 'csv' | 'xml' | 'parquet' | 'avro' | 'binary';
     partitioning_strategy?: PartitioningStrategy;
-    monitoring: {
+    monitoring: {,
         write_performance_tracking: boolean;
         storage_usage_monitoring: boolean;
         availability_monitoring: boolean;
@@ -105,26 +105,26 @@ export interface ProcessingStage {
     name: string;
     description: string;
     stage_type: 'filter' | 'transform' | 'enrich' | 'validate' | 'aggregate' | 'normalize' | 'custom';
-    configuration: {
+    configuration: {,
         processing_logic: string;
         input_schema?: string;
         output_schema?: string;
         transformation_rules: TransformationRule[];
         validation_rules: ValidationRule[];
     };
-    performance: {
+    performance: {,
         max_processing_time_ms: number;
         memory_limit_mb: number;
         parallel_execution: boolean;
         checkpoint_interval: number;
     };
-    error_handling: {
+    error_handling: {,
         continue_on_error: boolean;
         dead_letter_queue_enabled: boolean;
         max_retry_attempts: number;
         error_sampling_rate: number;
     };
-    monitoring: {
+    monitoring: {,
         execution_metrics: boolean;
         data_lineage_tracking: boolean;
         processing_time_tracking: boolean;
@@ -170,7 +170,7 @@ export interface ErrorHandlingStrategy {
     strategy: 'fail_fast' | 'continue_on_error' | 'circuit_breaker' | 'dead_letter_queue';
     error_threshold_percent: number;
     recovery_strategy: 'manual' | 'auto_retry' | 'fallback_pipeline' | 'alert_and_pause';
-    notification_settings: {
+    notification_settings: {,
         immediate_alerts: boolean;
         escalation_enabled: boolean;
         escalation_delay_minutes: number;
@@ -205,7 +205,7 @@ export interface PipelineExecution {
     duplicate_rate_percent: number;
     error_rate_percent: number;
     stage_executions: StageExecution[];
-    resource_usage: {
+    resource_usage: {,
         compute_time_seconds: number;
         memory_peak_mb: number;
         network_io_mb: number;
@@ -227,12 +227,12 @@ export interface StageExecution {
     records_output: number;
     records_filtered: number;
     records_failed: number;
-    performance_metrics: {
+    performance_metrics: {,
         processing_rate: number;
         memory_usage_mb: number;
         cpu_usage_percent: number;
     };
-    quality_metrics: {
+    quality_metrics: {,
         validation_pass_rate: number;
         transformation_success_rate: number;
         data_integrity_score: number;
@@ -258,7 +258,7 @@ export interface PipelineAlert {
     title: string;
     description: string;
     detected_at: number;
-    context: {
+    context: {,
         execution_id?: string;
         stage_id?: string;
         metric_name?: string;
@@ -267,7 +267,7 @@ export interface PipelineAlert {
         measurement_unit?: string;
         impact_assessment: 'none' | 'low' | 'medium' | 'high' | 'critical';
     };
-    resolution: {
+    resolution: {,
         acknowledged: boolean;
         acknowledged_by?: string;
         acknowledged_at?: number;
@@ -288,7 +288,7 @@ export interface PipelineOptimizationRecommendation {
     title: string;
     description: string;
     rationale: string;
-    impact: {
+    impact: {,
         performance_improvement_percent?: number;
         cost_reduction_percent?: number;
         quality_improvement_percent?: number;
@@ -296,14 +296,14 @@ export interface PipelineOptimizationRecommendation {
         implementation_effort: 'low' | 'medium' | 'high';
         risk_level: 'low' | 'medium' | 'high';
     };
-    implementation: {
+    implementation: {,
         configuration_changes: Record<string, any>;
         code_changes_required: boolean;
         testing_requirements: string[];
         rollback_plan: string;
         estimated_implementation_hours: number;
     };
-    validation: {
+    validation: {,
         success_criteria: string[];
         measurement_method: string;
         validation_period_days: number;
@@ -323,7 +323,7 @@ export interface DataLineageRecord {
     source_system: string;
     source_record_id: string;
     source_timestamp: number;
-    processing_history: Array<{
+    processing_history: Array<{,
         stage_id: string;
         stage_name: string;
         processed_at: number;
@@ -333,7 +333,7 @@ export interface DataLineageRecord {
     current_location: string;
     current_format: string;
     last_modified: number;
-    quality_scores: {
+    quality_scores: {,
         completeness: number;
         accuracy: number;
         consistency: number;
@@ -381,7 +381,7 @@ export declare class SecurityDataPipelineMonitor extends EventEmitter {
     getPipelineStatus(pipelineId?: string): any;
     getExecutionHistory(pipelineId: string, limit?: number): PipelineExecution[];
     getActiveAlerts(pipelineId?: string): PipelineAlert[];
-    getOptimizationRecommendations(
+    getOptimizationRecommendations()
       pipelineId: string,
       status?: PipelineOptimizationRecommendation['status']
     ): PipelineOptimizationRecommendation[];

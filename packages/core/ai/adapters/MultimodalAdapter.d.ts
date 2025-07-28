@@ -49,7 +49,7 @@ export interface MultimodalRequestOptions {
 export interface MultimodalAnalysis {
     content_type: string;
     confidence: number;
-    detected_elements: Array<{
+    detected_elements: Array<{,
         type: 'text' | 'object' | 'person' | 'scene' | 'emotion' | 'concept';
         value: string;
         confidence: number;
@@ -64,7 +64,7 @@ export interface MultimodalAnalysis {
             end: number;
         };
     }>;
-    relationships: Array<{
+    relationships: Array<{,
         source: string;
         target: string;
         relationship: string;
@@ -73,18 +73,18 @@ export interface MultimodalAnalysis {
     metadata: Record<string, unknown>;
 }
 export interface MultimodalUnderstandingResult {
-    understanding: {
+    understanding: {,
         summary: string;
         key_insights: string[];
         content_analysis: MultimodalAnalysis[];
-        cross_modal_connections: Array<{
+        cross_modal_connections: Array<{,
             modalities: string[];
             connection_type: 'temporal' | 'semantic' | 'causal' | 'spatial';
             description: string;
             confidence: number;
         }>;
     };
-    extracted_data: {
+    extracted_data: {,
         text_content?: string[];
         transcriptions?: Array<{
             text: string;
@@ -108,14 +108,14 @@ export interface MultimodalUnderstandingResult {
             relevance: number;
         }>;
     };
-    metadata: {
+    metadata: {,
         model: string;
         processing_time: number;
         input_count: number;
         modalities_processed: string[];
         total_tokens: number;
     };
-    usage: {
+    usage: {,
         input_tokens: number;
         output_tokens: number;
         total_cost: number;
@@ -130,31 +130,31 @@ export declare class MultimodalAdapter extends BaseAIModel {
     process(input: MultimodalInput[], options?: MultimodalRequestOptions): Promise<MultimodalUnderstandingResult>;
     cleanup(): Promise<void>;
     estimate(input: MultimodalInput[], options?: MultimodalRequestOptions): Promise<CostEstimate>;
-    understandContent(
+    understandContent()
       inputs: MultimodalInput[],
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
-    compareContent(
+    compareContent()
       inputs: MultimodalInput[],
       comparisonAspects?: string[],
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
-    describeMultimodal(
+    describeMultimodal()
       inputs: MultimodalInput[],
       detailLevel?: 'brief' | 'detailed' | 'comprehensive',
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
-    analyzeContent(
+    analyzeContent()
       inputs: MultimodalInput[],
       analysisTypes?: string[],
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
-    summarizeMultimodal(
+    summarizeMultimodal()
       inputs: MultimodalInput[],
       summaryLength?: 'short' | 'medium' | 'long',
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
-    extractInformation(
+    extractInformation()
       inputs: MultimodalInput[],
       extractionTargets?: string[],
       options?: Partial<MultimodalRequestOptions>

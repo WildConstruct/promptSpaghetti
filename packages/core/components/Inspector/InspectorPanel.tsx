@@ -25,7 +25,6 @@ const getFilmmakerFriendlyName = (nodeType: string): string => {
     'WeightedAdvanced': 'Weighted Selection',
     'PythonTransform': 'Text Transform'
   };
-  
   return friendlyNames[nodeType] || nodeType;
 };
 
@@ -40,7 +39,7 @@ export interface InspectorPanelProps {
   maxWidth?: number;
 }
 
-export const InspectorPanel = ({ 
+export const InspectorPanel = ({ )
   node, 
   schema, 
   onChange,
@@ -66,27 +65,21 @@ export const InspectorPanel = ({
     globalDisclosureLevel,
     setGlobalDisclosureLevel
   } = useUISettingsStore();
-  
   const nodeId = node?.id;
   const nodeType = node?.data?.nodeType || node?.type;
-
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     setIsResizing(true);
   }, []);
-
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isResizing) return;
-    
     const newWidth = window.innerWidth - e.clientX;
     const clampedWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
     setWidth(clampedWidth);
   }, [isResizing, minWidth, maxWidth]);
-
   const handleMouseUp = useCallback(() => {
     setIsResizing(false);
   }, []);
-
   useEffect(() => {
     if (isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
@@ -99,7 +92,6 @@ export const InspectorPanel = ({
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
     }
-
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
@@ -107,9 +99,8 @@ export const InspectorPanel = ({
       document.body.style.userSelect = '';
     };
   }, [isResizing, handleMouseMove, handleMouseUp]);
-
   if (!node || !schema) {
-    return (
+    return ()
       <aside
         className={`inspector-panel ${collapsed ? 'collapsed' : 'expanded'} animate-inspector-resize`}
         style={{
@@ -121,11 +112,11 @@ export const InspectorPanel = ({
           display: 'flex',
           flexDirection: 'column',
           // 60fps optimized transition
-          transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`,
+          transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`,}
           willChange: 'width',
           overflow: 'hidden', // Prevent content spillover during animation
           WebkitBackfaceVisibility: 'hidden',
-          backfaceVisibility: 'hidden'
+          backfaceVisibility: 'hidden',
         }}
         onKeyDown={(e) => {
           e.stopPropagation();
@@ -144,10 +135,10 @@ export const InspectorPanel = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            background: '#2d3748'
+            background: '#2d3748',
           }}
         >
-          {!collapsed && (
+          {!collapsed && ()
             <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
               Editor Panel
             </h3>
@@ -166,10 +157,10 @@ export const InspectorPanel = ({
               color: '#a0aec0',
               padding: '8px',
               borderRadius: '4px',
-              transition: `all ${animationDurations.micro}ms ${easingFunctions.cinema4d.professional}`,
+              transition: `all ${animationDurations.micro}ms ${easingFunctions.cinema4d.professional}`,}
               willChange: 'background-color, transform',
               WebkitBackfaceVisibility: 'hidden',
-              backfaceVisibility: 'hidden'
+              backfaceVisibility: 'hidden',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
@@ -184,16 +175,16 @@ export const InspectorPanel = ({
             <span
               style={{
                 transform: collapsed ? 'rotate(0deg)' : 'rotate(180deg)',
-                transition: `transform ${animationDurations.normal}ms ${easingFunctions.cinema4d.professional}`,
+                transition: `transform ${animationDurations.normal}ms ${easingFunctions.cinema4d.professional}`,}
                 display: 'inline-block',
-                willChange: 'transform'
+                willChange: 'transform',
               }}
             >
               ◀
             </span>
           </button>
         </div>
-        {!collapsed && (
+        {!collapsed && ()
           <div 
             className="animate-inspector-toggle"
             style={{ 
@@ -205,7 +196,7 @@ export const InspectorPanel = ({
               // Smooth fade in/out
               opacity: collapsed ? 0 : 1,
               transform: collapsed ? 'translateY(-10px)' : 'translateY(0)',
-              transition: `all ${animationDurations.fast}ms ${easingFunctions.cinema4d.professional}`,
+              transition: `all ${animationDurations.fast}ms ${easingFunctions.cinema4d.professional}`,}
               willChange: 'opacity, transform'
             }}
           >
@@ -223,14 +214,13 @@ export const InspectorPanel = ({
             width: 4,
             cursor: 'col-resize',
             background: 'transparent',
-            zIndex: 10
+            zIndex: 10,
           }}
         />
       </aside>
     );
   }
-
-  return (
+  return ()
     <aside
       className={`inspector-panel ${collapsed ? 'collapsed' : 'expanded'} animate-inspector-resize`}
       style={{
@@ -242,11 +232,11 @@ export const InspectorPanel = ({
         display: 'flex',
         flexDirection: 'column',
         // 60fps optimized transition
-        transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`,
+        transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`,}
         willChange: 'width',
         overflow: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
-        backfaceVisibility: 'hidden'
+        backfaceVisibility: 'hidden',
       }}
       onKeyDown={(e) => {
         e.stopPropagation();
@@ -265,16 +255,16 @@ export const InspectorPanel = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: '#2d3748'
+          background: '#2d3748',
         }}
       >
-        {!collapsed && (
+        {!collapsed && ()
           <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
             <span style={{ color: '#4CAF50' }}>🔍</span> {node.data?.label || getFilmmakerFriendlyName(node.data?.nodeType || node.type)} Settings
           </h3>
         )}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          {!collapsed && (
+          {!collapsed && ()
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <select
                 value={complexityLevel}
@@ -286,7 +276,7 @@ export const InspectorPanel = ({
                   color: '#e2e8f0',
                   fontSize: 10,
                   padding: '2px 4px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
                 title="Choose interface complexity level"
               >
@@ -306,7 +296,7 @@ export const InspectorPanel = ({
                   borderRadius: 2,
                   display: 'inline-block',
                   minWidth: 40,
-                  textAlign: 'center'
+                  textAlign: 'center',
                 }}
                 title={
                   complexityLevel === 'basic' ? 'Basic: Essential fields only' :
@@ -327,7 +317,7 @@ export const InspectorPanel = ({
                   fontSize: 10,
                   padding: '2px 6px',
                   cursor: 'pointer',
-                  marginLeft: 4
+                  marginLeft: 4,
                 }}
                 title="Configure disclosure preferences"
               >
@@ -335,7 +325,7 @@ export const InspectorPanel = ({
               </button>
             </div>
           )}
-          {!collapsed && onClose && (
+          {!collapsed && onClose && ()
             <button
               onClick={onClose}
               style={{
@@ -344,7 +334,7 @@ export const InspectorPanel = ({
                 cursor: 'pointer',
                 fontSize: 16,
                 color: '#a0aec0',
-                padding: 4
+                padding: 4,
               }}
               title="Close Inspector"
             >
@@ -359,7 +349,7 @@ export const InspectorPanel = ({
               cursor: 'pointer',
               fontSize: 16,
               color: '#a0aec0',
-              padding: 4
+              padding: 4,
             }}
             title={collapsed ? 'Expand Inspector' : 'Collapse Inspector'}
           >
@@ -367,10 +357,9 @@ export const InspectorPanel = ({
           </button>
         </div>
       </div>
-
-      {!collapsed && (
+      {!collapsed && ()
         <div style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
-          {showPreferences && (
+          {showPreferences && ()
             <div style={{ 
               padding: '0 16px 16px 16px',
               borderBottom: '1px solid #4a5568',
@@ -395,7 +384,6 @@ export const InspectorPanel = ({
           />
         </div>
       )}
-
       <div
         ref={resizeRef}
         onMouseDown={handleMouseDown}
@@ -407,7 +395,7 @@ export const InspectorPanel = ({
           width: 4,
           cursor: 'col-resize',
           background: 'transparent',
-          zIndex: 10
+          zIndex: 10,
         }}
       />
     </aside>

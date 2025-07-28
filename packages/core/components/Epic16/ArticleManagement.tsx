@@ -4,7 +4,6 @@
  * Comprehensive system for creating, editing, organizing, and managing knowledge base articles
  * for templates, tutorials, best practices, and marketplace documentation.
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   PencilIcon, 
@@ -48,12 +47,12 @@ export interface Article {
   featured: boolean;
   attachments?: ArticleAttachment[];
   relatedArticles?: string[]; // IDs of related articles
-  seo: {
+  seo: {,
     metaTitle?: string;
     metaDescription?: string;
     keywords?: string[];
   };
-  analytics: {
+  analytics: {,
     averageRating: number;
     ratingCount: number;
     completionRate: number;
@@ -143,7 +142,7 @@ export const ArticleList: React.FC<{
   currentUser: ArticleAuthor;
 }> = ({ articles, filter, sort, onEdit, onDelete, onDuplicate, onView, currentUser }) => {
   const filteredAndSortedArticles = useMemo(() => {
-    const filtered = articles.filter(article => {
+    const filtered = articles.filter(article => {)
       // Apply all filters
       if (filter.status?.length && !filter.status.includes(article.status)) return false;
       if (filter.category?.length && !filter.category.includes(article.category.id)) return false;
@@ -153,21 +152,18 @@ export const ArticleList: React.FC<{
       if (filter.featured !== undefined && article.featured !== filter.featured) return false;
       if (filter.searchQuery) {
         const query = filter.searchQuery.toLowerCase();
-        const searchableText = `${article.title} ${article.excerpt} ${article.tags.join(' ')}`.toLowerCase();
+        const searchableText = `${article.title} ${article.excerpt} ${article.tags.join(' ')}`.toLowerCase();}
         if (!searchableText.includes(query)) return false;
       }
       if (filter.dateRange) {
         const articleDate = new Date(article.createdAt);
         if (articleDate < filter.dateRange.start || articleDate > filter.dateRange.end) return false;
       }
-      
       return true;
     });
-
     // Apply sorting
     filtered.sort((a, b) => {
       const multiplier = sort.direction === 'asc' ? 1 : -1;
-      
       switch (sort.field) {
       case 'title':
         return a.title.localeCompare(b.title) * multiplier;
@@ -189,10 +185,8 @@ export const ArticleList: React.FC<{
         return 0;
       }
     });
-
     return filtered;
   }, [articles, filter, sort]);
-
   const getStatusColor = (status: Article['status']) => {
     switch (status) {
     case 'published': return 'bg-green-100 text-green-800';
@@ -202,7 +196,6 @@ export const ArticleList: React.FC<{
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getDifficultyColor = (difficulty: Article['difficulty']) => {
     switch (difficulty) {
     case 'beginner': return 'bg-blue-100 text-blue-800';
@@ -211,10 +204,9 @@ export const ArticleList: React.FC<{
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
-  return (
+  return ()
     <div className="space-y-4">
-      {filteredAndSortedArticles.map((article) => (
+      {filteredAndSortedArticles.map((article) => ()
         <div
           key={article.id}
           className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
@@ -222,7 +214,7 @@ export const ArticleList: React.FC<{
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                {article.featured && (
+                {article.featured && ()
                   <StarIcon className="h-5 w-5 text-yellow-500 fill-current" />
                 )}
                 <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 cursor-pointer"
@@ -230,9 +222,7 @@ export const ArticleList: React.FC<{
                   {article.title}
                 </h3>
               </div>
-              
               <p className="text-gray-600 mb-3 line-clamp-2">{article.excerpt}</p>
-              
               <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
                 <div className="flex items-center gap-1">
                   <UserIcon className="h-4 w-4" />
@@ -251,31 +241,28 @@ export const ArticleList: React.FC<{
                   <span>{article.likeCount}</span>
                 </div>
               </div>
-
               <div className="flex items-center gap-2 mb-3">
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(article.status)}`}>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(article.status)}`}>}
                   {article.status}
                 </span>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(article.difficulty)}`}>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(article.difficulty)}`}>}
                   {article.difficulty}
                 </span>
                 <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
                   {article.category.name}
                 </span>
               </div>
-
               <div className="flex flex-wrap gap-1">
-                {article.tags.slice(0, 3).map((tag) => (
+                {article.tags.slice(0, 3).map((tag) => ()
                   <span key={tag} className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs">
                     #{tag}
                   </span>
                 ))}
-                {article.tags.length > 3 && (
+                {article.tags.length > 3 && ()
                   <span className="text-xs text-gray-500">+{article.tags.length - 3} more</span>
                 )}
               </div>
             </div>
-
             <div className="flex items-center gap-2 ml-4">
               <button
                 onClick={() => onView(article)}
@@ -284,7 +271,7 @@ export const ArticleList: React.FC<{
               >
                 <EyeIcon className="h-5 w-5" />
               </button>
-              {(currentUser.role === 'admin' || currentUser.id === article.author.id) && (
+              {(currentUser.role === 'admin' || currentUser.id === article.author.id) && ()
                 <>
                   <button
                     onClick={() => onEdit(article)}
@@ -313,8 +300,7 @@ export const ArticleList: React.FC<{
           </div>
         </div>
       ))}
-      
-      {filteredAndSortedArticles.length === 0 && (
+      {filteredAndSortedArticles.length === 0 && ()
         <div className="text-center py-12">
           <DocumentIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-500 text-lg">No articles found</p>
@@ -333,7 +319,7 @@ export const ArticleEditor: React.FC<{
   onCancel: () => void;
   onUploadAttachment: (file: File) => Promise<ArticleAttachment>;
 }> = ({ article, categories, onSave, onCancel, onUploadAttachment }) => {
-  const [formData, setFormData] = useState<Partial<Article>>(() => ({
+  const [formData, setFormData] = useState<Partial<Article>>(() => ({)
     title: article?.title || '',
     content: article?.content || '',
     excerpt: article?.excerpt || '',
@@ -345,31 +331,26 @@ export const ArticleEditor: React.FC<{
     seo: article?.seo || {},
     ...article
   }));
-  
   const [newTag, setNewTag] = useState('');
   const [isSaving, setIsSaving] = useState(false);
-
   const handleInputChange = useCallback((field: string, value: Error) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   }, []);
-
   const handleAddTag = useCallback(() => {
     if (newTag.trim() && !formData.tags?.includes(newTag.trim())) {
-      setFormData(prev => ({
+      setFormData(prev => ({)
         ...prev,
         tags: [...(prev.tags || []), newTag.trim()]
       }));
       setNewTag('');
     }
   }, [newTag, formData.tags]);
-
   const handleRemoveTag = useCallback((tagToRemove: string) => {
-    setFormData(prev => ({
+    setFormData(prev => ({)
       ...prev,
       tags: prev.tags?.filter(tag => tag !== tagToRemove) || []
     }));
   }, []);
-
   const handleSave = useCallback(async () => {
     setIsSaving(true);
     try {
@@ -378,8 +359,7 @@ export const ArticleEditor: React.FC<{
       setIsSaving(false);
     }
   }, [formData, onSave]);
-
-  return (
+  return ()
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900">
@@ -402,7 +382,6 @@ export const ArticleEditor: React.FC<{
           </button>
         </div>
       </div>
-
       <div className="space-y-6">
         {/* Title */}
         <div>
@@ -417,7 +396,6 @@ export const ArticleEditor: React.FC<{
             placeholder="Enter article title..."
           />
         </div>
-
         {/* Excerpt */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -431,7 +409,6 @@ export const ArticleEditor: React.FC<{
             placeholder="Brief description of the article..."
           />
         </div>
-
         {/* Content */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -445,7 +422,6 @@ export const ArticleEditor: React.FC<{
             placeholder="Write your article content here... (Supports Markdown)"
           />
         </div>
-
         {/* Meta fields row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Category */}
@@ -461,14 +437,13 @@ export const ArticleEditor: React.FC<{
               }}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {categories.map((category) => (
+              {categories.map((category) => ()
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
               ))}
             </select>
           </div>
-
           {/* Difficulty */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -484,7 +459,6 @@ export const ArticleEditor: React.FC<{
               <option value="advanced">Advanced</option>
             </select>
           </div>
-
           {/* Status */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -502,14 +476,13 @@ export const ArticleEditor: React.FC<{
             </select>
           </div>
         </div>
-
         {/* Tags */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Tags
           </label>
           <div className="flex flex-wrap gap-2 mb-3">
-            {formData.tags?.map((tag) => (
+            {formData.tags?.map((tag) => ()
               <span
                 key={tag}
                 className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
@@ -542,7 +515,6 @@ export const ArticleEditor: React.FC<{
             </button>
           </div>
         </div>
-
         {/* Featured toggle */}
         <div className="flex items-center">
           <input
@@ -562,7 +534,7 @@ export const ArticleEditor: React.FC<{
 };
 
 // Main ArticleManagement Component
-export const ArticleManagement: React.FC<ArticleManagementProps> = ({
+export const ArticleManagement: React.FC<ArticleManagementProps> = ({)
   articles,
   categories,
   currentUser,
@@ -582,22 +554,18 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({
   const [filter, setFilter] = useState<ArticleFilter>({});
   const [sort, setSort] = useState<ArticleSort>({ field: 'updatedAt', direction: 'desc' });
   const [searchQuery, setSearchQuery] = useState('');
-
   // Apply search query to filter
   useEffect(() => {
     setFilter(prev => ({ ...prev, searchQuery: searchQuery.trim() || undefined }));
   }, [searchQuery]);
-
   const handleCreateNew = useCallback(() => {
     setEditingArticle(null);
     setActiveTab('editor');
   }, []);
-
   const handleEdit = useCallback((article: Article) => {
     setEditingArticle(article);
     setActiveTab('editor');
   }, []);
-
   const handleSaveArticle = useCallback(async (articleData: Partial<Article>) => {
     try {
       if (editingArticle) {
@@ -612,19 +580,16 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({
       // Handle error (show toast, etc.)
     }
   }, [editingArticle, onCreateArticle, onUpdateArticle]);
-
   const handleCancel = useCallback(() => {
     setActiveTab('list');
     setEditingArticle(null);
   }, []);
-
   const handleView = useCallback((article: Article) => {
     // Navigate to article view or open preview modal
     console.log('View article:', article);
   }, []);
-
   const handleDelete = useCallback(async (article: Article) => {
-    if (window.confirm(`Are you sure you want to delete "${article.title}"?`)) {
+    if (window.confirm(`Are you sure you want to delete "${article.title}"?`)) {}
       try {
         await onDeleteArticle(article.id);
       } catch (error) {
@@ -632,7 +597,6 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({
       }
     }
   }, [onDeleteArticle]);
-
   const handleDuplicate = useCallback(async (article: Article) => {
     try {
       const duplicated = await onDuplicateArticle(article.id);
@@ -642,9 +606,8 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({
       console.error('Failed to duplicate article:', error);
     }
   }, [onDuplicateArticle]);
-
-  return (
-    <div className={`bg-gray-50 min-h-screen ${className}`}>
+  return ()
+    <div className={`bg-gray-50 min-h-screen ${className}`}>}
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -658,7 +621,6 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({
               New Article
             </button>
           </div>
-
           {/* Tab Navigation */}
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex space-x-8">
@@ -685,9 +647,8 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({
             </nav>
           </div>
         </div>
-
         {/* Content */}
-        {activeTab === 'list' && (
+        {activeTab === 'list' && ()
           <>
             {/* Search and Filters */}
             <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
@@ -702,7 +663,6 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-                
                 {/* Sort dropdown */}
                 <select
                   value={`${sort.field}-${sort.direction}`}
@@ -720,7 +680,6 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({
                   <option value="rating-desc">Highest Rated</option>
                 </select>
               </div>
-
               {/* Quick filters */}
               <div className="flex flex-wrap gap-2">
                 <button
@@ -755,7 +714,6 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({
                 </button>
               </div>
             </div>
-
             <ArticleList
               articles={articles}
               filter={filter}
@@ -768,8 +726,7 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({
             />
           </>
         )}
-
-        {activeTab === 'editor' && (
+        {activeTab === 'editor' && ()
           <ArticleEditor
             article={editingArticle || undefined}
             categories={categories}
@@ -778,8 +735,7 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({
             onUploadAttachment={onUploadAttachment}
           />
         )}
-
-        {activeTab === 'categories' && (
+        {activeTab === 'categories' && ()
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-gray-900">Article Categories</h2>
@@ -788,9 +744,8 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({
                 New Category
               </button>
             </div>
-
             <div className="space-y-4">
-              {categories.map((category) => (
+              {categories.map((category) => ()
                 <div key={category.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                   <div className="flex items-center gap-3">
                     <div 

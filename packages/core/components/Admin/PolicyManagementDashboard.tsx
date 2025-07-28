@@ -4,7 +4,6 @@
  * Administrative interface for marketplace policy management
  * Part of Epic 17.5.4 - Policy Enforcement (Backstage Admin Controls)
  */
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -68,7 +67,7 @@ export interface PolicyManagementDashboardProps {
   className?: string;
 }
 
-export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps> = ({
+export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps> = ({)
   className = ''
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -77,9 +76,8 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [_____isLoading, _____setIsLoading] = useState(false);
-
   // Mock data - in real implementation, this would come from PolicyManagementService
-  const [policies, setPolicies] = useState<PolicyData[]>([
+  const [policies, setPolicies] = useState<PolicyData[]>([)
     {
       id: 'policy-trust-001',
       name: 'Trust Score Minimum Threshold',
@@ -126,8 +124,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       updatedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
     }
   ]);
-
-  const [violations, _____setViolations] = useState<PolicyViolationData[]>([
+  const [violations, _____setViolations] = useState<PolicyViolationData[]>([)
     {
       violationId: 'violation-001',
       policyId: 'policy-trust-001',
@@ -154,7 +151,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       description: 'Multiple failed payment attempts from different cards'
     }
   ]);
-
   const getStatusColor = (status: string) => {
     switch (status) {
     case 'active': return 'text-green-600 bg-green-100';
@@ -164,7 +160,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-
   const getSeverityColor = (severity: string) => {
     switch (severity) {
     case 'critical': return 'text-red-600 bg-red-100';
@@ -174,7 +169,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-
   const getViolationStatusColor = (status: string) => {
     switch (status) {
     case 'pending': return 'text-yellow-600 bg-yellow-100';
@@ -184,35 +178,29 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-
   const handlePolicyToggle = (policyId: string) => {
-    setPolicies(prev => 
-      prev.map(policy => 
+    setPolicies(prev => )
+      prev.map(policy => )
         policy.id === policyId 
           ? { ...policy, enabled: !policy.enabled }
           : policy
       )
     );
   };
-
-  const filteredPolicies = policies.filter(policy => {
-    const matchesSearch = searchTerm === '' || 
+  const filteredPolicies = policies.filter(policy => {)
+    const matchesSearch = searchTerm === '' || ;
       policy.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       policy.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
     const matchesStatus = statusFilter === 'all' || policy.status === statusFilter;
     const matchesType = typeFilter === 'all' || policy.type === typeFilter;
-
     return matchesSearch && matchesStatus && matchesType;
   });
-
   const renderOverview = () => {
     const totalPolicies = policies.length;
     const activePolicies = policies.filter(p => p.enabled).length;
     const totalViolations = violations.length;
     const pendingViolations = violations.filter(v => v.status === 'pending').length;
-
-    return (
+    return ()
       <div className="overview-section">
         <div className="metrics-grid">
           <Card className="metric-card">
@@ -230,7 +218,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
               </div>
             </CardContent>
           </Card>
-
           <Card className="metric-card">
             <CardContent>
               <div className="metric-header">
@@ -243,7 +230,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
               </div>
             </CardContent>
           </Card>
-
           <Card className="metric-card">
             <CardContent>
               <div className="metric-header">
@@ -259,7 +245,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
               </div>
             </CardContent>
           </Card>
-
           <Card className="metric-card">
             <CardContent>
               <div className="metric-header">
@@ -273,7 +258,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             </CardContent>
           </Card>
         </div>
-
         <div className="recent-activity">
           <Card>
             <CardHeader>
@@ -281,7 +265,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             </CardHeader>
             <CardContent>
               <div className="activity-list">
-                {violations.slice(0, 5).map(violation => (
+                {violations.slice(0, 5).map(violation => ()
                   <div key={violation.violationId} className="activity-item">
                     <div className="activity-icon">
                       <Flag className="w-4 h-4 text-orange-500" />
@@ -307,8 +291,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </div>
     );
   };
-
-  const renderPolicies = () => (
+  const renderPolicies = () => (;)
     <div className="policies-section">
       <div className="policies-controls">
         <div className="search-filters">
@@ -322,7 +305,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
               className="search-input"
             />
           </div>
-
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -334,7 +316,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             <option value="draft">Draft</option>
             <option value="suspended">Suspended</option>
           </select>
-
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
@@ -348,7 +329,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             <option value="transaction_monitoring">Transaction</option>
           </select>
         </div>
-
         <div className="action-buttons">
           <Button variant="outline">
             <RefreshCw className="w-4 h-4 mr-2" />
@@ -360,9 +340,8 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           </Button>
         </div>
       </div>
-
       <div className="policies-list">
-        {filteredPolicies.map(policy => (
+        {filteredPolicies.map(policy => ()
           <Card key={policy.id} className="policy-card">
             <CardContent>
               <div className="policy-header">
@@ -380,7 +359,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
                   </div>
                   <p className="policy-description">{policy.description}</p>
                 </div>
-
                 <div className="policy-toggle">
                   <label className="toggle-switch">
                     <input
@@ -392,7 +370,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
                   </label>
                 </div>
               </div>
-
               <div className="policy-stats">
                 <div className="stat-item">
                   <span className="stat-label">Violations</span>
@@ -413,7 +390,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
                   <span className="stat-value">{policy.updatedAt.toLocaleDateString()}</span>
                 </div>
               </div>
-
               <div className="policy-actions">
                 <Button size="sm" variant="outline">
                   <Eye className="w-4 h-4 mr-1" />
@@ -434,8 +410,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </div>
     </div>
   );
-
-  const renderViolations = () => (
+  const renderViolations = () => (;)
     <div className="violations-section">
       <Card>
         <CardHeader>
@@ -449,7 +424,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
         </CardHeader>
         <CardContent>
           <div className="violations-list">
-            {violations.map(violation => (
+            {violations.map(violation => ()
               <div key={violation.violationId} className="violation-item">
                 <div className="violation-main">
                   <div className="violation-info">
@@ -466,7 +441,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
                       <span>{violation.entityType}: {violation.entityId}</span>
                       <span>•</span>
                       <span>Detected: {violation.detectedAt.toLocaleString()}</span>
-                      {violation.reviewedBy && (
+                      {violation.reviewedBy && ()
                         <>
                           <span>•</span>
                           <span>Reviewed by: {violation.reviewedBy}</span>
@@ -474,15 +449,13 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
                       )}
                     </div>
                   </div>
-                  
                   <div className="violation-status">
                     <Badge className={getViolationStatusColor(violation.status)}>
                       {violation.status.toUpperCase()}
                     </Badge>
                   </div>
                 </div>
-
-                {violation.status === 'pending' && (
+                {violation.status === 'pending' && ()
                   <div className="violation-actions">
                     <Button size="sm" className="approve-btn">
                       Dismiss
@@ -502,16 +475,14 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </Card>
     </div>
   );
-
-  return (
-    <div className={`policy-management-dashboard ${className}`}>
+  return ()
+    <div className={`policy-management-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-info">
           <h2>Policy Management</h2>
           <p>Configure and monitor marketplace policies and enforcement</p>
         </div>
       </div>
-
       <Tabs value={activeTab} onValueChange={setActiveTab} className="dashboard-tabs">
         <TabsList className="grid grid-cols-4 w-full">
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -527,19 +498,15 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           </TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview" className="tab-content">
           {renderOverview()}
         </TabsContent>
-
         <TabsContent value="policies" className="tab-content">
           {renderPolicies()}
         </TabsContent>
-
         <TabsContent value="violations" className="tab-content">
           {renderViolations()}
         </TabsContent>
-
         <TabsContent value="analytics" className="tab-content">
           <Card>
             <CardHeader>
@@ -551,7 +518,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           </Card>
         </TabsContent>
       </Tabs>
-
       <style>{`
         .policy-management-dashboard {
           max-width: 1400px;
@@ -561,48 +527,40 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .dashboard-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
         }
-
         .header-info h2 {
           font-size: 1.875rem;
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 0.5rem;
         }
-
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
         }
-
         .overview-section {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 1rem;
         }
-
         .metric-card .card-content {
           padding: 1.5rem;
         }
-
         .metric-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 1rem;
         }
-
         .metric-trend {
           display: flex;
           align-items: center;
@@ -612,46 +570,38 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           padding: 0.25rem 0.5rem;
           border-radius: 4px;
         }
-
         .metric-trend.positive {
           color: #059669;
           background: #d1fae5;
         }
-
         .metric-trend.negative {
           color: #dc2626;
           background: #fee2e2;
         }
-
         .metric-percentage {
           font-size: 0.875rem;
           font-weight: 600;
           color: #059669;
         }
-
         .metric-content {
           text-align: center;
         }
-
         .metric-value {
           font-size: 2rem;
           font-weight: 700;
           color: #1f2937;
           line-height: 1;
         }
-
         .metric-label {
           font-size: 0.875rem;
           color: #6b7280;
           margin-top: 0.5rem;
         }
-
         .activity-list {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .activity-item {
           display: flex;
           align-items: flex-start;
@@ -660,39 +610,32 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           border: 1px solid #e5e7eb;
           border-radius: 6px;
         }
-
         .activity-icon {
           flex-shrink: 0;
           margin-top: 0.125rem;
         }
-
         .activity-content {
           flex: 1;
         }
-
         .activity-title {
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 0.25rem;
         }
-
         .activity-description {
           font-size: 0.875rem;
           color: #6b7280;
           margin-bottom: 0.5rem;
         }
-
         .activity-time {
           font-size: 0.75rem;
           color: #9ca3af;
         }
-
         .policies-section {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .policies-controls {
           display: flex;
           justify-content: space-between;
@@ -702,19 +645,16 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           background: #f9fafb;
           border-radius: 8px;
         }
-
         .search-filters {
           display: flex;
           gap: 0.75rem;
           flex: 1;
         }
-
         .search-bar {
           position: relative;
           flex: 1;
           max-width: 300px;
         }
-
         .search-bar .lucide {
           position: absolute;
           left: 0.75rem;
@@ -722,7 +662,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           transform: translateY(-50%);
           z-index: 1;
         }
-
         .search-input {
           width: 100%;
           padding: 0.5rem 0.75rem 0.5rem 2.25rem;
@@ -730,13 +669,11 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           border-radius: 6px;
           font-size: 0.875rem;
         }
-
         .search-input:focus {
           outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         }
-
         .filter-select {
           padding: 0.5rem;
           border: 1px solid #d1d5db;
@@ -745,74 +682,61 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           background: white;
           min-width: 120px;
         }
-
         .action-buttons {
           display: flex;
           gap: 0.5rem;
         }
-
         .policies-list {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
         }
-
         .policy-card .card-content {
           padding: 1.5rem;
         }
-
         .policy-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
         }
-
         .policy-info {
           flex: 1;
         }
-
         .policy-title {
           display: flex;
           align-items: center;
           gap: 0.75rem;
           margin-bottom: 0.5rem;
         }
-
         .policy-title h4 {
           font-weight: 600;
           color: #1f2937;
           margin: 0;
         }
-
         .policy-badges {
           display: flex;
           gap: 0.5rem;
         }
-
         .policy-description {
           color: #6b7280;
           font-size: 0.875rem;
           margin: 0;
         }
-
         .policy-toggle {
           margin-left: 1rem;
         }
-
         .toggle-switch {
           position: relative;
           display: inline-block;
           width: 50px;
           height: 24px;
         }
-
         .toggle-switch input {
           opacity: 0;
           width: 0;
           height: 0;
         }
-
         .toggle-slider {
           position: absolute;
           cursor: pointer;
@@ -824,7 +748,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           transition: 0.3s;
           border-radius: 24px;
         }
-
         .toggle-slider:before {
           position: absolute;
           content: "";
@@ -836,15 +759,12 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           transition: 0.3s;
           border-radius: 50%;
         }
-
         input:checked + .toggle-slider {
           background-color: #3b82f6;
         }
-
         input:checked + .toggle-slider:before {
           transform: translateX(26px);
         }
-
         .policy-stats {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
@@ -854,66 +774,55 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           border-top: 1px solid #e5e7eb;
           border-bottom: 1px solid #e5e7eb;
         }
-
         .stat-item {
           display: flex;
           flex-direction: column;
           gap: 0.25rem;
           text-align: center;
         }
-
         .stat-label {
           font-size: 0.75rem;
           color: #6b7280;
           font-weight: 500;
         }
-
         .stat-value {
           font-size: 0.875rem;
           color: #1f2937;
           font-weight: 600;
         }
-
         .policy-actions {
           display: flex;
           gap: 0.5rem;
           justify-content: flex-end;
         }
-
         .violations-section {
           display: flex;
           flex-direction: column;
         }
-
         .violations-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-
         .violations-list {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
         }
-
         .violation-item {
           border: 1px solid #e5e7eb;
           border-radius: 8px;
           padding: 1rem;
         }
-
         .violation-main {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 0.75rem;
         }
-
         .violation-info {
           flex: 1;
         }
-
         .violation-title {
           display: flex;
           align-items: center;
@@ -922,13 +831,11 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           color: #1f2937;
           margin-bottom: 0.5rem;
         }
-
         .violation-description {
           color: #6b7280;
           font-size: 0.875rem;
           margin-bottom: 0.5rem;
         }
-
         .violation-meta {
           display: flex;
           align-items: center;
@@ -936,78 +843,63 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           font-size: 0.75rem;
           color: #9ca3af;
         }
-
         .violation-actions {
           display: flex;
           gap: 0.5rem;
           justify-content: flex-end;
         }
-
         .approve-btn {
           background: #059669;
           border-color: #059669;
         }
-
         .approve-btn:hover {
           background: #047857;
           border-color: #047857;
         }
-
         .enforce-btn {
           color: #dc2626;
           border-color: #dc2626;
         }
-
         .enforce-btn:hover {
           background: #dc2626;
           color: white;
         }
-
         @media (max-width: 1200px) {
           .policy-stats {
             grid-template-columns: repeat(2, 1fr);
           }
-          
           .policies-controls {
             flex-direction: column;
             align-items: stretch;
           }
         }
-
         @media (max-width: 768px) {
           .metrics-grid {
             grid-template-columns: repeat(2, 1fr);
           }
-          
           .search-filters {
             flex-direction: column;
           }
-          
           .search-bar {
             max-width: none;
           }
-          
           .policy-header {
             flex-direction: column;
             gap: 1rem;
             align-items: stretch;
           }
-          
           .policy-stats {
             grid-template-columns: repeat(2, 1fr);
           }
-          
           .violation-main {
             flex-direction: column;
             gap: 1rem;
           }
         }
-
         @media (max-width: 480px) {
           .metrics-grid {
             grid-template-columns: 1fr;
           }
-          
           .policy-stats {
             grid-template-columns: 1fr;
           }

@@ -548,7 +548,7 @@ export declare class Epic16SuspiciousActivityService extends EventEmitter {
     detectBehavioralAnomalies(userId: string, event: SuspiciousActivityEvent): Promise<SuspiciousActivity[]>;
     addThreatIntelligence(threat: Omit<ThreatIntelligence, 'id'>): Promise<ThreatIntelligence>;
     checkThreatIntelligence(event: SuspiciousActivityEvent): Promise<ThreatIntelligence[]>;
-    getSecurityMetrics(timeRange: {
+    getSecurityMetrics(timeRange: {)
         start: Date;
         end: Date;
     }): Promise<SecurityMetrics>;
@@ -603,11 +603,11 @@ export interface SecurityMetrics {
     severityDistribution: Record<SeverityLevel, number>;
     typeDistribution: Record<ActivityType, number>;
     statusDistribution: Record<ActivityStatus, number>;
-    topAttackers: Array<{
+    topAttackers: Array<{,
         ip: string;
         count: number;
     }>;
-    topTargets: Array<{
+    topTargets: Array<{,
         userId: string;
         count: number;
     }>;

@@ -1,16 +1,13 @@
 // packages/core/palette/FavoritesManager.ts
 // Favorites management system for Epic 7.2 Palette Categorization
-
 /**
  * Favorites change listener function type
  */
 export type FavoritesChangeListener = (favorites: string[]) => void;
-
 /**
  * LocalStorage key for favorites persistence
  */
 const FAVORITES_STORAGE_KEY = 'prompt-spaghetti-node-favorites';
-
 /**
  * Favorites data structure
  */
@@ -19,7 +16,6 @@ export interface FavoritesData {
   lastModified: string;
   version: string;
 }
-
 /**
  * Singleton favorites manager class
  */
@@ -28,12 +24,10 @@ export class FavoritesManager {
   private favorites: Set<string> = new Set();
   private listeners: Set<FavoritesChangeListener> = new Set();
   private storageVersion = '1.0.0';
-
   private constructor() {
     this.loadFavorites();
     this.setupBeforeUnloadHandler();
   }
-
   /**
    * Get singleton instance
    */
@@ -43,21 +37,18 @@ export class FavoritesManager {
     }
     return FavoritesManager.instance;
   }
-
   /**
    * Get current favorites as array
    */
   public getFavorites(): string[] {
     return Array.from(this.favorites);
   }
-
   /**
    * Check if a node is favorited
    */
   public isFavorite(nodeId: string): boolean {
     return this.favorites.has(nodeId);
   }
-
   /**
    * Add node to favorites
    */
@@ -65,13 +56,11 @@ export class FavoritesManager {
     if (this.favorites.has(nodeId)) {
       return false; // Already favorited
     }
-
     this.favorites.add(nodeId);
     this.saveFavorites();
     this.notifyListeners();
     return true;
   }
-
   /**
    * Remove node from favorites
    */
@@ -79,28 +68,23 @@ export class FavoritesManager {
     if (!this.favorites.has(nodeId)) {
       return false; // Not favorited
     }
-
     this.favorites.delete(nodeId);
     this.saveFavorites();
     this.notifyListeners();
     return true;
   }
-
   /**
    * Toggle favorite status
    */
   public toggleFavorite(nodeId: string): boolean {
     const isFavorited = this.isFavorite(nodeId);
-    
     if (isFavorited) {
       this.removeFavorite(nodeId);
     } else {
       this.addFavorite(nodeId);
     }
-    
     return !isFavorited;
   }
-
   /**
    * Clear all favorites
    */
@@ -109,7 +93,6 @@ export class FavoritesManager {
     this.saveFavorites();
     this.notifyListeners();
   }
-
   /**
    * Set favorites from array (replaces existing)
    */
@@ -118,29 +101,24 @@ export class FavoritesManager {
     this.saveFavorites();
     this.notifyListeners();
   }
-
   /**
    * Reorder favorites
    */
   public reorderFavorites(orderedNodeIds: string[]): void {
     // Filter to only include actual favorites
     const validFavorites = orderedNodeIds.filter(id => this.favorites.has(id));
-    
     // Add any favorites that weren't in the ordered list
-    const missingFavorites = Array.from(this.favorites).filter(id => 
+    const missingFavorites = Array.from(this.favorites).filter(id => ;)
       !orderedNodeIds.includes(id)
     );
-    
     this.setFavorites([...validFavorites, ...missingFavorites]);
   }
-
   /**
    * Get favorites count
    */
   public getFavoritesCount(): number {
     return this.favorites.size;
   }
-
   /**
    * Add change listener
    */
@@ -148,14 +126,12 @@ export class FavoritesManager {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
   }
-
   /**
    * Remove all listeners
    */
   public clearListeners(): void {
     this.listeners.clear();
   }
-
   /**
    * Export favorites data
    */
@@ -163,10 +139,9 @@ export class FavoritesManager {
     return {
       nodeIds: this.getFavorites(),
       lastModified: new Date().toISOString(),
-      version: this.storageVersion
+      version: this.storageVersion,
     };
   }
-
   /**
    * Import favorites data
    */
@@ -175,12 +150,10 @@ export class FavoritesManager {
       if (!Array.isArray(data.nodeIds)) {
         return false;
       }
-
       // Validate node IDs are strings
-      const validNodeIds = data.nodeIds.filter(id => 
+      const validNodeIds = data.nodeIds.filter(id => ;)
         typeof id === 'string' && id.length > 0
       );
-
       this.setFavorites(validNodeIds);
       return true;
     } catch (error) {
@@ -188,7 +161,6 @@ export class FavoritesManager {
       return false;
     }
   }
-
   /**
    * Load favorites from localStorage
    */
@@ -198,15 +170,12 @@ export class FavoritesManager {
       if (!savedData) {
         return;
       }
-
       const parsedData = JSON.parse(savedData) as FavoritesData;
-      
       // Handle legacy format (simple array)
       if (Array.isArray(parsedData)) {
         this.favorites = new Set(parsedData.filter(id => typeof id === 'string'));
         return;
       }
-
       // Handle new format
       if (parsedData.nodeIds && Array.isArray(parsedData.nodeIds)) {
         this.favorites = new Set(parsedData.nodeIds.filter(id => typeof id === 'string'));
@@ -216,7 +185,6 @@ export class FavoritesManager {
       this.favorites = new Set();
     }
   }
-
   /**
    * Save favorites to localStorage
    */
@@ -225,21 +193,19 @@ export class FavoritesManager {
       const data: FavoritesData = {
         nodeIds: this.getFavorites(),
         lastModified: new Date().toISOString(),
-        version: this.storageVersion
+        version: this.storageVersion,
       };
-      
       localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
       console.error('Failed to save favorites:', error);
     }
   }
-
   /**
    * Notify change listeners
    */
   private notifyListeners(): void {
     const favorites = this.getFavorites();
-    this.listeners.forEach(listener => {
+    this.listeners.forEach(listener => {)
       try {
         listener(favorites);
       } catch (error) {
@@ -247,7 +213,6 @@ export class FavoritesManager {
       }
     });
   }
-
   /**
    * Setup beforeunload handler to save favorites
    */

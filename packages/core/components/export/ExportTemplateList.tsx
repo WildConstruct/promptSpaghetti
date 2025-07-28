@@ -5,12 +5,12 @@ export interface ExportTemplateListProps {
   onSelectTemplate?: (templateId: string) => void;
 }
 
-export const ExportTemplateList: React.FC<ExportTemplateListProps> = ({ 
+export const ExportTemplateList: React.FC<ExportTemplateListProps> = ({ )
   className = '',
   onSelectTemplate 
 }) => {
-  return (
-    <div className={`export-template-list ${className}`}>
+  return ()
+    <div className={`export-template-list ${className}`}>}
       <h3>Export Templates</h3>
       <ul>
         <li onClick={() => onSelectTemplate?.('default')}>Default Template</li>

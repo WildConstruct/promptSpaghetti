@@ -34,7 +34,7 @@ export interface DataClassificationRole {
     constraints: RoleConstraint[];
     parentRoles: string[];
     isActive: boolean;
-    metadata: {
+    metadata: {,
         createdBy: string;
         createdAt: Date;
         lastModified: Date;

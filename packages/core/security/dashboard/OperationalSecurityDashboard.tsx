@@ -24,7 +24,6 @@
  * @version 1.0.0
  * @since 2024-01-22
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   DashboardConfig, 
@@ -78,7 +77,7 @@ export interface ThreatIntelligence {
 }
 
 export interface OperationalMetrics {
-  alerts: {
+  alerts: {,
     total: number;
     newLast24h: number;
     byCategory: Record<string, number>;
@@ -86,19 +85,19 @@ export interface OperationalMetrics {
     avgResponseTime: number;
     slaCompliance: number;
   };
-  incidents: {
+  incidents: {,
     active: number;
     resolved24h: number;
     avgResolutionTime: number;
     escalated: number;
   };
-  system: {
+  system: {,
     overallHealth: number;
     componentsOperational: number;
     totalComponents: number;
     criticalIssues: number;
   };
-  team: {
+  team: {,
     onlineAnalysts: number;
     totalAnalysts: number;
     workload: 'low' | 'normal' | 'high' | 'critical';
@@ -118,11 +117,10 @@ export interface OperationalSecurityDashboardProps {
   onAlertAction?: (alertId: string, action: string) => void;
   onSystemIssue?: (component: string, issue: string) => void;
 }
-
 /**
  * Operational Security Dashboard Component
  */
-export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboardProps> = ({
+export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboardProps> = ({)
   alerts,
   metrics,
   systemStatus,
@@ -138,11 +136,10 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
   const [selectedAlert, setSelectedAlert] = useState<SecurityAlert | null>(null);
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [isConnected, setIsConnected] = useState(true);
-
   // Theme configuration
   const themeStyles = useMemo(() => {
     const themes = {
-      light: {
+      light: {,
         background: '#ffffff',
         surface: '#f8fafc',
         border: '#e2e8f0',
@@ -152,9 +149,9 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
         success: '#10b981',
         warning: '#f59e0b',
         error: '#ef4444',
-        critical: '#dc2626'
+        critical: '#dc2626',
       },
-      dark: {
+      dark: {,
         background: '#0f172a',
         surface: '#1e293b',
         border: '#334155',
@@ -164,9 +161,9 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
         success: '#34d399',
         warning: '#fbbf24',
         error: '#f87171',
-        critical: '#ef4444'
+        critical: '#ef4444',
       },
-      cinema: {
+      cinema: {,
         background: '#0a0a0a',
         surface: '#1a1a1a',
         border: '#333333',
@@ -176,12 +173,11 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
         success: '#22d3ee',
         warning: '#f59e0b',
         error: '#ef4444',
-        critical: '#dc2626'
+        critical: '#dc2626',
       }
     };
     return themes[theme] || themes.dark;
   }, [theme]);
-
   // Auto-refresh logic
   useEffect(() => {
     if (enableRealTimeUpdates && refreshInterval > 0) {
@@ -190,15 +186,12 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
         // Simulate connection check
         setIsConnected(Math.random() > 0.05); // 95% uptime simulation
       }, refreshInterval * 1000);
-
       return () => clearInterval(interval);
     }
   }, [enableRealTimeUpdates, refreshInterval]);
-
   // Filter alerts based on selected filter
   const filteredAlerts = useMemo(() => {
     let filtered = alerts;
-    
     switch (selectedFilter) {
     case 'critical':
       filtered = alerts.filter(alert => alert.severity === 'critical');
@@ -212,7 +205,6 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
     default:
       filtered = alerts;
     }
-    
     return filtered
       .sort((a, b) => {
         // Sort by severity first, then timestamp
@@ -224,7 +216,6 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
       })
       .slice(0, maxAlertsDisplayed);
   }, [alerts, selectedFilter, maxAlertsDisplayed]);
-
   // Get severity color
   const getSeverityColor = useCallback((severity: string) => {
     switch (severity) {
@@ -235,7 +226,6 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
     default: return themeStyles.textSecondary;
     }
   }, [themeStyles]);
-
   // Get status color
   const getStatusColor = useCallback((status: string) => {
     switch (status) {
@@ -246,24 +236,22 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
     default: return themeStyles.textSecondary;
     }
   }, [themeStyles]);
-
   // Handle alert action
   const handleAlertAction = useCallback((alertId: string, action: string) => {
     onAlertAction?.(alertId, action);
   }, [onAlertAction]);
-
   // Render metric card
-  const renderMetricCard = (title: string, value: string | number, subtitle?: string, color?: string, onClick?: () => void) => (
+  const renderMetricCard = (title: string, value: string | number, subtitle?: string, color?: string, onClick?: () => void) => (;)
     <div
       onClick={onClick}
       style={{
         background: themeStyles.surface,
-        border: `1px solid ${themeStyles.border}`,
+        border: `1px solid ${themeStyles.border}`,}
         borderRadius: '8px',
         padding: '16px',
         cursor: onClick ? 'pointer' : 'default',
         transition: 'all 0.2s ease',
-        borderLeft: color ? `4px solid ${color}` : undefined
+        borderLeft: color ? `4px solid ${color}` : undefined}
       }}
     >
       <div style={{
@@ -271,7 +259,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
         fontWeight: 600,
         color: themeStyles.textSecondary,
         textTransform: 'uppercase',
-        marginBottom: '8px'
+        marginBottom: '8px',
       }}>
         {title}
       </div>
@@ -283,26 +271,25 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
       }}>
         {value}
       </div>
-      {subtitle && (
+      {subtitle && ()
         <div style={{
           fontSize: '11px',
-          color: themeStyles.textSecondary
+          color: themeStyles.textSecondary,
         }}>
           {subtitle}
         </div>
       )}
     </div>
   );
-
   // Render alert item
-  const renderAlertItem = (alert: SecurityAlert) => (
+  const renderAlertItem = (alert: SecurityAlert) => (;)
     <div
       key={alert.id}
       onClick={() => setSelectedAlert(alert)}
       style={{
         background: themeStyles.surface,
-        border: `1px solid ${themeStyles.border}`,
-        borderLeft: `4px solid ${getSeverityColor(alert.severity)}`,
+        border: `1px solid ${themeStyles.border}`,}
+        borderLeft: `4px solid ${getSeverityColor(alert.severity)}`,}
         borderRadius: '6px',
         padding: '12px',
         marginBottom: '8px',
@@ -314,13 +301,13 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        marginBottom: '8px'
+        marginBottom: '8px',
       }}>
         <div style={{
           fontSize: '14px',
           fontWeight: 600,
           color: themeStyles.text,
-          flex: 1
+          flex: 1,
         }}>
           {alert.title}
         </div>
@@ -328,17 +315,17 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
           <span style={{
             fontSize: '10px',
             padding: '2px 6px',
-            background: `${getSeverityColor(alert.severity)}20`,
+            background: `${getSeverityColor(alert.severity)}20`,}
             color: getSeverityColor(alert.severity),
             borderRadius: '4px',
             fontWeight: 600,
-            textTransform: 'uppercase'
+            textTransform: 'uppercase',
           }}>
             {alert.severity}
           </span>
           <span style={{
             fontSize: '11px',
-            color: themeStyles.textSecondary
+            color: themeStyles.textSecondary,
           }}>
             {alert.timestamp.toLocaleTimeString()}
           </span>
@@ -348,7 +335,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
         fontSize: '12px',
         color: themeStyles.textSecondary,
         marginBottom: '8px',
-        lineHeight: 1.4
+        lineHeight: 1.4,
       }}>
         {alert.description}
       </div>
@@ -357,12 +344,12 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
         gap: '8px',
         alignItems: 'center',
         fontSize: '11px',
-        color: themeStyles.textSecondary
+        color: themeStyles.textSecondary,
       }}>
         <span>Source: {alert.source}</span>
         <span>•</span>
         <span>Assets: {alert.affectedAssets.length}</span>
-        {alert.assignee && (
+        {alert.assignee && ()
           <>
             <span>•</span>
             <span>Assigned: {alert.assignee}</span>
@@ -371,8 +358,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
       </div>
     </div>
   );
-
-  return (
+  return ()
     <div style={{
       background: themeStyles.background,
       color: themeStyles.text,
@@ -382,30 +368,30 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
       {/* Header */}
       <div style={{
         background: themeStyles.surface,
-        borderBottom: `1px solid ${themeStyles.border}`,
+        borderBottom: `1px solid ${themeStyles.border}`,}
         padding: '16px 24px',
         position: 'sticky',
         top: 0,
-        zIndex: 100
+        zIndex: 100,
       }}>
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
           <div>
             <h1 style={{
               margin: '0 0 4px 0',
               fontSize: '20px',
               fontWeight: 700,
-              color: themeStyles.text
+              color: themeStyles.text,
             }}>
               🛡️ Security Operations Center
             </h1>
             <p style={{
               margin: '0',
               fontSize: '14px',
-              color: themeStyles.textSecondary
+              color: themeStyles.textSecondary,
             }}>
               Real-time threat monitoring and incident response
             </p>
@@ -420,7 +406,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
               color: isConnected ? themeStyles.success : themeStyles.error,
               borderRadius: '20px',
               fontSize: '12px',
-              fontWeight: 600
+              fontWeight: 600,
             }}>
               <div style={{
                 width: '8px',
@@ -432,54 +418,52 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
             </div>
             <div style={{
               fontSize: '12px',
-              color: themeStyles.textSecondary
+              color: themeStyles.textSecondary,
             }}>
               Last update: {lastUpdate.toLocaleTimeString()}
             </div>
           </div>
         </div>
       </div>
-
       <div style={{ padding: '24px' }}>
         {/* Top Metrics Row */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '16px',
-          marginBottom: '24px'
+          marginBottom: '24px',
         }}>
-          {renderMetricCard(
+          {renderMetricCard()
             'Active Alerts',
             metrics.alerts.total,
-            `${metrics.alerts.newLast24h} new in 24h`,
+            `${metrics.alerts.newLast24h} new in 24h`,}
             metrics.alerts.total > 100 ? themeStyles.error : themeStyles.primary
           )}
-          {renderMetricCard(
+          {renderMetricCard()
             'Active Incidents',
             metrics.incidents.active,
-            `${metrics.incidents.escalated} escalated`,
+            `${metrics.incidents.escalated} escalated`,}
             metrics.incidents.active > 10 ? themeStyles.warning : themeStyles.success
           )}
-          {renderMetricCard(
+          {renderMetricCard()
             'System Health',
-            `${metrics.system.overallHealth}%`,
-            `${metrics.system.componentsOperational}/${metrics.system.totalComponents} operational`,
+            `${metrics.system.overallHealth}%`,}
+            `${metrics.system.componentsOperational}/${metrics.system.totalComponents} operational`,}
             metrics.system.overallHealth < 95 ? themeStyles.error : themeStyles.success
           )}
-          {renderMetricCard(
+          {renderMetricCard()
             'Team Status',
-            `${metrics.team.onlineAnalysts}/${metrics.team.totalAnalysts}`,
-            `Workload: ${metrics.team.workload}`,
+            `${metrics.team.onlineAnalysts}/${metrics.team.totalAnalysts}`,}
+            `Workload: ${metrics.team.workload}`,}
             metrics.team.workload === 'critical' ? themeStyles.critical : themeStyles.primary
           )}
-          {renderMetricCard(
+          {renderMetricCard()
             'Response Time',
-            `${Math.round(metrics.alerts.avgResponseTime)}m`,
-            `SLA: ${metrics.alerts.slaCompliance}%`,
+            `${Math.round(metrics.alerts.avgResponseTime)}m`,}
+            `SLA: ${metrics.alerts.slaCompliance}%`,}
             metrics.alerts.slaCompliance < 95 ? themeStyles.warning : themeStyles.success
           )}
         </div>
-
         {/* Main Content Grid */}
         <div style={{
           display: 'grid',
@@ -490,28 +474,28 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
           {/* Alert Queue */}
           <div style={{
             background: themeStyles.surface,
-            border: `1px solid ${themeStyles.border}`,
+            border: `1px solid ${themeStyles.border}`,}
             borderRadius: '8px',
             padding: '20px',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
           }}>
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: '16px'
+              marginBottom: '16px',
             }}>
               <h3 style={{
                 margin: 0,
                 fontSize: '16px',
                 fontWeight: 600,
-                color: themeStyles.text
+                color: themeStyles.text,
               }}>
                 🚨 Alert Queue ({filteredAlerts.length})
               </h3>
               <div style={{ display: 'flex', gap: '8px' }}>
-                {['all', 'new', 'high', 'critical'].map(filter => (
+                {['all', 'new', 'high', 'critical'].map(filter => ()
                   <button
                     key={filter}
                     onClick={() => setSelectedFilter(filter as typeof selectedFilter)}
@@ -519,12 +503,12 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                       padding: '4px 12px',
                       background: selectedFilter === filter ? themeStyles.primary : 'transparent',
                       color: selectedFilter === filter ? themeStyles.background : themeStyles.textSecondary,
-                      border: `1px solid ${selectedFilter === filter ? themeStyles.primary : themeStyles.border}`,
+                      border: `1px solid ${selectedFilter === filter ? themeStyles.primary : themeStyles.border}`,}
                       borderRadius: '4px',
                       fontSize: '12px',
                       fontWeight: 500,
                       cursor: 'pointer',
-                      textTransform: 'capitalize'
+                      textTransform: 'capitalize',
                     }}
                   >
                     {filter}
@@ -532,49 +516,47 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                 ))}
               </div>
             </div>
-            
             <div style={{
               flex: 1,
               overflowY: 'auto',
-              paddingRight: '8px'
+              paddingRight: '8px',
             }}>
-              {filteredAlerts.length === 0 ? (
+              {filteredAlerts.length === 0 ? ()
                 <div style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
                   height: '100%',
-                  color: themeStyles.textSecondary
+                  color: themeStyles.textSecondary,
                 }}>
                   <div style={{ fontSize: '48px', marginBottom: '16px' }}>✅</div>
                   <div>No alerts matching current filter</div>
                 </div>
-              ) : (
+              ) : ()
                 filteredAlerts.map(renderAlertItem)
               )}
             </div>
           </div>
-
           {/* System Status & Quick Actions */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* System Status */}
             <div style={{
               background: themeStyles.surface,
-              border: `1px solid ${themeStyles.border}`,
+              border: `1px solid ${themeStyles.border}`,}
               borderRadius: '8px',
-              padding: '16px'
+              padding: '16px',
             }}>
               <h3 style={{
                 margin: '0 0 12px 0',
                 fontSize: '14px',
                 fontWeight: 600,
-                color: themeStyles.text
+                color: themeStyles.text,
               }}>
                 ⚙️ System Status
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {systemStatus.slice(0, 6).map(system => (
+                {systemStatus.slice(0, 6).map(system => ()
                   <div
                     key={system.component}
                     style={{
@@ -584,12 +566,12 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                       padding: '8px',
                       background: themeStyles.background,
                       borderRadius: '4px',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     <span style={{ color: themeStyles.text }}>{system.component}</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      {system.responseTime && (
+                      {system.responseTime && ()
                         <span style={{ color: themeStyles.textSecondary }}>
                           {system.responseTime}ms
                         </span>
@@ -598,38 +580,37 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                         width: '8px',
                         height: '8px',
                         borderRadius: '50%',
-                        background: getStatusColor(system.status)
+                        background: getStatusColor(system.status),
                       }} />
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-
             {/* Threat Intelligence */}
             <div style={{
               background: themeStyles.surface,
-              border: `1px solid ${themeStyles.border}`,
+              border: `1px solid ${themeStyles.border}`,}
               borderRadius: '8px',
-              padding: '16px'
+              padding: '16px',
             }}>
               <h3 style={{
                 margin: '0 0 12px 0',
                 fontSize: '14px',
                 fontWeight: 600,
-                color: themeStyles.text
+                color: themeStyles.text,
               }}>
                 🔍 Threat Intelligence
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {threatIntel.slice(0, 3).map(intel => (
+                {threatIntel.slice(0, 3).map(intel => ()
                   <div
                     key={intel.feed}
                     style={
                       {
                         padding: '8px',
                         background: themeStyles.background,
-                        borderRadius: '4px'
+                        borderRadius: '4px',
                       }
                     }
                   >
@@ -637,7 +618,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      marginBottom: '4px'
+                      marginBottom: '4px',
                     }}>
                       <span style={{ fontSize: '12px', fontWeight: 600, color: themeStyles.text }}>
                         {intel.feed}
@@ -652,7 +633,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                           intel.confidence === 'medium' ? themeStyles.warning : 
                             themeStyles.error,
                         borderRadius: '4px',
-                        textTransform: 'uppercase'
+                        textTransform: 'uppercase',
                       }}>
                         {intel.confidence}
                       </span>
@@ -661,7 +642,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                       fontSize: '11px',
                       color: themeStyles.textSecondary,
                       display: 'flex',
-                      gap: '8px'
+                      gap: '8px',
                     }}>
                       <span>New: {intel.newIndicators}</span>
                       <span>•</span>
@@ -674,9 +655,8 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
           </div>
         </div>
       </div>
-
       {/* Alert Detail Modal */}
-      {selectedAlert && (
+      {selectedAlert && ()
         <div style={{
           position: 'fixed',
           top: 0,
@@ -687,29 +667,29 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 1000
+          zIndex: 1000,
         }}>
           <div style={{
             background: themeStyles.background,
-            border: `1px solid ${themeStyles.border}`,
+            border: `1px solid ${themeStyles.border}`,}
             borderRadius: '8px',
             padding: '24px',
             maxWidth: '600px',
             width: '90%',
             maxHeight: '80vh',
-            overflowY: 'auto'
+            overflowY: 'auto',
           }}>
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'flex-start',
-              marginBottom: '16px'
+              marginBottom: '16px',
             }}>
               <h3 style={{
                 margin: 0,
                 fontSize: '18px',
                 fontWeight: 600,
-                color: themeStyles.text
+                color: themeStyles.text,
               }}>
                 Alert Details
               </h3>
@@ -720,30 +700,28 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                   border: 'none',
                   color: themeStyles.textSecondary,
                   fontSize: '20px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 ×
               </button>
             </div>
-            
             <div style={{ marginBottom: '16px' }}>
               <h4 style={{
                 margin: '0 0 8px 0',
                 fontSize: '16px',
-                color: getSeverityColor(selectedAlert.severity)
+                color: getSeverityColor(selectedAlert.severity),
               }}>
                 {selectedAlert.title}
               </h4>
               <p style={{
                 margin: '0 0 12px 0',
                 color: themeStyles.textSecondary,
-                lineHeight: 1.5
+                lineHeight: 1.5,
               }}>
                 {selectedAlert.description}
               </p>
             </div>
-
             <div style={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
               <button
                 onClick={() => {
@@ -758,7 +736,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                   padding: '8px 16px',
                   fontSize: '14px',
                   fontWeight: 500,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 Acknowledge
@@ -776,7 +754,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                   padding: '8px 16px',
                   fontSize: '14px',
                   fontWeight: 500,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 Escalate
@@ -790,12 +768,12 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                   {
                     background: 'transparent',
                     color: themeStyles.textSecondary,
-                    border: `1px solid ${themeStyles.border}`,
+                    border: `1px solid ${themeStyles.border}`,}
                     borderRadius: '4px',
                     padding: '8px 16px',
                     fontSize: '14px',
                     fontWeight: 500,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }
                 }
               >

@@ -42,14 +42,14 @@ export interface AnthropicResponse {
     id: string;
     type: 'message';
     role: 'assistant';
-    content: Array<{
+    content: Array<{,
         type: 'text';
         text: string;
     }>;
     model: string;
     stop_reason: 'end_turn' | 'max_tokens' | 'stop_sequence' | 'tool_use';
     stop_sequence?: string;
-    usage: {
+    usage: {,
         input_tokens: number;
         output_tokens: number;
     };

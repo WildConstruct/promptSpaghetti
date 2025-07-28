@@ -27,7 +27,6 @@
  * @version 1.0.0
  * @since 2024-01-22
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   SecurityAlertingConfig, 
@@ -70,7 +69,6 @@ export interface ConfigValidationWarning {
   message: string;
   impact: 'low' | 'medium' | 'high';
 }
-
 interface ConfigurationState {
   config: SecurityAlertingConfig;
   validation: ValidationResult | null;
@@ -80,11 +78,10 @@ interface ConfigurationState {
   activeTab: 'general' | 'thresholds' | 'automation' | 'notifications' | 'compliance';
   expandedSections: Set<string>;
 }
-
 /**
  * Advanced security alerting configuration interface
  */
-export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigurationUIProps> = ({
+export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigurationUIProps> = ({)
   currentConfig,
   onConfigChange,
   onValidateConfig,
@@ -94,7 +91,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
   readOnly = false,
   allowAdvancedSettings = true
 }) => {
-  const [state, setState] = useState<ConfigurationState>({
+  const [state, setState] = useState<ConfigurationState>({)
     config: { ...currentConfig },
     validation: null,
     isLoading: false,
@@ -103,11 +100,10 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
     activeTab: 'general',
     expandedSections: new Set(['general-settings'])
   });
-
   // Theme configuration
   const themeStyles = useMemo(() => {
     const themes = {
-      light: {
+      light: {,
         background: '#ffffff',
         surface: '#f8fafc',
         surfaceSecondary: '#f1f5f9',
@@ -123,7 +119,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
         critical: '#dc2626',
         shadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
       },
-      dark: {
+      dark: {,
         background: '#0f172a',
         surface: '#1e293b',
         surfaceSecondary: '#334155',
@@ -139,7 +135,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
         critical: '#ef4444',
         shadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
       },
-      cinema: {
+      cinema: {,
         background: '#0a0a0a',
         surface: '#1a1a1a',
         surfaceSecondary: '#2d2d2d',
@@ -158,7 +154,6 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
     };
     return themes[theme];
   }, [theme]);
-
   // Validate configuration
   const validateConfiguration = useCallback(async () => {
     setState(prev => ({ ...prev, isLoading: true }));
@@ -166,23 +161,21 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
       const validation = await onValidateConfig(state.config);
       setState(prev => ({ ...prev, validation, isLoading: false }));
     } catch (error) {
-      setState(prev => ({ 
+      setState(prev => ({ )
         ...prev, 
         isLoading: false,
-        validation: {
+        validation: {,
           isValid: false,
           errors: [{ field: 'general', message: 'Configuration validation failed', severity: 'error' }],
           warnings: [],
-          securityScore: 0
+          securityScore: 0,
         }
       }));
     }
   }, [state.config, onValidateConfig]);
-
   // Save configuration
   const saveConfiguration = useCallback(async () => {
     if (readOnly || !state.validation?.isValid) return;
-    
     setState(prev => ({ ...prev, isSaving: true }));
     try {
       await onConfigChange(state.config);
@@ -192,33 +185,30 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
       // Handle error (show notification, etc.)
     }
   }, [state.config, state.validation, readOnly, onConfigChange]);
-
   // Update configuration field
   const updateConfig = useCallback((field: keyof SecurityAlertingConfig, value: any) => {
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
       config: { ...prev.config, [field]: value },
       hasUnsavedChanges: true,
-      validation: null
+      validation: null,
     }));
   }, []);
-
   // Update escalation thresholds
   const updateEscalationThresholds = useCallback((thresholds: Partial<EscalationThresholds>) => {
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
-      config: {
+      config: {,
         ...prev.config,
         escalationThresholds: { ...prev.config.escalationThresholds, ...thresholds }
       },
       hasUnsavedChanges: true,
-      validation: null
+      validation: null,
     }));
   }, []);
-
   // Toggle section expansion
   const toggleSection = useCallback((sectionId: string) => {
-    setState(prev => {
+    setState(prev => {)
       const newExpanded = new Set(prev.expandedSections);
       if (newExpanded.has(sectionId)) {
         newExpanded.delete(sectionId);
@@ -228,7 +218,6 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
       return { ...prev, expandedSections: newExpanded };
     });
   }, []);
-
   // Auto-validate on config changes
   useEffect(() => {
     if (state.hasUnsavedChanges) {
@@ -236,24 +225,23 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
       return () => clearTimeout(timeoutId);
     }
   }, [state.config, state.hasUnsavedChanges, validateConfiguration]);
-
   // Render validation status
   const renderValidationStatus = () => {
     if (state.isLoading) {
-      return (
+      return ()
         <div style={{
           padding: '12px',
           background: themeStyles.surface,
-          border: `1px solid ${themeStyles.border}`,
+          border: `1px solid ${themeStyles.border}`,}
           borderRadius: '6px',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px'
+          gap: '8px',
         }}>
           <div style={{
             width: '16px',
             height: '16px',
-            border: `2px solid ${themeStyles.primary}`,
+            border: `2px solid ${themeStyles.primary}`,}
             borderTopColor: 'transparent',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite'
@@ -264,19 +252,16 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
         </div>
       );
     }
-
     if (!state.validation) return null;
-
     const { isValid, errors, warnings, securityScore } = state.validation;
     const statusColor = isValid ? themeStyles.success : themeStyles.error;
-
-    return (
+    return ()
       <div style={{
         padding: '16px',
         background: themeStyles.surface,
-        border: `1px solid ${themeStyles.border}`,
+        border: `1px solid ${themeStyles.border}`,}
         borderRadius: '8px',
-        marginBottom: '20px'
+        marginBottom: '20px',
       }}>
         <div style={{
           display: 'flex',
@@ -289,12 +274,12 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
               width: '12px',
               height: '12px',
               borderRadius: '50%',
-              background: statusColor
+              background: statusColor,
             }} />
             <span style={{ 
               color: themeStyles.text, 
               fontWeight: 500,
-              fontSize: '14px'
+              fontSize: '14px',
             }}>
               Configuration {isValid ? 'Valid' : 'Invalid'}
             </span>
@@ -306,51 +291,49 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             color: themeStyles.background,
             borderRadius: '12px',
             fontSize: '12px',
-            fontWeight: 500
+            fontWeight: 500,
           }}>
             Security Score: {securityScore}/100
           </div>
         </div>
-
-        {errors.length > 0 && (
+        {errors.length > 0 && ()
           <div style={{ marginBottom: warnings.length > 0 ? '12px' : '0' }}>
             <div style={{
               color: themeStyles.error,
               fontSize: '13px',
               fontWeight: 500,
-              marginBottom: '4px'
+              marginBottom: '4px',
             }}>
               Errors:
             </div>
-            {errors.map((error, index) => (
+            {errors.map((error, index) => ()
               <div key={index} style={{
                 color: themeStyles.error,
                 fontSize: '12px',
                 marginLeft: '16px',
-                lineHeight: '1.4'
+                lineHeight: '1.4',
               }}>
                 • {error.field}: {error.message}
               </div>
             ))}
           </div>
         )}
-
-        {warnings.length > 0 && (
+        {warnings.length > 0 && ()
           <div>
             <div style={{
               color: themeStyles.warning,
               fontSize: '13px',
               fontWeight: 500,
-              marginBottom: '4px'
+              marginBottom: '4px',
             }}>
               Warnings:
             </div>
-            {warnings.map((warning, index) => (
+            {warnings.map((warning, index) => ()
               <div key={index} style={{
                 color: themeStyles.warning,
                 fontSize: '12px',
                 marginLeft: '16px',
-                lineHeight: '1.4'
+                lineHeight: '1.4',
               }}>
                 • {warning.field}: {warning.message}
               </div>
@@ -360,24 +343,22 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
       </div>
     );
   };
-
   // Render tab navigation
   const renderTabNavigation = () => {
-    const tabs = [
+    const tabs = [;
       { id: 'general', label: 'General Settings', icon: '⚙️' },
       { id: 'thresholds', label: 'Alert Thresholds', icon: '⚠️' },
       { id: 'automation', label: 'Response Automation', icon: '🤖' },
       { id: 'notifications', label: 'Notifications', icon: '📧' },
       { id: 'compliance', label: 'Compliance', icon: '📋' }
     ] as const;
-
-    return (
+    return ()
       <div style={{
         display: 'flex',
-        borderBottom: `1px solid ${themeStyles.border}`,
-        marginBottom: '24px'
+        borderBottom: `1px solid ${themeStyles.border}`,}
+        marginBottom: '24px',
       }}>
-        {tabs.map(tab => (
+        {tabs.map(tab => ()
           <button
             key={tab.id}
             onClick={() => setState(prev => ({ ...prev, activeTab: tab.id }))}
@@ -386,7 +367,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
               padding: '12px 20px',
               background: state.activeTab === tab.id ? themeStyles.surface : 'transparent',
               border: 'none',
-              borderBottom: state.activeTab === tab.id ? `2px solid ${themeStyles.primary}` : '2px solid transparent',
+              borderBottom: state.activeTab === tab.id ? `2px solid ${themeStyles.primary}` : '2px solid transparent',}
               color: state.activeTab === tab.id ? themeStyles.primary : themeStyles.textSecondary,
               cursor: 'pointer',
               fontSize: '14px',
@@ -404,16 +385,15 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
       </div>
     );
   };
-
   // Render general settings tab
-  const renderGeneralSettings = () => (
+  const renderGeneralSettings = () => (;)
     <div>
       <div style={{
         background: themeStyles.surface,
-        border: `1px solid ${themeStyles.border}`,
+        border: `1px solid ${themeStyles.border}`,}
         borderRadius: '8px',
         padding: '20px',
-        marginBottom: '16px'
+        marginBottom: '16px',
       }}>
         <h3 style={{
           color: themeStyles.text,
@@ -423,11 +403,10 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
         }}>
           Core Alert Settings
         </h3>
-
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '16px'
+          gap: '16px',
         }}>
           <label style={{
             display: 'flex',
@@ -435,7 +414,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             gap: '8px',
             color: themeStyles.text,
             fontSize: '14px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}>
             <input
               type="checkbox"
@@ -446,14 +425,13 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             />
             Enable Real-Time Analytics
           </label>
-
           <label style={{
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
             color: themeStyles.text,
             fontSize: '14px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}>
             <input
               type="checkbox"
@@ -464,14 +442,13 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             />
             Enable Pattern Analysis
           </label>
-
           <label style={{
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
             color: themeStyles.text,
             fontSize: '14px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}>
             <input
               type="checkbox"
@@ -482,14 +459,13 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             />
             Enable Threat Intelligence
           </label>
-
           <label style={{
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
             color: themeStyles.text,
             fontSize: '14px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}>
             <input
               type="checkbox"
@@ -500,14 +476,13 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             />
             Enable Automated Response
           </label>
-
           <label style={{
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
             color: themeStyles.text,
             fontSize: '14px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}>
             <input
               type="checkbox"
@@ -517,23 +492,22 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
               style={{ accentColor: themeStyles.primary }}
             />
             Enable Machine Learning Analysis
-            {!allowAdvancedSettings && (
+            {!allowAdvancedSettings && ()
               <span style={{ 
                 color: themeStyles.textMuted, 
-                fontSize: '12px' 
+                fontSize: '12px' ,
               }}>
                 (Advanced)
               </span>
             )}
           </label>
         </div>
-
         <div style={{ marginTop: '20px' }}>
           <label style={{
             display: 'block',
             color: themeStyles.text,
             fontSize: '14px',
-            marginBottom: '6px'
+            marginBottom: '6px',
           }}>
             Alert Retention Period (Days)
           </label>
@@ -548,16 +522,16 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
               width: '120px',
               padding: '8px',
               background: themeStyles.background,
-              border: `1px solid ${themeStyles.border}`,
+              border: `1px solid ${themeStyles.border}`,}
               borderRadius: '4px',
               color: themeStyles.text,
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           />
           <div style={{
             color: themeStyles.textMuted,
             fontSize: '12px',
-            marginTop: '4px'
+            marginTop: '4px',
           }}>
             Recommended: 30-90 days for compliance
           </div>
@@ -565,16 +539,15 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
       </div>
     </div>
   );
-
   // Render alert thresholds tab
-  const renderAlertThresholds = () => (
+  const renderAlertThresholds = () => (;)
     <div>
       <div style={{
         background: themeStyles.surface,
-        border: `1px solid ${themeStyles.border}`,
+        border: `1px solid ${themeStyles.border}`,}
         borderRadius: '8px',
         padding: '20px',
-        marginBottom: '16px'
+        marginBottom: '16px',
       }}>
         <h3 style={{
           color: themeStyles.text,
@@ -584,18 +557,17 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
         }}>
           Escalation Thresholds
         </h3>
-
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '16px'
+          gap: '16px',
         }}>
           <div>
             <label style={{
               display: 'block',
               color: themeStyles.text,
               fontSize: '14px',
-              marginBottom: '6px'
+              marginBottom: '6px',
             }}>
               Critical Alert Count
             </label>
@@ -610,20 +582,19 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
                 width: '100%',
                 padding: '8px',
                 background: themeStyles.background,
-                border: `1px solid ${themeStyles.border}`,
+                border: `1px solid ${themeStyles.border}`,}
                 borderRadius: '4px',
                 color: themeStyles.text,
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             />
           </div>
-
           <div>
             <label style={{
               display: 'block',
               color: themeStyles.text,
               fontSize: '14px',
-              marginBottom: '6px'
+              marginBottom: '6px',
             }}>
               High Alert Count
             </label>
@@ -638,20 +609,19 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
                 width: '100%',
                 padding: '8px',
                 background: themeStyles.background,
-                border: `1px solid ${themeStyles.border}`,
+                border: `1px solid ${themeStyles.border}`,}
                 borderRadius: '4px',
                 color: themeStyles.text,
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             />
           </div>
-
           <div>
             <label style={{
               display: 'block',
               color: themeStyles.text,
               fontSize: '14px',
-              marginBottom: '6px'
+              marginBottom: '6px',
             }}>
               Time Window (Minutes)
             </label>
@@ -666,20 +636,19 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
                 width: '100%',
                 padding: '8px',
                 background: themeStyles.background,
-                border: `1px solid ${themeStyles.border}`,
+                border: `1px solid ${themeStyles.border}`,}
                 borderRadius: '4px',
                 color: themeStyles.text,
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             />
           </div>
-
           <div>
             <label style={{
               display: 'block',
               color: themeStyles.text,
               fontSize: '14px',
-              marginBottom: '6px'
+              marginBottom: '6px',
             }}>
               Failed Access Attempts
             </label>
@@ -694,10 +663,10 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
                 width: '100%',
                 padding: '8px',
                 background: themeStyles.background,
-                border: `1px solid ${themeStyles.border}`,
+                border: `1px solid ${themeStyles.border}`,}
                 borderRadius: '4px',
                 color: themeStyles.text,
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             />
           </div>
@@ -705,20 +674,19 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
       </div>
     </div>
   );
-
   // Render action buttons
-  const renderActionButtons = () => (
+  const renderActionButtons = () => (;)
     <div style={{
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingTop: '20px',
-      borderTop: `1px solid ${themeStyles.border}`
+      borderTop: `1px solid ${themeStyles.border}`}
     }}>
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '12px'
+        gap: '12px',
       }}>
         <button
           onClick={validateConfiguration}
@@ -726,43 +694,41 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
           style={{
             padding: '8px 16px',
             background: 'transparent',
-            border: `1px solid ${themeStyles.border}`,
+            border: `1px solid ${themeStyles.border}`,}
             borderRadius: '6px',
             color: themeStyles.textSecondary,
             cursor: 'pointer',
             fontSize: '14px',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px'
+            gap: '6px',
           }}
         >
           🔍 Validate Configuration
         </button>
-        
-        {state.hasUnsavedChanges && (
+        {state.hasUnsavedChanges && ()
           <span style={{
             color: themeStyles.warning,
             fontSize: '12px',
-            fontStyle: 'italic'
+            fontStyle: 'italic',
           }}>
             • Unsaved changes
           </span>
         )}
       </div>
-
       <div style={{ display: 'flex', gap: '12px' }}>
         <button
-          onClick={() => setState(prev => ({ 
+          onClick={() => setState(prev => ({ )
             ...prev, 
             config: { ...currentConfig }, 
             hasUnsavedChanges: false,
-            validation: null
+            validation: null,
           }))}
           disabled={!state.hasUnsavedChanges || readOnly}
           style={{
             padding: '10px 20px',
             background: 'transparent',
-            border: `1px solid ${themeStyles.border}`,
+            border: `1px solid ${themeStyles.border}`,}
             borderRadius: '6px',
             color: themeStyles.textSecondary,
             cursor: state.hasUnsavedChanges && !readOnly ? 'pointer' : 'not-allowed',
@@ -772,7 +738,6 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
         >
           Reset Changes
         </button>
-
         <button
           onClick={saveConfiguration}
           disabled={!state.validation?.isValid || state.isSaving || readOnly || !state.hasUnsavedChanges}
@@ -791,10 +756,10 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             fontWeight: 500,
             display: 'flex',
             alignItems: 'center',
-            gap: '6px'
+            gap: '6px',
           }}
         >
-          {state.isSaving ? (
+          {state.isSaving ? ()
             <>
               <div style={{
                 width: '14px',
@@ -806,7 +771,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
               }} />
               Saving...
             </>
-          ) : (
+          ) : ()
             <>
               💾 Save Configuration
             </>
@@ -815,14 +780,13 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
       </div>
     </div>
   );
-
-  return (
+  return ()
     <div style={{
       background: themeStyles.background,
       color: themeStyles.text,
       fontFamily: 'Inter, system-ui, sans-serif',
       minHeight: '100vh',
-      padding: '24px'
+      padding: '24px',
     }}>
       <style>
         {`
@@ -831,20 +795,19 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
           }
         `}
       </style>
-
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '8px'
+          marginBottom: '8px',
         }}>
           <h1 style={{
             margin: '0',
             fontSize: '24px',
             fontWeight: 600,
-            color: themeStyles.text
+            color: themeStyles.text,
           }}>
             🚨 Security Alerting Configuration
           </h1>
@@ -855,7 +818,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             borderRadius: '16px',
             fontSize: '12px',
             fontWeight: 500,
-            textTransform: 'uppercase'
+            textTransform: 'uppercase',
           }}>
             {userRole.replace('_', ' ')}
           </div>
@@ -864,29 +827,26 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
           margin: '0',
           color: themeStyles.textSecondary,
           fontSize: '16px',
-          lineHeight: '1.5'
+          lineHeight: '1.5',
         }}>
           Configure comprehensive security alerting, threat detection, and automated response systems
         </p>
       </div>
-
       {/* Validation Status */}
       {renderValidationStatus()}
-
       {/* Tab Navigation */}
       {renderTabNavigation()}
-
       {/* Tab Content */}
       <div style={{ minHeight: '400px' }}>
         {state.activeTab === 'general' && renderGeneralSettings()}
         {state.activeTab === 'thresholds' && renderAlertThresholds()}
-        {state.activeTab === 'automation' && (
+        {state.activeTab === 'automation' && ()
           <div style={{
             background: themeStyles.surface,
-            border: `1px solid ${themeStyles.border}`,
+            border: `1px solid ${themeStyles.border}`,}
             borderRadius: '8px',
             padding: '40px',
-            textAlign: 'center'
+            textAlign: 'center',
           }}>
             <h3 style={{ color: themeStyles.text, marginBottom: '8px' }}>
               🤖 Response Automation
@@ -896,13 +856,13 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             </p>
           </div>
         )}
-        {state.activeTab === 'notifications' && (
+        {state.activeTab === 'notifications' && ()
           <div style={{
             background: themeStyles.surface,
-            border: `1px solid ${themeStyles.border}`,
+            border: `1px solid ${themeStyles.border}`,}
             borderRadius: '8px',
             padding: '40px',
-            textAlign: 'center'
+            textAlign: 'center',
           }}>
             <h3 style={{ color: themeStyles.text, marginBottom: '8px' }}>
               📧 Notification Channels
@@ -912,13 +872,13 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             </p>
           </div>
         )}
-        {state.activeTab === 'compliance' && (
+        {state.activeTab === 'compliance' && ()
           <div style={{
             background: themeStyles.surface,
-            border: `1px solid ${themeStyles.border}`,
+            border: `1px solid ${themeStyles.border}`,}
             borderRadius: '8px',
             padding: '40px',
-            textAlign: 'center'
+            textAlign: 'center',
           }}>
             <h3 style={{ color: themeStyles.text, marginBottom: '8px' }}>
               📋 Compliance Framework
@@ -929,7 +889,6 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
           </div>
         )}
       </div>
-
       {/* Action Buttons */}
       {renderActionButtons()}
     </div>

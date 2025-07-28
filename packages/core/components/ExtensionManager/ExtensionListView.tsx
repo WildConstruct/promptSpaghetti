@@ -2,7 +2,6 @@
  * Extension List View - Epic 8.4 Story 8.4.5
  * List view component for installed extensions
  */
-
 import React from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { ExtensionStatus } from './ExtensionManagerStore';
@@ -18,7 +17,7 @@ export interface ExtensionListViewProps {
   onConfigureExtension: (extension: ExtensionManifest) => void;
 }
 
-export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
+export const ExtensionListView: React.FC<ExtensionListViewProps> = ({)
   extensions,
   selectedExtension,
   getExtensionStatus,
@@ -37,23 +36,20 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
     default: return '📦';
     }
   };
-
   const getStatusIcon = (status: ExtensionStatus): string => {
     if (status.hasErrors) return '❌';
     if (!status.loaded) return '⏸️';
     if (status.enabled) return '✅';
     return '⭕';
   };
-
   const getStatusText = (status: ExtensionStatus): string => {
     if (status.hasErrors) return 'Error';
     if (!status.loaded) return 'Not Loaded';
     if (status.enabled) return 'Enabled';
     return 'Disabled';
   };
-
   if (extensions.length === 0) {
-    return (
+    return ()
       <div className="extension-list-empty">
         <div className="empty-icon">📦</div>
         <h3>No Extensions Found</h3>
@@ -61,8 +57,7 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="extension-list-view">
       <div className="extension-list-header">
         <span className="header-icon">Type</span>
@@ -71,13 +66,11 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
         <span className="header-status">Status</span>
         <span className="header-actions">Actions</span>
       </div>
-
       <div className="extension-list-items">
         {extensions.map((extension) => {
           const status = getExtensionStatus(extension.id);
           const isSelected = selectedExtension?.id === extension.id;
-
-          return (
+          return ()
             <div
               key={extension.id}
               className={`extension-list-item ${isSelected ? 'selected' : ''}`}
@@ -89,12 +82,11 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
                   {getExtensionIcon(extension.extension_type)}
                 </span>
               </div>
-
               {/* Extension Info */}
               <div className="extension-info">
                 <div className="extension-name">
                   <span className="name">{extension.name}</span>
-                  {status.updateAvailable && (
+                  {status.updateAvailable && ()
                     <span className="update-badge">Update Available</span>
                   )}
                 </div>
@@ -107,30 +99,27 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
                   {extension.description}
                 </div>
               </div>
-
               {/* Version */}
               <div className="extension-version">
                 <span className="current-version">{extension.version}</span>
-                {status.availableVersion && (
+                {status.availableVersion && ()
                   <span className="available-version">
                     → {status.availableVersion}
                   </span>
                 )}
               </div>
-
               {/* Status */}
               <div className="extension-status">
-                <span className={`status-indicator ${status.enabled ? 'enabled' : 'disabled'} ${status.hasErrors ? 'error' : ''}`}>
+                <span className={`status-indicator ${status.enabled ? 'enabled' : 'disabled'} ${status.hasErrors ? 'error' : ''}`}>}
                   <span className="status-icon">{getStatusIcon(status)}</span>
                   <span className="status-text">{getStatusText(status)}</span>
                 </span>
-                {status.hasErrors && status.lastError && (
+                {status.hasErrors && status.lastError && ()
                   <div className="error-details" title={status.lastError}>
                     ⚠️ {status.lastError.substring(0, 50)}...
                   </div>
                 )}
               </div>
-
               {/* Actions */}
               <div className="extension-actions">
                 {/* Toggle Enable/Disable */}
@@ -144,9 +133,8 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
                 >
                   {status.enabled ? '⏸️' : '▶️'}
                 </button>
-
                 {/* Update */}
-                {status.updateAvailable && (
+                {status.updateAvailable && ()
                   <button
                     className="action-btn update-btn"
                     onClick={(e) => {
@@ -158,7 +146,6 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
                     ⬆️
                   </button>
                 )}
-
                 {/* Configure */}
                 <button
                   className="action-btn configure-btn"
@@ -170,7 +157,6 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
                 >
                   ⚙️
                 </button>
-
                 {/* More Actions Menu */}
                 <div className="action-menu">
                   <button className="action-btn menu-btn" title="More Actions">
@@ -211,7 +197,6 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
           );
         })}
       </div>
-
       {/* Bulk Actions */}
       <div className="extension-list-footer">
         <div className="bulk-actions">

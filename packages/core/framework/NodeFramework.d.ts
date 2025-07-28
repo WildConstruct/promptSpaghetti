@@ -24,12 +24,12 @@ export interface NodeDefinition {
     /** Default configuration */
     defaultConfig: Partial<AdvancedNodeConfig>;
     /** Input/Output port definitions */
-    ports: {
+    ports: {,
         inputs: IOPortDefinition[];
         outputs: IOPortDefinition[];
     };
     /** Node-specific metadata */
-    metadata: {
+    metadata: {,
         author?: string;
         tags: string[];
         deprecated?: boolean;
@@ -190,7 +190,7 @@ export declare class NodeRegistry {
     /**
      * Search nodes by criteria
      */
-    searchNodes(criteria: {
+    searchNodes(criteria: {)
         category?: NodeDefinition['category'];
         tags?: string[];
         author?: string;

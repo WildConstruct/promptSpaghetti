@@ -4,7 +4,7 @@ export interface ConflictData {
   id: string;
   type: string;
   description: string;
-  operations: Array<{
+  operations: Array<{,
     id: string;
     userId: string;
     userName?: string;
@@ -27,7 +27,7 @@ export interface ConflictPanelProps {
   className?: string;
 }
 
-export const ConflictPanel: React.FC<ConflictPanelProps> = (
+export const ConflictPanel: React.FC<ConflictPanelProps> = ()
   { conflicts,
   onResolveConflict,
   onViewConflict,
@@ -35,23 +35,20 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
   className }
 ) => {
   const [selectedStrategy, setSelectedStrategy] = useState<string>('last_writer_wins');
-
   const formatTimestamp = (timestamp: number): string => {
     const date = new Date(timestamp);
     const now = new Date();
     const diff = now.getTime() - date.getTime();
-    
     if (diff < 60000) { // Less than 1 minute
       return 'Just now';
     } else if (diff < 3600000) { // Less than 1 hour
       const minutes = Math.floor(diff / 60000);
-      return `${minutes}m ago`;
+      return `${minutes}m ago`;}
     } else {
       const hours = Math.floor(diff / 3600000);
-      return `${hours}h ago`;
+      return `${hours}h ago`;}
     }
   };
-
   const getConflictIcon = (type: string): string => {
     switch (type) {
     case 'node_position':
@@ -72,7 +69,6 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
       return '⚠️';
     }
   };
-
   const getConflictColor = (type: string): string => {
     switch (type) {
     case 'node_position':
@@ -93,18 +89,16 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
       return 'border-gray-200 bg-gray-50';
     }
   };
-
-  const resolutionStrategies = [
+  const resolutionStrategies = [;
     { value: 'last_writer_wins', label: 'Last Writer Wins', description: 'Use the most recent change' },
     { value: 'first_writer_wins', label: 'First Writer Wins', description: 'Use the earliest change' },
     { value: 'merge_properties', label: 'Merge Properties', description: 'Combine all changes' },
     { value: 'positional_offset', label: 'Offset Position', description: 'Offset overlapping positions' },
     { value: 'user_resolution', label: 'Manual Resolution', description: 'Choose specific values' }
   ];
-
   if (conflicts.length === 0) {
-    return (
-      <div className={`bg-white rounded-lg border p-4 ${className}`}>
+    return ()
+      <div className={`bg-white rounded-lg border p-4 ${className}`}>}
         <div className="text-center text-gray-500">
           <div className="text-2xl mb-2">✅</div>
           <p>No conflicts detected</p>
@@ -113,9 +107,8 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
       </div>
     );
   }
-
-  return (
-    <div className={`bg-white rounded-lg border ${className}`}>
+  return ()
+    <div className={`bg-white rounded-lg border ${className}`}>}
       {/* Header */}
       <div className="border-b p-4">
         <div className="flex items-center justify-between">
@@ -128,12 +121,11 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
           </div>
         </div>
       </div>
-
       {/* Conflicts List */}
       <div className="divide-y max-h-96 overflow-y-auto">
-        {conflicts.map(conflict => (
+        {conflicts.map(conflict => ()
           <div key={conflict.id} className="p-4">
-            <div className={`rounded-lg border-2 p-3 ${getConflictColor(conflict.type)}`}>
+            <div className={`rounded-lg border-2 p-3 ${getConflictColor(conflict.type)}`}>}
               {/* Conflict Header */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-start space-x-3">
@@ -144,13 +136,13 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
                     </h4>
                     <div className="flex items-center space-x-2 text-xs text-gray-500 mt-1">
                       <span>{formatTimestamp(conflict.detectedAt)}</span>
-                      {conflict.nodeId && (
+                      {conflict.nodeId && ()
                         <>
                           <span>•</span>
                           <span>Node: {conflict.nodeId.slice(0, 8)}...</span>
                         </>
                       )}
-                      {conflict.property && (
+                      {conflict.property && ()
                         <>
                           <span>•</span>
                           <span>Property: {conflict.property}</span>
@@ -159,7 +151,6 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
                     </div>
                   </div>
                 </div>
-                
                 <button
                   onClick={() => onViewConflict(conflict.id)}
                   className="text-xs bg-white px-2 py-1 rounded border hover:bg-gray-50"
@@ -167,10 +158,9 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
                   View
                 </button>
               </div>
-
               {/* Operations */}
               <div className="space-y-2 mb-3">
-                {conflict.operations.map(op => (
+                {conflict.operations.map(op => ()
                   <div key={op.id} className="bg-white rounded p-2 text-xs">
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-medium">
@@ -182,7 +172,7 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
                       </span>
                     </div>
                     <div className="space-y-1">
-                      {op.oldValue && (
+                      {op.oldValue && ()
                         <div className="text-red-600">
                           <span className="font-medium">From: </span>
                           <span>{JSON.stringify(op.oldValue)}</span>
@@ -196,7 +186,6 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
                   </div>
                 ))}
               </div>
-
               {/* Resolution Controls */}
               <div className="border-t pt-3">
                 <div className="flex items-center space-x-2 mb-2">
@@ -208,25 +197,23 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
                     onChange={(e) => setSelectedStrategy(e.target.value)}
                     className="text-xs border rounded px-2 py-1 bg-white"
                   >
-                    {resolutionStrategies.map(strategy => (
+                    {resolutionStrategies.map(strategy => ()
                       <option key={strategy.value} value={strategy.value}>
                         {strategy.label}
                       </option>
                     ))}
                   </select>
                 </div>
-                
                 <div className="text-xs text-gray-500 mb-3">
                   {resolutionStrategies.find(s => s.value === selectedStrategy)?.description}
                 </div>
-
-                {selectedStrategy === 'user_resolution' && (
+                {selectedStrategy === 'user_resolution' && ()
                   <div className="mb-3">
                     <label className="text-xs font-medium text-gray-700 block mb-1">
                       Choose preferred value:
                     </label>
                     <div className="space-y-1">
-                      {conflict.operations.map(op => (
+                      {conflict.operations.map(op => ()
                         <label key={op.id} className="flex items-center space-x-2">
                           <input
                             type="radio"
@@ -242,7 +229,6 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
                     </div>
                   </div>
                 )}
-
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => onResolveConflict(conflict.id, selectedStrategy)}
@@ -251,7 +237,7 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
                     Resolve Conflict
                   </button>
                   <button
-                    onClick={() => setExpandedConflict(
+                    onClick={() => setExpandedConflict()
                       expandedConflict === conflict.id ? null : conflict.id
                     )}
                     className="px-3 py-1 border rounded text-xs hover:bg-gray-50"
@@ -260,9 +246,8 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
                   </button>
                 </div>
               </div>
-
               {/* Expanded Details */}
-              {expandedConflict === conflict.id && (
+              {expandedConflict === conflict.id && ()
                 <div className="border-t pt-3 mt-3">
                   <h5 className="font-medium text-xs text-gray-700 mb-2">
                     Conflict Details
@@ -276,13 +261,13 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = (
                       <span className="font-medium">Detected: </span>
                       <span>{new Date(conflict.detectedAt).toLocaleString()}</span>
                     </div>
-                    {conflict.nodeId && (
+                    {conflict.nodeId && ()
                       <div>
                         <span className="font-medium">Node ID: </span>
                         <span className="font-mono">{conflict.nodeId}</span>
                       </div>
                     )}
-                    {conflict.edgeId && (
+                    {conflict.edgeId && ()
                       <div>
                         <span className="font-medium">Edge ID: </span>
                         <span className="font-mono">{conflict.edgeId}</span>

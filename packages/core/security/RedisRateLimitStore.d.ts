@@ -6,7 +6,7 @@
 import { RateLimitStore, RateLimitData } from './RateLimiter';
 export interface RedisClient {
     get(key: string): Promise<string | null>;
-    set(key: string, value: string, options?: {
+    set(key: string, value: string, options?: {)
         EX?: number;
         PX?: number;
     }): Promise<string | null>;
@@ -18,7 +18,7 @@ export interface RedisClient {
     eval(script: string, keys: string[], args: string[]): Promise<unknown>;
     ping(): Promise<string>;
     quit(): Promise<string>;
-    scanStream(options?: {
+    scanStream(options?: {)
         match?: string;
         count?: number;
     }): AsyncIterable<string[]>;
@@ -85,7 +85,7 @@ export declare class RedisConnectionFactory {
     /**
      * Create Redis client for different environments
      */
-    static createClient(_config: {
+    static createClient(_config: {)
         host?: string;
         port?: number;
         password?: string;
@@ -98,8 +98,8 @@ export declare class RedisConnectionFactory {
     /**
      * Create Redis cluster client
      */
-    static createClusterClient(_config: {
-        nodes: Array<{
+    static createClusterClient(_config: {)
+        nodes: Array<{,
             host: string;
             port: number;
         }>;
@@ -111,7 +111,7 @@ export declare class MockRedisClient implements RedisClient {
     private data;
     private expiries;
     get(key: string): Promise<string | null>;
-    set(key: string, value: string, options?: {
+    set(key: string, value: string, options?: {)
         EX?: number;
         PX?: number;
     }): Promise<string | null>;
@@ -123,7 +123,7 @@ export declare class MockRedisClient implements RedisClient {
     eval(script: string, keys: string[], args: string[]): Promise<unknown>;
     ping(): Promise<string>;
     quit(): Promise<string>;
-    scanStream(options?: {
+    scanStream(options?: {)
         match?: string;
         count?: number;
     }): AsyncIterable<string[]>;

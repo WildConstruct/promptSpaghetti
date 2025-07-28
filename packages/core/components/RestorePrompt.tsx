@@ -1,6 +1,5 @@
 import React from 'react';
 import { Edge, Node } from 'reactflow';
-
 interface RestorePromptProps {
   show: boolean;
   draft: { nodes: Node[]; edges: Edge[] } | null;
@@ -8,7 +7,7 @@ interface RestorePromptProps {
   onDismiss: () => void;
 }
 
-export const RestorePrompt: React.FC<RestorePromptProps> = ({
+export const RestorePrompt: React.FC<RestorePromptProps> = ({)
   show,
   draft,
   onRestore,
@@ -17,8 +16,7 @@ export const RestorePrompt: React.FC<RestorePromptProps> = ({
   if (!show || !draft) {
     return null;
   }
-
-  return (
+  return ()
     <div 
       style={{
         position: 'absolute',
@@ -31,7 +29,7 @@ export const RestorePrompt: React.FC<RestorePromptProps> = ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
       }} 
       data-testid="restore-draft-modal"
     >
@@ -47,14 +45,12 @@ export const RestorePrompt: React.FC<RestorePromptProps> = ({
         <p style={{ color: '#ccc', marginBottom: 24 }}>
           A saved graph draft was found. Restore it?
         </p>
-        
         <button 
           onClick={() => onRestore(draft.nodes, draft.edges)}
           style={{ marginRight: 16 }}
         >
           Restore
         </button>
-        
         <button onClick={onDismiss}>
           Dismiss
         </button>

@@ -8,7 +8,6 @@
  * Task: E17-1753114397242-281319 - Design health dashboards
  * Epic: 17 - Backstage Admin Controls
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { AlertTriangle, CheckCircle, XCircle, AlertCircle, Activity, Zap, Database, Wifi, HardDrive } from 'lucide-react';
 
@@ -21,14 +20,12 @@ interface HealthStatus {
   lastUpdated: string;
   trends: HealthTrends;
 }
-
 interface HealthScore {
   score: number; // 0-100
   status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY' | 'CRITICAL' | 'UNKNOWN';
   message: string;
   recommendations: string[];
 }
-
 interface ComponentHealth {
   name: string;
   category: 'system' | 'database' | 'cache' | 'external' | 'filesystem' | 'authentication';
@@ -40,39 +37,37 @@ interface ComponentHealth {
   metrics?: Record<string, number>;
   dependencies?: string[];
 }
-
 interface SystemMetrics {
-  cpu: {
+  cpu: {,
     usage: number;
     cores: number;
     temperature?: number;
   };
-  memory: {
+  memory: {,
     used: number;
     total: number;
     available: number;
     usage: number;
   };
-  disk: {
+  disk: {,
     used: number;
     total: number;
     usage: number;
     iops?: number;
   };
-  network: {
+  network: {,
     bytesIn: number;
     bytesOut: number;
     connections: number;
     latency?: number;
   };
-  database: {
+  database: {,
     connections: number;
     maxConnections: number;
     queryTime: number;
     queueSize: number;
   };
 }
-
 interface SystemAlert {
   id: string;
   type: 'error' | 'warning' | 'info';
@@ -85,14 +80,12 @@ interface SystemAlert {
   escalated: boolean;
   resolvedAt?: string;
 }
-
 interface HealthTrends {
   healthScore: TrendData[];
   responseTime: TrendData[];
   errorRate: TrendData[];
   uptime: number;
 }
-
 interface TrendData {
   timestamp: string;
   value: number;
@@ -106,7 +99,7 @@ interface HealthDashboardProps {
   onAlertAction?: (alertId: string, action: 'acknowledge' | 'resolve') => void;
 }
 
-export const HealthDashboard: React.FC<HealthDashboardProps> = ({
+export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
   refreshInterval = 30000, // 30 seconds
   autoRefresh = true,
   showDetails = true,
@@ -118,17 +111,14 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [_____selectedComponent, setSelectedComponent] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'components' | 'metrics' | 'alerts' | 'trends'>('overview');
-
   // Fetch health status
   const fetchHealthStatus = useCallback(async () => {
     try {
       setError(null);
       const response = await fetch('/api/system/health/dashboard');
-      
       if (!response.ok) {
-        throw new Error(`Health API error: ${response.status}`);
+        throw new Error(`Health API error: ${response.status}`);}
       }
-      
       const data = await response.json();
       setHealthStatus(data);
     } catch (err) {
@@ -138,17 +128,14 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
       setLoading(false);
     }
   }, []);
-
   // Auto-refresh effect
   useEffect(() => {
     fetchHealthStatus();
-    
     if (autoRefresh && refreshInterval > 0) {
       const interval = setInterval(fetchHealthStatus, refreshInterval);
       return () => clearInterval(interval);
     }
   }, [fetchHealthStatus, autoRefresh, refreshInterval]);
-
   // Helper functions
   const getStatusColor = (status: string): string => {
     switch (status.toUpperCase()) {
@@ -159,7 +146,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-
   const getStatusIcon = (status: string) => {
     switch (status.toUpperCase()) {
     case 'HEALTHY': return <CheckCircle className="w-5 h-5 text-green-600" />;
@@ -169,7 +155,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
     default: return <AlertCircle className="w-5 h-5 text-gray-600" />;
     }
   };
-
   const getCategoryIcon = (category: string) => {
     switch (category) {
     case 'database': return <Database className="w-5 h-5" />;
@@ -180,7 +165,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
     default: return <Activity className="w-5 h-5" />;
     }
   };
-
   const formatBytes = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -188,48 +172,43 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
-
   const formatUptime = (seconds: number): string => {
     const days = Math.floor(seconds / 86400);
     const hours = Math.floor((seconds % 86400) / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    
-    if (days > 0) return `${days}d ${hours}h`;
-    if (hours > 0) return `${hours}h ${minutes}m`;
-    return `${minutes}m`;
+    if (days > 0) return `${days}d ${hours}h`;}
+    if (hours > 0) return `${hours}h ${minutes}m`;}
+    return `${minutes}m`;}
   };
-
   // Handle alert actions
   const handleAlertAction = async (alertId: string, action: 'acknowledge' | 'resolve') => {
     try {
-      await fetch(`/api/system/alerts/${alertId}/${action}`, { method: 'POST' });
+      await fetch(`/api/system/alerts/${alertId}/${action}`, { method: 'POST' });}
       await fetchHealthStatus(); // Refresh data
       onAlertAction?.(alertId, action);
     } catch (err) {
-      console.error(`Failed to ${action} alert:`, err);
+      console.error(`Failed to ${action} alert:`, err);}
     }
   };
-
   // Loading state
   if (loading) {
-    return (
+    return ()
       <div className="p-6 space-y-6">
         <div className="flex items-center space-x-3">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
           <h1 className="text-2xl font-bold text-gray-900">Loading Health Status...</h1>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
+          {[...Array(4)].map((_, i) => ()
             <div key={i} className="bg-gray-200 animate-pulse rounded-lg h-32"></div>
           ))}
         </div>
       </div>
     );
   }
-
   // Error state
   if (error) {
-    return (
+    return ()
       <div className="p-6">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
           <div className="flex items-center space-x-3">
@@ -249,10 +228,8 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
       </div>
     );
   }
-
   if (!healthStatus) return null;
-
-  return (
+  return ()
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -277,19 +254,17 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
           </button>
         </div>
       </div>
-
       {/* Overall Health Score */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900">Overall System Health</h2>
           <div className="flex items-center space-x-2">
             {getStatusIcon(healthStatus.overall.status)}
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(healthStatus.overall.status)}`}>
+            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(healthStatus.overall.status)}`}>}
               {healthStatus.overall.status}
             </span>
           </div>
         </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <div className="flex items-center justify-between mb-2">
@@ -307,16 +282,14 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
               ></div>
             </div>
           </div>
-          
           <div>
             <h3 className="text-sm font-medium text-gray-900 mb-2">System Message</h3>
             <p className="text-sm text-gray-600">{healthStatus.overall.message}</p>
-            
-            {healthStatus.overall.recommendations.length > 0 && (
+            {healthStatus.overall.recommendations.length > 0 && ()
               <div className="mt-3">
                 <h4 className="text-xs font-medium text-gray-700 mb-1">Recommendations:</h4>
                 <ul className="text-xs text-gray-600 space-y-1">
-                  {healthStatus.overall.recommendations.slice(0, 2).map((rec, i) => (
+                  {healthStatus.overall.recommendations.slice(0, 2).map((rec, i) => ()
                     <li key={i} className="flex items-start space-x-1">
                       <span>•</span>
                       <span>{rec}</span>
@@ -328,7 +301,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
           </div>
         </div>
       </div>
-
       {/* Tab Navigation */}
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8">
@@ -336,9 +308,9 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
             { id: 'overview', label: 'Overview' },
             { id: 'components', label: 'Components' },
             { id: 'metrics', label: 'Metrics' },
-            { id: 'alerts', label: `Alerts (${healthStatus.alerts.filter(a => !a.acknowledged).length})` },
+            { id: 'alerts', label: `Alerts (${healthStatus.alerts.filter(a => !a.acknowledged).length})` },}
             { id: 'trends', label: 'Trends' }
-          ].map((tab) => (
+          ].map((tab) => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
@@ -353,15 +325,14 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
           ))}
         </nav>
       </div>
-
       {/* Tab Content */}
-      {activeTab === 'overview' && (
+      {activeTab === 'overview' && ()
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Component Status Grid */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Component Status</h3>
             <div className="grid grid-cols-2 gap-3">
-              {healthStatus.components.slice(0, 6).map((component) => (
+              {healthStatus.components.slice(0, 6).map((component) => ()
                 <div
                   key={component.name}
                   className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer"
@@ -377,7 +348,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
               ))}
             </div>
           </div>
-
           {/* System Metrics Summary */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">System Resources</h3>
@@ -398,7 +368,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   ></div>
                 </div>
               </div>
-
               {/* Memory Usage */}
               <div>
                 <div className="flex justify-between text-sm mb-1">
@@ -415,7 +384,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   ></div>
                 </div>
               </div>
-
               {/* Disk Usage */}
               <div>
                 <div className="flex justify-between text-sm mb-1">
@@ -432,7 +400,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   ></div>
                 </div>
               </div>
-
               {/* Database Connections */}
               <div>
                 <div className="flex justify-between text-sm mb-1">
@@ -450,8 +417,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
           </div>
         </div>
       )}
-
-      {activeTab === 'components' && (
+      {activeTab === 'components' && ()
         <div className="bg-white rounded-lg shadow-md">
           <div className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Component Health Details</h3>
@@ -468,7 +434,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {healthStatus.components.map((component) => (
+                  {healthStatus.components.map((component) => ()
                     <tr key={component.name} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
@@ -482,7 +448,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           {getStatusIcon(component.status)}
-                          <span className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(component.status)}`}>
+                          <span className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(component.status)}`}>}
                             {component.status}
                           </span>
                         </div>
@@ -505,17 +471,16 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
           </div>
         </div>
       )}
-
-      {activeTab === 'alerts' && (
+      {activeTab === 'alerts' && ()
         <div className="space-y-4">
-          {healthStatus.alerts.length === 0 ? (
+          {healthStatus.alerts.length === 0 ? ()
             <div className="bg-white rounded-lg shadow-md p-6 text-center">
               <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No Active Alerts</h3>
               <p className="text-gray-600">All systems are operating normally.</p>
             </div>
-          ) : (
-            healthStatus.alerts.map((alert) => (
+          ) : ()
+            healthStatus.alerts.map((alert) => ()
               <div
                 key={alert.id}
                 className={`bg-white rounded-lg shadow-md p-6 border-l-4 ${
@@ -534,7 +499,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                       }`}>
                         {alert.severity.toUpperCase()}
                       </span>
-                      {alert.component && (
+                      {alert.component && ()
                         <span className="text-xs text-gray-500">{alert.component}</span>
                       )}
                       <span className="text-xs text-gray-500">
@@ -543,16 +508,14 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                     </div>
                     <h4 className="text-lg font-medium text-gray-900 mb-1">{alert.title}</h4>
                     <p className="text-gray-600 mb-3">{alert.message}</p>
-                    
-                    {alert.acknowledged && (
+                    {alert.acknowledged && ()
                       <div className="text-sm text-green-600">
                         ✓ Acknowledged
                       </div>
                     )}
                   </div>
-                  
                   <div className="flex space-x-2">
-                    {!alert.acknowledged && (
+                    {!alert.acknowledged && ()
                       <button
                         onClick={() => handleAlertAction(alert.id, 'acknowledge')}
                         className="bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700"
@@ -560,7 +523,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                         Acknowledge
                       </button>
                     )}
-                    {!alert.resolvedAt && (
+                    {!alert.resolvedAt && ()
                       <button
                         onClick={() => handleAlertAction(alert.id, 'resolve')}
                         className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
@@ -575,8 +538,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
           )}
         </div>
       )}
-
-      {activeTab === 'metrics' && (
+      {activeTab === 'metrics' && ()
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Detailed System Metrics */}
           <div className="bg-white rounded-lg shadow-md p-6">
@@ -590,7 +552,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                 </div>
                 <div className="flex justify-between text-sm mb-1">
                   <span>Current: {healthStatus.metrics.cpu.usage.toFixed(1)}%</span>
-                  {healthStatus.metrics.cpu.temperature && (
+                  {healthStatus.metrics.cpu.temperature && ()
                     <span>Temp: {healthStatus.metrics.cpu.temperature}°C</span>
                   )}
                 </div>
@@ -604,7 +566,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   ></div>
                 </div>
               </div>
-
               {/* Memory Metrics */}
               <div>
                 <div className="flex justify-between items-center mb-2">
@@ -627,12 +588,11 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   ></div>
                 </div>
               </div>
-
               {/* Disk Metrics */}
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <h4 className="text-sm font-medium text-gray-700">Disk Usage</h4>
-                  {healthStatus.metrics.disk.iops && (
+                  {healthStatus.metrics.disk.iops && ()
                     <span className="text-sm text-gray-600">{healthStatus.metrics.disk.iops} IOPS</span>
                   )}
                 </div>
@@ -652,7 +612,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
               </div>
             </div>
           </div>
-
           {/* Network and Database Metrics */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Network & Database</h3>
@@ -673,7 +632,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                     <div className="text-gray-600">Connections</div>
                     <div className="font-medium">{healthStatus.metrics.network.connections}</div>
                   </div>
-                  {healthStatus.metrics.network.latency && (
+                  {healthStatus.metrics.network.latency && ()
                     <div>
                       <div className="text-gray-600">Latency</div>
                       <div className="font-medium">{healthStatus.metrics.network.latency}ms</div>
@@ -681,7 +640,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   )}
                 </div>
               </div>
-
               {/* Database Metrics */}
               <div>
                 <h4 className="text-sm font-medium text-gray-700 mb-3">Database Performance</h4>
@@ -714,14 +672,13 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
           </div>
         </div>
       )}
-
-      {activeTab === 'trends' && (
+      {activeTab === 'trends' && ()
         <div className="space-y-6">
           {/* Health Score Trend */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Health Score Trends</h3>
             <div className="h-64 flex items-center justify-center">
-              {healthStatus.trends.healthScore.length > 0 ? (
+              {healthStatus.trends.healthScore.length > 0 ? ()
                 <div className="w-full h-full bg-gray-50 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-4xl font-bold text-blue-600 mb-2">
@@ -730,17 +687,16 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                     <div className="text-gray-600">Current Health Score</div>
                     <div className="text-sm text-gray-500 mt-1">
                       Trend: {healthStatus.trends.healthScore.length > 1 ? 
-                        (healthStatus.trends.healthScore[healthStatus.trends.healthScore.length - 1].value > 
+                        (healthStatus.trends.healthScore[healthStatus.trends.healthScore.length - 1].value > )
                          healthStatus.trends.healthScore[healthStatus.trends.healthScore.length - 2].value ? 'Improving' : 'Stable') : 'Stable'}
                     </div>
                   </div>
                 </div>
-              ) : (
+              ) : ()
                 <div className="text-gray-500">No trend data available</div>
               )}
             </div>
           </div>
-
           {/* Performance Metrics Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-white rounded-lg shadow-md p-6">
@@ -751,7 +707,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                 </div>
                 <div className="text-sm text-gray-600">Average Response Time</div>
                 <div className="text-xs text-gray-500 mt-1">
-                  {healthStatus.trends.responseTime.length > 1 && (
+                  {healthStatus.trends.responseTime.length > 1 && ()
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                       healthStatus.trends.responseTime[healthStatus.trends.responseTime.length - 1]?.value <= 
                       healthStatus.trends.responseTime[healthStatus.trends.responseTime.length - 2]?.value 
@@ -765,7 +721,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                 </div>
               </div>
             </div>
-
             <div className="bg-white rounded-lg shadow-md p-6">
               <h4 className="text-lg font-medium text-gray-900 mb-4">Error Rate</h4>
               <div className="text-center">
@@ -774,7 +729,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                 </div>
                 <div className="text-sm text-gray-600">Current Error Rate</div>
                 <div className="text-xs text-gray-500 mt-1">
-                  {healthStatus.trends.errorRate.length > 1 && (
+                  {healthStatus.trends.errorRate.length > 1 && ()
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                       healthStatus.trends.errorRate[healthStatus.trends.errorRate.length - 1]?.value <= 
                       healthStatus.trends.errorRate[healthStatus.trends.errorRate.length - 2]?.value 
@@ -788,7 +743,6 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                 </div>
               </div>
             </div>
-
             <div className="bg-white rounded-lg shadow-md p-6">
               <h4 className="text-lg font-medium text-gray-900 mb-4">System Uptime</h4>
               <div className="text-center">

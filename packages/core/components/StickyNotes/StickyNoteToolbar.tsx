@@ -9,10 +9,8 @@
  * - Settings toggle
  * - Professional Cinema 4D quality UI
  */
-
 import React, { useState } from 'react';
 import { StickyNote, StickyNoteColor, StickyNoteCategory } from '../../types/StickyNotes';
-
 interface StickyNoteToolbarProps {
   selectedNotes: StickyNote[];
   onColorChange: (color: StickyNoteColor) => void;
@@ -22,7 +20,6 @@ interface StickyNoteToolbarProps {
   settings: unknown;
   className?: string;
 }
-
 const COLORS: { value: StickyNoteColor; label: string; bg: string; border: string }[] = [
   { value: 'yellow', label: 'Yellow', bg: '#FEF3C7', border: '#F59E0B' },
   { value: 'blue', label: 'Blue', bg: '#DBEAFE', border: '#3B82F6' },
@@ -33,7 +30,6 @@ const COLORS: { value: StickyNoteColor; label: string; bg: string; border: strin
   { value: 'pink', label: 'Pink', bg: '#FCE7F3', border: '#EC4899' },
   { value: 'gray', label: 'Gray', bg: '#F3F4F6', border: '#6B7280' }
 ];
-
 const CATEGORIES: { value: StickyNoteCategory; label: string; icon: string }[] = [
   { value: 'general', label: 'General', icon: '📝' },
   { value: 'technical', label: 'Technical', icon: '⚙️' },
@@ -44,8 +40,7 @@ const CATEGORIES: { value: StickyNoteCategory; label: string; icon: string }[] =
   { value: 'action-item', label: 'Action Item', icon: '🎯' },
   { value: 'reference', label: 'Reference', icon: '📚' }
 ];
-
-const QUICK_TEMPLATES = [
+const QUICK_TEMPLATES = [;
   { color: 'yellow' as StickyNoteColor, category: 'general' as StickyNoteCategory, content: 'General note...', icon: '📝' },
   { color: 'blue' as StickyNoteColor, category: 'technical' as StickyNoteCategory, content: 'Technical note: ', icon: '⚙️' },
   { color: 'green' as StickyNoteColor, category: 'decision' as StickyNoteCategory, content: 'Decision: ', icon: '✅' },
@@ -54,7 +49,7 @@ const QUICK_TEMPLATES = [
   { color: 'orange' as StickyNoteColor, category: 'question' as StickyNoteCategory, content: 'Question: ', icon: '❓' }
 ];
 
-export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
+export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
   selectedNotes,
   onColorChange,
   onCategoryChange,
@@ -66,9 +61,7 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
   const [expanded, setExpanded] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-
   const hasSelection = selectedNotes.length > 0;
-
   const toolbarStyle: React.CSSProperties = {
     position: 'fixed',
     top: 20,
@@ -80,14 +73,12 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
     fontFamily: 'system-ui, -apple-system, sans-serif',
     zIndex: 2000,
     userSelect: 'none',
-    overflow: 'hidden'
+    overflow: 'hidden',
   };
-
   const sectionStyle: React.CSSProperties = {
     padding: '8px 12px',
     borderBottom: '1px solid #F3F4F6'
   };
-
   const buttonStyle: React.CSSProperties = {
     background: 'none',
     border: 'none',
@@ -102,7 +93,6 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
     gap: 4,
     transition: 'background-color 0.15s ease'
   };
-
   const colorButtonStyle: React.CSSProperties = {
     width: 24,
     height: 24,
@@ -111,9 +101,8 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
     cursor: 'pointer',
     transition: 'border-color 0.15s ease'
   };
-
-  return (
-    <div className={`sticky-note-toolbar ${className}`} style={toolbarStyle}>
+  return ()
+    <div className={`sticky-note-toolbar ${className}`} style={toolbarStyle}>}
       {/* Main controls */}
       <div style={sectionStyle}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -128,7 +117,6 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
           >
             📝
           </button>
-
           {/* Quick add button */}
           <button
             style={buttonStyle}
@@ -137,7 +125,6 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
           >
             ➕
           </button>
-
           {/* Templates */}
           <button
             style={{
@@ -149,7 +136,6 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
           >
             📋
           </button>
-
           {/* Settings */}
           <button
             style={{
@@ -161,25 +147,23 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
           >
             ⚙️
           </button>
-
           {/* Selection info */}
-          {hasSelection && (
+          {hasSelection && ()
             <div style={{
               fontSize: 11,
               color: '#6B7280',
               background: '#F9FAFB',
               padding: '2px 6px',
               borderRadius: 4,
-              marginLeft: 4
+              marginLeft: 4,
             }}>
               {selectedNotes.length} selected
             </div>
           )}
         </div>
       </div>
-
       {/* Expanded controls */}
-      {expanded && (
+      {expanded && ()
         <>
           {/* Color palette */}
           <div style={sectionStyle}>
@@ -187,7 +171,7 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
               Colors
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, maxWidth: 200 }}>
-              {COLORS.map(color => (
+              {COLORS.map(color => ()
                 <button
                   key={color.value}
                   style={{
@@ -207,14 +191,13 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
               ))}
             </div>
           </div>
-
           {/* Categories */}
           <div style={sectionStyle}>
             <div style={{ fontSize: 11, fontWeight: 600, color: '#6B7280', marginBottom: 8 }}>
               Categories
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, maxWidth: 200 }}>
-              {CATEGORIES.map(category => (
+              {CATEGORIES.map(category => ()
                 <button
                   key={category.value}
                   style={{
@@ -244,15 +227,14 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
           </div>
         </>
       )}
-
       {/* Quick templates */}
-      {showTemplates && (
+      {showTemplates && ()
         <div style={sectionStyle}>
           <div style={{ fontSize: 11, fontWeight: 600, color: '#6B7280', marginBottom: 8 }}>
             Quick Templates
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 180 }}>
-            {QUICK_TEMPLATES.map((template, index) => (
+            {QUICK_TEMPLATES.map((template, index) => ()
               <button
                 key={index}
                 style={{
@@ -278,9 +260,8 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
           </div>
         </div>
       )}
-
       {/* Settings */}
-      {showSettings && (
+      {showSettings && ()
         <div style={sectionStyle}>
           <div style={{ fontSize: 11, fontWeight: 600, color: '#6B7280', marginBottom: 8 }}>
             Settings
@@ -296,7 +277,6 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
               />
               <span style={{ fontSize: 12, color: '#374151' }}>Ghost mode</span>
             </label>
-
             {/* Snap to grid */}
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
               <input
@@ -307,7 +287,6 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
               />
               <span style={{ fontSize: 12, color: '#374151' }}>Snap to grid</span>
             </label>
-
             {/* Show all notes */}
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
               <input
@@ -318,9 +297,8 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
               />
               <span style={{ fontSize: 12, color: '#374151' }}>Show all notes</span>
             </label>
-
             {/* Grid size */}
-            {settings.snapToGrid && (
+            {settings.snapToGrid && ()
               <div>
                 <label style={{ fontSize: 12, color: '#6B7280', display: 'block', marginBottom: 4 }}>
                   Grid size: {settings.gridSize}px
@@ -338,9 +316,8 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({
           </div>
         </div>
       )}
-
       {/* Footer with shortcuts */}
-      {expanded && (
+      {expanded && ()
         <div style={{
           padding: '6px 12px',
           backgroundColor: '#F9FAFB',

@@ -56,7 +56,7 @@ export interface StepAction {
 }
 export interface StepValidation {
     required: boolean;
-    validators: {
+    validators: {,
         type: 'required' | 'format' | 'range' | 'custom';
         message: string;
         parameters?: Record<string, unknown>;
@@ -114,7 +114,7 @@ export interface SequenceDefinition {
     exitPoints: string[];
     globalTimeout?: number;
     concurrencyLimit?: number;
-    metadata: {
+    metadata: {,
         category: string;
         tags: string[];
         estimatedTotalDuration: number;
@@ -173,11 +173,11 @@ export interface ProgressMilestone {
 export interface ExecutionPerformance {
     totalDuration: number;
     averageStepDuration: number;
-    fastestStep: {
+    fastestStep: {,
         id: string;
         duration: number;
     };
-    slowestStep: {
+    slowestStep: {,
         id: string;
         duration: number;
     };
@@ -186,7 +186,7 @@ export interface ExecutionPerformance {
     effectiveSuccessRate: number;
 }
 export interface SequencingConfig {
-    execution: {
+    execution: {,
         defaultTimeout: number;
         maxConcurrentExecutions: number;
         enableProgressPersistence: boolean;
@@ -194,13 +194,13 @@ export interface SequencingConfig {
         enableRollback: boolean;
         autoRetryOnFailure: boolean;
     };
-    validation: {
+    validation: {,
         validateDependencies: boolean;
         validateConditions: boolean;
         strictValidation: boolean;
         allowCircularDependencies: boolean;
     };
-    performance: {
+    performance: {,
         trackExecutionMetrics: boolean;
         optimizeExecutionOrder: boolean;
         enableCaching: boolean;
@@ -219,7 +219,7 @@ export declare class StepSequencingSystem extends EventEmitter {
     createSequence(definition: Omit<SequenceDefinition, 'id'>): Promise<string>;
     updateSequence(sequenceId: string, updates: Partial<SequenceDefinition>): Promise<void>;
     deleteSequence(sequenceId: string, force?: boolean): Promise<void>;
-    startExecution(sequenceId: string, context?: Partial<ExecutionContext>, options?: {
+    startExecution(sequenceId: string, context?: Partial<ExecutionContext>, options?: {)
         name?: string;
         timeout?: number;
     }): Promise<string>;
@@ -229,13 +229,13 @@ export declare class StepSequencingSystem extends EventEmitter {
     executeStep(executionId: string, stepId: string): Promise<StepExecutionStatus>;
     rollbackExecution(executionId: string, toStepId?: string): Promise<void>;
     getSequence(sequenceId: string): SequenceDefinition | null;
-    listSequences(filters?: {
+    listSequences(filters?: {)
         category?: string;
         tags?: string[];
         difficulty?: string;
     }): SequenceDefinition[];
     getExecution(executionId: string): SequenceExecution | null;
-    listExecutions(filters?: {
+    listExecutions(filters?: {)
         sequenceId?: string;
         status?: string[];
         dateRange?: {
@@ -250,7 +250,7 @@ export declare class StepSequencingSystem extends EventEmitter {
         totalExecutions: number;
         successRate: number;
         averageDuration: number;
-        commonFailurePoints: Array<{
+        commonFailurePoints: Array<{,
             stepId: string;
             failureRate: number;
         }>;

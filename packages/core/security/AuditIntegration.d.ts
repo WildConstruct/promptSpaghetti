@@ -34,7 +34,7 @@ export declare class AuditIntegration {
     /**
      * Log a data access operation with automatic classification enrichment
      */
-    logDataAccess(
+    logDataAccess()
       context: OperationContext,
       resourceType: string,
       resourceId: string,
@@ -45,7 +45,7 @@ export declare class AuditIntegration {
     /**
      * Log an administrative operation
      */
-    logAdminOperation(operation: 'GRANT_ACCESS' | 'REVOKE_ACCESS' | 'CHANGE_CLASSIFICATION', context: OperationContext, target: {
+    logAdminOperation(operation: 'GRANT_ACCESS' | 'REVOKE_ACCESS' | 'CHANGE_CLASSIFICATION', context: OperationContext, target: {)
         userId?: string;
         resourceType: string;
         resourceId: string;
@@ -58,7 +58,7 @@ export declare class AuditIntegration {
     /**
      * Log a batch operation
      */
-    logBatchOperation(context: OperationContext, operation: AuditOperation, resources: Array<{
+    logBatchOperation(context: OperationContext, operation: AuditOperation, resources: Array<{)
         type: string;
         id: string;
         classification?: DataClassificationLevel;
@@ -82,7 +82,7 @@ export declare class AuditIntegration {
     /**
      * Generate compliance report
      */
-    generateComplianceReport(startDate: Date, endDate: Date, options?: {
+    generateComplianceReport(startDate: Date, endDate: Date, options?: {)
         groupBy?: 'user' | 'classification' | 'operation';
         includeDetails?: boolean;
     }): Promise<ComplianceReport>;
@@ -91,7 +91,7 @@ export declare class AuditIntegration {
  * Compliance report structure
  */
 export interface ComplianceReport {
-    period: {
+    period: {,
         start: Date;
         end: Date;
     };
@@ -102,7 +102,7 @@ export interface ComplianceReport {
     classificationBreakdown: Record<string, number>;
     operationBreakdown: Record<string, number>;
     anomalies: number;
-    riskMetrics: {
+    riskMetrics: {,
         averageRiskScore: number;
         highRiskOperations: number;
     };

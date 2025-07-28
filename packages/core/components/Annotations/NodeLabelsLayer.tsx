@@ -6,7 +6,6 @@
  * label creation, updates, display modes, and ensuring proper
  * integration with the node system.
  */
-
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Node } from 'reactflow';
 import { NodeLabel } from './NodeLabel';
@@ -16,7 +15,6 @@ import {
   NodeLabelPreferences,
   DEFAULT_NODE_LABEL_PREFERENCES
 } from '../../types/CollaborationTypes';
-
 interface NodeLabelsLayerProps {
   nodes: Node[];
   labelConfigs: Record<string, NodeLabelConfig>;
@@ -31,7 +29,7 @@ interface NodeLabelsLayerProps {
   zoom?: number;
 }
 
-export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({
+export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({)
   nodes,
   labelConfigs,
   onLabelConfigsChange,
@@ -46,12 +44,10 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({
 }) => {
   const [editingLabelId, setEditingLabelId] = useState<string | null>(null);
   const layerRef = useRef<HTMLDivElement>(null);
-
   // Generate unique ID for new labels
   const generateLabelId = useCallback((): string => {
-    return `label_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `label_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }, []);
-
   // Create label config for a node
   const createLabelConfig = useCallback((nodeId: string, customLabel: string = ''): NodeLabelConfig => {
     return {
@@ -67,11 +63,9 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({
       timestamp: new Date().toISOString()
     };
   }, [generateLabelId, labelPreferences, author]);
-
   // Handle label actions
   const handleLabelAction = useCallback((action: NodeLabelAction) => {
     const updatedConfigs = { ...labelConfigs };
-
     switch (action.type) {
       case 'create':
         if (!action.config && action.customLabel) {
@@ -86,7 +80,6 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({
           updatedConfigs[newConfig.id] = newConfig;
         }
         break;
-
       case 'update':
         if (action.labelId && updatedConfigs[action.labelId]) {
           updatedConfigs[action.labelId] = {
@@ -94,43 +87,37 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({
             ...action.config,
             timestamp: new Date().toISOString()
           };
-          
           if (action.customLabel !== undefined) {
             updatedConfigs[action.labelId].customLabel = action.customLabel;
           }
         }
         break;
-
       case 'delete':
         if (action.labelId && updatedConfigs[action.labelId]) {
           delete updatedConfigs[action.labelId];
         }
         break;
-
       case 'startEdit':
         setEditingLabelId(action.labelId || null);
         if (action.labelId && updatedConfigs[action.labelId]) {
           updatedConfigs[action.labelId] = {
             ...updatedConfigs[action.labelId],
-            isEditing: true
+            isEditing: true,
           };
         }
         break;
-
       case 'stopEdit':
         setEditingLabelId(null);
         if (action.labelId && updatedConfigs[action.labelId]) {
           updatedConfigs[action.labelId] = {
             ...updatedConfigs[action.labelId],
-            isEditing: false
+            isEditing: false,
           };
         }
         break;
     }
-
     onLabelConfigsChange(updatedConfigs);
   }, [labelConfigs, onLabelConfigsChange, createLabelConfig, generateLabelId]);
-
   // Get or create label config for a node
   const getLabelConfigForNode = useCallback((nodeId: string): NodeLabelConfig | null => {
     // Find existing config for this node
@@ -138,100 +125,85 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({
     if (existingConfig) {
       return existingConfig;
     }
-
     // If no custom label is set and we're in a mode that shows labels, return null
     // This allows nodes to use their built-in labels
     return null;
   }, [labelConfigs]);
-
   // Handle right-click to create/edit labels
   const handleContextMenu = useCallback((e: React.MouseEvent, nodeId: string) => {
     if (readOnly) return;
-    
     e.preventDefault();
     e.stopPropagation();
-
     const existingConfig = getLabelConfigForNode(nodeId);
-    
     if (existingConfig) {
       // Start editing existing label
-      handleLabelAction({
+      handleLabelAction({)
         type: 'startEdit',
         nodeId,
-        labelId: existingConfig.id
+        labelId: existingConfig.id,
       });
     } else {
       // Create new label
-      handleLabelAction({
+      handleLabelAction({)
         type: 'create',
         nodeId,
-        customLabel: ''
+        customLabel: '',
       });
     }
   }, [readOnly, getLabelConfigForNode, handleLabelAction]);
-
   // Handle double-click on empty area near node to create quick label
   const handleQuickLabelCreate = useCallback((nodeId: string) => {
     if (readOnly) return;
-
     const existingConfig = getLabelConfigForNode(nodeId);
     if (!existingConfig) {
       const newConfig = createLabelConfig(nodeId, '');
-      handleLabelAction({
+      handleLabelAction({)
         type: 'create',
         nodeId,
         config: { ...newConfig, isEditing: true }
       });
     }
   }, [readOnly, getLabelConfigForNode, createLabelConfig, handleLabelAction]);
-
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (readOnly || !selectedNodeId) return;
-
       // L key to add/edit label for selected node
       if (e.key === 'l' || e.key === 'L') {
         if (!e.ctrlKey && !e.metaKey && !e.altKey) {
           e.preventDefault();
-          
           const existingConfig = getLabelConfigForNode(selectedNodeId);
           if (existingConfig) {
-            handleLabelAction({
+            handleLabelAction({)
               type: 'startEdit',
               nodeId: selectedNodeId,
-              labelId: existingConfig.id
+              labelId: existingConfig.id,
             });
           } else {
             handleQuickLabelCreate(selectedNodeId);
           }
         }
       }
-
       // Escape to cancel editing
       if (e.key === 'Escape' && editingLabelId) {
-        handleLabelAction({
+        handleLabelAction({)
           type: 'stopEdit',
           nodeId: selectedNodeId,
-          labelId: editingLabelId
+          labelId: editingLabelId,
         });
       }
     };
-
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [readOnly, selectedNodeId, editingLabelId, getLabelConfigForNode, handleLabelAction, handleQuickLabelCreate]);
-
   // Get node position for label positioning
       if (!node) return { x: 0, y: 0 };
-    
     return {
       x: node.position.x,
-      y: node.position.y
+      y: node.position.y,
     };
   }, [nodes]);
-
-  return (
+  return ()
     <div
       ref={layerRef}
       data-testid="node-labels-layer"
@@ -243,25 +215,22 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({
         height: '100%',
         pointerEvents: 'none', // Allow graph interactions to pass through
         zIndex: 1500, // Above sticky notes but below modals
-        overflow: 'visible'
+        overflow: 'visible',
       }}
     >
-      {nodes.map(node => {
+      {nodes.map(node => {)
         const labelConfig = getLabelConfigForNode(node.id);
-        
         // Show label if we have a custom config, or if the node should show its default label
-        const shouldShowLabel = labelConfig || (
+        const shouldShowLabel = labelConfig || (;)
           labelPreferences.defaultDisplayMode === 'always' ||
           (labelPreferences.defaultDisplayMode === 'selected' && selectedNodeId === node.id) ||
           (labelPreferences.defaultDisplayMode === 'hover' && hoveredNodeId === node.id) ||
           (labelPreferences.defaultDisplayMode === 'focus' && focusedNodeId === node.id)
         );
-
         if (!shouldShowLabel) return null;
-
         // Use existing config or create a temporary one for built-in labels
         const effectiveConfig = labelConfig || {
-          id: `temp-${node.id}`,
+          id: `temp-${node.id}`,}
           nodeId: node.id,
           customLabel: '',
           displayMode: labelPreferences.defaultDisplayMode,
@@ -272,8 +241,7 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({
           author,
           timestamp: new Date().toISOString()
         };
-
-        return (
+        return ()
           <div
             key={`label-container-${node.id}`}
             style={{
@@ -282,7 +250,7 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({
               top: node.position.y,
               width: node.width || 180,
               height: node.height || 90,
-              pointerEvents: 'none'
+              pointerEvents: 'none',
             }}
             onContextMenu={(e) => handleContextMenu(e, node.id)}
           >
@@ -301,9 +269,8 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({
           </div>
         );
       })}
-
       {/* Instructions overlay when no labels exist */}
-      {Object.keys(labelConfigs).length === 0 && !readOnly && (
+      {Object.keys(labelConfigs).length === 0 && !readOnly && ()
         <div
           style={{
             position: 'fixed',
@@ -332,7 +299,7 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({
             Node Labels
           </div>
           <div style={{ lineHeight: 1.4 }}>
-            • Press <kbd style={{ background: 'rgba(
+            • Press <kbd style={{ background: 'rgba()
               255,
               255,
               255,

@@ -153,13 +153,13 @@ export interface BulkUpdateStats {
         successful: number;
         rate: number;
     }>;
-    commonErrors: Array<{
+    commonErrors: Array<{,
         type: string;
         message: string;
         count: number;
         affectedTargets: number;
     }>;
-    performanceMetrics: {
+    performanceMetrics: {,
         averageItemsPerSecond: number;
         largestBatchSize: number;
         longestOperation: number;
@@ -184,7 +184,7 @@ export declare class BulkPropertyUpdateService {
     /**
      * Operation Management
      */
-    createOperation(name: string, targets: BulkUpdateTarget[], updates: PropertyUpdate[], options: {
+    createOperation(name: string, targets: BulkUpdateTarget[], updates: PropertyUpdate[], options: {)
         validation?: Partial<ValidationRules>;
         execution?: Partial<ExecutionSettings>;
         rollback?: Partial<RollbackSettings>;

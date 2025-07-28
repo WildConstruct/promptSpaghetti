@@ -4,13 +4,12 @@
  * 
  * Comprehensive dashboard for all analytics and security systems monitoring
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { AlertTriangle, Shield, Activity, Users, Server, Globe, Clock, TrendingUp, TrendingDown, AlertCircle, CheckCircle, XCircle, Zap } from 'lucide-react';
 
 // Types
 interface DashboardMetrics {
-  security: {
+  security: {,
     active_alerts: number;
     critical_alerts: number;
     threat_level: number; // 0-10
@@ -18,7 +17,7 @@ interface DashboardMetrics {
     mean_response_time: number;
     false_positive_rate: number;
   };
-  performance: {
+  performance: {,
     system_health: number; // 0-100
     avg_response_time: number;
     requests_per_minute: number;
@@ -26,7 +25,7 @@ interface DashboardMetrics {
     cpu_usage: number;
     memory_usage: number;
   };
-  analytics: {
+  analytics: {,
     active_users: number;
     daily_sessions: number;
     conversion_rate: number;
@@ -34,7 +33,7 @@ interface DashboardMetrics {
     page_views_today: number;
     revenue_today: number;
   };
-  infrastructure: {
+  infrastructure: {,
     services_up: number;
     services_total: number;
     database_health: number;
@@ -43,7 +42,6 @@ interface DashboardMetrics {
     backup_status: 'success' | 'warning' | 'error';
   };
 }
-
 interface AlertSummary {
   id: string;
   type: 'security' | 'performance' | 'infrastructure' | 'business';
@@ -54,13 +52,11 @@ interface AlertSummary {
   source: string;
   status: 'active' | 'investigating' | 'resolved';
 }
-
 interface TimeSeriesData {
   timestamp: number;
   value: number;
   label?: string;
 }
-
 interface SystemStatus {
   name: string;
   status: 'healthy' | 'degraded' | 'unhealthy' | 'offline';
@@ -72,42 +68,41 @@ interface SystemStatus {
 
 // Mock data hook (would be replaced with real API calls)
 const useDashboardData = () => {
-  const [metrics, setMetrics] = useState<DashboardMetrics>({
-    security: {
+  const [metrics, setMetrics] = useState<DashboardMetrics>({)
+    security: {,
       active_alerts: 12,
       critical_alerts: 2,
       threat_level: 3.5,
       incidents_today: 5,
       mean_response_time: 4200,
-      false_positive_rate: 0.08
+      false_positive_rate: 0.08,
     },
-    performance: {
+    performance: {,
       system_health: 94,
       avg_response_time: 245,
       requests_per_minute: 1820,
       error_rate: 0.012,
       cpu_usage: 68,
-      memory_usage: 72
+      memory_usage: 72,
     },
-    analytics: {
+    analytics: {,
       active_users: 2847,
       daily_sessions: 15624,
       conversion_rate: 0.034,
       bounce_rate: 0.28,
       page_views_today: 89453,
-      revenue_today: 24890.50
+      revenue_today: 24890.50,
     },
-    infrastructure: {
+    infrastructure: {,
       services_up: 28,
       services_total: 30,
       database_health: 98,
       network_latency: 23,
       storage_usage: 0.67,
-      backup_status: 'success'
+      backup_status: 'success',
     }
   });
-
-  const [alerts, setAlerts] = useState<AlertSummary[]>([
+  const [alerts, setAlerts] = useState<AlertSummary[]>([)
     {
       id: 'alert_001',
       type: 'security',
@@ -116,7 +111,7 @@ const useDashboardData = () => {
       description: 'Multiple failed login attempts from various IP addresses',
       timestamp: Date.now() - 300000,
       source: 'Authentication System',
-      status: 'investigating'
+      status: 'investigating',
     },
     {
       id: 'alert_002',
@@ -126,7 +121,7 @@ const useDashboardData = () => {
       description: 'Average response time exceeded 500ms threshold',
       timestamp: Date.now() - 180000,
       source: 'API Gateway',
-      status: 'active'
+      status: 'active',
     },
     {
       id: 'alert_003',
@@ -136,11 +131,10 @@ const useDashboardData = () => {
       description: 'Primary database connection pool at 98% capacity',
       timestamp: Date.now() - 120000,
       source: 'Database Monitor',
-      status: 'active'
+      status: 'active',
     }
   ]);
-
-  const [systemStatuses, setSystemStatuses] = useState<SystemStatus[]>([
+  const [systemStatuses, setSystemStatuses] = useState<SystemStatus[]>([)
     { name: 'Web Frontend', status: 'healthy', uptime: 0.999, last_check: Date.now(), response_time: 124 },
     { name: 'API Gateway', status: 'degraded', uptime: 0.995, last_check: Date.now(), response_time: 456 },
     { name: 'Auth Service', status: 'healthy', uptime: 0.998, last_check: Date.now(), response_time: 89 },
@@ -148,27 +142,24 @@ const useDashboardData = () => {
     { name: 'Cache Layer', status: 'healthy', uptime: 1.0, last_check: Date.now(), response_time: 12 },
     { name: 'Message Queue', status: 'offline', uptime: 0.0, last_check: Date.now() - 300000 }
   ]);
-
   // Simulate real-time updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setMetrics(prev => ({
+      setMetrics(prev => ({)
         ...prev,
-        performance: {
+        performance: {,
           ...prev.performance,
           requests_per_minute: prev.performance.requests_per_minute + Math.floor(Math.random() * 100 - 50),
           avg_response_time: Math.max(100, prev.performance.avg_response_time + Math.floor(Math.random() * 40 - 20))
         },
-        analytics: {
+        analytics: {,
           ...prev.analytics,
           active_users: Math.max(0, prev.analytics.active_users + Math.floor(Math.random() * 20 - 10))
         }
       }));
     }, 5000);
-
     return () => clearInterval(interval);
   }, []);
-
   return { metrics, alerts, systemStatuses };
 };
 
@@ -187,14 +178,12 @@ const MetricCard: React.FC<{
     warning: 'bg-yellow-50 border-yellow-200',
     critical: 'bg-red-50 border-red-200'
   };
-
   const trendIcons = {
     up: <TrendingUp className="w-4 h-4 text-green-500" />,
     down: <TrendingDown className="w-4 h-4 text-red-500" />,
     stable: <div className="w-4 h-4" />
   };
-
-  return (
+  return ()
     <div 
       className={`p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md ${statusColors[status]}`}
       onClick={onClick}
@@ -213,7 +202,6 @@ const MetricCard: React.FC<{
     </div>
   );
 };
-
 const AlertCard: React.FC<{ alert: AlertSummary; onAcknowledge: (id: string) => void }> = ({ alert, onAcknowledge }) => {
   const severityColors = {
     low: 'border-blue-300 bg-blue-50',
@@ -221,22 +209,19 @@ const AlertCard: React.FC<{ alert: AlertSummary; onAcknowledge: (id: string) => 
     high: 'border-orange-300 bg-orange-50',
     critical: 'border-red-300 bg-red-50'
   };
-
   const severityIcons = {
     low: <AlertCircle className="w-4 h-4 text-blue-600" />,
     medium: <AlertTriangle className="w-4 h-4 text-yellow-600" />,
     high: <AlertTriangle className="w-4 h-4 text-orange-600" />,
     critical: <XCircle className="w-4 h-4 text-red-600" />
   };
-
   const statusIcons = {
     active: <AlertCircle className="w-4 h-4 text-red-500" />,
     investigating: <Clock className="w-4 h-4 text-yellow-500" />,
     resolved: <CheckCircle className="w-4 h-4 text-green-500" />
   };
-
-  return (
-    <div className={`p-4 rounded-lg border-2 ${severityColors[alert.severity]}`}>
+  return ()
+    <div className={`p-4 rounded-lg border-2 ${severityColors[alert.severity]}`}>}
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center space-x-2">
           {severityIcons[alert.severity]}
@@ -254,7 +239,7 @@ const AlertCard: React.FC<{ alert: AlertSummary; onAcknowledge: (id: string) => 
         <span>{alert.source}</span>
         <span>{new Date(alert.timestamp).toLocaleTimeString()}</span>
       </div>
-      {alert.status === 'active' && (
+      {alert.status === 'active' && ()
         <button
           onClick={() => onAcknowledge(alert.id)}
           className="mt-2 w-full px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
@@ -265,26 +250,23 @@ const AlertCard: React.FC<{ alert: AlertSummary; onAcknowledge: (id: string) => 
     </div>
   );
 };
-
 const SystemStatusIndicator: React.FC<{ system: SystemStatus }> = ({ system }) => {
   const statusColors = {
     healthy: 'bg-green-500',
     degraded: 'bg-yellow-500',
     unhealthy: 'bg-orange-500',
-    offline: 'bg-red-500'
+    offline: 'bg-red-500',
   };
-
   const statusIcons = {
     healthy: <CheckCircle className="w-4 h-4 text-green-600" />,
     degraded: <AlertTriangle className="w-4 h-4 text-yellow-600" />,
     unhealthy: <AlertTriangle className="w-4 h-4 text-orange-600" />,
     offline: <XCircle className="w-4 h-4 text-red-600" />
   };
-
-  return (
+  return ()
     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
       <div className="flex items-center space-x-3">
-        <div className={`w-3 h-3 rounded-full ${statusColors[system.status]}`} />
+        <div className={`w-3 h-3 rounded-full ${statusColors[system.status]}`} />}
         {statusIcons[system.status]}
         <span className="font-medium text-gray-900">{system.name}</span>
       </div>
@@ -292,23 +274,21 @@ const SystemStatusIndicator: React.FC<{ system: SystemStatus }> = ({ system }) =
         <div className="text-sm font-medium text-gray-600">
           {(system.uptime * 100).toFixed(2)}% uptime
         </div>
-        {system.response_time && (
+        {system.response_time && ()
           <div className="text-xs text-gray-500">{system.response_time}ms</div>
         )}
-        {system.error_count && (
+        {system.error_count && ()
           <div className="text-xs text-red-500">{system.error_count} errors</div>
         )}
       </div>
     </div>
   );
 };
-
 const SimpleChart: React.FC<{ data: TimeSeriesData[]; height?: number }> = ({ data, height = 60 }) => {
   const maxValue = Math.max(...data.map(d => d.value));
   const minValue = Math.min(...data.map(d => d.value));
   const range = maxValue - minValue || 1;
-
-  return (
+  return ()
     <div className="relative" style={{ height }}>
       <svg className="w-full h-full">
         <polyline
@@ -318,7 +298,7 @@ const SimpleChart: React.FC<{ data: TimeSeriesData[]; height?: number }> = ({ da
           points={data.map((point, index) => {
             const x = (index / (data.length - 1)) * 100;
             const y = ((maxValue - point.value) / range) * 100;
-            return `${x}%,${y}%`;
+            return `${x}%,${y}%`;}
           }).join(' ')}
         />
       </svg>
@@ -331,34 +311,28 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
   const { metrics, alerts, systemStatuses } = useDashboardData();
   const [selectedTab, setSelectedTab] = useState<'overview' | 'security' | 'performance' | 'analytics' | 'infrastructure'>('overview');
   const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h' | '7d'>('1h');
-
   const handleAcknowledgeAlert = useCallback((alertId: string) => {
-    console.log(`Acknowledging alert: ${alertId}`);
+    console.log(`Acknowledging alert: ${alertId}`);}
     // Would send API request to acknowledge alert
   }, []);
-
   const criticalAlertsCount = useMemo(() => {
     return alerts.filter(alert => alert.severity === 'critical' && alert.status === 'active').length;
   }, [alerts]);
-
   const systemHealthPercentage = useMemo(() => {
     const healthyCount = systemStatuses.filter(s => s.status === 'healthy').length;
     return Math.round((healthyCount / systemStatuses.length) * 100);
   }, [systemStatuses]);
-
   // Generate sample time series data
   const generateTimeSeriesData = (baseValue: number, variance: number, points: number = 24): TimeSeriesData[] => {
-    return Array.from({ length: points }, (_, i) => ({
+    return Array.from({ length: points }, (_, i) => ({)
       timestamp: Date.now() - (points - i) * 60 * 60 * 1000,
       value: baseValue + (Math.random() - 0.5) * variance
     }));
   };
-
   const responseTimeData = generateTimeSeriesData(metrics.performance.avg_response_time, 100);
   const requestRateData = generateTimeSeriesData(metrics.performance.requests_per_minute, 300);
   const activeUsersData = generateTimeSeriesData(metrics.analytics.active_users, 500);
-
-  return (
+  return ()
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="mb-6">
@@ -381,9 +355,8 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
             </div>
           </div>
         </div>
-
         {/* Critical Alerts Banner */}
-        {criticalAlertsCount > 0 && (
+        {criticalAlertsCount > 0 && ()
           <div className="bg-red-100 border border-red-300 rounded-lg p-4 mb-4">
             <div className="flex items-center space-x-2">
               <AlertTriangle className="w-5 h-5 text-red-600" />
@@ -393,10 +366,9 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
             </div>
           </div>
         )}
-
         {/* Navigation Tabs */}
         <div className="flex space-x-1 bg-gray-200 p-1 rounded-lg">
-          {(['overview', 'security', 'performance', 'analytics', 'infrastructure'] as const).map((tab) => (
+          {(['overview', 'security', 'performance', 'analytics', 'infrastructure'] as const).map((tab) => ()
             <button
               key={tab}
               onClick={() => setSelectedTab(tab)}
@@ -411,9 +383,8 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
           ))}
         </div>
       </div>
-
       {/* Overview Tab */}
-      {selectedTab === 'overview' && (
+      {selectedTab === 'overview' && ()
         <div className="space-y-6">
           {/* Key Metrics Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -445,7 +416,6 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
               trend="up"
             />
           </div>
-
           {/* Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-lg shadow">
@@ -470,24 +440,22 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
               </div>
             </div>
           </div>
-
           {/* Alerts and System Status */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Recent Alerts */}
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="text-lg font-semibold mb-4">Recent Alerts</h3>
               <div className="space-y-3">
-                {alerts.slice(0, 5).map((alert) => (
+                {alerts.slice(0, 5).map((alert) => ()
                   <AlertCard key={alert.id} alert={alert} onAcknowledge={handleAcknowledgeAlert} />
                 ))}
               </div>
             </div>
-
             {/* System Status */}
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="text-lg font-semibold mb-4">System Status</h3>
               <div className="space-y-3">
-                {systemStatuses.map((system) => (
+                {systemStatuses.map((system) => ()
                   <SystemStatusIndicator key={system.name} system={system} />
                 ))}
               </div>
@@ -495,9 +463,8 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Security Tab */}
-      {selectedTab === 'security' && (
+      {selectedTab === 'security' && ()
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <MetricCard
@@ -523,7 +490,6 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
               icon={<Activity className="w-5 h-5 text-purple-600" />}
             />
           </div>
-
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-lg font-semibold mb-4">Security Events Timeline</h3>
             <div className="text-center py-8 text-gray-500">
@@ -532,9 +498,8 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Performance Tab */}
-      {selectedTab === 'performance' && (
+      {selectedTab === 'performance' && ()
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <MetricCard
@@ -561,7 +526,6 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
               icon={<Globe className="w-5 h-5 text-purple-600" />}
             />
           </div>
-
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-lg font-semibold mb-4">Performance Metrics</h3>
             <div className="text-center py-8 text-gray-500">
@@ -570,9 +534,8 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Analytics Tab */}
-      {selectedTab === 'analytics' && (
+      {selectedTab === 'analytics' && ()
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <MetricCard
@@ -596,7 +559,6 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
               icon={<Activity className="w-5 h-5 text-purple-600" />}
             />
           </div>
-
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-lg font-semibold mb-4">Analytics Overview</h3>
             <div className="text-center py-8 text-gray-500">
@@ -605,9 +567,8 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Infrastructure Tab */}
-      {selectedTab === 'infrastructure' && (
+      {selectedTab === 'infrastructure' && ()
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <MetricCard
@@ -635,7 +596,6 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
               status={metrics.infrastructure.storage_usage > 0.9 ? 'critical' : metrics.infrastructure.storage_usage > 0.75 ? 'warning' : 'good'}
             />
           </div>
-
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-lg font-semibold mb-4">Infrastructure Status</h3>
             <div className="text-center py-8 text-gray-500">

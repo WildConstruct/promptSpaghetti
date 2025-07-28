@@ -14,13 +14,13 @@ export interface ReproducibilityValidationReport {
     errors: ValidationError[];
     warnings: ValidationWarning[];
     suggestions: ValidationSuggestion[];
-    integrity: {
+    integrity: {,
         configurationValid: boolean;
         seedsValid: boolean;
         versionCompatible: boolean;
         checksumValid: boolean;
     };
-    performance: {
+    performance: {,
         estimatedReproductionTime: number;
         complexityScore: number;
         memoryRequirement: number;
@@ -51,7 +51,7 @@ export declare class ReproducibilityValidator {
     /**
      * Comprehensive validation of VFX export reproducibility
      */
-    validateReproducibility(
+    validateReproducibility()
       exportData: VFXExportFormat,
       options?: ReproducibilityValidationOptions
     ): ReproducibilityValidationReport;
@@ -70,7 +70,7 @@ export declare class ReproducibilityValidator {
     /**
      * Test actual reproduction by re-executing with exported data
      */
-    testReproduction(exportData: VFXExportFormat, originalGraph: {
+    testReproduction(exportData: VFXExportFormat, originalGraph: {)
         nodes: Node[];
         edges: Edge[];
     }): Promise<{

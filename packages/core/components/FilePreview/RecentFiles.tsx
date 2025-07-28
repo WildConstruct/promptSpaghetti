@@ -3,25 +3,20 @@
  * 
  * Provides quick access to recently opened projects with chronological ordering
  */
-
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { PSGFile, projectManager } from '../../projectManager';
-
 interface RecentFilesProps {
   /** Maximum number of recent files to display */
   limit?: number;
-  
   /** Callback when a file is clicked */
   onClick?: (file: PSGFile) => void;
-  
   /** Custom styling */
   style?: React.CSSProperties;
-  
   /** CSS class name */
   className?: string;
 }
 
-export const RecentFiles: React.FC<RecentFilesProps> = ({
+export const RecentFiles: React.FC<RecentFilesProps> = ({)
   limit = 10,
   onClick,
   style,
@@ -30,13 +25,11 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
   const [currentView, setCurrentView] = useState<'recent' | 'favorites'>('recent');
   const [recentFiles, setRecentFiles] = useState<PSGFile[]>([]);
   const [favoriteFiles, setFavoriteFiles] = useState<PSGFile[]>([]);
-
   // Load files from projectManager
   const loadFiles = useCallback(() => {
     try {
       const recent = projectManager.getRecentFiles(limit);
       const favorites = projectManager.getFavoriteFiles();
-      
       setRecentFiles(recent);
       setFavoriteFiles(favorites);
     } catch (error) {
@@ -45,35 +38,27 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
       setFavoriteFiles([]);
     }
   }, [limit]);
-
   // Load files on mount and when limit changes
   useEffect(() => {
     loadFiles();
   }, [loadFiles]);
-
   // Handle file click
   const handleFileClick = useCallback((file: PSGFile) => {
     // Add to recent files
     projectManager.addToRecentFiles(file);
-    
     // Reload files to update the list
     loadFiles();
-    
     // Call the onClick handler
     onClick?.(file);
   }, [onClick, loadFiles]);
-
   // Handle favorite toggle
   const handleToggleFavorite = useCallback((file: PSGFile) => {
     const newStatus = projectManager.toggleFavorite(file.id);
-    
     // Update the file's favorite status
     file.isFavorite = newStatus;
-    
     // Reload files to update the lists
     loadFiles();
   }, [loadFiles]);
-
   // Format file size
   const formatFileSize = useCallback((bytes: number): string => {
     if (bytes === 0) return '0 B';
@@ -82,7 +67,6 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }, []);
-
   // Format date
   const formatDate = useCallback((date: Date): string => {
     try {
@@ -91,13 +75,11 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
       return 'Invalid date';
     }
   }, []);
-
   // Get files to display based on current view
   const filesToDisplay = useMemo(() => {
     return currentView === 'recent' ? recentFiles : favoriteFiles;
   }, [currentView, recentFiles, favoriteFiles]);
-
-  return (
+  return ()
     <div className={className} style={style}>
       {/* View Toggle */}
       <div style={{
@@ -117,7 +99,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
             color: currentView === 'recent' ? 'white' : '#666',
             cursor: 'pointer',
             fontSize: '14px',
-            fontWeight: '500'
+            fontWeight: '500',
           }}
         >
           Recent
@@ -132,30 +114,29 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
             color: currentView === 'favorites' ? 'white' : '#666',
             cursor: 'pointer',
             fontSize: '14px',
-            fontWeight: '500'
+            fontWeight: '500',
           }}
         >
           Favorites
         </button>
       </div>
-
       {/* Files List */}
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '8px'
+        gap: '8px',
       }}>
-        {filesToDisplay.length === 0 ? (
+        {filesToDisplay.length === 0 ? ()
           <div style={{
             textAlign: 'center',
             padding: '32px 16px',
             color: '#999',
-            fontSize: '14px'
+            fontSize: '14px',
           }}>
             {currentView === 'recent' ? 'No recent files' : 'No favorite files'}
           </div>
-        ) : (
-          filesToDisplay.map((file) => (
+        ) : ()
+          filesToDisplay.map((file) => ()
             <div
               key={file.id}
               style={{
@@ -177,7 +158,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
                   display: 'flex',
                   alignItems: 'center',
                   gap: '12px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
                 onClick={() => handleFileClick(file)}
               >
@@ -190,34 +171,31 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
                     marginBottom: '4px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
                   }}>
                     {file.name}
                   </div>
-                  
                   <div style={{
                     fontSize: '12px',
                     color: '#666',
                     marginBottom: '4px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
                   }}>
                     {file.metadata.description || 'No description'}
                   </div>
-
                   <div style={{
                     fontSize: '11px',
                     color: '#999',
                     display: 'flex',
-                    gap: '12px'
+                    gap: '12px',
                   }}>
                     <span>{file.nodeCount} nodes</span>
                     <span>{formatFileSize(file.size)}</span>
                     <span>{formatDate(file.lastModified)}</span>
                   </div>
                 </div>
-
                 {/* Favorite Button */}
                 <button
                   onClick={(e) => {
@@ -230,7 +208,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
                     cursor: 'pointer',
                     padding: '4px',
                     color: projectManager.isFavorite(file.id) ? '#ffc107' : '#ccc',
-                    fontSize: '16px'
+                    fontSize: '16px',
                   }}
                   title={projectManager.isFavorite(file.id) ? 'Remove from favorites' : 'Add to favorites'}
                   aria-label={`${projectManager.isFavorite(file.id) ? 'Remove from' : 'Add to'} favorites`}
@@ -248,12 +226,11 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
 
 // Memoized component for performance
 const MemoizedRecentFiles = React.memo(RecentFiles, (prevProps, nextProps) => {
-  return (
+  return ()
     prevProps.limit === nextProps.limit &&
     prevProps.onClick === nextProps.onClick
   );
 });
-
 MemoizedRecentFiles.displayName = 'RecentFiles';
 
 export default MemoizedRecentFiles;

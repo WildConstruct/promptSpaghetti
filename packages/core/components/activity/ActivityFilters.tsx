@@ -2,10 +2,8 @@
  * Epic 9.2.3 - Activity Filters Component
  * Filter controls for activity feed
  */
-
 import React, { useState } from 'react';
 import { ActivityEventFilter } from '../../types/workspace';
-
 interface ActivityFiltersProps {
   filters: ActivityEventFilter;
   eventTypes: string[];
@@ -13,54 +11,47 @@ interface ActivityFiltersProps {
   className?: string;
 }
 
-export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
+export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
   filters,
   eventTypes,
   onFilterChange,
   className = ''
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [dateRange, setDateRange] = useState({
+  const [dateRange, setDateRange] = useState({)
     from: filters.from_date ? filters.from_date.toISOString().split('T')[0] : '',
     to: filters.to_date ? filters.to_date.toISOString().split('T')[0] : ''
   });
-
   const handleEventTypeChange = (eventType: string, checked: boolean) => {
     const currentTypes = filters.event_types || [];
-    const newTypes = checked
+    const newTypes = checked;
       ? [...currentTypes, eventType]
       : currentTypes.filter(t => t !== eventType);
-    
     onFilterChange({ event_types: newTypes.length > 0 ? newTypes : undefined });
   };
-
   const handleDateRangeChange = (field: 'from' | 'to', value: string) => {
     const newDateRange = { ...dateRange, [field]: value };
     setDateRange(newDateRange);
-
-    onFilterChange({
+    onFilterChange({)
       from_date: newDateRange.from ? new Date(newDateRange.from) : undefined,
       to_date: newDateRange.to ? new Date(newDateRange.to) : undefined
     });
   };
-
   const clearFilters = () => {
     setDateRange({ from: '', to: '' });
-    onFilterChange({
+    onFilterChange({)
       actor_id: undefined,
       event_types: undefined,
       from_date: undefined,
-      to_date: undefined
+      to_date: undefined,
     });
   };
-
-  const hasActiveFilters = !!(
+  const hasActiveFilters = !!(;)
     filters.actor_id ||
     (filters.event_types && filters.event_types.length > 0) ||
     filters.from_date ||
     filters.to_date
   );
-
   const eventTypeGroups = {
     workspace: eventTypes.filter(t => t.startsWith('workspace.')),
     project: eventTypes.filter(t => t.startsWith('project.')),
@@ -69,13 +60,12 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
     user: eventTypes.filter(t => t.startsWith('user.')),
     other: eventTypes.filter(t => !['workspace.', 'project.', 'resource.', 'comment.', 'user.'].some(prefix => t.startsWith(prefix)))
   };
-
-  return (
-    <div className={`activity-filters ${className}`}>
+  return ()
+    <div className={`activity-filters ${className}`}>}
       <div className="activity-filters__header">
         <h4>Filter Activity</h4>
         <div className="activity-filters__actions">
-          {hasActiveFilters && (
+          {hasActiveFilters && ()
             <button
               className="btn btn--ghost btn--small"
               onClick={clearFilters}
@@ -91,7 +81,6 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
           </button>
         </div>
       </div>
-
       <div className="activity-filters__content">
         {/* Quick Filters */}
         <div className="filter-group">
@@ -111,7 +100,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
             </button>
             <button
               className={`quick-filter ${filters.event_types?.some(t => t.includes('created')) ? 'quick-filter--active' : ''}`}
-              onClick={() => onFilterChange({ 
+              onClick={() => onFilterChange({ )
                 event_types: eventTypes.filter(t => t.includes('created'))
               })}
             >
@@ -119,7 +108,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
             </button>
             <button
               className={`quick-filter ${filters.event_types?.some(t => t.startsWith('user.')) ? 'quick-filter--active' : ''}`}
-              onClick={() => onFilterChange({ 
+              onClick={() => onFilterChange({ )
                 event_types: eventTypes.filter(t => t.startsWith('user.'))
               })}
             >
@@ -127,7 +116,6 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
             </button>
           </div>
         </div>
-
         {/* Date Range */}
         <div className="filter-group">
           <label className="filter-label">Date Range</label>
@@ -149,7 +137,6 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
             />
           </div>
         </div>
-
         {/* User Filter */}
         <div className="filter-group">
           <label className="filter-label">User</label>
@@ -161,22 +148,20 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
             className="form-input form-input--small"
           />
         </div>
-
         {/* Advanced Filters */}
-        {showAdvanced && (
+        {showAdvanced && ()
           <div className="filter-group filter-group--advanced">
             <label className="filter-label">Event Types</label>
             <div className="event-type-filters">
               {Object.entries(eventTypeGroups).map(([group, types]) => {
                 if (types.length === 0) return null;
-                
-                return (
+                return ()
                   <div key={group} className="event-type-group">
                     <h5 className="event-type-group__title">
                       {group.charAt(0).toUpperCase() + group.slice(1)} Events
                     </h5>
                     <div className="event-type-checkboxes">
-                      {types.map(eventType => (
+                      {types.map(eventType => ()
                         <label key={eventType} className="checkbox-label">
                           <input
                             type="checkbox"
@@ -196,32 +181,31 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
           </div>
         )}
       </div>
-
       {/* Active Filters Summary */}
-      {hasActiveFilters && (
+      {hasActiveFilters && ()
         <div className="activity-filters__summary">
           <div className="active-filters">
             <span className="active-filters__label">Active filters:</span>
             <div className="active-filters__tags">
-              {filters.actor_id && (
+              {filters.actor_id && ()
                 <span className="filter-tag">
                   User: {filters.actor_id}
                   <button onClick={() => onFilterChange({ actor_id: undefined })}>×</button>
                 </span>
               )}
-              {filters.event_types?.map(type => (
+              {filters.event_types?.map(type => ()
                 <span key={type} className="filter-tag">
                   {type.replace(/[._]/g, ' ')}
                   <button onClick={() => handleEventTypeChange(type, false)}>×</button>
                 </span>
               ))}
-              {filters.from_date && (
+              {filters.from_date && ()
                 <span className="filter-tag">
                   From: {filters.from_date.toLocaleDateString()}
                   <button onClick={() => handleDateRangeChange('from', '')}>×</button>
                 </span>
               )}
-              {filters.to_date && (
+              {filters.to_date && ()
                 <span className="filter-tag">
                   To: {filters.to_date.toLocaleDateString()}
                   <button onClick={() => handleDateRangeChange('to', '')}>×</button>

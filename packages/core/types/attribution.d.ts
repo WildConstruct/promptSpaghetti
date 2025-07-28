@@ -450,7 +450,7 @@ export declare const AttributionStatsRequestSchema: z.ZodObject<{
 }>;
 export declare const UpdatePrivacySettingsRequestSchema: z.ZodObject<{
     projectId: z.ZodString;
-    settings: z.ZodObject<Omit<{
+    settings: z.ZodObject<Omit<{,
         id: z.ZodString;
         projectId: z.ZodString;
         userId: z.ZodString;
@@ -490,7 +490,7 @@ export declare const UpdatePrivacySettingsRequestSchema: z.ZodObject<{
         autoAnonymizeAfterDays?: number | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
-    settings: {
+    settings: {,
         retentionDays: number;
         showInAttribution: boolean;
         showDetailedChanges: boolean;
@@ -504,7 +504,7 @@ export declare const UpdatePrivacySettingsRequestSchema: z.ZodObject<{
     };
     projectId: string;
 }, {
-    settings: {
+    settings: {,
         retentionDays?: number | undefined;
         showInAttribution?: boolean | undefined;
         showDetailedChanges?: boolean | undefined;
@@ -523,7 +523,7 @@ export type AttributionFilter = z.infer<typeof AttributionFilterSchema>;
 export type AttributionStatsRequest = z.infer<typeof AttributionStatsRequestSchema>;
 export type UpdatePrivacySettingsRequest = z.infer<typeof UpdatePrivacySettingsRequestSchema>;
 export declare const AttributionStatsResponseSchema: z.ZodObject<{
-    overview: z.ZodObject<{
+    overview: z.ZodObject<{,
         totalChanges: z.ZodNumber;
         uniqueAuthors: z.ZodNumber;
         activeSessions: z.ZodNumber;
@@ -545,7 +545,7 @@ export declare const AttributionStatsResponseSchema: z.ZodObject<{
         uniqueAuthors: number;
         anonymousChanges: number;
     }>;
-    byAuthor: z.ZodArray<z.ZodObject<{
+    byAuthor: z.ZodArray<z.ZodObject<{,
         authorId: z.ZodOptional<z.ZodString>;
         authorName: z.ZodOptional<z.ZodString>;
         authorType: z.ZodEnum<["user", "anonymous", "guest", "system", "api"]>;
@@ -578,7 +578,7 @@ export declare const AttributionStatsResponseSchema: z.ZodObject<{
     }>, "many">;
     byResourceType: z.ZodRecord<z.ZodString, z.ZodNumber>;
     byChangeType: z.ZodRecord<z.ZodString, z.ZodNumber>;
-    timeline: z.ZodOptional<z.ZodArray<z.ZodObject<{
+    timeline: z.ZodOptional<z.ZodArray<z.ZodObject<{,
         timestamp: z.ZodDate;
         changes: z.ZodNumber;
         authors: z.ZodNumber;
@@ -595,10 +595,10 @@ export declare const AttributionStatsResponseSchema: z.ZodObject<{
         authors: number;
     }>, "many">>;
     heatmap: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodNumber>>>;
-    collaboration: z.ZodOptional<z.ZodObject<{
+    collaboration: z.ZodOptional<z.ZodObject<{,
         totalCollaborativeSessions: z.ZodNumber;
         averageCollaboratorsPerSession: z.ZodNumber;
-        mostActiveCollaborations: z.ZodArray<z.ZodObject<{
+        mostActiveCollaborations: z.ZodArray<z.ZodObject<{,
             sessionId: z.ZodString;
             authors: z.ZodArray<z.ZodString, "many">;
             changes: z.ZodNumber;
@@ -617,7 +617,7 @@ export declare const AttributionStatsResponseSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         totalCollaborativeSessions: number;
         averageCollaboratorsPerSession: number;
-        mostActiveCollaborations: {
+        mostActiveCollaborations: {,
             duration: number;
             sessionId: string;
             changes: number;
@@ -626,7 +626,7 @@ export declare const AttributionStatsResponseSchema: z.ZodObject<{
     }, {
         totalCollaborativeSessions: number;
         averageCollaboratorsPerSession: number;
-        mostActiveCollaborations: {
+        mostActiveCollaborations: {,
             duration: number;
             sessionId: string;
             changes: number;
@@ -634,7 +634,7 @@ export declare const AttributionStatsResponseSchema: z.ZodObject<{
         }[];
     }>>;
 }, "strip", z.ZodTypeAny, {
-    overview: {
+    overview: {,
         activeSessions: number;
         totalChanges: number;
         collaborativeChanges: number;
@@ -642,7 +642,7 @@ export declare const AttributionStatsResponseSchema: z.ZodObject<{
         uniqueAuthors: number;
         anonymousChanges: number;
     };
-    byAuthor: {
+    byAuthor: {,
         resourceTypes: Record<string, number>;
         authorType: "system" | "user" | "anonymous" | "api" | "guest";
         totalChanges: number;
@@ -658,7 +658,7 @@ export declare const AttributionStatsResponseSchema: z.ZodObject<{
     collaboration?: {
         totalCollaborativeSessions: number;
         averageCollaboratorsPerSession: number;
-        mostActiveCollaborations: {
+        mostActiveCollaborations: {,
             duration: number;
             sessionId: string;
             changes: number;
@@ -673,7 +673,7 @@ export declare const AttributionStatsResponseSchema: z.ZodObject<{
     }[] | undefined;
     heatmap?: Record<string, Record<string, number>> | undefined;
 }, {
-    overview: {
+    overview: {,
         activeSessions: number;
         totalChanges: number;
         collaborativeChanges: number;
@@ -681,7 +681,7 @@ export declare const AttributionStatsResponseSchema: z.ZodObject<{
         uniqueAuthors: number;
         anonymousChanges: number;
     };
-    byAuthor: {
+    byAuthor: {,
         resourceTypes: Record<string, number>;
         authorType: "system" | "user" | "anonymous" | "api" | "guest";
         totalChanges: number;
@@ -697,7 +697,7 @@ export declare const AttributionStatsResponseSchema: z.ZodObject<{
     collaboration?: {
         totalCollaborativeSessions: number;
         averageCollaboratorsPerSession: number;
-        mostActiveCollaborations: {
+        mostActiveCollaborations: {,
             duration: number;
             sessionId: string;
             changes: number;
@@ -713,9 +713,9 @@ export declare const AttributionStatsResponseSchema: z.ZodObject<{
     heatmap?: Record<string, Record<string, number>> | undefined;
 }>;
 export declare const AttributionTimelineResponseSchema: z.ZodObject<{
-    timeline: z.ZodArray<z.ZodObject<{
+    timeline: z.ZodArray<z.ZodObject<{,
         timestamp: z.ZodDate;
-        changes: z.ZodArray<z.ZodObject<{
+        changes: z.ZodArray<z.ZodObject<{,
             id: z.ZodString;
             resourceType: z.ZodEnum<["node", "edge", "property", "position", "graph"]>;
             resourceId: z.ZodString;
@@ -748,7 +748,7 @@ export declare const AttributionTimelineResponseSchema: z.ZodObject<{
         }>, "many">;
     }, "strip", z.ZodTypeAny, {
         timestamp: Date;
-        changes: {
+        changes: {,
             id: string;
             changeType: "create" | "update" | "delete" | "move" | "property_change" | "connection_change";
             isCollaborative: boolean;
@@ -761,7 +761,7 @@ export declare const AttributionTimelineResponseSchema: z.ZodObject<{
         }[];
     }, {
         timestamp: Date;
-        changes: {
+        changes: {,
             id: string;
             changeType: "create" | "update" | "delete" | "move" | "property_change" | "connection_change";
             isCollaborative: boolean;
@@ -773,9 +773,9 @@ export declare const AttributionTimelineResponseSchema: z.ZodObject<{
             changeDescription?: string | undefined;
         }[];
     }>, "many">;
-    summary: z.ZodObject<{
+    summary: z.ZodObject<{,
         totalChanges: z.ZodNumber;
-        dateRange: z.ZodObject<{
+        dateRange: z.ZodObject<{,
             start: z.ZodDate;
             end: z.ZodDate;
         }, "strip", z.ZodTypeAny, {
@@ -785,7 +785,7 @@ export declare const AttributionTimelineResponseSchema: z.ZodObject<{
             start: Date;
             end: Date;
         }>;
-        mostActiveAuthor: z.ZodOptional<z.ZodObject<{
+        mostActiveAuthor: z.ZodOptional<z.ZodObject<{,
             authorId: z.ZodOptional<z.ZodString>;
             authorName: z.ZodOptional<z.ZodString>;
             changes: z.ZodNumber;
@@ -798,7 +798,7 @@ export declare const AttributionTimelineResponseSchema: z.ZodObject<{
             authorId?: string | undefined;
             authorName?: string | undefined;
         }>>;
-        mostActiveResource: z.ZodOptional<z.ZodObject<{
+        mostActiveResource: z.ZodOptional<z.ZodObject<{,
             resourceType: z.ZodEnum<["node", "edge", "property", "position", "graph"]>;
             resourceId: z.ZodString;
             changes: z.ZodNumber;
@@ -812,7 +812,7 @@ export declare const AttributionTimelineResponseSchema: z.ZodObject<{
             changes: number;
         }>>;
     }, "strip", z.ZodTypeAny, {
-        dateRange: {
+        dateRange: {,
             start: Date;
             end: Date;
         };
@@ -828,7 +828,7 @@ export declare const AttributionTimelineResponseSchema: z.ZodObject<{
             changes: number;
         } | undefined;
     }, {
-        dateRange: {
+        dateRange: {,
             start: Date;
             end: Date;
         };
@@ -845,8 +845,8 @@ export declare const AttributionTimelineResponseSchema: z.ZodObject<{
         } | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
-    summary: {
-        dateRange: {
+    summary: {,
+        dateRange: {,
             start: Date;
             end: Date;
         };
@@ -862,9 +862,9 @@ export declare const AttributionTimelineResponseSchema: z.ZodObject<{
             changes: number;
         } | undefined;
     };
-    timeline: {
+    timeline: {,
         timestamp: Date;
-        changes: {
+        changes: {,
             id: string;
             changeType: "create" | "update" | "delete" | "move" | "property_change" | "connection_change";
             isCollaborative: boolean;
@@ -877,8 +877,8 @@ export declare const AttributionTimelineResponseSchema: z.ZodObject<{
         }[];
     }[];
 }, {
-    summary: {
-        dateRange: {
+    summary: {,
+        dateRange: {,
             start: Date;
             end: Date;
         };
@@ -894,9 +894,9 @@ export declare const AttributionTimelineResponseSchema: z.ZodObject<{
             changes: number;
         } | undefined;
     };
-    timeline: {
+    timeline: {,
         timestamp: Date;
-        changes: {
+        changes: {,
             id: string;
             changeType: "create" | "update" | "delete" | "move" | "property_change" | "connection_change";
             isCollaborative: boolean;
@@ -910,14 +910,14 @@ export declare const AttributionTimelineResponseSchema: z.ZodObject<{
     }[];
 }>;
 export declare const ContributorStatsResponseSchema: z.ZodObject<{
-    contributors: z.ZodArray<z.ZodObject<{
+    contributors: z.ZodArray<z.ZodObject<{,
         authorId: z.ZodOptional<z.ZodString>;
         authorName: z.ZodOptional<z.ZodString>;
         authorType: z.ZodEnum<["user", "anonymous", "guest", "system", "api"]>;
         totalChanges: z.ZodNumber;
         firstContribution: z.ZodDate;
         lastContribution: z.ZodDate;
-        activePeriods: z.ZodArray<z.ZodObject<{
+        activePeriods: z.ZodArray<z.ZodObject<{,
             period: z.ZodDate;
             changes: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
@@ -927,7 +927,7 @@ export declare const ContributorStatsResponseSchema: z.ZodObject<{
             period: Date;
             changes: number;
         }>, "many">;
-        expertise: z.ZodArray<z.ZodObject<{
+        expertise: z.ZodArray<z.ZodObject<{,
             resourceType: z.ZodEnum<["node", "edge", "property", "position", "graph"]>;
             changes: z.ZodNumber;
             percentage: z.ZodNumber;
@@ -940,7 +940,7 @@ export declare const ContributorStatsResponseSchema: z.ZodObject<{
             percentage: number;
             changes: number;
         }>, "many">;
-        collaborations: z.ZodArray<z.ZodObject<{
+        collaborations: z.ZodArray<z.ZodObject<{,
             sessionId: z.ZodString;
             collaborators: z.ZodArray<z.ZodString, "many">;
             changes: z.ZodNumber;
@@ -957,12 +957,12 @@ export declare const ContributorStatsResponseSchema: z.ZodObject<{
             collaborators: string[];
         }>, "many">;
     }, "strip", z.ZodTypeAny, {
-        expertise: {
+        expertise: {,
             resourceType: "position" | "graph" | "node" | "property" | "edge";
             percentage: number;
             changes: number;
         }[];
-        collaborations: {
+        collaborations: {,
             duration: number;
             sessionId: string;
             changes: number;
@@ -972,19 +972,19 @@ export declare const ContributorStatsResponseSchema: z.ZodObject<{
         totalChanges: number;
         firstContribution: Date;
         lastContribution: Date;
-        activePeriods: {
+        activePeriods: {,
             period: Date;
             changes: number;
         }[];
         authorId?: string | undefined;
         authorName?: string | undefined;
     }, {
-        expertise: {
+        expertise: {,
             resourceType: "position" | "graph" | "node" | "property" | "edge";
             percentage: number;
             changes: number;
         }[];
-        collaborations: {
+        collaborations: {,
             duration: number;
             sessionId: string;
             changes: number;
@@ -994,20 +994,20 @@ export declare const ContributorStatsResponseSchema: z.ZodObject<{
         totalChanges: number;
         firstContribution: Date;
         lastContribution: Date;
-        activePeriods: {
+        activePeriods: {,
             period: Date;
             changes: number;
         }[];
         authorId?: string | undefined;
         authorName?: string | undefined;
     }>, "many">;
-    summary: z.ZodObject<{
+    summary: z.ZodObject<{,
         totalContributors: z.ZodNumber;
         activeContributors: z.ZodNumber;
         newContributors: z.ZodNumber;
         returningContributors: z.ZodNumber;
         averageContributionsPerUser: z.ZodNumber;
-        mostActiveContributor: z.ZodOptional<z.ZodObject<{
+        mostActiveContributor: z.ZodOptional<z.ZodObject<{,
             authorId: z.ZodOptional<z.ZodString>;
             authorName: z.ZodOptional<z.ZodString>;
             changes: z.ZodNumber;
@@ -1044,7 +1044,7 @@ export declare const ContributorStatsResponseSchema: z.ZodObject<{
         } | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
-    summary: {
+    summary: {,
         totalContributors: number;
         activeContributors: number;
         newContributors: number;
@@ -1056,13 +1056,13 @@ export declare const ContributorStatsResponseSchema: z.ZodObject<{
             authorName?: string | undefined;
         } | undefined;
     };
-    contributors: {
-        expertise: {
+    contributors: {,
+        expertise: {,
             resourceType: "position" | "graph" | "node" | "property" | "edge";
             percentage: number;
             changes: number;
         }[];
-        collaborations: {
+        collaborations: {,
             duration: number;
             sessionId: string;
             changes: number;
@@ -1072,7 +1072,7 @@ export declare const ContributorStatsResponseSchema: z.ZodObject<{
         totalChanges: number;
         firstContribution: Date;
         lastContribution: Date;
-        activePeriods: {
+        activePeriods: {,
             period: Date;
             changes: number;
         }[];
@@ -1080,7 +1080,7 @@ export declare const ContributorStatsResponseSchema: z.ZodObject<{
         authorName?: string | undefined;
     }[];
 }, {
-    summary: {
+    summary: {,
         totalContributors: number;
         activeContributors: number;
         newContributors: number;
@@ -1092,13 +1092,13 @@ export declare const ContributorStatsResponseSchema: z.ZodObject<{
             authorName?: string | undefined;
         } | undefined;
     };
-    contributors: {
-        expertise: {
+    contributors: {,
+        expertise: {,
             resourceType: "position" | "graph" | "node" | "property" | "edge";
             percentage: number;
             changes: number;
         }[];
-        collaborations: {
+        collaborations: {,
             duration: number;
             sessionId: string;
             changes: number;
@@ -1108,7 +1108,7 @@ export declare const ContributorStatsResponseSchema: z.ZodObject<{
         totalChanges: number;
         firstContribution: Date;
         lastContribution: Date;
-        activePeriods: {
+        activePeriods: {,
             period: Date;
             changes: number;
         }[];
@@ -1146,9 +1146,9 @@ export interface ChangeEvent {
 export interface AttributionVisualization {
     type: 'timeline' | 'heatmap' | 'contributor_chart' | 'collaboration_graph';
     data: any;
-    metadata: {
+    metadata: {,
         generatedAt: Date;
-        dateRange: {
+        dateRange: {,
             start: Date;
             end: Date;
         };
@@ -1160,14 +1160,14 @@ export interface CollaborationMetrics {
     totalSessions: number;
     averageSessionDuration: number;
     averageCollaboratorsPerSession: number;
-    mostActiveCollaborations: Array<{
+    mostActiveCollaborations: Array<{,
         sessionId: string;
         authors: string[];
         changes: number;
         duration: number;
         efficiency: number;
     }>;
-    collaborationPatterns: {
+    collaborationPatterns: {,
         byTimeOfDay: Record<string, number>;
         byDayOfWeek: Record<string, number>;
         byResourceType: Record<string, number>;

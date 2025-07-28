@@ -4,7 +4,6 @@
  * 
  * Provides standardized loading states with optional overlay
  */
-
 import React from 'react';
 import { Loader2 } from 'lucide-react';
 import './LoadingState.css';
@@ -17,7 +16,7 @@ export interface LoadingStateProps {
   className?: string;
 }
 
-export const LoadingState: React.FC<LoadingStateProps> = ({
+export const LoadingState: React.FC<LoadingStateProps> = ({)
   message = 'Loading...',
   size = 'medium',
   overlay = false,
@@ -29,16 +28,14 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
     medium: { spinner: 24, fontSize: '16px', padding: '24px' },
     large: { spinner: 32, fontSize: '18px', padding: '32px' }
   };
-
   const config = sizeConfig[size];
-
-  const content = (
+  const content = (;)
     <div 
       className={`loading-state ${overlay ? 'overlay' : ''} ${className}`}
       style={{ padding: config.padding }}
     >
       <div className="loading-content">
-        {showSpinner && (
+        {showSpinner && ()
           <Loader2 
             size={config.spinner} 
             className="loading-spinner"
@@ -53,8 +50,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
       </div>
     </div>
   );
-
-  return overlay ? (
+  return overlay ? ()
     <div className="loading-overlay">
       {content}
     </div>

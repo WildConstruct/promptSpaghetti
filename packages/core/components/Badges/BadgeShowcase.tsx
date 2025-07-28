@@ -3,7 +3,6 @@
  * 
  * Comprehensive badge and achievement display system for Wild Construct creators
  */
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -37,7 +36,7 @@ export interface BadgeShowcaseProps {
   className?: string;
 }
 
-export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
+export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
   userId,
   variant = 'full',
   showProgressBars = true,
@@ -58,19 +57,16 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
     clearAllNotifications,
     hasUnreadNotifications,
     isLoading
-  } = useBadgeSystem({ 
+  } = useBadgeSystem({ )
     userId, 
     autoCheckBadges: true, 
     enableNotifications 
   });
-
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedTier, setSelectedTier] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'date' | 'rarity' | 'points'>('date');
-
   const statistics = getStatistics();
   const leaderboardPosition = getLeaderboardPosition();
-
   const getBadgeIcon = (iconString: string) => {
     // Map emoji strings to React icons for consistency
     const iconMap: Record<string, React.ReactNode> = {
@@ -89,10 +85,8 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
       '🎯': <Target className="w-4 h-4" />,
       '👑': <Crown className="w-4 h-4" />
     };
-
     return iconMap[iconString] || <Award className="w-4 h-4" />;
   };
-
   const getTierColor = (tier: string) => {
     switch (tier) {
     case 'diamond': return 'tier-diamond';
@@ -103,7 +97,6 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
     default: return 'tier-bronze';
     }
   };
-
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
     case 'legendary': return 'rarity-legendary';
@@ -114,8 +107,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
     default: return 'rarity-common';
     }
   };
-
-  const renderOverview = () => (
+  const renderOverview = () => (;)
     <div className="badge-overview">
       <div className="overview-stats">
         <Card className="stat-card level-card">
@@ -129,7 +121,6 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
             </div>
           </CardContent>
         </Card>
-
         <Card className="stat-card points-card">
           <CardContent className="stat-content">
             <div className="stat-icon">
@@ -141,7 +132,6 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
             </div>
           </CardContent>
         </Card>
-
         <Card className="stat-card badges-card">
           <CardContent className="stat-content">
             <div className="stat-icon">
@@ -153,7 +143,6 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
             </div>
           </CardContent>
         </Card>
-
         <Card className="stat-card completion-card">
           <CardContent className="stat-content">
             <div className="stat-icon">
@@ -166,8 +155,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
           </CardContent>
         </Card>
       </div>
-
-      {leaderboardPosition > 0 && (
+      {leaderboardPosition > 0 && ()
         <Card className="leaderboard-position">
           <CardHeader>
             <CardTitle className="position-title">
@@ -183,8 +171,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
           </CardContent>
         </Card>
       )}
-
-      {statistics && statistics.experience > 0 && (
+      {statistics && statistics.experience > 0 && ()
         <Card className="experience-progress">
           <CardHeader>
             <CardTitle>Level Progress</CardTitle>
@@ -205,34 +192,30 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
       )}
     </div>
   );
-
-  const renderBadgeGrid = (badges: unknown[]) => (
+  const renderBadgeGrid = (badges: unknown[]) => (;)
     <div className="badge-grid">
       {badges.map((badge, index) => {
         const isUnlocked = userBadges.some(ub => ub.badgeId === badge.id);
         const progress = getBadgeProgress(badge.id);
-        
-        return (
-          <Card key={badge.id} className={`badge-card ${isUnlocked ? 'unlocked' : 'locked'} ${getTierColor(badge.tier)}`}>
+        return ()
+          <Card key={badge.id} className={`badge-card ${isUnlocked ? 'unlocked' : 'locked'} ${getTierColor(badge.tier)}`}>}
             <CardContent className="badge-content">
               <div className="badge-header">
-                <div className={`badge-icon ${getRarityColor(badge.rarity)}`}>
+                <div className={`badge-icon ${getRarityColor(badge.rarity)}`}>}
                   {getBadgeIcon(badge.icon)}
                 </div>
                 <div className="badge-tier">
-                  <Badge variant="secondary" className={`tier-badge ${getTierColor(badge.tier)}`}>
+                  <Badge variant="secondary" className={`tier-badge ${getTierColor(badge.tier)}`}>}
                     {badge.tier.toUpperCase()}
                   </Badge>
                 </div>
               </div>
-              
               <div className="badge-info">
                 <div className="badge-name">{badge.name}</div>
                 <div className="badge-description">{badge.description}</div>
                 <div className="badge-points">{badge.points} points</div>
               </div>
-
-              {!isUnlocked && showProgressBars && progress > 0 && (
+              {!isUnlocked && showProgressBars && progress > 0 && ()
                 <div className="badge-progress">
                   <div className="progress-info">
                     <span>Progress</span>
@@ -241,25 +224,23 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
                   <Progress value={progress} className="badge-progress-bar" />
                 </div>
               )}
-
-              {!isUnlocked && (
+              {!isUnlocked && ()
                 <div className="badge-requirements">
                   <div className="requirements-title">Requirements:</div>
                   <ul className="requirements-list">
-                    {badge.requirements.map((req: string, i: number) => (
+                    {badge.requirements.map((req: string, i: number) => ()
                       <li key={i}>{req}</li>
                     ))}
                   </ul>
                 </div>
               )}
-
-              {isUnlocked && (
+              {isUnlocked && ()
                 <div className="badge-unlocked">
                   <div className="unlock-indicator">
                     <Award className="w-4 h-4 text-green-500" />
                     <span>Unlocked</span>
                   </div>
-                  {userBadges.find(ub => ub.badgeId === badge.id) && (
+                  {userBadges.find(ub => ub.badgeId === badge.id) && ()
                     <div className="unlock-date">
                       {new Date(userBadges.find(ub => ub.badgeId === badge.id)!.unlockedAt).toLocaleDateString()}
                     </div>
@@ -272,11 +253,9 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
       })}
     </div>
   );
-
   const renderNotifications = () => {
     if (recentUnlocks.length === 0) return null;
-
-    return (
+    return ()
       <Card className="badge-notifications">
         <CardHeader>
           <div className="notifications-header">
@@ -298,8 +277,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
             {recentUnlocks.map((unlock, index) => {
               const badge = availableBadges.find(b => b.id === unlock.badgeId);
               if (!badge) return null;
-
-              return (
+              return ()
                 <div key={index} className="notification-item">
                   <div className="notification-content">
                     <div className="notification-badge">
@@ -310,7 +288,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
                       <div className="notification-badge-name">{badge.name}</div>
                       <div className="notification-points">+{badge.points} points</div>
                     </div>
-                    {unlock.isLevelUp && (
+                    {unlock.isLevelUp && ()
                       <div className="level-up-indicator">
                         <Crown className="w-4 h-4" />
                         <span>Level {unlock.newLevel}!</span>
@@ -332,13 +310,10 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
       </Card>
     );
   };
-
   const renderNextBadges = () => {
     const nextBadges = getNextBadges(6);
-    
     if (nextBadges.length === 0) return null;
-
-    return (
+    return ()
       <Card className="next-badges">
         <CardHeader>
           <CardTitle>
@@ -348,7 +323,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
         </CardHeader>
         <CardContent>
           <div className="next-badges-grid">
-            {nextBadges.map(badge => (
+            {nextBadges.map(badge => ()
               <div key={badge.id} className="next-badge-item">
                 <div className="next-badge-icon">
                   {getBadgeIcon(badge.icon)}
@@ -367,25 +342,20 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
       </Card>
     );
   };
-
   const getFilteredBadges = () => {
     let filtered = availableBadges;
-
     if (selectedCategory !== 'all') {
       filtered = getBadgesByCategory(selectedCategory as any);
     }
-
     if (selectedTier !== 'all') {
       filtered = filtered.filter(badge => badge.tier === selectedTier);
     }
-
     // Sort badges
     switch (sortBy) {
     case 'date':
       filtered = [...filtered].sort((a, b) => {
         const aUnlocked = userBadges.find(ub => ub.badgeId === a.id);
         const bUnlocked = userBadges.find(ub => ub.badgeId === b.id);
-          
         if (aUnlocked && bUnlocked) {
           return bUnlocked.unlockedAt - aUnlocked.unlockedAt;
         }
@@ -405,22 +375,19 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
       );
       break;
     }
-
     return filtered;
   };
-
   if (isLoading) {
-    return (
+    return ()
       <div className="badge-showcase loading">
         <div className="loading-spinner"></div>
         <p>Loading badges...</p>
       </div>
     );
   }
-
   if (variant === 'minimal') {
-    return (
-      <div className={`badge-showcase minimal ${className}`}>
+    return ()
+      <div className={`badge-showcase minimal ${className}`}>}
         <div className="minimal-stats">
           <div className="mini-stat">
             <Award className="w-4 h-4" />
@@ -438,10 +405,9 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
       </div>
     );
   }
-
   if (variant === 'compact') {
-    return (
-      <div className={`badge-showcase compact ${className}`}>
+    return ()
+      <div className={`badge-showcase compact ${className}`}>}
         <Card>
           <CardHeader>
             <CardTitle>Achievement Progress</CardTitle>
@@ -462,13 +428,11 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
                   <span className="stat-value">{statistics?.totalPoints || 0}</span>
                 </div>
               </div>
-              
               <div className="recent-badges">
-                {userBadges.slice(0, 5).map(badge => {
+                {userBadges.slice(0, 5).map(badge => {)
                   const badgeData = availableBadges.find(b => b.id === badge.badgeId);
                   if (!badgeData) return null;
-                  
-                  return (
+                  return ()
                     <div key={badge.badgeId} className="recent-badge-mini">
                       {getBadgeIcon(badgeData.icon)}
                     </div>
@@ -481,16 +445,13 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`badge-showcase full ${className}`}>
+  return ()
+    <div className={`badge-showcase full ${className}`}>}
       <div className="showcase-header">
         <h2>Badges & Achievements</h2>
         <p>Track your progress and unlock rewards as you grow in the Wild Construct community.</p>
       </div>
-
       {hasUnreadNotifications && renderNotifications()}
-
       <Tabs defaultValue="overview" className="showcase-tabs">
         <TabsList className="grid grid-cols-4 w-full">
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -498,18 +459,16 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
           <TabsTrigger value="available">Available ({availableBadges.length})</TabsTrigger>
           <TabsTrigger value="progress">Progress</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview" className="tab-content">
           {renderOverview()}
         </TabsContent>
-
         <TabsContent value="earned" className="tab-content">
           <div className="earned-content">
-            {userBadges.length > 0 ? (
-              renderBadgeGrid(availableBadges.filter(badge => 
+            {userBadges.length > 0 ? ()
+              renderBadgeGrid(availableBadges.filter(badge => )
                 userBadges.some(ub => ub.badgeId === badge.id)
               ))
-            ) : (
+            ) : ()
               <div className="empty-state">
                 <Award className="w-12 h-12 text-gray-400" />
                 <h3>No badges yet</h3>
@@ -518,7 +477,6 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
             )}
           </div>
         </TabsContent>
-
         <TabsContent value="available" className="tab-content">
           <div className="available-content">
             <div className="filters">
@@ -537,7 +495,6 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
                   <SelectItem value="special">Special</SelectItem>
                 </SelectContent>
               </Select>
-
               <Select value={selectedTier} onValueChange={setSelectedTier}>
                 <SelectTrigger className="w-48">
                   <SelectValue placeholder="All Tiers" />
@@ -551,7 +508,6 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
                   <SelectItem value="diamond">Diamond</SelectItem>
                 </SelectContent>
               </Select>
-
               <Select value={sortBy} onValueChange={(value: Error) => setSortBy(value)}>
                 <SelectTrigger className="w-48">
                   <SelectValue placeholder="Sort by" />
@@ -563,21 +519,18 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
                 </SelectContent>
               </Select>
             </div>
-            
             {renderBadgeGrid(getFilteredBadges())}
           </div>
         </TabsContent>
-
         <TabsContent value="progress" className="tab-content">
           <div className="progress-content">
             {renderNextBadges()}
-            
             <Card className="statistics-card">
               <CardHeader>
                 <CardTitle>Your Statistics</CardTitle>
               </CardHeader>
               <CardContent>
-                {statistics && (
+                {statistics && ()
                   <div className="stats-grid">
                     <div className="stat-item">
                       <span className="stat-label">Templates Created</span>
@@ -610,116 +563,95 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
           </div>
         </TabsContent>
       </Tabs>
-
       <style>{`
         .badge-showcase {
           max-width: 1200px;
           margin: 0 auto;
           padding: 1rem;
         }
-
         .showcase-header {
           text-align: center;
           margin-bottom: 2rem;
         }
-
         .showcase-header h2 {
           font-size: 1.875rem;
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 0.5rem;
         }
-
         .showcase-header p {
           color: #6b7280;
           font-size: 1.125rem;
         }
-
         .badge-overview {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .overview-stats {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 1rem;
         }
-
         .stat-card {
           transition: transform 0.2s ease;
         }
-
         .stat-card:hover {
           transform: translateY(-2px);
         }
-
         .stat-content {
           display: flex;
           align-items: center;
           gap: 1rem;
           padding: 1.5rem;
         }
-
         .stat-icon {
           flex-shrink: 0;
         }
-
         .stat-info {
           flex: 1;
         }
-
         .stat-value {
           font-size: 1.75rem;
           font-weight: 700;
           color: #1f2937;
         }
-
         .stat-label {
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .badge-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 1rem;
         }
-
         .badge-card {
           position: relative;
           transition: all 0.2s ease;
           border-left: 4px solid transparent;
         }
-
         .badge-card.unlocked {
           background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
           border-left-color: #10b981;
         }
-
         .badge-card.locked {
           background: #f9fafb;
           border-left-color: #e5e7eb;
           opacity: 0.8;
         }
-
         .badge-card:hover {
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
         .badge-content {
           padding: 1.5rem;
         }
-
         .badge-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 1rem;
         }
-
         .badge-icon {
           width: 3rem;
           height: 3rem;
@@ -730,61 +662,51 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
           background: linear-gradient(135deg, #3b82f6, #1d4ed8);
           color: white;
         }
-
         .badge-info {
           margin-bottom: 1rem;
         }
-
         .badge-name {
           font-size: 1.125rem;
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 0.5rem;
         }
-
         .badge-description {
           font-size: 0.875rem;
           color: #6b7280;
           margin-bottom: 0.5rem;
         }
-
         .badge-points {
           font-size: 0.75rem;
           font-weight: 600;
           color: #059669;
         }
-
         .tier-diamond { border-left-color: #a855f7; }
         .tier-platinum { border-left-color: #06b6d4; }
         .tier-gold { border-left-color: #f59e0b; }
         .tier-silver { border-left-color: #6b7280; }
         .tier-bronze { border-left-color: #92400e; }
-
         .rarity-legendary { background: linear-gradient(135deg, #7c3aed, #a855f7); }
         .rarity-epic { background: linear-gradient(135deg, #2563eb, #3b82f6); }
         .rarity-rare { background: linear-gradient(135deg, #059669, #10b981); }
         .rarity-uncommon { background: linear-gradient(135deg, #d97706, #f59e0b); }
         .rarity-common { background: linear-gradient(135deg, #6b7280, #9ca3af); }
-
         .filters {
           display: flex;
           gap: 1rem;
           margin-bottom: 1.5rem;
           flex-wrap: wrap;
         }
-
         .empty-state {
           text-align: center;
           padding: 3rem;
           color: #6b7280;
         }
-
         .empty-state h3 {
           font-size: 1.25rem;
           font-weight: 600;
           margin: 1rem 0 0.5rem;
         }
-
         .loading {
           display: flex;
           flex-direction: column;
@@ -792,7 +714,6 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
           padding: 4rem;
           gap: 1rem;
         }
-
         .loading-spinner {
           width: 2rem;
           height: 2rem;
@@ -801,23 +722,19 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
           border-radius: 50%;
           animation: spin 1s linear infinite;
         }
-
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-
         /* Compact and minimal variants */
         .minimal {
           padding: 0.5rem;
         }
-
         .minimal-stats {
           display: flex;
           gap: 1rem;
           align-items: center;
         }
-
         .mini-stat {
           display: flex;
           align-items: center;
@@ -825,30 +742,25 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .compact .compact-overview {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-
         .compact-stats {
           display: flex;
           gap: 1rem;
         }
-
         .compact-stat {
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 0.25rem;
         }
-
         .recent-badges {
           display: flex;
           gap: 0.5rem;
         }
-
         .recent-badge-mini {
           width: 2rem;
           height: 2rem;
@@ -859,16 +771,13 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
           align-items: center;
           justify-content: center;
         }
-
         @media (max-width: 768px) {
           .badge-grid {
             grid-template-columns: 1fr;
           }
-
           .overview-stats {
             grid-template-columns: repeat(2, 1fr);
           }
-
           .filters {
             flex-direction: column;
           }

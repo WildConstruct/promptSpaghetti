@@ -34,7 +34,7 @@ export interface GeminiGenerationResult {
         category: string;
         probability: string;
     }>;
-    metadata: {
+    metadata: {,
         model: string;
         temperature: number;
         tokenCount: number;
@@ -77,7 +77,7 @@ export declare const defaultGeminiConfig: GeminiAgentConfig;
 /**
  * Utility function to create and use Gemini agent
  */
-export declare function generateGraphWithGemini(
+export declare function generateGraphWithGemini()
   request: GeminiGenerationRequest,
   config?: Partial<GeminiAgentConfig>
 ): Promise<GeminiGenerationResult>;

@@ -1,6 +1,5 @@
 // packages/core/components/Modal/SettingsModal.tsx
 // Advanced Settings Modal for Epic 7.3
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Modal } from './Modal';
 import { getSettingsManager, SettingsManager } from '../../settings/SettingsManager';
@@ -31,19 +30,19 @@ import { uiColors } from '../../styles/professional-design-system';
 // Enhanced color palette for better UI consistency
 const uiColors = {
   ...uiColors,
-  accent: {
+  accent: {,
     ...uiColors.accent,
     primary: uiColors.accent.orange,
-    secondary: uiColors.accent.blue
+    secondary: uiColors.accent.blue,
   },
-  ui: {
+  ui: {,
     ...uiColors.ui,
     selected: '#353535',
-    disabled: '#6b7280'
+    disabled: '#6b7280',
   },
-  text: {
+  text: {,
     ...uiColors.text,
-    disabled: '#6b7280'
+    disabled: '#6b7280',
   }
 };
 
@@ -52,11 +51,10 @@ export interface SettingsModalProps {
   onClose: () => void;
   onSettingsChange?: (settings: AdvancedSettings) => void;
 }
-
 /**
  * Settings group configuration for UI organization
  */
-const SETTINGS_GROUPS = [
+const SETTINGS_GROUPS = [;
   {
     id: 'execution',
     name: 'Execution Settings',
@@ -69,28 +67,27 @@ const SETTINGS_GROUPS = [
     name: 'Batch Processing',
     description: 'Configure batch execution and output options',
     icon: FiPackage,
-    sections: ['batch']
+    sections: ['batch'],
   },
   {
     id: 'performance',
     name: 'Performance & Debug',
     description: 'Performance monitoring and debugging tools',
     icon: FiMonitor,
-    sections: ['performance']
+    sections: ['performance'],
   },
   {
     id: 'interface',
     name: 'Interface & Accessibility',
     description: 'UI preferences and accessibility options',
     icon: FiEye,
-    sections: ['ui']
+    sections: ['ui'],
   }
 ];
-
 /**
  * Advanced Settings Modal Component
  */
-export const SettingsModal: React.FC<SettingsModalProps> = ({
+export const SettingsModal: React.FC<SettingsModalProps> = ({)
   isOpen,
   onClose,
   onSettingsChange
@@ -100,22 +97,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [activeGroup, setActiveGroup] = useState<string>('execution');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
-
   // Listen for settings changes
   useEffect(() => {
     const unsubscribe = settingsManager.addChangeListener((event: SettingsChangeEvent) => {
       setSettings(settingsManager.getSettings());
       onSettingsChange?.(settingsManager.getSettings());
-      
       if (event.source === 'user') {
         setHasUnsavedChanges(true);
         setSaveStatus('idle');
       }
     });
-
     return unsubscribe;
   }, [settingsManager, onSettingsChange]);
-
   // Handle settings update
   const handleSettingsUpdate = useCallback((updates: Partial<AdvancedSettings>) => {
     const result = settingsManager.updateSettings(updates, 'user');
@@ -124,7 +117,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       setSaveStatus('error');
     }
   }, [settingsManager]);
-
   // Save settings manually
   const handleSave = useCallback(() => {
     setSaveStatus('saving');
@@ -137,7 +129,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       setSaveStatus('error');
     }
   }, [settingsManager]);
-
   // Reset to defaults
   const handleReset = useCallback(() => {
     if (window.confirm('Reset all settings to defaults? This cannot be undone.')) {
@@ -146,23 +137,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       setSaveStatus('idle');
     }
   }, [settingsManager]);
-
   // Export settings
   const handleExport = useCallback(() => {
     const exportData = settingsManager.exportSettings();
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
-      type: 'application/json' 
+      type: 'application/json' ,
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `prompt-spaghetti-settings-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `prompt-spaghetti-settings-${new Date().toISOString().split('T')[0]}.json`;}
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }, [settingsManager]);
-
   // Import settings
   const handleImport = useCallback(() => {
     const input = document.createElement('input');
@@ -179,7 +168,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             if (result.valid) {
               alert('Settings imported successfully!');
             } else {
-              alert(`Import failed: ${result.errors.join(', ')}`);
+              alert(`Import failed: ${result.errors.join(', ')}`);}
             }
           } catch (error) {
             alert('Invalid settings file format');
@@ -190,11 +179,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     };
     input.click();
   }, [settingsManager]);
-
   // Handle keyboard shortcuts
   useEffect(() => {
     if (!isOpen) return;
-
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.ctrlKey || event.metaKey) {
         switch (event.key) {
@@ -209,51 +196,49 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         }
       }
     };
-
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, handleSave, handleReset]);
-
   // Render settings section
   const renderSettingsSection = (sectionId: string) => {
     switch (sectionId) {
       case 'seed':
-        return (
+        return ()
           <SeedControls
             settings={settings.seed}
             onChange={(seedSettings) => handleSettingsUpdate({ seed: seedSettings })}
           />
         );
       case 'temperature':
-        return (
+        return ()
           <TemperatureControls
             settings={settings.temperature}
             onChange={(tempSettings) => handleSettingsUpdate({ temperature: tempSettings })}
           />
         );
       case 'runCount':
-        return (
+        return ()
           <RunCountControls
             settings={settings.runCount}
             onChange={(runSettings) => handleSettingsUpdate({ runCount: runSettings })}
           />
         );
       case 'batch':
-        return (
+        return ()
           <BatchControls
             settings={settings.batch}
             onChange={(batchSettings) => handleSettingsUpdate({ batch: batchSettings })}
           />
         );
       case 'performance':
-        return (
+        return ()
           <PerformanceControls
             settings={settings.performance}
             onChange={(perfSettings) => handleSettingsUpdate({ performance: perfSettings })}
           />
         );
       case 'ui':
-        return (
+        return ()
           <UIControls
             settings={settings.ui}
             onChange={(uiSettings) => handleSettingsUpdate({ ui: uiSettings })}
@@ -263,8 +248,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         return null;
     }
   };
-
-  return (
+  return ()
     <Modal
       isOpen={isOpen}
       onClose={onClose}
@@ -275,13 +259,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       <div id="settings-description" className="sr-only">
         Configure advanced execution, batch processing, performance, and interface settings
       </div>
-
       <div style={{ display: 'flex', height: '600px', gap: '24px' }}>
         {/* Settings Navigation */}
         <div style={{
           width: '240px',
-          borderRight: `1px solid ${uiColors.ui.border}`,
-          paddingRight: '24px'
+          borderRight: `1px solid ${uiColors.ui.border}`,}
+          paddingRight: '24px',
         }}>
           <div style={{
             marginBottom: '16px',
@@ -289,12 +272,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             fontWeight: 500,
             color: uiColors.text.secondary,
             textTransform: 'uppercase',
-            letterSpacing: '0.5px'
+            letterSpacing: '0.5px',
           }}>
             Settings Groups
           </div>
-
-          {SETTINGS_GROUPS.map((group) => (
+          {SETTINGS_GROUPS.map((group) => ()
             <button
               key={group.id}
               onClick={() => setActiveGroup(group.id)}
@@ -309,13 +291,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   ? uiColors.accent.primary + '10' 
                   : 'transparent',
                 border: activeGroup === group.id 
-                  ? `1px solid ${uiColors.accent.primary}` 
+                  ? `1px solid ${uiColors.accent.primary}` }
                   : '1px solid transparent',
                 borderRadius: '8px',
                 cursor: 'pointer',
                 textAlign: 'left',
                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                outline: 'none'
+                outline: 'none',
               }}
               onMouseEnter={(e) => {
                 if (activeGroup !== group.id) {
@@ -342,14 +324,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   color: activeGroup === group.id 
                     ? uiColors.accent.primary 
                     : uiColors.text.primary,
-                  marginBottom: '2px'
+                  marginBottom: '2px',
                 }}>
                   {group.name}
                 </div>
                 <div style={{
                   fontSize: '12px',
                   color: uiColors.text.secondary,
-                  lineHeight: 1.3
+                  lineHeight: 1.3,
                 }}>
                   {group.description}
                 </div>
@@ -357,17 +339,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </button>
           ))}
         </div>
-
         {/* Settings Content */}
         <div style={{ flex: 1, overflow: 'auto' }}>
-          {SETTINGS_GROUPS.find(g => g.id === activeGroup)?.sections.map(sectionId => (
+          {SETTINGS_GROUPS.find(g => g.id === activeGroup)?.sections.map(sectionId => ()
             <div key={sectionId} style={{ marginBottom: '32px' }}>
               {renderSettingsSection(sectionId)}
             </div>
           ))}
         </div>
       </div>
-
       {/* Settings Footer */}
       <div style={{
         display: 'flex',
@@ -375,7 +355,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         justifyContent: 'space-between',
         marginTop: '24px',
         paddingTop: '24px',
-        borderTop: `1px solid ${uiColors.ui.border}`
+        borderTop: `1px solid ${uiColors.ui.border}`}
       }}>
         {/* Status and Import/Export */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -387,7 +367,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               gap: '6px',
               padding: '8px 12px',
               backgroundColor: 'transparent',
-              border: `1px solid ${uiColors.ui.border}`,
+              border: `1px solid ${uiColors.ui.border}`,}
               borderRadius: '6px',
               color: uiColors.text.secondary,
               fontSize: '13px',
@@ -399,7 +379,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <FiDownload size={14} />
             Export
           </button>
-
           <button
             onClick={handleImport}
             style={{
@@ -408,7 +387,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               gap: '6px',
               padding: '8px 12px',
               backgroundColor: 'transparent',
-              border: `1px solid ${uiColors.ui.border}`,
+              border: `1px solid ${uiColors.ui.border}`,}
               borderRadius: '6px',
               color: uiColors.text.secondary,
               fontSize: '13px',
@@ -420,9 +399,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <FiUpload size={14} />
             Import
           </button>
-
           {/* Save Status */}
-          {saveStatus !== 'idle' && (
+          {saveStatus !== 'idle' && ()
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -442,13 +420,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 : uiColors.text.secondary
             }}>
               {saveStatus === 'saving' && 'Saving...'}
-              {saveStatus === 'saved' && (
+              {saveStatus === 'saved' && ()
                 <>
                   <FiCheck size={12} />
                   Saved
                 </>
               )}
-              {saveStatus === 'error' && (
+              {saveStatus === 'error' && ()
                 <>
                   <FiAlertTriangle size={12} />
                   Save failed
@@ -457,7 +435,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
           )}
         </div>
-
         {/* Action Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <button
@@ -468,7 +445,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               gap: '6px',
               padding: '8px 16px',
               backgroundColor: 'transparent',
-              border: `1px solid ${uiColors.ui.border}`,
+              border: `1px solid ${uiColors.ui.border}`,}
               borderRadius: '6px',
               color: uiColors.text.secondary,
               fontSize: '14px',
@@ -480,7 +457,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <FiRotateCcw size={14} />
             Reset
           </button>
-
           <button
             onClick={handleSave}
             disabled={!hasUnsavedChanges}
@@ -489,12 +465,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               alignItems: 'center',
               gap: '6px',
               padding: '8px 16px',
-              backgroundColor: hasUnsavedChanges 
+              backgroundColor: hasUnsavedChanges ,
                 ? uiColors.accent.primary
                 : uiColors.ui.disabled,
               border: 'none',
               borderRadius: '6px',
-              color: hasUnsavedChanges 
+              color: hasUnsavedChanges ,
                 ? 'white'
                 : uiColors.text.disabled,
               fontSize: '14px',

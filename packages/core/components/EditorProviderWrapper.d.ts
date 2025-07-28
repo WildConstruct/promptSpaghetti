@@ -6,7 +6,7 @@ import React from 'react';
 import { Node, Edge } from 'reactflow';
 import { ProviderHook, ProviderRegistry, EditorStateContext, EditorActions } from '../hooks/useEditorProviders';
 export interface EditorProviderWrapperProps {
-    children: (props: {
+    children: (props: {)
         registry: ProviderRegistry;
         editorContext: EditorStateContext;
         editorActions: EditorActions;

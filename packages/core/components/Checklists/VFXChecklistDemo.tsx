@@ -4,7 +4,6 @@
  * Comprehensive demonstration of the VFX checklist system with sample data,
  * team collaboration, templates, and professional VFX workflow management.
  */
-
 import React, { useState, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -33,7 +32,6 @@ import {
   TrendingUp,
   Activity
 } from 'lucide-react';
-
 import VFXChecklistSystem, { 
   type VFXChecklist, 
   type VFXChecklistItem, 
@@ -61,13 +59,13 @@ const DEMO_TEAM: VFXTeamMember[] = [
     color: '#ff7c00',
     avatar: '/avatars/director.jpg',
     isOnline: true,
-    permissions: {
+    permissions: {,
       canCreate: true,
       canEdit: true,
       canDelete: true,
       canApprove: true,
       canAssign: true,
-      canViewReports: true
+      canViewReports: true,
     }
   },
   {
@@ -78,13 +76,13 @@ const DEMO_TEAM: VFXTeamMember[] = [
     color: '#3b82f6',
     avatar: '/avatars/vfx-supervisor.jpg',
     isOnline: true,
-    permissions: {
+    permissions: {,
       canCreate: true,
       canEdit: true,
       canDelete: false,
       canApprove: true,
       canAssign: true,
-      canViewReports: true
+      canViewReports: true,
     }
   },
   {
@@ -95,13 +93,13 @@ const DEMO_TEAM: VFXTeamMember[] = [
     color: '#10b981',
     avatar: '/avatars/lead-artist.jpg',
     isOnline: false,
-    permissions: {
+    permissions: {,
       canCreate: true,
       canEdit: true,
       canDelete: false,
       canApprove: false,
       canAssign: false,
-      canViewReports: true
+      canViewReports: true,
     }
   },
   {
@@ -112,13 +110,13 @@ const DEMO_TEAM: VFXTeamMember[] = [
     color: '#8b5cf6',
     avatar: '/avatars/pipeline-td.jpg',
     isOnline: true,
-    permissions: {
+    permissions: {,
       canCreate: true,
       canEdit: true,
       canDelete: false,
       canApprove: false,
       canAssign: false,
-      canViewReports: true
+      canViewReports: true,
     }
   },
   {
@@ -129,13 +127,13 @@ const DEMO_TEAM: VFXTeamMember[] = [
     color: '#f59e0b',
     avatar: '/avatars/producer.jpg',
     isOnline: true,
-    permissions: {
+    permissions: {,
       canCreate: true,
       canEdit: false,
       canDelete: false,
       canApprove: true,
       canAssign: true,
-      canViewReports: true
+      canViewReports: true,
     }
   },
   {
@@ -146,19 +144,19 @@ const DEMO_TEAM: VFXTeamMember[] = [
     color: '#ef4444',
     avatar: '/avatars/qa-lead.jpg',
     isOnline: false,
-    permissions: {
+    permissions: {,
       canCreate: true,
       canEdit: true,
       canDelete: false,
       canApprove: true,
       canAssign: false,
-      canViewReports: true
+      canViewReports: true,
     }
   }
 ];
 
 // Sample checklist data
-const createSampleChecklist = (): VFXChecklist => ({
+const createSampleChecklist = (): VFXChecklist => ({)
   id: 'checklist-medieval-scene',
   name: 'Medieval Courtyard - Hero Shot 042',
   description: 'Complete VFX checklist for the hero establishing shot of the medieval courtyard marketplace',
@@ -173,7 +171,7 @@ const createSampleChecklist = (): VFXChecklist => ({
   updatedAt: '2025-07-22T14:30:00Z',
   dueDate: '2025-07-30T17:00:00Z',
   tags: ['hero-shot', 'medieval', 'courtyard', 'crowd', 'establishing'],
-  metadata: {
+  metadata: {,
     totalItems: 12,
     completedItems: 8,
     overallProgress: 67,
@@ -183,9 +181,9 @@ const createSampleChecklist = (): VFXChecklist => ({
     blockedItems: 0,
     averageAccuracy: 91,
     lastActivity: '2025-07-22T14:30:00Z',
-    collaborators: 6
+    collaborators: 6,
   },
-  items: [
+  items: [,
     {
       id: 'item-001',
       title: 'Camera Tracking & Matchmove',
@@ -202,14 +200,14 @@ const createSampleChecklist = (): VFXChecklist => ({
       estimatedHours: 8,
       actualHours: 9,
       dependencies: [],
-      subtasks: [
+      subtasks: [,
         { id: 'sub-001', title: 'Feature tracking setup', completed: true, assignee: DEMO_TEAM[3] },
         { id: 'sub-002', title: '3D solve validation', completed: true, assignee: DEMO_TEAM[3] },
         { id: 'sub-003', title: 'Ground plane creation', completed: true, assignee: DEMO_TEAM[3] },
         { id: 'sub-004', title: 'Reference objects placement', completed: true, assignee: DEMO_TEAM[3] }
       ],
       attachments: [],
-      assets: [
+      assets: [,
         {
           id: 'asset-track-001',
           name: 'Camera_Track_v03.ma',
@@ -218,13 +216,13 @@ const createSampleChecklist = (): VFXChecklist => ({
           version: 'v03',
           accuracy: 98,
           complexity: 85,
-          dependencies: []
+          dependencies: [],
         }
       ],
       tags: ['tracking', 'camera', 'matchmove', '3d-solve'],
       category: 'pre_production',
       vfxPhase: 'previs',
-      qualityGates: [
+      qualityGates: [,
         {
           id: 'qg-001',
           name: 'Tracking Stability',
@@ -234,10 +232,10 @@ const createSampleChecklist = (): VFXChecklist => ({
           result: 'Achieved 0.2px average error',
           checkedBy: DEMO_TEAM[1],
           checkedAt: '2025-07-20T16:30:00Z',
-          required: true
+          required: true,
         }
       ],
-      comments: [
+      comments: [,
         {
           id: 'comment-001',
           content: 'Excellent tracking quality. The solve is very stable throughout the shot.',
@@ -248,7 +246,7 @@ const createSampleChecklist = (): VFXChecklist => ({
           reactions: { '👍': [DEMO_TEAM[0], DEMO_TEAM[2]] }
         }
       ],
-      history: []
+      history: [],
     },
     {
       id: 'item-002',
@@ -266,14 +264,14 @@ const createSampleChecklist = (): VFXChecklist => ({
       estimatedHours: 16,
       actualHours: 18,
       dependencies: ['Camera Tracking & Matchmove'],
-      subtasks: [
+      subtasks: [,
         { id: 'sub-005', title: 'Reference gathering & mood board', completed: true, assignee: DEMO_TEAM[2] },
         { id: 'sub-006', title: 'Perspective layout & composition', completed: true, assignee: DEMO_TEAM[2] },
         { id: 'sub-007', title: 'Detailed painting - architecture', completed: true, assignee: DEMO_TEAM[2] },
         { id: 'sub-008', title: 'Atmospheric effects & depth', completed: false, assignee: DEMO_TEAM[2] },
         { id: 'sub-009', title: 'Final color grading integration', completed: false, assignee: DEMO_TEAM[2] }
       ],
-      attachments: [
+      attachments: [,
         {
           id: 'att-001',
           name: 'Castle_MattePaint_v04.exr',
@@ -281,10 +279,10 @@ const createSampleChecklist = (): VFXChecklist => ({
           url: '/assets/matte_paint_v04.exr',
           size: 52428800,
           uploadedBy: DEMO_TEAM[2],
-          uploadedAt: '2025-07-22T11:15:00Z'
+          uploadedAt: '2025-07-22T11:15:00Z',
         }
       ],
-      assets: [
+      assets: [,
         {
           id: 'asset-mp-001',
           name: 'Castle_Background_MP_v04',
@@ -293,20 +291,20 @@ const createSampleChecklist = (): VFXChecklist => ({
           version: 'v04',
           accuracy: 94,
           complexity: 78,
-          dependencies: ['Camera_Track_v03.ma']
+          dependencies: ['Camera_Track_v03.ma'],
         }
       ],
       tags: ['matte-painting', 'castle', 'background', 'architecture'],
       category: 'asset_creation',
       vfxPhase: 'asset_build',
-      qualityGates: [
+      qualityGates: [,
         {
           id: 'qg-002',
           name: 'Historical Accuracy',
           type: 'accuracy',
           status: 'pending',
           criteria: 'UTDG validation score >90%',
-          required: true
+          required: true,
         },
         {
           id: 'qg-003',
@@ -314,10 +312,10 @@ const createSampleChecklist = (): VFXChecklist => ({
           type: 'creative',
           status: 'pending',
           criteria: 'Director final approval',
-          required: true
+          required: true,
         }
       ],
-      comments: [
+      comments: [,
         {
           id: 'comment-002',
           content: 'The architecture looks fantastic! The stonework detail is excellent. Just need to adjust the atmospheric haze in the distance to match the foreground lighting.',
@@ -337,7 +335,7 @@ const createSampleChecklist = (): VFXChecklist => ({
           reactions: {}
         }
       ],
-      history: []
+      history: [],
     },
     {
       id: 'item-003',
@@ -354,7 +352,7 @@ const createSampleChecklist = (): VFXChecklist => ({
       estimatedHours: 20,
       actualHours: 15,
       dependencies: ['Camera Tracking & Matchmove'],
-      subtasks: [
+      subtasks: [,
         { id: 'sub-010', title: 'Character asset preparation', completed: true, assignee: DEMO_TEAM[3] },
         { id: 'sub-011', title: 'Animation cycle setup', completed: true, assignee: DEMO_TEAM[3] },
         { id: 'sub-012', title: 'Path planning & navigation', completed: true, assignee: DEMO_TEAM[3] },
@@ -363,7 +361,7 @@ const createSampleChecklist = (): VFXChecklist => ({
         { id: 'sub-015', title: 'Final render preparation', completed: false, assignee: DEMO_TEAM[3] }
       ],
       attachments: [],
-      assets: [
+      assets: [,
         {
           id: 'asset-crowd-001',
           name: 'Medieval_Crowd_Setup_v02',
@@ -371,23 +369,23 @@ const createSampleChecklist = (): VFXChecklist => ({
           status: 'draft',
           version: 'v02',
           complexity: 92,
-          dependencies: ['Camera_Track_v03.ma']
+          dependencies: ['Camera_Track_v03.ma'],
         }
       ],
       tags: ['crowd', 'simulation', 'medieval', 'characters', 'animation'],
       category: 'fx',
       vfxPhase: 'fx',
-      qualityGates: [
+      qualityGates: [,
         {
           id: 'qg-004',
           name: 'Performance Check',
           type: 'performance',
           status: 'pending',
           criteria: 'Render time <2min/frame',
-          required: true
+          required: true,
         }
       ],
-      comments: [
+      comments: [,
         {
           id: 'comment-004',
           content: 'The character variety looks good, but we need to ensure the clothing is historically accurate for the period. Can we get UTDG validation on the costumes?',
@@ -398,7 +396,7 @@ const createSampleChecklist = (): VFXChecklist => ({
           reactions: {}
         }
       ],
-      history: []
+      history: [],
     },
     {
       id: 'item-004',
@@ -414,7 +412,7 @@ const createSampleChecklist = (): VFXChecklist => ({
       dueDate: '2025-07-26T17:00:00Z',
       estimatedHours: 12,
       dependencies: ['Digital Matte Painting - Background Castle', 'Crowd Simulation - Medieval Citizens'],
-      subtasks: [
+      subtasks: [,
         { id: 'sub-016', title: 'Smoke source identification', completed: true, assignee: DEMO_TEAM[2] },
         { id: 'sub-017', title: 'Particle system setup', completed: false, assignee: DEMO_TEAM[2] },
         { id: 'sub-018', title: 'Dust mote simulation', completed: false, assignee: DEMO_TEAM[2] },
@@ -427,7 +425,7 @@ const createSampleChecklist = (): VFXChecklist => ({
       vfxPhase: 'fx',
       qualityGates: [],
       comments: [],
-      history: []
+      history: [],
     },
     {
       id: 'item-005',
@@ -444,7 +442,7 @@ const createSampleChecklist = (): VFXChecklist => ({
       estimatedHours: 6,
       actualHours: 3,
       dependencies: ['Digital Matte Painting - Background Castle'],
-      subtasks: [
+      subtasks: [,
         { id: 'sub-020', title: 'Medieval architecture research', completed: true, assignee: DEMO_TEAM[5] },
         { id: 'sub-021', title: 'Period-specific detail validation', completed: false, assignee: DEMO_TEAM[5] },
         { id: 'sub-022', title: 'Expert historian consultation', completed: false, assignee: DEMO_TEAM[5] },
@@ -455,17 +453,17 @@ const createSampleChecklist = (): VFXChecklist => ({
       tags: ['accuracy', 'historical', 'architecture', 'utdg', 'validation'],
       category: 'review',
       vfxPhase: 'review',
-      qualityGates: [
+      qualityGates: [,
         {
           id: 'qg-005',
           name: 'UTDG Validation',
           type: 'accuracy',
           status: 'pending',
           criteria: '>90% historical accuracy score',
-          required: true
+          required: true,
         }
       ],
-      comments: [
+      comments: [,
         {
           id: 'comment-005',
           content: 'Blocked pending external historian consultation. Dr. Williams is unavailable until Thursday. This may impact our timeline.',
@@ -476,12 +474,12 @@ const createSampleChecklist = (): VFXChecklist => ({
           reactions: {}
         }
       ],
-      history: []
+      history: [],
     }
   ]
 });
 
-export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
+export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
   title = 'Wild Construct VFX Checklist System',
   showTemplates = true,
   showAnalytics = true,
@@ -494,12 +492,10 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
   const [activeTab, setActiveTab] = useState('checklist');
   const [checklist, setChecklist] = useState<VFXChecklist>(createSampleChecklist());
   const [customTemplates, _____setCustomTemplates] = useState<VFXChecklistTemplate[]>([]);
-  
   // UI state
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [showCompactView, setShowCompactView] = useState(false);
   const [showStatistics, setShowStatistics] = useState(true);
-
   // Analytics data
   const analytics = useMemo(() => {
     const items = checklist.items;
@@ -509,30 +505,26 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
     const reviewItems = items.filter(item => item.status === 'review').length;
     const blockedItems = items.filter(item => item.status === 'blocked').length;
     const criticalItems = items.filter(item => item.priority === 'critical').length;
-    const overdue = items.filter(item => 
+    const overdue = items.filter(item => ;)
       item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved'
     ).length;
-
     const totalEstimated = items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0);
     const totalActual = items.reduce((sum, item) => sum + (item.actualHours || 0), 0);
     const efficiency = totalEstimated > 0 ? ((totalEstimated - totalActual) / totalEstimated) * 100 : 0;
-
     const statusDistribution = {
       pending: items.filter(item => item.status === 'pending').length,
       in_progress: inProgressItems,
       review: reviewItems,
       approved: completedItems,
       rejected: items.filter(item => item.status === 'rejected').length,
-      blocked: blockedItems
+      blocked: blockedItems,
     };
-
     const priorityDistribution = {
       low: items.filter(item => item.priority === 'low').length,
       medium: items.filter(item => item.priority === 'medium').length,
       high: items.filter(item => item.priority === 'high').length,
-      critical: criticalItems
+      critical: criticalItems,
     };
-
     return {
       totalItems,
       completedItems,
@@ -549,75 +541,68 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
       priorityDistribution
     };
   }, [checklist.items]);
-
   // Event handlers
   const handleChecklistUpdate = useCallback((updatedChecklist: VFXChecklist) => {
     setChecklist(updatedChecklist);
   }, []);
-
   const handleItemCreate = useCallback((item: Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>) => {
     const newItem: VFXChecklistItem = {
       ...item,
-      id: `item-${Date.now()}`,
+      id: `item-${Date.now()}`,}
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      history: []
+      history: [],
     };
-
-    setChecklist(prev => ({
+    setChecklist(prev => ({)
       ...prev,
       items: [...prev.items, newItem],
       updatedAt: new Date().toISOString(),
-      metadata: {
+      metadata: {,
         ...prev.metadata,
         totalItems: prev.items.length + 1,
         lastActivity: new Date().toISOString()
       }
     }));
   }, []);
-
   const handleItemUpdate = useCallback((itemId: string, updates: Partial<VFXChecklistItem>) => {
-    setChecklist(prev => ({
+    setChecklist(prev => ({)
       ...prev,
-      items: prev.items.map(item => 
+      items: prev.items.map(item => )
         item.id === itemId 
           ? { ...item, ...updates, updatedAt: new Date().toISOString() }
           : item
       ),
       updatedAt: new Date().toISOString(),
-      metadata: {
+      metadata: {,
         ...prev.metadata,
-        completedItems: prev.items.filter(item => 
+        completedItems: prev.items.filter(item => )
           item.id === itemId ? updates.status === 'approved' : item.status === 'approved'
         ).length,
         lastActivity: new Date().toISOString()
       }
     }));
   }, []);
-
   const handleItemDelete = useCallback((itemId: string) => {
-    setChecklist(prev => ({
+    setChecklist(prev => ({)
       ...prev,
       items: prev.items.filter(item => item.id !== itemId),
       updatedAt: new Date().toISOString(),
-      metadata: {
+      metadata: {,
         ...prev.metadata,
         totalItems: prev.items.length - 1,
         lastActivity: new Date().toISOString()
       }
     }));
   }, []);
-
   const handleCommentCreate = useCallback((itemId: string, comment: Omit<VFXChecklistComment, 'id' | 'timestamp'>) => {
     const newComment: VFXChecklistComment = {
       ...comment,
-      id: `comment-${Date.now()}`,
+      id: `comment-${Date.now()}`,}
       timestamp: new Date().toISOString()
     };
-
-    setChecklist(prev => ({
+    setChecklist(prev => ({)
       ...prev,
-      items: prev.items.map(item =>
+      items: prev.items.map(item =>)
         item.id === itemId
           ? { ...item, comments: [...item.comments, newComment] }
           : item
@@ -625,13 +610,12 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
       updatedAt: new Date().toISOString()
     }));
   }, []);
-
   const handleTemplateSelect = useCallback((template: VFXChecklistTemplate) => {
     // Create new checklist from template
     const newChecklist: VFXChecklist = {
-      id: `checklist-${Date.now()}`,
-      name: `${template.name} - New Project`,
-      description: `Checklist created from template: ${template.name}`,
+      id: `checklist-${Date.now()}`,}
+      name: `${template.name} - New Project`,}
+      description: `Checklist created from template: ${template.name}`,}
       project: 'New Project',
       owner: currentUser,
       team: DEMO_TEAM,
@@ -639,7 +623,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       tags: [],
-      metadata: {
+      metadata: {,
         totalItems: template.items.length,
         completedItems: 0,
         overallProgress: 0,
@@ -649,24 +633,22 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
         blockedItems: 0,
         averageAccuracy: 0,
         lastActivity: new Date().toISOString(),
-        collaborators: DEMO_TEAM.length
+        collaborators: DEMO_TEAM.length,
       },
-      items: template.items.map((templateItem, index) => ({
+      items: template.items.map((templateItem, index) => ({)
         ...templateItem,
-        id: `item-${Date.now()}-${index}`,
+        id: `item-${Date.now()}-${index}`,}
         author: currentUser,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        history: []
+        history: [],
       }))
     };
-
     setChecklist(newChecklist);
     setActiveTab('checklist');
   }, [currentUser]);
-
-  return (
-    <div className={`vfx-checklist-demo ${className}`}>
+  return ()
+    <div className={`vfx-checklist-demo ${className}`}>}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
@@ -682,7 +664,6 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                 Wild Construct v2.0
               </Badge>
             </div>
-            
             <div className="flex items-center gap-2">
               {/* User Switcher */}
               <Select 
@@ -696,7 +677,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {DEMO_TEAM.map(user => (
+                  {DEMO_TEAM.map(user => ()
                     <SelectItem key={user.id} value={user.id}>
                       <div className="flex items-center gap-2">
                         <div 
@@ -711,16 +692,14 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                   ))}
                 </SelectContent>
               </Select>
-
               <Button variant="outline" size="sm">
                 <Download className="w-4 h-4 mr-2" />
                 Export
               </Button>
             </div>
           </CardTitle>
-
           {/* Quick Stats */}
-          {showStatistics && (
+          {showStatistics && ()
             <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mt-4">
               <div className="bg-blue-50 p-3 rounded-lg text-center">
                 <div className="text-lg font-bold text-blue-900">{analytics.totalItems}</div>
@@ -748,7 +727,6 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
               </div>
             </div>
           )}
-
           {/* Control Panel */}
           <div className="flex items-center gap-4 mt-4 pt-4 border-t">
             <div className="flex items-center gap-2">
@@ -759,7 +737,6 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
               />
               <label htmlFor="auto-refresh" className="text-sm">Auto-refresh</label>
             </div>
-
             <div className="flex items-center gap-2">
               <Switch
                 checked={showCompactView}
@@ -768,7 +745,6 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
               />
               <label htmlFor="compact-view" className="text-sm">Compact View</label>
             </div>
-
             <div className="flex items-center gap-2">
               <Switch
                 checked={showStatistics}
@@ -779,7 +755,6 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
             </div>
           </div>
         </CardHeader>
-
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-4">
@@ -787,26 +762,25 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                 <CheckSquare className="w-4 h-4" />
                 Checklist
               </TabsTrigger>
-              {showTemplates && (
+              {showTemplates && ()
                 <TabsTrigger value="templates" className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
                   Templates
                 </TabsTrigger>
               )}
-              {showAnalytics && (
+              {showAnalytics && ()
                 <TabsTrigger value="analytics" className="flex items-center gap-2">
                   <BarChart3 className="w-4 h-4" />
                   Analytics
                 </TabsTrigger>
               )}
-              {showTeamPanel && (
+              {showTeamPanel && ()
                 <TabsTrigger value="team" className="flex items-center gap-2">
                   <Users className="w-4 h-4" />
                   Team
                 </TabsTrigger>
               )}
             </TabsList>
-
             <TabsContent value="checklist" className="mt-6">
               <VFXChecklistSystem
                 checklist={checklist}
@@ -820,8 +794,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                 compactView={showCompactView}
               />
             </TabsContent>
-
-            {showTemplates && (
+            {showTemplates && ()
               <TabsContent value="templates" className="mt-6">
                 <VFXChecklistTemplates
                   templates={customTemplates}
@@ -830,8 +803,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                 />
               </TabsContent>
             )}
-
-            {showAnalytics && (
+            {showAnalytics && ()
               <TabsContent value="analytics" className="mt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Status Distribution */}
@@ -844,7 +816,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        {Object.entries(analytics.statusDistribution).map(([status, count]) => (
+                        {Object.entries(analytics.statusDistribution).map(([status, count]) => ()
                           <div key={status} className="flex items-center justify-between">
                             <span className="text-sm capitalize">{status.replace('_', ' ')}</span>
                             <div className="flex items-center gap-2">
@@ -863,7 +835,6 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                       </div>
                     </CardContent>
                   </Card>
-
                   {/* Performance Metrics */}
                   <Card>
                     <CardHeader>
@@ -884,7 +855,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                         </div>
                         <div className="flex justify-between">
                           <span className="text-sm">Efficiency:</span>
-                          <span className={`font-medium ${analytics.efficiency >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          <span className={`font-medium ${analytics.efficiency >= 0 ? 'text-green-600' : 'text-red-600'}`}>}
                             {analytics.efficiency >= 0 ? '+' : ''}{analytics.efficiency.toFixed(1)}%
                           </span>
                         </div>
@@ -895,7 +866,6 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                       </div>
                     </CardContent>
                   </Card>
-
                   {/* Priority Analysis */}
                   <Card>
                     <CardHeader>
@@ -907,11 +877,10 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                     <CardContent>
                       <div className="space-y-3">
                         {Object.entries(analytics.priorityDistribution).map(([priority, count]) => {
-                          const color = priority === 'critical' ? 'bg-red-500' :
+                          const color = priority === 'critical' ? 'bg-red-500' :;
                             priority === 'high' ? 'bg-orange-500' :
                               priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500';
-                          
-                          return (
+                          return ()
                             <div key={priority} className="flex items-center justify-between">
                               <span className="text-sm capitalize">{priority}</span>
                               <div className="flex items-center gap-2">
@@ -929,7 +898,6 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                       </div>
                     </CardContent>
                   </Card>
-
                   {/* Team Activity */}
                   <Card>
                     <CardHeader>
@@ -940,11 +908,10 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        {DEMO_TEAM.slice(0, 4).map(member => {
+                        {DEMO_TEAM.slice(0, 4).map(member => {)
                           const userItems = checklist.items.filter(item => item.assignee?.id === member.id);
                           const completed = userItems.filter(item => item.status === 'approved').length;
-                          
-                          return (
+                          return ()
                             <div key={member.id} className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <div 
@@ -962,19 +929,17 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                 </div>
               </TabsContent>
             )}
-
-            {showTeamPanel && (
+            {showTeamPanel && ()
               <TabsContent value="team" className="mt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {DEMO_TEAM.map(member => {
+                  {DEMO_TEAM.map(member => {)
                     const userItems = checklist.items.filter(item => item.assignee?.id === member.id);
                     const completed = userItems.filter(item => item.status === 'approved').length;
                     const inProgress = userItems.filter(item => item.status === 'in_progress').length;
-                    const overdue = userItems.filter(item => 
+                    const overdue = userItems.filter(item => ;)
                       item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved'
                     ).length;
-
-                    return (
+                    return ()
                       <Card key={member.id} className={member.id === currentUser.id ? 'border-blue-300 bg-blue-50' : ''}>
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between mb-3">
@@ -988,7 +953,6 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                               {member.role.replace('_', ' ')}
                             </Badge>
                           </div>
-
                           <div className="space-y-2 text-xs">
                             <div className="flex justify-between">
                               <span>Assigned:</span>
@@ -1007,8 +971,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                               <span className="font-medium text-red-600">{overdue}</span>
                             </div>
                           </div>
-
-                          {userItems.length > 0 && (
+                          {userItems.length > 0 && ()
                             <div className="mt-3">
                               <div className="text-xs text-gray-600 mb-1">Progress</div>
                               <div className="w-full bg-gray-200 rounded-full h-2">

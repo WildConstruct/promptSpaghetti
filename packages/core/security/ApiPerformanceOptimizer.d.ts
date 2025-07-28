@@ -366,7 +366,7 @@ export declare enum OptimizationStatus {
 export interface PerformanceReport {
     reportId: string;
     generatedAt: Date;
-    reportPeriod: {
+    reportPeriod: {,
         start: Date;
         end: Date;
     };

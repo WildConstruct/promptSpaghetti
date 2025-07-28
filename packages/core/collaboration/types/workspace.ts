@@ -63,19 +63,19 @@ export interface Workspace {
 
 export interface WorkspaceSettings {
   visibility: 'private' | 'internal' | 'public';
-  features: {
+  features: {,
     real_time_collaboration: boolean;
     version_history: boolean;
     comments: boolean;
     notifications: boolean;
     integrations: boolean;
   };
-  limits: {
+  limits: {,
     max_projects: number;
     max_members: number;
     storage_quota_mb: number;
   };
-  permissions: {
+  permissions: {,
     who_can_invite: 'owners' | 'admins' | 'members';
     who_can_create_projects: 'owners' | 'admins' | 'members';
     default_project_visibility: 'private' | 'workspace' | 'public';
@@ -97,13 +97,13 @@ export interface Project {
 
 export interface ProjectSettings {
   visibility: 'private' | 'workspace' | 'public';
-  features: {
+  features: {,
     auto_save: boolean;
     version_control: boolean;
     real_time_sync: boolean;
     notifications: boolean;
   };
-  collaboration: {
+  collaboration: {,
     max_concurrent_editors: number;
     conflict_resolution: 'manual' | 'automatic' | 'last_writer_wins';
     presence_timeout_ms: number;
@@ -241,38 +241,31 @@ export interface WorkspaceOperations {
   getWorkspace(id: WorkspaceId): Promise<Workspace | null>;
   updateWorkspace(id: WorkspaceId, data: Partial<Workspace>): Promise<Workspace>;
   deleteWorkspace(id: WorkspaceId): Promise<void>;
-  
   // Project management
   createProject(data: Omit<Project, 'id' | 'created_at' | 'updated_at' | 'last_activity_at'>): Promise<Project>;
   getProject(id: ProjectId): Promise<Project | null>;
   updateProject(id: ProjectId, data: Partial<Project>): Promise<Project>;
   deleteProject(id: ProjectId): Promise<void>;
-  
   // Resource management
   createResource(data: Omit<Resource, 'id' | 'created_at' | 'updated_at' | 'version'>): Promise<Resource>;
   getResource(id: ResourceId): Promise<Resource | null>;
   updateResource(id: ResourceId, data: Partial<Resource>): Promise<Resource>;
   deleteResource(id: ResourceId): Promise<void>;
-  
   // Membership management
   addWorkspaceMember(workspaceId: WorkspaceId, userId: UserId, role: WorkspaceRole, invitedBy: UserId): Promise<WorkspaceMember>;
   removeWorkspaceMember(workspaceId: WorkspaceId, userId: UserId): Promise<void>;
   updateWorkspaceMemberRole(workspaceId: WorkspaceId, userId: UserId, role: WorkspaceRole): Promise<WorkspaceMember>;
-  
   addProjectMember(projectId: ProjectId, userId: UserId, role: ProjectRole, invitedBy: UserId): Promise<ProjectMember>;
   removeProjectMember(projectId: ProjectId, userId: UserId): Promise<void>;
   updateProjectMemberRole(projectId: ProjectId, userId: UserId, role: ProjectRole): Promise<ProjectMember>;
-  
   // Activity tracking
   logActivity(event: Omit<ActivityEvent, 'id' | 'created_at'>): Promise<ActivityEvent>;
   getWorkspaceActivity(workspaceId: WorkspaceId, limit?: number, offset?: number): Promise<ActivityEvent[]>;
-  
   // Comments
   createComment(data: Omit<Comment, 'id' | 'created_at' | 'updated_at'>): Promise<Comment>;
   getComments(resourceId: ResourceId): Promise<Comment[]>;
   updateComment(id: string, content: string): Promise<Comment>;
   deleteComment(id: string): Promise<void>;
-  
   // Notifications
   createNotification(data: Omit<Notification, 'id' | 'created_at'>): Promise<Notification>;
   getUserNotifications(userId: UserId, unreadOnly?: boolean): Promise<Notification[]>;

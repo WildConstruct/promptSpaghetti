@@ -38,7 +38,7 @@ export interface NodeAnnotationReply {
     content: string;
     author: VFXUser;
     timestamp: string;
-    reactions: {
+    reactions: {,
         [emoji: string]: VFXUser[];
     };
 }

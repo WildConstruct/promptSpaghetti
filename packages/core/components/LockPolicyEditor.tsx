@@ -1,17 +1,15 @@
 // Epic 9.4.3 - Lock Policy Editor Component
 // Editor for workspace lock policies
-
 import React, { useState, useEffect } from 'react';
 import { Save, Settings, AlertTriangle, Info, Clock, Users, Shield } from 'lucide-react';
 import { LockPolicy } from '../types/locking';
 import { useLockingStore } from '../stores/lockingStore';
-
 interface LockPolicyEditorProps {
   workspaceId: string;
   onPolicyUpdate: () => void;
 }
 
-export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
+export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
   workspaceId,
   onPolicyUpdate
 }) => {
@@ -19,73 +17,57 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
   const [editingPolicy, setEditingPolicy] = useState<Partial<LockPolicy> | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-
   useEffect(() => {
     fetchPolicy(workspaceId);
   }, [workspaceId]);
-
   useEffect(() => {
     if (policy) {
       setEditingPolicy(policy);
     }
   }, [policy]);
-
   const validatePolicy = (policyData: Partial<LockPolicy>): Record<string, string> => {
     const errors: Record<string, string> = {};
-
     if (!policyData.name?.trim()) {
       errors.name = 'Policy name is required';
     }
-
     if (policyData.max_locks_per_user && policyData.max_locks_per_user < 1) {
       errors.max_locks_per_user = 'Must be at least 1';
     }
-
     if (policyData.max_locks_per_resource && policyData.max_locks_per_resource < 1) {
       errors.max_locks_per_resource = 'Must be at least 1';
     }
-
     if (policyData.default_duration_minutes && policyData.default_duration_minutes < 1) {
       errors.default_duration_minutes = 'Must be at least 1 minute';
     }
-
     if (policyData.max_duration_minutes && policyData.max_duration_minutes < 1) {
       errors.max_duration_minutes = 'Must be at least 1 minute';
     }
-
-    if (
+    if ()
       policyData.default_duration_minutes &&
       policyData.max_duration_minutes &&
       policyData.default_duration_minutes > policyData.max_duration_minutes
     ) {
       errors.default_duration_minutes = 'Cannot exceed maximum duration';
     }
-
     return errors;
   };
-
   const handleInputChange = (field: keyof LockPolicy, value: Error) => {
     if (!editingPolicy) return;
-
     const updatedPolicy = { ...editingPolicy, [field]: value };
     setEditingPolicy(updatedPolicy);
     setHasChanges(true);
-
     // Clear validation error for this field
     if (validationErrors[field]) {
       setValidationErrors(prev => ({ ...prev, [field]: undefined }));
     }
   };
-
   const handleSave = async () => {
     if (!editingPolicy) return;
-
     const errors = validatePolicy(editingPolicy);
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
       return;
     }
-
     try {
       const result = await updatePolicy(workspaceId, editingPolicy);
       if (result.success) {
@@ -96,24 +78,21 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
       console.error('Failed to save policy:', error);
     }
   };
-
   const handleReset = () => {
     setEditingPolicy(policy);
     setHasChanges(false);
     setValidationErrors({});
   };
-
   if (isLoading) {
-    return (
+    return ()
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-2 text-gray-600">Loading policy...</span>
       </div>
     );
   }
-
   if (!editingPolicy) {
-    return (
+    return ()
       <div className="text-center py-8">
         <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No Policy Found</h3>
@@ -123,8 +102,7 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -133,7 +111,7 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
           <h3 className="text-lg font-semibold text-gray-900">Lock Policy Configuration</h3>
         </div>
         <div className="flex items-center space-x-2">
-          {hasChanges && (
+          {hasChanges && ()
             <button
               onClick={handleReset}
               className="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded hover:bg-gray-200"
@@ -151,9 +129,8 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
           </button>
         </div>
       </div>
-
       {/* Error Display */}
-      {error && (
+      {error && ()
         <div className="bg-red-50 border border-red-200 rounded-md p-4">
           <div className="flex items-center">
             <AlertTriangle className="h-5 w-5 text-red-400 mr-2" />
@@ -161,7 +138,6 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
           </div>
         </div>
       )}
-
       {/* Basic Settings */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <h4 className="text-md font-medium text-gray-900 mb-4">Basic Settings</h4>
@@ -178,7 +154,7 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
                 validationErrors.name ? 'border-red-300' : 'border-gray-300'
               }`}
             />
-            {validationErrors.name && (
+            {validationErrors.name && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.name}</p>
             )}
           </div>
@@ -195,7 +171,6 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
           </div>
         </div>
       </div>
-
       {/* Lock Limits */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-center space-x-2 mb-4">
@@ -216,7 +191,7 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
                 validationErrors.max_locks_per_user ? 'border-red-300' : 'border-gray-300'
               }`}
             />
-            {validationErrors.max_locks_per_user && (
+            {validationErrors.max_locks_per_user && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.max_locks_per_user}</p>
             )}
           </div>
@@ -233,13 +208,12 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
                 validationErrors.max_locks_per_resource ? 'border-red-300' : 'border-gray-300'
               }`}
             />
-            {validationErrors.max_locks_per_resource && (
+            {validationErrors.max_locks_per_resource && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.max_locks_per_resource}</p>
             )}
           </div>
         </div>
       </div>
-
       {/* Duration Settings */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-center space-x-2 mb-4">
@@ -260,7 +234,7 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
                 validationErrors.default_duration_minutes ? 'border-red-300' : 'border-gray-300'
               }`}
             />
-            {validationErrors.default_duration_minutes && (
+            {validationErrors.default_duration_minutes && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.default_duration_minutes}</p>
             )}
           </div>
@@ -277,13 +251,12 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
                 validationErrors.max_duration_minutes ? 'border-red-300' : 'border-gray-300'
               }`}
             />
-            {validationErrors.max_duration_minutes && (
+            {validationErrors.max_duration_minutes && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.max_duration_minutes}</p>
             )}
           </div>
         </div>
       </div>
-
       {/* Auto-Lock Settings */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-center space-x-2 mb-4">
@@ -327,7 +300,6 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
           </div>
         </div>
       </div>
-
       {/* Lock Breaking Settings */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-center space-x-2 mb-4">
@@ -371,7 +343,6 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
           </div>
         </div>
       </div>
-
       {/* Conflict Resolution */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-center space-x-2 mb-4">

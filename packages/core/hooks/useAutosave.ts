@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Edge, Node } from 'reactflow';
-
 interface UseAutosaveProps {
   nodes: Node[];
   edges: Edge[];
   intervalMs?: number;
   storageKey?: string;
 }
-
 interface UseAutosaveReturn {
   showRestorePrompt: boolean;
   restoreDraft: { nodes: Node[]; edges: Edge[] } | null;
@@ -15,7 +13,7 @@ interface UseAutosaveReturn {
   setRestoreDraft: (draft: { nodes: Node[]; edges: Edge[] } | null) => void;
 }
 
-export const useAutosave = ({
+export const useAutosave = ({)
   nodes,
   edges,
   intervalMs = 5000,
@@ -23,7 +21,6 @@ export const useAutosave = ({
 }: UseAutosaveProps): UseAutosaveReturn => {
   const [showRestorePrompt, setShowRestorePrompt] = useState(false);
   const [restoreDraft, setRestoreDraft] = useState<{ nodes: Node[]; edges: Edge[] } | null>(null);
-
   // Check for existing draft on mount
   useEffect(() => {
     try {
@@ -40,7 +37,6 @@ export const useAutosave = ({
       localStorage.removeItem(storageKey);
     }
   }, [storageKey]);
-
   // Autosave graph every intervalMs
   useEffect(() => {
     const save = () => {
@@ -51,18 +47,15 @@ export const useAutosave = ({
         console.warn('Failed to save draft:', error);
       }
     };
-    
     const interval = setInterval(save, intervalMs);
     return () => clearInterval(interval);
   }, [nodes, edges, intervalMs, storageKey]);
-
   // Clear localStorage on mount to prevent infinite loops (emergency fix)
   useEffect(() => {
     console.log('Clearing localStorage to prevent infinite loops');
     localStorage.removeItem(storageKey);
     localStorage.clear();
   }, [storageKey]);
-
   return {
     showRestorePrompt,
     restoreDraft,

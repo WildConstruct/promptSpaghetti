@@ -13,22 +13,22 @@ import { AdaptiveThrottlingRulesEngine } from './AdaptiveThrottlingRules';
 export interface RateLimitingMetricsConfig {
     enableRealTimeMetrics: boolean;
     metricsRetentionPeriod: number;
-    performanceThresholds: {
+    performanceThresholds: {,
         responseTime: number;
         throughput: number;
         errorRate: number;
         blockRate: number;
     };
-    visualizationOptions: {
+    visualizationOptions: {,
         enableCharts: boolean;
         enableHeatmaps: boolean;
         enableTimeseries: boolean;
         enableGeospatialMaps: boolean;
         refreshInterval: number;
     };
-    alerting: {
+    alerting: {,
         enableAlerts: boolean;
-        alertThresholds: {
+        alertThresholds: {,
             highResponseTime: number;
             lowThroughput: number;
             highErrorRate: number;
@@ -38,33 +38,33 @@ export interface RateLimitingMetricsConfig {
 }
 export interface PerformanceMetrics {
     timestamp: Date;
-    responseTime: {
+    responseTime: {,
         average: number;
         p50: number;
         p95: number;
         p99: number;
         max: number;
     };
-    throughput: {
+    throughput: {,
         requestsPerSecond: number;
         allowedPerSecond: number;
         blockedPerSecond: number;
         throttledPerSecond: number;
     };
-    errorRates: {
+    errorRates: {,
         totalRequests: number;
         blockedRequests: number;
         errorRequests: number;
         blockRate: number;
         errorRate: number;
     };
-    resourceUtilization: {
+    resourceUtilization: {,
         memoryUsage: number;
         cpuUsage: number;
         cacheHitRate: number;
         activeConnections: number;
     };
-    threatMetrics: {
+    threatMetrics: {,
         threatDistribution: Record<ThreatLevel, number>;
         suspiciousActivities: number;
         blockedThreats: number;
@@ -72,21 +72,21 @@ export interface PerformanceMetrics {
     };
 }
 export interface MetricsVisualizationData {
-    timeSeriesData: {
+    timeSeriesData: {,
         timestamps: Date[];
         responseTime: number[];
         throughput: number[];
         blockRate: number[];
         errorRate: number[];
     };
-    heatmapData: {
+    heatmapData: {,
         endpoints: string[];
         timeSlots: string[];
         activityMatrix: number[][];
         blockMatrix: number[][];
     };
-    geospatialData: {
-        locations: Array<{
+    geospatialData: {,
+        locations: Array<{,
             latitude: number;
             longitude: number;
             requestCount: number;
@@ -94,10 +94,10 @@ export interface MetricsVisualizationData {
             threatLevel: ThreatLevel;
         }>;
     };
-    distributionData: {
+    distributionData: {,
         endpointDistribution: Record<string, number>;
         threatLevelDistribution: Record<ThreatLevel, number>;
-        responseTimeDistribution: Array<{
+        responseTimeDistribution: Array<{,
             range: string;
             count: number;
         }>;
@@ -123,7 +123,7 @@ export interface DashboardWidget {
     description: string;
     dataSource: string;
     refreshInterval: number;
-    config: {
+    config: {,
         chartType?: 'line' | 'bar' | 'pie' | 'area' | 'scatter';
         timeRange?: string;
         aggregation?: 'sum' | 'avg' | 'max' | 'min' | 'count';
@@ -131,7 +131,7 @@ export interface DashboardWidget {
         dimensions?: string[];
         metrics?: string[];
     };
-    position: {
+    position: {,
         x: number;
         y: number;
         width: number;
@@ -148,7 +148,7 @@ export declare class RateLimitingPerformanceMetrics extends EventEmitter {
     private dashboardWidgets;
     private metricsCollectionTimer?;
     private startTime;
-    constructor(
+    constructor()
       rateLimitingService: RateLimitingService,
       throttlingEngine?: AdaptiveThrottlingRulesEngine,
       config?: Partial<RateLimitingMetricsConfig>
@@ -261,7 +261,7 @@ export declare class RateLimitingPerformanceMetrics extends EventEmitter {
         uptime: number;
         metrics: PerformanceMetrics;
         alerts: AlertCondition[];
-        systemInfo: {
+        systemInfo: {,
             version: string;
             environment: string;
             configuredEndpoints: number;

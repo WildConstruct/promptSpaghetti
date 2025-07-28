@@ -79,7 +79,7 @@ export interface VerificationSession {
     userAgent: string;
     sessionContext: Record<string, any>;
     metadata: Record<string, any>;
-    flags: {
+    flags: {,
         suspiciousActivity: boolean;
         vpnDetected: boolean;
         proxyDetected: boolean;
@@ -96,7 +96,7 @@ export interface DeviceChallenge {
     createdAt: Date;
     expiresAt: Date;
     completedAt?: Date;
-    challengeData: {
+    challengeData: {,
         code?: string;
         question?: string;
         expectedResponse?: string;
@@ -125,13 +125,13 @@ export interface VerificationConfig {
     sessionTimeoutMinutes: number;
     maxAttemptsPerChallenge: number;
     maxVerificationAttempts: number;
-    riskThresholds: {
+    riskThresholds: {,
         lowRisk: number;
         mediumRisk: number;
         highRisk: number;
         requireManualReview: number;
     };
-    challengeRequirements: {
+    challengeRequirements: {,
         [key in RiskLevel]: ChallengeType[];
     };
     enableBehavioralAnalysis: boolean;
@@ -160,7 +160,7 @@ export declare class DeviceVerificationService extends EventEmitter {
     private config;
     private sessions;
     private challenges;
-    constructor(
+    constructor()
       fingerprintService: DeviceFingerprintingService,
       trustedDeviceManager: TrustedDeviceManager,
       verificationCodeManager: VerificationCodeManager,
@@ -174,7 +174,7 @@ export declare class DeviceVerificationService extends EventEmitter {
     /**
      * Submit challenge response
      */
-    submitChallengeResponse(
+    submitChallengeResponse()
       sessionId: string,
       challengeId: string,
       response: string,

@@ -51,7 +51,7 @@ export declare class GraphSerializer {
 /**
  * Utility function for easy serialization
  */
-export declare function serializeGraph(
+export declare function serializeGraph()
   graph: Graph,
   metadata?: SerializationMetadata,
   options?: SerializationOptions

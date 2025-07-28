@@ -62,7 +62,7 @@ export declare abstract class BaseError extends Error {
     readonly suggestions: string[];
     readonly recoveryActions: RecoveryAction[];
     readonly userMessage?: string;
-    constructor(message: string, code: ErrorCode, severity?: ErrorSeverity, context?: Partial<ErrorContext>, options?: {
+    constructor(message: string, code: ErrorCode, severity?: ErrorSeverity, context?: Partial<ErrorContext>, options?: {)
         suggestions?: string[];
         recoveryActions?: RecoveryAction[];
         userMessage?: string;
@@ -94,12 +94,12 @@ export declare abstract class BaseError extends Error {
  * Graph-related errors
  */
 export declare class GraphValidationError extends BaseError {
-    validationErrors: Array<{
+    validationErrors: Array<{,
         field: string;
         value: any;
         expected: string;
     }>;
-    constructor(message: string, validationErrors: Array<{
+    constructor(message: string, validationErrors: Array<{)
         field: string;
         value: any;
         expected: string;

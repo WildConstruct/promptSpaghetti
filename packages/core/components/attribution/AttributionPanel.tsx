@@ -42,9 +42,7 @@ import {
 } from '../../types/attribution';
 import { useAttribution } from '../../hooks/useAttribution';
 import { ContributorVisualization } from './ContributorVisualization';
-
 const { Text, _____Title } = Typography;
-
 interface AttributionPanelProps {
   projectId: string;
   selectedResourceType?: ResourceType;
@@ -53,19 +51,16 @@ interface AttributionPanelProps {
   onClose: () => void;
   onAttributionRecord?: (attribution: ChangeAttribution) => void;
 }
-
 interface AuthorIndicatorProps {
   attribution: ChangeAttribution;
   showDetails?: boolean;
   onClick?: () => void;
 }
-
 const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDetails = true, onClick }) => {
   const getAuthorInitials = (name?: string) => {
     if (!name) return '?';
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
-
   const getAuthorColor = (authorType: string) => {
     switch (authorType) {
     case 'user':
@@ -82,7 +77,6 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
       return '#8c8c8c';
     }
   };
-
   const getChangeTypeIcon = (changeType: ChangeType) => {
     switch (changeType) {
     case 'create':
@@ -99,22 +93,19 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
       return <EditOutlined />;
     }
   };
-
   const formatTime = (date: Date) => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const minutes = Math.floor(diff / (1000 * 60));
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-
     if (minutes < 1) return 'Just now';
-    if (minutes < 60) return `${minutes}m ago`;
-    if (hours < 24) return `${hours}h ago`;
-    if (days < 7) return `${days}d ago`;
+    if (minutes < 60) return `${minutes}m ago`;}
+    if (hours < 24) return `${hours}h ago`;}
+    if (days < 7) return `${days}d ago`;}
     return date.toLocaleDateString();
   };
-
-  const content = (
+  const content = (;)
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
       <Avatar
         size={24}
@@ -123,7 +114,6 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
       >
         {getAuthorInitials(attribution.authorName)}
       </Avatar>
-      
       <div style={{ flex: 1 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <Text strong style={{ fontSize: '12px' }}>
@@ -133,8 +123,7 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
             {attribution.authorType}
           </Tag>
         </div>
-        
-        {showDetails && (
+        {showDetails && ()
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
             {getChangeTypeIcon(attribution.changeType)}
             <Text type="secondary" style={{ fontSize: '11px' }}>
@@ -144,7 +133,7 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
             <Text type="secondary" style={{ fontSize: '11px' }}>
               {formatTime(attribution.createdAt)}
             </Text>
-            {attribution.isCollaborative && (
+            {attribution.isCollaborative && ()
               <TeamOutlined style={{ fontSize: '10px', color: '#722ed1' }} />
             )}
           </div>
@@ -152,9 +141,8 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
       </div>
     </div>
   );
-
   if (onClick) {
-    return (
+    return ()
       <div 
         style={{ cursor: 'pointer', padding: '4px', borderRadius: '4px' }}
         onClick={onClick}
@@ -165,11 +153,10 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
       </div>
     );
   }
-
   return content;
 };
 
-export const AttributionPanel: React.FC<AttributionPanelProps> = ({
+export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
   projectId,
   selectedResourceType,
   selectedResourceId,
@@ -182,7 +169,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
   const [privacySettings, setPrivacySettings] = useState<AttributionPrivacySettings | null>(null);
   const [showPrivacySettings, setShowPrivacySettings] = useState(false);
   const [selectedAttribution, setSelectedAttribution] = useState<ChangeAttribution | null>(null);
-
   const { 
     listAttributions, 
     getResourceAttribution, 
@@ -191,7 +177,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
     loading, 
     error 
   } = useAttribution();
-
   useEffect(() => {
     if (visible) {
       loadPrivacySettings();
@@ -202,7 +187,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
       }
     }
   }, [visible, projectId, selectedResourceType, selectedResourceId]);
-
   const loadPrivacySettings = async () => {
     try {
       const settings = await getPrivacySettings(projectId);
@@ -211,12 +195,10 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
       console.error('Failed to load privacy settings:', error);
     }
   };
-
   const loadResourceAttributions = async () => {
     if (!selectedResourceType || !selectedResourceId) return;
-    
     try {
-      const resourceAttributions = await getResourceAttribution(
+      const resourceAttributions = await getResourceAttribution(;)
         projectId, 
         selectedResourceType, 
         selectedResourceId
@@ -226,25 +208,23 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
       console.error('Failed to load resource attributions:', error);
     }
   };
-
   const loadRecentAttributions = async () => {
     try {
-      const recentAttributions = await listAttributions({
+      const recentAttributions = await listAttributions({)
         projectId,
         limit: 50,
         offset: 0,
         sortBy: 'created_at',
-        sortOrder: 'desc'
+        sortOrder: 'desc',
       });
       setAttributions(recentAttributions);
     } catch (error) {
       console.error('Failed to load recent attributions:', error);
     }
   };
-
   const handlePrivacySettingsChange = async (settings: Partial<AttributionPrivacySettings>) => {
     try {
-      const updatedSettings = await updatePrivacySettings({
+      const updatedSettings = await updatePrivacySettings({)
         projectId,
         settings: { ...privacySettings, ...settings } as any
       });
@@ -253,24 +233,21 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
       console.error('Failed to update privacy settings:', error);
     }
   };
-
   const handleAttributionClick = (attribution: ChangeAttribution) => {
     setSelectedAttribution(attribution);
   };
-
   const groupedAttributions = attributions.reduce((groups, attribution) => {
-    const key = `${attribution.resourceType}:${attribution.resourceId}`;
+    const key = `${attribution.resourceType}:${attribution.resourceId}`;}
     if (!groups[key]) {
       groups[key] = [];
     }
     groups[key].push(attribution);
     return groups;
   }, {} as Record<string, ChangeAttribution[]>);
-
   const renderAttributionList = () => {
     if (selectedResourceType && selectedResourceId) {
       // Show attributions for specific resource
-      return (
+      return ()
         <div>
           <div style={{ marginBottom: '12px' }}>
             <Text strong>Changes to {selectedResourceType} {selectedResourceId}</Text>
@@ -278,7 +255,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
           <List
             size="small"
             dataSource={attributions}
-            renderItem={(attribution) => (
+            renderItem={(attribution) => ()
               <List.Item style={{ padding: '8px 0' }}>
                 <AuthorIndicator
                   attribution={attribution}
@@ -291,7 +268,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
       );
     } else {
       // Show recent attributions grouped by resource
-      return (
+      return ()
         <div>
           <div style={{ marginBottom: '12px' }}>
             <Text strong>Recent Changes</Text>
@@ -299,8 +276,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
           {Object.entries(groupedAttributions).map(([resourceKey, resourceAttributions]) => {
             const [resourceType, resourceId] = resourceKey.split(':');
             const _____latestAttribution = resourceAttributions[0];
-            
-            return (
+            return ()
               <Card 
                 key={resourceKey} 
                 size="small" 
@@ -318,9 +294,8 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
                     <Badge count={resourceAttributions.length} size="small" />
                   </Space>
                 </div>
-                
                 <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                  {resourceAttributions.slice(0, 3).map((attribution) => (
+                  {resourceAttributions.slice(0, 3).map((attribution) => ()
                     <Tooltip
                       key={attribution.id}
                       title={
@@ -336,7 +311,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
                         style={{ 
                           backgroundColor: attribution.authorType === 'user' ? '#1890ff' : '#d9d9d9',
                           fontSize: '10px',
-                          cursor: 'pointer'
+                          cursor: 'pointer',
                         }}
                         onClick={() => handleAttributionClick(attribution)}
                       >
@@ -344,7 +319,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
                       </Avatar>
                     </Tooltip>
                   ))}
-                  {resourceAttributions.length > 3 && (
+                  {resourceAttributions.length > 3 && ()
                     <Avatar size={20} style={{ backgroundColor: '#f0f0f0', fontSize: '10px' }}>
                       +{resourceAttributions.length - 3}
                     </Avatar>
@@ -357,8 +332,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
       );
     }
   };
-
-  const renderPrivacySettings = () => (
+  const renderPrivacySettings = () => (;)
     <div>
       <Alert
         message="Privacy Settings"
@@ -367,7 +341,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
         showIcon
         style={{ marginBottom: '16px' }}
       />
-      
       <Space direction="vertical" style={{ width: '100%' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text>Show in attribution</Text>
@@ -376,7 +349,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
             onChange={(checked) => handlePrivacySettingsChange({ showInAttribution: checked })}
           />
         </div>
-        
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text>Show detailed changes</Text>
           <Switch
@@ -384,7 +356,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
             onChange={(checked) => handlePrivacySettingsChange({ showDetailedChanges: checked })}
           />
         </div>
-        
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text>Show timing information</Text>
           <Switch
@@ -392,7 +363,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
             onChange={(checked) => handlePrivacySettingsChange({ showTimingInfo: checked })}
           />
         </div>
-        
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text>Track property changes</Text>
           <Switch
@@ -400,7 +370,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
             onChange={(checked) => handlePrivacySettingsChange({ trackPropertyChanges: checked })}
           />
         </div>
-        
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text>Track position changes</Text>
           <Switch
@@ -411,18 +380,15 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
       </Space>
     </div>
   );
-
   const renderAttributionDetail = () => {
     if (!selectedAttribution) return null;
-    
-    return (
+    return ()
       <div>
         <div style={{ marginBottom: '16px' }}>
           <Button size="small" onClick={() => setSelectedAttribution(null)}>
             ← Back
           </Button>
         </div>
-        
         <Card title="Attribution Details" size="small">
           <Space direction="vertical" style={{ width: '100%' }}>
             <div>
@@ -431,7 +397,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
                 <AuthorIndicator attribution={selectedAttribution} showDetails={false} />
               </div>
             </div>
-            
             <div>
               <Text strong>Change:</Text>
               <div style={{ marginTop: '4px' }}>
@@ -439,7 +404,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
                 <Text>{CHANGE_TYPE_DESCRIPTIONS[selectedAttribution.changeType]}</Text>
               </div>
             </div>
-            
             <div>
               <Text strong>Resource:</Text>
               <div style={{ marginTop: '4px' }}>
@@ -449,15 +413,13 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
                 </Text>
               </div>
             </div>
-            
             <div>
               <Text strong>Time:</Text>
               <div style={{ marginTop: '4px' }}>
                 <Text>{selectedAttribution.createdAt.toLocaleString()}</Text>
               </div>
             </div>
-            
-            {selectedAttribution.changeDescription && (
+            {selectedAttribution.changeDescription && ()
               <div>
                 <Text strong>Description:</Text>
                 <div style={{ marginTop: '4px' }}>
@@ -465,8 +427,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
                 </div>
               </div>
             )}
-            
-            {selectedAttribution.isCollaborative && (
+            {selectedAttribution.isCollaborative && ()
               <div>
                 <Text strong>Collaboration:</Text>
                 <div style={{ marginTop: '4px' }}>
@@ -476,7 +437,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
                 </div>
               </div>
             )}
-            
             <div>
               <Text strong>Confidence:</Text>
               <div style={{ marginTop: '4px' }}>
@@ -488,8 +448,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
       </div>
     );
   };
-
-  return (
+  return ()
     <Drawer
       title="Change Attribution"
       placement="right"
@@ -515,7 +474,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
         </Space>
       }
     >
-      {error && (
+      {error && ()
         <Alert
           message="Error"
           description={error}
@@ -525,8 +484,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
           style={{ marginBottom: '16px' }}
         />
       )}
-
-      {privacySettings && !privacySettings.showInAttribution && (
+      {privacySettings && !privacySettings.showInAttribution && ()
         <Alert
           message="Attribution Disabled"
           description="You have disabled attribution tracking. Your changes will not be attributed to you."
@@ -535,15 +493,13 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
           style={{ marginBottom: '16px' }}
         />
       )}
-
-      {selectedAttribution ? renderAttributionDetail() : (
+      {selectedAttribution ? renderAttributionDetail() : ()
         <div style={{ minHeight: '400px' }}>
-          {attributions.length > 0 ? renderAttributionList() : (
+          {attributions.length > 0 ? renderAttributionList() : ()
             <Empty description="No attributions found" />
           )}
         </div>
       )}
-
       {/* Contributors Modal */}
       <Drawer
         title="Contributors"
@@ -558,7 +514,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
           onClose={() => setShowContributors(false)}
         />
       </Drawer>
-
       {/* Privacy Settings Modal */}
       <Drawer
         title="Privacy Settings"

@@ -157,14 +157,14 @@ export interface MetricResult {
     trend: 'up' | 'down' | 'stable';
 }
 export interface StatisticalResults {
-    primaryMetric: {
+    primaryMetric: {,
         winningVariant?: string;
         pValue: number;
         statisticalSignificance: boolean;
         practicalSignificance: boolean;
         confidenceLevel: number;
     };
-    guardrailMetrics: {
+    guardrailMetrics: {,
         metricId: string;
         passed: boolean;
         threshold: number;
@@ -232,9 +232,9 @@ export interface AllocationServiceConfig {
     cacheTtl: number;
     maxAssignmentLatency: number;
     enableDebugMode: boolean;
-    saltStorage: {
+    saltStorage: {,
         currentSalt: string;
-        previousSalts: {
+        previousSalts: {,
             salt: string;
             rotatedAt: Date;
         }[];
@@ -244,7 +244,7 @@ export declare class ExperimentError extends Error {
     code: string;
     experimentId?: string | undefined;
     details?: Record<string, unknown> | undefined;
-    constructor(
+    constructor()
       message: string,
       code: string,
       experimentId?: string | undefined,

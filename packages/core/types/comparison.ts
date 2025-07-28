@@ -10,14 +10,14 @@ export type HighlightMode = 'changes' | 'additions' | 'deletions' | 'all';
 // Graph data structure for comparison
 export interface GraphData {
   id: string;
-  nodes: Array<{
+  nodes: Array<{,
     id: string;
     type: string;
     position: { x: number; y: number };
     data: Record<string, unknown>;
     [key: string]: unknown;
   }>;
-  edges: Array<{
+  edges: Array<{,
     id: string;
     source: string;
     target: string;
@@ -46,7 +46,7 @@ export interface NodeChange {
   change_type: MatchType;
   old_properties?: Record<string, unknown>;
   new_properties?: Record<string, unknown>;
-  property_changes: Array<{
+  property_changes: Array<{,
     field: string;
     old_value: unknown;
     new_value: unknown;
@@ -63,7 +63,7 @@ export interface EdgeChange {
   change_type: MatchType;
   old_properties?: Record<string, unknown>;
   new_properties?: Record<string, unknown>;
-  property_changes: Array<{
+  property_changes: Array<{,
     field: string;
     old_value: unknown;
     new_value: unknown;
@@ -130,7 +130,7 @@ export interface DetailedComparison extends GraphComparison {
   target_data: GraphData;
   node_matches: NodeMatchResult[];
   edge_matches: EdgeMatchResult[];
-  algorithm_metadata: {
+  algorithm_metadata: {,
     steps_executed: string[];
     performance_metrics: Record<string, number>;
     confidence_distribution: Record<string, number>;
@@ -199,7 +199,7 @@ export interface ComparisonStatistics {
   avg_similarity: number;
   comparison_types: Record<string, number>;
   recent_comparisons: number;
-  similarity_distribution: {
+  similarity_distribution: {,
     high: number; // > 0.8
     medium: number; // 0.5 - 0.8
     low: number; // < 0.5
@@ -244,7 +244,7 @@ export interface ApiResponse<T> {
 
 // Batch comparison
 export interface BatchComparisonRequest {
-  comparisons: Array<{
+  comparisons: Array<{,
     source_version_id: string;
     target_version_id: string;
     comparison_type?: ComparisonType;
@@ -252,14 +252,14 @@ export interface BatchComparisonRequest {
 }
 
 export interface BatchComparisonResult {
-  successful: Array<{
+  successful: Array<{,
     similarity_score: number;
     changes_summary: ChangeSummary;
     comparison_id: string;
     source_version_id: string;
     target_version_id: string;
   }>;
-  failed: Array<{
+  failed: Array<{,
     error: string;
   }>;
   total_requested: number;
@@ -269,7 +269,7 @@ export interface BatchComparisonResult {
 
 // Error types
 export class ComparisonError extends Error {
-  constructor(
+  constructor()
     message: string,
     public code: string,
     public details?: Record<string, unknown>
@@ -280,7 +280,7 @@ export class ComparisonError extends Error {
 }
 
 export class DiffSessionError extends Error {
-  constructor(
+  constructor()
     message: string,
     public code: string,
     public sessionId?: string

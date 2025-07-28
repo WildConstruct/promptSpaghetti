@@ -2,10 +2,8 @@
  * Epic 9.2.1 - Workspace List Component
  * Displays list of user's workspaces with search and filtering
  */
-
 import React, { useState, useMemo } from 'react';
 import { WorkspaceWithMembership } from '../../types/workspace';
-
 interface WorkspaceListProps {
   workspaces: WorkspaceWithMembership[];
   selectedWorkspace: WorkspaceWithMembership | null;
@@ -13,7 +11,7 @@ interface WorkspaceListProps {
   loading?: boolean;
 }
 
-export const WorkspaceList: React.FC<WorkspaceListProps> = ({
+export const WorkspaceList: React.FC<WorkspaceListProps> = ({)
   workspaces,
   selectedWorkspace,
   onWorkspaceSelect,
@@ -21,21 +19,18 @@ export const WorkspaceList: React.FC<WorkspaceListProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterBy, setFilterBy] = useState<'all' | 'owner' | 'member'>('all');
-
   const filteredWorkspaces = useMemo(() => {
     let filtered = workspaces;
-
     // Apply search filter
     if (searchTerm) {
-      filtered = filtered.filter(workspace =>
+      filtered = filtered.filter(workspace =>)
         workspace.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         workspace.description?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-
     // Apply role filter
     if (filterBy !== 'all') {
-      filtered = filtered.filter(workspace => {
+      filtered = filtered.filter(workspace => {)
         if (filterBy === 'owner') {
           return workspace.owner_id === workspace.membership?.user_id;
         } else if (filterBy === 'member') {
@@ -44,19 +39,17 @@ export const WorkspaceList: React.FC<WorkspaceListProps> = ({
         return true;
       });
     }
-
     // Sort by name
     return filtered.sort((a, b) => a.name.localeCompare(b.name));
   }, [workspaces, searchTerm, filterBy]);
-
   if (loading) {
-    return (
+    return ()
       <div className="workspace-list workspace-list--loading">
         <div className="workspace-list__header">
           <h3>Loading workspaces...</h3>
         </div>
         <div className="workspace-list__skeleton">
-          {[1, 2, 3].map(i => (
+          {[1, 2, 3].map(i => ()
             <div key={i} className="workspace-item workspace-item--skeleton">
               <div className="workspace-item__avatar"></div>
               <div className="workspace-item__content">
@@ -69,12 +62,10 @@ export const WorkspaceList: React.FC<WorkspaceListProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="workspace-list">
       <div className="workspace-list__header">
         <h3>Your Workspaces ({workspaces.length})</h3>
-        
         <div className="workspace-list__search">
           <input
             type="text"
@@ -84,7 +75,6 @@ export const WorkspaceList: React.FC<WorkspaceListProps> = ({
             className="search-input"
           />
         </div>
-
         <div className="workspace-list__filters">
           <select
             value={filterBy}
@@ -97,18 +87,17 @@ export const WorkspaceList: React.FC<WorkspaceListProps> = ({
           </select>
         </div>
       </div>
-
       <div className="workspace-list__items">
-        {filteredWorkspaces.length === 0 ? (
+        {filteredWorkspaces.length === 0 ? ()
           <div className="workspace-list__empty">
-            {searchTerm || filterBy !== 'all' ? (
+            {searchTerm || filterBy !== 'all' ? ()
               <p>No workspaces match your filters.</p>
-            ) : (
+            ) : ()
               <p>You don't have any workspaces yet. Create one to get started!</p>
             )}
           </div>
-        ) : (
-          filteredWorkspaces.map(workspace => (
+        ) : ()
+          filteredWorkspaces.map(workspace => ()
             <WorkspaceItem
               key={workspace.id}
               workspace={workspace}
@@ -121,22 +110,19 @@ export const WorkspaceList: React.FC<WorkspaceListProps> = ({
     </div>
   );
 };
-
 interface WorkspaceItemProps {
   workspace: WorkspaceWithMembership;
   isSelected: boolean;
   onSelect: () => void;
 }
-
-const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
+const WorkspaceItem: React.FC<WorkspaceItemProps> = ({)
   workspace,
   isSelected,
   onSelect
 }) => {
   const isOwner = workspace.owner_id === workspace.membership?.user_id;
-  const memberCount = 1; // TODO: Get actual member count from API
-
-  return (
+  const memberCount = 1; // TODO: Get actual member count from API;
+  return ()
     <div
       className={`workspace-item ${isSelected ? 'workspace-item--selected' : ''}`}
       onClick={onSelect}
@@ -144,26 +130,23 @@ const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
       <div className="workspace-item__avatar">
         {workspace.name.charAt(0).toUpperCase()}
       </div>
-      
       <div className="workspace-item__content">
         <div className="workspace-item__header">
           <h4 className="workspace-item__name">{workspace.name}</h4>
           <div className="workspace-item__badges">
-            {isOwner && (
+            {isOwner && ()
               <span className="badge badge--owner">Owner</span>
             )}
           </div>
         </div>
-        
-        {workspace.description && (
+        {workspace.description && ()
           <p className="workspace-item__description">
             {workspace.description.length > 60
-              ? `${workspace.description.substring(0, 60)}...`
+              ? `${workspace.description.substring(0, 60)}...`}
               : workspace.description
             }
           </p>
         )}
-        
         <div className="workspace-item__meta">
           <span className="workspace-item__members">
             {memberCount} member{memberCount !== 1 ? 's' : ''}

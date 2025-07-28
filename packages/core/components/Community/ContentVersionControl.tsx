@@ -5,7 +5,6 @@
  * React component for managing content versions, reviewing changes,
  * and coordinating editorial workflows.
  */
-
 import React, { useState, useEffect } from 'react';
 import { ContentVersion, ContentVersionDiff, ContentVersionManager } from '../../community/ContentVersionManager';
 
@@ -20,7 +19,7 @@ export interface ContentVersionControlProps {
   className?: string;
 }
 
-export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
+export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({)
   contentId,
   currentVersionId,
   onVersionSelect,
@@ -37,17 +36,13 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'versions' | 'compare' | 'workflow'>('versions');
   const [showCreateVersion, setShowCreateVersion] = useState(false);
-
-  const versionManager = new ContentVersionManager(null, contentId, 'current-user'); // API client would be injected
-
+  const versionManager = new ContentVersionManager(null, contentId, 'current-user'); // API client would be injected;
   useEffect(() => {
     loadVersionHistory();
   }, [contentId]);
-
   const loadVersionHistory = async () => {
     setLoading(true);
     setError(null);
-    
     try {
       const result = await versionManager.getVersionHistory({ limit: 50 });
       setVersions(result.versions);
@@ -57,7 +52,6 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
       setLoading(false);
     }
   };
-
   const handleVersionCompare = async (fromId: string, toId: string) => {
     try {
       const comparison = await versionManager.compareVersions(fromId, toId);
@@ -68,8 +62,7 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
       setError(err instanceof Error ? err.message : 'Failed to compare versions');
     }
   };
-
-  const handleCreateVersion = async (data: {
+  const handleCreateVersion = async (data: {)
     title: string;
     description: string;
     changelog: string;
@@ -78,15 +71,13 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
     try {
       // This would get the current content from the parent component
       const currentContent = {} as any; // Placeholder
-      
-      const newVersion = await versionManager.createVersion(currentContent, {
+      const newVersion = await versionManager.createVersion(currentContent, {)
         title: data.title,
         description: data.description,
         changelog: data.changelog,
         revision_type: data.revision_type,
-        target_status: 'draft'
+        target_status: 'draft',
       });
-      
       setVersions([newVersion, ...versions]);
       setShowCreateVersion(false);
       onVersionCreate?.(newVersion);
@@ -94,33 +85,28 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
       setError(err instanceof Error ? err.message : 'Failed to create version');
     }
   };
-
   const handleSubmitForReview = async (versionId: string) => {
     try {
-      const updatedVersion = await versionManager.submitForReview(versionId, {
-        priority: 'normal'
+      const updatedVersion = await versionManager.submitForReview(versionId, {)
+        priority: 'normal',
       });
-      
       setVersions(versions.map(v => v.id === versionId ? updatedVersion : v));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit for review');
     }
   };
-
   const handlePublishVersion = async (versionId: string) => {
     try {
-      const publishedVersion = await versionManager.publishVersion(versionId, {
+      const publishedVersion = await versionManager.publishVersion(versionId, {)
         visibility: 'public',
-        notify_subscribers: true
+        notify_subscribers: true,
       });
-      
       setVersions(versions.map(v => v.id === versionId ? publishedVersion : v));
       onVersionPublish?.(publishedVersion);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to publish version');
     }
   };
-
   const getStatusIcon = (status: string) => {
     const icons = {
       draft: '📝',
@@ -128,11 +114,10 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
       approved: '✅',
       published: '🌐',
       deprecated: '⚠️',
-      archived: '🗄️'
+      archived: '🗄️',
     };
     return icons[status as keyof typeof icons] || '📄';
   };
-
   const getStatusColor = (status: string) => {
     const colors = {
       draft: '#6b7280',
@@ -140,41 +125,37 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
       approved: '#10b981',
       published: '#3b82f6',
       deprecated: '#ef4444',
-      archived: '#9ca3af'
+      archived: '#9ca3af',
     };
     return colors[status as keyof typeof colors] || '#6b7280';
   };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString();
   };
-
   const formatChangeType = (changeType: string) => {
     const types = {
       major: 'Major Update',
       minor: 'Minor Update', 
       patch: 'Patch/Fix',
-      editorial: 'Editorial'
+      editorial: 'Editorial',
     };
     return types[changeType as keyof typeof types] || changeType;
   };
-
   if (loading) {
-    return (
-      <div className={`content-version-control loading ${className}`}>
+    return ()
+      <div className={`content-version-control loading ${className}`}>}
         <div className="loading-spinner"></div>
         <p>Loading version history...</p>
       </div>
     );
   }
-
-  return (
-    <div className={`content-version-control ${className}`}>
+  return ()
+    <div className={`content-version-control ${className}`}>}
       {/* Header */}
       <div className="version-control-header">
         <h3>Version Control</h3>
         <div className="header-actions">
-          {!readOnly && (
+          {!readOnly && ()
             <button
               onClick={() => setShowCreateVersion(true)}
               className="create-version-btn"
@@ -184,16 +165,14 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           )}
         </div>
       </div>
-
       {/* Error Display */}
-      {error && (
+      {error && ()
         <div className="error-message">
           <span className="error-icon">⚠️</span>
           {error}
           <button onClick={() => setError(null)} className="error-dismiss">×</button>
         </div>
       )}
-
       {/* Tabs */}
       <div className="version-tabs">
         <button
@@ -209,7 +188,7 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
         >
           🔍 Compare
         </button>
-        {showEditorialWorkflow && (
+        {showEditorialWorkflow && ()
           <button
             onClick={() => setActiveTab('workflow')}
             className={`tab ${activeTab === 'workflow' ? 'active' : ''}`}
@@ -218,15 +197,14 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           </button>
         )}
       </div>
-
       {/* Tab Content */}
       <div className="tab-content">
-        {activeTab === 'versions' && (
+        {activeTab === 'versions' && ()
           <div className="versions-list">
-            {versions.length === 0 ? (
+            {versions.length === 0 ? ()
               <div className="empty-state">
                 <p>No versions found</p>
-                {!readOnly && (
+                {!readOnly && ()
                   <button
                     onClick={() => setShowCreateVersion(true)}
                     className="create-first-version"
@@ -235,9 +213,9 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                   </button>
                 )}
               </div>
-            ) : (
+            ) : ()
               <div className="versions-grid">
-                {versions.map((version) => (
+                {versions.map((version) => ()
                   <div
                     key={version.id}
                     className={`version-card ${version.id === currentVersionId ? 'current' : ''}`}
@@ -247,7 +225,7 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                       <div className="version-info">
                         <div className="version-number">
                           {getStatusIcon(version.status)} v{version.version_number}
-                          {version.version_tag && (
+                          {version.version_tag && ()
                             <span className="version-tag">{version.version_tag}</span>
                           )}
                         </div>
@@ -258,7 +236,6 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                           {version.status}
                         </div>
                       </div>
-                      
                       <div className="version-actions">
                         <button
                           onClick={() => onVersionSelect?.(version.id)}
@@ -267,8 +244,7 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                         >
                           👁️
                         </button>
-                        
-                        {versions.length > 1 && (
+                        {versions.length > 1 && ()
                           <button
                             onClick={() => {
                               const otherVersion = versions.find(v => v.id !== version.id);
@@ -282,8 +258,7 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                             🔍
                           </button>
                         )}
-                        
-                        {!readOnly && version.status === 'draft' && (
+                        {!readOnly && version.status === 'draft' && ()
                           <button
                             onClick={() => handleSubmitForReview(version.id)}
                             className="action-btn review"
@@ -292,8 +267,7 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                             👀
                           </button>
                         )}
-                        
-                        {!readOnly && version.status === 'approved' && (
+                        {!readOnly && version.status === 'approved' && ()
                           <button
                             onClick={() => handlePublishVersion(version.id)}
                             className="action-btn publish"
@@ -304,47 +278,41 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                         )}
                       </div>
                     </div>
-
                     {/* Version Details */}
                     <div className="version-details">
-                      {version.title && (
+                      {version.title && ()
                         <h4 className="version-title">{version.title}</h4>
                       )}
-                      
-                      {version.description && (
+                      {version.description && ()
                         <p className="version-description">{version.description}</p>
                       )}
-                      
                       <div className="version-meta">
                         <div className="meta-item">
                           <span className="meta-label">Type:</span>
                           <span className="meta-value">{formatChangeType(version.revision_type)}</span>
                         </div>
-                        
                         <div className="meta-item">
                           <span className="meta-label">Created:</span>
                           <span className="meta-value">{formatDate(version.created_at)}</span>
                         </div>
-                        
-                        {version.published_at && (
+                        {version.published_at && ()
                           <div className="meta-item">
                             <span className="meta-label">Published:</span>
                             <span className="meta-value">{formatDate(version.published_at)}</span>
                           </div>
                         )}
                       </div>
-
                       {/* Contributors */}
-                      {version.contributors.length > 0 && (
+                      {version.contributors.length > 0 && ()
                         <div className="contributors">
                           <span className="contributors-label">Contributors:</span>
                           <div className="contributors-list">
-                            {version.contributors.slice(0, 3).map((contributor, index) => (
+                            {version.contributors.slice(0, 3).map((contributor, index) => ()
                               <span key={index} className="contributor">
                                 {contributor.name} ({contributor.role})
                               </span>
                             ))}
-                            {version.contributors.length > 3 && (
+                            {version.contributors.length > 3 && ()
                               <span className="contributors-more">
                                 +{version.contributors.length - 3} more
                               </span>
@@ -352,9 +320,8 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                           </div>
                         </div>
                       )}
-
                       {/* Changelog */}
-                      {version.changelog && (
+                      {version.changelog && ()
                         <div className="changelog">
                           <details>
                             <summary>📋 Changelog</summary>
@@ -371,8 +338,7 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
             )}
           </div>
         )}
-
-        {activeTab === 'compare' && versionDiff && selectedVersions && (
+        {activeTab === 'compare' && versionDiff && selectedVersions && ()
           <div className="version-comparison">
             <div className="comparison-header">
               <h4>Version Comparison</h4>
@@ -382,32 +348,30 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                 <span className="version-label">To: v{versions.find(v => v.id === selectedVersions[1])?.version_number}</span>
               </div>
             </div>
-
             <div className="diff-sections">
               {/* Content Changes */}
-              {versionDiff.content_changes.length > 0 && (
+              {versionDiff.content_changes.length > 0 && ()
                 <div className="diff-section">
                   <h5>📝 Content Changes ({versionDiff.content_changes.length})</h5>
                   <div className="changes-list">
-                    {versionDiff.content_changes.map((change, index) => (
-                      <div key={index} className={`change-item ${change.change_type}`}>
+                    {versionDiff.content_changes.map((change, index) => ()
+                      <div key={index} className={`change-item ${change.change_type}`}>}
                         <div className="change-header">
                           <span className="change-type">{change.change_type}</span>
                           <span className="change-section">{change.section}</span>
-                          {change.line_number && (
+                          {change.line_number && ()
                             <span className="line-number">Line {change.line_number}</span>
                           )}
                         </div>
-                        
-                        {change.change_type === 'modified' && (
+                        {change.change_type === 'modified' && ()
                           <div className="change-diff">
-                            {change.old_content && (
+                            {change.old_content && ()
                               <div className="old-content">
                                 <label>Before:</label>
                                 <div className="content-preview">{change.old_content}</div>
                               </div>
                             )}
-                            {change.new_content && (
+                            {change.new_content && ()
                               <div className="new-content">
                                 <label>After:</label>
                                 <div className="content-preview">{change.new_content}</div>
@@ -415,8 +379,7 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                             )}
                           </div>
                         )}
-                        
-                        {(change.change_type === 'added' || change.change_type === 'removed') && (
+                        {(change.change_type === 'added' || change.change_type === 'removed') && ()
                           <div className="change-content">
                             <div className="content-preview">
                               {change.new_content || change.old_content}
@@ -428,14 +391,13 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                   </div>
                 </div>
               )}
-
               {/* Metadata Changes */}
-              {versionDiff.metadata_changes.length > 0 && (
+              {versionDiff.metadata_changes.length > 0 && ()
                 <div className="diff-section">
                   <h5>🏷️ Metadata Changes ({versionDiff.metadata_changes.length})</h5>
                   <div className="metadata-changes">
-                    {versionDiff.metadata_changes.map((change, index) => (
-                      <div key={index} className={`metadata-change ${change.change_type}`}>
+                    {versionDiff.metadata_changes.map((change, index) => ()
+                      <div key={index} className={`metadata-change ${change.change_type}`}>}
                         <span className="field-name">{change.field}:</span>
                         <span className="old-value">{String(change.old_value)}</span>
                         <span className="arrow">→</span>
@@ -445,14 +407,13 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                   </div>
                 </div>
               )}
-
               {/* Media Changes */}
-              {versionDiff.media_changes.length > 0 && (
+              {versionDiff.media_changes.length > 0 && ()
                 <div className="diff-section">
                   <h5>🖼️ Media Changes ({versionDiff.media_changes.length})</h5>
                   <div className="media-changes">
-                    {versionDiff.media_changes.map((change, index) => (
-                      <div key={index} className={`media-change ${change.change_type}`}>
+                    {versionDiff.media_changes.map((change, index) => ()
+                      <div key={index} className={`media-change ${change.change_type}`}>}
                         <div className="media-info">
                           <span className="change-type">{change.change_type}</span>
                           <span className="media-title">
@@ -467,7 +428,6 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
                   </div>
                 </div>
               )}
-
               {/* Structure Changes Summary */}
               <div className="diff-section">
                 <h5>📊 Structure Summary</h5>
@@ -493,8 +453,7 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
             </div>
           </div>
         )}
-
-        {activeTab === 'workflow' && showEditorialWorkflow && (
+        {activeTab === 'workflow' && showEditorialWorkflow && ()
           <div className="editorial-workflow">
             <h4>Editorial Workflow</h4>
             <p>Workflow management interface would be implemented here...</p>
@@ -502,15 +461,13 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           </div>
         )}
       </div>
-
       {/* Create Version Modal */}
-      {showCreateVersion && (
+      {showCreateVersion && ()
         <CreateVersionModal
           onCreate={handleCreateVersion}
           onCancel={() => setShowCreateVersion(false)}
         />
       )}
-
       <style>{`
         .content-version-control {
           background: #ffffff;
@@ -518,7 +475,6 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           border-radius: 8px;
           overflow: hidden;
         }
-
         .content-version-control.loading {
           display: flex;
           flex-direction: column;
@@ -527,7 +483,6 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           padding: 60px 20px;
           text-align: center;
         }
-
         .loading-spinner {
           width: 32px;
           height: 32px;
@@ -537,12 +492,10 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           animation: spin 1s linear infinite;
           margin-bottom: 16px;
         }
-
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-
         .version-control-header {
           display: flex;
           justify-content: space-between;
@@ -551,14 +504,12 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           border-bottom: 1px solid #e5e7eb;
           background: #f9fafb;
         }
-
         .version-control-header h3 {
           margin: 0;
           font-size: 18px;
           font-weight: 600;
           color: #1f2937;
         }
-
         .create-version-btn {
           background: #3b82f6;
           color: #ffffff;
@@ -569,11 +520,9 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           cursor: pointer;
           transition: background 0.2s ease;
         }
-
         .create-version-btn:hover {
           background: #2563eb;
         }
-
         .error-message {
           background: #fef2f2;
           color: #dc2626;
@@ -585,7 +534,6 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           align-items: center;
           gap: 8px;
         }
-
         .error-dismiss {
           background: none;
           border: none;
@@ -594,12 +542,10 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           margin-left: auto;
           font-size: 16px;
         }
-
         .version-tabs {
           display: flex;
           border-bottom: 1px solid #e5e7eb;
         }
-
         .tab {
           background: none;
           border: none;
@@ -610,32 +556,26 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           border-bottom: 2px solid transparent;
           transition: all 0.2s ease;
         }
-
         .tab:hover {
           color: #1f2937;
           background: #f9fafb;
         }
-
         .tab.active {
           color: #3b82f6;
           border-bottom-color: #3b82f6;
         }
-
         .tab:disabled {
           opacity: 0.5;
           cursor: not-allowed;
         }
-
         .tab-content {
           padding: 20px;
         }
-
         .empty-state {
           text-align: center;
           padding: 40px 20px;
           color: #6b7280;
         }
-
         .create-first-version {
           background: #3b82f6;
           color: #ffffff;
@@ -645,43 +585,36 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           cursor: pointer;
           margin-top: 16px;
         }
-
         .versions-grid {
           display: flex;
           flex-direction: column;
           gap: 16px;
         }
-
         .version-card {
           border: 1px solid #e5e7eb;
           border-radius: 8px;
           padding: 16px;
           transition: all 0.2s ease;
         }
-
         .version-card:hover {
           border-color: #d1d5db;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-
         .version-card.current {
           border-color: #3b82f6;
           background: #eff6ff;
         }
-
         .version-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 12px;
         }
-
         .version-info {
           display: flex;
           flex-direction: column;
           gap: 4px;
         }
-
         .version-number {
           display: flex;
           align-items: center;
@@ -690,7 +623,6 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           font-weight: 600;
           color: #1f2937;
         }
-
         .version-tag {
           background: #dbeafe;
           color: #1e40af;
@@ -699,18 +631,15 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           font-size: 11px;
           font-weight: 500;
         }
-
         .version-status {
           font-size: 12px;
           font-weight: 500;
           text-transform: capitalize;
         }
-
         .version-actions {
           display: flex;
           gap: 4px;
         }
-
         .action-btn {
           background: #f3f4f6;
           border: 1px solid #d1d5db;
@@ -724,75 +653,62 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           font-size: 14px;
           transition: all 0.2s ease;
         }
-
         .action-btn:hover {
           background: #e5e7eb;
           border-color: #9ca3af;
         }
-
         .action-btn.review {
           background: #fef3c7;
           border-color: #f59e0b;
         }
-
         .action-btn.publish {
           background: #dbeafe;
           border-color: #3b82f6;
         }
-
         .version-details h4 {
           margin: 0 0 8px 0;
           font-size: 14px;
           font-weight: 600;
           color: #1f2937;
         }
-
         .version-description {
           margin: 0 0 12px 0;
           font-size: 14px;
           color: #6b7280;
           line-height: 1.5;
         }
-
         .version-meta {
           display: flex;
           flex-wrap: wrap;
           gap: 16px;
           margin-bottom: 12px;
         }
-
         .meta-item {
           display: flex;
           gap: 4px;
           font-size: 12px;
         }
-
         .meta-label {
           color: #6b7280;
           font-weight: 500;
         }
-
         .meta-value {
           color: #1f2937;
         }
-
         .contributors {
           margin-bottom: 12px;
         }
-
         .contributors-label {
           font-size: 12px;
           color: #6b7280;
           font-weight: 500;
         }
-
         .contributors-list {
           display: flex;
           flex-wrap: wrap;
           gap: 6px;
           margin-top: 4px;
         }
-
         .contributor {
           background: #f3f4f6;
           color: #4b5563;
@@ -800,23 +716,19 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           border-radius: 4px;
           font-size: 11px;
         }
-
         .contributors-more {
           color: #9ca3af;
           font-size: 11px;
           font-style: italic;
         }
-
         .changelog {
           margin-top: 8px;
         }
-
         .changelog summary {
           cursor: pointer;
           font-size: 12px;
           color: #6b7280;
         }
-
         .changelog-content {
           margin-top: 8px;
           padding: 8px;
@@ -826,12 +738,10 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           color: #4b5563;
           white-space: pre-wrap;
         }
-
         .version-comparison {
           max-height: 600px;
           overflow-y: auto;
         }
-
         .comparison-header {
           display: flex;
           justify-content: space-between;
@@ -840,79 +750,66 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           padding-bottom: 12px;
           border-bottom: 1px solid #e5e7eb;
         }
-
         .comparison-header h4 {
           margin: 0;
           font-size: 16px;
           font-weight: 600;
           color: #1f2937;
         }
-
         .compared-versions {
           display: flex;
           align-items: center;
           gap: 8px;
           font-size: 14px;
         }
-
         .version-label {
           background: #f3f4f6;
           padding: 4px 8px;
           border-radius: 4px;
           color: #4b5563;
         }
-
         .comparison-arrow {
           color: #9ca3af;
         }
-
         .diff-sections {
           display: flex;
           flex-direction: column;
           gap: 20px;
         }
-
         .diff-section h5 {
           margin: 0 0 12px 0;
           font-size: 14px;
           font-weight: 600;
           color: #1f2937;
         }
-
         .changes-list {
           display: flex;
           flex-direction: column;
           gap: 12px;
         }
-
         .change-item {
           border: 1px solid #e5e7eb;
           border-radius: 6px;
           padding: 12px;
         }
-
         .change-item.added {
           border-color: #10b981;
           background: #ecfdf5;
         }
-
         .change-item.removed {
           border-color: #ef4444;
           background: #fef2f2;
         }
-
         .change-item.modified {
           border-color: #f59e0b;
           background: #fffbeb;
         }
-
         .change-header {
           display: flex;
           gap: 12px;
           margin-bottom: 8px;
           font-size: 12px;
         }
-
         .change-type {
           background: #374151;
           color: #ffffff;
@@ -921,38 +818,31 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           font-weight: 500;
           text-transform: capitalize;
         }
-
         .change-section {
           background: #f3f4f6;
           color: #4b5563;
           padding: 2px 6px;
           border-radius: 4px;
         }
-
         .line-number {
           color: #9ca3af;
         }
-
         .change-diff {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 12px;
         }
-
         .old-content, .new-content {
           font-size: 12px;
         }
-
         .old-content label {
           color: #ef4444;
           font-weight: 500;
         }
-
         .new-content label {
           color: #10b981;
           font-weight: 500;
         }
-
         .content-preview {
           background: #f9fafb;
           border: 1px solid #e5e7eb;
@@ -964,13 +854,11 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           max-height: 100px;
           overflow-y: auto;
         }
-
         .metadata-changes {
           display: flex;
           flex-direction: column;
           gap: 8px;
         }
-
         .metadata-change {
           display: flex;
           align-items: center;
@@ -980,55 +868,46 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           border-radius: 4px;
           font-size: 12px;
         }
-
         .field-name {
           font-weight: 500;
           color: #4b5563;
         }
-
         .old-value {
           background: #fef2f2;
           color: #dc2626;
           padding: 2px 4px;
           border-radius: 3px;
         }
-
         .new-value {
           background: #ecfdf5;
           color: #059669;
           padding: 2px 4px;
           border-radius: 3px;
         }
-
         .arrow {
           color: #9ca3af;
         }
-
         .media-changes {
           display: flex;
           flex-direction: column;
           gap: 8px;
         }
-
         .media-change {
           padding: 8px;
           background: #f9fafb;
           border-radius: 4px;
         }
-
         .media-info {
           display: flex;
           gap: 8px;
           align-items: center;
           font-size: 12px;
         }
-
         .structure-summary {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 12px;
         }
-
         .summary-item {
           display: flex;
           justify-content: space-between;
@@ -1037,54 +916,44 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
           border-radius: 4px;
           font-size: 12px;
         }
-
         .summary-item .label {
           color: #6b7280;
           font-weight: 500;
         }
-
         .summary-item .value {
           color: #1f2937;
           font-weight: 600;
         }
-
         .editorial-workflow {
           text-align: center;
           padding: 40px 20px;
           color: #6b7280;
         }
-
         @media (max-width: 768px) {
           .version-control-header {
             flex-direction: column;
             gap: 12px;
             align-items: flex-start;
           }
-
           .tab-content {
             padding: 12px;
           }
-
           .version-header {
             flex-direction: column;
             align-items: flex-start;
             gap: 12px;
           }
-
           .version-actions {
             align-self: flex-end;
           }
-
           .change-diff {
             grid-template-columns: 1fr;
           }
-
           .compared-versions {
             flex-direction: column;
             align-items: flex-end;
             gap: 4px;
           }
-
           .structure-summary {
             grid-template-columns: 1fr;
           }
@@ -1096,7 +965,7 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
 
 // Create Version Modal Component
 interface CreateVersionModalProps {
-  onCreate: (data: {
+  onCreate: (data: {)
     title: string;
     description: string;
     changelog: string;
@@ -1104,39 +973,34 @@ interface CreateVersionModalProps {
   }) => void;
   onCancel: () => void;
 }
-
-const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
+const CreateVersionModal: React.FC<CreateVersionModalProps> = ({)
   onCreate,
   onCancel
 }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({)
     title: '',
     description: '',
     changelog: '',
     revision_type: 'minor' as 'major' | 'minor' | 'patch' | 'editorial'
   });
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.title.trim() && formData.description.trim()) {
       onCreate(formData);
     }
   };
-
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onCancel();
     }
   };
-
-  return (
+  return ()
     <div className="modal-overlay" onClick={handleBackdropClick}>
       <div className="modal-content">
         <div className="modal-header">
           <h3>Create New Version</h3>
           <button onClick={onCancel} className="close-btn">×</button>
         </div>
-        
         <form onSubmit={handleSubmit} className="modal-form">
           <div className="form-group">
             <label htmlFor="version-title">Title *</label>
@@ -1149,7 +1013,6 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
               required
             />
           </div>
-          
           <div className="form-group">
             <label htmlFor="version-description">Description *</label>
             <textarea
@@ -1161,7 +1024,6 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
               required
             />
           </div>
-          
           <div className="form-group">
             <label htmlFor="revision-type">Revision Type</label>
             <select
@@ -1175,7 +1037,6 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
               <option value="major">Major (significant restructure)</option>
             </select>
           </div>
-          
           <div className="form-group">
             <label htmlFor="changelog">Changelog</label>
             <textarea
@@ -1186,7 +1047,6 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
               rows={4}
             />
           </div>
-          
           <div className="modal-actions">
             <button type="button" onClick={onCancel} className="cancel-btn">
               Cancel
@@ -1197,7 +1057,6 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
           </div>
         </form>
       </div>
-
       <style>{`
         .modal-overlay {
           position: fixed;
@@ -1212,7 +1071,6 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
           z-index: 1000;
           padding: 20px;
         }
-
         .modal-content {
           background: #ffffff;
           border-radius: 8px;
@@ -1221,7 +1079,6 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
           max-height: 90vh;
           overflow-y: auto;
         }
-
         .modal-header {
           display: flex;
           justify-content: space-between;
@@ -1229,14 +1086,12 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
           padding: 20px;
           border-bottom: 1px solid #e5e7eb;
         }
-
         .modal-header h3 {
           margin: 0;
           font-size: 18px;
           font-weight: 600;
           color: #1f2937;
         }
-
         .close-btn {
           background: none;
           border: none;
@@ -1244,15 +1099,12 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
           color: #9ca3af;
           cursor: pointer;
         }
-
         .modal-form {
           padding: 20px;
         }
-
         .form-group {
           margin-bottom: 16px;
         }
-
         .form-group label {
           display: block;
           margin-bottom: 4px;
@@ -1260,7 +1112,6 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
           font-weight: 500;
           color: #374151;
         }
-
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -1270,19 +1121,16 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
           border-radius: 6px;
           font-size: 14px;
         }
-
         .form-group textarea {
           resize: vertical;
           min-height: 80px;
         }
-
         .modal-actions {
           display: flex;
           gap: 12px;
           justify-content: flex-end;
           margin-top: 24px;
         }
-
         .cancel-btn {
           background: #f3f4f6;
           color: #374151;
@@ -1291,7 +1139,6 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
           border-radius: 6px;
           cursor: pointer;
         }
-
         .create-btn {
           background: #3b82f6;
           color: #ffffff;
@@ -1300,7 +1147,6 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
           border-radius: 6px;
           cursor: pointer;
         }
-
         .create-btn:hover {
           background: #2563eb;
         }

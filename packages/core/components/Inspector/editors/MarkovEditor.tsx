@@ -4,7 +4,6 @@ import { TextFieldEditor } from '../TextFieldEditor';
 import { TextAreaEditor } from '../TextAreaEditor';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { WeightSlider } from '../WeightSlider';
-
 interface MarkovTransition {
   from: string;
   to: string;
@@ -14,7 +13,6 @@ interface MarkovTransition {
 export interface MarkovEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Markov chain editor with three-tier progressive disclosure
 }
-
 /**
  * Epic 8.4 - Markov Chain Editor with Progressive Disclosure
  * 
@@ -33,9 +31,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
   const maxTransitions = (nodeData.maxTransitions as number) || 1000;
   const detectLoops = (nodeData.detectLoops as boolean) ?? false;
   const terminationStates = (nodeData.terminationStates as string[]) || [];
-
   // No manual collapse state needed - managed by ProgressiveDisclosureSection
-
   // Convert transitions object to array for easier editing
   const getTransitionArray = (): MarkovTransition[] => {
     const result: MarkovTransition[] = [];
@@ -46,10 +42,8 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
     }
     return result;
   };
-
   const setTransitionArray = (transitionArray: MarkovTransition[]) => {
     const newTransitions: Record<string, Record<string, number>> = {};
-    
     for (const { from, to, probability } of transitionArray) {
       if (!newTransitions[from]) {
         newTransitions[from] = {};
@@ -58,17 +52,13 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
         newTransitions[from][to] = probability;
       }
     }
-    
     onChange({ transitions: newTransitions });
   };
-
   const transitionArray = getTransitionArray();
-
   const handleStatesChange = (newStates: string[]) => {
     // Update states and clean up invalid transitions
     const validStates = new Set(newStates);
     const cleanedTransitions: Record<string, Record<string, number>> = {};
-    
     for (const [from, targets] of Object.entries(transitions)) {
       if (validStates.has(from)) {
         cleanedTransitions[from] = {};
@@ -79,8 +69,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
         }
       }
     }
-    
-    onChange({ 
+    onChange({ )
       states: newStates,
       transitions: cleanedTransitions,
       // Update initial state if it's no longer valid
@@ -89,22 +78,18 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
       terminationStates: terminationStates.filter(state => newStates.includes(state))
     });
   };
-
   const handleAddState = () => {
-    const newStateName = `State ${states.length + 1}`;
+    const newStateName = `State ${states.length + 1}`;}
     handleStatesChange([...states, newStateName]);
   };
-
   const handleRemoveState = (index: number) => {
     const newStates = states.filter((_, i) => i !== index);
     handleStatesChange(newStates);
   };
-
   const handleUpdateState = (index: number, newValue: string) => {
     const newStates = [...states];
     const oldState = states[index];
     newStates[index] = newValue;
-    
     // Update transitions to use new state name
     const updatedTransitions: Record<string, Record<string, number>> = {};
     for (const [from, targets] of Object.entries(transitions)) {
@@ -115,74 +100,60 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
         updatedTransitions[newFrom][newTo] = probability;
       }
     }
-    
-    onChange({ 
+    onChange({ )
       states: newStates, 
       transitions: updatedTransitions,
       initialState: initialState === oldState ? newValue : initialState,
       terminationStates: terminationStates.map(state => state === oldState ? newValue : state)
     });
   };
-
   const handleAddTransition = () => {
     if (states.length >= 2) {
       const newTransition: MarkovTransition = {
         from: states[0],
         to: states[1],
-        probability: 0.5
+        probability: 0.5,
       };
       setTransitionArray([...transitionArray, newTransition]);
     }
   };
-
   const handleRemoveTransition = (index: number) => {
     const newArray = transitionArray.filter((_, i) => i !== index);
     setTransitionArray(newArray);
   };
-
   const handleUpdateTransition = (index: number, field: keyof MarkovTransition, value: string | number) => {
     const newArray = [...transitionArray];
     newArray[index] = { ...newArray[index], [field]: value };
     setTransitionArray(newArray);
   };
-
   const handleNameChange = (value: unknown) => {
     onChange({ name: value as string, label: value as string });
   };
-
   const handleInitialStateChange = (value: unknown) => {
     onChange({ initialState: value as string });
   };
-
   const handleMaxTransitionsChange = (value: unknown) => {
     onChange({ maxTransitions: Math.max(1, Number(value) || 1000) });
   };
-
   const handleDetectLoopsChange = (value: unknown) => {
     onChange({ detectLoops: Boolean(value) });
   };
-
   const handleTerminationStatesChange = (value: unknown) => {
     const stateList = String(value).split(',').map(s => s.trim()).filter(s => s && states.includes(s));
     onChange({ terminationStates: stateList });
   };
-
   const normalizeTransitions = (fromState: string) => {
     const stateTransitions = transitions[fromState] || {};
     const total = Object.values(stateTransitions).reduce((sum, prob) => sum + prob, 0);
-    
     if (total > 0) {
       const normalizedTransitions = { ...transitions };
       normalizedTransitions[fromState] = {};
-      
       for (const [to, prob] of Object.entries(stateTransitions)) {
         normalizedTransitions[fromState][to] = prob / total;
       }
-      
       onChange({ transitions: normalizedTransitions });
     }
   };
-
   // Get probability totals for each state
   const getProbabilityTotals = (): Record<string, number> => {
     const totals: Record<string, number> = {};
@@ -192,10 +163,8 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
     }
     return totals;
   };
-
   const probabilityTotals = getProbabilityTotals();
-
-  return (
+  return ()
     <div className="markov-editor">
       {/* BASIC LEVEL: Essential settings for filmmakers */}
       <ProgressiveDisclosureSection
@@ -216,14 +185,13 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
             placeholder="e.g., Character Emotions, Plot Progression, Dialogue Flow"
           />
         </div>
-        
         <div style={{ marginBottom: 16 }}>
           <label style={{ 
             display: 'block', 
             fontWeight: 500, 
             marginBottom: 4,
             color: '#e2e8f0',
-            fontSize: 12
+            fontSize: 12,
           }}>
             Starting Point
           </label>
@@ -237,34 +205,33 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
               borderRadius: 4,
               background: '#2d3748',
               color: '#e2e8f0',
-              fontSize: 12
+              fontSize: 12,
             }}
           >
             <option value="">Choose where to begin...</option>
-            {states.map((state, index) => (
+            {states.map((state, index) => ()
               <option key={index} value={state}>{state}</option>
             ))}
           </select>
           <div style={{
             fontSize: 10,
             color: '#a0aec0',
-            marginTop: 4
+            marginTop: 4,
           }}>
             The initial state your story generation will begin from
           </div>
         </div>
-
         <div style={{ marginBottom: 12 }}>
           <div style={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'center',
-            marginBottom: 8
+            marginBottom: 8,
           }}>
             <label style={{ 
               fontWeight: 500, 
               color: '#e2e8f0',
-              fontSize: 12
+              fontSize: 12,
             }}>
               Story States
             </label>
@@ -277,14 +244,13 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                 border: 'none',
                 borderRadius: 2,
                 color: '#fff',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Add State
             </button>
           </div>
-          
-          {states.length === 0 ? (
+          {states.length === 0 ? ()
             <div style={{
               background: '#2d3748',
               border: '1px solid #4a5568',
@@ -293,25 +259,25 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
               textAlign: 'center',
               color: '#a0aec0',
               fontSize: 12,
-              fontStyle: 'italic'
+              fontStyle: 'italic',
             }}>
               No states defined. Add states like "Happy", "Sad", "Tense" to create your story chain.
             </div>
-          ) : (
+          ) : ()
             <div style={{
               background: '#2d3748',
               border: '1px solid #4a5568',
               borderRadius: 4,
-              padding: 8
+              padding: 8,
             }}>
-              {states.map((state, index) => (
+              {states.map((state, index) => ()
                 <div
                   key={index}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     marginBottom: index < states.length - 1 ? 8 : 0,
-                    gap: 8
+                    gap: 8,
                   }}
                 >
                   <input
@@ -325,11 +291,10 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                       borderRadius: 2,
                       background: '#1a202c',
                       color: '#e2e8f0',
-                      fontSize: 11
+                      fontSize: 11,
                     }}
                     placeholder={'e.g., "Joyful", "Mysterious", "Tense"'}
                   />
-                  
                   <button
                     onClick={() => handleRemoveState(index)}
                     style={{
@@ -339,7 +304,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                       color: '#fff',
                       cursor: 'pointer',
                       padding: '2px 6px',
-                      fontSize: 10
+                      fontSize: 10,
                     }}
                   >
                     Remove
@@ -350,7 +315,6 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
           )}
         </div>
       </ProgressiveDisclosureSection>
-
       {/* ADVANCED LEVEL: Transition matrix and probability controls */}
       <ProgressiveDisclosureSection
         title="Transition Controls"
@@ -365,12 +329,12 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'center',
-            marginBottom: 8
+            marginBottom: 8,
           }}>
             <label style={{ 
               fontWeight: 500, 
               color: '#e2e8f0',
-              fontSize: 12
+              fontSize: 12,
             }}>
               Markov Chain States
             </label>
@@ -383,14 +347,13 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                 border: 'none',
                 borderRadius: 2,
                 color: '#fff',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Add State
             </button>
           </div>
-          
-          {states.length === 0 ? (
+          {states.length === 0 ? ()
             <div style={{
               background: '#2d3748',
               border: '1px solid #4a5568',
@@ -399,25 +362,25 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
               textAlign: 'center',
               color: '#a0aec0',
               fontSize: 12,
-              fontStyle: 'italic'
+              fontStyle: 'italic',
             }}>
               No states defined. Add states to create your Markov chain.
             </div>
-          ) : (
+          ) : ()
             <div style={{
               background: '#2d3748',
               border: '1px solid #4a5568',
               borderRadius: 4,
-              padding: 8
+              padding: 8,
             }}>
-              {states.map((state, index) => (
+              {states.map((state, index) => ()
                 <div
                   key={index}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     marginBottom: index < states.length - 1 ? 8 : 0,
-                    gap: 8
+                    gap: 8,
                   }}
                 >
                   <input
@@ -431,21 +394,19 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                       borderRadius: 2,
                       background: '#1a202c',
                       color: '#e2e8f0',
-                      fontSize: 11
+                      fontSize: 11,
                     }}
                     placeholder={`State ${index + 1}`}
                   />
-                  
                   {/* Probability total indicator */}
                   <div style={{
                     fontSize: 10,
                     color: probabilityTotals[state] === 1 ? '#68d391' : '#fbb6ce',
                     minWidth: 50,
-                    textAlign: 'center'
+                    textAlign: 'center',
                   }}>
                     {probabilityTotals[state]?.toFixed(2) || '0.00'}
                   </div>
-                  
                   <button
                     onClick={() => handleRemoveState(index)}
                     style={{
@@ -455,7 +416,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                       color: '#fff',
                       cursor: 'pointer',
                       padding: '2px 6px',
-                      fontSize: 10
+                      fontSize: 10,
                     }}
                   >
                     Remove
@@ -466,7 +427,6 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
           )}
         </div>
       </ProgressiveDisclosureSection>
-
       {/* Transitions */}
       <ProgressiveDisclosureSection 
         title="Transition Matrix" 
@@ -481,12 +441,12 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'center',
-            marginBottom: 8
+            marginBottom: 8,
           }}>
             <label style={{ 
               fontWeight: 500, 
               color: '#e2e8f0',
-              fontSize: 12
+              fontSize: 12,
             }}>
               State Transitions
             </label>
@@ -506,8 +466,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
               Add Transition
             </button>
           </div>
-          
-          {transitionArray.length === 0 ? (
+          {transitionArray.length === 0 ? ()
             <div style={{
               background: '#2d3748',
               border: '1px solid #4a5568',
@@ -516,18 +475,18 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
               textAlign: 'center',
               color: '#a0aec0',
               fontSize: 12,
-              fontStyle: 'italic'
+              fontStyle: 'italic',
             }}>
               No transitions defined. Add transitions to define state behavior.
             </div>
-          ) : (
+          ) : ()
             <div style={{
               background: '#2d3748',
               border: '1px solid #4a5568',
               borderRadius: 4,
-              padding: 8
+              padding: 8,
             }}>
-              {transitionArray.map((transition, index) => (
+              {transitionArray.map((transition, index) => ()
                 <div
                   key={index}
                   style={{
@@ -542,7 +501,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                     display: 'flex',
                     alignItems: 'center',
                     gap: 8,
-                    marginBottom: 8
+                    marginBottom: 8,
                   }}>
                     <select
                       value={transition.from}
@@ -554,16 +513,14 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                         borderRadius: 2,
                         background: '#2d3748',
                         color: '#e2e8f0',
-                        fontSize: 11
+                        fontSize: 11,
                       }}
                     >
-                      {states.map((state) => (
+                      {states.map((state) => ()
                         <option key={state} value={state}>{state}</option>
                       ))}
                     </select>
-                    
                     <span style={{ color: '#a0aec0', fontSize: 12 }}>→</span>
-                    
                     <select
                       value={transition.to}
                       onChange={(e) => handleUpdateTransition(index, 'to', e.target.value)}
@@ -574,14 +531,13 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                         borderRadius: 2,
                         background: '#2d3748',
                         color: '#e2e8f0',
-                        fontSize: 11
+                        fontSize: 11,
                       }}
                     >
-                      {states.map((state) => (
+                      {states.map((state) => ()
                         <option key={state} value={state}>{state}</option>
                       ))}
                     </select>
-                    
                     <button
                       onClick={() => handleRemoveTransition(index)}
                       style={{
@@ -591,17 +547,16 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                         color: '#fff',
                         cursor: 'pointer',
                         padding: '2px 6px',
-                        fontSize: 10
+                        fontSize: 10,
                       }}
                     >
                       ✕
                     </button>
                   </div>
-                  
                   <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 8
+                    gap: 8,
                   }}>
                     <WeightSlider
                       value={transition.probability}
@@ -612,7 +567,6 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                       showNumeric={true}
                       label="Probability"
                     />
-                    
                     <button
                       onClick={() => normalizeTransitions(transition.from)}
                       style={{
@@ -622,7 +576,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                         border: 'none',
                         borderRadius: 2,
                         color: '#fff',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
                       }}
                     >
                       Normalize {transition.from}
@@ -633,33 +587,32 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
             </div>
           )}
         </div>
-
         {/* Probability Summary */}
-        {states.length > 0 && (
+        {states.length > 0 && ()
           <div style={{
             background: '#1a202c',
             border: '1px solid #4a5568',
             borderRadius: 4,
             padding: 8,
-            marginTop: 12
+            marginTop: 12,
           }}>
             <div style={{
               fontSize: 11,
               fontWeight: 500,
               color: '#e2e8f0',
-              marginBottom: 4
+              marginBottom: 4,
             }}>
               Probability Totals by State:
             </div>
             <div style={{
               fontSize: 10,
               color: '#a0aec0',
-              lineHeight: 1.4
+              lineHeight: 1.4,
             }}>
-              {states.map(state => {
+              {states.map(state => {)
                 const total = probabilityTotals[state] || 0;
                 const isValid = Math.abs(total - 1.0) < 0.001;
-                return (
+                return ()
                   <div key={state} style={{ 
                     display: 'flex', 
                     justifyContent: 'space-between',
@@ -674,7 +627,6 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
           </div>
         )}
       </ProgressiveDisclosureSection>
-
       {/* Settings */}
       <ProgressiveDisclosureSection 
         title="Debug Settings" 
@@ -696,19 +648,18 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
           <div style={{
             fontSize: 10,
             color: '#a0aec0',
-            marginTop: 2
+            marginTop: 2,
           }}>
             Maximum number of transitions before forcing termination
           </div>
         </div>
-
         <div style={{ marginBottom: 12 }}>
           <label style={{
             display: 'flex',
             alignItems: 'center',
             fontSize: 12,
             color: '#e2e8f0',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}>
             <input
               type="checkbox"
@@ -722,12 +673,11 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
             fontSize: 10,
             color: '#a0aec0',
             marginTop: 2,
-            marginLeft: 20
+            marginLeft: 20,
           }}>
             Stop execution when repetitive state patterns are detected
           </div>
         </div>
-
         <div>
           <TextAreaEditor
             label="Termination States"
@@ -741,13 +691,12 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
           <div style={{
             fontSize: 10,
             color: '#a0aec0',
-            marginTop: 2
+            marginTop: 2,
           }}>
             Comma-separated list of states that will stop the chain when reached
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* Preview */}
       <ProgressiveDisclosureSection 
         title="Chain Preview" 
@@ -763,18 +712,17 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
           borderRadius: 4,
           padding: 12,
           fontSize: 12,
-          color: '#e2e8f0'
+          color: '#e2e8f0',
         }}>
-          {states.length === 0 ? (
+          {states.length === 0 ? ()
             <div style={{ color: '#a0aec0', fontStyle: 'italic' }}>
               Add states to see Markov chain preview
             </div>
-          ) : (
+          ) : ()
             <div>
               <div style={{ marginBottom: 8, fontWeight: 500 }}>
                 Markov Chain Configuration:
               </div>
-              
               <div style={{ marginBottom: 8 }}>
                 <span style={{ color: '#90cdf4' }}>States:</span> {states.length} total
                 <br />
@@ -782,29 +730,26 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                 <br />
                 <span style={{ color: '#90cdf4' }}>Transitions:</span> {transitionArray.length} defined
               </div>
-
-              {transitionArray.length > 0 && (
+              {transitionArray.length > 0 && ()
                 <div style={{ marginTop: 8 }}>
                   <div style={{ fontSize: 11, color: '#90cdf4', marginBottom: 4 }}>
                     Transition Matrix:
                   </div>
-                  {states.map(fromState => {
+                  {states.map(fromState => {)
                     const stateTransitions = transitions[fromState] || {};
                     const hasTransitions = Object.keys(stateTransitions).length > 0;
-                    
                     if (!hasTransitions) return null;
-                    
-                    return (
+                    return ()
                       <div key={fromState} style={{
                         marginBottom: 4,
                         padding: '2px 4px',
                         background: 'rgba(66, 153, 225, 0.1)',
                         borderRadius: 2,
-                        fontSize: 10
+                        fontSize: 10,
                       }}>
                         <span style={{ fontWeight: 500 }}>{fromState}</span> →{' '}
-                        {Object.entries(stateTransitions).map(([toState, prob]) => (
-                          `${toState}(${(prob * 100).toFixed(1)}%)`
+                        {Object.entries(stateTransitions).map(([toState, prob]) => ()
+                          `${toState}(${(prob * 100).toFixed(1)}%)`}
                         )).join(', ')}
                       </div>
                     );

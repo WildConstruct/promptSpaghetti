@@ -7,85 +7,68 @@
  * - Ensures professional branding and appearance
  * - Provides performance monitoring for smooth demos
  */
-
 import React, { useState, useEffect } from 'react';
 import { professionalColors } from '../styles/professional-design-system';
-
 interface DemoReadyModeProps {
   children: React.ReactNode;
   enabled?: boolean;
   onToggle?: (enabled: boolean) => void;
 }
 
-export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({ 
+export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({ )
   children, 
   enabled = false, 
   onToggle 
 }) => {
-  const [screenSize, setScreenSize] = useState({
+  const [screenSize, setScreenSize] = useState({)
     width: window.innerWidth,
     height: window.innerHeight,
-    isPresentationSize: false
+    isPresentationSize: false,
   });
-
   useEffect(() => {
     const checkScreenSize = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
-      
       // Check for common presentation screen sizes
-      const isPresentationSize = 
+      const isPresentationSize = ;
         (width >= 1920 && height >= 1080) || // Full HD
         (width >= 2560 && height >= 1440) || // 1440p
         (width >= 3840 && height >= 2160);   // 4K
-
       setScreenSize({ width, height, isPresentationSize });
     };
-
     const handleResize = () => checkScreenSize();
     window.addEventListener('resize', handleResize);
     checkScreenSize();
-
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
   useEffect(() => {
     if (!enabled) return;
-
     // Performance monitoring for demo mode
     let lastTime = performance.now();
     let frameCount = 0;
-    
     const measurePerformance = () => {
       const currentTime = performance.now();
       frameCount++;
-
       if (currentTime - lastTime >= 1000) {
         const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
-        
         // Memory usage (if available)
         const memoryInfo = (performance as any).memory;
-        const memoryUsage = memoryInfo ? 
+        const memoryUsage = memoryInfo ? ;
           Math.round(memoryInfo.usedJSHeapSize / 1024 / 1024) : 0;
-
-        setPerformanceMetrics({
+        setPerformanceMetrics({)
           fps,
           renderTime: currentTime - lastTime,
           memoryUsage
         });
-
         frameCount = 0;
         lastTime = currentTime;
       }
-
       if (enabled) {
         requestAnimationFrame(measurePerformance);
       }
     };
-
     requestAnimationFrame(measurePerformance);
   }, [enabled]);
-
   const demoStyles = enabled ? {
     // Hide scrollbars and development chrome
     '--scrollbar-width': '0px',
@@ -96,8 +79,7 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
     // Professional cursor
     cursor: 'default' as const
   } : {};
-
-  return (
+  return ()
     <div 
       style={{
         position: 'relative',
@@ -108,7 +90,7 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
       data-demo-mode={enabled}
     >
       {/* Demo Ready Status Indicator */}
-      {enabled && (
+      {enabled && ()
         <div
           style={{
             position: 'fixed',
@@ -124,7 +106,7 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
             display: 'flex',
             alignItems: 'center',
-            gap: 8
+            gap: 8,
           }}
         >
           <div 
@@ -139,9 +121,8 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
           Demo Ready
         </div>
       )}
-
       {/* Performance Monitor (only shown in demo mode) */}
-      {enabled && performanceMetrics.fps > 0 && (
+      {enabled && performanceMetrics.fps > 0 && ()
         <div
           style={{
             position: 'fixed',
@@ -155,7 +136,7 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
             fontSize: 11,
             fontFamily: 'monospace',
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            minWidth: 200
+            minWidth: 200,
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
@@ -176,7 +157,7 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
               {screenSize.width}×{screenSize.height}
             </span>
           </div>
-          {performanceMetrics.memoryUsage > 0 && (
+          {performanceMetrics.memoryUsage > 0 && ()
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span>Memory:</span>
               <span>{performanceMetrics.memoryUsage}MB</span>
@@ -184,9 +165,8 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
           )}
         </div>
       )}
-
       {/* Screen Size Recommendation */}
-      {enabled && !screenSize.isPresentationSize && (
+      {enabled && !screenSize.isPresentationSize && ()
         <div
           style={{
             position: 'fixed',
@@ -206,7 +186,6 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
           ⚠️ For best presentation quality, use 1920×1080 or higher resolution
         </div>
       )}
-
       {/* Demo Toggle Button */}
       <button
         onClick={() => onToggle?.(!enabled)}
@@ -217,7 +196,7 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
           zIndex: 9999,
           background: enabled ? professionalColors.accent.orange : professionalColors.ui.hover,
           color: enabled ? 'white' : professionalColors.text.primary,
-          border: `1px solid ${professionalColors.ui.border}`,
+          border: `1px solid ${professionalColors.ui.border}`,}
           borderRadius: 8,
           padding: '8px 16px',
           fontSize: 12,
@@ -237,13 +216,12 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
       >
         {enabled ? '🎬 Demo Mode ON' : '🎬 Demo Mode OFF'}
       </button>
-
       {/* Main Content */}
       <div 
         style={{
           width: '100%',
           height: '100%',
-          ...(enabled && {
+          ...(enabled && {)
             // Hide development elements in demo mode
             '& [data-dev-only]': {
               display: 'none !important'
@@ -251,16 +229,15 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
             // Ensure professional appearance
             '& *': {
               fontSmoothing: 'antialiased',
-              WebkitFontSmoothing: 'antialiased'
+              WebkitFontSmoothing: 'antialiased',
             }
           })
         }}
       >
         {children}
       </div>
-
       {/* Demo Mode CSS Styles */}
-      {enabled && (
+      {enabled && ()
         <style>
           {`
             /* Hide scrollbars in demo mode */
@@ -271,19 +248,16 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
               scrollbar-width: none;
               -ms-overflow-style: none;
             }
-
             /* Hide development elements */
             [data-demo-mode="true"] [data-dev-only] {
               display: none !important;
             }
-
             /* Professional text rendering */
             [data-demo-mode="true"] * {
               -webkit-font-smoothing: antialiased;
               -moz-osx-font-smoothing: grayscale;
               text-rendering: optimizeLegibility;
             }
-
             /* Disable text selection in demo mode */
             [data-demo-mode="true"] {
               -webkit-user-select: none;
@@ -291,17 +265,14 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
               -ms-user-select: none;
               user-select: none;
             }
-
             /* Professional cursor */
             [data-demo-mode="true"] * {
               cursor: default !important;
             }
-
             [data-demo-mode="true"] button,
             [data-demo-mode="true"] [role="button"] {
               cursor: pointer !important;
             }
-
             /* Pulse animation for demo indicator */
             @keyframes pulse {
               0%, 100% { opacity: 1; }
@@ -317,13 +288,9 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
 // Utility hook for demo mode state
 export const useDemoMode = () => {
   const [enabled, setEnabled] = useState(false);
-  
   const toggle = () => setEnabled(!enabled);
-  
   const enable = () => setEnabled(true);
-  
   const disable = () => setEnabled(false);
-
   return {
     enabled,
     toggle,

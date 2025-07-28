@@ -5,12 +5,10 @@
  * working together to showcase the business value of prompt templates.
  * Part of Epic 16 Case Study Showcase (Story 16.4.4).
  */
-
 import React, { useState } from 'react';
 import { Calculator, PiggyBank, TrendingUp, BarChart3, Download } from 'lucide-react';
 import { ROICalculator } from './ROICalculator';
 import { SavingsEstimation } from './SavingsEstimation';
-
 interface BusinessValueDemoProps {
   className?: string;
   templateExample?: {
@@ -21,7 +19,7 @@ interface BusinessValueDemoProps {
   };
 }
 
-export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
+export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)
   className = '',
   templateExample = {
     name: 'Professional Email Templates',
@@ -34,28 +32,24 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
   const [roiResults, setROIResults] = useState<unknown>(null);
   const [savingsResults, setSavingsResults] = useState<unknown>(null);
   const [industryPreset, setIndustryPreset] = useState<string>('startup');
-
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-US', {)
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     }).format(amount);
   };
-
   const formatPercentage = (value: number) => {
-    return `${value.toFixed(1)}%`;
+    return `${value.toFixed(1)}%`;}
   };
-
   const generateReport = () => {
     if (!roiResults || !savingsResults) return;
-
     const report = {
       template: templateExample,
       roi: roiResults,
       savings: savingsResults,
-      summary: {
+      summary: {,
         totalValue: roiResults.netSavings + savingsResults.totalSavings.totalProjectSavings,
         paybackTime: roiResults.timeToValue,
         efficiency: savingsResults.productivity.productivityGain,
@@ -63,20 +57,18 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
       },
       generatedAt: new Date().toISOString()
     };
-
     const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `business-value-analysis-${templateExample.name.toLowerCase().replace(/\s+/g, '-')}.json`;
+    a.download = `business-value-analysis-${templateExample.name.toLowerCase().replace(/\s+/g, '-')}.json`;}
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-
-  return (
-    <div className={`space-y-6 ${className}`}>
+  return ()
+    <div className={`space-y-6 ${className}`}>}
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200">
         <div className="flex items-center justify-between">
@@ -96,7 +88,6 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
               </span>
             </div>
           </div>
-          
           <div className="flex space-x-3">
             <button
               onClick={generateReport}
@@ -113,14 +104,13 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
           </div>
         </div>
       </div>
-
       {/* Industry Preset Selector */}
       <div className="bg-white rounded-lg border border-gray-200 p-4">
         <label className="block text-sm font-medium text-gray-700 mb-3">
           Select Your Industry/Use Case
         </label>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {['individual', 'startup', 'agency', 'enterprise'].map((preset) => (
+          {['individual', 'startup', 'agency', 'enterprise'].map((preset) => ()
             <button
               key={preset}
               onClick={() => setIndustryPreset(preset)}
@@ -135,7 +125,6 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
           ))}
         </div>
       </div>
-
       {/* Tab Navigation */}
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
         <nav className="flex border-b border-gray-200">
@@ -152,7 +141,6 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
               <span>ROI Calculator</span>
             </div>
           </button>
-          
           <button
             onClick={() => setActiveTab('savings')}
             className={`flex-1 py-4 px-6 text-center font-medium ${
@@ -166,7 +154,6 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
               <span>Savings Estimation</span>
             </div>
           </button>
-          
           <button
             onClick={() => setActiveTab('summary')}
             className={`flex-1 py-4 px-6 text-center font-medium ${
@@ -181,26 +168,23 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
             </div>
           </button>
         </nav>
-
         {/* Tab Content */}
         <div className="p-6">
-          {activeTab === 'roi' && (
+          {activeTab === 'roi' && ()
             <ROICalculator
               onResultsChange={setROIResults}
               presetScenario={industryPreset as any}
             />
           )}
-
-          {activeTab === 'savings' && (
+          {activeTab === 'savings' && ()
             <SavingsEstimation
               onSavingsChange={setSavingsResults}
               industryPreset={industryPreset as any}
             />
           )}
-
-          {activeTab === 'summary' && (
+          {activeTab === 'summary' && ()
             <div className="space-y-6">
-              {!roiResults || !savingsResults ? (
+              {!roiResults || !savingsResults ? ()
                 <div className="text-center py-12">
                   <BarChart3 className="mx-auto w-12 h-12 text-gray-400 mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -210,10 +194,9 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
                     Please visit the ROI Calculator and Savings Estimation tabs to generate your executive summary.
                   </p>
                 </div>
-              ) : (
+              ) : ()
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold text-gray-900">Executive Summary</h3>
-                  
                   {/* Key Metrics Dashboard */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-green-50 rounded-lg p-6 border border-green-200">
@@ -230,7 +213,6 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
                         <TrendingUp className="w-8 h-8 text-green-600" />
                       </div>
                     </div>
-
                     <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
                       <div className="flex items-center justify-between">
                         <div>
@@ -245,7 +227,6 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
                         <Calculator className="w-8 h-8 text-blue-600" />
                       </div>
                     </div>
-
                     <div className="bg-purple-50 rounded-lg p-6 border border-purple-200">
                       <div className="flex items-center justify-between">
                         <div>
@@ -261,7 +242,6 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
                       </div>
                     </div>
                   </div>
-
                   {/* Business Impact Summary */}
                   <div className="bg-gray-50 rounded-lg p-6">
                     <h4 className="font-semibold text-gray-900 mb-4">Business Impact</h4>
@@ -283,7 +263,6 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
                           </li>
                         </ul>
                       </div>
-                      
                       <div className="space-y-3">
                         <h5 className="font-medium text-gray-700">Operational Benefits</h5>
                         <ul className="space-y-2 text-sm text-gray-600">
@@ -303,7 +282,6 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
                       </div>
                     </div>
                   </div>
-
                   {/* Recommendation */}
                   <div className={`rounded-lg p-6 border ${
                     roiResults.roi > 100 
@@ -328,18 +306,18 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
                           ? 'text-yellow-800'
                           : 'text-red-800'
                     }`}>
-                      {roiResults.roi > 100 ? (
+                      {roiResults.roi > 100 ? ()
                         <p>
                           <strong>Strongly Recommended:</strong> This template shows excellent ROI with {formatPercentage(roiResults.roi)} return 
                           and payback in {roiResults.timeToValue}. The business case is compelling with significant cost savings 
                           and productivity improvements.
                         </p>
-                      ) : roiResults.roi > 50 ? (
+                      ) : roiResults.roi > 50 ? ()
                         <p>
                           <strong>Recommended:</strong> This template provides positive ROI with reasonable payback time. 
                           Consider the productivity and quality benefits alongside the financial savings.
                         </p>
-                      ) : (
+                      ) : ()
                         <p>
                           <strong>Consider Alternatives:</strong> The ROI is below optimal thresholds. 
                           Review usage patterns or explore alternative templates that might provide better value.
@@ -347,7 +325,6 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
                       )}
                     </div>
                   </div>
-
                   {/* Action Items */}
                   <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
                     <h4 className="font-semibold text-blue-900 mb-3">Next Steps</h4>

@@ -10,7 +10,6 @@
  * - Result persistence and organization
  * - Export integration
  */
-
 import React, { useState, useCallback, useMemo } from 'react';
 import { ErrorFactory } from '../../errors/ErrorFactory';
 import { VarianceAnalysis } from '../../hooks/useEnhancedPreview';
@@ -25,7 +24,6 @@ export interface EnhancedPreviewResult {
   executionTimeMs?: number;
   usedNodeIds?: string[];
   usedEdgeIds?: string[];
-  
   // Film industry metadata
   metadata?: {
     createdAt: Date;
@@ -37,14 +35,12 @@ export interface EnhancedPreviewResult {
     rating?: 1 | 2 | 3 | 4 | 5; // Professional rating
     notes?: string;
   };
-  
   // Management state
   id: string;
   selected?: boolean;
   saved?: boolean;
   exported?: boolean;
 }
-
 interface EnhancedPreviewModalProps {
   open: boolean;
   loading: boolean;
@@ -54,7 +50,6 @@ interface EnhancedPreviewModalProps {
   onClose: () => void;
   onCancel?: () => void;
   onResultHover?: (index: number) => void;
-  
   // Enhanced functionality
   onResultSelect?: (resultId: string, selected: boolean) => void;
   onResultSave?: (resultId: string, metadata?: Record<string, unknown>) => Promise<void>;
@@ -62,7 +57,6 @@ interface EnhancedPreviewModalProps {
   onResultRate?: (resultId: string, rating: number) => void;
   onResultTag?: (resultId: string, tags: string[]) => void;
   onResultNote?: (resultId: string, note: string) => void;
-  
   // Configuration
   enableSelection?: boolean;
   enableRating?: boolean;
@@ -71,23 +65,20 @@ interface EnhancedPreviewModalProps {
   maxResults?: number;
 }
 
-export   const [expandedResult, setExpandedResult] = useState<string | null>(null);
+export const [expandedResult, setExpandedResult] = useState<string | null>(null);
   const [ratingInProgress, setRatingInProgress] = useState<string | null>(null);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [tempNote, setTempNote] = useState('');
-
   // Enhanced result statistics
   const resultStats = useMemo(() => {
     if (!results.length) return null;
-    
     const validResults = results.filter(r => !r.error);
     const totalWords = validResults.reduce((sum, r) => sum + (r.metadata?.wordCount || 0), 0);
-    const avgReadingTime = validResults.reduce(
-      (sum,
+    const avgReadingTime = validResults.reduce(;)
+      (sum,)
         r
       ) => sum + (r.metadata?.estimatedReadingTime || 0), 0) / validResults.length;
     const avgRating = validResults.reduce((sum, r) => sum + (r.metadata?.rating || 0), 0) / validResults.length;
-    
     return {
       totalResults: results.length,
       validResults: validResults.length,
@@ -99,7 +90,6 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
       savedCount: results.filter(r => r.saved).length
     };
   }, [results, selectedResults.size]);
-
   const handleResultSelect = useCallback((resultId: string, selected: boolean) => {
     const newSelected = new Set(selectedResults);
     if (selected) {
@@ -110,44 +100,37 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
     setSelectedResults(newSelected);
     onResultSelect?.(resultId, selected);
   }, [selectedResults, onResultSelect]);
-
   const handleSelectAll = useCallback(() => {
     const allResultIds = new Set(results.map(r => r.id));
     setSelectedResults(allResultIds);
     results.forEach(r => onResultSelect?.(r.id, true));
   }, [results, onResultSelect]);
-
   const handleClearSelection = useCallback(() => {
     selectedResults.forEach(id => onResultSelect?.(id, false));
     setSelectedResults(new Set());
   }, [selectedResults, onResultSelect]);
-
   const handleBatchExport = useCallback(async () => {
     if (selectedResults.size === 0) return;
-    
     try {
       await onResultExport?.(Array.from(selectedResults));
     } catch (error) {
-      throw ErrorFactory.createGraphExecutionError(
+      throw ErrorFactory.createGraphExecutionError()
         'Failed to export selected results',
         error as Error,
         { operation: 'batch_export' }
       );
     }
   }, [selectedResults, onResultExport]);
-
   const handleRating = useCallback((resultId: string, rating: number) => {
     setRatingInProgress(resultId);
     onResultRate?.(resultId, rating);
     setTimeout(() => setRatingInProgress(null), 500);
   }, [onResultRate]);
-
   const handleNoteSave = useCallback((resultId: string) => {
     onResultNote?.(resultId, tempNote);
     setNoteEditing(null);
     setTempNote('');
   }, [tempNote, onResultNote]);
-
   const getContentTypeIcon = (contentType?: string) => {
     switch (contentType) {
     case 'dialogue': return '💬';
@@ -156,15 +139,12 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
     default: return '📄';
     }
   };
-
   const formatExecutionTime = (timeMs?: number) => {
     if (!timeMs) return 'N/A';
-    return timeMs < 1000 ? `${timeMs}ms` : `${(timeMs / 1000).toFixed(1)}s`;
+    return timeMs < 1000 ? `${timeMs}ms` : `${(timeMs / 1000).toFixed(1)}s`;}
   };
-
   if (!open) return null;
-
-  return (
+  return ()
     <div 
       role="dialog" 
       aria-modal="true" 
@@ -180,7 +160,7 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backdropFilter: 'blur(4px)'
+        backdropFilter: 'blur(4px)',
       }}
     >
       <div 
@@ -208,17 +188,17 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
               fontWeight: 600,
               background: 'linear-gradient(135deg, #ffffff 0%, #b0b0b0 100%)',
               WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
+              WebkitTextFillColor: 'transparent',
             }}>
               🎬 Preview Results
             </h2>
-            {resultStats && (
+            {resultStats && ()
               <div style={{ 
                 marginTop: 8, 
                 fontSize: 14, 
                 color: '#b0b0b0',
                 display: 'flex',
-                gap: 16
+                gap: 16,
               }}>
                 <span>📊 {resultStats.validResults}/{resultStats.totalResults} results</span>
                 <span>⏱️ Avg: {resultStats.avgReadingTime}s read time</span>
@@ -248,18 +228,17 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
             ✕ Close
           </button>
         </div>
-
         {/* Tab Navigation */}
         <div style={{
           display: 'flex',
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          marginBottom: 20
+          marginBottom: 20,
         }}>
           {[
             { id: 'results', label: '📋 Results', icon: '📋' },
             { id: 'analysis', label: '📊 Creative Analysis', icon: '📊' },
             { id: 'visualization', label: '📈 Visualization', icon: '📈' }
-          ].map(tab => (
+          ].map(tab => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
@@ -276,11 +255,11 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                 cursor: 'pointer',
                 borderRadius: '8px 8px 0 0',
                 transition: 'all 0.2s',
-                position: 'relative'
+                position: 'relative',
               }}
             >
               {tab.label}
-              {activeTab === tab.id && (
+              {activeTab === tab.id && ()
                 <div style={{
                   position: 'absolute',
                   bottom: 0,
@@ -294,9 +273,8 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
             </button>
           ))}
         </div>
-
         {/* Toolbar */}
-        {enableSelection && (
+        {enableSelection && ()
           <div style={{
             display: 'flex',
             gap: 12,
@@ -339,7 +317,7 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
             >
               Clear ({selectedResults.size})
             </button>
-            {enableExport && (
+            {enableExport && ()
               <button
                 onClick={handleBatchExport}
                 disabled={selectedResults.size === 0}
@@ -360,17 +338,16 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
             )}
           </div>
         )}
-
         {/* Tab Content */}
-        {activeTab === 'results' && (
+        {activeTab === 'results' && ()
           <>
             {/* Loading/Error States */}
-            {loading && (
+            {loading && ()
               <div style={{ 
                 textAlign: 'center', 
                 padding: 40,
                 color: '#b0b0b0',
-                fontSize: 16
+                fontSize: 16,
               }}>
                 <div style={{ marginBottom: 12 }}>⚡ Generating professional results...</div>
                 <div style={{ 
@@ -379,7 +356,7 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                   background: '#333', 
                   borderRadius: 2, 
                   margin: '0 auto',
-                  overflow: 'hidden'
+                  overflow: 'hidden',
                 }}>
                   <div style={{
                     width: '100%',
@@ -391,37 +368,35 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                 </div>
               </div>
             )}
-
-            {error && (
+            {error && ()
               <div style={{ 
                 color: '#ef4444', 
                 background: 'rgba(239, 68, 68, 0.1)',
                 border: '1px solid rgba(239, 68, 68, 0.2)',
                 padding: 16,
                 borderRadius: 8,
-                marginBottom: 20
+                marginBottom: 20,
               }}>
                 ⚠️ Error: {error}
               </div>
             )}
-
             {/* Results List */}
-            {!loading && !error && (
+            {!loading && !error && ()
               <div style={{ 
                 flex: 1, 
                 overflowY: 'auto',
-                paddingRight: 8
+                paddingRight: 8,
               }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  {results.slice(0, maxResults).map((result, index) => (
+                  {results.slice(0, maxResults).map((result, index) => ()
                     <div
                       key={result.id}
                       onMouseEnter={() => onResultHover?.(index)}
                       style={{
-                        background: selectedResults.has(result.id) 
+                        background: selectedResults.has(result.id) ,
                           ? 'linear-gradient(135deg, rgba(79, 70, 229, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%)'
                           : 'rgba(255, 255, 255, 0.05)',
-                        border: `1px solid ${selectedResults.has(result.id) ? '#4f46e5' : 'rgba(255, 255, 255, 0.1)'}`,
+                        border: `1px solid ${selectedResults.has(result.id) ? '#4f46e5' : 'rgba(255, 255, 255, 0.1)'}`,}
                         borderRadius: 12,
                         padding: 20,
                         position: 'relative',
@@ -436,7 +411,7 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                       {/* Result Header */}
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                          {enableSelection && (
+                          {enableSelection && ()
                             <input
                               type="checkbox"
                               checked={selectedResults.has(result.id)}
@@ -444,7 +419,7 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                               style={{
                                 width: 16,
                                 height: 16,
-                                accentColor: '#4f46e5'
+                                accentColor: '#4f46e5',
                               }}
                             />
                           )}
@@ -456,17 +431,16 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                             fontSize: 11,
                             padding: '4px 10px',
                             borderRadius: 12,
-                            fontWeight: 600
+                            fontWeight: 600,
                           }}>
                         🎲 {result.seed}
                           </span>
-                          {result.metadata?.contentType && (
+                          {result.metadata?.contentType && ()
                             <span style={{ fontSize: 16 }}>
                               {getContentTypeIcon(result.metadata.contentType)}
                             </span>
                           )}
                         </div>
-                    
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           <span style={{ fontSize: 11, color: '#999' }}>
                             {formatExecutionTime(result.executionTimeMs)}
@@ -475,13 +449,12 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                           {result.exported && <span style={{ fontSize: 12 }}>📤</span>}
                         </div>
                       </div>
-
                       {/* Result Content */}
-                      {result.error ? (
+                      {result.error ? ()
                         <div style={{ color: '#ef4444', fontFamily: 'monospace', fontSize: 14 }}>
                           {result.error}
                         </div>
-                      ) : (
+                      ) : ()
                         <div style={{ 
                           fontFamily: '\'Georgia\', \'Times New Roman\', serif', 
                           fontSize: 15,
@@ -490,10 +463,10 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                           color: '#e5e5e5',
                           maxHeight: expandedResult === result.id ? 'none' : 150,
                           overflow: 'hidden',
-                          position: 'relative'
+                          position: 'relative',
                         }}>
                           {result.output}
-                          {result.output && result.output.length > 300 && expandedResult !== result.id && (
+                          {result.output && result.output.length > 300 && expandedResult !== result.id && ()
                             <div style={{
                               position: 'absolute',
                               bottom: 0,
@@ -503,7 +476,7 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                               background: 'linear-gradient(transparent, rgba(45, 45, 45, 0.9))',
                               display: 'flex',
                               alignItems: 'end',
-                              justifyContent: 'center'
+                              justifyContent: 'center',
                             }}>
                               <button
                                 onClick={() => setExpandedResult(result.id)}
@@ -514,14 +487,14 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                                   padding: '4px 12px',
                                   borderRadius: 4,
                                   cursor: 'pointer',
-                                  fontSize: 12
+                                  fontSize: 12,
                                 }}
                               >
                             Show More
                               </button>
                             </div>
                           )}
-                          {expandedResult === result.id && (
+                          {expandedResult === result.id && ()
                             <button
                               onClick={() => setExpandedResult(null)}
                               style={{
@@ -532,7 +505,7 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                                 borderRadius: 4,
                                 cursor: 'pointer',
                                 fontSize: 12,
-                                marginTop: 12
+                                marginTop: 12,
                               }}
                             >
                           Show Less
@@ -540,33 +513,31 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                           )}
                         </div>
                       )}
-
                       {/* Metadata */}
-                      {result.metadata && (
+                      {result.metadata && ()
                         <div style={{ 
                           marginTop: 16,
                           display: 'flex',
                           gap: 16,
                           fontSize: 12,
-                          color: '#999'
+                          color: '#999',
                         }}>
-                          {result.metadata.wordCount && (
+                          {result.metadata.wordCount && ()
                             <span>📝 {result.metadata.wordCount} words</span>
                           )}
-                          {result.metadata.estimatedReadingTime && (
+                          {result.metadata.estimatedReadingTime && ()
                             <span>⏱️ {result.metadata.estimatedReadingTime}s read</span>
                           )}
-                          {result.metadata.tags?.length && (
+                          {result.metadata.tags?.length && ()
                             <span>🏷️ {result.metadata.tags.join(', ')}</span>
                           )}
                         </div>
                       )}
-
                       {/* Rating System */}
-                      {enableRating && !result.error && (
+                      {enableRating && !result.error && ()
                         <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
                           <span style={{ fontSize: 12, color: '#b0b0b0' }}>Rate:</span>
-                          {[1, 2, 3, 4, 5].map(star => (
+                          {[1, 2, 3, 4, 5].map(star => ()
                             <button
                               key={star}
                               onClick={() => handleRating(result.id, star)}
@@ -576,22 +547,21 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                                 color: (result.metadata?.rating || 0) >= star ? '#fbbf24' : '#666',
                                 cursor: 'pointer',
                                 fontSize: 16,
-                                padding: 2
+                                padding: 2,
                               }}
                             >
                           ⭐
                             </button>
                           ))}
-                          {ratingInProgress === result.id && (
+                          {ratingInProgress === result.id && ()
                             <span style={{ fontSize: 12, color: '#4f46e5' }}>✓</span>
                           )}
                         </div>
                       )}
-
                       {/* Notes */}
-                      {enableNotes && !result.error && (
+                      {enableNotes && !result.error && ()
                         <div style={{ marginTop: 12 }}>
-                          {noteEditing === result.id ? (
+                          {noteEditing === result.id ? ()
                             <div style={{ display: 'flex', gap: 8 }}>
                               <input
                                 type="text"
@@ -605,7 +575,7 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                                   color: '#ffffff',
                                   padding: '6px 12px',
                                   borderRadius: 4,
-                                  fontSize: 12
+                                  fontSize: 12,
                                 }}
                                 autoFocus
                               />
@@ -618,7 +588,7 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                                   padding: '6px 12px',
                                   borderRadius: 4,
                                   cursor: 'pointer',
-                                  fontSize: 12
+                                  fontSize: 12,
                                 }}
                               >
                             Save
@@ -635,13 +605,13 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                                   padding: '6px 12px',
                                   borderRadius: 4,
                                   cursor: 'pointer',
-                                  fontSize: 12
+                                  fontSize: 12,
                                 }}
                               >
                             Cancel
                               </button>
                             </div>
-                          ) : (
+                          ) : ()
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                               <div style={{ fontSize: 12, color: '#b0b0b0', fontStyle: 'italic' }}>
                                 {result.metadata?.notes || 'No notes'}
@@ -658,7 +628,7 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                                   padding: '4px 8px',
                                   borderRadius: 4,
                                   cursor: 'pointer',
-                                  fontSize: 11
+                                  fontSize: 11,
                                 }}
                               >
                             📝 {result.metadata?.notes ? 'Edit' : 'Add'} Note
@@ -674,13 +644,12 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
             )}
           </>
         )}
-
         {/* Creative Analysis Tab */}
-        {activeTab === 'analysis' && (
+        {activeTab === 'analysis' && ()
           <div style={{ 
             flex: 1, 
             overflowY: 'auto',
-            paddingRight: 8
+            paddingRight: 8,
           }}>
             <CreativeVarianceAnalyzer
               results={results}
@@ -689,13 +658,12 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
             />
           </div>
         )}
-
         {/* Visualization Tab */}
-        {activeTab === 'visualization' && (
+        {activeTab === 'visualization' && ()
           <div style={{ 
             flex: 1, 
             overflowY: 'auto',
-            paddingRight: 8
+            paddingRight: 8,
           }}>
             <VarianceVisualization
               results={results}
@@ -705,7 +673,6 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
           </div>
         )}
       </div>
-
       <style>
         {`
           @keyframes loading {

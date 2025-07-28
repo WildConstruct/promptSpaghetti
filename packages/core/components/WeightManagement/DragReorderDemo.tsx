@@ -4,7 +4,6 @@
  * 
  * Professional demo showcase for Wild Construct's $2.3B film industry integration
  */
-
 import React, { useState, useCallback, useMemo } from 'react';
 import { DragReorderWeightManager, WeightedOption } from './DragReorderWeightManager';
 
@@ -13,11 +12,10 @@ export interface DragReorderDemoProps {
   showCode?: boolean;
   interactive?: boolean;
 }
-
 /**
  * Interactive demo showcasing drag-to-reorder weight management capabilities
  */
-export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
+export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
   theme = 'cinema',
   showCode = true,
   interactive = true
@@ -25,13 +23,12 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
   // Demo scenarios for film industry use cases
   const [activeScenario, setActiveScenario] = useState('character-traits');
   const [demoOptions, setDemoOptions] = useState<WeightedOption[]>([]);
-  
   // Film industry demo scenarios
   const scenarios = {
     'character-traits': {
       title: '🎭 Character Trait Generation',
       description: 'Generate diverse character traits for screenplay development',
-      options: [
+      options: [,
         { id: '1', text: 'Mysterious and enigmatic', weight: 25, category: 'Personality' },
         { id: '2', text: 'Witty and charming', weight: 30, category: 'Personality' },
         { id: '3', text: 'Brooding and intense', weight: 20, category: 'Personality' },
@@ -43,7 +40,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
     'dialogue-styles': {
       title: '💬 Dialogue Style Variations',
       description: 'Control dialogue generation patterns for different character archetypes',
-      options: [
+      options: [,
         { id: '1', text: 'Sharp, witty one-liners', weight: 40, category: 'Comedy' },
         { id: '2', text: 'Philosophical monologues', weight: 15, category: 'Drama' },
         { id: '3', text: 'Casual, naturalistic speech', weight: 50, category: 'Realism' },
@@ -55,7 +52,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
     'scene-settings': {
       title: '🏙️ Scene Setting Selection',
       description: 'Generate varied locations for screenplay scenes',
-      options: [
+      options: [,
         { id: '1', text: 'Urban rooftop at sunset', weight: 35, category: 'Exterior' },
         { id: '2', text: 'Cozy coffee shop interior', weight: 45, category: 'Interior' },
         { id: '3', text: 'Abandoned warehouse', weight: 20, category: 'Exterior' },
@@ -68,7 +65,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
     'plot-twists': {
       title: '🎲 Plot Twist Generation',
       description: 'Control the likelihood of different plot twist types',
-      options: [
+      options: [,
         { id: '1', text: 'Character betrayal reveal', weight: 40, category: 'Character' },
         { id: '2', text: 'Hidden family connection', weight: 30, category: 'Relationship' },
         { id: '3', text: 'False death scenario', weight: 20, category: 'Survival' },
@@ -80,37 +77,29 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
       ]
     }
   };
-
   // Initialize demo with first scenario
   React.useEffect(() => {
     setDemoOptions(scenarios[activeScenario as keyof typeof scenarios].options);
   }, [activeScenario]);
-
   // Handle scenario change
   const handleScenarioChange = useCallback((scenarioId: string) => {
     setActiveScenario(scenarioId);
     setDemoOptions(scenarios[scenarioId as keyof typeof scenarios].options);
   }, []);
-
   // Handle options change
   const handleOptionsChange = useCallback((newOptions: WeightedOption[]) => {
     setDemoOptions(newOptions);
   }, []);
-
   // Generate preview results
   const [previewResults, setPreviewResults] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-
   const generatePreview = useCallback(async () => {
     setIsGenerating(true);
-    
     // Simulate generation with animation
     const results: string[] = [];
     const totalWeight = demoOptions.reduce((sum, opt) => sum + opt.weight, 0);
-    
     for (let i = 0; i < 10; i++) {
       await new Promise(resolve => setTimeout(resolve, 100)); // Animate generation
-      
       let random = Math.random() * totalWeight;
       for (const option of demoOptions) {
         random -= option.weight;
@@ -119,68 +108,61 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
           break;
         }
       }
-      
       setPreviewResults([...results]);
     }
-    
     setIsGenerating(false);
   }, [demoOptions]);
-
   // Calculate statistics
   const statistics = useMemo(() => {
     const totalWeight = demoOptions.reduce((sum, opt) => sum + opt.weight, 0);
     const categories = Array.from(new Set(demoOptions.map(opt => opt.category).filter(Boolean)));
     const mostLikely = demoOptions.reduce((max, opt) => opt.weight > max.weight ? opt : max, demoOptions[0]);
-    
     return {
       totalOptions: demoOptions.length,
       totalWeight,
       categories: categories.length,
       mostLikely,
-      evenness: calculateEvenness(demoOptions)
+      evenness: calculateEvenness(demoOptions),
     };
   }, [demoOptions]);
-
   // Theme styles
   const getThemeStyles = () => {
     const themes = {
-      light: {
+      light: {,
         background: '#ffffff',
         secondary: '#f8fafc',
         border: '#e5e7eb',
         text: '#374151',
         accent: '#3b82f6',
         success: '#10b981',
-        warning: '#f59e0b'
+        warning: '#f59e0b',
       },
-      dark: {
+      dark: {,
         background: '#1f2937',
         secondary: '#111827',
         border: '#4b5563',
         text: '#f9fafb',
         accent: '#60a5fa',
         success: '#34d399',
-        warning: '#fbbf24'
+        warning: '#fbbf24',
       },
-      cinema: {
+      cinema: {,
         background: '#0d1117',
         secondary: '#1a1a1a',
         border: '#ff7c00',
         text: '#ffffff',
         accent: '#ff7c00',
         success: '#00d084',
-        warning: '#ffb700'
+        warning: '#ffb700',
       }
     };
     return themes[theme];
   };
-
   const styles = getThemeStyles();
-
-  return (
+  return ()
     <div style={{
       minHeight: '100vh',
-      background: `linear-gradient(135deg, ${styles.background}, ${styles.secondary})`,
+      background: `linear-gradient(135deg, ${styles.background}, ${styles.secondary})`,}
       color: styles.text,
       fontFamily: 'Inter, system-ui, sans-serif',
       padding: '40px 20px'
@@ -191,33 +173,31 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
           <h1 style={{
             fontSize: '48px',
             fontWeight: 800,
-            background: `linear-gradient(135deg, ${styles.accent}, ${styles.accent}80)`,
+            background: `linear-gradient(135deg, ${styles.accent}, ${styles.accent}80)`,}
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
             margin: '0 0 16px 0',
-            letterSpacing: '-0.02em'
+            letterSpacing: '-0.02em',
           }}>
             🎬 Wild Construct Demo
           </h1>
-          
           <p style={{
             fontSize: '20px',
             opacity: 0.8,
             maxWidth: '600px',
             margin: '0 auto 32px auto',
-            lineHeight: 1.6
+            lineHeight: 1.6,
           }}>
             Professional drag-to-reorder weight management for AI-powered film content generation
           </p>
-          
           <div style={{
             display: 'inline-flex',
             gap: '12px',
             padding: '12px',
             background: styles.secondary,
-            border: `1px solid ${styles.border}`,
-            borderRadius: '12px'
+            border: `1px solid ${styles.border}`,}
+            borderRadius: '12px',
           }}>
             <span style={{
               padding: '6px 12px',
@@ -225,7 +205,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
               color: styles.background,
               borderRadius: '6px',
               fontSize: '14px',
-              fontWeight: 600
+              fontWeight: 600,
             }}>
               Epic 8.3 Complete
             </span>
@@ -235,7 +215,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
               color: styles.success,
               borderRadius: '6px',
               fontSize: '14px',
-              fontWeight: 600
+              fontWeight: 600,
             }}>
               Film Industry Ready
             </span>
@@ -245,48 +225,46 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
               color: styles.warning,
               borderRadius: '6px',
               fontSize: '14px',
-              fontWeight: 600
+              fontWeight: 600,
             }}>
               $2.3B Integration
             </span>
           </div>
         </div>
-
         {/* Scenario Selector */}
         <div style={{
           background: styles.secondary,
-          border: `1px solid ${styles.border}`,
+          border: `1px solid ${styles.border}`,}
           borderRadius: '16px',
           padding: '24px',
-          marginBottom: '32px'
+          marginBottom: '32px',
         }}>
           <h3 style={{
             margin: '0 0 20px 0',
             fontSize: '18px',
             fontWeight: 600,
-            color: styles.accent
+            color: styles.accent,
           }}>
             📋 Select Film Industry Scenario
           </h3>
-          
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '16px'
+            gap: '16px',
           }}>
-            {Object.entries(scenarios).map(([id, scenario]) => (
+            {Object.entries(scenarios).map(([id, scenario]) => ()
               <button
                 key={id}
                 onClick={() => handleScenarioChange(id)}
                 style={{
                   background: activeScenario === id ? styles.accent + '20' : 'transparent',
-                  border: `2px solid ${activeScenario === id ? styles.accent : styles.border}`,
+                  border: `2px solid ${activeScenario === id ? styles.accent : styles.border}`,}
                   borderRadius: '12px',
                   padding: '16px',
                   textAlign: 'left',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
-                  color: styles.text
+                  color: styles.text,
                 }}
               >
                 <h4 style={{
@@ -301,7 +279,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
                   margin: 0,
                   fontSize: '14px',
                   opacity: 0.7,
-                  lineHeight: 1.5
+                  lineHeight: 1.5,
                 }}>
                   {scenario.description}
                 </p>
@@ -309,20 +287,19 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
             ))}
           </div>
         </div>
-
         {/* Main Demo Area */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: interactive ? '2fr 1fr' : '1fr',
           gap: '32px',
-          alignItems: 'start'
+          alignItems: 'start',
         }}>
           {/* Weight Manager */}
           <div style={{
             background: styles.secondary,
             borderRadius: '16px',
             overflow: 'hidden',
-            boxShadow: `0 8px 32px ${styles.accent}20`
+            boxShadow: `0 8px 32px ${styles.accent}20`}
           }}>
             <DragReorderWeightManager
               options={demoOptions}
@@ -338,30 +315,28 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
               enableCategories={true}
               style={{
                 background: 'transparent',
-                border: 'none'
+                border: 'none',
               }}
             />
           </div>
-
           {/* Demo Controls & Results */}
-          {interactive && (
+          {interactive && ()
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               {/* Statistics Panel */}
               <div style={{
                 background: styles.secondary,
-                border: `1px solid ${styles.border}`,
+                border: `1px solid ${styles.border}`,}
                 borderRadius: '16px',
-                padding: '24px'
+                padding: '24px',
               }}>
                 <h4 style={{
                   margin: '0 0 20px 0',
                   fontSize: '16px',
                   fontWeight: 600,
-                  color: styles.accent
+                  color: styles.accent,
                 }}>
                   📊 Scenario Statistics
                 </h4>
-                
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <span style={{ opacity: 0.7 }}>Total Options:</span>
@@ -385,13 +360,13 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
                         statistics.evenness > 0.4 ? 'Skewed' : 'Concentrated'}
                     </strong>
                   </div>
-                  {statistics.mostLikely && (
+                  {statistics.mostLikely && ()
                     <div style={{ 
                       marginTop: '12px',
                       padding: '12px',
                       background: styles.accent + '10',
-                      border: `1px solid ${styles.accent}30`,
-                      borderRadius: '8px'
+                      border: `1px solid ${styles.accent}30`,}
+                      borderRadius: '8px',
                     }}>
                       <div style={{ fontSize: '12px', opacity: 0.7, marginBottom: '4px' }}>
                         Most Likely:
@@ -406,29 +381,27 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
                   )}
                 </div>
               </div>
-
               {/* Generation Panel */}
               <div style={{
                 background: styles.secondary,
-                border: `1px solid ${styles.border}`,
+                border: `1px solid ${styles.border}`,}
                 borderRadius: '16px',
-                padding: '24px'
+                padding: '24px',
               }}>
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  marginBottom: '20px'
+                  marginBottom: '20px',
                 }}>
                   <h4 style={{
                     margin: 0,
                     fontSize: '16px',
                     fontWeight: 600,
-                    color: styles.accent
+                    color: styles.accent,
                   }}>
                     🎯 Live Generation
                   </h4>
-                  
                   <button
                     onClick={generatePreview}
                     disabled={isGenerating || demoOptions.length === 0}
@@ -448,22 +421,21 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
                     {isGenerating ? '🔄 Generating...' : '✨ Generate'}
                   </button>
                 </div>
-
-                {previewResults.length > 0 && (
+                {previewResults.length > 0 && ()
                   <div style={{
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '8px',
                     maxHeight: '300px',
-                    overflow: 'auto'
+                    overflow: 'auto',
                   }}>
-                    {previewResults.map((result, index) => (
+                    {previewResults.map((result, index) => ()
                       <div
                         key={index}
                         style={{
                           padding: '8px 12px',
                           background: styles.background,
-                          border: `1px solid ${styles.border}`,
+                          border: `1px solid ${styles.border}`,}
                           borderRadius: '6px',
                           fontSize: '14px',
                           opacity: isGenerating && index >= previewResults.length - 1 ? 0.5 : 1,
@@ -476,7 +448,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
                           width: '20px',
                           fontSize: '12px',
                           opacity: 0.5,
-                          marginRight: '8px'
+                          marginRight: '8px',
                         }}>
                           {index + 1}.
                         </span>
@@ -485,13 +457,12 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
                     ))}
                   </div>
                 )}
-                
-                {previewResults.length === 0 && (
+                {previewResults.length === 0 && ()
                   <div style={{
                     textAlign: 'center',
                     padding: '40px 20px',
                     opacity: 0.5,
-                    fontSize: '14px'
+                    fontSize: '14px',
                   }}>
                     Click "Generate" to see weighted random results
                   </div>
@@ -500,28 +471,26 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
             </div>
           )}
         </div>
-
         {/* Code Example */}
-        {showCode && (
+        {showCode && ()
           <div style={{
             marginTop: '48px',
             background: styles.secondary,
-            border: `1px solid ${styles.border}`,
+            border: `1px solid ${styles.border}`,}
             borderRadius: '16px',
-            padding: '24px'
+            padding: '24px',
           }}>
             <h3 style={{
               margin: '0 0 20px 0',
               fontSize: '18px',
               fontWeight: 600,
-              color: styles.accent
+              color: styles.accent,
             }}>
               💻 Implementation Example
             </h3>
-            
             <pre style={{
               background: styles.background,
-              border: `1px solid ${styles.border}`,
+              border: `1px solid ${styles.border}`,}
               borderRadius: '8px',
               padding: '20px',
               overflow: 'auto',
@@ -532,13 +501,11 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
             }}>
               <code style={{ color: styles.text }}>
                 {`import { DragReorderWeightManager } from './WeightManagement/DragReorderWeightManager';
-
-const filmOptions = [
+const filmOptions = [;
   { id: '1', text: 'Mysterious protagonist', weight: 25 },
   { id: '2', text: 'Witty dialogue', weight: 30 },
   { id: '3', text: 'Plot twist revelation', weight: 20 },
 ];
-
 <DragReorderWeightManager
   options={filmOptions}
   onChange={handleOptionsChange}
@@ -554,14 +521,13 @@ const filmOptions = [
             </pre>
           </div>
         )}
-
         {/* Footer */}
         <div style={{
           marginTop: '48px',
           textAlign: 'center',
           padding: '24px',
-          borderTop: `1px solid ${styles.border}`,
-          opacity: 0.7
+          borderTop: `1px solid ${styles.border}`,}
+          opacity: 0.7,
         }}>
           <p style={{ margin: '0 0 12px 0', fontSize: '16px' }}>
             🎬 <strong>Wild Construct</strong> • Film Industry AI Platform
@@ -571,7 +537,6 @@ const filmOptions = [
           </p>
         </div>
       </div>
-
       {/* CSS Animations */}
       <style>
         {`
@@ -588,18 +553,14 @@ const filmOptions = [
 // Utility function to calculate distribution evenness
 function calculateEvenness(options: WeightedOption[]): number {
   if (options.length === 0) return 0;
-  
   const weights = options.map(opt => opt.weight);
   const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
   const expectedWeight = totalWeight / weights.length;
-  
   const variance = weights.reduce((sum, weight) => {
     return sum + Math.pow(weight - expectedWeight, 2);
   }, 0) / weights.length;
-  
   const standardDeviation = Math.sqrt(variance);
   const coefficientOfVariation = expectedWeight > 0 ? standardDeviation / expectedWeight : 0;
-  
   // Convert to 0-1 scale where 1 is perfectly even
   return Math.max(0, 1 - (coefficientOfVariation / 2));
 }

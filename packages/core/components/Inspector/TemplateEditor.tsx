@@ -30,25 +30,21 @@ export interface TemplateEditorProps {
   className?: string;
 }
 
-export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
+export const [suggestionIndex, setSuggestionIndex] = useState(-1);
   const [cursorPosition, setCursorPosition] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const suggestionItemRefs = useRef<(HTMLDivElement | null)[]>([]);
-
   // Set template context for contextual suggestions
   useEffect(() => {
     if (nodeType || existingVariables.length > 0) {
       setTemplateContext(nodeType, existingVariables);
     }
   }, [nodeType, existingVariables]);
-  
   // Parse template and get results
   const parseResult = useMemo(() => parseTemplate(value), [value]);
   const previewResult = useMemo(() => getPreviewWithSamples(value), [value]);
-  
   // Real-time preview integration
   const {
     variants: realTimeVariants,
@@ -59,45 +55,36 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
     templateErrors,
     forcePreview,
     refreshVariant
-  } = useTemplatePreview(value, variableValues, {
+  } = useTemplatePreview(value, variableValues, {)
     maxVariants: 3,
     debounceMs: 200,
     autoRefresh: showRealTimePreview,
     showVariableSubstitution: true,
-    errorOnUndefinedVariables: false
+    errorOnUndefinedVariables: false,
   });
-  
   // Get variable suggestions based on cursor position with enhanced filtering
   const suggestions = useMemo(() => {
     if (!autoComplete || !showSuggestions) return [];
-    
     // Find if cursor is inside a variable being typed
     const beforeCursor = value.slice(0, cursorPosition);
     const match = beforeCursor.match(/{([^{}]*)$/);
-    
     if (match) {
       const partialVariable = match[1];
       let allSuggestions = getVariableSuggestions(partialVariable, nodeType, true);
-      
       // Filter by selected category
       if (selectedCategory !== 'all') {
         allSuggestions = allSuggestions.filter(s => s.category === selectedCategory);
       }
-      
       // Limit number of suggestions
       allSuggestions = allSuggestions.slice(0, maxSuggestions);
-      
       // Update refs array length
       suggestionItemRefs.current = allSuggestions.map((_, index) => 
         suggestionItemRefs.current[index] || null
       );
-      
       return allSuggestions;
     }
-    
     return [];
   }, [value, cursorPosition, autoComplete, showSuggestions, selectedCategory, maxSuggestions, nodeType]);
-
   // Update variables when they change
   useEffect(() => {
     if (onVariablesChange) {
@@ -106,83 +93,73 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
       onVariablesChange(variableNames, validVariables);
     }
   }, [parseResult.variables, onVariablesChange]);
-
   // Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     onChange(newValue);
     setCursorPosition(e.target.selectionStart);
-    
     // Show suggestions if typing a variable
     const beforeCursor = newValue.slice(0, e.target.selectionStart);
     const isTypingVariable = beforeCursor.includes('{') && !beforeCursor.match(/{[^{}]*}$/);
     setShowSuggestions(isTypingVariable);
     setSuggestionIndex(-1);
   };
-
   // Scroll selected suggestion into view
   const scrollToSuggestion = (index: number) => {
     if (suggestionItemRefs.current[index]) {
-      suggestionItemRefs.current[index]?.scrollIntoView({
+      suggestionItemRefs.current[index]?.scrollIntoView({)
         behavior: 'smooth',
-        block: 'nearest'
+        block: 'nearest',
       });
     }
   };
-
   // Handle enhanced key navigation for suggestions
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (showSuggestions && suggestions.length > 0) {
       switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        setSuggestionIndex(prev => {
+        setSuggestionIndex(prev => {)
           const newIndex = prev < suggestions.length - 1 ? prev + 1 : 0;
           scrollToSuggestion(newIndex);
           return newIndex;
         });
         break;
-          
       case 'ArrowUp':
         e.preventDefault();
-        setSuggestionIndex(prev => {
+        setSuggestionIndex(prev => {)
           const newIndex = prev > 0 ? prev - 1 : suggestions.length - 1;
           scrollToSuggestion(newIndex);
           return newIndex;
         });
         break;
-          
       case 'PageDown':
         e.preventDefault();
-        setSuggestionIndex(prev => {
+        setSuggestionIndex(prev => {)
           const newIndex = Math.min(prev + 5, suggestions.length - 1);
           scrollToSuggestion(newIndex);
           return newIndex;
         });
         break;
-          
       case 'PageUp':
         e.preventDefault();
-        setSuggestionIndex(prev => {
+        setSuggestionIndex(prev => {)
           const newIndex = Math.max(prev - 5, 0);
           scrollToSuggestion(newIndex);
           return newIndex;
         });
         break;
-          
       case 'Home':
         e.preventDefault();
         setSuggestionIndex(0);
         scrollToSuggestion(0);
         break;
-          
       case 'End':
         e.preventDefault();
         const lastIndex = suggestions.length - 1;
         setSuggestionIndex(lastIndex);
         scrollToSuggestion(lastIndex);
         break;
-          
       case 'Enter':
       case 'Tab':
         e.preventDefault();
@@ -190,14 +167,12 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
           applySuggestion(suggestions[suggestionIndex]);
         }
         break;
-          
       case 'Escape':
         e.preventDefault();
         setShowSuggestions(false);
         setSuggestionIndex(-1);
         inputRef.current?.focus();
         break;
-
         // Quick filter by category using number keys
       case '1':
       case '2':
@@ -217,7 +192,6 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
           }
         }
         break;
-          
       case '0':
         if (e.ctrlKey || e.metaKey) {
           e.preventDefault();
@@ -228,30 +202,23 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
       }
     }
   };
-
   // Apply selected suggestion
   const applySuggestion = (suggestion: VariableSuggestion) => {
     if (!inputRef.current) return;
-    
     const beforeCursor = value.slice(0, cursorPosition);
     const afterCursor = value.slice(cursorPosition);
     const match = beforeCursor.match(/{([^{}]*)$/);
-    
     if (match) {
       const variableStart = beforeCursor.lastIndexOf('{');
-      const newValue = 
+      const newValue = ;
         beforeCursor.slice(0, variableStart) + 
-        `{${suggestion.name}}` + 
+        `{${suggestion.name}}` + }
         afterCursor;
-      
       onChange(newValue);
-      
       // Track variable usage for user history
       trackVariableUsage(suggestion.name);
-      
       setShowSuggestions(false);
       setSuggestionIndex(-1);
-      
       // Set cursor after the inserted variable
       setTimeout(() => {
         if (inputRef.current) {
@@ -263,30 +230,24 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
       }, 0);
     }
   };
-
   // Render highlighted text (for display purposes)
   const renderHighlightedTemplate = () => {
     if (!value) return placeholder;
-    
     let result = value;
     let offset = 0;
-    
     // Add highlighting spans around variables
     for (const variable of parseResult.variables) {
       const className = variable.isValid ? 'template-variable' : 'template-variable-error';
       const before = result.slice(0, variable.startIndex + offset);
       const after = result.slice(variable.endIndex + offset);
-      const highlightedVar = `<span class="${className}">${variable.placeholder}</span>`;
-      
+      const highlightedVar = `<span class="${className}">${variable.placeholder}</span>`;}
       result = before + highlightedVar + after;
       offset += highlightedVar.length - variable.placeholder.length;
     }
-    
     return result;
   };
-
-  return (
-    <div className={`template-editor ${className}`} style={{ position: 'relative' }}>
+  return ()
+    <div className={`template-editor ${className}`} style={{ position: 'relative' }}>}
       {/* Main Template Input */}
       <div style={{ position: 'relative' }}>
         <textarea
@@ -319,12 +280,11 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
             fontFamily: 'Monaco, Consolas, "Courier New", monospace',
             resize: 'vertical',
             outline: 'none',
-            lineHeight: 1.4
+            lineHeight: 1.4,
           }}
         />
-        
         {/* Variable highlighting overlay */}
-        {parseResult.variables.length > 0 && (
+        {parseResult.variables.length > 0 && ()
           <div 
             style={{
               position: 'absolute',
@@ -338,15 +298,14 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
               fontFamily: 'Monaco, Consolas, "Courier New", monospace',
               lineHeight: 1.4,
               whiteSpace: 'pre-wrap',
-              wordWrap: 'break-word'
+              wordWrap: 'break-word',
             }}
             dangerouslySetInnerHTML={{ __html: renderHighlightedTemplate() }}
           />
         )}
       </div>
-      
       {/* Auto-completion Suggestions */}
-      {showSuggestions && suggestions.length > 0 && (
+      {showSuggestions && suggestions.length > 0 && ()
         <div
           ref={suggestionsRef}
           style={{
@@ -364,7 +323,7 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
           }}
         >
-          {suggestions.map((suggestion, index) => (
+          {suggestions.map((suggestion, index) => ()
             <div
               key={suggestion.name}
               onClick={() => applySuggestion(suggestion)}
@@ -389,7 +348,7 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
                   <div style={{ 
                     color: '#a0aec0', 
                     fontSize: 12,
-                    marginTop: 2
+                    marginTop: 2,
                   }}>
                     {suggestion.description}
                   </div>
@@ -400,18 +359,17 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
                   fontSize: 10,
                   padding: '2px 6px',
                   borderRadius: 3,
-                  fontWeight: 500
+                  fontWeight: 500,
                 }}>
                   {suggestion.category}
                 </div>
               </div>
-              
               {/* Example preview */}
               <div style={{
                 marginTop: 4,
                 fontSize: 11,
                 color: '#6b7280',
-                fontStyle: 'italic'
+                fontStyle: 'italic',
               }}>
                 e.g., {suggestion.examples[0]}
               </div>
@@ -419,11 +377,10 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
           ))}
         </div>
       )}
-      
       {/* Validation Errors */}
-      {parseResult.errors.length > 0 && (
+      {parseResult.errors.length > 0 && ()
         <div style={{ marginTop: 8 }}>
-          {parseResult.errors.map((error, index) => (
+          {parseResult.errors.map((error, index) => ()
             <div
               key={index}
               style={{
@@ -432,7 +389,7 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
                 marginBottom: 4,
                 display: 'flex',
                 alignItems: 'center',
-                gap: 6
+                gap: 6,
               }}
             >
               <span>{error.severity === 'error' ? '❌' : '⚠️'}</span>
@@ -441,21 +398,20 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
           ))}
         </div>
       )}
-      
       {/* Live Preview */}
-      {showPreview && parseResult.isValid && parseResult.variables.length > 0 && (
+      {showPreview && parseResult.isValid && parseResult.variables.length > 0 && ()
         <div style={{
           marginTop: 12,
           padding: 12,
           background: '#1a202c',
           border: '1px solid #4a5568',
-          borderRadius: 6
+          borderRadius: 6,
         }}>
           <div style={{
             fontSize: 11,
             color: '#a0aec0',
             marginBottom: 6,
-            fontWeight: 500
+            fontWeight: 500,
           }}>
             Preview with sample values:
           </div>
@@ -463,44 +419,42 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
             color: '#e2e8f0',
             fontSize: 13,
             fontStyle: 'italic',
-            lineHeight: 1.4
+            lineHeight: 1.4,
           }}>
             "{previewResult.preview}"
           </div>
-          
           {/* Variable values used */}
           <div style={{ marginTop: 8, fontSize: 10, color: '#6b7280' }}>
-            Variables: {Object.entries(previewResult.usedSamples)
-              .map(([name, value]) => `{${name}} = "${value}"`)
+            Variables: {Object.entries(previewResult.usedSamples),
+              .map(([name, value]) => `{${name}} = "${value}"`)}
               .join(', ')}
           </div>
         </div>
       )}
-      
       {/* Real-time Preview */}
-      {showRealTimePreview && value.trim() && (
+      {showRealTimePreview && value.trim() && ()
         <div style={{
           marginTop: 12,
           padding: 12,
           background: '#1a202c',
           border: hasTemplateErrors ? '1px solid #e53e3e' : '1px solid #4a5568',
-          borderRadius: 6
+          borderRadius: 6,
         }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: 8
+            marginBottom: 8,
           }}>
             <div style={{
               fontSize: 11,
               color: '#a0aec0',
-              fontWeight: 500
+              fontWeight: 500,
             }}>
               Real-time Preview:
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              {isGenerating && (
+              {isGenerating && ()
                 <div style={{
                   width: 12,
                   height: 12,
@@ -528,11 +482,10 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
               </button>
             </div>
           </div>
-          
           {/* Template Errors */}
-          {hasTemplateErrors && templateErrors.length > 0 && (
+          {hasTemplateErrors && templateErrors.length > 0 && ()
             <div style={{ marginBottom: 8 }}>
-              {templateErrors.map((error, index) => (
+              {templateErrors.map((error, index) => ()
                 <div
                   key={index}
                   style={{
@@ -541,7 +494,7 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
                     marginBottom: 4,
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 6
+                    gap: 6,
                   }}
                 >
                   <span>❌</span>
@@ -550,9 +503,8 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
               ))}
             </div>
           )}
-          
           {/* Preview Error */}
-          {previewError && (
+          {previewError && ()
             <div style={{
               color: '#f56565',
               fontSize: 11,
@@ -565,11 +517,10 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
               <strong>Preview Error:</strong> {previewError}
             </div>
           )}
-          
           {/* Real-time Variants */}
-          {!hasTemplateErrors && !previewError && realTimeVariants.length > 0 && (
+          {!hasTemplateErrors && !previewError && realTimeVariants.length > 0 && ()
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {realTimeVariants.map((variant, index) => (
+              {realTimeVariants.map((variant, index) => ()
                 <div
                   key={variant.id}
                   style={{
@@ -583,12 +534,12 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    marginBottom: 4
+                    marginBottom: 4,
                   }}>
                     <span style={{
                       fontSize: 10,
                       color: '#a0aec0',
-                      fontWeight: 500
+                      fontWeight: 500,
                     }}>
                       Variant {index + 1}
                     </span>
@@ -601,33 +552,31 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
                         color: '#a0aec0',
                         border: '1px solid #4a5568',
                         borderRadius: 3,
-                        cursor: 'pointer'
+                        cursor: 'pointer',
                       }}
                       title="Generate new variation"
                     >
                       🔄
                     </button>
                   </div>
-                  
                   <div style={{
                     color: '#e2e8f0',
                     fontSize: 12,
                     lineHeight: 1.4,
-                    marginBottom: 6
+                    marginBottom: 6,
                   }}>
                     "{variant.result}"
                   </div>
-                  
                   {/* Variable substitutions */}
-                  {Object.keys(variant.substitutions).length > 0 && (
+                  {Object.keys(variant.substitutions).length > 0 && ()
                     <div style={{
                       fontSize: 9,
                       color: '#6b7280',
                       display: 'flex',
                       flexWrap: 'wrap',
-                      gap: 6
+                      gap: 6,
                     }}>
-                      {Object.entries(variant.substitutions).map(([name, value]) => (
+                      {Object.entries(variant.substitutions).map(([name, value]) => ()
                         <span
                           key={name}
                           style={{
@@ -635,7 +584,7 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
                             color: '#63b3ed',
                             padding: '2px 4px',
                             borderRadius: 2,
-                            fontSize: 9
+                            fontSize: 9,
                           }}
                         >
                           {name}="{value}"
@@ -647,22 +596,20 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
               ))}
             </div>
           )}
-          
           {/* No variants message */}
-          {!hasTemplateErrors && !previewError && !isGenerating && realTimeVariants.length === 0 && (
+          {!hasTemplateErrors && !previewError && !isGenerating && realTimeVariants.length === 0 && ()
             <div style={{
               color: '#a0aec0',
               fontSize: 11,
               fontStyle: 'italic',
               textAlign: 'center',
-              padding: 16
+              padding: 16,
             }}>
               No previews generated yet. Try adding some variables to your template.
             </div>
           )}
         </div>
       )}
-      
       {/* CSS Styles */}
       <style>{`
         .template-variable {
@@ -672,7 +619,6 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
           border-radius: 2px;
           font-weight: 500;
         }
-        
         .template-variable-error {
           background: rgba(245, 101, 101, 0.2);
           color: #f56565;
@@ -680,7 +626,6 @@ export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
           border-radius: 2px;
           font-weight: 500;
         }
-        
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
@@ -700,6 +645,5 @@ const getCategoryColor = (category: string): string => {
     object: '#68d391',     // green
     custom: '#a0aec0'      // gray
   };
-  
   return colors[category] || colors.custom;
 };

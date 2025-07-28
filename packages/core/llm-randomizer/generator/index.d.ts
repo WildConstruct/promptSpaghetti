@@ -25,7 +25,7 @@ export declare class RandomizerSystem {
     /**
      * Quick generation with minimal setup
      */
-    quickGenerate(
+    quickGenerate()
       purpose: string,
       complexity?: ComplexityLevelType,
       provider?: LLMProviderType
@@ -43,13 +43,13 @@ export declare class RandomizerSystem {
      */
     getHistory(): {
         entries: import("./parameters/parameter-manager").ParameterHistory[];
-        stats: {
+        stats: {,
             totalGenerations: number;
             successRate: number;
             averageGenerationTime: number;
             mostUsedComplexity: string;
             mostUsedProvider: string;
-            popularNodeTypes: Array<{
+            popularNodeTypes: Array<{,
                 nodeType: string;
                 count: number;
             }>;

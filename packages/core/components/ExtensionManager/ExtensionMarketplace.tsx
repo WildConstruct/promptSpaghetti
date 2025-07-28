@@ -2,7 +2,6 @@
  * Extension Marketplace - Epic 8.4 Story 8.4.5
  * Marketplace view for discovering and installing extensions
  */
-
 import React, { useState } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 
@@ -12,7 +11,6 @@ export interface ExtensionMarketplaceProps {
   onExtensionSelect: (extension: ExtensionManifest) => void;
   onInstallExtension: (extension: ExtensionManifest) => void;
 }
-
 interface MarketplaceCategory {
   id: string;
   name: string;
@@ -21,7 +19,7 @@ interface MarketplaceCategory {
   count: number;
 }
 
-export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
+export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({)
   extensions,
   selectedExtension,
   onExtensionSelect,
@@ -29,14 +27,13 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
 }) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-
   const categories: MarketplaceCategory[] = [
     {
       id: 'all',
       name: 'All Extensions',
       icon: '📦',
       description: 'Browse all available extensions',
-      count: extensions.length
+      count: extensions.length,
     },
     {
       id: 'featured',
@@ -74,13 +71,11 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
       count: extensions.filter(ext => ext.extension_type === 'storage').length
     }
   ];
-
-  const filteredExtensions = selectedCategory === 'all' 
+  const filteredExtensions = selectedCategory === 'all' ;
     ? extensions 
     : selectedCategory === 'featured'
       ? extensions.slice(0, Math.floor(extensions.length * 0.3))
       : extensions.filter(ext => ext.extension_type === selectedCategory);
-
   const getExtensionIcon = (type: string): string => {
     switch (type) {
     case 'node': return '🔧';
@@ -90,21 +85,18 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
     default: return '📦';
     }
   };
-
   const formatDownloads = (downloads: number): string => {
     if (downloads < 1000) return downloads.toString();
-    if (downloads < 1000000) return `${(downloads / 1000).toFixed(1)}K`;
-    return `${(downloads / 1000000).toFixed(1)}M`;
+    if (downloads < 1000000) return `${(downloads / 1000).toFixed(1)}K`;}
+    return `${(downloads / 1000000).toFixed(1)}M`;}
   };
-
-  const renderExtensionGrid = () => (
+  const renderExtensionGrid = () => (;)
     <div className="extension-grid">
       {filteredExtensions.map((extension) => {
         const downloads = Math.floor(Math.random() * 50000);
         const rating = (4 + Math.random()).toFixed(1);
         const isSelected = selectedExtension?.id === extension.id;
-
-        return (
+        return ()
           <div
             key={extension.id}
             className={`extension-card ${isSelected ? 'selected' : ''}`}
@@ -126,22 +118,19 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
                 </button>
               </div>
             </div>
-
             <div className="card-content">
               <h3 className="extension-name">{extension.name}</h3>
               <p className="extension-author">by {extension.author}</p>
               <p className="extension-description">{extension.description}</p>
-              
               <div className="extension-tags">
                 <span className="tag type-tag">{extension.extension_type}</span>
-                {extension.capabilities?.provides?.slice(0, 2).map((capability, index) => (
+                {extension.capabilities?.provides?.slice(0, 2).map((capability, index) => ()
                   <span key={index} className="tag capability-tag">
                     {capability}
                   </span>
                 ))}
               </div>
             </div>
-
             <div className="card-footer">
               <div className="extension-stats">
                 <span className="stat">
@@ -163,15 +152,13 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
       })}
     </div>
   );
-
-  const renderExtensionList = () => (
+  const renderExtensionList = () => (;)
     <div className="extension-list">
       {filteredExtensions.map((extension) => {
         const downloads = Math.floor(Math.random() * 50000);
         const rating = (4 + Math.random()).toFixed(1);
         const isSelected = selectedExtension?.id === extension.id;
-
-        return (
+        return ()
           <div
             key={extension.id}
             className={`extension-list-item ${isSelected ? 'selected' : ''}`}
@@ -180,7 +167,6 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
             <div className="item-icon">
               {getExtensionIcon(extension.extension_type)}
             </div>
-
             <div className="item-content">
               <div className="item-header">
                 <h3 className="extension-name">{extension.name}</h3>
@@ -188,14 +174,12 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
               </div>
               <p className="extension-author">by {extension.author}</p>
               <p className="extension-description">{extension.description}</p>
-              
               <div className="item-stats">
                 <span className="stat">⬇️ {formatDownloads(downloads)}</span>
                 <span className="stat">⭐ {rating}</span>
                 <span className="stat">{extension.extension_type}</span>
               </div>
             </div>
-
             <div className="item-actions">
               <button
                 className="install-btn"
@@ -212,9 +196,8 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
       })}
     </div>
   );
-
   if (filteredExtensions.length === 0) {
-    return (
+    return ()
       <div className="marketplace-empty">
         <div className="empty-icon">🏪</div>
         <h3>No Extensions Found</h3>
@@ -222,11 +205,10 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="extension-marketplace">
       {/* Featured Banner */}
-      {selectedCategory === 'all' && (
+      {selectedCategory === 'all' && ()
         <div className="featured-banner">
           <div className="banner-content">
             <h2>Welcome to the Extension Marketplace</h2>
@@ -248,10 +230,9 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
           </div>
         </div>
       )}
-
       {/* Categories */}
       <div className="marketplace-categories">
-        {categories.map((category) => (
+        {categories.map((category) => ()
           <button
             key={category.id}
             className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
@@ -265,11 +246,10 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
           </button>
         ))}
       </div>
-
       {/* View Controls */}
       <div className="marketplace-controls">
         <div className="category-description">
-          {selectedCategory !== 'all' && (
+          {selectedCategory !== 'all' && ()
             <div className="active-category">
               <span className="category-icon">
                 {categories.find(c => c.id === selectedCategory)?.icon}
@@ -281,7 +261,6 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
             </div>
           )}
         </div>
-
         <div className="view-controls">
           <span className="view-label">View:</span>
           <button
@@ -300,14 +279,12 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
           </button>
         </div>
       </div>
-
       {/* Extension Display */}
       <div className="marketplace-content">
         {viewMode === 'grid' ? renderExtensionGrid() : renderExtensionList()}
       </div>
-
       {/* Load More */}
-      {filteredExtensions.length > 20 && (
+      {filteredExtensions.length > 20 && ()
         <div className="load-more-section">
           <button className="load-more-btn">
             Load More Extensions

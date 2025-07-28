@@ -209,7 +209,7 @@ export interface PatternStats {
 export interface CorrelationReport {
     reportId: string;
     generatedAt: Date;
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };
@@ -279,7 +279,7 @@ export declare class SecurityEventCorrelationEngine extends EventEmitter {
     updateCorrelationRule(ruleId: string, updates: Partial<CorrelationRule>): void;
     deleteCorrelationRule(ruleId: string): void;
     getAnalytics(): CorrelationAnalytics;
-    generateReport(timeRange: {
+    generateReport(timeRange: {)
         start: Date;
         end: Date;
     }): Promise<CorrelationReport>;

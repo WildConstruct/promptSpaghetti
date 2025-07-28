@@ -53,7 +53,6 @@ export {
 export type AnyAgentConfig = OpenAIAgentConfig | AnthropicAgentConfig | GeminiAgentConfig;
 export type AnyGenerationRequest = GraphGenerationRequest | ClaudeGenerationRequest | GeminiGenerationRequest;
 export type AnyGenerationResult = GenerationResult | ClaudeGenerationResult | GeminiGenerationResult;
-
 /**
  * Universal agent interface for consistent usage across models
  */
@@ -66,17 +65,15 @@ export interface UniversalAgentRequest {
   focusAreas?: string[];
   style?: 'creative' | 'logical' | 'balanced';
   domain?: string;
-  
   // Model-specific extensions
   userContext?: string; // For Claude
   constraints?: string[]; // For Gemini
   examples?: string[]; // For Gemini
 }
-
 /**
  * Universal generation function that routes to appropriate agent
  */
-export async function generateGraph(
+export async function generateGraph()
   request: UniversalAgentRequest,
   provider: 'openai' | 'claude' | 'gemini' = 'openai',
   config: Partial<AnyAgentConfig> = {}
@@ -84,14 +81,11 @@ export async function generateGraph(
   switch (provider) {
   case 'openai':
     return generateGraphWithOpenAI(request as GraphGenerationRequest, config as Partial<OpenAIAgentConfig>);
-    
   case 'claude':
     return generateGraphWithClaude(request as ClaudeGenerationRequest, config as Partial<AnthropicAgentConfig>);
-    
   case 'gemini':
     return generateGraphWithGemini(request as GeminiGenerationRequest, config as Partial<GeminiAgentConfig>);
-    
   default:
-    throw new Error(`Unsupported provider: ${provider}`);
+    throw new Error(`Unsupported provider: ${provider}`);}
   }
 }

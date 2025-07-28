@@ -27,7 +27,7 @@ export interface ResourceUsage {
 }
 export interface SandboxContext {
     require: (id: string) => any;
-    module: {
+    module: {,
         exports: any;
     };
     exports: any;

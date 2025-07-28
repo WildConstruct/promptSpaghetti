@@ -84,7 +84,7 @@ export declare const PerformanceBaselineSchema: z.ZodObject<{
     updatedAt: z.ZodDate;
     version: z.ZodString;
     tags: z.ZodArray<z.ZodString, "many">;
-    measurements: z.ZodArray<z.ZodObject<{
+    measurements: z.ZodArray<z.ZodObject<{,
         id: z.ZodString;
         name: z.ZodString;
         category: z.ZodNativeEnum<typeof BaselineCategory>;
@@ -139,7 +139,7 @@ export declare const PerformanceBaselineSchema: z.ZodObject<{
     enabled: boolean;
     alerting: boolean;
     unit: string;
-    measurements: {
+    measurements: {,
         id: string;
         name: string;
         value: number;
@@ -172,7 +172,7 @@ export declare const PerformanceBaselineSchema: z.ZodObject<{
     enabled: boolean;
     alerting: boolean;
     unit: string;
-    measurements: {
+    measurements: {,
         id: string;
         name: string;
         value: number;
@@ -194,7 +194,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     environment: z.ZodNativeEnum<typeof TestEnvironment>;
-    baselines: z.ZodArray<z.ZodObject<{
+    baselines: z.ZodArray<z.ZodObject<{,
         id: z.ZodString;
         name: z.ZodString;
         description: z.ZodString;
@@ -212,7 +212,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
         updatedAt: z.ZodDate;
         version: z.ZodString;
         tags: z.ZodArray<z.ZodString, "many">;
-        measurements: z.ZodArray<z.ZodObject<{
+        measurements: z.ZodArray<z.ZodObject<{,
             id: z.ZodString;
             name: z.ZodString;
             category: z.ZodNativeEnum<typeof BaselineCategory>;
@@ -267,7 +267,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
         enabled: boolean;
         alerting: boolean;
         unit: string;
-        measurements: {
+        measurements: {,
             id: string;
             name: string;
             value: number;
@@ -300,7 +300,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
         enabled: boolean;
         alerting: boolean;
         unit: string;
-        measurements: {
+        measurements: {,
             id: string;
             name: string;
             value: number;
@@ -316,7 +316,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
         minimum?: number | undefined;
         maximum?: number | undefined;
     }>, "many">;
-    metadata: z.ZodOptional<z.ZodObject<{
+    metadata: z.ZodOptional<z.ZodObject<{,
         systemInfo: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         buildInfo: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         testConfig: z.ZodRecord<z.ZodString, z.ZodUnknown>;
@@ -334,7 +334,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
     updatedAt: Date;
     version: string;
     environment: TestEnvironment;
-    baselines: {
+    baselines: {,
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -352,7 +352,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
         enabled: boolean;
         alerting: boolean;
         unit: string;
-        measurements: {
+        measurements: {,
             id: string;
             name: string;
             value: number;
@@ -378,7 +378,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
     updatedAt: Date;
     version: string;
     environment: TestEnvironment;
-    baselines: {
+    baselines: {,
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -396,7 +396,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
         enabled: boolean;
         alerting: boolean;
         unit: string;
-        measurements: {
+        measurements: {,
             id: string;
             name: string;
             value: number;
@@ -432,7 +432,7 @@ export declare class PerformanceBaselineManager {
     /**
      * Create a new performance baseline
      */
-    createBaseline(config: {
+    createBaseline(config: {)
         id: string;
         name: string;
         description: string;
@@ -447,7 +447,7 @@ export declare class PerformanceBaselineManager {
     /**
      * Add a measurement to a baseline
      */
-    addMeasurement(
+    addMeasurement()
       baselineId: string,
       measurement: Omit<PerformanceMeasurement,
       'id' | 'timestamp' | 'environment'>
@@ -488,13 +488,13 @@ export declare class PerformanceBaselineManager {
      * Generate baseline report
      */
     generateReport(): {
-        summary: {
+        summary: {,
             totalBaselines: number;
             activeBaselines: number;
             categories: Record<BaselineCategory, number>;
             alerts: number;
         };
-        baselines: Array<{
+        baselines: Array<{,
             baseline: PerformanceBaseline;
             status: 'ok' | 'warning' | 'critical';
             trend: 'improving' | 'stable' | 'degrading';

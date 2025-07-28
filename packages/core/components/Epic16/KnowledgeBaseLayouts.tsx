@@ -4,7 +4,6 @@
  * Professional UI layouts for displaying knowledge content, articles, guides, and documentation
  * with excellent UX for discovery and reading across the template marketplace ecosystem.
  */
-
 import React, { useState, useMemo, useCallback } from 'react';
 import { 
   DocumentIcon,
@@ -133,22 +132,20 @@ export interface LearningPathCardProps {
 }
 
 // Hero Section Component
-export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({
+export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({)
   stats,
   onSearch,
   onBrowseCategory,
   featuredSections
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       onSearch(searchQuery.trim());
     }
   };
-
-  return (
+  return ()
     <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <div className="max-w-7xl mx-auto px-4 py-16">
         {/* Main Hero Content */}
@@ -160,7 +157,6 @@ export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({
             Discover comprehensive guides, tutorials, and best practices for prompt engineering,
             template creation, and marketplace success.
           </p>
-
           {/* Search Bar */}
           <form onSubmit={handleSearchSubmit} className="max-w-2xl mx-auto mb-8">
             <div className="relative">
@@ -181,7 +177,6 @@ export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({
               </button>
             </div>
           </form>
-
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
             <div className="text-center">
@@ -202,18 +197,17 @@ export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({
             </div>
           </div>
         </div>
-
         {/* Featured Sections */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredSections.map((section) => (
+          {featuredSections.map((section) => ()
             <div
               key={section.id}
               className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
               onClick={() => onBrowseCategory(section.id)}
             >
               <div className="flex items-center mb-4">
-                <div className={`p-3 rounded-lg bg-${section.color}-100`}>
-                  <section.icon className={`h-6 w-6 text-${section.color}-600`} />
+                <div className={`p-3 rounded-lg bg-${section.color}-100`}>}
+                  <section.icon className={`h-6 w-6 text-${section.color}-600`} />}
                 </div>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">{section.title}</h3>
@@ -231,7 +225,7 @@ export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({
 };
 
 // Article Card Component with multiple variants
-export const ArticleCard: React.FC<ArticleCardProps> = ({
+export const ArticleCard: React.FC<ArticleCardProps> = ({)
   article,
   variant = 'detailed',
   showAuthor = true,
@@ -247,7 +241,6 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   const handleCardClick = useCallback(() => {
     onClick?.(article);
   }, [onClick, article]);
-
   const getDifficultyColor = (difficulty: Article['difficulty']) => {
     switch (difficulty) {
     case 'beginner': return 'bg-green-100 text-green-800';
@@ -256,28 +249,25 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   if (variant === 'compact') {
-    return (
-      <div className={`bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer ${className}`}>
+    return ()
+      <div className={`bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer ${className}`}>}
         <div onClick={handleCardClick}>
           <div className="flex items-start justify-between mb-2">
             <h3 className="font-medium text-gray-900 line-clamp-2 flex-1 pr-2">{article.title}</h3>
             {article.featured && <StarIcon className="h-4 w-4 text-yellow-500 fill-current flex-shrink-0" />}
           </div>
-          
-          {showCategory && (
+          {showCategory && ()
             <div className="flex items-center gap-2 mb-2">
               <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
                 {article.category.name}
               </span>
-              <span className={`px-2 py-1 rounded text-xs ${getDifficultyColor(article.difficulty)}`}>
+              <span className={`px-2 py-1 rounded text-xs ${getDifficultyColor(article.difficulty)}`}>}
                 {article.difficulty}
               </span>
             </div>
           )}
-          
-          {showStats && (
+          {showStats && ()
             <div className="flex items-center gap-3 text-xs text-gray-500">
               <div className="flex items-center gap-1">
                 <ClockIcon className="h-3 w-3" />
@@ -293,23 +283,20 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
       </div>
     );
   }
-
   if (variant === 'list') {
-    return (
-      <div className={`bg-white border-b border-gray-200 p-4 hover:bg-gray-50 cursor-pointer ${className}`}>
+    return ()
+      <div className={`bg-white border-b border-gray-200 p-4 hover:bg-gray-50 cursor-pointer ${className}`}>}
         <div onClick={handleCardClick} className="flex items-center justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               {article.featured && <StarIcon className="h-4 w-4 text-yellow-500 fill-current" />}
               <h3 className="font-medium text-gray-900">{article.title}</h3>
             </div>
-            
-            {showExcerpt && (
+            {showExcerpt && ()
               <p className="text-gray-600 text-sm line-clamp-1 mb-2">{article.excerpt}</p>
             )}
-            
             <div className="flex items-center gap-4 text-xs text-gray-500">
-              {showAuthor && (
+              {showAuthor && ()
                 <div className="flex items-center gap-1">
                   <UserIcon className="h-3 w-3" />
                   <span>{article.author.name}</span>
@@ -319,7 +306,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
                 <ClockIcon className="h-3 w-3" />
                 <span>{article.readTime}m read</span>
               </div>
-              {showStats && (
+              {showStats && ()
                 <>
                   <div className="flex items-center gap-1">
                     <EyeIcon className="h-3 w-3" />
@@ -333,9 +320,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               )}
             </div>
           </div>
-          
           <div className="flex items-center gap-2 ml-4">
-            {showCategory && (
+            {showCategory && ()
               <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
                 {article.category.name}
               </span>
@@ -346,10 +332,9 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
       </div>
     );
   }
-
   if (variant === 'featured') {
-    return (
-      <div className={`bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow ${className}`}>
+    return ()
+      <div className={`bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow ${className}`}>}
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-2">
@@ -361,19 +346,16 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               <StarIcon className="h-4 w-4 text-yellow-500 fill-current" />
             </div>
           </div>
-          
           <div onClick={handleCardClick} className="cursor-pointer">
             <h3 className="text-xl font-semibold text-gray-900 mb-2 hover:text-blue-600">
               {article.title}
             </h3>
-            
-            {showExcerpt && (
+            {showExcerpt && ()
               <p className="text-gray-600 line-clamp-3 mb-4">{article.excerpt}</p>
             )}
           </div>
-          
           <div className="flex items-center justify-between mb-4">
-            {showAuthor && (
+            {showAuthor && ()
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
                   <UserIcon className="h-4 w-4 text-gray-600" />
@@ -384,7 +366,6 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
                 </div>
               </div>
             )}
-            
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <div className="flex items-center gap-1">
                 <ClockIcon className="h-4 w-4" />
@@ -396,21 +377,19 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               </div>
             </div>
           </div>
-          
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              {showCategory && (
+              {showCategory && ()
                 <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
                   {article.category.name}
                 </span>
               )}
-              <span className={`px-2 py-1 rounded text-xs ${getDifficultyColor(article.difficulty)}`}>
+              <span className={`px-2 py-1 rounded text-xs ${getDifficultyColor(article.difficulty)}`}>}
                 {article.difficulty}
               </span>
             </div>
-            
             <div className="flex items-center gap-1">
-              {onBookmark && (
+              {onBookmark && ()
                 <button
                   onClick={(e) => { e.stopPropagation(); onBookmark(article); }}
                   className="p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded"
@@ -418,7 +397,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
                   <BookmarkIcon className="h-4 w-4" />
                 </button>
               )}
-              {onLike && (
+              {onLike && ()
                 <button
                   onClick={(e) => { e.stopPropagation(); onLike(article); }}
                   className="p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
@@ -426,7 +405,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
                   <HeartIcon className="h-4 w-4" />
                 </button>
               )}
-              {onShare && (
+              {onShare && ()
                 <button
                   onClick={(e) => { e.stopPropagation(); onShare(article); }}
                   className="p-1 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded"
@@ -440,10 +419,9 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
       </div>
     );
   }
-
   // Default detailed variant
-  return (
-    <div className={`bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow ${className}`}>
+  return ()
+    <div className={`bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow ${className}`}>}
       <div onClick={handleCardClick} className="cursor-pointer">
         <div className="flex items-start justify-between mb-3">
           <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 flex-1 pr-4">
@@ -451,14 +429,12 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           </h3>
           {article.featured && <StarIcon className="h-5 w-5 text-yellow-500 fill-current" />}
         </div>
-        
-        {showExcerpt && (
+        {showExcerpt && ()
           <p className="text-gray-600 line-clamp-2 mb-4">{article.excerpt}</p>
         )}
       </div>
-      
       <div className="flex items-center justify-between mb-4">
-        {showAuthor && (
+        {showAuthor && ()
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
               <UserIcon className="h-4 w-4 text-gray-600" />
@@ -471,8 +447,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             </div>
           </div>
         )}
-        
-        {showStats && (
+        {showStats && ()
           <div className="flex items-center gap-4 text-sm text-gray-500">
             <div className="flex items-center gap-1">
               <ClockIcon className="h-4 w-4" />
@@ -489,26 +464,24 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           </div>
         )}
       </div>
-      
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          {showCategory && (
+          {showCategory && ()
             <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
               {article.category.name}
             </span>
           )}
-          <span className={`px-2 py-1 rounded text-xs ${getDifficultyColor(article.difficulty)}`}>
+          <span className={`px-2 py-1 rounded text-xs ${getDifficultyColor(article.difficulty)}`}>}
             {article.difficulty}
           </span>
-          {article.tags.slice(0, 2).map(tag => (
+          {article.tags.slice(0, 2).map(tag => ()
             <span key={tag} className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs">
               #{tag}
             </span>
           ))}
         </div>
-        
         <div className="flex items-center gap-1">
-          {onBookmark && (
+          {onBookmark && ()
             <button
               onClick={(e) => { e.stopPropagation(); onBookmark(article); }}
               className="p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded"
@@ -516,7 +489,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               <BookmarkIcon className="h-4 w-4" />
             </button>
           )}
-          {onLike && (
+          {onLike && ()
             <button
               onClick={(e) => { e.stopPropagation(); onLike(article); }}
               className="p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
@@ -524,7 +497,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               <HeartIcon className="h-4 w-4" />
             </button>
           )}
-          {onShare && (
+          {onShare && ()
             <button
               onClick={(e) => { e.stopPropagation(); onShare(article); }}
               className="p-1 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded"
@@ -539,16 +512,16 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
 };
 
 // Category Browser Component
-export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({
+export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({)
   categories,
   onSelectCategory,
   layout = 'grid',
   showArticleCount = true
 }) => {
   if (layout === 'list') {
-    return (
+    return ()
       <div className="space-y-2">
-        {categories.map((category) => (
+        {categories.map((category) => ()
           <div
             key={category.id}
             onClick={() => onSelectCategory(category)}
@@ -565,7 +538,7 @@ export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {showArticleCount && (
+              {showArticleCount && ()
                 <span className="text-sm text-gray-500">{category.articleCount}</span>
               )}
               <ChevronRightIcon className="h-4 w-4 text-gray-400" />
@@ -575,11 +548,10 @@ export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({
       </div>
     );
   }
-
   // Grid layout (default)
-  return (
+  return ()
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {categories.map((category) => (
+      {categories.map((category) => ()
         <div
           key={category.id}
           onClick={() => onSelectCategory(category)}
@@ -594,7 +566,7 @@ export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({
           </div>
           <p className="text-gray-600 text-sm mb-4 line-clamp-2">{category.description}</p>
           <div className="flex items-center justify-between">
-            {showArticleCount && (
+            {showArticleCount && ()
               <span className="text-sm text-gray-500">{category.articleCount} articles</span>
             )}
             <ArrowRightIcon className="h-4 w-4 text-gray-400" />
@@ -606,7 +578,7 @@ export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({
 };
 
 // Learning Path Card Component
-export const LearningPathCard: React.FC<LearningPathCardProps> = ({
+export const LearningPathCard: React.FC<LearningPathCardProps> = ({)
   learningPath,
   variant = 'detailed',
   showProgress = true,
@@ -622,25 +594,21 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   const completedSteps = learningPath.steps.filter(step => step.completed).length;
   const progressPercentage = currentUserProgress || (completedSteps / learningPath.steps.length) * 100;
-
   if (variant === 'compact') {
-    return (
+    return ()
       <div className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer">
         <div onClick={() => onClick?.(learningPath)}>
           <h3 className="font-medium text-gray-900 mb-2 line-clamp-2">{learningPath.title}</h3>
           <p className="text-gray-600 text-sm line-clamp-2 mb-3">{learningPath.description}</p>
-          
           <div className="flex items-center justify-between mb-3">
-            <span className={`px-2 py-1 rounded text-xs ${getDifficultyColor(learningPath.difficulty)}`}>
+            <span className={`px-2 py-1 rounded text-xs ${getDifficultyColor(learningPath.difficulty)}`}>}
               {learningPath.difficulty}
             </span>
             <span className="text-sm text-gray-500">{learningPath.estimatedTime}m</span>
           </div>
-          
-          {showProgress && (
+          {showProgress && ()
             <div className="mb-3">
               <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
                 <span>Progress</span>
@@ -658,9 +626,8 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
       </div>
     );
   }
-
   // Detailed variant
-  return (
+  return ()
     <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
       <div onClick={() => onClick?.(learningPath)} className="cursor-pointer">
         <div className="flex items-start justify-between mb-4">
@@ -668,17 +635,15 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             <AcademicCapIcon className="h-6 w-6 text-blue-600" />
             <span className="text-sm font-medium text-blue-600">Learning Path</span>
           </div>
-          <span className={`px-2 py-1 rounded text-xs ${getDifficultyColor(learningPath.difficulty)}`}>
+          <span className={`px-2 py-1 rounded text-xs ${getDifficultyColor(learningPath.difficulty)}`}>}
             {learningPath.difficulty}
           </span>
         </div>
-        
         <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600">
           {learningPath.title}
         </h3>
         <p className="text-gray-600 line-clamp-3 mb-4">{learningPath.description}</p>
       </div>
-      
       <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
         <div className="flex items-center gap-1">
           <ClockIcon className="h-4 w-4" />
@@ -693,8 +658,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
           <span>{learningPath.enrolledCount} enrolled</span>
         </div>
       </div>
-      
-      {showProgress && (
+      {showProgress && ()
         <div className="mb-4">
           <div className="flex items-center justify-between text-sm text-gray-700 mb-2">
             <span>Your Progress</span>
@@ -711,18 +675,16 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
           </div>
         </div>
       )}
-      
       <div className="flex items-center justify-between">
         <div className="flex flex-wrap gap-1">
-          {learningPath.tags.slice(0, 3).map(tag => (
+          {learningPath.tags.slice(0, 3).map(tag => ()
             <span key={tag} className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs">
               #{tag}
             </span>
           ))}
         </div>
-        
         <div className="flex items-center gap-2">
-          {progressPercentage === 0 && onEnroll && (
+          {progressPercentage === 0 && onEnroll && ()
             <button
               onClick={(e) => { e.stopPropagation(); onEnroll(learningPath); }}
               className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
@@ -730,7 +692,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
               Enroll
             </button>
           )}
-          {progressPercentage > 0 && progressPercentage < 100 && (
+          {progressPercentage > 0 && progressPercentage < 100 && ()
             <button
               onClick={() => onClick?.(learningPath)}
               className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700"
@@ -738,7 +700,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
               Continue
             </button>
           )}
-          {progressPercentage === 100 && (
+          {progressPercentage === 100 && ()
             <span className="flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 rounded text-sm">
               <CheckIcon className="h-3 w-3" />
               Completed
@@ -764,7 +726,7 @@ export interface KnowledgeBaseLayoutProps {
   className?: string;
 }
 
-export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
+export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({)
   articles,
   categories,
   learningPaths = [],
@@ -778,7 +740,6 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
 }) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>(layout === 'list' ? 'list' : 'grid');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
   const featuredSections: KnowledgeBaseSection[] = useMemo(() => [
     {
       id: 'getting-started',
@@ -787,7 +748,7 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
       icon: PlayIcon,
       articles: articles.filter(a => a.tags.includes('getting-started')),
       color: 'blue',
-      featured: true
+      featured: true,
     },
     {
       id: 'templates',
@@ -796,7 +757,7 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
       icon: DocumentIcon,
       articles: articles.filter(a => a.category.slug === 'templates'),
       color: 'green',
-      featured: true
+      featured: true,
     },
     {
       id: 'best-practices',
@@ -805,7 +766,7 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
       icon: LightBulbIcon,
       articles: articles.filter(a => a.tags.includes('best-practices')),
       color: 'purple',
-      featured: true
+      featured: true,
     },
     {
       id: 'advanced',
@@ -814,17 +775,15 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
       icon: AcademicCapIcon,
       articles: articles.filter(a => a.difficulty === 'advanced'),
       color: 'orange',
-      featured: true
+      featured: true,
     }
   ], [articles]);
-
   const filteredArticles = useMemo(() => {
     if (!selectedCategory) return articles;
     return articles.filter(article => article.category.id === selectedCategory);
   }, [articles, selectedCategory]);
-
-  return (
-    <div className={`min-h-screen bg-gray-50 ${className}`}>
+  return ()
+    <div className={`min-h-screen bg-gray-50 ${className}`}>}
       {/* Hero Section */}
       <KnowledgeBaseHero
         stats={stats}
@@ -832,10 +791,9 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
         onBrowseCategory={(categoryId) => setSelectedCategory(categoryId)}
         featuredSections={featuredSections}
       />
-
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Navigation Breadcrumb */}
-        {selectedCategory && (
+        {selectedCategory && ()
           <div className="flex items-center gap-2 mb-6 text-sm text-gray-600">
             <button 
               onClick={() => setSelectedCategory(null)}
@@ -849,14 +807,13 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
             </span>
           </div>
         )}
-
-        {!selectedCategory ? (
+        {!selectedCategory ? ()
           <>
             {/* Featured Content */}
             <section className="mb-12">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Featured Articles</h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {stats.featuredContent.slice(0, 4).map((article) => (
+                {stats.featuredContent.slice(0, 4).map((article) => ()
                   <ArticleCard
                     key={article.id}
                     article={article}
@@ -866,13 +823,12 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
                 ))}
               </div>
             </section>
-
             {/* Learning Paths */}
-            {learningPaths.length > 0 && (
+            {learningPaths.length > 0 && ()
               <section className="mb-12">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Learning Paths</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {learningPaths.slice(0, 6).map((path) => (
+                  {learningPaths.slice(0, 6).map((path) => ()
                     <LearningPathCard
                       key={path.id}
                       learningPath={path}
@@ -882,7 +838,6 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
                 </div>
               </section>
             )}
-
             {/* Categories */}
             <section className="mb-12">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Browse by Category</h2>
@@ -892,12 +847,11 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
                 layout="grid"
               />
             </section>
-
             {/* Recent Articles */}
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Recently Updated</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {stats.recentlyUpdated.slice(0, 6).map((article) => (
+                {stats.recentlyUpdated.slice(0, 6).map((article) => ()
                   <ArticleCard
                     key={article.id}
                     article={article}
@@ -908,7 +862,7 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
               </div>
             </section>
           </>
-        ) : (
+        ) : ()
           <>
             {/* Category View */}
             <div className="flex items-center justify-between mb-6">
@@ -920,7 +874,6 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
                   {categories.find(c => c.id === selectedCategory)?.description}
                 </p>
               </div>
-              
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setViewMode('grid')}
@@ -936,11 +889,10 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
                 </button>
               </div>
             </div>
-
             {/* Articles in Category */}
-            {viewMode === 'grid' ? (
+            {viewMode === 'grid' ? ()
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredArticles.map((article) => (
+                {filteredArticles.map((article) => ()
                   <ArticleCard
                     key={article.id}
                     article={article}
@@ -949,9 +901,9 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
                   />
                 ))}
               </div>
-            ) : (
+            ) : ()
               <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-200">
-                {filteredArticles.map((article) => (
+                {filteredArticles.map((article) => ()
                   <ArticleCard
                     key={article.id}
                     article={article}
@@ -961,8 +913,7 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({
                 ))}
               </div>
             )}
-
-            {filteredArticles.length === 0 && (
+            {filteredArticles.length === 0 && ()
               <div className="text-center py-12">
                 <DocumentIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-500 text-lg">No articles in this category yet</p>

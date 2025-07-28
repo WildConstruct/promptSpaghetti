@@ -21,12 +21,12 @@ interface OrganizationManagerProps {
         role: string;
     };
     onOrganizationChange?: (org: Organization) => void;
-    onInvitationSent?: (invitation: {
+    onInvitationSent?: (invitation: {)
         id: string;
         email: string;
         role: string;
     }) => void;
-    onMembershipUpdated?: (membership: {
+    onMembershipUpdated?: (membership: {)
         id: string;
         userId: string;
         role: string;

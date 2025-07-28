@@ -4,26 +4,22 @@
  * 
  * Provides professional animation utilities for 60fps interactions
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 
 // Animation easing functions inspired by Cinema 4D
 export const easingFunctions = {
   // Cinema 4D style easing curves
-  cinema4d: {
+  cinema4d: {,
     ease: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
     easeIn: 'cubic-bezier(0.55, 0.055, 0.675, 0.19)',
     easeOut: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
     easeInOut: 'cubic-bezier(0.645, 0.045, 0.355, 1)',
-    
     // Professional motion easing
     professional: 'cubic-bezier(0.4, 0, 0.2, 1)',
     sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
-    
     // Smooth anticipation curves
     anticipate: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
     bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-    
     // Substance Designer inspired
     substance: 'cubic-bezier(0.23, 1, 0.32, 1)'
   }
@@ -33,20 +29,16 @@ export const easingFunctions = {
 export const animationDurations = {
   // Micro-interactions (hover, click)
   micro: 150,
-  
   // UI element transitions
   fast: 200,
   normal: 300,
   smooth: 400,
-  
   // Panel animations
   panel: 350,
-  
   // Complex animations
   complex: 500,
-  
   // Loading states
-  loading: 800
+  loading: 800,
 };
 
 // CSS animation classes
@@ -57,65 +49,57 @@ export const cssAnimationClasses = {
   panelExpand: 'animate-panel-expand',
   panelCollapse: 'animate-panel-collapse',
   loadingSpinner: 'animate-loading-spinner',
-  hoverLift: 'animate-hover-lift'
+  hoverLift: 'animate-hover-lift',
 };
-
 /**
  * Creates smooth animation styles for React components
  */
-export function createAnimationStyle(
+export function createAnimationStyle()
   property: string, 
   duration: number = animationDurations.normal,
   easing: string = easingFunctions.cinema4d.professional
 ): React.CSSProperties {
   return {
-    transition: `${property} ${duration}ms ${easing}`,
-    willChange: property
+    transition: `${property} ${duration}ms ${easing}`,}
+    willChange: property,
   };
 }
-
 /**
  * Creates a comprehensive transition style for multiple properties
  */
-export function createSmoothTransition(
+export function createSmoothTransition()
   properties: string[],
   duration: number = animationDurations.normal,
   easing: string = easingFunctions.cinema4d.professional
 ): React.CSSProperties {
   return {
-    transition: properties.map(prop => `${prop} ${duration}ms ${easing}`).join(', '),
+    transition: properties.map(prop => `${prop} ${duration}ms ${easing}`).join(', '),}
     willChange: properties.join(', ')
   };
 }
-
 /**
  * Animation state management hook
  */
 export function useAnimation(initialState: boolean = false) {
   const [isAnimating, setIsAnimating] = React.useState(initialState);
   const timeoutRef = React.useRef<NodeJS.Timeout>();
-
   const startAnimation = React.useCallback((duration?: number) => {
     setIsAnimating(true);
-    
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    
     if (duration) {
       timeoutRef.current = setTimeout(() => {
         setIsAnimating(false);
       }, duration);
     }
   }, []);
-
   const stopAnimation = React.useCallback(() => {
     setIsAnimating(false);
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
   }, []);
-
   React.useEffect(() => {
     return () => {
       if (timeoutRef.current) {
@@ -123,18 +107,16 @@ export function useAnimation(initialState: boolean = false) {
       }
     };
   }, []);
-
   return {
     isAnimating,
     startAnimation,
     stopAnimation
   };
 }
-
 /**
  * Smooth scroll utilities
  */
-export function smoothScrollTo(
+export function smoothScrollTo()
   element: HTMLElement,
   top: number,
   duration: number = animationDurations.smooth
@@ -142,31 +124,24 @@ export function smoothScrollTo(
   const start = element.scrollTop;
   const change = top - start;
   const startTime = performance.now();
-
   function animateScroll(currentTime: number) {
     const elapsed = currentTime - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    
     // Use easeOutQuart for smooth scrolling
     const easeProgress = 1 - Math.pow(1 - progress, 4);
-    
     element.scrollTop = start + (change * easeProgress);
-
     if (progress < 1) {
       requestAnimationFrame(animateScroll);
     }
   }
-
   requestAnimationFrame(animateScroll);
 }
-
 /**
  * Performance-optimized animation utilities
  */
 export class AnimationManager {
   private activeAnimations = new Set<string>();
   private rafId: number | null = null;
-  
   /**
    * Register an animation to prevent overlapping animations
    */
@@ -174,25 +149,21 @@ export class AnimationManager {
     if (this.activeAnimations.has(id)) {
       return false; // Animation already running
     }
-    
     this.activeAnimations.add(id);
     return true;
   }
-
   /**
    * Unregister an animation
    */
   unregisterAnimation(id: string): void {
     this.activeAnimations.delete(id);
   }
-
   /**
    * Check if animation is running
    */
   isAnimationActive(id: string): boolean {
     return this.activeAnimations.has(id);
   }
-
   /**
    * Batch DOM updates for 60fps performance
    */
@@ -200,13 +171,11 @@ export class AnimationManager {
     if (this.rafId) {
       cancelAnimationFrame(this.rafId);
     }
-    
     this.rafId = requestAnimationFrame(() => {
       callback();
       this.rafId = null;
     });
   }
-
   /**
    * Cleanup all animations
    */
@@ -221,40 +190,34 @@ export class AnimationManager {
 
 // Global animation manager instance
 export const globalAnimationManager = new AnimationManager();
-
 /**
  * Hook for managing element hover states with smooth transitions
  */
-export function useSmoothHover(
+export function useSmoothHover()
   duration: number = animationDurations.micro
 ) {
   const [isHovered, setIsHovered] = React.useState(false);
   const [isTransitioning, setIsTransitioning] = React.useState(false);
-
   const handleMouseEnter = React.useCallback(() => {
     setIsHovered(true);
     setIsTransitioning(true);
     setTimeout(() => setIsTransitioning(false), duration);
   }, [duration]);
-
   const handleMouseLeave = React.useCallback(() => {
     setIsHovered(false);
     setIsTransitioning(true);
     setTimeout(() => setIsTransitioning(false), duration);
   }, [duration]);
-
   const hoverProps = {
     onMouseEnter: handleMouseEnter,
-    onMouseLeave: handleMouseLeave
+    onMouseLeave: handleMouseLeave,
   };
-
   return {
     isHovered,
     isTransitioning,
     hoverProps
   };
 }
-
 /**
  * Loading animation utilities
  */
@@ -265,21 +228,19 @@ export const loadingAnimations = {
   createSpinner(): React.CSSProperties {
     return {
       animation: 'spin 1s linear infinite',
-      willChange: 'transform'
+      willChange: 'transform',
     };
   },
-
   /**
    * Creates a pulsing animation for loading states
    */
   createPulse(): React.CSSProperties {
     return {
       animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-      willChange: 'opacity'
+      willChange: 'opacity',
     };
   }
 };
-
 /**
  * React component wrapper for smooth animations
  */
@@ -293,7 +254,7 @@ interface AnimatedProps {
   isVisible?: boolean;
 }
 
-export const AnimatedContainer: React.FC<AnimatedProps> = ({
+export const AnimatedContainer: React.FC<AnimatedProps> = ({)
   children,
   className,
   style,
@@ -303,18 +264,15 @@ export const AnimatedContainer: React.FC<AnimatedProps> = ({
   isVisible = true
 }) => {
   const [mounted, setMounted] = React.useState(false);
-
   React.useEffect(() => {
     const timer = setTimeout(() => setMounted(true), delay);
     return () => clearTimeout(timer);
   }, [delay]);
-
   const getAnimationStyle = (): React.CSSProperties => {
     const baseStyle = {
-      transition: `all ${duration}ms ${easingFunctions.cinema4d.professional}`,
+      transition: `all ${duration}ms ${easingFunctions.cinema4d.professional}`,}
       willChange: 'transform, opacity'
     };
-
     if (!mounted || !isVisible) {
       switch (animationType) {
       case 'fade':
@@ -329,15 +287,13 @@ export const AnimatedContainer: React.FC<AnimatedProps> = ({
         return { ...baseStyle, opacity: 0 };
       }
     }
-
     return {
       ...baseStyle,
       opacity: 1,
       transform: 'translateY(0) scale(1)'
     };
   };
-
-  return (
+  return ()
     <div 
       className={className}
       style={{
@@ -349,4 +305,3 @@ export const AnimatedContainer: React.FC<AnimatedProps> = ({
     </div>
   );
 };
-

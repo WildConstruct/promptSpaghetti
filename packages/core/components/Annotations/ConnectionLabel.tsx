@@ -5,14 +5,12 @@
  * Advanced connection labeling component with inline editing, positioning
  * along connection paths, and professional styling for annotating relationships.
  */
-
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { 
   ConnectionLabel as ConnectionLabelType, 
   ConnectionLabelAction,
   CONNECTION_LABEL_STYLES
 } from '../../types/CollaborationTypes';
-
 interface ConnectionLabelProps {
   label: ConnectionLabelType;
   onAction: (action: ConnectionLabelAction) => void;
@@ -22,7 +20,7 @@ interface ConnectionLabelProps {
   connectionPath?: string; // SVG path for positioning calculations
 }
 
-export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({
+export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
   label,
   onAction,
   canEdit = true,
@@ -34,14 +32,11 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({
   const [editValue, setEditValue] = useState(label.content);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-
   const labelRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
   // Get label styles
   const getLabelStyles = useCallback(() => {
     const baseStyle = CONNECTION_LABEL_STYLES[label.style] || CONNECTION_LABEL_STYLES.default;
-    
     return {
       ...baseStyle,
       ...(label.color && { color: label.color }),
@@ -58,78 +53,65 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({
       transition: 'all 0.2s ease',
       fontFamily: 'system-ui, -apple-system, sans-serif',
       pointerEvents: 'all' as const,
-      ...(isHighlighted && {
+      ...(isHighlighted && {)
         transform: 'scale(1.1)',
-        boxShadow: `0 4px 12px ${baseStyle.color}40`,
-        zIndex: 1000
+        boxShadow: `0 4px 12px ${baseStyle.color}40`,}
+        zIndex: 1000,
       })
     };
   }, [label, canEdit, isHighlighted]);
-
   // Handle double-click to start editing
   const handleDoubleClick = useCallback((e: React.MouseEvent) => {
     if (!canEdit) return;
-    
     e.stopPropagation();
     e.preventDefault();
-    
     setIsEditing(true);
     setEditValue(label.content);
-    
-    onAction({
+    onAction({)
       type: 'startEdit',
       labelId: label.id,
-      connectionId: label.connectionId
+      connectionId: label.connectionId,
     });
   }, [canEdit, label.content, label.id, label.connectionId, onAction]);
-
   // Handle input changes
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const maxLength = 100; // Could be configurable
-    
+    const maxLength = 100; // Could be configurable;
     if (value.length <= maxLength) {
       setEditValue(value);
     }
   }, []);
-
   // Save label changes
   const saveLabel = useCallback(() => {
     const newContent = editValue.trim();
-    
     setIsEditing(false);
-    
-    onAction({
+    onAction({)
       type: 'update',
       labelId: label.id,
       connectionId: label.connectionId,
       content: newContent || 'Untitled',
-      label: {
+      label: {,
         content: newContent || 'Untitled',
         isEditing: false,
         lastModified: new Date().toISOString()
       }
     });
-
-    onAction({
+    onAction({)
       type: 'stopEdit',
       labelId: label.id,
-      connectionId: label.connectionId
+      connectionId: label.connectionId,
     });
   }, [editValue, label.id, label.connectionId, onAction]);
-
   // Cancel editing
   const cancelEdit = useCallback(() => {
     setIsEditing(false);
     setEditValue(label.content);
-    
-    onAction({
+    onAction({)
       type: 'stopEdit',
       labelId: label.id,
-      connectionId: label.connectionId
+      connectionId: label.connectionId,
     });
   }, [label.content, label.id, label.connectionId, onAction]);
-
   // Handle key events
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     switch (e.key) {
@@ -143,12 +125,10 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({
         break;
     }
   }, [saveLabel, cancelEdit]);
-
   // Handle blur
   const handleBlur = useCallback(() => {
     saveLabel();
   }, [saveLabel]);
-
   // Focus input when editing starts
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -156,60 +136,48 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({
       inputRef.current.select();
     }
   }, [isEditing]);
-
   // Handle drag start
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (!canEdit || isEditing) return;
-    
     e.preventDefault();
     e.stopPropagation();
-    
     setIsDragging(true);
-    setDragStart({
+    setDragStart({)
       x: e.clientX - label.position.x,
       y: e.clientY - label.position.y
     });
   }, [canEdit, isEditing, label.position]);
-
   // Handle drag movement
   useEffect(() => {
     if (!isDragging) return;
-
     const handleMouseMove = (e: MouseEvent) => {
       const newPosition = {
         x: e.clientX - dragStart.x,
         y: e.clientY - dragStart.y
       };
-      
-      onAction({
+      onAction({)
         type: 'move',
         labelId: label.id,
         connectionId: label.connectionId,
-        position: newPosition
+        position: newPosition,
       });
     };
-
     const handleMouseUp = () => {
       setIsDragging(false);
     };
-
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
-
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [isDragging, dragStart, label.id, label.connectionId, onAction]);
-
   // Don't render if not visible
   if (!label.visible) {
     return null;
   }
-
   const labelStyles = getLabelStyles();
-
-  return (
+  return ()
     <div
       ref={labelRef}
       data-testid={`connection-label-${label.id}`}
@@ -220,17 +188,17 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({
         zIndex: isHighlighted ? 1000 : 100,
         transform: 'translate(-50%, -50%)', // Center on position
         ...labelStyles,
-        ...(isDragging && {
+        ...(isDragging && {)
           cursor: 'grabbing',
           transform: 'translate(-50%, -50%) scale(1.05)',
-          boxShadow: `0 8px 20px ${labelStyles.color}40`
+          boxShadow: `0 8px 20px ${labelStyles.color}40`}
         })
       }}
       onMouseDown={handleMouseDown}
       onDoubleClick={handleDoubleClick}
       title={showTooltip ? label.content : undefined}
     >
-      {isEditing ? (
+      {isEditing ? ()
         <input
           ref={inputRef}
           type="text"
@@ -245,36 +213,34 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({
             cursor: 'text',
             minWidth: '80px',
             maxWidth: '200px',
-            background: 'white'
+            background: 'white',
           }}
           placeholder="Enter label..."
           maxLength={100}
         />
-      ) : (
+      ) : ()
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '4px'
+            gap: '4px',
           }}
         >
           {/* Icon */}
-          {label.showIcon && label.icon && (
+          {label.showIcon && label.icon && ()
             <span style={{ fontSize: '12px' }}>
               {label.icon}
             </span>
           )}
-          
           {/* Content */}
           <span>{label.content}</span>
-          
           {/* Edit indicator */}
-          {canEdit && (
+          {canEdit && ()
             <span 
               style={{ 
                 fontSize: '8px', 
                 opacity: 0.6,
-                marginLeft: '2px'
+                marginLeft: '2px',
               }}
             >
               ✏️
@@ -282,9 +248,8 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({
           )}
         </div>
       )}
-
       {/* Delete button for labels */}
-      {canEdit && !isEditing && (
+      {canEdit && !isEditing && ()
         <button
           style={{
             position: 'absolute',
@@ -306,10 +271,10 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({
           }}
           onClick={(e) => {
             e.stopPropagation();
-            onAction({
+            onAction({)
               type: 'delete',
               labelId: label.id,
-              connectionId: label.connectionId
+              connectionId: label.connectionId,
             });
           }}
           onMouseEnter={(e) => {
@@ -323,9 +288,8 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({
           ×
         </button>
       )}
-
       {/* Arrow pointer for arrow style */}
-      {label.style === 'arrow' && (
+      {label.style === 'arrow' && ()
         <div
           style={{
             position: 'absolute',
@@ -340,9 +304,8 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({
           }}
         />
       )}
-
       {/* Glow effect for highlight style */}
-      {label.style === 'highlight' && (
+      {label.style === 'highlight' && ()
         <div
           style={{
             position: 'absolute',
@@ -354,18 +317,15 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({
           }}
         />
       )}
-
       {/* CSS animations */}
       <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 0.3; }
           50% { opacity: 0.6; }
         }
-        
         [data-testid^="connection-label-"] {
           animation: labelFadeIn 0.3s ease-out;
         }
-        
         @keyframes labelFadeIn {
           from {
             opacity: 0;

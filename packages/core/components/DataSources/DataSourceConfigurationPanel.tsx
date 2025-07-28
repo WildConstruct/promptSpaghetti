@@ -1,6 +1,5 @@
 // packages/core/components/DataSources/DataSourceConfigurationPanel.tsx
 // Epic 8.8 Task 1: External Data Source Configuration Interface
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { DataSource, DataTransform } from '../../external-data/DataSourceManager';
 
@@ -10,19 +9,18 @@ export interface DataSourceConfigurationPanelProps {
   onSave: (dataSources: DataSource[]) => void;
   initialDataSources?: DataSource[];
 }
-
 interface DataSourceFormData {
   id: string;
   name: string;
   type: DataSource['type'];
   enabled: boolean;
   endpoint?: string;
-  authentication: {
+  authentication: {,
     type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer';
     credentials: Record<string, string>;
     headers: Record<string, string>;
   };
-  caching: {
+  caching: {,
     enabled: boolean;
     ttl: number;
     strategy: 'memory' | 'disk' | 'hybrid';
@@ -34,57 +32,56 @@ interface DataSourceFormData {
     window: number;
     burst?: number;
   };
-  reliability: {
+  reliability: {,
     timeout: number;
     retries: number;
     backoff: 'linear' | 'exponential';
     healthCheck?: string;
   };
-  metadata: {
+  metadata: {,
     description: string;
     category: 'historical' | 'cultural' | 'artistic' | 'academic' | 'commercial';
     tags: string[];
     version: string;
   };
 }
-
 const defaultDataSourceForm: DataSourceFormData = {
   id: '',
   name: '',
   type: 'api',
   enabled: true,
   endpoint: '',
-  authentication: {
+  authentication: {,
     type: 'none',
     credentials: {},
     headers: {}
   },
-  caching: {
+  caching: {,
     enabled: true,
     ttl: 3600,
     strategy: 'hybrid',
-    maxSize: 50
+    maxSize: 50,
   },
   transforms: [],
-  rateLimit: {
+  rateLimit: {,
     requests: 100,
     window: 60,
-    burst: 10
+    burst: 10,
   },
-  reliability: {
+  reliability: {,
     timeout: 10000,
     retries: 3,
-    backoff: 'exponential'
+    backoff: 'exponential',
   },
-  metadata: {
+  metadata: {,
     description: '',
     category: 'historical',
     tags: [],
-    version: '1.0'
+    version: '1.0',
   }
 };
 
-export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanelProps> = ({
+export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanelProps> = ({)
   visible,
   onClose,
   onSave,
@@ -94,25 +91,21 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
   const [selectedSourceId, setSelectedSourceId] = useState<string | null>(null);
   const [editingSource, setEditingSource] = useState<DataSourceFormData | null>(null);
   const [showForm, setShowForm] = useState(false);
-
   const selectedSource = dataSources.find(ds => ds.id === selectedSourceId);
-
   useEffect(() => {
     if (initialDataSources.length > 0) {
       setDataSources(initialDataSources);
     }
   }, [initialDataSources]);
-
   const handleNewSource = useCallback(() => {
-    const newId = `custom-source-${Date.now()}`;
+    const newId = `custom-source-${Date.now()}`;}
     setEditingSource({ ...defaultDataSourceForm, id: newId });
     setShowForm(true);
   }, []);
-
   const handleEditSource = useCallback((source: DataSource) => {
-    setEditingSource({
+    setEditingSource({)
       ...source,
-      authentication: {
+      authentication: {,
         type: source.authentication?.type || 'none',
         credentials: source.authentication?.credentials || {},
         headers: source.authentication?.headers || {}
@@ -120,20 +113,16 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
     });
     setShowForm(true);
   }, []);
-
   const handleSaveSource = useCallback(() => {
     if (!editingSource) return;
-
-    const updatedSources = dataSources.some(ds => ds.id === editingSource.id)
+    const updatedSources = dataSources.some(ds => ds.id === editingSource.id);
       ? dataSources.map(ds => ds.id === editingSource.id ? editingSource : ds)
       : [...dataSources, editingSource];
-
     setDataSources(updatedSources);
     setEditingSource(null);
     setShowForm(false);
     onSave(updatedSources);
   }, [editingSource, dataSources, onSave]);
-
   const handleDeleteSource = useCallback((sourceId: string) => {
     const updatedSources = dataSources.filter(ds => ds.id !== sourceId);
     setDataSources(updatedSources);
@@ -142,43 +131,37 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
     }
     onSave(updatedSources);
   }, [dataSources, selectedSourceId, onSave]);
-
   const handleToggleSource = useCallback((sourceId: string) => {
-    const updatedSources = dataSources.map(ds =>
+    const updatedSources = dataSources.map(ds =>;)
       ds.id === sourceId ? { ...ds, enabled: !ds.enabled } : ds
     );
     setDataSources(updatedSources);
     onSave(updatedSources);
   }, [dataSources, onSave]);
-
   const updateEditingSource = useCallback((updates: Partial<DataSourceFormData>) => {
     if (!editingSource) return;
     setEditingSource({ ...editingSource, ...updates });
   }, [editingSource]);
-
   const addTag = useCallback((tag: string) => {
     if (!editingSource || editingSource.metadata.tags.includes(tag)) return;
-    updateEditingSource({
-      metadata: {
+    updateEditingSource({)
+      metadata: {,
         ...editingSource.metadata,
         tags: [...editingSource.metadata.tags, tag]
       }
     });
   }, [editingSource, updateEditingSource]);
-
   const removeTag = useCallback((tag: string) => {
     if (!editingSource) return;
-    updateEditingSource({
-      metadata: {
+    updateEditingSource({)
+      metadata: {,
         ...editingSource.metadata,
         tags: editingSource.metadata.tags.filter(t => t !== tag)
       }
     });
   }, [editingSource, updateEditingSource]);
-
   if (!visible) return null;
-
-  return (
+  return ()
     <div style={{
       position: 'fixed',
       top: 0,
@@ -189,7 +172,7 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 2000
+      zIndex: 2000,
     }}>
       <div style={{
         background: '#2d3748',
@@ -199,7 +182,7 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
         maxWidth: 1200,
         maxHeight: '90vh',
         display: 'flex',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}>
         {/* Sidebar - Data Sources List */}
         <div style={{
@@ -207,14 +190,14 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
           background: '#1a202c',
           borderRight: '1px solid #4a5568',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}>
           <div style={{
             padding: 16,
             borderBottom: '1px solid #4a5568',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
           }}>
             <h3 style={{ color: '#e2e8f0', margin: 0, fontSize: 16 }}>
               Data Sources
@@ -228,24 +211,23 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                 borderRadius: 4,
                 color: 'white',
                 fontSize: 12,
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               + Add New
             </button>
           </div>
-
           <div style={{ flex: 1, overflowY: 'auto', padding: 8 }}>
-            {dataSources.map(source => (
+            {dataSources.map(source => ()
               <div
                 key={source.id}
                 style={{
                   padding: 12,
                   marginBottom: 8,
                   background: selectedSourceId === source.id ? '#2d3748' : 'transparent',
-                  border: `1px solid ${selectedSourceId === source.id ? '#4299e1' : '#4a5568'}`,
+                  border: `1px solid ${selectedSourceId === source.id ? '#4299e1' : '#4a5568'}`,}
                   borderRadius: 6,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
                 onClick={() => setSelectedSourceId(source.id)}
               >
@@ -253,21 +235,21 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'flex-start',
-                  marginBottom: 8
+                  marginBottom: 8,
                 }}>
                   <div>
                     <div style={{
                       color: '#e2e8f0',
                       fontSize: 14,
                       fontWeight: 500,
-                      marginBottom: 4
+                      marginBottom: 4,
                     }}>
                       {source.name}
                     </div>
                     <div style={{
                       color: '#a0aec0',
                       fontSize: 12,
-                      marginBottom: 4
+                      marginBottom: 4,
                     }}>
                       {source.type.toUpperCase()}
                     </div>
@@ -279,25 +261,23 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                     background: source.enabled ? '#48bb78' : '#f56565'
                   }} />
                 </div>
-
                 <div style={{
                   color: '#a0aec0',
                   fontSize: 11,
                   marginBottom: 8,
                   maxHeight: 36,
                   overflow: 'hidden',
-                  lineHeight: 1.3
+                  lineHeight: 1.3,
                 }}>
                   {source.metadata.description}
                 </div>
-
                 <div style={{
                   display: 'flex',
                   flexWrap: 'wrap',
                   gap: 4,
-                  marginBottom: 8
+                  marginBottom: 8,
                 }}>
-                  {source.metadata.tags.slice(0, 3).map(tag => (
+                  {source.metadata.tags.slice(0, 3).map(tag => ()
                     <span
                       key={tag}
                       style={{
@@ -305,19 +285,18 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                         color: '#e2e8f0',
                         padding: '2px 6px',
                         borderRadius: 3,
-                        fontSize: 10
+                        fontSize: 10,
                       }}
                     >
                       {tag}
                     </span>
                   ))}
-                  {source.metadata.tags.length > 3 && (
+                  {source.metadata.tags.length > 3 && ()
                     <span style={{ color: '#a0aec0', fontSize: 10 }}>
                       +{source.metadata.tags.length - 3}
                     </span>
                   )}
                 </div>
-
                 <div style={{ display: 'flex', gap: 4 }}>
                   <button
                     onClick={(e) => {
@@ -331,7 +310,7 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                       borderRadius: 3,
                       color: 'white',
                       fontSize: 10,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     {source.enabled ? 'Disable' : 'Enable'}
@@ -348,7 +327,7 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                       borderRadius: 3,
                       color: 'white',
                       fontSize: 10,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     Edit
@@ -365,7 +344,7 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                       borderRadius: 3,
                       color: 'white',
                       fontSize: 10,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     Delete
@@ -375,7 +354,6 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
             ))}
           </div>
         </div>
-
         {/* Main Content Area */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           {/* Header */}
@@ -384,7 +362,7 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
             borderBottom: '1px solid #4a5568',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
           }}>
             <h2 style={{ color: '#e2e8f0', margin: 0, fontSize: 20 }}>
               External Data Sources Configuration
@@ -398,16 +376,15 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                 borderRadius: 4,
                 color: 'white',
                 fontSize: 14,
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Close
             </button>
           </div>
-
           {/* Content */}
           <div style={{ flex: 1, overflow: 'hidden' }}>
-            {showForm && editingSource ? (
+            {showForm && editingSource ? ()
               <DataSourceForm
                 source={editingSource}
                 onUpdate={updateEditingSource}
@@ -419,19 +396,19 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                 onAddTag={addTag}
                 onRemoveTag={removeTag}
               />
-            ) : selectedSource ? (
+            ) : selectedSource ? ()
               <DataSourceDetails
                 source={selectedSource}
                 onEdit={() => handleEditSource(selectedSource)}
               />
-            ) : (
+            ) : ()
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: '100%',
                 color: '#a0aec0',
-                fontSize: 16
+                fontSize: 16,
               }}>
                 Select a data source to view details or click "Add New" to create one
               </div>
@@ -453,15 +430,13 @@ const DataSourceForm: React.FC<{
   onRemoveTag: (tag: string) => void;
 }> = ({ source, onUpdate, onSave, onCancel, onAddTag, onRemoveTag }) => {
   const [newTag, setNewTag] = useState('');
-
   const handleTagAdd = useCallback(() => {
     if (newTag.trim()) {
       onAddTag(newTag.trim());
       setNewTag('');
     }
   }, [newTag, onAddTag]);
-
-  return (
+  return ()
     <div style={{ height: '100%', overflowY: 'auto', padding: 24 }}>
       <div style={{ maxWidth: 800 }}>
         {/* Basic Information */}
@@ -469,7 +444,6 @@ const DataSourceForm: React.FC<{
           <h3 style={{ color: '#e2e8f0', marginBottom: 16, fontSize: 16 }}>
             Basic Information
           </h3>
-          
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
             <div>
               <label style={{ display: 'block', color: '#a0aec0', fontSize: 12, marginBottom: 4 }}>
@@ -486,12 +460,11 @@ const DataSourceForm: React.FC<{
                   border: '1px solid #4a5568',
                   borderRadius: 4,
                   color: '#e2e8f0',
-                  fontSize: 14
+                  fontSize: 14,
                 }}
                 placeholder="Enter source name"
               />
             </div>
-
             <div>
               <label style={{ display: 'block', color: '#a0aec0', fontSize: 12, marginBottom: 4 }}>
                 Type *
@@ -506,7 +479,7 @@ const DataSourceForm: React.FC<{
                   border: '1px solid #4a5568',
                   borderRadius: 4,
                   color: '#e2e8f0',
-                  fontSize: 14
+                  fontSize: 14,
                 }}
               >
                 <option value="api">API</option>
@@ -516,14 +489,13 @@ const DataSourceForm: React.FC<{
               </select>
             </div>
           </div>
-
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: 'block', color: '#a0aec0', fontSize: 12, marginBottom: 4 }}>
               Description
             </label>
             <textarea
               value={source.metadata.description}
-              onChange={(e) => onUpdate({
+              onChange={(e) => onUpdate({)
                 metadata: { ...source.metadata, description: e.target.value }
               })}
               rows={3}
@@ -535,13 +507,12 @@ const DataSourceForm: React.FC<{
                 borderRadius: 4,
                 color: '#e2e8f0',
                 fontSize: 14,
-                resize: 'vertical'
+                resize: 'vertical',
               }}
               placeholder="Describe this data source..."
             />
           </div>
-
-          {source.type === 'api' && (
+          {source.type === 'api' && ()
             <div>
               <label style={{ display: 'block', color: '#a0aec0', fontSize: 12, marginBottom: 4 }}>
                 API Endpoint *
@@ -557,22 +528,20 @@ const DataSourceForm: React.FC<{
                   border: '1px solid #4a5568',
                   borderRadius: 4,
                   color: '#e2e8f0',
-                  fontSize: 14
+                  fontSize: 14,
                 }}
                 placeholder="https://api.example.com/v1"
               />
             </div>
           )}
         </div>
-
         {/* Tags */}
         <div style={{ marginBottom: 24 }}>
           <h3 style={{ color: '#e2e8f0', marginBottom: 16, fontSize: 16 }}>
             Tags
           </h3>
-          
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
-            {source.metadata.tags.map(tag => (
+            {source.metadata.tags.map(tag => ()
               <span
                 key={tag}
                 style={{
@@ -583,7 +552,7 @@ const DataSourceForm: React.FC<{
                   fontSize: 12,
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 4
+                  gap: 4,
                 }}
               >
                 {tag}
@@ -595,7 +564,7 @@ const DataSourceForm: React.FC<{
                     color: '#f56565',
                     cursor: 'pointer',
                     fontSize: 12,
-                    padding: 0
+                    padding: 0,
                   }}
                 >
                   ×
@@ -603,7 +572,6 @@ const DataSourceForm: React.FC<{
               </span>
             ))}
           </div>
-
           <div style={{ display: 'flex', gap: 8 }}>
             <input
               type="text"
@@ -618,7 +586,7 @@ const DataSourceForm: React.FC<{
                 border: '1px solid #4a5568',
                 borderRadius: 4,
                 color: '#e2e8f0',
-                fontSize: 12
+                fontSize: 12,
               }}
             />
             <button
@@ -638,7 +606,6 @@ const DataSourceForm: React.FC<{
             </button>
           </div>
         </div>
-
         {/* Save/Cancel Buttons */}
         <div style={{ 
           display: 'flex', 
@@ -670,7 +637,7 @@ const DataSourceForm: React.FC<{
               borderRadius: 4,
               color: 'white',
               fontSize: 14,
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             Cancel
@@ -686,14 +653,14 @@ const DataSourceDetails: React.FC<{
   source: DataSource;
   onEdit: () => void;
 }> = ({ source, onEdit }) => {
-  return (
+  return ()
     <div style={{ height: '100%', overflowY: 'auto', padding: 24 }}>
       <div style={{ maxWidth: 800 }}>
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-start',
-          marginBottom: 24
+          marginBottom: 24,
         }}>
           <div>
             <h3 style={{ color: '#e2e8f0', fontSize: 20, margin: '0 0 8px 0' }}>
@@ -715,20 +682,19 @@ const DataSourceDetails: React.FC<{
               borderRadius: 4,
               color: 'white',
               fontSize: 14,
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             Edit
           </button>
         </div>
-
         {/* Configuration Details */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
           <div>
             <h4 style={{ color: '#e2e8f0', fontSize: 16, marginBottom: 12 }}>
               Connection
             </h4>
-            {source.endpoint && (
+            {source.endpoint && ()
               <div style={{ marginBottom: 8 }}>
                 <span style={{ color: '#a0aec0', fontSize: 12 }}>Endpoint: </span>
                 <span style={{ color: '#e2e8f0', fontSize: 12, fontFamily: 'monospace' }}>
@@ -743,7 +709,6 @@ const DataSourceDetails: React.FC<{
               </span>
             </div>
           </div>
-
           <div>
             <h4 style={{ color: '#e2e8f0', fontSize: 16, marginBottom: 12 }}>
               Caching
@@ -768,14 +733,13 @@ const DataSourceDetails: React.FC<{
             </div>
           </div>
         </div>
-
         {/* Tags */}
         <div style={{ marginTop: 24 }}>
           <h4 style={{ color: '#e2e8f0', fontSize: 16, marginBottom: 12 }}>
             Tags
           </h4>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            {source.metadata.tags.map(tag => (
+            {source.metadata.tags.map(tag => ()
               <span
                 key={tag}
                 style={{
@@ -783,7 +747,7 @@ const DataSourceDetails: React.FC<{
                   color: '#e2e8f0',
                   padding: '4px 8px',
                   borderRadius: 4,
-                  fontSize: 12
+                  fontSize: 12,
                 }}
               >
                 {tag}
@@ -791,15 +755,14 @@ const DataSourceDetails: React.FC<{
             ))}
           </div>
         </div>
-
         {/* Transforms */}
-        {source.transforms.length > 0 && (
+        {source.transforms.length > 0 && ()
           <div style={{ marginTop: 24 }}>
             <h4 style={{ color: '#e2e8f0', fontSize: 16, marginBottom: 12 }}>
               Data Transforms ({source.transforms.length})
             </h4>
             <div style={{ background: '#1a202c', padding: 16, borderRadius: 6 }}>
-              {source.transforms.map((transform, index) => (
+              {source.transforms.map((transform, index) => ()
                 <div key={transform.id} style={{ marginBottom: index < source.transforms.length - 1 ? 12 : 0 }}>
                   <div style={{ color: '#e2e8f0', fontSize: 14, marginBottom: 4 }}>
                     {transform.name} ({transform.type})

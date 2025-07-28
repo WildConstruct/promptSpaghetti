@@ -61,26 +61,26 @@ export interface UnifiedPolicy {
     domain: PolicyDomain;
     type: PolicyType;
     status: PolicyStatus;
-    configuration: {
+    configuration: {,
         rules: PolicyRule[];
         conditions: PolicyCondition[];
         actions: PolicyAction[];
         exceptions: PolicyException[];
     };
-    scope: {
+    scope: {,
         workspaceIds?: string[];
         projectIds?: string[];
         userRoles?: string[];
         contentTypes?: string[];
         vfxPipelines?: string[];
     };
-    enforcement: {
+    enforcement: {,
         mode: 'ENFORCE' | 'WARN' | 'MONITOR' | 'DISABLED';
         severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
         automated: boolean;
         reviewRequired: boolean;
     };
-    compliance: {
+    compliance: {,
         frameworks: ComplianceFramework[];
         requirements: string[];
         auditRequired: boolean;
@@ -93,7 +93,7 @@ export interface UnifiedPolicy {
         accuracyLevel: 'STRICT' | 'MODERATE' | 'FLEXIBLE';
         expertValidationRequired: boolean;
     };
-    metadata: {
+    metadata: {,
         version: number;
         createdBy: string;
         createdAt: Date;
@@ -114,7 +114,7 @@ export interface PolicyRule {
     name: string;
     description: string;
     ruleType: 'VALIDATION' | 'RESTRICTION' | 'REQUIREMENT' | 'THRESHOLD' | 'PATTERN';
-    logic: {
+    logic: {,
         field: string;
         operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | 'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN' | 'REGEX' | 'CUSTOM';
         value: any;
@@ -133,12 +133,12 @@ export interface PolicyCondition {
     id: string;
     name: string;
     conditionType: 'PREREQUISITE' | 'CONTEXT' | 'STATE' | 'TEMPORAL' | 'ENVIRONMENTAL';
-    logic: {
+    logic: {,
         expression: string;
         parameters: Record<string, any>;
         evaluationMode: 'AND' | 'OR' | 'NOT';
     };
-    evaluationContext: {
+    evaluationContext: {,
         requiredData: string[];
         externalServices?: string[];
         cacheDuration?: number;
@@ -150,7 +150,7 @@ export interface PolicyAction {
     id: string;
     name: string;
     actionType: 'ALLOW' | 'DENY' | 'RESTRICT' | 'ESCALATE' | 'NOTIFY' | 'LOG' | 'TRANSFORM';
-    configuration: {
+    configuration: {,
         parameters: Record<string, any>;
         targetEntities: string[];
         executionMode: 'IMMEDIATE' | 'DEFERRED' | 'SCHEDULED';
@@ -168,18 +168,18 @@ export interface PolicyException {
     id: string;
     name: string;
     description: string;
-    criteria: {
+    criteria: {,
         userIds?: string[];
         roleIds?: string[];
         entityIds?: string[];
         contextConditions?: Record<string, any>;
     };
-    scope: {
+    scope: {,
         rules?: string[];
         actions?: string[];
         fullPolicy?: boolean;
     };
-    governance: {
+    governance: {,
         approvalRequired: boolean;
         approvedBy?: string;
         approvalDate?: Date;
@@ -214,13 +214,13 @@ export interface PolicyEvaluationContext {
     userId?: string;
     entityType: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';
     entityId: string;
-    sessionData: {
+    sessionData: {,
         ipAddress: string;
         userAgent: string;
         geolocation?: string;
         authenticationMethod: string;
     };
-    operation: {
+    operation: {,
         type: string;
         parameters: Record<string, any>;
         riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -241,44 +241,44 @@ export interface PolicyEvaluationResult {
     policyName: string;
     result: 'ALLOW' | 'DENY' | 'RESTRICT' | 'ESCALATE';
     confidence: number;
-    ruleResults: Array<{
+    ruleResults: Array<{,
         ruleId: string;
         ruleName: string;
         result: 'PASS' | 'FAIL' | 'WARN';
         score: number;
         details: any;
     }>;
-    conditionResults: Array<{
+    conditionResults: Array<{,
         conditionId: string;
         conditionName: string;
         result: 'MET' | 'NOT_MET' | 'ERROR';
         details: any;
     }>;
-    triggeredActions: Array<{
+    triggeredActions: Array<{,
         actionId: string;
         actionType: string;
         executed: boolean;
         result?: any;
         error?: string;
     }>;
-    appliedExceptions: Array<{
+    appliedExceptions: Array<{,
         exceptionId: string;
         exceptionName: string;
         scope: string[];
     }>;
-    complianceStatus: {
-        frameworks: Array<{
+    complianceStatus: {,
+        frameworks: Array<{,
             framework: ComplianceFramework;
             compliant: boolean;
             violations: string[];
         }>;
     };
-    performance: {
+    performance: {,
         evaluationTimeMs: number;
         cacheHit: boolean;
         externalServiceCalls: number;
     };
-    metadata: {
+    metadata: {,
         evaluatedBy: string;
         reviewRequired: boolean;
         escalationRequired: boolean;
@@ -289,27 +289,27 @@ export interface PolicyViolation {
     id: string;
     policyId: string;
     policyName: string;
-    violation: {
+    violation: {,
         type: 'RULE_VIOLATION' | 'CONDITION_FAILURE' | 'THRESHOLD_EXCEEDED' | 'PATTERN_DETECTED';
         severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
         description: string;
         details: any;
     };
     context: PolicyEvaluationContext;
-    impact: {
+    impact: {,
         affectedEntities: string[];
         riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
         businessImpact: string;
         complianceImpact: string[];
     };
-    response: {
+    response: {,
         actionsTaken: string[];
         escalated: boolean;
         resolved: boolean;
         resolvedAt?: Date;
         resolvedBy?: string;
     };
-    metadata: {
+    metadata: {,
         detectedAt: Date;
         detectedBy: string;
         reportedAt?: Date;
@@ -327,7 +327,7 @@ export declare class PolicyManagement extends EventEmitter {
     private performanceMetrics;
     private securityDashboardPolicies;
     private automatedEnforcementService;
-    constructor(
+    constructor()
       securityDashboardPolicies?: SecurityDashboardPolicies,
       automatedEnforcementService?: AutomatedEnforcementService
     );
@@ -368,7 +368,7 @@ export declare class PolicyManagement extends EventEmitter {
     /**
      * Get all policies
      */
-    getPolicies(filters?: {
+    getPolicies(filters?: {)
         domain?: PolicyDomain;
         type?: PolicyType;
         status?: PolicyStatus;

@@ -55,7 +55,7 @@ export interface StreamMetrics {
         errorCount: number;
         avgProcessingTime: number;
     }>;
-    deadLetterQueue: {
+    deadLetterQueue: {,
         size: number;
         oldestEvent: number;
     };

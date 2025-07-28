@@ -7,7 +7,6 @@
  * Task: E17-1753114397410-91A84B - Create trust score
  * Epic: 17 - Backstage Admin Controls
  */
-
 import { TimeRange } from '../marketplace/analytics.types';
 
 // =============================================================================
@@ -51,22 +50,17 @@ export type TrustFactorCategory =
 export interface UserTrustScore extends TrustScore {
   userId: string;
   userType: 'creator' | 'buyer' | 'both';
-  
   // Core trust dimensions
   dimensions: UserTrustDimensions;
-  
   // Specialized scores based on user type
   creatorScore?: CreatorTrustScore;
   buyerScore?: BuyerTrustScore;
-  
   // Trust history and trends
   history: TrustScoreHistory[];
   trends: TrustTrends;
-  
   // Risk and safety indicators
   riskFactors: RiskFactor[];
   verificationStatus: VerificationStatus;
-  
   // Metadata
   dataQuality: DataQualityScore;
   calculationMethod: string;
@@ -90,19 +84,16 @@ export interface DimensionScore {
 
 export interface CreatorTrustScore {
   score: number; // 0-100
-  
   // Creator-specific metrics
   contentQuality: ContentQualityTrustMetrics;
   marketplaceReputation: ReputationMetrics;
   customerSatisfaction: SatisfactionMetrics;
   platformCompliance: ComplianceMetrics;
-  
   // Creator performance indicators
   templateCount: number;
   averageTemplateScore: number;
   customerRetentionRate: number;
   supportResponseTime: number; // hours
-  
   // Creator trust badges
   badges: TrustBadge[];
   certifications: Certification[];
@@ -110,13 +101,11 @@ export interface CreatorTrustScore {
 
 export interface BuyerTrustScore {
   score: number; // 0-100
-  
   // Buyer-specific metrics
   purchaseHistory: PurchaseHistoryMetrics;
   reviewQuality: ReviewQualityMetrics;
   communityContribution: CommunityContributionMetrics;
   paymentReliability: PaymentReliabilityMetrics;
-  
   // Buyer behavior indicators
   averageReviewRating: number;
   reviewHelpfulnessScore: number;
@@ -131,20 +120,15 @@ export interface BuyerTrustScore {
 export interface TemplateTrustScore extends TrustScore {
   templateId: string;
   creatorId: string;
-  
   // Template-specific dimensions
   dimensions: TemplateTrustDimensions;
-  
   // Quality and safety assessment
   qualityAssessment: TemplateQualityAssessment;
   safetyAssessment: TemplateSafetyAssessment;
-  
   // Community validation
   communityValidation: CommunityValidationMetrics;
-  
   // Performance and reliability
   performanceMetrics: TemplatePerformanceMetrics;
-  
   // Trust indicators
   trustIndicators: TemplateTrustIndicator[];
   warnings: TrustWarning[];
@@ -205,17 +189,13 @@ export interface TransactionTrustScore extends TrustScore {
   buyerId: string;
   sellerId: string;
   templateId: string;
-  
   // Transaction-specific factors
   factors: TransactionTrustFactors;
-  
   // Risk assessment
   riskAssessment: TransactionRiskAssessment;
-  
   // Fraud detection
   fraudScore: number; // 0-100 (lower is better)
   fraudIndicators: FraudIndicator[];
-  
   // Transaction context
   transactionContext: TransactionContext;
 }
@@ -499,24 +479,19 @@ export interface PaymentEvent {
 
 export interface TrustScoreConfig {
   version: string;
-  
   // Weight configurations for different user types
-  weights: {
+  weights: {,
     creator: CreatorTrustWeights;
     buyer: BuyerTrustWeights;
     template: TemplateTrustWeights;
     transaction: TransactionTrustWeights;
   };
-  
   // Threshold configurations
   thresholds: TrustThresholds;
-  
   // Calculation parameters
   calculation: CalculationConfig;
-  
   // Fraud detection parameters
   fraudDetection: FraudDetectionConfig;
-  
   // Update frequencies
   updateFrequencies: UpdateFrequencyConfig;
 }
@@ -592,20 +567,15 @@ export interface UpdateFrequencyConfig {
 export interface TrustScoreAnalytics {
   period: AnalyticsPeriod;
   generatedAt: Date;
-  
   // Overall marketplace trust metrics
   overallMetrics: MarketplaceTrustMetrics;
-  
   // Trust distribution across user types
   userTrustDistribution: TrustDistribution;
   templateTrustDistribution: TrustDistribution;
-  
   // Trust trends
   trustTrends: TrustTrendAnalysis;
-  
   // Risk analysis
   riskAnalysis: RiskAnalysis;
-  
   // Trust insights and recommendations
   insights: TrustInsight[];
   recommendations: TrustRecommendation[];
@@ -692,7 +662,7 @@ export interface TrustRecommendation {
   title: string;
   description: string;
   expectedImpact: string;
-  implementation: {
+  implementation: {,
     effort: 'low' | 'medium' | 'high';
     timeline: string;
     resources: string[];

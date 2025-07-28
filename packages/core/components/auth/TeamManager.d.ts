@@ -20,7 +20,7 @@ interface TeamManagerProps {
         role: string;
     };
     onTeamChange?: (team: Team) => void;
-    onMembershipUpdated?: (membership: {
+    onMembershipUpdated?: (membership: {)
         id: string;
         userId: string;
         teamId: string;

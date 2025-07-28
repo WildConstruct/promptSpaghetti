@@ -17,7 +17,7 @@ export declare class ExtensionInterfaceValidator {
     /**
      * Validate extension interface compatibility
      */
-    validateInterfaceCompatibility(
+    validateInterfaceCompatibility()
       extension: any,
       requiredInterface: string,
       version?: string
@@ -25,7 +25,7 @@ export declare class ExtensionInterfaceValidator {
     /**
      * Validate method signatures
      */
-    validateMethodSignatures(
+    validateMethodSignatures()
       extension: any,
       expectedSignatures: Record<string,
       MethodSignature>
@@ -37,7 +37,7 @@ export declare class ExtensionInterfaceValidator {
     /**
      * Validate extension dependencies
      */
-    validateExtensionDependencies(
+    validateExtensionDependencies()
       extension: any,
       availableExtensions: Map<string,
       BaseExtension>

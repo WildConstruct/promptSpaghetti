@@ -294,7 +294,7 @@ export interface HeatmapData {
     element: string;
     interactionType: string;
     frequency: number;
-    coordinates: {
+    coordinates: {,
         x: number;
         y: number;
     };
@@ -408,7 +408,7 @@ export declare class PolicyPreviewStagingService extends EventEmitter {
     /**
      * Create a new policy preview with staging capabilities
      */
-    createPolicyPreview(policyId: string, baseVersion: string, changes: PreviewChange[], options: {
+    createPolicyPreview(policyId: string, baseVersion: string, changes: PreviewChange[], options: {)
         title: string;
         description: string;
         createdBy: string;
@@ -419,7 +419,7 @@ export declare class PolicyPreviewStagingService extends EventEmitter {
     /**
      * Deploy preview to staging environment
      */
-    deployToStaging(previewId: string, environmentId: string, options?: {
+    deployToStaging(previewId: string, environmentId: string, options?: {)
         targetUserGroups?: string[];
         autoRollbackEnabled?: boolean;
         monitoringDuration?: number;
@@ -435,7 +435,7 @@ export declare class PolicyPreviewStagingService extends EventEmitter {
     /**
      * Collect user feedback for preview
      */
-    collectUserFeedback(previewId: string, userId: string, feedback: {
+    collectUserFeedback(previewId: string, userId: string, feedback: {)
         feedbackType: FeedbackType;
         rating: number;
         comments: string;
@@ -448,7 +448,7 @@ export declare class PolicyPreviewStagingService extends EventEmitter {
     /**
      * Promote preview to production
      */
-    promoteToProduction(previewId: string, options: {
+    promoteToProduction(previewId: string, options: {)
         approvedBy: string;
         effectiveDate: Date;
         rolloutStrategy?: string;

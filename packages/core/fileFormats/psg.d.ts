@@ -38,7 +38,7 @@ export declare const GraphContentSchema: z.ZodObject<{
     nodes: z.ZodArray<z.ZodAny, "many">;
     edges: z.ZodArray<z.ZodAny, "many">;
     seed: z.ZodOptional<z.ZodNumber>;
-    viewport: z.ZodOptional<z.ZodObject<{
+    viewport: z.ZodOptional<z.ZodObject<{,
         x: z.ZodNumber;
         y: z.ZodNumber;
         zoom: z.ZodNumber;
@@ -103,7 +103,7 @@ export declare const ExportMetadataSchema: z.ZodObject<{
     exportDate: z.ZodString;
     exportVersion: z.ZodDefault<z.ZodString>;
     format: z.ZodLiteral<"psg">;
-    compatibility: z.ZodOptional<z.ZodObject<{
+    compatibility: z.ZodOptional<z.ZodObject<{,
         minVersion: z.ZodDefault<z.ZodString>;
         maxVersion: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -133,7 +133,7 @@ export declare const ExportMetadataSchema: z.ZodObject<{
     exportVersion?: string | undefined;
 }>;
 export declare const PSGFileSchema: z.ZodObject<{
-    metadata: z.ZodObject<{
+    metadata: z.ZodObject<{,
         name: z.ZodString;
         description: z.ZodOptional<z.ZodString>;
         author: z.ZodOptional<z.ZodString>;
@@ -161,11 +161,11 @@ export declare const PSGFileSchema: z.ZodObject<{
         created?: string | undefined;
         modified?: string | undefined;
     }>;
-    graph: z.ZodObject<{
+    graph: z.ZodObject<{,
         nodes: z.ZodArray<z.ZodAny, "many">;
         edges: z.ZodArray<z.ZodAny, "many">;
         seed: z.ZodOptional<z.ZodNumber>;
-        viewport: z.ZodOptional<z.ZodObject<{
+        viewport: z.ZodOptional<z.ZodObject<{,
             x: z.ZodNumber;
             y: z.ZodNumber;
             zoom: z.ZodNumber;
@@ -197,7 +197,7 @@ export declare const PSGFileSchema: z.ZodObject<{
             zoom: number;
         } | undefined;
     }>;
-    settings: z.ZodDefault<z.ZodObject<{
+    settings: z.ZodDefault<z.ZodObject<{,
         autoSave: z.ZodDefault<z.ZodBoolean>;
         autoSaveInterval: z.ZodDefault<z.ZodNumber>;
         theme: z.ZodDefault<z.ZodEnum<["light", "dark"]>>;
@@ -225,12 +225,12 @@ export declare const PSGFileSchema: z.ZodObject<{
         miniMapVisible?: boolean | undefined;
         showConnectionLabels?: boolean | undefined;
     }>>;
-    exportMetadata: z.ZodObject<{
+    exportMetadata: z.ZodObject<{,
         exportedBy: z.ZodDefault<z.ZodString>;
         exportDate: z.ZodString;
         exportVersion: z.ZodDefault<z.ZodString>;
         format: z.ZodLiteral<"psg">;
-        compatibility: z.ZodOptional<z.ZodObject<{
+        compatibility: z.ZodOptional<z.ZodObject<{,
             minVersion: z.ZodDefault<z.ZodString>;
             maxVersion: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
@@ -260,7 +260,7 @@ export declare const PSGFileSchema: z.ZodObject<{
         exportVersion?: string | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
-    metadata: {
+    metadata: {,
         name: string;
         version: string;
         fileFormatVersion: string;
@@ -270,7 +270,7 @@ export declare const PSGFileSchema: z.ZodObject<{
         created?: string | undefined;
         modified?: string | undefined;
     };
-    settings: {
+    settings: {,
         autoSave: boolean;
         theme: "light" | "dark";
         showNodeIcons: boolean;
@@ -280,7 +280,7 @@ export declare const PSGFileSchema: z.ZodObject<{
         miniMapVisible: boolean;
         showConnectionLabels: boolean;
     };
-    graph: {
+    graph: {,
         nodes: any[];
         edges: any[];
         seed?: number | undefined;
@@ -290,7 +290,7 @@ export declare const PSGFileSchema: z.ZodObject<{
             zoom: number;
         } | undefined;
     };
-    exportMetadata: {
+    exportMetadata: {,
         format: "psg";
         exportedBy: string;
         exportDate: string;
@@ -301,7 +301,7 @@ export declare const PSGFileSchema: z.ZodObject<{
         } | undefined;
     };
 }, {
-    metadata: {
+    metadata: {,
         name: string;
         description?: string | undefined;
         tags?: string[] | undefined;
@@ -311,7 +311,7 @@ export declare const PSGFileSchema: z.ZodObject<{
         created?: string | undefined;
         modified?: string | undefined;
     };
-    graph: {
+    graph: {,
         nodes: any[];
         edges: any[];
         seed?: number | undefined;
@@ -321,7 +321,7 @@ export declare const PSGFileSchema: z.ZodObject<{
             zoom: number;
         } | undefined;
     };
-    exportMetadata: {
+    exportMetadata: {,
         format: "psg";
         exportDate: string;
         compatibility?: {
@@ -350,7 +350,7 @@ export type PSGFile = z.infer<typeof PSGFileSchema>;
 /**
  * Creates a new .psg file from graph data
  */
-export declare function createPSGFile(nodes: Node[], edges: Edge[], metadata: Partial<ProjectMetadata>, settings?: Partial<EditorSettings>, seed?: number, viewport?: {
+export declare function createPSGFile(nodes: Node[], edges: Edge[], metadata: Partial<ProjectMetadata>, settings?: Partial<EditorSettings>, seed?: number, viewport?: {)
     x: number;
     y: number;
     zoom: number;
@@ -382,7 +382,7 @@ export interface PSGError {
 /**
  * Safely parses a .psg file with comprehensive error handling
  */
-export declare function parsePSGFile(jsonString: string, options?: {
+export declare function parsePSGFile(jsonString: string, options?: {)
     maxFileSize?: number;
     strictValidation?: boolean;
     allowLegacyFormat?: boolean;
@@ -427,7 +427,7 @@ export declare function checkPSGCompatibility(psgFile: PSGFile, currentVersion?:
 /**
  * Enhanced serialization with validation and error handling
  */
-export declare function serializePSGFile(psgFile: PSGFile, options?: {
+export declare function serializePSGFile(psgFile: PSGFile, options?: {)
     pretty?: boolean;
     validate?: boolean;
 }): {

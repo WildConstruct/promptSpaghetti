@@ -66,7 +66,7 @@ export interface AuthorizationPolicy {
 }
 export interface AuthorizationRule {
     id: string;
-    condition: {
+    condition: {,
         eventTypes?: string[];
         categories?: string[];
         sources?: string[];
@@ -107,9 +107,9 @@ export declare class AnalyticsAuthorizationService {
     /**
      * Authorize event publication
      */
-    authorizeEventPublication(
+    authorizeEventPublication()
       event: Partial<UnifiedAnalyticsEvent>,
-      authContext: AuthContext
+      authContext: AuthContext,
     ): Promise<AuthorizationResult>;
     /**
      * Authorize event access/viewing
@@ -126,9 +126,9 @@ export declare class AnalyticsAuthorizationService {
     /**
      * Authorize dashboard access
      */
-    authorizeDashboardAccess(
+    authorizeDashboardAccess()
       dashboardType: 'user' | 'organization' | 'admin' | 'system',
-      authContext: AuthContext
+      authContext: AuthContext,
     ): Promise<AuthorizationResult>;
     /**
      * Apply authorization policies to event
@@ -182,7 +182,7 @@ export declare class AnalyticsAuthorizationService {
         organizationId?: string;
         roles: string[];
         permissions: string[];
-        capabilities: {
+        capabilities: {,
             canPublishEvents: boolean;
             canViewEvents: boolean;
             canViewAllEvents: boolean;

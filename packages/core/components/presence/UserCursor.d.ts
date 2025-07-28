@@ -14,7 +14,7 @@ export interface UserCursorProps {
 }
 export declare const UserCursor: React.FC<UserCursorProps>;
 export interface UserCursorOverlayProps {
-    cursors: Array<{
+    cursors: Array<{,
         userId: string;
         userName?: string;
         userAvatar?: string;
@@ -38,7 +38,7 @@ export interface UserSelectionProps {
 }
 export declare const UserSelection: React.FC<UserSelectionProps>;
 export interface TypingIndicatorProps {
-    users: Array<{
+    users: Array<{,
         userId: string;
         userName?: string;
         nodeId?: string;

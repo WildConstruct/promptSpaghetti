@@ -5,7 +5,6 @@
  * Inspector panel component for managing node label preferences
  * including display modes, positioning, styling, and behavior settings.
  */
-
 import React, { useCallback } from 'react';
 import { useGraphStore } from '../../graphStore';
 import { 
@@ -14,21 +13,18 @@ import {
   NodeLabelPosition,
   NodeLabelStyle
 } from '../../types/CollaborationTypes';
-
 interface LabelPreferencesPanelProps {
   onClose?: () => void;
 }
 
-export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
+export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({)
   onClose
 }) => {
   const { annotations, setLabelPreferences } = useGraphStore();
   const preferences = annotations.labelPreferences;
-
   const handlePreferenceChange = useCallback((updates: Partial<NodeLabelPreferences>) => {
     setLabelPreferences(updates);
   }, [setLabelPreferences]);
-
   const displayModeOptions: { value: NodeLabelDisplayMode; label: string; description: string }[] = [
     { value: 'always', label: 'Always Visible', description: 'Labels are always shown' },
     { value: 'hover', label: 'On Hover', description: 'Labels appear when hovering over nodes' },
@@ -36,7 +32,6 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
     { value: 'selected', label: 'When Selected', description: 'Labels appear when nodes are selected' },
     { value: 'never', label: 'Hidden', description: 'Labels are never shown' }
   ];
-
   const positionOptions: { value: NodeLabelPosition; label: string }[] = [
     { value: 'top', label: 'Top' },
     { value: 'bottom', label: 'Bottom' },
@@ -44,7 +39,6 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
     { value: 'right', label: 'Right' },
     { value: 'center', label: 'Center' }
   ];
-
   const styleOptions: { value: NodeLabelStyle; label: string; description: string }[] = [
     { value: 'default', label: 'Default', description: 'Clean white background with shadow' },
     { value: 'minimal', label: 'Minimal', description: 'Transparent background, subtle text' },
@@ -52,8 +46,7 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
     { value: 'colorful', label: 'Colorful', description: 'Yellow theme with bold styling' },
     { value: 'outline', label: 'Outline', description: 'Transparent with colored border' }
   ];
-
-  return (
+  return ()
     <div
       style={{
         background: 'var(--bg-primary)',
@@ -62,7 +55,7 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
         padding: 'var(--space-4)',
         width: '320px',
         fontFamily: 'var(--font-primary)',
-        boxShadow: 'var(--shadow-lg)'
+        boxShadow: 'var(--shadow-lg)',
       }}
     >
       {/* Header */}
@@ -81,12 +74,12 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             margin: 0,
             fontSize: 'var(--font-size-lg)',
             fontWeight: 600,
-            color: 'var(--text-primary)'
+            color: 'var(--text-primary)',
           }}
         >
           🏷️ Label Preferences
         </h3>
-        {onClose && (
+        {onClose && ()
           <button
             onClick={onClose}
             style={{
@@ -110,7 +103,6 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
           </button>
         )}
       </div>
-
       {/* Display Mode */}
       <div style={{ marginBottom: 'var(--space-4)' }}>
         <label
@@ -119,14 +111,14 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             fontSize: 'var(--font-size-sm)',
             fontWeight: 600,
             color: 'var(--text-primary)',
-            marginBottom: 'var(--space-2)'
+            marginBottom: 'var(--space-2)',
           }}
         >
           Display Mode
         </label>
         <select
           value={preferences.defaultDisplayMode}
-          onChange={(e) => handlePreferenceChange({ 
+          onChange={(e) => handlePreferenceChange({ )
             defaultDisplayMode: e.target.value as NodeLabelDisplayMode 
           })}
           style={{
@@ -136,10 +128,10 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             borderRadius: 'var(--radius-md)',
             background: 'var(--bg-secondary)',
             color: 'var(--text-primary)',
-            fontSize: 'var(--font-size-sm)'
+            fontSize: 'var(--font-size-sm)',
           }}
         >
-          {displayModeOptions.map(option => (
+          {displayModeOptions.map(option => ()
             <option key={option.value} value={option.value} title={option.description}>
               {option.label}
             </option>
@@ -150,13 +142,12 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             fontSize: 'var(--font-size-xs)',
             color: 'var(--text-secondary)',
             marginTop: 'var(--space-1)',
-            fontStyle: 'italic'
+            fontStyle: 'italic',
           }}
         >
           {displayModeOptions.find(opt => opt.value === preferences.defaultDisplayMode)?.description}
         </div>
       </div>
-
       {/* Position */}
       <div style={{ marginBottom: 'var(--space-4)' }}>
         <label
@@ -165,7 +156,7 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             fontSize: 'var(--font-size-sm)',
             fontWeight: 600,
             color: 'var(--text-primary)',
-            marginBottom: 'var(--space-2)'
+            marginBottom: 'var(--space-2)',
           }}
         >
           Default Position
@@ -174,10 +165,10 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 'var(--space-2)'
+            gap: 'var(--space-2)',
           }}
         >
-          {positionOptions.map(option => (
+          {positionOptions.map(option => ()
             <button
               key={option.value}
               onClick={() => handlePreferenceChange({ defaultPosition: option.value })}
@@ -203,7 +194,6 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
           ))}
         </div>
       </div>
-
       {/* Style */}
       <div style={{ marginBottom: 'var(--space-4)' }}>
         <label
@@ -212,14 +202,14 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             fontSize: 'var(--font-size-sm)',
             fontWeight: 600,
             color: 'var(--text-primary)',
-            marginBottom: 'var(--space-2)'
+            marginBottom: 'var(--space-2)',
           }}
         >
           Label Style
         </label>
         <select
           value={preferences.defaultStyle}
-          onChange={(e) => handlePreferenceChange({ 
+          onChange={(e) => handlePreferenceChange({ )
             defaultStyle: e.target.value as NodeLabelStyle 
           })}
           style={{
@@ -229,10 +219,10 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             borderRadius: 'var(--radius-md)',
             background: 'var(--bg-secondary)',
             color: 'var(--text-primary)',
-            fontSize: 'var(--font-size-sm)'
+            fontSize: 'var(--font-size-sm)',
           }}
         >
-          {styleOptions.map(option => (
+          {styleOptions.map(option => ()
             <option key={option.value} value={option.value} title={option.description}>
               {option.label}
             </option>
@@ -243,13 +233,12 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             fontSize: 'var(--font-size-xs)',
             color: 'var(--text-secondary)',
             marginTop: 'var(--space-1)',
-            fontStyle: 'italic'
+            fontStyle: 'italic',
           }}
         >
           {styleOptions.find(opt => opt.value === preferences.defaultStyle)?.description}
         </div>
       </div>
-
       {/* Behavior Settings */}
       <div style={{ marginBottom: 'var(--space-4)' }}>
         <h4
@@ -257,19 +246,18 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             margin: '0 0 var(--space-3) 0',
             fontSize: 'var(--font-size-sm)',
             fontWeight: 600,
-            color: 'var(--text-primary)'
+            color: 'var(--text-primary)',
           }}
         >
           Behavior
         </h4>
-        
         {/* Inline Editing */}
         <label
           style={{
             display: 'flex',
             alignItems: 'center',
             marginBottom: 'var(--space-2)',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           <input
@@ -282,14 +270,13 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             Enable inline editing
           </span>
         </label>
-
         {/* Auto Save */}
         <label
           style={{
             display: 'flex',
             alignItems: 'center',
             marginBottom: 'var(--space-2)',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           <input
@@ -302,14 +289,13 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             Auto-save changes
           </span>
         </label>
-
         {/* Show Tooltips */}
         <label
           style={{
             display: 'flex',
             alignItems: 'center',
             marginBottom: 'var(--space-2)',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           <input
@@ -323,7 +309,6 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
           </span>
         </label>
       </div>
-
       {/* Max Label Length */}
       <div style={{ marginBottom: 'var(--space-4)' }}>
         <label
@@ -332,7 +317,7 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             fontSize: 'var(--font-size-sm)',
             fontWeight: 600,
             color: 'var(--text-primary)',
-            marginBottom: 'var(--space-2)'
+            marginBottom: 'var(--space-2)',
           }}
         >
           Max Label Length: {preferences.maxLabelLength}
@@ -345,7 +330,7 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
           onChange={(e) => handlePreferenceChange({ maxLabelLength: parseInt(e.target.value) })}
           style={{
             width: '100%',
-            accentColor: 'var(--accent-orange)'
+            accentColor: 'var(--accent-orange)',
           }}
         />
         <div
@@ -354,14 +339,13 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             justifyContent: 'space-between',
             fontSize: 'var(--font-size-xs)',
             color: 'var(--text-secondary)',
-            marginTop: 'var(--space-1)'
+            marginTop: 'var(--space-1)',
           }}
         >
           <span>10</span>
           <span>100</span>
         </div>
       </div>
-
       {/* Keyboard Shortcuts Info */}
       <div
         style={{
@@ -376,7 +360,7 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({
             margin: '0 0 var(--space-2) 0',
             fontSize: 'var(--font-size-sm)',
             fontWeight: 600,
-            color: 'var(--text-primary)'
+            color: 'var(--text-primary)',
           }}
         >
           Keyboard Shortcuts

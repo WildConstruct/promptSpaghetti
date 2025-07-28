@@ -36,17 +36,13 @@ export type {
 export const ExtensionManagerConstants = {
   // View modes
   VIEW_MODES: ['installed', 'marketplace', 'settings'] as const,
-  
   // Extension statuses
   EXTENSION_STATUSES: ['enabled', 'disabled', 'error', 'loading'] as const,
-  
   // Filter options
   FILTER_TYPES: ['all', 'node', 'ui', 'transform', 'storage'] as const,
   SORT_OPTIONS: ['name', 'version', 'lastUpdated', 'size'] as const,
-  
   // Install methods
   INSTALL_METHODS: ['file', 'url', 'dev'] as const,
-  
   // Configuration tabs
   CONFIG_TABS: ['general', 'advanced', 'security'] as const
 };
@@ -73,7 +69,6 @@ export const ExtensionManagerUtils = {
     default: return '📦';
     }
   },
-
   /**
    * Get status icon for extension
    */
@@ -83,7 +78,6 @@ export const ExtensionManagerUtils = {
     if (status.enabled) return '✅';
     return '⭕';
   },
-
   /**
    * Get human-readable status text
    */
@@ -93,32 +87,28 @@ export const ExtensionManagerUtils = {
     if (status.enabled) return 'Enabled';
     return 'Disabled';
   },
-
   /**
    * Format download count for display
    */
   formatDownloads(downloads: number): string {
     if (downloads < 1000) return downloads.toString();
-    if (downloads < 1000000) return `${(downloads / 1000).toFixed(1)}K`;
-    return `${(downloads / 1000000).toFixed(1)}M`;
+    if (downloads < 1000000) return `${(downloads / 1000).toFixed(1)}K`;}
+    return `${(downloads / 1000000).toFixed(1)}M`;}
   },
-
   /**
    * Format file size for display
    */
   formatFileSize(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    if (bytes < 1024) return `${bytes} B`;}
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;}
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;}
   },
-
   /**
    * Validate extension name for development
    */
   validateExtensionName(name: string): boolean {
     return /^[a-z0-9-]+$/.test(name) && name.length >= 3 && name.length <= 50;
   },
-
   /**
    * Get permission description
    */
@@ -133,15 +123,13 @@ export const ExtensionManagerUtils = {
       'system-info': 'Access system information and statistics',
       'data-storage': 'Store and retrieve persistent data'
     };
-    
     return descriptions[permission] || 'Access to system functionality';
   },
-
   /**
    * Check if permission is dangerous
    */
   isDangerousPermission(permission: string): boolean {
-    const dangerousPermissions = [
+    const dangerousPermissions = [;
       'file-system-write',
       'network',
       'process-spawn',
@@ -158,22 +146,18 @@ export const DefaultExtensionManagerConfig = {
   defaultView: 'installed' as ViewMode,
   defaultViewMode: 'list' as 'grid' | 'list',
   extensionsPerPage: 20,
-  
   // Search and filter settings
   searchDebounceMs: 300,
   defaultSortBy: 'name' as SortOption,
   showCategories: true,
-  
   // Installation settings
   allowDevExtensions: false,
   requireManualApproval: true,
   autoCheckUpdates: true,
-  
   // Security settings
   enableSandboxing: true,
   validateManifests: true,
   checkCompatibility: true,
-  
   // Performance settings
   maxConcurrentInstalls: 3,
   installTimeout: 30000,
@@ -190,7 +174,7 @@ export const ExtensionManagerEvents = {
   EXTENSION_CONFIGURED: 'extension-configured',
   MARKETPLACE_LOADED: 'marketplace-loaded',
   SEARCH_PERFORMED: 'search-performed',
-  FILTER_CHANGED: 'filter-changed'
+  FILTER_CHANGED: 'filter-changed',
 } as const;
 
 export type ExtensionManagerEventType = typeof ExtensionManagerEvents[keyof typeof ExtensionManagerEvents];

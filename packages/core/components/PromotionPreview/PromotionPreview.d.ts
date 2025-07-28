@@ -12,7 +12,7 @@ interface PromotionSlot {
     name: string;
     type: string;
     location: string;
-    dimensions: {
+    dimensions: {,
         width: number;
         height: number;
     };
@@ -20,7 +20,7 @@ interface PromotionSlot {
     priority: number;
 }
 interface PromotionPreviewData {
-    schedule: {
+    schedule: {,
         id: string;
         title: string;
         promotion_type: string;
@@ -29,7 +29,7 @@ interface PromotionPreviewData {
         end_date: Date;
         status: string;
     };
-    content: Array<{
+    content: Array<{,
         id: string;
         title: string;
         category: string;
@@ -38,13 +38,13 @@ interface PromotionPreviewData {
         downloads: number;
         performance_score: number;
     }>;
-    rotation_config: {
+    rotation_config: {,
         pattern: string;
         duration_per_content?: number;
         click_threshold?: number;
         performance_threshold?: number;
     };
-    predicted_performance: {
+    predicted_performance: {,
         estimated_impressions: number;
         estimated_ctr: number;
         estimated_conversions: number;
@@ -53,7 +53,7 @@ interface PromotionPreviewData {
     };
     ab_test_config?: {
         test_name: string;
-        variants: Array<{
+        variants: Array<{,
             id: string;
             name: string;
             traffic_split: number;

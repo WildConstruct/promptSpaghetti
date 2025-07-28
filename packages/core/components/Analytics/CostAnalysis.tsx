@@ -21,7 +21,6 @@ import {
   CartesianGrid,
   Tooltip
 } from 'recharts';
-
 /**
  * Budget card props
  */
@@ -30,36 +29,31 @@ interface BudgetCardProps {
   usage: Error;
   onUpdate: (budgetId: string, updates: unknown) => void;
 }
-
 /**
  * Budget card component
  */
 const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editForm, setEditForm] = useState({
+  const [editForm, setEditForm] = useState({)
     amount: budget.amount,
     alertThresholds: budget.alertThresholds || [75, 90]
   });
-
   const handleSave = () => {
     onUpdate(budget.id, editForm);
     setIsEditing(false);
   };
-
   const getStatusColor = (percentage: number) => {
     if (percentage >= 90) return 'bg-red-500';
     if (percentage >= 75) return 'bg-yellow-500';
     return 'bg-green-500';
   };
-
   const getStatusText = (percentage: number) => {
     if (percentage >= 100) return 'Exceeded';
     if (percentage >= 90) return 'Critical';
     if (percentage >= 75) return 'Warning';
     return 'On Track';
   };
-
-  return (
+  return ()
     <Card className="budget-card">
       <CardHeader>
         <div className="flex justify-between items-start">
@@ -85,13 +79,12 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
               className={`h-2 ${getStatusColor(usage?.percentageUsed || 0)}`}
             />
             <div className="flex justify-between text-sm text-gray-600">
-              <span>${usage?.amountUsed?.toFixed(2) || '0.00'}</span>
-              <span>${budget.amount.toFixed(2)}</span>
+              <span>${usage?.amountUsed?.toFixed(2) || '0.00'}</span>}
+              <span>${budget.amount.toFixed(2)}</span>}
             </div>
           </div>
-
           {/* Budget Details */}
-          {isEditing ? (
+          {isEditing ? ()
             <div className="space-y-3">
               <div>
                 <Label htmlFor="amount">Budget Amount</Label>
@@ -108,7 +101,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
                   <Input
                     type="number"
                     value={editForm.alertThresholds[0]}
-                    onChange={(e) => setEditForm(prev => ({ 
+                    onChange={(e) => setEditForm(prev => ({ )
                       ...prev, 
                       alertThresholds: [parseFloat(e.target.value), prev.alertThresholds[1]] 
                     }))}
@@ -117,7 +110,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
                   <Input
                     type="number"
                     value={editForm.alertThresholds[1]}
-                    onChange={(e) => setEditForm(prev => ({ 
+                    onChange={(e) => setEditForm(prev => ({ )
                       ...prev, 
                       alertThresholds: [prev.alertThresholds[0], parseFloat(e.target.value)] 
                     }))}
@@ -130,11 +123,11 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
                 <Button size="sm" variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
               </div>
             </div>
-          ) : (
+          ) : ()
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm text-gray-600">Remaining</span>
-                <span className="text-sm font-medium">${usage?.amountRemaining?.toFixed(2) || budget.amount.toFixed(2)}</span>
+                <span className="text-sm font-medium">${usage?.amountRemaining?.toFixed(2) || budget.amount.toFixed(2)}</span>}
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-gray-600">Transactions</span>
@@ -155,7 +148,6 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
     </Card>
   );
 };
-
 /**
  * Cost forecast chart props
  */
@@ -163,13 +155,12 @@ interface CostForecastChartProps {
   forecastData: unknown;
   loading: boolean;
 }
-
 /**
  * Cost forecast chart component
  */
 const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loading }) => {
   if (loading) {
-    return (
+    return ()
       <Card>
         <CardHeader>
           <CardTitle>Cost Forecast</CardTitle>
@@ -182,9 +173,8 @@ const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loa
       </Card>
     );
   }
-
   if (!forecastData) {
-    return (
+    return ()
       <Card>
         <CardHeader>
           <CardTitle>Cost Forecast</CardTitle>
@@ -197,15 +187,13 @@ const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loa
       </Card>
     );
   }
-
-  const chartData = Array.from({ length: 30 }, (_, i) => ({
+  const chartData = Array.from({ length: 30 }, (_, i) => ({)
     day: i + 1,
     projected: forecastData.forecastedDailyCost * (i + 1),
     lower: forecastData.confidenceInterval.lower * (i + 1) / 30,
     upper: forecastData.confidenceInterval.upper * (i + 1) / 30
   }));
-
-  return (
+  return ()
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -235,14 +223,13 @@ const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loa
               <div className="text-sm text-gray-600">Days of Data</div>
             </div>
           </div>
-
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="day" />
-                <YAxis tickFormatter={(value) => `$${value.toFixed(0)}`} />
-                <Tooltip formatter={(value: number) => [`$${value.toFixed(2)}`, 'Cost']} />
+                <YAxis tickFormatter={(value) => `$${value.toFixed(0)}`} />}
+                <Tooltip formatter={(value: number) => [`$${value.toFixed(2)}`, 'Cost']} />}
                 <Line
                   type="monotone"
                   dataKey="projected"
@@ -274,7 +261,6 @@ const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loa
     </Card>
   );
 };
-
 /**
  * Cost analysis props
  */
@@ -284,7 +270,6 @@ export interface CostAnalysisProps {
   userId?: number;
   organizationId?: number;
 }
-
 /**
  * Cost analysis state
  */
@@ -297,44 +282,39 @@ interface CostAnalysisState {
   recommendations: unknown[];
   error: string | null;
 }
-
 /**
  * Cost analysis component
  */
-export const CostAnalysis: React.FC<CostAnalysisProps> = ({
+export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
   analyticsClient,
   timeRange,
   userId,
   organizationId
 }) => {
-  const [state, setState] = useState<CostAnalysisState>({
+  const [state, setState] = useState<CostAnalysisState>({)
     loading: true,
     costSummary: null,
     forecast: null,
     budgets: [],
     budgetUsage: new Map(),
     recommendations: [],
-    error: null
+    error: null,
   });
-
   /**
    * Load cost data
    */
   const loadCostData = useCallback(async () => {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
-
-      const [costResponse, forecastResponse, budgetsResponse, recommendationsResponse] = await Promise.all([
+      const [costResponse, forecastResponse, budgetsResponse, recommendationsResponse] = await Promise.all([)
         analyticsClient.getCostSummary(timeRange, userId, organizationId),
         analyticsClient.getCostForecast(30, userId, organizationId),
         analyticsClient.getBudgets(userId, organizationId),
         analyticsClient.getRecommendations(userId, organizationId)
       ]);
-
       if (!costResponse.success) {
         throw new Error(costResponse.error || 'Failed to load cost summary');
       }
-
       // Load budget usage for each budget
       const budgetUsageMap = new Map();
       if (budgetsResponse.success && budgetsResponse.data) {
@@ -345,12 +325,11 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
               budgetUsageMap.set(budget.id, usageResponse.data);
             }
           } catch (error) {
-            console.warn(`Failed to load usage for budget ${budget.id}:`, error);
+            console.warn(`Failed to load usage for budget ${budget.id}:`, error);}
           }
         }
       }
-
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
         loading: false,
         costSummary: costResponse.data,
@@ -361,14 +340,13 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
       }));
     } catch (error) {
       console.error('Failed to load cost data:', error);
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
         loading: false,
         error: error instanceof Error ? error.message : 'Failed to load cost data'
       }));
     }
   }, [analyticsClient, timeRange, userId, organizationId]);
-
   /**
    * Create new budget
    */
@@ -382,7 +360,6 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
       console.error('Failed to create budget:', error);
     }
   }, [analyticsClient, loadCostData]);
-
   /**
    * Update budget
    */
@@ -396,16 +373,14 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
       console.error('Failed to update budget:', error);
     }
   }, [analyticsClient, loadCostData]);
-
   /**
    * Load data on mount
    */
   useEffect(() => {
     loadCostData();
   }, [loadCostData]);
-
   if (state.loading) {
-    return (
+    return ()
       <div className="cost-analysis">
         <div className="loading-container">
           <div className="loading-spinner"></div>
@@ -414,9 +389,8 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
       </div>
     );
   }
-
   if (state.error) {
-    return (
+    return ()
       <div className="cost-analysis">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
@@ -435,16 +409,13 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
       </div>
     );
   }
-
   const costSummary = state.costSummary || {};
-  const providerData = Array.from(costSummary.costByProvider || []).map(([provider, cost]) => ({
+  const providerData = Array.from(costSummary.costByProvider || []).map(([provider, cost]) => ({)
     name: provider,
-    value: cost
+    value: cost,
   }));
-
   const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
-
-  return (
+  return ()
     <div className="cost-analysis">
       <Tabs defaultValue="overview" className="w-full">
         <TabsList className="grid grid-cols-4 w-full">
@@ -453,7 +424,6 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
           <TabsTrigger value="forecast">Forecast</TabsTrigger>
           <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview" className="space-y-6">
           {/* Cost Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -468,7 +438,6 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
                 <div className="text-sm text-gray-500">This period</div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-gray-600">Total Tokens</CardTitle>
@@ -480,7 +449,6 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
                 <div className="text-sm text-gray-500">Tokens consumed</div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-gray-600">Avg Cost/Transaction</CardTitle>
@@ -492,7 +460,6 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
                 <div className="text-sm text-gray-500">Per execution</div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-gray-600">Transactions</CardTitle>
@@ -505,7 +472,6 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
               </CardContent>
             </Card>
           </div>
-
           {/* Provider Cost Breakdown */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
@@ -516,7 +482,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {providerData.length > 0 ? (
+                {providerData.length > 0 ? ()
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <RechartsPieChart>
@@ -530,22 +496,21 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
                           fill="#8884d8"
                           dataKey="value"
                         >
-                          {providerData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          {providerData.map((entry, index) => ()
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />}
                           ))}
                         </Pie>
-                        <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />
+                        <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />}
                       </RechartsPieChart>
                     </ResponsiveContainer>
                   </div>
-                ) : (
+                ) : ()
                   <div className="h-64 flex items-center justify-center text-gray-500">
                     No provider data available
                   </div>
                 )}
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -555,14 +520,14 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {(costSummary.topModels || []).slice(0, 5).map((model: HTMLElement, index: number) => (
+                  {(costSummary.topModels || []).slice(0, 5).map((model: HTMLElement, index: number) => ()
                     <div key={model.model} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Badge variant="outline">{index + 1}</Badge>
                         <span className="font-medium">{model.model}</span>
                       </div>
                       <div className="text-right">
-                        <div className="font-semibold">${model.cost.toFixed(2)}</div>
+                        <div className="font-semibold">${model.cost.toFixed(2)}</div>}
                         <div className="text-sm text-gray-600">
                           {model.tokens.toLocaleString()} tokens
                         </div>
@@ -574,7 +539,6 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
             </Card>
           </div>
         </TabsContent>
-
         <TabsContent value="budgets" className="space-y-6">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold">Budget Management</h3>
@@ -582,9 +546,8 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
               const name = prompt('Budget name:');
               const amount = prompt('Budget amount:');
               const period = prompt('Budget period (daily/weekly/monthly/yearly):');
-              
               if (name && amount && period) {
-                handleCreateBudget({
+                handleCreateBudget({)
                   name,
                   amount: parseFloat(amount),
                   period,
@@ -596,9 +559,8 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
               Create Budget
             </Button>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {state.budgets.map((budget: unknown) => (
+            {state.budgets.map((budget: unknown) => ()
               <BudgetCard
                 key={budget.id}
                 budget={budget}
@@ -607,24 +569,21 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
               />
             ))}
           </div>
-
-          {state.budgets.length === 0 && (
+          {state.budgets.length === 0 && ()
             <div className="text-center py-8 text-gray-500">
               No budgets configured. Create your first budget to start tracking costs.
             </div>
           )}
         </TabsContent>
-
         <TabsContent value="forecast" className="space-y-6">
           <CostForecastChart
             forecastData={state.forecast}
             loading={state.loading}
           />
         </TabsContent>
-
         <TabsContent value="recommendations" className="space-y-6">
           <div className="space-y-4">
-            {state.recommendations.map((rec: unknown, index: number) => (
+            {state.recommendations.map((rec: unknown, index: number) => ()
               <Card key={index}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -646,7 +605,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
                     <div className="space-y-2">
                       <div className="text-sm font-medium">Action Items:</div>
                       <ul className="text-sm text-gray-600 space-y-1">
-                        {rec.actionItems?.map((item: string, i: number) => (
+                        {rec.actionItems?.map((item: string, i: number) => ()
                           <li key={i} className="flex items-start gap-2">
                             <span className="text-blue-600">•</span>
                             {item}
@@ -659,8 +618,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
               </Card>
             ))}
           </div>
-
-          {state.recommendations.length === 0 && (
+          {state.recommendations.length === 0 && ()
             <div className="text-center py-8 text-gray-500">
               No recommendations available at this time.
             </div>

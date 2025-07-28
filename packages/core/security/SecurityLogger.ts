@@ -13,7 +13,6 @@
  * - Security metrics and analytics
  * - Integration with SIEM systems
  */
-
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
 import {
@@ -102,7 +101,7 @@ export interface SecurityLogEntry {
   level: LogLevel;
   eventType: SecurityEventType;
   message: string;
-  actor: {
+  actor: {,
     type: 'user' | 'admin' | 'system';
     id: string;
     email?: string;
@@ -117,13 +116,13 @@ export interface SecurityLogEntry {
   details: Record<string, any>;
   outcome: 'success' | 'failure' | 'pending' | 'unknown';
   severity: 'low' | 'medium' | 'high' | 'critical';
-  compliance: {
+  compliance: {,
     frameworks: ComplianceFramework[];
     retention: number; // days
     encrypted: boolean;
     immutable: boolean;
   };
-  metadata: {
+  metadata: {,
     source: string;
     environment: string;
     version: string;
@@ -140,12 +139,12 @@ export interface AuditTrailEntry {
   operation: string;
   resource: string;
   resourceId: string;
-  actor: {
+  actor: {,
     type: 'user' | 'admin' | 'system';
     id: string;
     email?: string;
   };
-  changes: {
+  changes: {,
     before?: any;
     after?: any;
     fields: string[];
@@ -158,40 +157,40 @@ export interface AuditTrailEntry {
 
 // Security Metrics
 export interface SecurityMetrics {
-  period: {
+  period: {,
     start: Date;
     end: Date;
   };
-  lockoutEvents: {
+  lockoutEvents: {,
     total: number;
     byReason: Record<LockoutReason, number>;
     byHour: number[];
     averagePerDay: number;
   };
-  unlockEvents: {
+  unlockEvents: {,
     total: number;
     byMethod: Record<UnlockMethod, number>;
     adminUnlocks: number;
     emergencyUnlocks: number;
     averageResolutionTime: number;
   };
-  securityAlerts: {
+  securityAlerts: {,
     total: number;
     bySeverity: Record<string, number>;
     falsePositives: number;
     responseTime: number;
   };
-  compliance: {
+  compliance: {,
     violations: number;
     reportingRequirements: number;
     dataRetention: number;
     auditAccess: number;
   };
-  threatLandscape: {
+  threatLandscape: {,
     topAttackVectors: Array<{ vector: string; count: number }>;
     topTargetedUsers: Array<{ userId: string; count: number }>;
     geographicDistribution: Record<string, number>;
-    timePatterns: {
+    timePatterns: {,
       peakHours: number[];
       peakDays: string[];
     };
@@ -224,7 +223,6 @@ export interface LogRetentionPolicy {
   immutable: boolean;
   accessControls: string[];
 }
-
 /**
  * Comprehensive security logging service
  */
@@ -234,18 +232,16 @@ export class SecurityLogger extends EventEmitter {
   private retentionPolicies: Map<ComplianceFramework, LogRetentionPolicy> = new Map();
   private metrics: SecurityMetrics | null = null;
   private lastMetricsUpdate: Date = new Date();
-  
   constructor() {
     super();
     this.initializeRetentionPolicies();
     this.startMetricsCollection();
     this.startLogMaintenance();
   }
-  
   /**
    * Log account lockout event
    */
-  public logAccountLocked(
+  public logAccountLocked()
     lockout: AccountLockout,
     context: LogContext = {}
   ): string {
@@ -254,59 +250,57 @@ export class SecurityLogger extends EventEmitter {
       timestamp: new Date(),
       level: this.determineLockoutLogLevel(lockout.reason),
       eventType: SecurityEventType.ACCOUNT_LOCKED,
-      message: `Account locked: ${lockout.userEmail} due to ${lockout.reason}`,
-      actor: {
+      message: `Account locked: ${lockout.userEmail} due to ${lockout.reason}`,}
+      actor: {,
         type: 'system',
-        id: 'lockout-service'
+        id: 'lockout-service',
       },
-      target: {
+      target: {,
         type: 'account',
         id: lockout.userId,
-        email: lockout.userEmail
+        email: lockout.userEmail,
       },
-      context: {
+      context: {,
         ...context,
         userId: lockout.userId,
         userEmail: lockout.userEmail,
-        lockoutId: lockout.id
+        lockoutId: lockout.id,
       },
-      details: {
+      details: {,
         reason: lockout.reason,
         failedAttempts: lockout.failedAttempts,
         lockoutTime: lockout.lockoutTime,
         expiryTime: lockout.expiryTime,
         metadata: lockout.metadata,
-        securityEvents: lockout.securityEvents
+        securityEvents: lockout.securityEvents,
       },
       outcome: 'success',
       severity: this.determineLockoutSeverity(lockout.reason),
-      compliance: {
+      compliance: {,
         frameworks: this.getApplicableFrameworks(lockout.reason),
         retention: this.getRetentionDays(lockout.reason),
         encrypted: true,
-        immutable: true
+        immutable: true,
       },
-      metadata: {
+      metadata: {,
         source: 'AccountLockoutService',
         environment: process.env.NODE_ENV || 'development',
         version: '1.0.0',
         correlationId: context.requestId,
-        checksum: this.calculateChecksum({
+        checksum: this.calculateChecksum({),
           eventType: SecurityEventType.ACCOUNT_LOCKED,
           timestamp: new Date(),
           userId: lockout.userId,
-          reason: lockout.reason
+          reason: lockout.reason,
         })
       }
     };
-    
     return this.storeLogEntry(logEntry);
   }
-  
   /**
    * Log account unlock event
    */
-  public logAccountUnlocked(
+  public logAccountUnlocked()
     lockout: AccountLockout,
     method: UnlockMethod,
     adminId?: string,
@@ -317,47 +311,47 @@ export class SecurityLogger extends EventEmitter {
       timestamp: new Date(),
       level: LogLevel.INFO,
       eventType: SecurityEventType.ACCOUNT_UNLOCKED,
-      message: `Account unlocked: ${lockout.userEmail} via ${method}${adminId ? ` by ${adminId}` : ''}`,
-      actor: {
+      message: `Account unlocked: ${lockout.userEmail} via ${method}${adminId ? ` by ${adminId}` : ''}`,}
+      actor: {,
         type: adminId ? 'admin' : 'system',
         id: adminId || 'lockout-service',
-        email: adminId ? `${adminId}@company.com` : undefined
+        email: adminId ? `${adminId}@company.com` : undefined}
       },
-      target: {
+      target: {,
         type: 'account',
         id: lockout.userId,
-        email: lockout.userEmail
+        email: lockout.userEmail,
       },
-      context: {
+      context: {,
         ...context,
         userId: lockout.userId,
         userEmail: lockout.userEmail,
         lockoutId: lockout.id,
         adminId
       },
-      details: {
+      details: {,
         method,
         originalReason: lockout.reason,
-        lockoutDuration: lockout.unlockTime 
+        lockoutDuration: lockout.unlockTime ,
           ? lockout.unlockTime.getTime() - lockout.lockoutTime.getTime()
           : null,
         adminActions: lockout.adminActions,
-        unlockTime: lockout.unlockTime
+        unlockTime: lockout.unlockTime,
       },
       outcome: 'success',
       severity: 'medium',
-      compliance: {
+      compliance: {,
         frameworks: [ComplianceFramework.SOX, ComplianceFramework.ISO_27001],
         retention: 2555, // 7 years for SOX compliance
         encrypted: true,
-        immutable: true
+        immutable: true,
       },
-      metadata: {
+      metadata: {,
         source: 'AccountLockoutService',
         environment: process.env.NODE_ENV || 'development',
         version: '1.0.0',
         correlationId: context.requestId,
-        checksum: this.calculateChecksum({
+        checksum: this.calculateChecksum({),
           eventType: SecurityEventType.ACCOUNT_UNLOCKED,
           timestamp: new Date(),
           userId: lockout.userId,
@@ -366,14 +360,12 @@ export class SecurityLogger extends EventEmitter {
         })
       }
     };
-    
     return this.storeLogEntry(logEntry);
   }
-  
   /**
    * Log unlock attempt
    */
-  public logUnlockAttempt(
+  public logUnlockAttempt()
     lockoutId: string,
     adminId: string,
     reason: string,
@@ -385,40 +377,40 @@ export class SecurityLogger extends EventEmitter {
       timestamp: new Date(),
       level: outcome === 'failure' ? LogLevel.WARN : LogLevel.INFO,
       eventType: SecurityEventType.UNLOCK_ATTEMPT,
-      message: `Unlock attempt ${outcome}: ${adminId} for lockout ${lockoutId}`,
-      actor: {
+      message: `Unlock attempt ${outcome}: ${adminId} for lockout ${lockoutId}`,}
+      actor: {,
         type: 'admin',
         id: adminId,
-        email: `${adminId}@company.com`
+        email: `${adminId}@company.com`}
       },
-      target: {
+      target: {,
         type: 'lockout',
-        id: lockoutId
+        id: lockoutId,
       },
-      context: {
+      context: {,
         ...context,
         adminId,
         lockoutId
       },
-      details: {
+      details: {,
         reason,
         outcome,
         timestamp: new Date()
       },
       outcome,
       severity: outcome === 'failure' ? 'medium' : 'low',
-      compliance: {
+      compliance: {,
         frameworks: [ComplianceFramework.SOX, ComplianceFramework.ISO_27001],
         retention: 2555,
         encrypted: true,
-        immutable: true
+        immutable: true,
       },
-      metadata: {
+      metadata: {,
         source: 'AccountLockoutService',
         environment: process.env.NODE_ENV || 'development',
         version: '1.0.0',
         correlationId: context.requestId,
-        checksum: this.calculateChecksum({
+        checksum: this.calculateChecksum({),
           eventType: SecurityEventType.UNLOCK_ATTEMPT,
           timestamp: new Date(),
           adminId,
@@ -427,14 +419,12 @@ export class SecurityLogger extends EventEmitter {
         })
       }
     };
-    
     return this.storeLogEntry(logEntry);
   }
-  
   /**
    * Log emergency unlock event
    */
-  public logEmergencyUnlock(
+  public logEmergencyUnlock()
     lockoutId: string,
     adminId: string,
     emergencyCode: string,
@@ -446,22 +436,22 @@ export class SecurityLogger extends EventEmitter {
       timestamp: new Date(),
       level: LogLevel.CRITICAL,
       eventType: SecurityEventType.EMERGENCY_UNLOCK,
-      message: `EMERGENCY UNLOCK: ${adminId} unlocked ${lockoutId} with emergency code`,
-      actor: {
+      message: `EMERGENCY UNLOCK: ${adminId} unlocked ${lockoutId} with emergency code`,}
+      actor: {,
         type: 'admin',
         id: adminId,
-        email: `${adminId}@company.com`
+        email: `${adminId}@company.com`}
       },
-      target: {
+      target: {,
         type: 'lockout',
-        id: lockoutId
+        id: lockoutId,
       },
-      context: {
+      context: {,
         ...context,
         adminId,
         lockoutId
       },
-      details: {
+      details: {,
         emergencyCode: this.maskSensitiveData(emergencyCode),
         justification,
         fullEmergencyCodeHash: this.hashSensitiveData(emergencyCode),
@@ -469,22 +459,22 @@ export class SecurityLogger extends EventEmitter {
       },
       outcome: 'success',
       severity: 'critical',
-      compliance: {
-        frameworks: [
+      compliance: {,
+        frameworks: [,
           ComplianceFramework.SOX,
           ComplianceFramework.ISO_27001,
           ComplianceFramework.NIST
         ],
         retention: 2555, // 7 years
         encrypted: true,
-        immutable: true
+        immutable: true,
       },
-      metadata: {
+      metadata: {,
         source: 'AccountLockoutService',
         environment: process.env.NODE_ENV || 'development',
         version: '1.0.0',
         correlationId: context.requestId,
-        checksum: this.calculateChecksum({
+        checksum: this.calculateChecksum({),
           eventType: SecurityEventType.EMERGENCY_UNLOCK,
           timestamp: new Date(),
           adminId,
@@ -493,14 +483,12 @@ export class SecurityLogger extends EventEmitter {
         })
       }
     };
-    
     return this.storeLogEntry(logEntry);
   }
-  
   /**
    * Log security alert
    */
-  public logSecurityAlert(
+  public logSecurityAlert()
     alertType: string,
     severity: 'low' | 'medium' | 'high' | 'critical',
     details: Record<string, any>,
@@ -511,34 +499,34 @@ export class SecurityLogger extends EventEmitter {
       timestamp: new Date(),
       level: this.mapSeverityToLogLevel(severity),
       eventType: SecurityEventType.SECURITY_ALERT,
-      message: `Security alert: ${alertType} (${severity})`,
-      actor: {
+      message: `Security alert: ${alertType} (${severity})`,}
+      actor: {,
         type: 'system',
-        id: 'security-monitor'
+        id: 'security-monitor',
       },
       context,
-      details: {
+      details: {,
         alertType,
         ...details
       },
       outcome: 'unknown',
       severity,
-      compliance: {
-        frameworks: [
+      compliance: {,
+        frameworks: [,
           ComplianceFramework.ISO_27001,
           ComplianceFramework.NIST,
           ComplianceFramework.GDPR
         ],
         retention: 2555,
         encrypted: true,
-        immutable: true
+        immutable: true,
       },
-      metadata: {
+      metadata: {,
         source: 'SecurityMonitor',
         environment: process.env.NODE_ENV || 'development',
         version: '1.0.0',
         correlationId: context.requestId,
-        checksum: this.calculateChecksum({
+        checksum: this.calculateChecksum({),
           eventType: SecurityEventType.SECURITY_ALERT,
           timestamp: new Date(),
           alertType,
@@ -546,14 +534,12 @@ export class SecurityLogger extends EventEmitter {
         })
       }
     };
-    
     return this.storeLogEntry(logEntry);
   }
-  
   /**
    * Create audit trail entry
    */
-  public createAuditTrail(
+  public createAuditTrail()
     operation: string,
     resource: string,
     resourceId: string,
@@ -569,16 +555,16 @@ export class SecurityLogger extends EventEmitter {
       operation,
       resource,
       resourceId,
-      actor: {
+      actor: {,
         type: actorType,
         id: actorId,
-        email: actorType !== 'system' ? `${actorId}@company.com` : undefined
+        email: actorType !== 'system' ? `${actorId}@company.com` : undefined}
       },
       changes,
       reason,
       context,
       compliance: [ComplianceFramework.SOX, ComplianceFramework.ISO_27001, ComplianceFramework.GDPR],
-      signature: this.generateAuditSignature({
+      signature: this.generateAuditSignature({),
         operation,
         resource,
         resourceId,
@@ -587,13 +573,10 @@ export class SecurityLogger extends EventEmitter {
         changes
       })
     };
-    
     this.auditTrail.set(auditEntry.id, auditEntry);
     this.emit('auditTrailCreated', auditEntry);
-    
     return auditEntry.id;
   }
-  
   /**
    * Query security logs
    */
@@ -603,60 +586,48 @@ export class SecurityLogger extends EventEmitter {
     hasMore: boolean;
   } {
     let logs = Array.from(this.logs.values());
-    
     // Apply filters
     if (query.startTime) {
       logs = logs.filter(log => log.timestamp >= query.startTime!);
     }
-    
     if (query.endTime) {
       logs = logs.filter(log => log.timestamp <= query.endTime!);
     }
-    
     if (query.eventTypes?.length) {
       logs = logs.filter(log => query.eventTypes!.includes(log.eventType));
     }
-    
     if (query.levels?.length) {
       logs = logs.filter(log => query.levels!.includes(log.level));
     }
-    
     if (query.actors?.length) {
       logs = logs.filter(log => query.actors!.includes(log.actor.id));
     }
-    
     if (query.targets?.length) {
       logs = logs.filter(log => log.target && query.targets!.includes(log.target.id));
     }
-    
     if (query.severity?.length) {
       logs = logs.filter(log => query.severity!.includes(log.severity));
     }
-    
     if (query.compliance?.length) {
-      logs = logs.filter(log => 
-        query.compliance!.some(framework => 
+      logs = logs.filter(log => )
+        query.compliance!.some(framework => )
           log.compliance.frameworks.includes(framework)
         )
       );
     }
-    
     if (query.search) {
       const searchTerm = query.search.toLowerCase();
-      logs = logs.filter(log => 
+      logs = logs.filter(log => )
         log.message.toLowerCase().includes(searchTerm) ||
         log.actor.id.toLowerCase().includes(searchTerm) ||
         (log.target?.id.toLowerCase().includes(searchTerm))
       );
     }
-    
     // Sort
     const sortBy = query.sortBy || 'timestamp';
     const sortOrder = query.sortOrder || 'desc';
-    
     logs.sort((a, b) => {
       let aValue: any, bValue: any;
-      
       switch (sortBy) {
       case 'timestamp':
         aValue = a.timestamp.getTime();
@@ -675,52 +646,45 @@ export class SecurityLogger extends EventEmitter {
         aValue = a.timestamp.getTime();
         bValue = b.timestamp.getTime();
       }
-      
       if (sortOrder === 'desc') {
         return bValue - aValue;
       } else {
         return aValue - bValue;
       }
     });
-    
     const total = logs.length;
     const offset = query.offset || 0;
     const limit = query.limit || 100;
-    
     logs = logs.slice(offset, offset + limit);
-    
     return {
       logs,
       total,
       hasMore: (offset + limit) < total
     };
   }
-  
   /**
    * Get security metrics
    */
-  public getSecurityMetrics(
+  public getSecurityMetrics()
     startTime?: Date,
     endTime?: Date
   ): SecurityMetrics {
     if (!this.metrics || this.shouldUpdateMetrics()) {
       this.updateMetrics(startTime, endTime);
     }
-    
     return this.metrics!;
   }
-  
   /**
    * Export logs for compliance
    */
-  public exportLogsForCompliance(
+  public exportLogsForCompliance()
     framework: ComplianceFramework,
     startTime: Date,
     endTime: Date,
     format: 'json' | 'csv' | 'xml' = 'json'
   ): {
     data: string;
-    metadata: {
+    metadata: {,
       framework: ComplianceFramework;
       period: { start: Date; end: Date };
       recordCount: number;
@@ -731,24 +695,21 @@ export class SecurityLogger extends EventEmitter {
     const query: LogQuery = {
       startTime,
       endTime,
-      compliance: [framework]
+      compliance: [framework],
     };
-    
     const result = this.queryLogs(query);
     const exportData = {
       framework,
       period: { start: startTime, end: endTime },
       recordCount: result.total,
       logs: result.logs,
-      auditTrail: Array.from(this.auditTrail.values()).filter(entry =>
+      auditTrail: Array.from(this.auditTrail.values()).filter(entry =>)
         entry.compliance.includes(framework) &&
         entry.timestamp >= startTime &&
         entry.timestamp <= endTime
       )
     };
-    
     let data: string;
-    
     switch (format) {
     case 'json':
       data = JSON.stringify(exportData, null, 2);
@@ -762,7 +723,6 @@ export class SecurityLogger extends EventEmitter {
     default:
       data = JSON.stringify(exportData, null, 2);
     }
-    
     const metadata = {
       framework,
       period: { start: startTime, end: endTime },
@@ -770,24 +730,18 @@ export class SecurityLogger extends EventEmitter {
       exportTime: new Date(),
       signature: this.generateExportSignature(data, framework)
     };
-    
     return { data, metadata };
   }
-  
   // Private helper methods
-  
   private storeLogEntry(logEntry: SecurityLogEntry): string {
     this.logs.set(logEntry.id, logEntry);
     this.emit('securityLogCreated', logEntry);
-    
     // Alert on critical events
     if (logEntry.severity === 'critical' || logEntry.level === LogLevel.CRITICAL) {
       this.emit('criticalSecurityEvent', logEntry);
     }
-    
     return logEntry.id;
   }
-  
   private determineLockoutLogLevel(reason: LockoutReason): LogLevel {
     const levelMap: Record<LockoutReason, LogLevel> = {
       [LockoutReason.EXCESSIVE_FAILED_ATTEMPTS]: LogLevel.WARN,
@@ -797,10 +751,8 @@ export class SecurityLogger extends EventEmitter {
       [LockoutReason.SYSTEM_SECURITY_ALERT]: LogLevel.CRITICAL,
       [LockoutReason.COMPLIANCE_REQUIREMENT]: LogLevel.WARN
     };
-    
     return levelMap[reason] || LogLevel.WARN;
   }
-  
   private determineLockoutSeverity(reason: LockoutReason): 'low' | 'medium' | 'high' | 'critical' {
     const severityMap: Record<LockoutReason, 'low' | 'medium' | 'high' | 'critical'> = {
       [LockoutReason.EXCESSIVE_FAILED_ATTEMPTS]: 'medium',
@@ -810,24 +762,19 @@ export class SecurityLogger extends EventEmitter {
       [LockoutReason.SYSTEM_SECURITY_ALERT]: 'critical',
       [LockoutReason.COMPLIANCE_REQUIREMENT]: 'medium'
     };
-    
     return severityMap[reason] || 'medium';
   }
-  
   private mapSeverityToLogLevel(severity: 'low' | 'medium' | 'high' | 'critical'): LogLevel {
     const levelMap = {
       low: LogLevel.INFO,
       medium: LogLevel.WARN,
       high: LogLevel.ERROR,
-      critical: LogLevel.CRITICAL
+      critical: LogLevel.CRITICAL,
     };
-    
     return levelMap[severity];
   }
-  
   private getApplicableFrameworks(reason: LockoutReason): ComplianceFramework[] {
     const baseFrameworks = [ComplianceFramework.ISO_27001, ComplianceFramework.NIST];
-    
     switch (reason) {
     case LockoutReason.SUSPICIOUS_ACTIVITY:
     case LockoutReason.SYSTEM_SECURITY_ALERT:
@@ -838,264 +785,216 @@ export class SecurityLogger extends EventEmitter {
       return baseFrameworks;
     }
   }
-  
   private getRetentionDays(reason: LockoutReason): number {
     // Security events require longer retention
-    if ([
+    if ([)
       LockoutReason.SUSPICIOUS_ACTIVITY,
       LockoutReason.SYSTEM_SECURITY_ALERT,
       LockoutReason.SECURITY_POLICY_VIOLATION
     ].includes(reason)) {
       return 2555; // 7 years
     }
-    
     return 1095; // 3 years default
   }
-  
   private calculateChecksum(data: any): string {
     const hash = crypto.createHash('sha256');
     hash.update(JSON.stringify(data));
     return hash.digest('hex');
   }
-  
   private maskSensitiveData(data: string): string {
     if (data.length <= 8) {
       return '*'.repeat(data.length);
     }
-    
     return data.substring(0, 4) + '*'.repeat(data.length - 8) + data.substring(data.length - 4);
   }
-  
   private hashSensitiveData(data: string): string {
     const hash = crypto.createHash('sha256');
     hash.update(data);
     return hash.digest('hex');
   }
-  
   private generateAuditSignature(data: any): string {
     const hash = crypto.createHash('sha256');
     hash.update(JSON.stringify(data) + process.env.AUDIT_SALT || 'default-salt');
     return hash.digest('hex');
   }
-  
   private generateExportSignature(data: string, framework: ComplianceFramework): string {
     const hash = crypto.createHash('sha256');
     hash.update(data + framework + new Date().toISOString());
     return hash.digest('hex');
   }
-  
   private shouldUpdateMetrics(): boolean {
     const now = new Date();
     const timeSinceUpdate = now.getTime() - this.lastMetricsUpdate.getTime();
     return timeSinceUpdate > 5 * 60 * 1000; // Update every 5 minutes
   }
-  
   private updateMetrics(startTime?: Date, endTime?: Date): void {
     const now = new Date();
-    const defaultStart = new Date(now.getTime() - 24 * 60 * 60 * 1000); // Last 24 hours
-    
+    const defaultStart = new Date(now.getTime() - 24 * 60 * 60 * 1000); // Last 24 hours;
     const start = startTime || defaultStart;
     const end = endTime || now;
-    
-    const logs = Array.from(this.logs.values()).filter(log => 
+    const logs = Array.from(this.logs.values()).filter(log => ;)
       log.timestamp >= start && log.timestamp <= end
     );
-    
     // Calculate lockout metrics
     const lockoutLogs = logs.filter(log => log.eventType === SecurityEventType.ACCOUNT_LOCKED);
     const unlockLogs = logs.filter(log => log.eventType === SecurityEventType.ACCOUNT_UNLOCKED);
     const alertLogs = logs.filter(log => log.eventType === SecurityEventType.SECURITY_ALERT);
-    
     this.metrics = {
       period: { start, end },
-      lockoutEvents: {
+      lockoutEvents: {,
         total: lockoutLogs.length,
         byReason: this.groupByReason(lockoutLogs),
         byHour: this.groupByHour(lockoutLogs, start, end),
         averagePerDay: lockoutLogs.length / Math.max(1, (end.getTime() - start.getTime()) / (24 * 60 * 60 * 1000))
       },
-      unlockEvents: {
+      unlockEvents: {,
         total: unlockLogs.length,
         byMethod: this.groupByMethod(unlockLogs),
         adminUnlocks: unlockLogs.filter(log => log.actor.type === 'admin').length,
         emergencyUnlocks: logs.filter(log => log.eventType === SecurityEventType.EMERGENCY_UNLOCK).length,
         averageResolutionTime: this.calculateAverageResolutionTime(lockoutLogs, unlockLogs)
       },
-      securityAlerts: {
+      securityAlerts: {,
         total: alertLogs.length,
         bySeverity: this.groupBySeverity(alertLogs),
         falsePositives: 0, // Would need additional tracking
         responseTime: 0 // Would need additional tracking
       },
-      compliance: {
+      compliance: {,
         violations: logs.filter(log => log.eventType === SecurityEventType.POLICY_VIOLATION).length,
         reportingRequirements: logs.filter(log => log.compliance.frameworks.length > 0).length,
         dataRetention: logs.filter(log => log.compliance.retention > 0).length,
         auditAccess: logs.filter(log => log.eventType === SecurityEventType.AUDIT_LOG_ACCESS).length
       },
-      threatLandscape: {
+      threatLandscape: {,
         topAttackVectors: this.getTopAttackVectors(logs),
         topTargetedUsers: this.getTopTargetedUsers(logs),
         geographicDistribution: this.getGeographicDistribution(logs),
-        timePatterns: {
+        timePatterns: {,
           peakHours: this.getPeakHours(logs),
-          peakDays: this.getPeakDays(logs)
+          peakDays: this.getPeakDays(logs),
         }
       }
     };
-    
     this.lastMetricsUpdate = now;
   }
-  
   private groupByReason(logs: SecurityLogEntry[]): Record<LockoutReason, number> {
     const result: Record<LockoutReason, number> = {} as any;
-    
-    logs.forEach(log => {
+    logs.forEach(log => {)
       const reason = log.details.reason as LockoutReason;
       result[reason] = (result[reason] || 0) + 1;
     });
-    
     return result;
   }
-  
   private groupByHour(logs: SecurityLogEntry[], start: Date, end: Date): number[] {
     const hours = new Array(24).fill(0);
-    
-    logs.forEach(log => {
+    logs.forEach(log => {)
       const hour = log.timestamp.getHours();
       hours[hour]++;
     });
-    
     return hours;
   }
-  
   private groupByMethod(logs: SecurityLogEntry[]): Record<UnlockMethod, number> {
     const result: Record<UnlockMethod, number> = {} as any;
-    
-    logs.forEach(log => {
+    logs.forEach(log => {)
       const method = log.details.method as UnlockMethod;
       if (method) {
         result[method] = (result[method] || 0) + 1;
       }
     });
-    
     return result;
   }
-  
   private groupBySeverity(logs: SecurityLogEntry[]): Record<string, number> {
     const result: Record<string, number> = {};
-    
-    logs.forEach(log => {
+    logs.forEach(log => {)
       result[log.severity] = (result[log.severity] || 0) + 1;
     });
-    
     return result;
   }
-  
   private calculateAverageResolutionTime(lockoutLogs: SecurityLogEntry[], unlockLogs: SecurityLogEntry[]): number {
     const resolutionTimes: number[] = [];
-    
-    lockoutLogs.forEach(lockoutLog => {
-      const matchingUnlock = unlockLogs.find(unlockLog => 
+    lockoutLogs.forEach(lockoutLog => {)
+      const matchingUnlock = unlockLogs.find(unlockLog => ;)
         unlockLog.context.lockoutId === lockoutLog.context.lockoutId
       );
-      
       if (matchingUnlock) {
         const resolutionTime = matchingUnlock.timestamp.getTime() - lockoutLog.timestamp.getTime();
         resolutionTimes.push(resolutionTime);
       }
     });
-    
     return resolutionTimes.length > 0 
       ? resolutionTimes.reduce((sum, time) => sum + time, 0) / resolutionTimes.length
       : 0;
   }
-  
   private getTopAttackVectors(logs: SecurityLogEntry[]): Array<{ vector: string; count: number }> {
     const vectors: Record<string, number> = {};
-    
-    logs.forEach(log => {
+    logs.forEach(log => {)
       if (log.context.threatContext?.attackVector) {
         const vector = log.context.threatContext.attackVector;
         vectors[vector] = (vectors[vector] || 0) + 1;
       }
     });
-    
     return Object.entries(vectors)
       .map(([vector, count]) => ({ vector, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
   }
-  
   private getTopTargetedUsers(logs: SecurityLogEntry[]): Array<{ userId: string; count: number }> {
     const users: Record<string, number> = {};
-    
-    logs.forEach(log => {
+    logs.forEach(log => {)
       if (log.target?.id) {
         users[log.target.id] = (users[log.target.id] || 0) + 1;
       }
     });
-    
     return Object.entries(users)
       .map(([userId, count]) => ({ userId, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
   }
-  
   private getGeographicDistribution(logs: SecurityLogEntry[]): Record<string, number> {
     const distribution: Record<string, number> = {};
-    
-    logs.forEach(log => {
+    logs.forEach(log => {)
       if (log.context.geolocation?.country) {
         const country = log.context.geolocation.country;
         distribution[country] = (distribution[country] || 0) + 1;
       }
     });
-    
     return distribution;
   }
-  
   private getPeakHours(logs: SecurityLogEntry[]): number[] {
     const hourCounts = new Array(24).fill(0);
-    
-    logs.forEach(log => {
+    logs.forEach(log => {)
       const hour = log.timestamp.getHours();
       hourCounts[hour]++;
     });
-    
     const maxCount = Math.max(...hourCounts);
     return hourCounts
       .map((count, hour) => ({ hour, count }))
       .filter(item => item.count === maxCount)
       .map(item => item.hour);
   }
-  
   private getPeakDays(logs: SecurityLogEntry[]): string[] {
     const dayCounts: Record<string, number> = {};
-    
-    logs.forEach(log => {
+    logs.forEach(log => {)
       const day = log.timestamp.toLocaleDateString('en-US', { weekday: 'long' });
       dayCounts[day] = (dayCounts[day] || 0) + 1;
     });
-    
     const maxCount = Math.max(...Object.values(dayCounts));
     return Object.entries(dayCounts)
       .filter(([_, count]) => count === maxCount)
       .map(([day, _]) => day);
   }
-  
   private convertToCSV(logs: SecurityLogEntry[]): string {
-    const headers = [
+    const headers = [;
       'ID', 'Timestamp', 'Level', 'Event Type', 'Message', 'Actor Type', 'Actor ID',
       'Target Type', 'Target ID', 'Outcome', 'Severity', 'IP Address', 'User Agent'
     ];
-    
-    const rows = logs.map(log => [
+    const rows = logs.map(log => [;)
       log.id,
       log.timestamp.toISOString(),
       log.level,
       log.eventType,
-      `"${log.message}"`,
+      `"${log.message}"`,}
       log.actor.type,
       log.actor.id,
       log.target?.type || '',
@@ -1103,21 +1002,18 @@ export class SecurityLogger extends EventEmitter {
       log.outcome,
       log.severity,
       log.context.ipAddress || '',
-      `"${log.context.userAgent || ''}"`
+      `"${log.context.userAgent || ''}"`}
     ]);
-    
     return [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
   }
-  
   private convertToXML(data: any): string {
     // Simplified XML conversion - in production, use a proper XML library
     const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
-    const xmlBody = `<SecurityLogExport>${JSON.stringify(data)}</SecurityLogExport>`;
+    const xmlBody = `<SecurityLogExport>${JSON.stringify(data)}</SecurityLogExport>`;}
     return xmlHeader + '\n' + xmlBody;
   }
-  
   private initializeRetentionPolicies(): void {
-    this.retentionPolicies.set(ComplianceFramework.SOX, {
+    this.retentionPolicies.set(ComplianceFramework.SOX, {)
       framework: ComplianceFramework.SOX,
       retentionDays: 2555, // 7 years
       archiveAfterDays: 365,
@@ -1125,8 +1021,7 @@ export class SecurityLogger extends EventEmitter {
       immutable: true,
       accessControls: ['auditor', 'compliance-officer']
     });
-    
-    this.retentionPolicies.set(ComplianceFramework.GDPR, {
+    this.retentionPolicies.set(ComplianceFramework.GDPR, {)
       framework: ComplianceFramework.GDPR,
       retentionDays: 2190, // 6 years
       archiveAfterDays: 365,
@@ -1134,8 +1029,7 @@ export class SecurityLogger extends EventEmitter {
       immutable: true,
       accessControls: ['data-protection-officer', 'legal']
     });
-    
-    this.retentionPolicies.set(ComplianceFramework.HIPAA, {
+    this.retentionPolicies.set(ComplianceFramework.HIPAA, {)
       framework: ComplianceFramework.HIPAA,
       retentionDays: 2190, // 6 years
       archiveAfterDays: 365,
@@ -1144,23 +1038,19 @@ export class SecurityLogger extends EventEmitter {
       accessControls: ['privacy-officer', 'security-officer']
     });
   }
-  
   private startMetricsCollection(): void {
     // Update metrics every 5 minutes
     setInterval(() => {
       this.updateMetrics();
     }, 5 * 60 * 1000);
   }
-  
   private startLogMaintenance(): void {
     // Clean up old logs based on retention policies every 24 hours
     setInterval(() => {
       const now = new Date();
-      
       for (const [id, log] of this.logs) {
         const retentionDays = log.compliance.retention;
         const cutoffDate = new Date(now.getTime() - retentionDays * 24 * 60 * 60 * 1000);
-        
         if (log.timestamp < cutoffDate) {
           this.logs.delete(id);
           this.emit('logExpired', { id, log });

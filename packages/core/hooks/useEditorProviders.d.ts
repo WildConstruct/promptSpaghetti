@@ -20,7 +20,7 @@ export interface EditorActions {
     selectNode: (nodeId: string | null) => void;
     focusNode: (nodeId: string) => void;
     saveGraph: () => Promise<void>;
-    loadGraph: (data: {
+    loadGraph: (data: {)
         nodes: Node[];
         edges: Edge[];
     }) => void;
@@ -42,11 +42,11 @@ export interface ProviderHook {
     onSave?: (context: EditorStateContext) => void | Promise<void>;
     onLoad?: (context: EditorStateContext) => void | Promise<void>;
     onNodeAdd?: (node: Node, context: EditorStateContext) => Node | void;
-    onNodeUpdate?: (
+    onNodeUpdate?: ()
       nodeId: string,
       updates: Record<string,
       unknown>,
-      context: EditorStateContext
+      context: EditorStateContext,
     ) => Record<string, unknown> | void;
     onNodeRemove?: (nodeId: string, context: EditorStateContext) => boolean | void;
     onEdgeAdd?: (edge: Edge, context: EditorStateContext) => Edge | void;
@@ -64,7 +64,7 @@ export interface ProviderRegistry {
     executeHooks: <T extends keyof ProviderHook>(hookName: T, ...args: any[]) => Promise<void>;
     executeCustomAction: (hookId: string, actionName: string, ...args: any[]) => any;
 }
-export declare const useEditorProviders: (
+export declare const useEditorProviders: ()
   initialNodes: Node[],
   initialEdges: Edge[],
   selectedNodeId: string | null,

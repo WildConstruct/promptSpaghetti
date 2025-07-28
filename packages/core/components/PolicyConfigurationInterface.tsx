@@ -6,7 +6,6 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { z } from 'zod';
 
@@ -15,13 +14,10 @@ type PolicyType =
   'PRIVACY_POLICY' | 'TERMS_OF_SERVICE' | 'COOKIE_POLICY' | 
   'DATA_PROCESSING_AGREEMENT' | 'CONSENT_POLICY' | 'RETENTION_POLICY' |
   'SECURITY_POLICY' | 'ACCEPTABLE_USE_POLICY' | 'GDPR_POLICY' | 'CCPA_POLICY' | 'CUSTOM';
-
 type PolicyStatus = 
   'DRAFT' | 'UNDER_REVIEW' | 'APPROVED' | 'PUBLISHED' | 
   'ACTIVE' | 'DEPRECATED' | 'ARCHIVED' | 'SUSPENDED';
-
 type ChangeImpact = 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-
 interface PolicyConfigurationInterfaceProps {
   onPolicyCreate?: (policy: unknown) => void;
   onPolicyUpdate?: (policy: unknown) => void;
@@ -32,7 +28,6 @@ interface PolicyConfigurationInterfaceProps {
   jurisdictions?: string[];
   templates?: PolicyTemplate[];
 }
-
 interface PolicyTemplate {
   templateId: string;
   name: string;
@@ -41,7 +36,6 @@ interface PolicyTemplate {
   policyType: PolicyType;
   variables: TemplateVariable[];
 }
-
 interface TemplateVariable {
   name: string;
   type: 'TEXT' | 'EMAIL' | 'NUMBER' | 'DATE' | 'BOOLEAN' | 'LIST';
@@ -49,7 +43,6 @@ interface TemplateVariable {
   defaultValue?: unknown;
   description?: string;
 }
-
 interface PolicyFormData {
   policyType: PolicyType;
   title: string;
@@ -61,7 +54,6 @@ interface PolicyFormData {
   variables: Record<string, any>;
   customizations: PolicyCustomization[];
 }
-
 interface PolicyCustomization {
   customizationId: string;
   type: 'BRANDING' | 'CONTENT' | 'STRUCTURE' | 'VARIABLES' | 'STYLING';
@@ -70,7 +62,6 @@ interface PolicyCustomization {
   priority: number;
   enabled: boolean;
 }
-
 interface DeploymentConfig {
   environment: 'STAGING' | 'PRODUCTION';
   channels: string[];
@@ -78,7 +69,6 @@ interface DeploymentConfig {
   phases: RolloutPhase[];
   notifications: NotificationConfig;
 }
-
 interface RolloutPhase {
   phaseId: string;
   name: string;
@@ -86,7 +76,6 @@ interface RolloutPhase {
   audience: string[];
   duration: number;
 }
-
 interface NotificationConfig {
   enabled: boolean;
   channels: string[];
@@ -96,8 +85,8 @@ interface NotificationConfig {
 }
 
 // Validation schemas
-const PolicyFormSchema = z.object({
-  policyType: z.enum(
+const PolicyFormSchema = z.object({)
+  policyType: z.enum(),
     ['PRIVACY_POLICY',
       'TERMS_OF_SERVICE',
       'COOKIE_POLICY',
@@ -117,7 +106,7 @@ const PolicyFormSchema = z.object({
   audience: z.array(z.string()).min(1, 'At least one audience is required')
 });
 
-export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterfaceProps> = ({
+export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterfaceProps> = ({)
   onPolicyCreate,
   onPolicyUpdate,
   onPolicyDeploy,
@@ -129,7 +118,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
 }) => {
   // State management
   const [currentTab, setCurrentTab] = useState<'basic' | 'content' | 'compliance' | 'deployment' | 'preview'>('basic');
-  const [formData, setFormData] = useState<PolicyFormData>({
+  const [formData, setFormData] = useState<PolicyFormData>({)
     policyType: 'PRIVACY_POLICY',
     title: '',
     description: '',
@@ -138,28 +127,27 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
     audience: [],
     templateId: '',
     variables: {},
-    customizations: []
+    customizations: [],
   });
-  const [deploymentConfig, setDeploymentConfig] = useState<DeploymentConfig>({
+  const [deploymentConfig, setDeploymentConfig] = useState<DeploymentConfig>({)
     environment: 'STAGING',
     channels: [],
     rolloutType: 'IMMEDIATE',
     phases: [],
-    notifications: {
+    notifications: {,
       enabled: true,
       channels: ['EMAIL'],
       template: 'default',
-      immediate: true
+      immediate: true,
     }
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<PolicyTemplate | null>(null);
-
   // Initialize form with initial policy data
   useEffect(() => {
     if (initialPolicy && mode !== 'create') {
-      setFormData({
+      setFormData({)
         policyType: initialPolicy.policyType,
         title: initialPolicy.title,
         description: initialPolicy.description,
@@ -172,25 +160,23 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
       });
     }
   }, [initialPolicy, mode]);
-
   // Template selection handling
   const handleTemplateSelect = useCallback((templateId: string) => {
     const template = templates.find(t => t.templateId === templateId);
     if (template) {
       setSelectedTemplate(template);
-      setFormData(prev => ({
+      setFormData(prev => ({)
         ...prev,
         templateId,
         policyType: template.policyType,
         complianceFrameworks: [template.framework],
-        variables: template.variables.reduce((acc, variable) => ({
+        variables: template.variables.reduce((acc, variable) => ({)
           ...acc,
           [variable.name]: variable.defaultValue || ''
         }), {})
       }));
     }
   }, [templates]);
-
   // Form validation
   const validateForm = useCallback((): boolean => {
     try {
@@ -200,7 +186,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
-        error.errors.forEach(err => {
+        error.errors.forEach(err => {)
           if (err.path) {
             newErrors[err.path.join('.')] = err.message;
           }
@@ -210,18 +196,15 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
       return false;
     }
   }, [formData]);
-
   // Form submission handlers
   const handleCreate = useCallback(async () => {
     if (!validateForm()) return;
-
     setIsLoading(true);
     try {
       const policyData = {
         ...formData,
-        templateId: selectedTemplate?.templateId
+        templateId: selectedTemplate?.templateId,
       };
-      
       if (onPolicyCreate) {
         await onPolicyCreate(policyData);
       }
@@ -231,32 +214,29 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
       setIsLoading(false);
     }
   }, [formData, selectedTemplate, validateForm, onPolicyCreate]);
-
   const handleUpdate = useCallback(async () => {
     if (!validateForm()) return;
-
     setIsLoading(true);
     try {
       const updateData = {
         policyId: initialPolicy?.policyId,
         version: initialPolicy?.version,
-        changes: [
+        changes: [,
           {
-            changeId: `CHG-${Date.now()}`,
+            changeId: `CHG-${Date.now()}`,}
             type: 'CONTENT',
             location: 'general',
             description: 'Policy configuration updated via interface',
             impact: 'MEDIUM' as ChangeImpact,
             requiresReacceptance: true,
-            newValue: formData
+            newValue: formData,
           }
         ],
         description: 'Updated policy configuration',
         impact: 'MEDIUM' as ChangeImpact,
         requiresApproval: true,
-        notificationRequired: true
+        notificationRequired: true,
       };
-      
       if (onPolicyUpdate) {
         await onPolicyUpdate(updateData);
       }
@@ -266,10 +246,8 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
       setIsLoading(false);
     }
   }, [formData, initialPolicy, validateForm, onPolicyUpdate]);
-
   const handleDeploy = useCallback(async () => {
     if (!initialPolicy?.policyId) return;
-
     setIsLoading(true);
     try {
       const deploymentData = {
@@ -277,33 +255,32 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
         version: initialPolicy.version,
         environment: deploymentConfig.environment,
         channels: deploymentConfig.channels,
-        rolloutStrategy: {
+        rolloutStrategy: {,
           type: deploymentConfig.rolloutType,
-          phases: deploymentConfig.phases.map(phase => ({
+          phases: deploymentConfig.phases.map(phase => ({)
             ...phase,
             startDate: new Date(),
             successCriteria: [],
-            dependencies: []
+            dependencies: [],
           })),
           rollbackCriteria: [],
-          monitoringPeriod: 24
+          monitoringPeriod: 24,
         },
-        notificationSettings: {
+        notificationSettings: {,
           enabled: deploymentConfig.notifications.enabled,
-          channels: deploymentConfig.notifications.channels.map(channel => ({
+          channels: deploymentConfig.notifications.channels.map(channel => ({)
             type: channel,
             configuration: {},
-            enabled: true
+            enabled: true,
           })),
           audiences: formData.audience,
           template: deploymentConfig.notifications.template,
-          scheduling: {
+          scheduling: {,
             immediate: deploymentConfig.notifications.immediate,
-            scheduled: deploymentConfig.notifications.scheduled
+            scheduled: deploymentConfig.notifications.scheduled,
           }
         }
       };
-      
       if (onPolicyDeploy) {
         await onPolicyDeploy(deploymentData);
       }
@@ -313,74 +290,66 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
       setIsLoading(false);
     }
   }, [deploymentConfig, initialPolicy, formData.audience, onPolicyDeploy]);
-
   // Computed values
   const availableTemplates = useMemo(() => {
-    return templates.filter(template => 
+    return templates.filter(template => )
       formData.complianceFrameworks.length === 0 || 
       formData.complianceFrameworks.includes(template.framework)
     );
   }, [templates, formData.complianceFrameworks]);
-
   const isFormValid = useMemo(() => {
     return Object.keys(errors).length === 0 && formData.title && formData.description && 
            formData.jurisdiction.length > 0 && formData.audience.length > 0;
   }, [errors, formData]);
-
   // Helper functions for form inputs
   const updateFormField = useCallback((field: keyof PolicyFormData, value: Error) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   }, []);
-
   const addCustomization = useCallback(() => {
     const newCustomization: PolicyCustomization = {
-      customizationId: `CUST-${Date.now()}`,
+      customizationId: `CUST-${Date.now()}`,}
       type: 'CONTENT',
       target: '',
       value: '',
       priority: 1,
-      enabled: true
+      enabled: true,
     };
-    setFormData(prev => ({
+    setFormData(prev => ({)
       ...prev,
       customizations: [...prev.customizations, newCustomization]
     }));
   }, []);
-
   const updateCustomization = useCallback((index: number, field: keyof PolicyCustomization, value: Error) => {
-    setFormData(prev => ({
+    setFormData(prev => ({)
       ...prev,
       customizations: prev.customizations.map((cust, i) => 
         i === index ? { ...cust, [field]: value } : cust
       )
     }));
   }, []);
-
   const removeCustomization = useCallback((index: number) => {
-    setFormData(prev => ({
+    setFormData(prev => ({)
       ...prev,
       customizations: prev.customizations.filter((_, i) => i !== index)
     }));
   }, []);
-
-  return (
+  return ()
     <div className="policy-configuration-interface">
       <div className="policy-config-header">
         <h2 className="policy-config-title">
           {mode === 'create' ? 'Create New Policy' : 
             mode === 'edit' ? 'Edit Policy' : 'View Policy'}
         </h2>
-        {initialPolicy && (
+        {initialPolicy && ()
           <div className="policy-info">
             <span className="policy-id">ID: {initialPolicy.policyId}</span>
             <span className="policy-version">Version: {initialPolicy.version}</span>
-            <span className={`policy-status status-${initialPolicy.status?.toLowerCase()}`}>
+            <span className={`policy-status status-${initialPolicy.status?.toLowerCase()}`}>}
               {initialPolicy.status}
             </span>
           </div>
         )}
       </div>
-
       {/* Tab Navigation */}
       <div className="policy-config-tabs">
         <button
@@ -415,13 +384,11 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
           Preview
         </button>
       </div>
-
       {/* Tab Content */}
       <div className="policy-config-content">
-        {currentTab === 'basic' && (
+        {currentTab === 'basic' && ()
           <div className="config-section">
             <h3>Basic Information</h3>
-            
             <div className="form-group">
               <label htmlFor="policyType">Policy Type *</label>
               <select
@@ -444,7 +411,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
               </select>
               {errors.policyType && <div className="error-message">{errors.policyType}</div>}
             </div>
-
             <div className="form-group">
               <label htmlFor="title">Title *</label>
               <input
@@ -457,7 +423,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
               />
               {errors.title && <div className="error-message">{errors.title}</div>}
             </div>
-
             <div className="form-group">
               <label htmlFor="description">Description *</label>
               <textarea
@@ -470,11 +435,10 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
               />
               {errors.description && <div className="error-message">{errors.description}</div>}
             </div>
-
             <div className="form-group">
               <label>Jurisdiction *</label>
               <div className="checkbox-group">
-                {jurisdictions.map(jurisdiction => (
+                {jurisdictions.map(jurisdiction => ()
                   <label key={jurisdiction} className="checkbox-label">
                     <input
                       type="checkbox"
@@ -494,11 +458,10 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
               </div>
               {errors.jurisdiction && <div className="error-message">{errors.jurisdiction}</div>}
             </div>
-
             <div className="form-group">
               <label>Target Audience *</label>
               <div className="checkbox-group">
-                {['all-users', 'customers', 'employees', 'partners', 'vendors'].map(audience => (
+                {['all-users', 'customers', 'employees', 'partners', 'vendors'].map(audience => ()
                   <label key={audience} className="checkbox-label">
                     <input
                       type="checkbox"
@@ -520,12 +483,10 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
             </div>
           </div>
         )}
-
-        {currentTab === 'content' && (
+        {currentTab === 'content' && ()
           <div className="config-section">
             <h3>Content & Templates</h3>
-            
-            {templates.length > 0 && (
+            {templates.length > 0 && ()
               <div className="form-group">
                 <label htmlFor="template">Use Template</label>
                 <select
@@ -535,7 +496,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                   disabled={mode === 'view'}
                 >
                   <option value="">No template (start from scratch)</option>
-                  {availableTemplates.map(template => (
+                  {availableTemplates.map(template => ()
                     <option key={template.templateId} value={template.templateId}>
                       {template.name} ({template.framework})
                     </option>
@@ -543,58 +504,57 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                 </select>
               </div>
             )}
-
-            {selectedTemplate && (
+            {selectedTemplate && ()
               <div className="template-variables">
                 <h4>Template Variables</h4>
-                {selectedTemplate.variables.map(variable => (
+                {selectedTemplate.variables.map(variable => ()
                   <div key={variable.name} className="form-group">
                     <label htmlFor={variable.name}>
                       {variable.name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                       {variable.required && ' *'}
                     </label>
-                    {variable.description && (
+                    {variable.description && ()
                       <div className="help-text">{variable.description}</div>
                     )}
-                    {variable.type === 'BOOLEAN' ? (
+                    {variable.type === 'BOOLEAN' ? ()
                       <input
                         type="checkbox"
                         id={variable.name}
                         checked={formData.variables[variable.name] || false}
-                        onChange={(e) => updateFormField('variables', {
+                        onChange={(e) => updateFormField('variables', {)
                           ...formData.variables,
                           [variable.name]: e.target.checked
                         })}
                         disabled={mode === 'view'}
                       />
-                    ) : variable.type === 'DATE' ? (
+                    ) : variable.type === 'DATE' ? ()
                       <input
                         type="date"
                         id={variable.name}
                         value={formData.variables[variable.name] || ''}
-                        onChange={(e) => updateFormField('variables', {
+                        onChange={(e) => updateFormField('variables', {)
                           ...formData.variables,
                           [variable.name]: e.target.value
                         })}
                         disabled={mode === 'view'}
                       />
-                    ) : variable.type === 'NUMBER' ? (
+                    ) : variable.type === 'NUMBER' ? ()
                       <input
                         type="number"
                         id={variable.name}
                         value={formData.variables[variable.name] || ''}
-                        onChange={(e) => updateFormField('variables', {
+                        onChange={(e) => updateFormField('variables', {)
                           ...formData.variables,
                           [variable.name]: e.target.value
                         })}
                         disabled={mode === 'view'}
                       />
-                    ) : (
+                    ) : ()
                       <input
                         type={variable.type === 'EMAIL' ? 'email' : 'text'}
                         id={variable.name}
                         value={formData.variables[variable.name] || ''}
-                        onChange={(e) => updateFormField('variables', {
+                        onChange={(e) => updateFormField('variables', {)
                           ...formData.variables,
                           [variable.name]: e.target.value
                         })}
@@ -605,11 +565,10 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                 ))}
               </div>
             )}
-
             <div className="customizations-section">
               <div className="section-header">
                 <h4>Customizations</h4>
-                {mode !== 'view' && (
+                {mode !== 'view' && ()
                   <button
                     type="button"
                     onClick={addCustomization}
@@ -619,12 +578,11 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                   </button>
                 )}
               </div>
-
-              {formData.customizations.map((customization, index) => (
+              {formData.customizations.map((customization, index) => ()
                 <div key={customization.customizationId} className="customization-item">
                   <div className="customization-header">
                     <span>Customization {index + 1}</span>
-                    {mode !== 'view' && (
+                    {mode !== 'view' && ()
                       <button
                         type="button"
                         onClick={() => removeCustomization(index)}
@@ -634,7 +592,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                       </button>
                     )}
                   </div>
-                  
                   <div className="customization-fields">
                     <div className="form-group">
                       <label>Type</label>
@@ -650,7 +607,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         <option value="STYLING">Styling</option>
                       </select>
                     </div>
-                    
                     <div className="form-group">
                       <label>Target</label>
                       <input
@@ -661,7 +617,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         disabled={mode === 'view'}
                       />
                     </div>
-                    
                     <div className="form-group">
                       <label>Value</label>
                       <textarea
@@ -672,7 +627,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         disabled={mode === 'view'}
                       />
                     </div>
-                    
                     <div className="form-group">
                       <label>Priority</label>
                       <input
@@ -684,7 +638,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         disabled={mode === 'view'}
                       />
                     </div>
-                    
                     <div className="form-group">
                       <label className="checkbox-label">
                         <input
@@ -702,15 +655,13 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
             </div>
           </div>
         )}
-
-        {currentTab === 'compliance' && (
+        {currentTab === 'compliance' && ()
           <div className="config-section">
             <h3>Compliance & Frameworks</h3>
-            
             <div className="form-group">
               <label>Compliance Frameworks</label>
               <div className="checkbox-group">
-                {complianceFrameworks.map(framework => (
+                {complianceFrameworks.map(framework => ()
                   <label key={framework} className="checkbox-label">
                     <input
                       type="checkbox"
@@ -719,9 +670,9 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         if (e.target.checked) {
                           updateFormField('complianceFrameworks', [...formData.complianceFrameworks, framework]);
                         } else {
-                          updateFormField(
+                          updateFormField()
                             'complianceFrameworks',
-                            formData.complianceFrameworks.filter(f => f !== framework
+                            formData.complianceFrameworks.filter(f => f !== framework)
                             ));
                         }
                       }}
@@ -732,15 +683,14 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                 ))}
               </div>
             </div>
-
-            {formData.complianceFrameworks.length > 0 && (
+            {formData.complianceFrameworks.length > 0 && ()
               <div className="compliance-info">
                 <h4>Framework Requirements</h4>
-                {formData.complianceFrameworks.map(framework => (
+                {formData.complianceFrameworks.map(framework => ()
                   <div key={framework} className="framework-requirements">
                     <h5>{framework}</h5>
                     <ul>
-                      {framework === 'GDPR' && (
+                      {framework === 'GDPR' && ()
                         <>
                           <li>✓ Clear legal basis for processing</li>
                           <li>✓ Data subject rights section</li>
@@ -748,7 +698,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                           <li>✓ Data transfer safeguards</li>
                         </>
                       )}
-                      {framework === 'CCPA' && (
+                      {framework === 'CCPA' && ()
                         <>
                           <li>✓ Categories of personal information</li>
                           <li>✓ Right to know and delete</li>
@@ -756,7 +706,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                           <li>✓ Contact information for requests</li>
                         </>
                       )}
-                      {framework === 'HIPAA' && (
+                      {framework === 'HIPAA' && ()
                         <>
                           <li>✓ Protected health information usage</li>
                           <li>✓ Patient rights section</li>
@@ -771,17 +721,15 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
             )}
           </div>
         )}
-
-        {currentTab === 'deployment' && mode !== 'create' && (
+        {currentTab === 'deployment' && mode !== 'create' && ()
           <div className="config-section">
             <h3>Deployment Configuration</h3>
-            
             <div className="form-group">
               <label htmlFor="environment">Environment</label>
               <select
                 id="environment"
                 value={deploymentConfig.environment}
-                onChange={(e) => setDeploymentConfig(prev => ({
+                onChange={(e) => setDeploymentConfig(prev => ({)
                   ...prev,
                   environment: e.target.value as 'STAGING' | 'PRODUCTION'
                 }))}
@@ -791,13 +739,12 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                 <option value="PRODUCTION">Production</option>
               </select>
             </div>
-
             <div className="form-group">
               <label htmlFor="rolloutType">Rollout Strategy</label>
               <select
                 id="rolloutType"
                 value={deploymentConfig.rolloutType}
-                onChange={(e) => setDeploymentConfig(prev => ({
+                onChange={(e) => setDeploymentConfig(prev => ({)
                   ...prev,
                   rolloutType: e.target.value as any
                 }))}
@@ -809,23 +756,22 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                 <option value="BLUE_GREEN">Blue-Green</option>
               </select>
             </div>
-
             <div className="form-group">
               <label>Deployment Channels</label>
               <div className="checkbox-group">
-                {['web', 'mobile', 'email', 'api'].map(channel => (
+                {['web', 'mobile', 'email', 'api'].map(channel => ()
                   <label key={channel} className="checkbox-label">
                     <input
                       type="checkbox"
                       checked={deploymentConfig.channels.includes(channel)}
                       onChange={(e) => {
                         if (e.target.checked) {
-                          setDeploymentConfig(prev => ({
+                          setDeploymentConfig(prev => ({)
                             ...prev,
                             channels: [...prev.channels, channel]
                           }));
                         } else {
-                          setDeploymentConfig(prev => ({
+                          setDeploymentConfig(prev => ({)
                             ...prev,
                             channels: prev.channels.filter(c => c !== channel)
                           }));
@@ -838,16 +784,14 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                 ))}
               </div>
             </div>
-
             <div className="notification-settings">
               <h4>Notification Settings</h4>
-              
               <div className="form-group">
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
                     checked={deploymentConfig.notifications.enabled}
-                    onChange={(e) => setDeploymentConfig(prev => ({
+                    onChange={(e) => setDeploymentConfig(prev => ({)
                       ...prev,
                       notifications: { ...prev.notifications, enabled: e.target.checked }
                     }))}
@@ -856,30 +800,29 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                   Enable Notifications
                 </label>
               </div>
-
-              {deploymentConfig.notifications.enabled && (
+              {deploymentConfig.notifications.enabled && ()
                 <>
                   <div className="form-group">
                     <label>Notification Channels</label>
                     <div className="checkbox-group">
-                      {['EMAIL', 'SMS', 'IN_APP', 'PUSH'].map(channel => (
+                      {['EMAIL', 'SMS', 'IN_APP', 'PUSH'].map(channel => ()
                         <label key={channel} className="checkbox-label">
                           <input
                             type="checkbox"
                             checked={deploymentConfig.notifications.channels.includes(channel)}
                             onChange={(e) => {
                               if (e.target.checked) {
-                                setDeploymentConfig(prev => ({
+                                setDeploymentConfig(prev => ({)
                                   ...prev,
-                                  notifications: {
+                                  notifications: {,
                                     ...prev.notifications,
                                     channels: [...prev.notifications.channels, channel]
                                   }
                                 }));
                               } else {
-                                setDeploymentConfig(prev => ({
+                                setDeploymentConfig(prev => ({)
                                   ...prev,
-                                  notifications: {
+                                  notifications: {,
                                     ...prev.notifications,
                                     channels: prev.notifications.channels.filter(c => c !== channel)
                                   }
@@ -893,13 +836,12 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                       ))}
                     </div>
                   </div>
-
                   <div className="form-group">
                     <label className="checkbox-label">
                       <input
                         type="checkbox"
                         checked={deploymentConfig.notifications.immediate}
-                        onChange={(e) => setDeploymentConfig(prev => ({
+                        onChange={(e) => setDeploymentConfig(prev => ({)
                           ...prev,
                           notifications: { ...prev.notifications, immediate: e.target.checked }
                         }))}
@@ -908,17 +850,16 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                       Send Immediately
                     </label>
                   </div>
-
-                  {!deploymentConfig.notifications.immediate && (
+                  {!deploymentConfig.notifications.immediate && ()
                     <div className="form-group">
                       <label htmlFor="scheduledDate">Scheduled Date</label>
                       <input
                         type="datetime-local"
                         id="scheduledDate"
                         value={deploymentConfig.notifications.scheduled?.toISOString().slice(0, 16) || ''}
-                        onChange={(e) => setDeploymentConfig(prev => ({
+                        onChange={(e) => setDeploymentConfig(prev => ({)
                           ...prev,
-                          notifications: {
+                          notifications: {,
                             ...prev.notifications,
                             scheduled: new Date(e.target.value)
                           }
@@ -932,11 +873,9 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
             </div>
           </div>
         )}
-
-        {currentTab === 'preview' && (
+        {currentTab === 'preview' && ()
           <div className="config-section">
             <h3>Configuration Preview</h3>
-            
             <div className="preview-content">
               <div className="preview-section">
                 <h4>Basic Information</h4>
@@ -953,7 +892,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                   <dd>{formData.audience.join(', ') || 'Not specified'}</dd>
                 </dl>
               </div>
-
               <div className="preview-section">
                 <h4>Compliance</h4>
                 <dl>
@@ -961,8 +899,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                   <dd>{formData.complianceFrameworks.join(', ') || 'None selected'}</dd>
                 </dl>
               </div>
-
-              {selectedTemplate && (
+              {selectedTemplate && ()
                 <div className="preview-section">
                   <h4>Template</h4>
                   <dl>
@@ -972,26 +909,24 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                     <dd>{selectedTemplate.framework}</dd>
                     <dt>Variables:</dt>
                     <dd>
-                      {Object.entries(formData.variables).map(([key, value]) => (
+                      {Object.entries(formData.variables).map(([key, value]) => ()
                         <div key={key}>{key}: {value}</div>
                       ))}
                     </dd>
                   </dl>
                 </div>
               )}
-
-              {formData.customizations.length > 0 && (
+              {formData.customizations.length > 0 && ()
                 <div className="preview-section">
                   <h4>Customizations</h4>
-                  {formData.customizations.map((cust, index) => (
+                  {formData.customizations.map((cust, index) => ()
                     <div key={cust.customizationId} className="customization-preview">
                       <strong>{cust.type}</strong> - {cust.target}: {cust.value}
                     </div>
                   ))}
                 </div>
               )}
-
-              {mode !== 'create' && (
+              {mode !== 'create' && ()
                 <div className="preview-section">
                   <h4>Deployment Configuration</h4>
                   <dl>
@@ -1010,10 +945,9 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
           </div>
         )}
       </div>
-
       {/* Action Buttons */}
       <div className="policy-config-actions">
-        {mode === 'create' && (
+        {mode === 'create' && ()
           <button
             type="button"
             onClick={handleCreate}
@@ -1023,8 +957,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
             {isLoading ? 'Creating...' : 'Create Policy'}
           </button>
         )}
-
-        {mode === 'edit' && (
+        {mode === 'edit' && ()
           <button
             type="button"
             onClick={handleUpdate}
@@ -1034,8 +967,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
             {isLoading ? 'Updating...' : 'Update Policy'}
           </button>
         )}
-
-        {mode !== 'create' && currentTab === 'deployment' && (
+        {mode !== 'create' && currentTab === 'deployment' && ()
           <button
             type="button"
             onClick={handleDeploy}
@@ -1045,7 +977,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
             {isLoading ? 'Deploying...' : 'Deploy Policy'}
           </button>
         )}
-
         <button type="button" className="secondary-button">
           Cancel
         </button>

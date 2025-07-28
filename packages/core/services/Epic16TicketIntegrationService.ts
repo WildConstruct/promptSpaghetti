@@ -5,7 +5,6 @@
  * Provides seamless integration between community support, marketplace issues,
  * template submissions, and internal ticketing systems.
  */
-
 import { EventEmitter } from 'events';
 
 // Core ticket interfaces for Epic 16
@@ -17,38 +16,31 @@ export interface MarketplaceTicket {
   status: TicketStatus;
   priority: TicketPriority;
   category: TicketCategory;
-  
   // Marketplace-specific fields
   templateId?: string;
   sellerId?: string;
   buyerId?: string;
   transactionId?: string;
-  
   // Community fields
   communityUserId?: string;
   threadId?: string;
   topicCategory?: string;
-  
   // Assignment and tracking
   assignedTo?: string;
   assignedTeam?: string;
   labels: string[];
   tags: string[];
-  
   // Metadata
   metadata: TicketMetadata;
   attachments: TicketAttachment[];
   comments: TicketComment[];
-  
   // Timestamps
   createdAt: Date;
   updatedAt: Date;
   resolvedAt?: Date;
   closedAt?: Date;
-  
   // SLA tracking
   sla: SLATracking;
-  
   // Integration data
   externalIntegrations: ExternalIntegration[];
 }
@@ -377,23 +369,22 @@ export interface TicketIntegrationConfig {
   autoAssignment: boolean;
   slaEnabled: boolean;
   integrations: IntegrationConfig;
-  notifications: {
+  notifications: {,
     enabled: boolean;
     channels: string[];
     templates: Record<string, string>;
   };
-  security: {
+  security: {,
     encryptAttachments: boolean;
     scanUploads: boolean;
     retentionPeriod: number; // days
   };
-  analytics: {
+  analytics: {,
     trackMetrics: boolean;
     dashboardEnabled: boolean;
     reportingEnabled: boolean;
   };
 }
-
 /**
  * Epic 16 Ticket Integration Service
  * 
@@ -406,15 +397,13 @@ export class Epic16TicketIntegrationService extends EventEmitter {
   private integrations: IntegrationConfig;
   private config: TicketIntegrationConfig;
   private metrics: Map<string, any> = new Map();
-
   constructor(config: Partial<TicketIntegrationConfig> = {}) {
     super();
-    
     this.config = {
       defaultWorkflow: 'standard_support',
       autoAssignment: true,
       slaEnabled: true,
-      integrations: {
+      integrations: {,
         github: { enabled: false, repository: '', token: '', labelMapping: {}, autoCreateIssues: false, syncComments: false },
         jira: { enabled: false, url: '', username: '', token: '', project: '', issueTypeMapping: {} as any, fieldMapping: {} },
         zendesk: { enabled: false, domain: '', email: '', token: '', customFields: {} },
@@ -423,35 +412,32 @@ export class Epic16TicketIntegrationService extends EventEmitter {
         email: { enabled: false, smtpHost: '', smtpPort: 587, username: '', password: '', fromAddress: '', templates: {} },
         webhook: { enabled: false, endpoints: [], retryPolicy: { maxRetries: 3, backoffStrategy: 'exponential', baseDelay: 1000, maxDelay: 30000 } }
       },
-      notifications: {
+      notifications: {,
         enabled: true,
         channels: ['email', 'slack'],
         templates: {}
       },
-      security: {
+      security: {,
         encryptAttachments: true,
         scanUploads: true,
-        retentionPeriod: 365
+        retentionPeriod: 365,
       },
-      analytics: {
+      analytics: {,
         trackMetrics: true,
         dashboardEnabled: true,
-        reportingEnabled: true
+        reportingEnabled: true,
       },
       ...config
     };
-
     this.integrations = this.config.integrations;
     this.initializeDefaultWorkflows();
   }
-
   /**
    * Create a new marketplace/community ticket
    */
   async createTicket(ticketData: Omit<MarketplaceTicket, 'id' | 'createdAt' | 'updatedAt' | 'sla'>): Promise<MarketplaceTicket> {
     const ticketId = this.generateTicketId();
     const now = new Date();
-
     const ticket: MarketplaceTicket = {
       ...ticketData,
       id: ticketId,
@@ -459,164 +445,129 @@ export class Epic16TicketIntegrationService extends EventEmitter {
       updatedAt: now,
       sla: this.calculateSLA(ticketData.type, ticketData.priority)
     };
-
     this.tickets.set(ticketId, ticket);
-
     // Auto-assign if enabled
     if (this.config.autoAssignment) {
       await this.autoAssignTicket(ticket);
     }
-
     // Execute workflow
     await this.executeWorkflow(ticket, 'created');
-
     // Send notifications
     if (this.config.notifications.enabled) {
       await this.sendNotifications(ticket, 'created');
     }
-
     // Sync with external systems
     await this.syncWithIntegrations(ticket, 'created');
-
     this.emit('ticket_created', { ticket });
     return ticket;
   }
-
   /**
    * Update ticket status
    */
   async updateTicketStatus(ticketId: string, newStatus: TicketStatus, userId: string, comment?: string): Promise<MarketplaceTicket | null> {
     const ticket = this.tickets.get(ticketId);
     if (!ticket) return null;
-
     const oldStatus = ticket.status;
     ticket.status = newStatus;
     ticket.updatedAt = new Date();
-
     // Add system comment for status change
     if (comment) {
-      await this.addComment(ticketId, {
+      await this.addComment(ticketId, {)
         content: comment,
         author: userId,
         authorType: 'agent',
-        visibility: 'internal'
+        visibility: 'internal',
       });
     }
-
     // Update SLA tracking
     this.updateSLATracking(ticket, newStatus);
-
     // Execute workflow for status change
     await this.executeWorkflow(ticket, 'status_changed', { oldStatus, newStatus });
-
     // Send notifications
     await this.sendNotifications(ticket, 'status_changed', { oldStatus, newStatus });
-
     // Sync with external systems
     await this.syncWithIntegrations(ticket, 'status_changed', { oldStatus, newStatus });
-
     this.emit('ticket_status_changed', { ticket, oldStatus, newStatus });
     return ticket;
   }
-
   /**
    * Add comment to ticket
    */
   async addComment(ticketId: string, commentData: Omit<TicketComment, 'id' | 'createdAt' | 'reactions'>): Promise<TicketComment | null> {
     const ticket = this.tickets.get(ticketId);
     if (!ticket) return null;
-
     const comment: TicketComment = {
       ...commentData,
       id: this.generateCommentId(),
       createdAt: new Date(),
-      reactions: []
+      reactions: [],
     };
-
     ticket.comments.push(comment);
     ticket.updatedAt = new Date();
-
     // Execute workflow for comment added
     await this.executeWorkflow(ticket, 'comment_added', { comment });
-
     // Send notifications for public comments
     if (comment.visibility === 'public') {
       await this.sendNotifications(ticket, 'comment_added', { comment });
     }
-
     // Sync with external systems
     await this.syncWithIntegrations(ticket, 'comment_added', { comment });
-
     this.emit('comment_added', { ticket, comment });
     return comment;
   }
-
   /**
    * Assign ticket to user or team
    */
   async assignTicket(ticketId: string, assigneeId: string, assignerId: string): Promise<MarketplaceTicket | null> {
     const ticket = this.tickets.get(ticketId);
     if (!ticket) return null;
-
     const oldAssignee = ticket.assignedTo;
     ticket.assignedTo = assigneeId;
     ticket.updatedAt = new Date();
-
     // Add system comment
-    await this.addComment(ticketId, {
-      content: `Ticket assigned to ${assigneeId}`,
+    await this.addComment(ticketId, {)
+      content: `Ticket assigned to ${assigneeId}`,}
       author: assignerId,
       authorType: 'system',
-      visibility: 'internal'
+      visibility: 'internal',
     });
-
     // Send notifications
     await this.sendNotifications(ticket, 'assigned', { oldAssignee, newAssignee: assigneeId });
-
     // Sync with external systems
     await this.syncWithIntegrations(ticket, 'assigned');
-
     this.emit('ticket_assigned', { ticket, oldAssignee, newAssignee: assigneeId });
     return ticket;
   }
-
   /**
    * Escalate ticket
    */
   async escalateTicket(ticketId: string, reason: string, escalatedBy: string): Promise<MarketplaceTicket | null> {
     const ticket = this.tickets.get(ticketId);
     if (!ticket) return null;
-
     const oldStatus = ticket.status;
     ticket.status = TicketStatus.ESCALATED;
     ticket.priority = this.increasePriority(ticket.priority);
     ticket.updatedAt = new Date();
-
     // Add escalation comment
-    await this.addComment(ticketId, {
-      content: `Ticket escalated: ${reason}`,
+    await this.addComment(ticketId, {)
+      content: `Ticket escalated: ${reason}`,}
       author: escalatedBy,
       authorType: 'agent',
-      visibility: 'internal'
+      visibility: 'internal',
     });
-
     // Execute escalation workflow
     await this.executeWorkflow(ticket, 'escalated', { reason, escalatedBy });
-
     // Send escalation notifications
     await this.sendNotifications(ticket, 'escalated', { reason });
-
     // Sync with external systems
     await this.syncWithIntegrations(ticket, 'escalated');
-
     this.emit('ticket_escalated', { ticket, reason, escalatedBy });
     return ticket;
   }
-
   /**
    * Get tickets with filtering and pagination
    */
-  async getTickets(filters: {
+  async getTickets(filters: {)
     status?: TicketStatus[];
     type?: MarketplaceTicketType[];
     priority?: TicketPriority[];
@@ -631,51 +582,41 @@ export class Epic16TicketIntegrationService extends EventEmitter {
     hasMore: boolean;
   }> {
     let filtered = Array.from(this.tickets.values());
-
     // Apply filters
     if (filters.status) {
       filtered = filtered.filter(t => filters.status!.includes(t.status));
     }
-
     if (filters.type) {
       filtered = filtered.filter(t => filters.type!.includes(t.type));
     }
-
     if (filters.priority) {
       filtered = filtered.filter(t => filters.priority!.includes(t.priority));
     }
-
     if (filters.assignedTo) {
       filtered = filtered.filter(t => t.assignedTo === filters.assignedTo);
     }
-
     if (filters.category) {
       filtered = filtered.filter(t => t.category === filters.category);
     }
-
     if (filters.dateRange) {
-      filtered = filtered.filter(t => 
+      filtered = filtered.filter(t => )
         t.createdAt >= filters.dateRange!.start && 
         t.createdAt <= filters.dateRange!.end
       );
     }
-
     const total = filtered.length;
     const limit = filters.limit || 50;
     const offset = filters.offset || 0;
-    
     // Apply pagination
-    const tickets = filtered
+    const tickets = filtered;
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       .slice(offset, offset + limit);
-
     return {
       tickets,
       total,
       hasMore: offset + limit < total
     };
   }
-
   /**
    * Get ticket metrics and analytics
    */
@@ -690,31 +631,25 @@ export class Epic16TicketIntegrationService extends EventEmitter {
     escalationRate: number;
     customerSatisfaction: number;
   }> {
-    const tickets = Array.from(this.tickets.values()).filter(t =>
+    const tickets = Array.from(this.tickets.values()).filter(t =>;)
       t.createdAt >= timeRange.start && t.createdAt <= timeRange.end
     );
-
     const totalTickets = tickets.length;
-    
     // Calculate metrics
     const ticketsByStatus = tickets.reduce((acc, ticket) => {
       acc[ticket.status] = (acc[ticket.status] || 0) + 1;
       return acc;
     }, {} as Record<TicketStatus, number>);
-
     const ticketsByType = tickets.reduce((acc, ticket) => {
       acc[ticket.type] = (acc[ticket.type] || 0) + 1;
       return acc;
     }, {} as Record<MarketplaceTicketType, number>);
-
     const ticketsByPriority = tickets.reduce((acc, ticket) => {
       acc[ticket.priority] = (acc[ticket.priority] || 0) + 1;
       return acc;
     }, {} as Record<TicketPriority, number>);
-
     const slaBreached = tickets.filter(t => t.sla.breached).length;
     const escalated = tickets.filter(t => t.status === TicketStatus.ESCALATED).length;
-
     return {
       totalTickets,
       ticketsByStatus,
@@ -727,20 +662,15 @@ export class Epic16TicketIntegrationService extends EventEmitter {
       customerSatisfaction: 85 // Mock value - would come from surveys
     };
   }
-
   // Private helper methods
-
   private generateTicketId(): string {
-    return `MKT-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+    return `MKT-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;}
   }
-
   private generateCommentId(): string {
-    return `comment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `comment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   private calculateSLA(type: MarketplaceTicketType, priority: TicketPriority): SLATracking {
     const now = new Date();
-    
     // SLA targets in minutes
     const slaTargets = {
       [TicketPriority.CRITICAL]: { response: 15, resolution: 240 },  // 15min / 4h
@@ -749,75 +679,64 @@ export class Epic16TicketIntegrationService extends EventEmitter {
       [TicketPriority.MEDIUM]: { response: 240, resolution: 4320 },  // 4h / 72h
       [TicketPriority.LOW]: { response: 480, resolution: 10080 }     // 8h / 7days
     };
-
     const targets = slaTargets[priority];
-
     return {
-      responseTime: {
+      responseTime: {,
         target: targets.response,
         deadline: new Date(now.getTime() + targets.response * 60000),
         breached: false,
         warningThreshold: Math.floor(targets.response * 0.8)
       },
-      resolutionTime: {
+      resolutionTime: {,
         target: targets.resolution,
         deadline: new Date(now.getTime() + targets.resolution * 60000),
         breached: false,
         warningThreshold: Math.floor(targets.resolution * 0.8)
       },
-      escalationTime: {
+      escalationTime: {,
         target: targets.resolution * 0.5,
         deadline: new Date(now.getTime() + (targets.resolution * 0.5) * 60000),
         breached: false,
         warningThreshold: Math.floor((targets.resolution * 0.5) * 0.8)
       },
-      breached: false
+      breached: false,
     };
   }
-
   private updateSLATracking(ticket: MarketplaceTicket, newStatus: TicketStatus): void {
     const now = new Date();
-    
     // Update response time if first response
-    if (!ticket.sla.responseTime.actual && 
+    if (!ticket.sla.responseTime.actual && )
         [TicketStatus.IN_PROGRESS, TicketStatus.PENDING_USER].includes(newStatus)) {
       const responseTime = (now.getTime() - ticket.createdAt.getTime()) / (1000 * 60);
       ticket.sla.responseTime.actual = responseTime;
       ticket.sla.responseTime.breached = responseTime > ticket.sla.responseTime.target;
     }
-    
     // Update resolution time if resolved
     if ([TicketStatus.RESOLVED, TicketStatus.CLOSED].includes(newStatus)) {
       const resolutionTime = (now.getTime() - ticket.createdAt.getTime()) / (1000 * 60);
       ticket.sla.resolutionTime.actual = resolutionTime;
       ticket.sla.resolutionTime.breached = resolutionTime > ticket.sla.resolutionTime.target;
       ticket.resolvedAt = now;
-      
       if (newStatus === TicketStatus.CLOSED) {
         ticket.closedAt = now;
       }
     }
-    
     // Check overall SLA breach
     ticket.sla.breached = ticket.sla.responseTime.breached || ticket.sla.resolutionTime.breached;
   }
-
   private async autoAssignTicket(ticket: MarketplaceTicket): Promise<void> {
     // Simple round-robin assignment - in real implementation would be more sophisticated
     const availableAgents = ['agent-1', 'agent-2', 'agent-3', 'agent-4'];
     const assigneeIndex = ticket.id.length % availableAgents.length;
     ticket.assignedTo = availableAgents[assigneeIndex];
   }
-
   private async executeWorkflow(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
     const workflow = this.workflows.get(this.config.defaultWorkflow);
     if (!workflow || !workflow.active) return;
-
     // Find applicable workflow steps
-    const applicableTriggers = workflow.triggers.filter(trigger => 
+    const applicableTriggers = workflow.triggers.filter(trigger => ;)
       trigger.type === event || (event === 'status_changed' && trigger.type === 'status_change')
     );
-
     for (const trigger of applicableTriggers) {
       // Execute workflow actions
       for (const step of workflow.steps) {
@@ -825,19 +744,16 @@ export class Epic16TicketIntegrationService extends EventEmitter {
       }
     }
   }
-
   private async executeWorkflowStep(step: WorkflowStep, ticket: MarketplaceTicket, context?: any): Promise<void> {
     // Execute workflow actions
     for (const action of step.actions) {
       await this.executeWorkflowAction(action, ticket, context);
     }
-
     // Send step notifications
     for (const notification of step.notifications) {
       await this.sendWorkflowNotification(notification, ticket, context);
     }
   }
-
   private async executeWorkflowAction(action: WorkflowAction, ticket: MarketplaceTicket, context?: any): Promise<void> {
     switch (action.type) {
     case 'set_field':
@@ -848,25 +764,20 @@ export class Epic16TicketIntegrationService extends EventEmitter {
         (ticket as any)[field] = value;
       }
       break;
-        
     case 'update_status':
       ticket.status = action.parameters.status as TicketStatus;
       break;
-        
     case 'call_webhook':
       await this.callWebhook(action.parameters.url, ticket, action.parameters.method || 'POST');
       break;
     }
   }
-
   private async sendNotifications(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
     if (!this.config.notifications.enabled) return;
-
     for (const channel of this.config.notifications.channels) {
       await this.sendNotificationByChannel(channel, ticket, event, context);
     }
   }
-
   private async sendNotificationByChannel(channel: string, ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
     switch (channel) {
     case 'email':
@@ -874,13 +785,11 @@ export class Epic16TicketIntegrationService extends EventEmitter {
         await this.sendEmailNotification(ticket, event, context);
       }
       break;
-        
     case 'slack':
       if (this.integrations.slack.enabled) {
         await this.sendSlackNotification(ticket, event, context);
       }
       break;
-        
     case 'discord':
       if (this.integrations.discord.enabled) {
         await this.sendDiscordNotification(ticket, event, context);
@@ -888,51 +797,40 @@ export class Epic16TicketIntegrationService extends EventEmitter {
       break;
     }
   }
-
   private async syncWithIntegrations(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
     const syncPromises: Promise<void>[] = [];
-
     if (this.integrations.github.enabled) {
       syncPromises.push(this.syncWithGitHub(ticket, event, context));
     }
-
     if (this.integrations.jira.enabled) {
       syncPromises.push(this.syncWithJira(ticket, event, context));
     }
-
     if (this.integrations.zendesk.enabled) {
       syncPromises.push(this.syncWithZendesk(ticket, event, context));
     }
-
     await Promise.allSettled(syncPromises);
   }
-
   private increasePriority(currentPriority: TicketPriority): TicketPriority {
     const priorityOrder = [TicketPriority.LOW, TicketPriority.MEDIUM, TicketPriority.HIGH, TicketPriority.URGENT, TicketPriority.CRITICAL];
     const currentIndex = priorityOrder.indexOf(currentPriority);
     return priorityOrder[Math.min(currentIndex + 1, priorityOrder.length - 1)];
   }
-
   private calculateAverageResponseTime(tickets: MarketplaceTicket[]): number {
-    const responseTimes = tickets
+    const responseTimes = tickets;
       .filter(t => t.sla.responseTime.actual)
       .map(t => t.sla.responseTime.actual!);
-    
     return responseTimes.length > 0 
       ? responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length 
       : 0;
   }
-
   private calculateAverageResolutionTime(tickets: MarketplaceTicket[]): number {
-    const resolutionTimes = tickets
+    const resolutionTimes = tickets;
       .filter(t => t.sla.resolutionTime.actual)
       .map(t => t.sla.resolutionTime.actual!);
-    
     return resolutionTimes.length > 0 
       ? resolutionTimes.reduce((sum, time) => sum + time, 0) / resolutionTimes.length 
       : 0;
   }
-
   private initializeDefaultWorkflows(): void {
     // Initialize standard workflows - simplified for brevity
     const standardWorkflow: TicketWorkflow = {
@@ -944,41 +842,32 @@ export class Epic16TicketIntegrationService extends EventEmitter {
       triggers: [],
       conditions: [],
       active: true,
-      version: '1.0.0'
+      version: '1.0.0',
     };
-    
     this.workflows.set('standard_support', standardWorkflow);
   }
-
   // Placeholder integration methods - would implement actual API calls
   private async sendEmailNotification(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
     // Email notification implementation
   }
-
   private async sendSlackNotification(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
     // Slack notification implementation
   }
-
   private async sendDiscordNotification(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
     // Discord notification implementation
   }
-
   private async sendWorkflowNotification(notification: NotificationRule, ticket: MarketplaceTicket, context?: any): Promise<void> {
     // Workflow notification implementation
   }
-
   private async callWebhook(url: string, ticket: MarketplaceTicket, method: string): Promise<void> {
     // Webhook call implementation
   }
-
   private async syncWithGitHub(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
     // GitHub sync implementation
   }
-
   private async syncWithJira(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
     // Jira sync implementation
   }
-
   private async syncWithZendesk(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
     // Zendesk sync implementation
   }

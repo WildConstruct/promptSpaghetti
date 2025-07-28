@@ -5,7 +5,7 @@
 export interface GraphNode {
     id: string;
     type: string;
-    position: {
+    position: {,
         x: number;
         y: number;
     };
@@ -33,11 +33,11 @@ export interface DiffChange {
     new_value?: unknown;
     property_path?: string;
     position_change?: {
-        from: {
+        from: {,
             x: number;
             y: number;
         };
-        to: {
+        to: {,
             x: number;
             y: number;
         };
@@ -50,7 +50,7 @@ export interface GraphDiff {
     from_snapshot_id: string;
     to_snapshot_id: string;
     changes: DiffChange[];
-    summary: {
+    summary: {,
         total_changes: number;
         added_nodes: number;
         removed_nodes: number;
@@ -63,9 +63,9 @@ export interface GraphDiff {
         similarity_score: number;
         complexity_score: number;
     };
-    visualization_data: {
-        changed_regions: Array<{
-            bounds: {
+    visualization_data: {,
+        changed_regions: Array<{,
+            bounds: {,
                 x: number;
                 y: number;
                 width: number;
@@ -74,12 +74,12 @@ export interface GraphDiff {
             change_types: string[];
             intensity: number;
         }>;
-        change_paths: Array<{
-            from_position: {
+        change_paths: Array<{,
+            from_position: {,
                 x: number;
                 y: number;
             };
-            to_position: {
+            to_position: {,
                 x: number;
                 y: number;
             };
@@ -92,7 +92,7 @@ export declare class GraphDiffEngine {
     private options;
     private static readonly POSITION_THRESHOLD;
     private static readonly SIMILARITY_THRESHOLD;
-    constructor(options?: {
+    constructor(options?: {)
         ignore_position_changes?: boolean;
         ignore_style_changes?: boolean;
         position_threshold?: number;
@@ -110,7 +110,7 @@ export declare class GraphDiffEngine {
     private calculateSummary;
     private generateVisualizationData;
     private groupChangesSpatially;
-    static filterChanges(diff: GraphDiff, filters: {
+    static filterChanges(diff: GraphDiff, filters: {)
         change_types?: string[];
         element_types?: string[];
         min_significance?: number;

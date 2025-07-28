@@ -103,7 +103,7 @@ export interface WorkflowStats {
   by_resource_type: Record<string, number>;
   average_time_in_state: Record<WorkflowState, number>; // seconds
   transition_counts: Record<string, number>; // transition_id -> count
-  recent_activity: {
+  recent_activity: {,
     today: number;
     this_week: number;
     this_month: number;
@@ -208,7 +208,7 @@ export interface WorkflowWebhook {
   events: WorkflowWebhookEvent[];
   headers?: Record<string, string>;
   is_active: boolean;
-  retry_config: {
+  retry_config: {,
     max_retries: number;
     backoff_factor: number;
     max_delay: number;
@@ -243,7 +243,7 @@ export interface ScheduledExecution {
   resource_id: string;
   resource_type: 'project' | 'resource';
   schedule_type: 'cron' | 'interval' | 'one_time';
-  schedule_config: {
+  schedule_config: {,
     cron_expression?: string;
     interval_seconds?: number;
     execute_at?: string;
@@ -275,11 +275,9 @@ export interface UseWorkflowReturn {
   config: WorkflowConfig | null;
   loading: boolean;
   error: Error | null;
-  
   // Actions
   transition: (request: WorkflowTransitionRequest) => Promise<WorkflowInstance>;
   refreshInstance: () => Promise<void>;
-  
   // Computed properties
   availableTransitions: WorkflowTransition[];
   canTransition: (action: WorkflowAction) => boolean;

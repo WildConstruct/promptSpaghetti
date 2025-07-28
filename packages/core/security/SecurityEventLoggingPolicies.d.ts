@@ -109,7 +109,7 @@ export declare const SecurityEventSchema: z.ZodObject<{
     assigned_to: z.ZodOptional<z.ZodString>;
     evidence_preserved: z.ZodDefault<z.ZodBoolean>;
     forensic_artifacts: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    chain_of_custody: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    chain_of_custody: z.ZodDefault<z.ZodArray<z.ZodObject<{,
         timestamp: z.ZodDate;
         action: z.ZodString;
         performed_by: z.ZodString;
@@ -156,7 +156,7 @@ export declare const SecurityEventSchema: z.ZodObject<{
     escalation_required: boolean;
     evidence_preserved: boolean;
     forensic_artifacts: string[];
-    chain_of_custody: {
+    chain_of_custody: {,
         timestamp: Date;
         action: string;
         performed_by: string;
@@ -234,8 +234,8 @@ export interface SecurityEventPolicy {
     event_types: SecurityEventType[];
     severity_threshold: SecurityEventSeverity;
     enabled: boolean;
-    detection_rules: {
-        conditions: Array<{
+    detection_rules: {,
+        conditions: Array<{,
             field: string;
             operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains' | 'regex';
             value: any;
@@ -244,19 +244,19 @@ export interface SecurityEventPolicy {
         time_window?: number;
         frequency_threshold?: number;
     };
-    response_actions: {
+    response_actions: {,
         immediate_actions: string[];
         escalation_actions: string[];
         notification_channels: string[];
         automated_containment: boolean;
     };
-    compliance_mapping: {
+    compliance_mapping: {,
         frameworks: ComplianceFramework[];
         requirements: string[];
         retention_period: number;
         requires_encryption: boolean;
     };
-    reporting: {
+    reporting: {,
         real_time_alerts: boolean;
         periodic_reports: string[];
         stakeholders: string[];
@@ -328,7 +328,7 @@ export declare class SecurityEventLoggingPolicyEngine {
      */
     generateComplianceReport(framework: ComplianceFramework, startDate: Date, endDate: Date): {
         framework: ComplianceFramework;
-        period: {
+        period: {,
             start: Date;
             end: Date;
         };

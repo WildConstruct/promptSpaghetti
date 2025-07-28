@@ -9,20 +9,17 @@ import { TemplateEditor } from '../TemplateEditor';
 export interface SubjectEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Subject specific props can be added here
 }
-
 const GRAMMATICAL_NUMBERS: SelectOption[] = [
   { value: 'singular', label: 'Singular' },
   { value: 'plural', label: 'Plural' },
   { value: 'both', label: 'Both (auto-detect)' }
 ];
-
 const GRAMMATICAL_PERSONS: SelectOption[] = [
   { value: 'first', label: 'First person (I, we)' },
   { value: 'second', label: 'Second person (you)' },
   { value: 'third', label: 'Third person (he, she, it, they)' },
   { value: 'any', label: 'Any person' }
 ];
-
 const SUBJECT_CATEGORIES: SelectOption[] = [
   { value: 'person', label: 'Person/People', group: 'Animate' },
   { value: 'animal', label: 'Animal', group: 'Animate' },
@@ -45,40 +42,31 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
   const allowPronouns = (nodeData.allowPronouns as boolean) ?? true;
   const pronouns = (nodeData.pronouns as string[]) || [];
   const contextHints = (nodeData.contextHints as string[]) || [];
-
   // No state needed - ProgressiveDisclosureSection handles collapse state automatically
-
   const handleFieldChange = (field: string, value: unknown) => {
     onChange({ [field]: value });
   };
-
   const handleVariationsChange = (newVariations: string[]) => {
     handleFieldChange('variations', newVariations);
   };
-
   const handlePronounsChange = (newPronouns: string[]) => {
     handleFieldChange('pronouns', newPronouns);
   };
-
   const handleContextHintsChange = (newHints: string[]) => {
     handleFieldChange('contextHints', newHints);
   };
-
   // Auto-generate pronouns based on category and person
   const generatePronouns = () => {
     const generated = [];
-    
     if (grammaticalPerson === 'first' || grammaticalPerson === 'any') {
       generated.push('I', 'me', 'my', 'mine');
       if (grammaticalNumber === 'plural' || grammaticalNumber === 'both') {
         generated.push('we', 'us', 'our', 'ours');
       }
     }
-    
     if (grammaticalPerson === 'second' || grammaticalPerson === 'any') {
       generated.push('you', 'your', 'yours');
     }
-    
     if (grammaticalPerson === 'third' || grammaticalPerson === 'any') {
       if (category === 'person') {
         generated.push('he', 'him', 'his', 'she', 'her', 'hers');
@@ -90,11 +78,9 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
         generated.push('they', 'them', 'their', 'theirs');
       }
     }
-    
     handlePronounsChange([...new Set(generated)]);
   };
-
-  return (
+  return ()
     <div className="subject-editor">
       {/* BASIC LEVEL: Essential subject configuration */}
       <ProgressiveDisclosureSection
@@ -113,7 +99,6 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
           onChange={(value) => handleFieldChange('label', value)}
           placeholder="Enter a name for this subject node..."
         />
-
         <SelectEditor
           label="Subject Category"
           value={category}
@@ -123,7 +108,6 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
           onChange={(value) => handleFieldChange('category', value)}
         />
       </ProgressiveDisclosureSection>
-
       {/* BASIC LEVEL: Template Input */}
       <ProgressiveDisclosureSection
         title="Subject Template"
@@ -139,7 +123,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
             fontSize: 12,
             fontWeight: 500,
             color: '#e2e8f0',
-            marginBottom: 6
+            marginBottom: 6,
           }}>
             Subject Template (optional)
           </label>
@@ -160,7 +144,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
             fontSize: 10,
             color: '#a0aec0',
             marginTop: 4,
-            lineHeight: 1.4
+            lineHeight: 1.4,
           }}>
             Use {'{variable}'} syntax for dynamic subjects. Variables will appear as connection ports.
             <br />
@@ -168,7 +152,6 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* BASIC LEVEL: Subject Variations */}
       <ProgressiveDisclosureSection
         title="Subject Variations"
@@ -184,7 +167,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
             fontWeight: 500, 
             marginBottom: 8,
             color: '#e2e8f0',
-            fontSize: 12
+            fontSize: 12,
           }}>
             Subject Forms
           </label>
@@ -215,13 +198,12 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
             fontSize: 10,
             color: '#a0aec0',
             marginTop: 4,
-            lineHeight: 1.4
+            lineHeight: 1.4,
           }}>
             Include different forms: definite ("the cat"), indefinite ("a cat"), proper nouns ("Fluffy"), etc.
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* ADVANCED LEVEL: Grammatical Properties */}
       <ProgressiveDisclosureSection
         title="Grammatical Properties"
@@ -239,7 +221,6 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
           zodType={null as any}
           onChange={(value) => handleFieldChange('grammaticalNumber', value)}
         />
-
         <SelectEditor
           label="Grammatical Person"
           value={grammaticalPerson}
@@ -249,7 +230,6 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
           onChange={(value) => handleFieldChange('grammaticalPerson', value)}
         />
       </ProgressiveDisclosureSection>
-
       {/* ADVANCED LEVEL: Pronouns */}
       <ProgressiveDisclosureSection
         title="Pronouns"
@@ -264,7 +244,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: 8
+            marginBottom: 8,
           }}>
             <label style={{
               display: 'flex',
@@ -272,7 +252,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
               gap: 8,
               fontSize: 12,
               color: '#e2e8f0',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}>
               <input
                 type="checkbox"
@@ -281,12 +261,11 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
                 style={{
                   width: 14,
                   height: 14,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               />
               Allow pronoun substitution
             </label>
-            
             <button
               onClick={generatePronouns}
               disabled={!allowPronouns}
@@ -303,8 +282,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
               Auto-Generate
             </button>
           </div>
-
-          {allowPronouns && (
+          {allowPronouns && ()
             <VariationList
               nodeId={`${nodeData.id as string}-pronouns`}
               variations={pronouns}
@@ -331,7 +309,6 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
           )}
         </div>
       </ProgressiveDisclosureSection>
-
       {/* ADVANCED LEVEL: Context Hints */}
       <ProgressiveDisclosureSection
         title="Context Hints"
@@ -347,7 +324,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
             fontWeight: 500, 
             marginBottom: 8,
             color: '#e2e8f0',
-            fontSize: 12
+            fontSize: 12,
           }}>
             Context Hints
           </label>
@@ -378,13 +355,12 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
             fontSize: 10,
             color: '#a0aec0',
             marginTop: 4,
-            lineHeight: 1.4
+            lineHeight: 1.4,
           }}>
             Hints help other nodes determine correct verb forms, adjective agreement, etc.
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* DEBUG LEVEL: Configuration Preview */}
       <ProgressiveDisclosureSection
         title="Configuration Preview"
@@ -400,12 +376,11 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
           borderRadius: 4,
           padding: 12,
           fontSize: 12,
-          color: '#e2e8f0'
+          color: '#e2e8f0',
         }}>
           <div style={{ marginBottom: 8, fontWeight: 500 }}>
             Subject Configuration:
           </div>
-          
           <div style={{ marginBottom: 4 }}>
             <span style={{ color: '#a0aec0' }}>Category:</span> {SUBJECT_CATEGORIES.find(c => c.value === category)?.label}
           </div>
@@ -418,24 +393,23 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
           <div style={{ marginBottom: 4 }}>
             <span style={{ color: '#a0aec0' }}>Pronouns:</span> {allowPronouns ? 'Enabled' : 'Disabled'}
           </div>
-
-          {variations.length > 0 && (
+          {variations.length > 0 && ()
             <div style={{ 
               marginTop: 8, 
               padding: 8, 
               background: 'rgba(66, 153, 225, 0.1)',
-              borderRadius: 2
+              borderRadius: 2,
             }}>
               <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                 Subject forms ({variations.length}):
               </div>
               <div style={{ fontSize: 11 }}>
-                {variations.slice(0, 3).map((variation, index) => (
+                {variations.slice(0, 3).map((variation, index) => ()
                   <div key={index} style={{ marginBottom: 2 }}>
                     "{variation}"
                   </div>
                 ))}
-                {variations.length > 3 && (
+                {variations.length > 3 && ()
                   <div style={{ color: '#a0aec0', fontStyle: 'italic' }}>
                     ... and {variations.length - 3} more
                   </div>
@@ -443,13 +417,12 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
               </div>
             </div>
           )}
-
-          {allowPronouns && pronouns.length > 0 && (
+          {allowPronouns && pronouns.length > 0 && ()
             <div style={{ 
               marginTop: 8, 
               padding: 8, 
               background: 'rgba(34, 197, 94, 0.1)',
-              borderRadius: 2
+              borderRadius: 2,
             }}>
               <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                 Available pronouns:

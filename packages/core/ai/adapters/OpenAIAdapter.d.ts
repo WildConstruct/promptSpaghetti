@@ -40,13 +40,13 @@ export interface OpenAIResponse {
     object: string;
     created: number;
     model: string;
-    choices: Array<{
+    choices: Array<{,
         index: number;
         message?: ChatMessage;
         text?: string;
         finish_reason: string;
     }>;
-    usage: {
+    usage: {,
         prompt_tokens: number;
         completion_tokens: number;
         total_tokens: number;

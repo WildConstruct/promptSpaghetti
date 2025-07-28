@@ -73,7 +73,7 @@ export interface PreviewResultWithPath {
 }
 export interface MultiSeedPreviewResult {
     results: PreviewResultWithPath[];
-    aggregateStats: {
+    aggregateStats: {,
         totalTime: number;
         averageTime: number;
         variance: number;
@@ -85,12 +85,12 @@ export interface MultiSeedPreviewResult {
 }
 export interface PathComparisonData {
     sharedSteps: NodeExecutionStep[];
-    divergentPaths: {
+    divergentPaths: {,
         resultId: string;
         divergencePoint: string;
         uniqueSteps: NodeExecutionStep[];
     }[];
-    varianceAnalysis: {
+    varianceAnalysis: {,
         highVarianceNodes: string[];
         consistentNodes: string[];
         randomizationImpact: number;

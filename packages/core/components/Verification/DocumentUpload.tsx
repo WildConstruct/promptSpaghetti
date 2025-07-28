@@ -4,9 +4,7 @@
  * Handles secure document uploads for verification requests.
  * Supports multiple file types with preview and validation.
  */
-
 import React, { useState, useCallback, useRef } from 'react';
-
 interface DocumentUploadProps {
   acceptedTypes?: string[];
   maxFileSize?: number; // in MB
@@ -16,7 +14,6 @@ interface DocumentUploadProps {
   disabled?: boolean;
   placeholder?: string;
 }
-
 interface UploadedFile {
   id: string;
   name: string;
@@ -25,18 +22,16 @@ interface UploadedFile {
   url: string;
   uploadedAt: Date;
 }
-
-const DEFAULT_ACCEPTED_TYPES = [
+const DEFAULT_ACCEPTED_TYPES = [;
   'image/jpeg',
   'image/png',
   'image/webp',
   'application/pdf'
 ];
-
-const DEFAULT_MAX_FILE_SIZE = 10; // 10MB
+const DEFAULT_MAX_FILE_SIZE = 10; // 10MB;
 const DEFAULT_MAX_FILES = 5;
 
-export const DocumentUpload: React.FC<DocumentUploadProps> = ({
+export const DocumentUpload: React.FC<DocumentUploadProps> = ({)
   acceptedTypes = DEFAULT_ACCEPTED_TYPES,
   maxFileSize = DEFAULT_MAX_FILE_SIZE,
   maxFiles = DEFAULT_MAX_FILES,
@@ -49,65 +44,51 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
   const [dragActive, setDragActive] = useState(false);
   const [uploadErrors, setUploadErrors] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const validateFile = useCallback((file: File): string | null => {
     // Check file type
     if (!acceptedTypes.includes(file.type)) {
-      return `File type ${file.type} is not supported`;
+      return `File type ${file.type} is not supported`;}
     }
-
     // Check file size
     const fileSizeMB = file.size / (1024 * 1024);
     if (fileSizeMB > maxFileSize) {
-      return `File size ${fileSizeMB.toFixed(1)}MB exceeds limit of ${maxFileSize}MB`;
+      return `File size ${fileSizeMB.toFixed(1)}MB exceeds limit of ${maxFileSize}MB`;}
     }
-
     return null;
   }, [acceptedTypes, maxFileSize]);
-
   const processFiles = useCallback((files: FileList | null) => {
     if (!files || files.length === 0) return;
-
     const newFiles: File[] = [];
     const errors: string[] = [];
-
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      
       // Check if we're exceeding max files
       if (selectedFiles.length + existingFiles.length + newFiles.length >= maxFiles) {
-        errors.push(`Maximum of ${maxFiles} files allowed`);
+        errors.push(`Maximum of ${maxFiles} files allowed`);}
         break;
       }
-
       // Validate file
       const error = validateFile(file);
       if (error) {
-        errors.push(`${file.name}: ${error}`);
+        errors.push(`${file.name}: ${error}`);}
         continue;
       }
-
       // Check for duplicates
-      const isDuplicate = selectedFiles.some(f => f.name === file.name && f.size === file.size) ||
+      const isDuplicate = selectedFiles.some(f => f.name === file.name && f.size === file.size) ||;
                          existingFiles.some(f => f.name === file.name && f.size === file.size);
-      
       if (isDuplicate) {
-        errors.push(`${file.name} is already added`);
+        errors.push(`${file.name} is already added`);}
         continue;
       }
-
       newFiles.push(file);
     }
-
     if (newFiles.length > 0) {
       const updatedFiles = [...selectedFiles, ...newFiles];
       setSelectedFiles(updatedFiles);
       onFilesChange(updatedFiles);
     }
-
     setUploadErrors(errors);
   }, [selectedFiles, existingFiles, maxFiles, validateFile, onFilesChange]);
-
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     processFiles(e.target.files);
     // Reset input value to allow selecting the same file again if needed
@@ -115,40 +96,33 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       fileInputRef.current.value = '';
     }
   }, [processFiles]);
-
   const handleDragEnter = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(true);
   }, []);
-
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
   }, []);
-
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
   }, []);
-
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
     if (!disabled) {
       processFiles(e.dataTransfer.files);
     }
   }, [processFiles, disabled]);
-
   const removeFile = useCallback((index: number) => {
     const updatedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(updatedFiles);
     onFilesChange(updatedFiles);
   }, [selectedFiles, onFilesChange]);
-
   const formatFileSize = useCallback((bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -156,20 +130,17 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }, []);
-
   const getFileIcon = useCallback((type: string): string => {
     if (type.startsWith('image/')) return '🖼️';
     if (type === 'application/pdf') return '📄';
     return '📋';
   }, []);
-
   const totalFiles = selectedFiles.length + existingFiles.length;
   const canAddMore = totalFiles < maxFiles;
-
-  return (
+  return ()
     <div className="document-upload">
       {/* Upload Area */}
-      {canAddMore && (
+      {canAddMore && ()
         <div
           className={`upload-area ${dragActive ? 'drag-active' : ''} ${disabled ? 'disabled' : ''}`}
           onDragEnter={handleDragEnter}
@@ -187,7 +158,6 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
             disabled={disabled}
             style={{ display: 'none' }}
           />
-          
           <div className="upload-icon">📁</div>
           <div className="upload-text">
             <div className="upload-primary">{placeholder}</div>
@@ -195,7 +165,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
               Drag and drop or click to browse files
             </div>
             <div className="upload-info">
-              Accepted: {acceptedTypes.map(type => {
+              Accepted: {acceptedTypes.map(type => {)
                 const ext = type.split('/')[1].toUpperCase();
                 return ext === 'JPEG' ? 'JPG' : ext;
               }).join(', ')} • Max {maxFileSize}MB each • {maxFiles} files max
@@ -203,23 +173,21 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
           </div>
         </div>
       )}
-
       {/* Error Messages */}
-      {uploadErrors.length > 0 && (
+      {uploadErrors.length > 0 && ()
         <div className="upload-errors">
-          {uploadErrors.map((error, index) => (
+          {uploadErrors.map((error, index) => ()
             <div key={index} className="error-message">
               ⚠️ {error}
             </div>
           ))}
         </div>
       )}
-
       {/* Selected Files */}
-      {selectedFiles.length > 0 && (
+      {selectedFiles.length > 0 && ()
         <div className="selected-files">
           <h4>Selected Files ({selectedFiles.length})</h4>
-          {selectedFiles.map((file, index) => (
+          {selectedFiles.map((file, index) => ()
             <div key={index} className="file-item">
               <div className="file-info">
                 <span className="file-icon">{getFileIcon(file.type)}</span>
@@ -241,12 +209,11 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
           ))}
         </div>
       )}
-
       {/* Existing Files */}
-      {existingFiles.length > 0 && (
+      {existingFiles.length > 0 && ()
         <div className="existing-files">
           <h4>Previously Uploaded ({existingFiles.length})</h4>
-          {existingFiles.map((file) => (
+          {existingFiles.map((file) => ()
             <div key={file.id} className="file-item existing">
               <div className="file-info">
                 <span className="file-icon">{getFileIcon(file.type)}</span>
@@ -263,12 +230,10 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
           ))}
         </div>
       )}
-
       <style>{`
         .document-upload {
           width: 100%;
         }
-
         .upload-area {
           border: 2px dashed #d1d5db;
           border-radius: 8px;
@@ -279,42 +244,35 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
           background-color: #fafafa;
           margin-bottom: 20px;
         }
-
         .upload-area:hover:not(.disabled) {
           border-color: #3b82f6;
           background-color: #f0f9ff;
         }
-
         .upload-area.drag-active {
           border-color: #3b82f6;
           background-color: #dbeafe;
           transform: scale(1.02);
         }
-
         .upload-area.disabled {
           opacity: 0.5;
           cursor: not-allowed;
           background-color: #f5f5f5;
         }
-
         .upload-icon {
           font-size: 48px;
           margin-bottom: 16px;
         }
-
         .upload-primary {
           font-size: 18px;
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 8px;
         }
-
         .upload-secondary {
           font-size: 14px;
           color: #6b7280;
           margin-bottom: 12px;
         }
-
         .upload-info {
           font-size: 12px;
           color: #9ca3af;
@@ -322,11 +280,9 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
           margin: 0 auto;
           line-height: 1.4;
         }
-
         .upload-errors {
           margin-bottom: 20px;
         }
-
         .error-message {
           background-color: #fef2f2;
           color: #dc2626;
@@ -336,12 +292,10 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
           margin-bottom: 8px;
           font-size: 14px;
         }
-
         .selected-files,
         .existing-files {
           margin-bottom: 20px;
         }
-
         .selected-files h4,
         .existing-files h4 {
           font-size: 16px;
@@ -349,7 +303,6 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
           color: #1f2937;
           margin: 0 0 12px 0;
         }
-
         .file-item {
           display: flex;
           align-items: center;
@@ -360,45 +313,37 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
           background-color: white;
           margin-bottom: 8px;
         }
-
         .file-item.existing {
           background-color: #f9fafb;
           border-color: #d1d5db;
         }
-
         .file-info {
           display: flex;
           align-items: center;
           flex: 1;
         }
-
         .file-icon {
           font-size: 20px;
           margin-right: 12px;
         }
-
         .file-details {
           flex: 1;
         }
-
         .file-name {
           font-weight: 500;
           color: #1f2937;
           margin-bottom: 2px;
           font-size: 14px;
         }
-
         .file-size {
           font-size: 12px;
           color: #6b7280;
         }
-
         .file-date {
           font-size: 11px;
           color: #9ca3af;
           margin-top: 2px;
         }
-
         .remove-file {
           background: none;
           border: none;
@@ -407,39 +352,31 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
           border-radius: 4px;
           transition: background-color 0.2s;
         }
-
         .remove-file:hover:not(:disabled) {
           background-color: #fee2e2;
         }
-
         .remove-file:disabled {
           opacity: 0.5;
           cursor: not-allowed;
         }
-
         .file-status {
           font-size: 16px;
           margin-left: 8px;
         }
-
         @media (max-width: 768px) {
           .upload-area {
             padding: 30px 15px;
           }
-
           .upload-icon {
             font-size: 36px;
             margin-bottom: 12px;
           }
-
           .upload-primary {
             font-size: 16px;
           }
-
           .file-item {
             padding: 10px;
           }
-
           .file-icon {
             font-size: 18px;
             margin-right: 10px;

@@ -18,7 +18,7 @@ export interface IdentityValidationRequest {
     type: IdentityValidationType;
     data: IdentityValidationData;
     status: ValidationStatus;
-    metadata: {
+    metadata: {,
         ipAddress: string;
         userAgent: string;
         sessionId: string;
@@ -129,7 +129,7 @@ export interface ValidationFlag {
 }
 export interface TrustScore {
     overall: number;
-    components: {
+    components: {,
         identity: number;
         professional: number;
         community: number;
@@ -152,7 +152,7 @@ export declare class IdentityValidationService {
     /**
      * Submit identity validation request
      */
-    submitValidationRequest(
+    submitValidationRequest()
       userId: string,
       type: IdentityValidationType,
       data: Partial<IdentityValidationData>,

@@ -2,48 +2,45 @@
  * Epic 9.2.5 - Notification Manager
  * Manages notification delivery, preferences, and real-time updates
  */
-
 import { Notification } from './NotificationCenter';
 
 export interface NotificationPreferences {
   in_app_enabled: boolean;
   email_enabled: boolean;
   push_enabled: boolean;
-  
   // Event type preferences
-  comments: {
+  comments: {,
     enabled: boolean;
     channels: ('in_app' | 'email' | 'push')[];
     mentions_only: boolean;
   };
-  collaboration: {
+  collaboration: {,
     enabled: boolean;
     channels: ('in_app' | 'email' | 'push')[];
     presence_updates: boolean;
   };
-  workspace: {
+  workspace: {,
     enabled: boolean;
     channels: ('in_app' | 'email' | 'push')[];
     member_changes: boolean;
   };
-  approvals: {
+  approvals: {,
     enabled: boolean;
     channels: ('in_app' | 'email' | 'push')[];
   };
-  system: {
+  system: {,
     enabled: boolean;
     channels: ('in_app' | 'email' | 'push')[];
     maintenance_only: boolean;
   };
-  
   // Timing preferences
-  quiet_hours: {
+  quiet_hours: {,
     enabled: boolean;
     start_time: string; // HH:MM format
     end_time: string;
     timezone: string;
   };
-  digest: {
+  digest: {,
     enabled: boolean;
     frequency: 'hourly' | 'daily' | 'weekly';
     time: string; // HH:MM format
@@ -74,23 +71,19 @@ export class NotificationManager {
   private listeners = new Set<(notification: Notification) => void>();
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
-
   constructor(private apiClient: unknown, private userId: string) {
     this.initializeWebSocket();
     this.loadPreferences();
   }
-
   // Real-time notification handling
   private initializeWebSocket() {
     try {
-      const wsUrl = `ws://localhost:8000/ws/notifications/${this.userId}`;
+      const wsUrl = `ws://localhost:8000/ws/notifications/${this.userId}`;}
       this.wsConnection = new WebSocket(wsUrl);
-
       this.wsConnection.onopen = () => {
         console.log('Notification WebSocket connected');
         this.reconnectAttempts = 0;
       };
-
       this.wsConnection.onmessage = (event) => {
         try {
           const notification = JSON.parse(event.data) as Notification;
@@ -99,12 +92,10 @@ export class NotificationManager {
           console.error('Failed to parse notification:', error);
         }
       };
-
       this.wsConnection.onclose = () => {
         console.log('Notification WebSocket disconnected');
         this.attemptReconnect();
       };
-
       this.wsConnection.onerror = (error) => {
         console.error('Notification WebSocket error:', error);
       };
@@ -112,64 +103,51 @@ export class NotificationManager {
       console.error('Failed to initialize WebSocket:', error);
     }
   }
-
   private attemptReconnect() {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
       this.reconnectAttempts++;
       const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
-      
       setTimeout(() => {
-        console.log(`Attempting notification WebSocket reconnection (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+        console.log(`Attempting notification WebSocket reconnection (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);}
         this.initializeWebSocket();
       }, delay);
     }
   }
-
   private handleIncomingNotification(notification: Notification) {
     // Store notification
     this.notifications.set(notification.id, notification);
-
     // Check if notification should be shown based on preferences
     if (this.shouldShowNotification(notification)) {
       // Show browser notification if supported and enabled
       this.showBrowserNotification(notification);
-
       // Notify listeners
       this.listeners.forEach(listener => listener(notification));
     }
   }
-
   private shouldShowNotification(notification: Notification): boolean {
     if (!this.preferences) return true;
-
     // Check global preferences
     if (!this.preferences.in_app_enabled && notification.delivery_channel === 'in_app') {
       return false;
     }
-
     // Check quiet hours
     if (this.preferences.quiet_hours.enabled && this.isInQuietHours()) {
       // Only show urgent notifications during quiet hours
       return notification.priority === 'urgent';
     }
-
     // Check type-specific preferences
     const typePrefs = this.getTypePreferences(notification.notification_type);
     if (!typePrefs?.enabled) {
       return false;
     }
-
     return true;
   }
-
   private isInQuietHours(): boolean {
     if (!this.preferences?.quiet_hours.enabled) return false;
-
     const now = new Date();
-    const currentTime = now.toTimeString().slice(0, 5); // HH:MM format
+    const currentTime = now.toTimeString().slice(0, 5); // HH:MM format;
     const startTime = this.preferences.quiet_hours.start_time;
     const endTime = this.preferences.quiet_hours.end_time;
-
     // Handle overnight quiet hours (e.g., 22:00 to 08:00)
     if (startTime > endTime) {
       return currentTime >= startTime || currentTime <= endTime;
@@ -177,10 +155,8 @@ export class NotificationManager {
       return currentTime >= startTime && currentTime <= endTime;
     }
   }
-
   private getTypePreferences(notificationType: string) {
     if (!this.preferences) return null;
-
     switch (notificationType) {
     case 'comment':
     case 'mention':
@@ -198,19 +174,16 @@ export class NotificationManager {
       return null;
     }
   }
-
   private showBrowserNotification(notification: Notification) {
     if (!('Notification' in window) || Notification.permission !== 'granted') {
       return;
     }
-
-    const browserNotification = new Notification(notification.title, {
+    const browserNotification = new Notification(notification.title, {)
       body: notification.message,
       icon: '/favicon.ico',
       tag: notification.id,
       requireInteraction: notification.priority === 'urgent'
     });
-
     browserNotification.onclick = () => {
       window.focus();
       if (notification.action_url) {
@@ -218,13 +191,11 @@ export class NotificationManager {
       }
       browserNotification.close();
     };
-
     // Auto-close after 5 seconds for non-urgent notifications
     if (notification.priority !== 'urgent') {
       setTimeout(() => browserNotification.close(), 5000);
     }
   }
-
   // Public API methods
   async getNotifications(filter: NotificationFilter): Promise<{ notifications: Notification[]; total: number; unread_count: number }> {
     try {
@@ -234,26 +205,21 @@ export class NotificationManager {
           params.append(key, String(value));
         }
       });
-
-      const response = await this.apiClient.get(`/api/notifications?${params}`);
+      const response = await this.apiClient.get(`/api/notifications?${params}`);}
       const result = response.data;
-
       // Update local cache
       result.notifications.forEach((notification: Notification) => {
         this.notifications.set(notification.id, notification);
       });
-
       return result;
     } catch (error) {
       console.error('Failed to get notifications:', error);
       throw error;
     }
   }
-
   async markAsRead(notificationId: string): Promise<void> {
     try {
-      await this.apiClient.put(`/api/notifications/${notificationId}/read`);
-      
+      await this.apiClient.put(`/api/notifications/${notificationId}/read`);}
       // Update local cache
       const notification = this.notifications.get(notificationId);
       if (notification) {
@@ -265,16 +231,14 @@ export class NotificationManager {
       throw error;
     }
   }
-
   async markAllAsRead(notificationIds: string[]): Promise<void> {
     try {
-      await this.apiClient.put('/api/notifications/read-all', {
-        notification_ids: notificationIds
+      await this.apiClient.put('/api/notifications/read-all', {)
+        notification_ids: notificationIds,
       });
-      
       // Update local cache
       const now = new Date().toISOString();
-      notificationIds.forEach(id => {
+      notificationIds.forEach(id => {)
         const notification = this.notifications.get(id);
         if (notification) {
           notification.read_at = now;
@@ -286,27 +250,24 @@ export class NotificationManager {
       throw error;
     }
   }
-
   async deleteNotification(notificationId: string): Promise<void> {
     try {
-      await this.apiClient.delete(`/api/notifications/${notificationId}`);
+      await this.apiClient.delete(`/api/notifications/${notificationId}`);}
       this.notifications.delete(notificationId);
     } catch (error) {
       console.error('Failed to delete notification:', error);
       throw error;
     }
   }
-
   async getStats(days: number = 30): Promise<NotificationStats> {
     try {
-      const response = await this.apiClient.get(`/api/notifications/stats?days=${days}`);
+      const response = await this.apiClient.get(`/api/notifications/stats?days=${days}`);}
       return response.data;
     } catch (error) {
       console.error('Failed to get notification stats:', error);
       throw error;
     }
   }
-
   // Preference management
   async getPreferences(): Promise<NotificationPreferences> {
     try {
@@ -318,7 +279,6 @@ export class NotificationManager {
       throw error;
     }
   }
-
   async updatePreferences(preferences: Partial<NotificationPreferences>): Promise<NotificationPreferences> {
     try {
       const response = await this.apiClient.put('/api/notification-preferences', preferences);
@@ -329,7 +289,6 @@ export class NotificationManager {
       throw error;
     }
   }
-
   private async loadPreferences() {
     try {
       await this.getPreferences();
@@ -338,73 +297,66 @@ export class NotificationManager {
       this.preferences = this.getDefaultPreferences();
     }
   }
-
   private getDefaultPreferences(): NotificationPreferences {
     return {
       in_app_enabled: true,
       email_enabled: true,
       push_enabled: false,
-      comments: {
+      comments: {,
         enabled: true,
         channels: ['in_app', 'email'],
-        mentions_only: false
+        mentions_only: false,
       },
-      collaboration: {
+      collaboration: {,
         enabled: true,
         channels: ['in_app'],
-        presence_updates: false
+        presence_updates: false,
       },
-      workspace: {
+      workspace: {,
         enabled: true,
         channels: ['in_app', 'email'],
-        member_changes: true
+        member_changes: true,
       },
-      approvals: {
+      approvals: {,
         enabled: true,
         channels: ['in_app', 'email']
       },
-      system: {
+      system: {,
         enabled: true,
         channels: ['in_app'],
-        maintenance_only: true
+        maintenance_only: true,
       },
-      quiet_hours: {
+      quiet_hours: {,
         enabled: false,
         start_time: '22:00',
         end_time: '08:00',
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       },
-      digest: {
+      digest: {,
         enabled: false,
         frequency: 'daily',
-        time: '09:00'
+        time: '09:00',
       }
     };
   }
-
   // Event listeners
   onNotificationReceived(callback: (notification: Notification) => void): () => void {
     this.listeners.add(callback);
     return () => this.listeners.delete(callback);
   }
-
   // Utility methods
   async requestPermission(): Promise<NotificationPermission> {
     if (!('Notification' in window)) {
       return 'denied';
     }
-
     if (Notification.permission === 'default') {
       return await Notification.requestPermission();
     }
-
     return Notification.permission;
   }
-
   getUnreadCount(): number {
     return Array.from(this.notifications.values()).filter(n => !n.read_at).length;
   }
-
   // Send notification (for testing/admin purposes)
   async sendNotification(notification: Omit<Notification, 'id' | 'user_id' | 'delivered_at'>): Promise<void> {
     try {
@@ -414,7 +366,6 @@ export class NotificationManager {
       throw error;
     }
   }
-
   // Cleanup
   disconnect() {
     if (this.wsConnection) {

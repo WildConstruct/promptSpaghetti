@@ -25,7 +25,7 @@ export interface SecurityIncident {
     relatedAlerts: string[];
     affectedSystems: string[];
     affectedUsers: string[];
-    impactAssessment: {
+    impactAssessment: {,
         confidentiality: 'none' | 'low' | 'medium' | 'high' | 'critical';
         integrity: 'none' | 'low' | 'medium' | 'high' | 'critical';
         availability: 'none' | 'low' | 'medium' | 'high' | 'critical';
@@ -74,7 +74,7 @@ export interface Evidence {
     collectedAt: number;
     location: string;
     hash?: string;
-    chainOfCustody: Array<{
+    chainOfCustody: Array<{,
         handler: string;
         timestamp: number;
         action: 'collected' | 'analyzed' | 'transferred' | 'archived';
@@ -101,7 +101,7 @@ export interface IncidentResponseProcedure {
     description: string;
     category: SecurityIncident['category'];
     severity: SecurityIncident['severity'];
-    triggerConditions: {
+    triggerConditions: {,
         eventTypes: SecurityEvent['type'][];
         severityThreshold: SecurityEvent['severity'];
         customRules: string[];
@@ -109,7 +109,7 @@ export interface IncidentResponseProcedure {
     phases: IncidentResponsePhase[];
     automatedActions: AutomatedResponseAction[];
     communicationTemplates: CommunicationTemplate[];
-    complianceRequirements: {
+    complianceRequirements: {,
         framework: string;
         reportingTimeline: number;
         requiredActions: string[];
@@ -160,7 +160,7 @@ export interface AutomatedResponseAction {
     name: string;
     description: string;
     type: 'containment' | 'isolation' | 'blocking' | 'notification' | 'data_collection' | 'analysis';
-    trigger: {
+    trigger: {,
         automatic: boolean;
         requiresApproval: boolean;
         conditions: string[];
@@ -181,7 +181,7 @@ export interface CommunicationTemplate {
     subject: string;
     content: string;
     channel: Communication['channel'];
-    variables: Array<{
+    variables: Array<{,
         name: string;
         description: string;
         required: boolean;
@@ -218,7 +218,7 @@ export interface DiagnosticStep {
     expectedResults: string[];
     tools: string[];
     automationScript?: string;
-    nextSteps: Array<{
+    nextSteps: Array<{,
         condition: string;
         nextStepId: string;
         confidence: number;
@@ -232,7 +232,7 @@ export interface DecisionNode {
     question: string;
     type: 'boolean' | 'multiple_choice' | 'numeric' | 'text';
     options?: string[];
-    routes: Array<{
+    routes: Array<{,
         condition: string;
         nextNodeId?: string;
         solutionId?: string;
@@ -248,7 +248,7 @@ export interface Solution {
     description: string;
     category: string;
     severity: SecurityIncident['severity'];
-    steps: Array<{
+    steps: Array<{,
         order: number;
         description: string;
         type: 'action' | 'verification' | 'rollback';
@@ -266,44 +266,44 @@ export interface Solution {
     lastUsed?: number;
 }
 export interface IncidentResponseConfig {
-    responseTeams: {
+    responseTeams: {,
         primary: string[];
         secondary: string[];
         escalation: string[];
         external: string[];
     };
-    slaTargets: {
+    slaTargets: {,
         detection: number;
         acknowledgment: number;
         triage: number;
         containment: number;
         resolution: number;
     };
-    notifications: {
+    notifications: {,
         immediate: string[];
         escalation: string[];
         resolution: string[];
         external: string[];
     };
-    integrations: {
-        ticketing: {
+    integrations: {,
+        ticketing: {,
             enabled: boolean;
             system: 'jira' | 'servicenow' | 'remedy';
             autoCreate: boolean;
             syncUpdates: boolean;
         };
-        siem: {
+        siem: {,
             enabled: boolean;
             endpoint: string;
             autoEnrichment: boolean;
         };
-        chatOps: {
+        chatOps: {,
             enabled: boolean;
             channels: string[];
             platform: 'slack' | 'teams' | 'discord';
         };
     };
-    compliance: {
+    compliance: {,
         frameworks: string[];
         autoReporting: boolean;
         reportingChannels: string[];
@@ -360,7 +360,7 @@ export declare class SecurityIncidentResponseService extends EventEmitter {
     /**
      * List incidents with filtering
      */
-    listIncidents(filters?: {
+    listIncidents(filters?: {)
         status?: SecurityIncident['status'];
         severity?: SecurityIncident['severity'];
         category?: SecurityIncident['category'];
@@ -375,7 +375,7 @@ export declare class SecurityIncidentResponseService extends EventEmitter {
      */
     generateIncidentReport(incidentId: string, reportType?: 'executive' | 'technical' | 'compliance' | 'post_incident'): {
         incident: SecurityIncident;
-        summary: {
+        summary: {,
             timeToDetection: number;
             timeToContainment: number;
             timeToResolution: number;
@@ -385,7 +385,7 @@ export declare class SecurityIncidentResponseService extends EventEmitter {
         };
         timeline: IncidentTimelineEntry[];
         recommendations: string[];
-        complianceStatus: {
+        complianceStatus: {,
             framework: string;
             compliant: boolean;
             gaps: string[];
@@ -399,7 +399,7 @@ export declare class SecurityIncidentResponseService extends EventEmitter {
         incidentsByStatus: Record<SecurityIncident['status'], number>;
         incidentsBySeverity: Record<SecurityIncident['severity'], number>;
         incidentsByCategory: Record<SecurityIncident['category'], number>;
-        averageMetrics: {
+        averageMetrics: {,
             detectionTime: number;
             responseTime: number;
             resolutionTime: number;

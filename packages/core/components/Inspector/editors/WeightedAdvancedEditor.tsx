@@ -11,7 +11,6 @@ import { WeightedChoice, WeightDistributionType } from '../../../runtime/nodes/W
 export interface WeightedAdvancedEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   nodeId: string;
 }
-
 /**
  * Epic 8.4 - WeightedAdvanced Editor with Progressive Disclosure
  * 
@@ -28,106 +27,85 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
   const normalize = (nodeData.normalize as boolean) ?? true;
   const minWeight = (nodeData.minWeight as number) || 0;
   const name = (nodeData.name as string) || (nodeData.label as string) || 'WeightedAdvanced';
-
   // Distribution parameters
   const exponentialFactor = (nodeData.exponentialFactor as number) || 2;
   const gaussianMean = (nodeData.gaussianMean as number) || 0.5;
   const gaussianStd = (nodeData.gaussianStd as number) || 0.2;
-
   // No manual collapse state needed - managed by ProgressiveDisclosureSection
-
   // Convert WeightedChoice to WeightControlOptions for visualization
-  const weightOptions: WeightControlOption[] = choices.map((choice, index) => ({
-    id: `advanced_choice_${index}`,
+  const weightOptions: WeightControlOption[] = choices.map((choice, index) => ({)
+    id: `advanced_choice_${index}`,}
     text: choice.value,
-    weight: choice.weight
+    weight: choice.weight,
   }));
-
   const handleChoicesChange = (newChoices: WeightedChoice[]) => {
     onChange({ choices: newChoices });
   };
-
   const handleAddChoice = () => {
     const newChoice: WeightedChoice = {
-      value: `Choice ${choices.length + 1}`,
-      weight: 1
+      value: `Choice ${choices.length + 1}`,}
+      weight: 1,
     };
     handleChoicesChange([...choices, newChoice]);
   };
-
   const handleRemoveChoice = (index: number) => {
     const newChoices = choices.filter((_, i) => i !== index);
     handleChoicesChange(newChoices);
   };
-
   const handleUpdateChoice = (index: number, field: keyof WeightedChoice, value: string | number) => {
     const newChoices = [...choices];
     newChoices[index] = { ...newChoices[index], [field]: value };
     handleChoicesChange(newChoices);
   };
-
   const handleNameChange = (value: unknown) => {
     onChange({ name: value as string, label: value as string });
   };
-
   const handleDistributionTypeChange = (value: unknown) => {
     onChange({ distributionType: value as WeightDistributionType });
   };
-
   const handleNormalizeChange = (value: unknown) => {
     onChange({ normalize: Boolean(value) });
   };
-
   const handleMinWeightChange = (value: unknown) => {
     onChange({ minWeight: Math.max(0, Number(value) || 0) });
   };
-
   const handleExponentialFactorChange = (value: unknown) => {
     onChange({ exponentialFactor: Math.max(0.1, Number(value) || 2) });
   };
-
   const handleGaussianMeanChange = (value: unknown) => {
     onChange({ gaussianMean: Math.max(0, Math.min(1, Number(value) || 0.5)) });
   };
-
   const handleGaussianStdChange = (value: unknown) => {
     onChange({ gaussianStd: Math.max(0.01, Number(value) || 0.2) });
   };
-
-  const distributionOptions = [
+  const distributionOptions = [;
     { value: 'linear', label: 'Linear - Use original weights' },
     { value: 'exponential', label: 'Exponential - Apply power transformation' },
     { value: 'gaussian', label: 'Gaussian - Apply normal distribution curve' },
     { value: 'custom', label: 'Custom - User-defined transformation' }
   ];
-
   const equalizeWeights = () => {
     const newChoices = choices.map(choice => ({ ...choice, weight: 1 }));
     handleChoicesChange(newChoices);
   };
-
   const randomizeWeights = () => {
-    const newChoices = choices.map(choice => ({ 
+    const newChoices = choices.map(choice => ({ )
       ...choice, 
       weight: Math.random() * 10 + 1 
     }));
     handleChoicesChange(newChoices);
   };
-
   const setLinearProgression = () => {
-    const newChoices = choices.map((choice, index) => ({ 
+    const newChoices = choices.map((choice, index) => ({ )
       ...choice, 
       weight: index + 1 
     }));
     handleChoicesChange(newChoices);
   };
-
   // Calculate effective weights after distribution and normalization
   const getEffectiveWeights = (): number[] => {
     if (choices.length === 0) return [];
-    
     let weights = choices.map(choice => choice.weight);
-    
     // Apply distribution transformation
     switch (distributionType) {
     case 'exponential':
@@ -146,12 +124,10 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
       // No transformation
       break;
     }
-    
     // Apply minimum weight
     if (minWeight > 0) {
       weights = weights.map(w => Math.max(w, minWeight));
     }
-    
     // Normalize if requested
     if (normalize) {
       const total = weights.reduce((sum, w) => sum + w, 0);
@@ -159,13 +135,10 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
         weights = weights.map(w => w / total);
       }
     }
-    
     return weights;
   };
-
   const effectiveWeights = getEffectiveWeights();
-
-  return (
+  return ()
     <div className="weighted-advanced-editor">
       {/* BASIC LEVEL: Essential settings for filmmakers */}
       <ProgressiveDisclosureSection
@@ -186,18 +159,17 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
             placeholder="e.g., Character Emotions, Scene Styles, Action Types"
           />
         </div>
-        
         <div style={{ marginBottom: 12 }}>
           <div style={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'center',
-            marginBottom: 8
+            marginBottom: 8,
           }}>
             <label style={{ 
               fontWeight: 500, 
               color: '#e2e8f0',
-              fontSize: 12
+              fontSize: 12,
             }}>
               Story Choices
             </label>
@@ -210,14 +182,13 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                 border: 'none',
                 borderRadius: 2,
                 color: '#fff',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Add Choice
             </button>
           </div>
-          
-          {choices.length === 0 ? (
+          {choices.length === 0 ? ()
             <div style={{
               background: '#2d3748',
               border: '1px solid #4a5568',
@@ -226,27 +197,26 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
               textAlign: 'center',
               color: '#a0aec0',
               fontSize: 12,
-              fontStyle: 'italic'
+              fontStyle: 'italic',
             }}>
               No story choices defined. Add options like "Dramatic", "Comedy", "Action" to create weighted selection.
             </div>
-          ) : (
+          ) : ()
             <div style={{
               background: '#2d3748',
               border: '1px solid #4a5568',
               borderRadius: 4,
-              padding: 8
+              padding: 8,
             }}>
               {choices.map((choice, index) => {
                 const effectiveWeight = effectiveWeights[index] || 0;
-                const percentage = effectiveWeights.length > 0
-                  ? Math.round(
-                    effectiveWeight * (normalize ? 100 : effectiveWeights.reduce((sum,
+                const percentage = effectiveWeights.length > 0;
+                  ? Math.round()
+                    effectiveWeight * (normalize ? 100 : effectiveWeights.reduce((sum,)
                       w
                     ) => sum + w, 0) > 0 ? 100 / effectiveWeights.reduce((sum, w) => sum + w, 0) : 0))
                   : Math.round(100 / choices.length);
-
-                return (
+                return ()
                   <div
                     key={index}
                     style={{
@@ -261,7 +231,7 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                       display: 'flex',
                       alignItems: 'center',
                       marginBottom: 8,
-                      gap: 8
+                      gap: 8,
                     }}>
                       <input
                         type="text"
@@ -274,11 +244,10 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                           borderRadius: 2,
                           background: '#2d3748',
                           color: '#e2e8f0',
-                          fontSize: 11
+                          fontSize: 11,
                         }}
                         placeholder={'e.g., "Suspenseful", "Lighthearted", "Intense"'}
                       />
-                      
                       <button
                         onClick={() => handleRemoveChoice(index)}
                         style={{
@@ -288,17 +257,16 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                           color: '#fff',
                           cursor: 'pointer',
                           padding: '2px 6px',
-                          fontSize: 10
+                          fontSize: 10,
                         }}
                       >
                         Remove
                       </button>
                     </div>
-                    
                     <div style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8
+                      gap: 8,
                     }}>
                       <label style={{ fontSize: 10, color: '#a0aec0', minWidth: 80 }}>
                         Raw Weight:
@@ -312,12 +280,11 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                         showNumeric={true}
                         label="Raw Weight"
                       />
-                      
                       <div style={{ 
                         fontSize: 10, 
                         color: '#a0aec0',
                         minWidth: 60,
-                        textAlign: 'right'
+                        textAlign: 'right',
                       }}>
                         {percentage.toFixed(1)}% chance
                       </div>
@@ -330,13 +297,12 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
           <div style={{
             fontSize: 10,
             color: '#a0aec0',
-            marginTop: 4
+            marginTop: 4,
           }}>
             Choose options and their relative likelihood. Higher weights = more likely to be selected.
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* ADVANCED LEVEL: Distribution algorithms and weight controls */}
       <ProgressiveDisclosureSection
         title="Advanced Weight Controls"
@@ -347,12 +313,12 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
         fieldName="distribution"
       >
         {/* Weight adjustment tools */}
-        {choices.length > 1 && (
+        {choices.length > 1 && ()
           <div style={{ 
             marginBottom: 16, 
             display: 'flex', 
             gap: 8,
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
           }}>
             <button
               onClick={equalizeWeights}
@@ -363,12 +329,11 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                 border: 'none',
                 borderRadius: 2,
                 color: '#e2e8f0',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Equal Weights
             </button>
-            
             <button
               onClick={randomizeWeights}
               style={{
@@ -378,12 +343,11 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                 border: 'none',
                 borderRadius: 2,
                 color: '#e2e8f0',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Random Weights
             </button>
-            
             <button
               onClick={setLinearProgression}
               style={{
@@ -393,14 +357,13 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                 border: 'none',
                 borderRadius: 2,
                 color: '#e2e8f0',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Linear Progression
             </button>
           </div>
         )}
-        
         <div style={{ marginBottom: 16 }}>
           <SelectEditor
             label="Distribution Type"
@@ -411,9 +374,8 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
             options={distributionOptions}
           />
         </div>
-
         {/* Distribution-specific parameters */}
-        {distributionType === 'exponential' && (
+        {distributionType === 'exponential' && ()
           <div style={{ marginBottom: 16 }}>
             <TextFieldEditor
               label="Exponential Factor"
@@ -426,14 +388,13 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
             <div style={{
               fontSize: 10,
               color: '#a0aec0',
-              marginTop: 2
+              marginTop: 2,
             }}>
               Higher values create more extreme weight distributions (factor &gt; 1 amplifies differences)
             </div>
           </div>
         )}
-
-        {distributionType === 'gaussian' && (
+        {distributionType === 'gaussian' && ()
           <>
             <div style={{ marginBottom: 12 }}>
               <TextFieldEditor
@@ -447,12 +408,11 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
               <div style={{
                 fontSize: 10,
                 color: '#a0aec0',
-                marginTop: 2
+                marginTop: 2,
               }}>
                 Center of the bell curve (0 = first choice, 1 = last choice, 0.5 = middle)
               </div>
             </div>
-            
             <div style={{ marginBottom: 16 }}>
               <TextFieldEditor
                 label="Standard Deviation"
@@ -465,14 +425,13 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
               <div style={{
                 fontSize: 10,
                 color: '#a0aec0',
-                marginTop: 2
+                marginTop: 2,
               }}>
                 Width of the bell curve (smaller = more focused, larger = more spread)
               </div>
             </div>
           </>
         )}
-
         {/* General settings */}
         <div style={{ marginBottom: 12 }}>
           <label style={{
@@ -480,7 +439,7 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
             alignItems: 'center',
             fontSize: 12,
             color: '#e2e8f0',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}>
             <input
               type="checkbox"
@@ -494,12 +453,11 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
             fontSize: 10,
             color: '#a0aec0',
             marginTop: 2,
-            marginLeft: 20
+            marginLeft: 20,
           }}>
             Scale final weights to sum to 1.0 for probability calculations
           </div>
         </div>
-
         <div style={{ marginBottom: 16 }}>
           <TextFieldEditor
             label="Minimum Weight"
@@ -512,40 +470,39 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
           <div style={{
             fontSize: 10,
             color: '#a0aec0',
-            marginTop: 2
+            marginTop: 2,
           }}>
             Minimum weight threshold (0 = no minimum)
           </div>
         </div>
-
         {/* Distribution Explanation */}
         <div style={{
           background: '#1a202c',
           border: '1px solid #4a5568',
           borderRadius: 4,
-          padding: 8
+          padding: 8,
         }}>
           <div style={{
             fontSize: 11,
             fontWeight: 500,
             color: '#e2e8f0',
-            marginBottom: 4
+            marginBottom: 4,
           }}>
             Distribution Effects:
           </div>
           <div style={{
             fontSize: 10,
             color: '#a0aec0',
-            lineHeight: 1.4
+            lineHeight: 1.4,
           }}>
             {distributionType === 'linear' && 
               'Uses original weights without modification. Simple and predictable.'
             }
             {distributionType === 'exponential' && 
-              `Applies power transformation: weight^${exponentialFactor}. Amplifies differences between weights.`
+              `Applies power transformation: weight^${exponentialFactor}. Amplifies differences between weights.`}
             }
             {distributionType === 'gaussian' && 
-              `Applies bell curve centered at position ${gaussianMean} with spread ${gaussianStd}. Favors choices near the center.`
+              `Applies bell curve centered at position ${gaussianMean} with spread ${gaussianStd}. Favors choices near the center.`}
             }
             {distributionType === 'custom' && 
               'Uses custom transformation function. Implementation depends on specific requirements.'
@@ -553,7 +510,6 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* DEBUG LEVEL: Technical details and visualization */}
       <ProgressiveDisclosureSection
         title="Technical Analysis & Preview"
@@ -569,13 +525,13 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
           border: '1px solid #4a5568',
           borderRadius: 4,
           padding: 8,
-          marginBottom: 16
+          marginBottom: 16,
         }}>
           <div style={{
             fontSize: 11,
             fontWeight: 500,
             color: '#e2e8f0',
-            marginBottom: 4
+            marginBottom: 4,
           }}>
             Node Configuration:
           </div>
@@ -587,7 +543,7 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
             <div>Normalization: {normalize ? 'Enabled' : 'Disabled'}</div>
             <div>Min Weight: {minWeight}</div>
             {distributionType === 'exponential' && <div>Exponential Factor: {exponentialFactor}</div>}
-            {distributionType === 'gaussian' && (
+            {distributionType === 'gaussian' && ()
               <>
                 <div>Gaussian Mean: {gaussianMean}</div>
                 <div>Gaussian Std: {gaussianStd}</div>
@@ -595,7 +551,6 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
             )}
           </div>
         </div>
-        
         {/* Selection Preview */}
         <div style={{
           background: '#1a202c',
@@ -603,13 +558,13 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
           borderRadius: 4,
           padding: 12,
           fontSize: 12,
-          color: '#e2e8f0'
+          color: '#e2e8f0',
         }}>
-          {choices.length === 0 ? (
+          {choices.length === 0 ? ()
             <div style={{ color: '#a0aec0', fontStyle: 'italic' }}>
               Add weighted choices to see selection preview
             </div>
-          ) : (
+          ) : ()
             <div>
               <div style={{ marginBottom: 8, fontWeight: 500 }}>
                 Weighted Selection Preview ({distributionType}):
@@ -617,11 +572,10 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
               {choices.map((choice, index) => {
                 const rawWeight = choice.weight;
                 const effectiveWeight = effectiveWeights[index] || 0;
-                const percentage = effectiveWeights.length > 0 && effectiveWeights.reduce((sum, w) => sum + w, 0) > 0
+                const percentage = effectiveWeights.length > 0 && effectiveWeights.reduce((sum, w) => sum + w, 0) > 0;
                   ? Math.round((effectiveWeight / effectiveWeights.reduce((sum, w) => sum + w, 0)) * 100)
                   : Math.round(100 / choices.length);
-                
-                return (
+                return ()
                   <div key={index} style={{ 
                     display: 'flex', 
                     justifyContent: 'space-between',
@@ -629,7 +583,7 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                     marginBottom: 4,
                     padding: '4px 8px',
                     background: 'rgba(66, 153, 225, 0.1)',
-                    borderRadius: 2
+                    borderRadius: 2,
                   }}>
                     <span style={{ flex: 1 }}>"{choice.value}"</span>
                     <span style={{ color: '#a0aec0', fontSize: 10, minWidth: 80 }}>
@@ -641,14 +595,13 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                   </div>
                 );
               })}
-              
               {/* Total weights summary */}
               <div style={{ 
                 marginTop: 8, 
                 paddingTop: 8, 
                 borderTop: '1px solid #4a5568',
                 fontSize: 10,
-                color: '#a0aec0'
+                color: '#a0aec0',
               }}>
                 Raw total: {choices.reduce((sum, c) => sum + c.weight, 0).toFixed(2)} → 
                 Effective total: {effectiveWeights.reduce((sum, w) => sum + w, 0).toFixed(3)}
@@ -657,9 +610,8 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
             </div>
           )}
         </div>
-        
         {/* Weight Distribution Visualization */}
-        {choices.length > 0 && weightOptions.length > 0 && (
+        {choices.length > 0 && weightOptions.length > 0 && ()
           <div style={{ marginTop: 16 }}>
             <WeightVisualizationPanel
               options={weightOptions}

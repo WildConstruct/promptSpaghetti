@@ -1,98 +1,94 @@
 // packages/core/__tests__/ReproducibilityValidator.test.ts
 // Test suite for ReproducibilityValidator service
-
 import { ReproducibilityValidator } from '../services/ReproducibilityValidator';
 import { VFXExportFormat } from '../types/VFXExport';
-
 describe('ReproducibilityValidator', () => {
   let validator: ReproducibilityValidator;
   let mockValidExport: VFXExportFormat;
   let mockInvalidExport: VFXExportFormat;
-
   beforeEach(() => {
     validator = ReproducibilityValidator.getInstance();
-
     // Create mock valid export data
     mockValidExport = {
-      metadata: {
+      metadata: {,
         exportId: 'test-export-001',
         version: '1.2.0',
         timestamp: '2025-07-24T10:00:00.000Z',
-        generator: {
+        generator: {,
           name: 'Wild Construct Prompt Generator',
           version: '1.0.0',
           build: 'test-build',
           coreVersion: '2.1.0',
           exporterVersion: '1.2.0',
           schemaVersion: '1.2.0',
-          dependencies: {
+          dependencies: {,
             reactflow: '11.10.1',
             seedrandom: '3.0.5',
-            typescript: '5.0.0'
+            typescript: '5.0.0',
           }
         },
-        project: {
+        project: {,
           name: 'Test Project',
-          id: 'test-project-001'
+          id: 'test-project-001',
         },
-        export: {
+        export: {,
           format: 'vfx-pipeline-v1',
           quality: 'production',
           includeDebugInfo: true,
-          includeHistoricalData: false
+          includeHistoricalData: false,
         },
-        compatibility: {
+        compatibility: {,
           controlNet: true,
           diffusionModels: ['stable-diffusion', 'sdxl'],
           animationFramework: true,
-          billboardProjection: true
+          billboardProjection: true,
         }
       },
-      prompt: {
+      prompt: {,
         finalPrompt: 'A warrior in ancient temple',
-        components: {
+        components: {,
           subject: ['warrior'],
           action: ['standing'],
           setting: ['ancient temple'],
           mood: ['dramatic'],
           technical: ['cinematic lighting'],
-          style: ['realistic']
+          style: ['realistic'],
         },
-        variables: {
-          subject: {
+        variables: {,
+          subject: {,
             value: 'warrior',
             source: 'generated',
-            confidence: 0.85
+            confidence: 0.85,
           }
         },
-        variants: [{
+        variants: [{,
           id: 'variant-001',
           seed: 12345,
           prompt: 'A warrior in ancient temple',
           confidence: 0.85,
-          metadata: {
+          metadata: {,
             generationTime: 150,
             nodesExecuted: 3,
-            variablesUsed: ['subject']
+            variablesUsed: ['subject'],
           }
         }],
-        weights: {
+        weights: {,
           overall: 1.0,
           subject: 1.2,
           composition: 1.0,
-          style: 0.8
+          style: 0.8,
         }
       },
-      graph: {
-        nodes: [{
+      graph: {,
+        nodes: [{,
           id: 'node-001',
           type: 'weightedChoice',
           label: 'Subject Choice',
           category: 'input',
           purpose: 'Select character type',
-          configuration: {
+          configuration: {,
             name: 'Subject Choice',
-            choices: [
+            choices: [,
               { text: 'warrior', weight: 3 },
               { text: 'mage', weight: 2 }
             ]
@@ -101,124 +97,121 @@ describe('ReproducibilityValidator', () => {
           executionTime: 50,
           dependsOn: [],
           affects: ['node-002'],
-          reproducibilityData: {
+          reproducibilityData: {,
             originalPosition: { x: 100, y: 100 },
             originalSize: { width: 200, height: 100 },
             creationTimestamp: '2025-07-24T09:00:00.000Z',
             lastModified: '2025-07-24T09:30:00.000Z',
-            configurationHash: 'abc123def456'
+            configurationHash: 'abc123def456',
           }
         }],
-        connections: [{
+        connections: [{,
           id: 'conn-001',
           source: { nodeId: 'node-001' },
           target: { nodeId: 'node-002' },
-          dataType: 'text'
+          dataType: 'text',
         }],
         executionPath: ['node-001', 'node-002'],
         criticalPath: ['node-001', 'node-002'],
-        analysis: {
+        analysis: {,
           complexity: 'simple',
           variabilityScore: 0.6,
           determinismScore: 0.8,
-          performanceScore: 0.9
+          performanceScore: 0.9,
         }
       },
-      execution: {
-        randomization: {
+      execution: {,
+        randomization: {,
           masterSeed: 12345,
-          nodeSeed: {
+          nodeSeed: {,
             'node-001': 12346,
             'node-002': 12347
           },
           rngState: 'mocked-rng-state-string',
           reproducibilityHash: 'repro-hash-123',
-          nodeRngStates: {
+          nodeRngStates: {,
             'node-001': {
               seed: 12346,
               state: 'node-rng-state-1',
               callCount: 3,
-              lastValue: 0.7234
+              lastValue: 0.7234,
             }
           },
           executionSequence: ['node-001', 'node-002']
         },
-        performance: {
+        performance: {,
           totalTime: 150,
-          nodePerformance: {
+          nodePerformance: {,
             'node-001': {
               executionTime: 50,
               cacheHits: 0,
-              cacheMisses: 1
+              cacheMisses: 1,
             }
           },
-          memoryUsage: 2048000
+          memoryUsage: 2048000,
         },
-        history: {
-          iterations: [{
+        history: {,
+          iterations: [{,
             iterationId: 'iter-001',
             timestamp: '2025-07-24T10:00:00.000Z',
             trigger: 'user_request',
             seed: 12345,
             result: 'A warrior in ancient temple',
-            executionTime: 150
+            executionTime: 150,
           }],
-          modifications: []
+          modifications: [],
         },
-        reproduction: {
-          environment: {
+        reproduction: {,
+          environment: {,
             nodeVersion: '18.17.0',
-            platform: 'darwin'
+            platform: 'darwin',
           },
           exactReproduction: true,
-          approximateReproduction: true
+          approximateReproduction: true,
         }
       },
       extensions: {},
-      rendering: {
-        resolution: {
+      rendering: {,
+        resolution: {,
           width: 1920,
           height: 1080,
-          aspectRatio: '16:9'
+          aspectRatio: '16:9',
         },
-        camera: {
+        camera: {,
           fov: 45,
           position: [0, 0, 5]
         },
-        lighting: {
+        lighting: {,
           timeOfDay: 'afternoon',
-          mood: 'dramatic'
+          mood: 'dramatic',
         },
-        style: {
+        style: {,
           filmstock: 'digital',
-          colorGrading: 'cinematic'
+          colorGrading: 'cinematic',
         },
-        quality: {
+        quality: {,
           samples: 100,
-          denoising: 0.7
+          denoising: 0.7,
         }
       }
     };
-
     // Create mock invalid export (missing critical data)
     mockInvalidExport = {
       ...mockValidExport,
-      execution: {
+      execution: {,
         ...mockValidExport.execution,
-        randomization: {
+        randomization: {,
           masterSeed: undefined as any,
           nodeSeed: {},
           rngState: undefined,
-          reproducibilityHash: undefined
+          reproducibilityHash: undefined,
         }
       }
     };
   });
-
   describe('Basic Validation', () => {
     it('should validate a complete valid export', () => {
       const report = validator.validateReproducibility(mockValidExport);
-
       expect(report.isValid).toBe(true);
       expect(report.exactReproducible).toBe(true);
       expect(report.approximateReproducible).toBe(true);
@@ -227,353 +220,288 @@ describe('ReproducibilityValidator', () => {
       expect(report.integrity.configurationValid).toBe(true);
       expect(report.integrity.versionCompatible).toBe(true);
     });
-
     it('should detect missing master seed', () => {
       const report = validator.validateReproducibility(mockInvalidExport);
-
       expect(report.isValid).toBe(false);
       expect(report.errors.some(e => e.code === 'MISSING_MASTER_SEED')).toBe(true);
       expect(report.integrity.seedsValid).toBe(false);
     });
-
     it('should handle missing node seeds', () => {
       const exportWithMissingNodeSeeds = {
         ...mockValidExport,
-        execution: {
+        execution: {,
           ...mockValidExport.execution,
-          randomization: {
+          randomization: {,
             ...mockValidExport.execution.randomization,
             nodeSeed: undefined as any
           }
         }
       };
-
       const report = validator.validateReproducibility(exportWithMissingNodeSeeds);
-
       expect(report.isValid).toBe(false);
       expect(report.errors.some(e => e.code === 'MISSING_NODE_SEEDS')).toBe(true);
     });
   });
-
   describe('Randomization State Validation', () => {
     it('should validate RNG state presence for exact reproducibility', () => {
       const report = validator.validateReproducibility(mockValidExport);
-
       expect(report.exactReproducible).toBe(true);
       expect(report.warnings.some(w => w.code === 'MISSING_RNG_STATE')).toBe(false);
     });
-
     it('should warn about missing RNG state', () => {
       const exportWithoutRngState = {
         ...mockValidExport,
-        execution: {
+        execution: {,
           ...mockValidExport.execution,
-          randomization: {
+          randomization: {,
             ...mockValidExport.execution.randomization,
-            rngState: undefined
+            rngState: undefined,
           }
         }
       };
-
       const report = validator.validateReproducibility(exportWithoutRngState);
-
       expect(report.exactReproducible).toBe(false);
       expect(report.approximateReproducible).toBe(true);
       expect(report.warnings.some(w => w.code === 'MISSING_RNG_STATE')).toBe(true);
     });
-
     it('should validate per-node RNG states', () => {
       const report = validator.validateReproducibility(mockValidExport);
-
       expect(report.errors.filter(e => e.code.includes('NODE_RNG')).length).toBe(0);
     });
-
     it('should detect invalid per-node RNG states', () => {
       const exportWithInvalidNodeRng = {
         ...mockValidExport,
-        execution: {
+        execution: {,
           ...mockValidExport.execution,
-          randomization: {
+          randomization: {,
             ...mockValidExport.execution.randomization,
-            nodeRngStates: {
+            nodeRngStates: {,
               'node-001': {
                 seed: 'invalid-seed' as any,
                 state: null as any,
                 callCount: -1,
-                lastValue: 0.5
+                lastValue: 0.5,
               }
             }
           }
         }
       };
-
       const report = validator.validateReproducibility(exportWithInvalidNodeRng);
-
       expect(report.errors.some(e => e.code === 'INVALID_NODE_RNG_SEED')).toBe(true);
       expect(report.errors.some(e => e.code === 'INVALID_NODE_RNG_STATE')).toBe(true);
       expect(report.warnings.some(w => w.code === 'INVALID_RNG_CALL_COUNT')).toBe(true);
     });
   });
-
   describe('Node Configuration Validation', () => {
     it('should validate node structure', () => {
       const report = validator.validateReproducibility(mockValidExport);
-
       expect(report.integrity.configurationValid).toBe(true);
       expect(report.errors.filter(e => e.code === 'INVALID_NODE_STRUCTURE').length).toBe(0);
     });
-
     it('should detect invalid node structure', () => {
       const exportWithInvalidNode = {
         ...mockValidExport,
-        graph: {
+        graph: {,
           ...mockValidExport.graph,
-          nodes: [{
+          nodes: [{,
             id: undefined as any,
             type: undefined as any,
             label: 'Invalid Node'
           } as any]
         }
       };
-
       const report = validator.validateReproducibility(exportWithInvalidNode);
-
       expect(report.integrity.configurationValid).toBe(false);
       expect(report.errors.some(e => e.code === 'INVALID_NODE_STRUCTURE')).toBe(true);
     });
-
     it('should warn about missing node configurations', () => {
       const exportWithoutConfig = {
         ...mockValidExport,
-        graph: {
+        graph: {,
           ...mockValidExport.graph,
-          nodes: [{
+          nodes: [{,
             ...mockValidExport.graph.nodes[0],
-            configuration: undefined
+            configuration: undefined,
           } as any]
         }
       };
-
       const report = validator.validateReproducibility(exportWithoutConfig);
-
       expect(report.warnings.some(w => w.code === 'MISSING_NODE_CONFIGURATION')).toBe(true);
     });
   });
-
   describe('Version Compatibility Validation', () => {
     it('should validate version metadata', () => {
       const report = validator.validateReproducibility(mockValidExport);
-
       expect(report.integrity.versionCompatible).toBe(true);
       expect(report.errors.filter(e => e.code.includes('VERSION')).length).toBe(0);
     });
-
     it('should detect missing version information', () => {
       const exportWithoutVersion = {
         ...mockValidExport,
-        metadata: {
+        metadata: {,
           ...mockValidExport.metadata,
           version: undefined as any
         }
       };
-
       const report = validator.validateReproducibility(exportWithoutVersion);
-
       expect(report.errors.some(e => e.code === 'MISSING_VERSION')).toBe(true);
     });
-
     it('should warn about missing dependency versions', () => {
       const exportWithoutDeps = {
         ...mockValidExport,
-        metadata: {
+        metadata: {,
           ...mockValidExport.metadata,
-          generator: {
+          generator: {,
             ...mockValidExport.metadata.generator,
             dependencies: undefined as any
           }
         }
       };
-
       const report = validator.validateReproducibility(exportWithoutDeps);
-
       expect(report.warnings.some(w => w.code === 'MISSING_DEPENDENCIES')).toBe(true);
     });
-
     it('should check for critical dependencies', () => {
       const exportWithMissingCriticalDep = {
         ...mockValidExport,
-        metadata: {
+        metadata: {,
           ...mockValidExport.metadata,
-          generator: {
+          generator: {,
             ...mockValidExport.metadata.generator,
-            dependencies: {
-              typescript: '5.0.0'
+            dependencies: {,
+              typescript: '5.0.0',
               // Missing seedrandom and reactflow
             }
           }
         }
       };
-
       const report = validator.validateReproducibility(exportWithMissingCriticalDep);
-
       expect(report.warnings.filter(w => w.code === 'MISSING_CRITICAL_DEPENDENCY').length).toBe(2);
     });
   });
-
   describe('Performance Estimation', () => {
     it('should calculate performance estimates', () => {
       const report = validator.validateReproducibility(mockValidExport);
-
       expect(report.performance.estimatedReproductionTime).toBeGreaterThan(0);
       expect(report.performance.complexityScore).toBeGreaterThan(0);
       expect(report.performance.memoryRequirement).toBeGreaterThan(0);
     });
-
     it('should estimate reproduction time from performance data', () => {
       const report = validator.validateReproducibility(mockValidExport);
-
       // Should use actual performance data if available
       expect(report.performance.estimatedReproductionTime).toBe(165); // 150ms * 1.1
     });
-
     it('should calculate complexity score', () => {
       const report = validator.validateReproducibility(mockValidExport);
-
       expect(report.performance.complexityScore).toBeGreaterThan(0);
       expect(report.performance.complexityScore).toBeLessThanOrEqual(100);
     });
-
     it('should estimate memory requirements', () => {
       const report = validator.validateReproducibility(mockValidExport);
-
       expect(report.performance.memoryRequirement).toBeGreaterThan(1000); // Should be reasonable size
     });
   });
-
   describe('Validation Options', () => {
     it('should respect strict mode', () => {
       const reportNormal = validator.validateReproducibility(mockValidExport, { strictMode: false });
       const reportStrict = validator.validateReproducibility(mockValidExport, { strictMode: true });
-
       expect(reportNormal.isValid).toBe(true);
       expect(reportStrict.isValid).toBe(true);
     });
-
     it('should handle strict mode with errors', () => {
       const reportStrict = validator.validateReproducibility(mockInvalidExport, { strictMode: true });
-
       expect(reportStrict.isValid).toBe(false);
     });
-
     it('should handle allowApproximate option', () => {
       const exportWithApproximateOnly = {
         ...mockValidExport,
-        execution: {
+        execution: {,
           ...mockValidExport.execution,
-          randomization: {
+          randomization: {,
             ...mockValidExport.execution.randomization,
             rngState: undefined // Only approximate reproducibility
           }
         }
       };
-
-      const reportWithApproximate = validator.validateReproducibility(
+      const reportWithApproximate = validator.validateReproducibility(;)
         exportWithApproximateOnly, 
         { allowApproximate: true }
       );
-      const reportWithoutApproximate = validator.validateReproducibility(
+      const reportWithoutApproximate = validator.validateReproducibility(;)
         exportWithApproximateOnly, 
         { allowApproximate: false }
       );
-
       expect(reportWithApproximate.isValid).toBe(true);
       expect(reportWithoutApproximate.isValid).toBe(false);
     });
   });
-
   describe('Suggestions Generation', () => {
     it('should generate optimization suggestions for complex graphs', () => {
       // Create export with high complexity
       const complexExport = {
         ...mockValidExport,
-        graph: {
+        graph: {,
           ...mockValidExport.graph,
-          nodes: Array.from({ length: 30 }, (_, i) => ({
+          nodes: Array.from({ length: 30 }, (_, i) => ({)
             ...mockValidExport.graph.nodes[0],
-            id: `node-${i}`
+            id: `node-${i}`}
           }))
         }
       };
-
       const report = validator.validateReproducibility(complexExport);
-
       expect(report.suggestions.some(s => s.code === 'HIGH_COMPLEXITY')).toBe(true);
     });
-
     it('should suggest enhancement for missing RNG tracking', () => {
       const exportWithoutNodeRng = {
         ...mockValidExport,
-        execution: {
+        execution: {,
           ...mockValidExport.execution,
-          randomization: {
+          randomization: {,
             ...mockValidExport.execution.randomization,
-            nodeRngStates: undefined
+            nodeRngStates: undefined,
           }
         }
       };
-
       const report = validator.validateReproducibility(exportWithoutNodeRng);
-
       expect(report.suggestions.some(s => s.code === 'ENHANCE_RNG_TRACKING')).toBe(true);
     });
-
     it('should suggest debug mode for exports with errors', () => {
       const report = validator.validateReproducibility(mockInvalidExport);
-
       expect(report.suggestions.some(s => s.code === 'ENABLE_DEBUG_MODE')).toBe(true);
     });
   });
-
   describe('Graph Integrity Validation', () => {
     it('should detect orphaned connections', () => {
       const exportWithOrphanedConnection = {
         ...mockValidExport,
-        graph: {
+        graph: {,
           ...mockValidExport.graph,
-          connections: [{
+          connections: [{,
             id: 'orphaned-conn',
             source: { nodeId: 'non-existent-node' },
             target: { nodeId: 'node-001' },
-            dataType: 'text'
+            dataType: 'text',
           }]
         }
       };
-
       const report = validator.validateReproducibility(exportWithOrphanedConnection);
-
       expect(report.warnings.some(w => w.code === 'ORPHANED_CONNECTION_SOURCE')).toBe(true);
     });
-
     it('should validate execution path integrity', () => {
       const exportWithInvalidExecutionPath = {
         ...mockValidExport,
-        graph: {
+        graph: {,
           ...mockValidExport.graph,
           executionPath: ['node-001', 'non-existent-node']
         }
       };
-
       const report = validator.validateReproducibility(exportWithInvalidExecutionPath);
-
       expect(report.warnings.some(w => w.code === 'INVALID_EXECUTION_PATH')).toBe(true);
     });
   });
-
   describe('Singleton Pattern', () => {
     it('should return the same instance', () => {
       const validator1 = ReproducibilityValidator.getInstance();
       const validator2 = ReproducibilityValidator.getInstance();
-
       expect(validator1).toBe(validator2);
     });
   });

@@ -4,14 +4,12 @@
  * Interactive preview widget for marketplace templates with
  * zoom, download, sharing, and detailed information display.
  */
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   QuickPreviewElement,
   Epic16InteractiveElementsService,
   InteractionType
 } from '../../services/Epic16InteractiveElementsService';
-
 interface QuickPreviewWidgetProps {
   element: QuickPreviewElement;
   interactiveService: Epic16InteractiveElementsService;
@@ -23,7 +21,6 @@ interface QuickPreviewWidgetProps {
   onShare?: (templateId: string, platform: string) => void;
   onPurchase?: (templateId: string) => void;
 }
-
 interface TemplatePreviewData {
   id: string;
   title: string;
@@ -39,30 +36,26 @@ interface TemplatePreviewData {
   category: string;
   tags: string[];
   license: string;
-  
   // Preview content
   previewUrl: string;
   thumbnails: string[];
   demoUrl?: string;
-  
   // Metadata
   fileSize: string;
   fileFormat: string[];
   lastUpdated: Date;
   compatibility: string[];
-  
   // Features
   features: string[];
   whatsIncluded: string[];
   requirements: string[];
-  
   // User context
   isPurchased: boolean;
   isInWishlist: boolean;
   canDownload: boolean;
 }
 
-export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
+export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({)
   element,
   interactiveService,
   userId,
@@ -76,7 +69,6 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
   // Configuration
   const previewConfig = element.config.preview_config;
   const theme = element.config.theme;
-  
   // State management
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
@@ -85,46 +77,42 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'details' | 'reviews'>('overview');
   const [wishlistLoading, setWishlistLoading] = useState(false);
-  
   // Refs
   const imageRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  
   // Track preview view
   useEffect(() => {
     const trackView = async () => {
-      await interactiveService.trackInteraction(element.id, {
+      await interactiveService.trackInteraction(element.id, {)
         type: InteractionType.CUSTOM,
         user_id: userId,
         timestamp: new Date(),
-        context: {
+        context: {,
           page_url: window.location.href,
           referrer: document.referrer,
           user_agent: navigator.userAgent,
-          screen_resolution: `${screen.width}x${screen.height}`,
-          viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+          screen_resolution: `${screen.width}x${screen.height}`,}
+          viewport_size: `${window.innerWidth}x${window.innerHeight}`,}
           device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
           session_id: 'session-' + Date.now(),
-          ab_test_variant: null
+          ab_test_variant: null,
         },
-        data: {
+        data: {,
           action: 'preview_opened',
           template_id: templateId,
           template_category: templateData.category,
-          template_price: templateData.price
+          template_price: templateData.price,
         },
-        result: {
+        result: {,
           success: true,
           conversion: false,
           data: { template_id: templateId }
         },
-        duration: 0
+        duration: 0,
       });
     };
-
     trackView();
   }, [element.id, interactiveService, userId, templateId, templateData.category, templateData.price]);
-
   // Handle image navigation
   const nextImage = useCallback(() => {
     setCurrentImageIndex((prev) => 
@@ -132,23 +120,19 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
     );
     setImageLoaded(false);
   }, [templateData.thumbnails.length]);
-
   const prevImage = useCallback(() => {
     setCurrentImageIndex((prev) => 
       prev > 0 ? prev - 1 : templateData.thumbnails.length - 1
     );
     setImageLoaded(false);
   }, [templateData.thumbnails.length]);
-
   // Handle zoom
   const handleZoomIn = useCallback(() => {
     setZoomLevel(prev => Math.min(prev + 0.5, 3));
   }, []);
-
   const handleZoomOut = useCallback(() => {
     setZoomLevel(prev => Math.max(prev - 0.5, 0.5));
   }, []);
-
   const toggleZoom = useCallback(() => {
     if (isZoomed) {
       setIsZoomed(false);
@@ -158,41 +142,37 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
       setZoomLevel(1.5);
     }
   }, [isZoomed]);
-
   // Handle wishlist toggle
   const handleWishlistToggle = useCallback(async () => {
     setWishlistLoading(true);
-    
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500));
-      
-      await interactiveService.trackInteraction(element.id, {
+      await interactiveService.trackInteraction(element.id, {)
         type: InteractionType.CLICK,
         user_id: userId,
         timestamp: new Date(),
-        context: {
+        context: {,
           page_url: window.location.href,
           referrer: document.referrer,
           user_agent: navigator.userAgent,
-          screen_resolution: `${screen.width}x${screen.height}`,
-          viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+          screen_resolution: `${screen.width}x${screen.height}`,}
+          viewport_size: `${window.innerWidth}x${window.innerHeight}`,}
           device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
           session_id: 'session-' + Date.now(),
-          ab_test_variant: null
+          ab_test_variant: null,
         },
-        data: {
+        data: {,
           action: templateData.isInWishlist ? 'wishlist_remove' : 'wishlist_add',
-          template_id: templateId
+          template_id: templateId,
         },
-        result: {
+        result: {,
           success: true,
           conversion: !templateData.isInWishlist,
           data: { wishlist_status: !templateData.isInWishlist }
         },
-        duration: 500
+        duration: 500,
       });
-      
       // Update local state (in real app, this would be managed by global state)
       templateData.isInWishlist = !templateData.isInWishlist;
     } catch (error) {
@@ -201,124 +181,115 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
       setWishlistLoading(false);
     }
   }, [element.id, interactiveService, userId, templateId, templateData]);
-
   // Handle share
   const handleShare = useCallback(async (platform: string) => {
     onShare?.(templateId, platform);
     setShowShareMenu(false);
-    
-    await interactiveService.trackInteraction(element.id, {
+    await interactiveService.trackInteraction(element.id, {)
       type: InteractionType.CLICK,
       user_id: userId,
       timestamp: new Date(),
-      context: {
+      context: {,
         page_url: window.location.href,
         referrer: document.referrer,
         user_agent: navigator.userAgent,
-        screen_resolution: `${screen.width}x${screen.height}`,
-        viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+        screen_resolution: `${screen.width}x${screen.height}`,}
+        viewport_size: `${window.innerWidth}x${window.innerHeight}`,}
         device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
         session_id: 'session-' + Date.now(),
-        ab_test_variant: null
+        ab_test_variant: null,
       },
-      data: {
+      data: {,
         action: 'template_shared',
         template_id: templateId,
-        share_platform: platform
+        share_platform: platform,
       },
-      result: {
+      result: {,
         success: true,
         conversion: true,
         data: { platform }
       },
-      duration: 0
+      duration: 0,
     });
   }, [element.id, interactiveService, userId, templateId, onShare]);
-
   // Handle download
   const handleDownload = useCallback(async () => {
     onDownload?.(templateId);
-    
-    await interactiveService.trackInteraction(element.id, {
+    await interactiveService.trackInteraction(element.id, {)
       type: InteractionType.CLICK,
       user_id: userId,
       timestamp: new Date(),
-      context: {
+      context: {,
         page_url: window.location.href,
         referrer: document.referrer,
         user_agent: navigator.userAgent,
-        screen_resolution: `${screen.width}x${screen.height}`,
-        viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+        screen_resolution: `${screen.width}x${screen.height}`,}
+        viewport_size: `${window.innerWidth}x${window.innerHeight}`,}
         device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
         session_id: 'session-' + Date.now(),
-        ab_test_variant: null
+        ab_test_variant: null,
       },
-      data: {
+      data: {,
         action: 'template_downloaded',
         template_id: templateId,
-        was_purchased: templateData.isPurchased
+        was_purchased: templateData.isPurchased,
       },
-      result: {
+      result: {,
         success: true,
         conversion: true,
         data: { template_id: templateId }
       },
-      duration: 0
+      duration: 0,
     });
   }, [element.id, interactiveService, userId, templateId, templateData.isPurchased, onDownload]);
-
   // Handle purchase
   const handlePurchase = useCallback(async () => {
     onPurchase?.(templateId);
-    
-    await interactiveService.trackInteraction(element.id, {
+    await interactiveService.trackInteraction(element.id, {)
       type: InteractionType.CLICK,
       user_id: userId,
       timestamp: new Date(),
-      context: {
+      context: {,
         page_url: window.location.href,
         referrer: document.referrer,
         user_agent: navigator.userAgent,
-        screen_resolution: `${screen.width}x${screen.height}`,
-        viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+        screen_resolution: `${screen.width}x${screen.height}`,}
+        viewport_size: `${window.innerWidth}x${window.innerHeight}`,}
         device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
         session_id: 'session-' + Date.now(),
-        ab_test_variant: null
+        ab_test_variant: null,
       },
-      data: {
+      data: {,
         action: 'purchase_initiated',
         template_id: templateId,
         price: templateData.price,
-        currency: templateData.currency
+        currency: templateData.currency,
       },
-      result: {
+      result: {,
         success: true,
         conversion: true,
-        data: { 
+        data: { ,
           template_id: templateId,
           price: templateData.price,
-          currency: templateData.currency
+          currency: templateData.currency,
         }
       },
-      duration: 0
+      duration: 0,
     });
   }, [element.id, interactiveService, userId, templateId, templateData.price, templateData.currency, onPurchase]);
-
   // Format price
   const formatPrice = useCallback((price: number, currency: string) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-US', {)
       style: 'currency',
-      currency: currency
+      currency: currency,
     }).format(price);
   }, []);
-
   // Render stars for rating
   const renderStars = useCallback((rating: number, size: 'sm' | 'md' = 'sm') => {
     const stars = [];
     const sizeClass = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
-    
     for (let i = 1; i <= 5; i++) {
-      stars.push(
+      stars.push()
         <svg
           key={i}
           className={`${sizeClass} ${i <= rating ? 'text-yellow-400' : 'text-gray-300'}`}
@@ -329,18 +300,16 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
         </svg>
       );
     }
-    
     return <div className="flex items-center">{stars}</div>;
   }, []);
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
       <div 
         ref={containerRef}
         className="bg-white rounded-lg shadow-2xl max-w-6xl w-full max-h-full overflow-hidden flex"
         style={{ 
           backgroundColor: theme.background_color,
-          borderRadius: `${theme.border_radius}px`
+          borderRadius: `${theme.border_radius}px`}
         }}
       >
         {/* Image Preview Section */}
@@ -355,22 +324,20 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                 isZoomed ? 'cursor-move' : 'cursor-zoom-in'
               }`}
               style={{ 
-                transform: `scale(${zoomLevel})`,
+                transform: `scale(${zoomLevel})`,}
                 filter: imageLoaded ? 'none' : 'blur(4px)'
               }}
               onLoad={() => setImageLoaded(true)}
               onClick={previewConfig.zoom_enabled ? toggleZoom : undefined}
             />
-            
-            {!imageLoaded && (
+            {!imageLoaded && ()
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
               </div>
             )}
           </div>
-
           {/* Image Navigation */}
-          {templateData.thumbnails.length > 1 && (
+          {templateData.thumbnails.length > 1 && ()
             <>
               <button
                 onClick={prevImage}
@@ -380,7 +347,6 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              
               <button
                 onClick={nextImage}
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all"
@@ -391,9 +357,8 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
               </button>
             </>
           )}
-
           {/* Zoom Controls */}
-          {previewConfig.zoom_enabled && (
+          {previewConfig.zoom_enabled && ()
             <div className="absolute bottom-4 left-4 flex space-x-2">
               <button
                 onClick={handleZoomOut}
@@ -404,11 +369,9 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                 </svg>
               </button>
-              
               <div className="bg-black bg-opacity-50 text-white px-3 py-2 rounded text-sm">
                 {Math.round(zoomLevel * 100)}%
               </div>
-              
               <button
                 onClick={handleZoomIn}
                 disabled={zoomLevel >= 3}
@@ -420,15 +383,13 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
               </button>
             </div>
           )}
-
           {/* Image Counter */}
-          {templateData.thumbnails.length > 1 && (
+          {templateData.thumbnails.length > 1 && ()
             <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded text-sm">
               {currentImageIndex + 1} / {templateData.thumbnails.length}
             </div>
           )}
         </div>
-
         {/* Details Panel */}
         <div className="w-96 flex flex-col">
           {/* Header */}
@@ -448,7 +409,6 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                   <span>{templateData.category}</span>
                 </div>
               </div>
-              
               <button
                 onClick={onClose}
                 className="p-2 text-gray-400 hover:text-gray-600"
@@ -458,16 +418,15 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                 </svg>
               </button>
             </div>
-
             {/* Author */}
             <div className="flex items-center space-x-3 mb-4">
-              {templateData.authorAvatar ? (
+              {templateData.authorAvatar ? ()
                 <img
                   src={templateData.authorAvatar}
                   alt={templateData.author}
                   className="w-8 h-8 rounded-full"
                 />
-              ) : (
+              ) : ()
                 <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
                   <span className="text-xs font-medium text-gray-600">
                     {templateData.author.charAt(0).toUpperCase()}
@@ -479,11 +438,10 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                 <div className="text-xs text-gray-500">Template Creator</div>
               </div>
             </div>
-
             {/* Price and Actions */}
             <div className="flex items-center justify-between">
               <div>
-                {templateData.originalPrice && templateData.originalPrice > templateData.price ? (
+                {templateData.originalPrice && templateData.originalPrice > templateData.price ? ()
                   <div>
                     <span className="text-lg font-bold text-green-600">
                       {formatPrice(templateData.price, templateData.currency)}
@@ -492,13 +450,12 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                       {formatPrice(templateData.originalPrice, templateData.currency)}
                     </span>
                   </div>
-                ) : (
+                ) : ()
                   <span className="text-lg font-bold text-gray-900">
                     {templateData.price === 0 ? 'Free' : formatPrice(templateData.price, templateData.currency)}
                   </span>
                 )}
               </div>
-              
               <div className="flex items-center space-x-2">
                 <button
                   onClick={handleWishlistToggle}
@@ -514,8 +471,7 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
                 </button>
-                
-                {previewConfig.sharing_enabled && (
+                {previewConfig.sharing_enabled && ()
                   <div className="relative">
                     <button
                       onClick={() => setShowShareMenu(!showShareMenu)}
@@ -526,8 +482,7 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                       </svg>
                     </button>
-                    
-                    {showShareMenu && (
+                    {showShareMenu && ()
                       <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-10">
                         <button
                           onClick={() => handleShare('twitter')}
@@ -560,11 +515,10 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
               </div>
             </div>
           </div>
-
           {/* Tabs */}
           <div className="border-b border-gray-200">
             <nav className="flex -mb-px">
-              {['overview', 'details', 'reviews'].map((tab) => (
+              {['overview', 'details', 'reviews'].map((tab) => ()
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab as any)}
@@ -579,20 +533,18 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
               ))}
             </nav>
           </div>
-
           {/* Tab Content */}
           <div className="flex-1 overflow-y-auto p-6">
-            {activeTab === 'overview' && (
+            {activeTab === 'overview' && ()
               <div className="space-y-4">
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">Description</h3>
                   <p className="text-sm text-gray-600">{templateData.description}</p>
                 </div>
-                
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">What's Included</h3>
                   <ul className="text-sm text-gray-600 space-y-1">
-                    {templateData.whatsIncluded.map((item, index) => (
+                    {templateData.whatsIncluded.map((item, index) => ()
                       <li key={index} className="flex items-center">
                         <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -602,11 +554,10 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                     ))}
                   </ul>
                 </div>
-                
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">Tags</h3>
                   <div className="flex flex-wrap gap-2">
-                    {templateData.tags.map((tag) => (
+                    {templateData.tags.map((tag) => ()
                       <span key={tag} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
                         {tag}
                       </span>
@@ -615,8 +566,7 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                 </div>
               </div>
             )}
-
-            {activeTab === 'details' && (
+            {activeTab === 'details' && ()
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
@@ -636,23 +586,21 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                     <div className="text-gray-600">{templateData.lastUpdated.toLocaleDateString()}</div>
                   </div>
                 </div>
-                
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">Compatibility</h3>
                   <div className="flex flex-wrap gap-2">
-                    {templateData.compatibility.map((app) => (
+                    {templateData.compatibility.map((app) => ()
                       <span key={app} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
                         {app}
                       </span>
                     ))}
                   </div>
                 </div>
-                
-                {templateData.requirements.length > 0 && (
+                {templateData.requirements.length > 0 && ()
                   <div>
                     <h3 className="font-medium text-gray-900 mb-2">Requirements</h3>
                     <ul className="text-sm text-gray-600 space-y-1">
-                      {templateData.requirements.map((req, index) => (
+                      {templateData.requirements.map((req, index) => ()
                         <li key={index} className="flex items-start">
                           <span className="text-yellow-500 mr-2">•</span>
                           {req}
@@ -663,8 +611,7 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                 )}
               </div>
             )}
-
-            {activeTab === 'reviews' && (
+            {activeTab === 'reviews' && ()
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
@@ -673,14 +620,13 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                     <span className="text-gray-500">({templateData.reviewCount} reviews)</span>
                   </div>
                 </div>
-                
                 {/* Mock reviews */}
                 <div className="space-y-4">
                   {[
                     { name: 'Sarah Johnson', rating: 5, comment: 'Excellent template! Very well designed and easy to customize.', date: '2 days ago' },
                     { name: 'Mike Chen', rating: 4, comment: 'Good quality, though I wish it had more color variations.', date: '1 week ago' },
                     { name: 'Emma Wilson', rating: 5, comment: 'Perfect for my project. Great value for money!', date: '2 weeks ago' }
-                  ].map((review, index) => (
+                  ].map((review, index) => ()
                     <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-2">
@@ -696,27 +642,26 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
               </div>
             )}
           </div>
-
           {/* Action Buttons */}
           <div className="border-t border-gray-200 p-6">
             <div className="space-y-3">
-              {templateData.isPurchased || templateData.canDownload ? (
+              {templateData.isPurchased || templateData.canDownload ? ()
                 <button
                   onClick={handleDownload}
                   className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 transition-all font-medium"
                 >
-                  {previewConfig.download_enabled ? (
+                  {previewConfig.download_enabled ? ()
                     <>
                       <svg className="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-4-4m4 4l4-4m-4-4V4" />
                       </svg>
                       Download Template
                     </>
-                  ) : (
+                  ) : ()
                     'View Template'
                   )}
                 </button>
-              ) : (
+              ) : ()
                 <button
                   onClick={handlePurchase}
                   className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-all font-medium"
@@ -724,8 +669,7 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({
                   {templateData.price === 0 ? 'Get Free Template' : `Purchase for ${formatPrice(templateData.price, templateData.currency)}`}
                 </button>
               )}
-              
-              {templateData.demoUrl && (
+              {templateData.demoUrl && ()
                 <button
                   onClick={() => window.open(templateData.demoUrl, '_blank')}
                   className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-200 transition-all font-medium"

@@ -22,7 +22,7 @@ declare class WorkflowService {
     updateWorkflowConfig(configId: string, updates: Partial<WorkflowConfig>): Promise<WorkflowConfig>;
     deleteWorkflowConfig(configId: string): Promise<void>;
     getWorkflowInstance(resourceId: string, resourceType: string): Promise<WorkflowInstance | null>;
-    createWorkflowInstance(
+    createWorkflowInstance()
       resourceId: string,
       resourceType: string,
       configId: string,
@@ -49,7 +49,7 @@ declare class WorkflowService {
     updateWebhook(webhookId: string, updates: Partial<WorkflowWebhook>): Promise<WorkflowWebhook>;
     deleteWebhook(webhookId: string): Promise<void>;
     getScheduledExecutions(resourceId?: string, resourceType?: string): Promise<ScheduledExecution[]>;
-    createScheduledExecution(
+    createScheduledExecution()
       execution: Omit<ScheduledExecution,
       'id' | 'created_at' | 'updated_at' | 'execution_count' | 'failure_count'>
     ): Promise<ScheduledExecution>;

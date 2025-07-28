@@ -6,7 +6,6 @@
  * 
  * Task: E16-1753114247017-86B04D - Implement trending comments
  */
-
 import React, { useState, useEffect } from 'react';
 import {
   TrendingComment,
@@ -18,7 +17,6 @@ import {
 } from '../../types/TrendingCommentsTypes';
 import { TrendingCommentsService } from '../../services/TrendingCommentsService';
 import { TrendingCommentCard } from './TrendingCommentCard';
-
 interface TrendingCommentsListProps {
   resourceId: string;
   resourceType: CommentableResourceType;
@@ -30,7 +28,7 @@ interface TrendingCommentsListProps {
   onCommentEngagement?: (commentId: string, engagementType: string) => void;
 }
 
-export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
+export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({)
   resourceId,
   resourceType,
   initialPeriod = '24h',
@@ -48,19 +46,15 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
   const [response, setResponse] = useState<TrendingCommentsResponse | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [offset, setOffset] = useState(0);
-
-  const trendingService = new TrendingCommentsService({
-    baseUrl: 'https://prompt-spaghetti.vercel.app'
+  const trendingService = new TrendingCommentsService({)
+    baseUrl: 'https://prompt-spaghetti.vercel.app',
   });
-
   useEffect(() => {
     loadTrendingComments();
   }, [resourceId, resourceType, period, sortOrder]);
-
   const loadTrendingComments = async (loadMore = false) => {
     setIsLoading(true);
     setError(null);
-
     try {
       const request: GetTrendingCommentsRequest = {
         resourceId,
@@ -69,11 +63,9 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
         sortOrder,
         limit,
         offset: loadMore ? offset : 0,
-        includeReplies: true
+        includeReplies: true,
       };
-
       const trendingResponse = await trendingService.getTrendingComments(request);
-      
       if (loadMore) {
         setComments(prev => [...prev, ...trendingResponse.results.trendingComments]);
         setOffset(prev => prev + limit);
@@ -81,7 +73,6 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
         setComments(trendingResponse.results.trendingComments);
         setOffset(limit);
       }
-      
       setResponse(trendingResponse);
       setHasMore(trendingResponse.pagination.hasMore);
     } catch (err) {
@@ -90,24 +81,21 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
       setIsLoading(false);
     }
   };
-
   const handleLoadMore = () => {
     if (!isLoading && hasMore) {
       loadTrendingComments(true);
     }
   };
-
   const handleEngagement = async (commentId: string, engagementType: string) => {
     try {
       // Track engagement
-      await trendingService.trackEngagement(
+      await trendingService.trackEngagement()
         commentId,
         'current-user-id', // TODO: Get from auth context
         engagementType as any
       );
-      
       // Update local state optimistically
-      setComments(prev => prev.map(comment => {
+      setComments(prev => prev.map(comment => {)
         if (comment.commentId === commentId) {
           const updatedMetrics = { ...comment.score.metrics };
           switch (engagementType) {
@@ -126,32 +114,28 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
           }
           return {
             ...comment,
-            score: {
+            score: {,
               ...comment.score,
-              metrics: updatedMetrics
+              metrics: updatedMetrics,
             }
           };
         }
         return comment;
       }));
-      
       onCommentEngagement?.(commentId, engagementType);
     } catch (err) {
       console.error('Failed to track engagement:', err);
     }
   };
-
   const formatNumber = (num: number) => {
     if (num >= 1000) {
       return (num / 1000).toFixed(1) + 'K';
     }
     return num.toString();
   };
-
   const renderFilters = () => {
     if (!showFilters) return null;
-
-    return (
+    return ()
       <div style={{
         padding: '16px',
         backgroundColor: '#f8fafc',
@@ -160,14 +144,14 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
         display: 'flex',
         gap: '16px',
         alignItems: 'center',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
       }}>
         {/* Time Period Filter */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <label style={{
             fontSize: '14px',
             fontWeight: '500',
-            color: '#374151'
+            color: '#374151',
           }}>
             Period:
           </label>
@@ -179,7 +163,7 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
               border: '1px solid #d1d5db',
               borderRadius: '6px',
               fontSize: '14px',
-              backgroundColor: 'white'
+              backgroundColor: 'white',
             }}
           >
             <option value="1h">Last Hour</option>
@@ -190,13 +174,12 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
             <option value="all_time">All Time</option>
           </select>
         </div>
-
         {/* Sort Order Filter */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <label style={{
             fontSize: '14px',
             fontWeight: '500',
-            color: '#374151'
+            color: '#374151',
           }}>
             Sort:
           </label>
@@ -208,7 +191,7 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
               border: '1px solid #d1d5db',
               borderRadius: '6px',
               fontSize: '14px',
-              backgroundColor: 'white'
+              backgroundColor: 'white',
             }}
           >
             <option value="trending">🔥 Trending</option>
@@ -218,7 +201,6 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
             <option value="oldest">📅 Oldest First</option>
           </select>
         </div>
-
         {/* Refresh Button */}
         <button
           onClick={() => loadTrendingComments()}
@@ -239,13 +221,10 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
       </div>
     );
   };
-
   const renderAnalytics = () => {
     if (!showAnalytics || !response) return null;
-
     const summary = response.results.summary;
-    
-    return (
+    return ()
       <div style={{
         padding: '16px',
         backgroundColor: '#f0f9ff',
@@ -257,64 +236,60 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
           margin: '0 0 12px 0',
           fontSize: '16px',
           fontWeight: '600',
-          color: '#0c4a6e'
+          color: '#0c4a6e',
         }}>
           📊 Conversation Analytics
         </h4>
-        
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-          gap: '12px'
+          gap: '12px',
         }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{
               fontSize: '24px',
               fontWeight: '700',
-              color: '#1e40af'
+              color: '#1e40af',
             }}>
               {formatNumber(summary.totalEngagements)}
             </div>
             <div style={{
               fontSize: '12px',
-              color: '#6b7280'
+              color: '#6b7280',
             }}>
               Total Engagements
             </div>
           </div>
-          
           <div style={{ textAlign: 'center' }}>
             <div style={{
               fontSize: '24px',
               fontWeight: '700',
-              color: '#059669'
+              color: '#059669',
             }}>
               {summary.uniqueParticipants}
             </div>
             <div style={{
               fontSize: '12px',
-              color: '#6b7280'
+              color: '#6b7280',
             }}>
               Unique Participants
             </div>
           </div>
-          
           <div style={{ textAlign: 'center' }}>
             <div style={{
               fontSize: '24px',
               fontWeight: '700',
-              color: '#d97706'
+              color: '#d97706',
             }}>
               {summary.averageScore.toFixed(1)}
             </div>
             <div style={{
               fontSize: '12px',
-              color: '#6b7280'
+              color: '#6b7280',
             }}>
               Avg Score
             </div>
           </div>
-          
           <div style={{ textAlign: 'center' }}>
             <div style={{
               fontSize: '16px',
@@ -327,23 +302,22 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
             </div>
             <div style={{
               fontSize: '12px',
-              color: '#6b7280'
+              color: '#6b7280',
             }}>
               Health Score
             </div>
           </div>
         </div>
-        
-        {summary.topHashtags.length > 0 && (
+        {summary.topHashtags.length > 0 && ()
           <div style={{ marginTop: '12px' }}>
             <span style={{
               fontSize: '12px',
               color: '#6b7280',
-              marginRight: '8px'
+              marginRight: '8px',
             }}>
               Trending topics:
             </span>
-            {summary.topHashtags.map(hashtag => (
+            {summary.topHashtags.map(hashtag => ()
               <span
                 key={hashtag}
                 style={{
@@ -353,7 +327,7 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
                   color: '#1e40af',
                   borderRadius: '4px',
                   fontSize: '12px',
-                  marginRight: '6px'
+                  marginRight: '6px',
                 }}
               >
                 #{hashtag}
@@ -364,9 +338,8 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
       </div>
     );
   };
-
   if (error) {
-    return (
+    return ()
       <div style={{
         padding: '40px',
         textAlign: 'center',
@@ -386,7 +359,7 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
             color: 'white',
             border: 'none',
             borderRadius: '6px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Try Again
@@ -394,8 +367,7 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div style={{
       backgroundColor: 'white',
       borderRadius: '12px',
@@ -413,31 +385,29 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
           color: '#111827',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px'
+          gap: '8px',
         }}>
           🔥 Trending Comments
-          {response && (
+          {response && ()
             <span style={{
               fontSize: '14px',
               fontWeight: '400',
-              color: '#6b7280'
+              color: '#6b7280',
             }}>
               ({response.results.qualifiedComments} of {response.results.totalComments})
             </span>
           )}
         </h3>
       </div>
-
       <div style={{ padding: '20px' }}>
         {renderFilters()}
         {renderAnalytics()}
-
         {/* Comments List */}
-        {isLoading && comments.length === 0 ? (
+        {isLoading && comments.length === 0 ? ()
           <div style={{
             padding: '40px',
             textAlign: 'center',
-            color: '#6b7280'
+            color: '#6b7280',
           }}>
             <div style={{
               width: '40px',
@@ -450,11 +420,11 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
             }}></div>
             Loading trending comments...
           </div>
-        ) : comments.length === 0 ? (
+        ) : comments.length === 0 ? ()
           <div style={{
             padding: '40px',
             textAlign: 'center',
-            color: '#6b7280'
+            color: '#6b7280',
           }}>
             <div style={{ fontSize: '48px', marginBottom: '16px' }}>💬</div>
             <div>No trending comments found for this time period.</div>
@@ -462,9 +432,9 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
               Try selecting a different time period or sort order.
             </div>
           </div>
-        ) : (
+        ) : ()
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {comments.map((comment, index) => (
+            {comments.map((comment, index) => ()
               <TrendingCommentCard
                 key={comment.commentId}
                 comment={comment}
@@ -472,9 +442,8 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
                 onEngagement={handleEngagement}
               />
             ))}
-            
             {/* Load More Button */}
-            {hasMore && (
+            {hasMore && ()
               <div style={{ textAlign: 'center', marginTop: '20px' }}>
                 <button
                   onClick={handleLoadMore}

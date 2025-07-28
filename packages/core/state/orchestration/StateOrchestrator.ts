@@ -4,7 +4,6 @@
  * 
  * Cross-domain state coordination and synchronization
  */
-
 import { EventEmitter } from 'events';
 import { BaseStateContainer } from '../containers/BaseStateContainer';
 import { globalEventBus } from '../../shared/services/EventBus';
@@ -75,31 +74,24 @@ export class StateOrchestrator extends EventEmitter {
   private isProcessingQueue = false;
   private maxRetries = 3;
   private transactionTimeout = 30000; // 30 seconds
-
   constructor() {
     super();
     this.setupEventHandling();
     this.setupCoordinationRules();
   }
-
   // Domain registration
   registerDomain(domain: DomainStateContainer): void {
     const domainName = domain.getDomainName();
-    
     if (this.domains.has(domainName)) {
-      throw new Error(`Domain ${domainName} is already registered`);
+      throw new Error(`Domain ${domainName} is already registered`);}
     }
-
     this.domains.set(domainName, domain);
-    
     // Subscribe to domain state changes
     domain.on('stateChanged', (event) => {
       this.handleDomainStateChange(event);
     });
-
     this.emit('domainRegistered', { domain: domainName });
   }
-
   unregisterDomain(domainName: string): void {
     const domain = this.domains.get(domainName);
     if (domain) {
@@ -108,13 +100,11 @@ export class StateOrchestrator extends EventEmitter {
       this.emit('domainUnregistered', { domain: domainName });
     }
   }
-
   // Cross-domain event handling
   async handleCrossDomainEvent(event: DomainEvent): Promise<void> {
     try {
       // Add to processing queue
       this.eventQueue.push(event);
-      
       // Process queue if not already processing
       if (!this.isProcessingQueue) {
         await this.processEventQueue();
@@ -124,10 +114,8 @@ export class StateOrchestrator extends EventEmitter {
       throw error;
     }
   }
-
   private async processEventQueue(): Promise<void> {
     this.isProcessingQueue = true;
-
     try {
       while (this.eventQueue.length > 0) {
         const event = this.eventQueue.shift()!;
@@ -137,65 +125,55 @@ export class StateOrchestrator extends EventEmitter {
       this.isProcessingQueue = false;
     }
   }
-
   private async processEvent(event: DomainEvent): Promise<void> {
     // Find applicable coordination rules
-    const applicableRules = this.coordinationRules.filter(rule => 
+    const applicableRules = this.coordinationRules.filter(rule => ;)
       rule.sourceDomain === event.domain &&
       rule.eventTypes.includes(event.type) &&
       (!rule.condition || rule.condition(event))
     );
-
     // Sort by priority
     applicableRules.sort((a, b) => b.priority - a.priority);
-
     // Process each rule
     for (const rule of applicableRules) {
       try {
         await this.applyCoordinationRule(rule, event);
       } catch (error) {
-        console.error(`Failed to apply coordination rule ${rule.name}:`, error);
+        console.error(`Failed to apply coordination rule ${rule.name}:`, error);}
         this.emit('ruleError', { rule: rule.name, event, error });
       }
     }
   }
-
   private async applyCoordinationRule(rule: StateCoordinationRule, event: DomainEvent): Promise<void> {
     // Transform event if transformer provided
     const eventsToApply = rule.transform ? rule.transform(event) : [event];
-
     // Create cross-domain changes
-    const changes: DomainStateChange[] = eventsToApply.map(e => ({
+    const changes: DomainStateChange[] = eventsToApply.map(e => ({)
       domain: e.domain,
       path: e.payload.path || '',
       value: e.payload.value,
       operation: e.payload.operation || 'update',
-      metadata: e.payload.metadata
+      metadata: e.payload.metadata,
     }));
-
     const crossDomainChange: CrossDomainChange = {
       id: this.generateChangeId(),
       sourceDomain: rule.sourceDomain,
       targetDomains: rule.targetDomains,
       changes,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
-
     // Apply changes to target domains
     await this.applyCrossDomainChanges(crossDomainChange);
   }
-
   // Cross-domain transaction management
   async atomicCrossDomainUpdate(changes: CrossDomainChange[]): Promise<void> {
     const transactionId = this.generateTransactionId();
     const allDomains = new Set<string>();
-    
     // Collect all affected domains
-    changes.forEach(change => {
+    changes.forEach(change => {)
       allDomains.add(change.sourceDomain);
       change.targetDomains.forEach(domain => allDomains.add(domain));
     });
-
     const transaction: TransactionContext = {
       id: transactionId,
       initiator: changes[0]?.sourceDomain || 'system',
@@ -205,22 +183,16 @@ export class StateOrchestrator extends EventEmitter {
       startTime: Date.now(),
       timeout: Date.now() + this.transactionTimeout
     };
-
     this.activeTransactions.set(transactionId, transaction);
-
     try {
       // Phase 1: Prepare all domains
       await this.prepareTransaction(transaction);
-      
       // Phase 2: Apply all changes
       await this.applyTransactionChanges(transaction);
-      
       // Phase 3: Commit transaction
       await this.commitTransaction(transaction);
-      
       transaction.status = 'committed';
       this.emit('transactionCompleted', { transactionId, changes });
-      
     } catch (error) {
       // Rollback on any failure
       await this.rollbackTransaction(transaction);
@@ -231,65 +203,54 @@ export class StateOrchestrator extends EventEmitter {
       this.activeTransactions.delete(transactionId);
     }
   }
-
   private async prepareTransaction(transaction: TransactionContext): Promise<void> {
-    const preparePromises = transaction.participants.map(async domainName => {
+    const preparePromises = transaction.participants.map(async domainName => {)
       const domain = this.domains.get(domainName);
       if (!domain) {
-        throw new Error(`Domain ${domainName} not found`);
+        throw new Error(`Domain ${domainName} not found`);}
       }
-      
       await domain.prepareForTransaction(transaction.id);
     });
-
     await Promise.all(preparePromises);
   }
-
   private async applyTransactionChanges(transaction: TransactionContext): Promise<void> {
     for (const crossDomainChange of transaction.changes) {
       await this.applyCrossDomainChanges(crossDomainChange);
     }
   }
-
   private async commitTransaction(transaction: TransactionContext): Promise<void> {
-    const commitPromises = transaction.participants.map(async domainName => {
+    const commitPromises = transaction.participants.map(async domainName => {)
       const domain = this.domains.get(domainName);
       if (domain) {
         await domain.commitTransaction(transaction.id);
       }
     });
-
     await Promise.all(commitPromises);
   }
-
   private async rollbackTransaction(transaction: TransactionContext): Promise<void> {
-    const rollbackPromises = transaction.participants.map(async domainName => {
+    const rollbackPromises = transaction.participants.map(async domainName => {)
       const domain = this.domains.get(domainName);
       if (domain) {
         try {
           await domain.rollbackTransaction(transaction.id);
         } catch (error) {
-          console.error(`Failed to rollback domain ${domainName}:`, error);
+          console.error(`Failed to rollback domain ${domainName}:`, error);}
         }
       }
     });
-
     await Promise.all(rollbackPromises);
   }
-
   private async applyCrossDomainChanges(crossDomainChange: CrossDomainChange): Promise<void> {
-    const applicationPromises = crossDomainChange.targetDomains.map(async domainName => {
+    const applicationPromises = crossDomainChange.targetDomains.map(async domainName => {)
       const domain = this.domains.get(domainName);
       if (!domain) {
-        console.warn(`Target domain ${domainName} not found`);
+        console.warn(`Target domain ${domainName} not found`);}
         return;
       }
-
       // Find changes for this domain
-      const domainChanges = crossDomainChange.changes.filter(change => 
+      const domainChanges = crossDomainChange.changes.filter(change => ;)
         change.domain === domainName
       );
-
       // Apply each change
       for (const change of domainChanges) {
         if (domain.canAcceptChange(change)) {
@@ -297,37 +258,32 @@ export class StateOrchestrator extends EventEmitter {
         }
       }
     });
-
     await Promise.all(applicationPromises);
   }
-
   // Domain state change handler
   private handleDomainStateChange(event: any): void {
     const domainEvent: DomainEvent = {
       domain: event.domain,
       type: 'STATE_CHANGED',
-      payload: {
+      payload: {,
         state: event.state,
         prevState: event.prevState,
-        change: event.change
+        change: event.change,
       },
       timestamp: Date.now(),
-      source: 'local'
+      source: 'local',
     };
-
     // Emit to global event bus for other listeners
     globalEventBus.emit('domain:stateChanged', domainEvent);
-
     // Process cross-domain coordination
-    this.handleCrossDomainEvent(domainEvent).catch(error => {
+    this.handleCrossDomainEvent(domainEvent).catch(error => {)
       console.error('Failed to handle cross-domain event:', error);
     });
   }
-
   // Setup default coordination rules
   private setupCoordinationRules(): void {
     // Graph Editor → Admin Dashboard coordination
-    this.addCoordinationRule({
+    this.addCoordinationRule({)
       name: 'graph-to-admin-metrics',
       sourceDomain: 'graph-editor',
       targetDomains: ['admin-dashboard'],
@@ -336,41 +292,39 @@ export class StateOrchestrator extends EventEmitter {
         ...event,
         domain: 'admin-dashboard',
         type: 'UPDATE_METRICS',
-        payload: {
+        payload: {,
           path: 'metrics.graphActivity',
-          value: {
+          value: {,
             lastModified: event.timestamp,
-            executionCount: 1
+            executionCount: 1,
           },
-          operation: 'update'
+          operation: 'update',
         }
       }],
-      priority: 100
+      priority: 100,
     });
-
     // Security → All Domains coordination
-    this.addCoordinationRule({
+    this.addCoordinationRule({)
       name: 'security-to-all',
       sourceDomain: 'security',
       targetDomains: ['graph-editor', 'admin-dashboard', 'runtime'],
       eventTypes: ['ACCESS_REVOKED', 'SECURITY_VIOLATION'],
       transform: (event) => {
-        return ['graph-editor', 'admin-dashboard', 'runtime'].map(domain => ({
+        return ['graph-editor', 'admin-dashboard', 'runtime'].map(domain => ({)
           ...event,
           domain,
           type: 'SECURITY_UPDATE',
-          payload: {
+          payload: {,
             path: 'security.status',
             value: event.payload,
-            operation: 'update'
+            operation: 'update',
           }
         }));
       },
-      priority: 200
+      priority: 200,
     });
-
     // Runtime → Graph Editor coordination
-    this.addCoordinationRule({
+    this.addCoordinationRule({)
       name: 'runtime-to-graph',
       sourceDomain: 'runtime',
       targetDomains: ['graph-editor'],
@@ -379,90 +333,75 @@ export class StateOrchestrator extends EventEmitter {
         ...event,
         domain: 'graph-editor',
         type: 'UPDATE_EXECUTION_STATE',
-        payload: {
+        payload: {,
           path: 'execution.status',
           value: event.payload,
-          operation: 'update'
+          operation: 'update',
         }
       }],
-      priority: 150
+      priority: 150,
     });
   }
-
   // Event handling setup
   private setupEventHandling(): void {
     // Handle global events from event bus
     globalEventBus.on('domain:requestSync', this.handleSyncRequest.bind(this));
     globalEventBus.on('domain:conflict', this.handleConflict.bind(this));
-    
     // Cleanup expired transactions
     setInterval(() => {
       this.cleanupExpiredTransactions();
     }, 5000);
   }
-
   private handleSyncRequest(event: any): void {
     // Handle explicit sync requests between domains
-    this.handleCrossDomainEvent(event).catch(error => {
+    this.handleCrossDomainEvent(event).catch(error => {)
       console.error('Failed to handle sync request:', error);
     });
   }
-
   private handleConflict(event: any): void {
     // Handle conflict resolution requests
     this.emit('conflictDetected', event);
   }
-
   private cleanupExpiredTransactions(): void {
     const now = Date.now();
-    
     for (const [transactionId, transaction] of this.activeTransactions) {
       if (now > transaction.timeout) {
-        console.warn(`Transaction ${transactionId} expired, rolling back`);
-        this.rollbackTransaction(transaction).catch(error => {
-          console.error(`Failed to rollback expired transaction ${transactionId}:`, error);
+        console.warn(`Transaction ${transactionId} expired, rolling back`);}
+        this.rollbackTransaction(transaction).catch(error => {)
+          console.error(`Failed to rollback expired transaction ${transactionId}:`, error);}
         });
         this.activeTransactions.delete(transactionId);
       }
     }
   }
-
   // Public coordination rule management
   addCoordinationRule(rule: StateCoordinationRule): void {
     this.coordinationRules.push(rule);
     this.coordinationRules.sort((a, b) => b.priority - a.priority);
   }
-
   removeCoordinationRule(name: string): void {
     this.coordinationRules = this.coordinationRules.filter(rule => rule.name !== name);
   }
-
   getCoordinationRules(): StateCoordinationRule[] {
     return [...this.coordinationRules];
   }
-
   // Utility methods
   private generateChangeId(): string {
-    return `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   private generateTransactionId(): string {
-    return `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }
-
   // Domain query methods
   getDomain(name: string): DomainStateContainer | undefined {
     return this.domains.get(name);
   }
-
   getRegisteredDomains(): string[] {
     return Array.from(this.domains.keys());
   }
-
   getDomainCount(): number {
     return this.domains.size;
   }
-
   // Health and debugging
   getHealthStatus(): any {
     return {
@@ -470,18 +409,15 @@ export class StateOrchestrator extends EventEmitter {
       activeTransactions: this.activeTransactions.size,
       coordinationRules: this.coordinationRules.length,
       queuedEvents: this.eventQueue.length,
-      isProcessing: this.isProcessingQueue
+      isProcessing: this.isProcessingQueue,
     };
   }
-
   // Domain dependency resolution
   async resolveDomainDependencies(): Promise<string[]> {
     const loadOrder: string[] = [];
     const dependencies = new Map<string, string[]>();
-    
     // Build dependency graph from domain metadata
     // This would integrate with the domain registry system
-    
     return loadOrder;
   }
 }
@@ -509,7 +445,7 @@ export function useStateOrchestrator() {
   return globalStateOrchestrator;
 }
 
-export function useCrossDomainState<T>(
+export function useCrossDomainState<T>()
   domains: string[],
   selector: (states: Record<string, any>) => T
 ): T | null {

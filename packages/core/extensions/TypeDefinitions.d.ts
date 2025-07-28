@@ -33,7 +33,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         permissions?: string[] | undefined;
         dependencies?: string[] | undefined;
     }>;
-    NodeExtension: z.ZodObject<{
+    NodeExtension: z.ZodObject<{,
         extensionType: z.ZodLiteral<"node">;
         getNodeDefinitions: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
         createNodeInstance: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
@@ -67,7 +67,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         onNodeDestroyed?: ((...args: unknown[]) => unknown) | undefined;
         createAdvancedNodeInstance?: ((...args: unknown[]) => unknown) | undefined;
     }>;
-    UIExtension: z.ZodObject<{
+    UIExtension: z.ZodObject<{,
         extensionType: z.ZodLiteral<"ui">;
         getComponentDefinitions: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
         createComponentInstance: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
@@ -101,7 +101,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         onUIDestroyed?: ((...args: unknown[]) => unknown) | undefined;
         onThemeChanged?: ((...args: unknown[]) => unknown) | undefined;
     }>;
-    TransformExtension: z.ZodObject<{
+    TransformExtension: z.ZodObject<{,
         extensionType: z.ZodLiteral<"transform">;
         getTransformDefinitions: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
         createTransformInstance: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
@@ -135,7 +135,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         onTransformError?: ((...args: unknown[]) => unknown) | undefined;
         createPipeline?: ((...args: unknown[]) => unknown) | undefined;
     }>;
-    StorageExtension: z.ZodObject<{
+    StorageExtension: z.ZodObject<{,
         extensionType: z.ZodLiteral<"storage">;
         getStorageProviders: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
         createStorageProvider: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;

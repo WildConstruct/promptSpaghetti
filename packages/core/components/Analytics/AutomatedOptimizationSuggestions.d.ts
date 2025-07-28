@@ -223,7 +223,7 @@ export type SuggestionPriority = 'low' | 'medium' | 'high' | 'urgent' | 'critica
 export type SuggestionStatus = 'generated' | 'reviewing' | 'approved' | 'implementing' | 'testing' | 'completed' | 'rejected' | 'expired';
 export interface SuggestionImpact {
     expectedLift: number;
-    confidenceInterval: {
+    confidenceInterval: {,
         min: number;
         max: number;
     };
@@ -680,7 +680,7 @@ export interface LearningInsight {
 export type InsightType = 'pattern_discovery' | 'anomaly_detection' | 'trend_identification' | 'correlation_finding' | 'prediction_accuracy' | 'user_behavior_insight' | 'performance_insight';
 export interface SupportingData {
     dataPoints: number;
-    timeRange: {
+    timeRange: {,
         start: number;
         end: number;
     };
@@ -814,7 +814,7 @@ export interface RecognizedPattern {
 }
 export type PatternType = 'user_behavior' | 'performance_cycle' | 'seasonal_trend' | 'conversion_path' | 'traffic_pattern' | 'engagement_pattern';
 export interface PatternContext {
-    timeRange: {
+    timeRange: {,
         start: number;
         end: number;
     };
@@ -838,7 +838,7 @@ export interface OptimizationPrediction {
     type: PredictionType;
     target: string;
     predictedValue: number;
-    confidenceInterval: {
+    confidenceInterval: {,
         min: number;
         max: number;
     };

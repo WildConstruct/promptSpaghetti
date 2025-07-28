@@ -1,7 +1,6 @@
 // packages/core/components/WeightControls/WeightVisualization.tsx
 // Weight Distribution Visualization Components for Story 8.3 Task 2
 // Implements pie chart and bar graph alternatives for visual weight distribution
-
 import React, { useMemo } from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 
@@ -34,7 +33,7 @@ export const getOptionColor = (index: number): string => {
 };
 
 // Pie Chart Component
-const PieChart: React.FC<WeightVisualizationProps> = ({
+const PieChart: React.FC<WeightVisualizationProps> = ({)
   options,
   width = 200,
   height = 200,
@@ -45,60 +44,49 @@ const PieChart: React.FC<WeightVisualizationProps> = ({
   const { slices, totalWeight } = useMemo(() => {
     const total = options.reduce((sum, option) => sum + option.weight, 0);
     let currentAngle = 0;
-    
     const slices = options.map((option, index) => {
       const percentage = total > 0 ? (option.weight / total) * 100 : 0;
       const angle = total > 0 ? (option.weight / total) * 360 : 0;
       const startAngle = currentAngle;
       currentAngle += angle;
-      
       return {
         option,
         percentage,
         angle,
         startAngle,
         endAngle: currentAngle,
-        color: getOptionColor(index)
+        color: getOptionColor(index),
       };
     });
-    
     return { slices, totalWeight: total };
   }, [options]);
-
   const radius = Math.min(width, height) / 2 - 10;
   const centerX = width / 2;
   const centerY = height / 2;
-
   // Generate SVG path for pie slice
   const createPieSlice = (startAngle: number, endAngle: number, radius: number) => {
     const startAngleRad = (startAngle - 90) * (Math.PI / 180);
     const endAngleRad = (endAngle - 90) * (Math.PI / 180);
-    
     const x1 = centerX + radius * Math.cos(startAngleRad);
     const y1 = centerY + radius * Math.sin(startAngleRad);
     const x2 = centerX + radius * Math.cos(endAngleRad);
     const y2 = centerY + radius * Math.sin(endAngleRad);
-    
     const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
-    
-    return `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+    return `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;}
   };
-
   // Calculate label position
   const getLabelPosition = (startAngle: number, endAngle: number, radius: number) => {
     const midAngle = (startAngle + endAngle) / 2;
     const midAngleRad = (midAngle - 90) * (Math.PI / 180);
     const labelRadius = radius * 0.7;
-    
     return {
       x: centerX + labelRadius * Math.cos(midAngleRad),
       y: centerY + labelRadius * Math.sin(midAngleRad)
     };
   };
-
   if (totalWeight === 0) {
-    return (
-      <div className={`weight-visualization pie-chart ${className}`} style={{ width, height }}>
+    return ()
+      <div className={`weight-visualization pie-chart ${className}`} style={{ width, height }}>}
         <svg width={width} height={height}>
           <circle
             cx={centerX}
@@ -122,11 +110,10 @@ const PieChart: React.FC<WeightVisualizationProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`weight-visualization pie-chart ${className}`} style={{ width, height }}>
+  return ()
+    <div className={`weight-visualization pie-chart ${className}`} style={{ width, height }}>}
       <svg width={width} height={height}>
-        {slices.map((slice, index) => (
+        {slices.map((slice, index) => ()
           <g key={slice.option.id}>
             <path
               d={createPieSlice(slice.startAngle, slice.endAngle, radius)}
@@ -135,7 +122,7 @@ const PieChart: React.FC<WeightVisualizationProps> = ({
               strokeWidth="2"
               opacity={0.9}
             />
-            {showLabels && slice.percentage > 5 && (
+            {showLabels && slice.percentage > 5 && ()
               <text
                 x={getLabelPosition(slice.startAngle, slice.endAngle, radius).x}
                 y={getLabelPosition(slice.startAngle, slice.endAngle, radius).y}
@@ -156,7 +143,7 @@ const PieChart: React.FC<WeightVisualizationProps> = ({
 };
 
 // Bar Graph Component
-const BarGraph: React.FC<WeightVisualizationProps> = ({
+const BarGraph: React.FC<WeightVisualizationProps> = ({)
   options,
   width = 300,
   height = 200,
@@ -167,22 +154,18 @@ const BarGraph: React.FC<WeightVisualizationProps> = ({
   const { bars, maxWeight, totalWeight } = useMemo(() => {
     const total = options.reduce((sum, option) => sum + option.weight, 0);
     const max = Math.max(...options.map(option => option.weight), 1);
-    
-    const bars = options.map((option, index) => ({
+    const bars = options.map((option, index) => ({)
       option,
       percentage: total > 0 ? (option.weight / total) * 100 : 0,
       height: max > 0 ? (option.weight / max) * (height - 60) : 0,
-      color: getOptionColor(index)
+      color: getOptionColor(index),
     }));
-    
     return { bars, maxWeight: max, totalWeight: total };
   }, [options, height]);
-
   const barWidth = Math.max(20, (width - 40) / options.length - 5);
   const barSpacing = 5;
-
-  return (
-    <div className={`weight-visualization bar-graph ${className}`} style={{ width, height }}>
+  return ()
+    <div className={`weight-visualization bar-graph ${className}`} style={{ width, height }}>}
       <svg width={width} height={height}>
         {/* Y-axis */}
         <line
@@ -193,7 +176,6 @@ const BarGraph: React.FC<WeightVisualizationProps> = ({
           stroke="#4a5568"
           strokeWidth="1"
         />
-        
         {/* X-axis */}
         <line
           x1="30"
@@ -203,13 +185,11 @@ const BarGraph: React.FC<WeightVisualizationProps> = ({
           stroke="#4a5568"
           strokeWidth="1"
         />
-
         {/* Bars */}
         {bars.map((bar, index) => {
           const x = 35 + index * (barWidth + barSpacing);
           const y = height - 40 - bar.height;
-          
-          return (
+          return ()
             <g key={bar.option.id}>
               <rect
                 x={x}
@@ -221,9 +201,8 @@ const BarGraph: React.FC<WeightVisualizationProps> = ({
                 strokeWidth="1"
                 opacity={0.9}
               />
-              
               {/* Percentage label on top of bar */}
-              {showPercentages && bar.height > 15 && (
+              {showPercentages && bar.height > 15 && ()
                 <text
                   x={x + barWidth / 2}
                   y={y - 5}
@@ -235,9 +214,8 @@ const BarGraph: React.FC<WeightVisualizationProps> = ({
                   {Math.round(bar.percentage)}%
                 </text>
               )}
-              
               {/* Option label at bottom */}
-              {showLabels && (
+              {showLabels && ()
                 <text
                   x={x + barWidth / 2}
                   y={height - 25}
@@ -252,7 +230,6 @@ const BarGraph: React.FC<WeightVisualizationProps> = ({
             </g>
           );
         })}
-
         {/* Y-axis labels */}
         <text x="5" y="25" fill="#a0aec0" fontSize="9">{maxWeight}</text>
         <text x="5" y={height - 35} fill="#a0aec0" fontSize="9">0</text>
@@ -277,14 +254,14 @@ export interface WeightLegendProps {
   className?: string;
 }
 
-export         
-        return (
+export 
+        return ()
           <div
             key={option.id}
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '8px',
             }}
           >
             <div
@@ -293,7 +270,7 @@ export
                 height: '12px',
                 borderRadius: '2px',
                 backgroundColor: getOptionColor(index),
-                flexShrink: 0
+                flexShrink: 0,
               }}
             />
             <span style={{ flex: 1, minWidth: 0 }}>

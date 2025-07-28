@@ -14,54 +14,45 @@ export interface Dispute {
   buyerId: string;
   sellerId: string;
   templateId?: string;
-  
   // Dispute Classification
   type: DisputeType;
   category: DisputeCategory;
   reason: DisputeReason;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  
   // Dispute Details
   amount: number;
   currency: string;
   description: string;
   customerClaim: string;
   merchantResponse?: string;
-  
   // Status and Timeline
   status: DisputeStatus;
   stage: DisputeStage;
   dueDate?: Date;
   responseDeadline?: Date;
-  
   // Evidence and Documentation
   evidence: DisputeEvidence[];
   attachments: DisputeAttachment[];
   communications: DisputeCommunication[];
-  
   // Resolution and Outcome
   outcome?: DisputeOutcome;
   resolution?: DisputeResolution;
   finalAmount?: number;
-  
   // System Integration
   enforcementActions?: string[];
   trustImpact?: DisputeTrustImpact;
   policyViolations?: string[];
-  
   // Audit Trail
   createdAt: Date;
   updatedAt: Date;
   resolvedAt?: Date;
   createdBy: string;
   assignedTo?: string;
-  
   // Metadata
   source: DisputeSource;
   paymentProvider?: string;
   providerDisputeId?: string;
   liabilityShift?: boolean;
-  
   // Appeal Information
   appealable: boolean;
   appealDeadline?: Date;
@@ -97,29 +88,24 @@ export enum DisputeReason {
   UNAUTHORIZED_TRANSACTION = 'unauthorized_transaction',
   FRAUDULENT_TRANSACTION = 'fraudulent_transaction',
   CARD_NOT_PRESENT = 'card_not_present',
-  
   // Authorization-related
   INVALID_AUTHORIZATION = 'invalid_authorization',
   EXPIRED_AUTHORIZATION = 'expired_authorization',
   DECLINED_AUTHORIZATION = 'declined_authorization',
-  
   // Processing errors
   DUPLICATE_TRANSACTION = 'duplicate_transaction',
   INCORRECT_AMOUNT = 'incorrect_amount',
   PROCESSING_ERROR = 'processing_error',
-  
   // Consumer disputes
   PRODUCT_NOT_RECEIVED = 'product_not_received',
   PRODUCT_UNACCEPTABLE = 'product_unacceptable',
   SUBSCRIPTION_CANCELLED = 'subscription_cancelled',
   REFUND_NOT_PROCESSED = 'refund_not_processed',
-  
   // Quality issues
   TEMPLATE_DEFECTIVE = 'template_defective',
   DESCRIPTION_MISMATCH = 'description_mismatch',
   FUNCTIONALITY_ISSUES = 'functionality_issues',
   SECURITY_VULNERABILITIES = 'security_vulnerabilities',
-  
   // General
   GENERAL_DISPUTE = 'general_dispute',
   OTHER = 'other'
@@ -331,7 +317,7 @@ export interface DisputeMonthlyTrend {
 }
 
 export interface DisputeAnalytics {
-  period: {
+  period: {,
     startDate: Date;
     endDate: Date;
   };
@@ -360,7 +346,7 @@ export interface DisputeRecommendation {
   title: string;
   description: string;
   expectedImpact: string;
-  implementation: {
+  implementation: {,
     effort: 'low' | 'medium' | 'high';
     timeline: string;
     resources: string[];

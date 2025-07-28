@@ -6,7 +6,6 @@
  * Modular monitoring widgets for different views and metrics.
  * Supports configurable layouts, real-time updates, and role-based visibility.
  */
-
 import React, { useState, useEffect } from 'react';
 
 // Widget Configuration Types
@@ -19,7 +18,6 @@ export interface WidgetConfig {
   requiredPermissions: string[];
   dataSource: string;
 }
-
 interface MonitoringWidgetProps {
   config: WidgetConfig;
   userRole: string;
@@ -32,23 +30,20 @@ interface MonitoringWidgetProps {
 export const SystemHealthWidget: React.FC<MonitoringWidgetProps> = ({ data, className }) => {
   const healthScore = data?.healthScore || 0;
   const components = data?.components || [];
-  
   const getHealthColor = (score: number) => {
     if (score >= 95) return '#10b981';
     if (score >= 85) return '#f59e0b';
     if (score >= 70) return '#ef4444';
     return '#dc2626';
   };
-
   const getHealthStatus = (score: number) => {
     if (score >= 95) return 'Excellent';
     if (score >= 85) return 'Good';
     if (score >= 70) return 'Warning';
     return 'Critical';
   };
-
-  return (
-    <div className={`health-widget ${className}`} style={{
+  return ()
+    <div className={`health-widget ${className}`} style={{}
       backgroundColor: '#FFFFFF',
       borderRadius: '8px',
       padding: '20px',
@@ -57,7 +52,6 @@ export const SystemHealthWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
       <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
         System Health Score
       </h3>
-      
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '16px' }}>
         <div style={{ position: 'relative', width: '80px', height: '80px' }}>
           <svg width="80" height="80" viewBox="0 0 80 80">
@@ -84,12 +78,11 @@ export const SystemHealthWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
             transform: 'translate(-50%, -50%)',
             fontSize: '18px',
             fontWeight: '700',
-            color: getHealthColor(healthScore)
+            color: getHealthColor(healthScore),
           }}>
             {healthScore}
           </div>
         </div>
-        
         <div>
           <div style={{ fontSize: '18px', fontWeight: '600', color: '#1f2937', marginBottom: '4px' }}>
             {getHealthStatus(healthScore)}
@@ -99,9 +92,8 @@ export const SystemHealthWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
           </div>
         </div>
       </div>
-
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {components.slice(0, 4).map((component: unknown, index: number) => (
+        {components.slice(0, 4).map((component: unknown, index: number) => ()
           <div key={index} style={{
             display: 'flex',
             alignItems: 'center',
@@ -113,7 +105,7 @@ export const SystemHealthWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
             <span style={{
               fontSize: '12px',
               color: component.status === 'healthy' ? '#10b981' : '#ef4444',
-              fontWeight: '500'
+              fontWeight: '500',
             }}>
               {component.status === 'healthy' ? '●' : '●'} {component.status}
             </span>
@@ -127,8 +119,7 @@ export const SystemHealthWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
 // Resource Usage Widget
 export const ResourceUsageWidget: React.FC<MonitoringWidgetProps> = ({ data, className }) => {
   const resources = data?.resources || {};
-  
-  const ResourceBar = ({ label, value, unit, threshold }: {
+  const ResourceBar = ({ label, value, unit, threshold }: {)
     label: string;
     value: number;
     unit: string;
@@ -139,14 +130,13 @@ export const ResourceUsageWidget: React.FC<MonitoringWidgetProps> = ({ data, cla
       if (value >= threshold.warning) return '#f59e0b';
       return '#10b981';
     };
-
-    return (
+    return ()
       <div style={{ marginBottom: '16px' }}>
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '4px'
+          marginBottom: '4px',
         }}>
           <span style={{ fontSize: '13px', color: '#374151', fontWeight: '500' }}>{label}</span>
           <span style={{ fontSize: '13px', color: '#1f2937', fontWeight: '600' }}>
@@ -158,10 +148,10 @@ export const ResourceUsageWidget: React.FC<MonitoringWidgetProps> = ({ data, cla
           height: '6px',
           backgroundColor: '#f3f4f6',
           borderRadius: '3px',
-          overflow: 'hidden'
+          overflow: 'hidden',
         }}>
           <div style={{
-            width: `${Math.min(value, 100)}%`,
+            width: `${Math.min(value, 100)}%`,}
             height: '100%',
             backgroundColor: getColor(),
             borderRadius: '3px',
@@ -171,9 +161,8 @@ export const ResourceUsageWidget: React.FC<MonitoringWidgetProps> = ({ data, cla
       </div>
     );
   };
-
-  return (
-    <div className={`resource-usage-widget ${className}`} style={{
+  return ()
+    <div className={`resource-usage-widget ${className}`} style={{}
       backgroundColor: '#FFFFFF',
       borderRadius: '8px',
       padding: '20px',
@@ -182,28 +171,24 @@ export const ResourceUsageWidget: React.FC<MonitoringWidgetProps> = ({ data, cla
       <h3 style={{ margin: '0 0 20px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
         Resource Usage
       </h3>
-      
       <ResourceBar
         label="CPU"
         value={resources.cpu || 0}
         unit="%"
         threshold={{ warning: 70, critical: 85 }}
       />
-      
       <ResourceBar
         label="Memory"
         value={resources.memory || 0}
         unit="%"
         threshold={{ warning: 75, critical: 90 }}
       />
-      
       <ResourceBar
         label="Disk"
         value={resources.disk || 0}
         unit="%"
         threshold={{ warning: 80, critical: 95 }}
       />
-      
       <ResourceBar
         label="Network I/O"
         value={resources.network || 0}
@@ -217,19 +202,18 @@ export const ResourceUsageWidget: React.FC<MonitoringWidgetProps> = ({ data, cla
 // API Metrics Widget
 export const APIMetricsWidget: React.FC<MonitoringWidgetProps> = ({ data, className }) => {
   const metrics = data?.api || {};
-  
-  const MetricCard = ({ title, value, unit, trend, trendDirection }: {
+  const MetricCard = ({ title, value, unit, trend, trendDirection }: {)
     title: string;
     value: number;
     unit: string;
     trend?: number;
     trendDirection?: 'up' | 'down' | 'stable';
-  }) => (
+  }) => ()
     <div style={{
       backgroundColor: '#f9fafb',
       borderRadius: '6px',
       padding: '12px',
-      textAlign: 'center'
+      textAlign: 'center',
     }}>
       <div style={{ fontSize: '20px', fontWeight: '700', color: '#1f2937', marginBottom: '4px' }}>
         {typeof value === 'number' ? value.toLocaleString() : value}
@@ -238,14 +222,14 @@ export const APIMetricsWidget: React.FC<MonitoringWidgetProps> = ({ data, classN
         </span>
       </div>
       <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>{title}</div>
-      {trend !== undefined && (
+      {trend !== undefined && ()
         <div style={{
           fontSize: '11px',
           color: trendDirection === 'up' ? '#10b981' : trendDirection === 'down' ? '#ef4444' : '#6b7280',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '2px'
+          gap: '2px',
         }}>
           {trendDirection === 'up' && '↗'}
           {trendDirection === 'down' && '↘'}
@@ -255,9 +239,8 @@ export const APIMetricsWidget: React.FC<MonitoringWidgetProps> = ({ data, classN
       )}
     </div>
   );
-
-  return (
-    <div className={`api-metrics-widget ${className}`} style={{
+  return ()
+    <div className={`api-metrics-widget ${className}`} style={{}
       backgroundColor: '#FFFFFF',
       borderRadius: '8px',
       padding: '20px',
@@ -266,7 +249,6 @@ export const APIMetricsWidget: React.FC<MonitoringWidgetProps> = ({ data, classN
       <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
         API Performance
       </h3>
-      
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
         <MetricCard
           title="Requests/sec"
@@ -275,7 +257,6 @@ export const APIMetricsWidget: React.FC<MonitoringWidgetProps> = ({ data, classN
           trend={5.2}
           trendDirection="up"
         />
-        
         <MetricCard
           title="Avg Latency"
           value={metrics.averageLatency || 0}
@@ -283,7 +264,6 @@ export const APIMetricsWidget: React.FC<MonitoringWidgetProps> = ({ data, classN
           trend={-2.1}
           trendDirection="down"
         />
-        
         <MetricCard
           title="Error Rate"
           value={metrics.errorRate || 0}
@@ -291,7 +271,6 @@ export const APIMetricsWidget: React.FC<MonitoringWidgetProps> = ({ data, classN
           trend={-15.3}
           trendDirection="down"
         />
-        
         <MetricCard
           title="Active Connections"
           value={metrics.activeConnections || 0}
@@ -308,8 +287,7 @@ export const APIMetricsWidget: React.FC<MonitoringWidgetProps> = ({ data, classN
 export const SecurityOverviewWidget: React.FC<MonitoringWidgetProps> = ({ data, onAction, className }) => {
   const security = data?.security || {};
   const threats = security.threats || [];
-  
-  const SecurityMetric = ({ label, value, status }: {
+  const SecurityMetric = ({ label, value, status }: {)
     label: string;
     value: number | string;
     status: 'good' | 'warning' | 'critical';
@@ -317,10 +295,9 @@ export const SecurityOverviewWidget: React.FC<MonitoringWidgetProps> = ({ data, 
     const statusColors = {
       good: '#10b981',
       warning: '#f59e0b',
-      critical: '#ef4444'
+      critical: '#ef4444',
     };
-
-    return (
+    return ()
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -332,16 +309,15 @@ export const SecurityOverviewWidget: React.FC<MonitoringWidgetProps> = ({ data, 
         <span style={{
           fontSize: '14px',
           fontWeight: '600',
-          color: statusColors[status]
+          color: statusColors[status],
         }}>
           {value}
         </span>
       </div>
     );
   };
-
-  return (
-    <div className={`security-overview-widget ${className}`} style={{
+  return ()
+    <div className={`security-overview-widget ${className}`} style={{}
       backgroundColor: '#FFFFFF',
       borderRadius: '8px',
       padding: '20px',
@@ -351,7 +327,7 @@ export const SecurityOverviewWidget: React.FC<MonitoringWidgetProps> = ({ data, 
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: '16px'
+        marginBottom: '16px',
       }}>
         <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
           Security Status
@@ -365,43 +341,38 @@ export const SecurityOverviewWidget: React.FC<MonitoringWidgetProps> = ({ data, 
             borderRadius: '4px',
             fontSize: '12px',
             cursor: 'pointer',
-            color: '#374151'
+            color: '#374151',
           }}
         >
           View Details
         </button>
       </div>
-
       <SecurityMetric
         label="Active Threats"
         value={security.activeThreats || 0}
         status={security.activeThreats > 0 ? 'critical' : 'good'}
       />
-      
       <SecurityMetric
         label="Blocked Attempts"
         value={`${security.blockedAttempts || 0}/24h`}
         status={security.blockedAttempts > 100 ? 'warning' : 'good'}
       />
-      
       <SecurityMetric
         label="Compliance Score"
         value={`${security.complianceScore || 0}%`}
         status={security.complianceScore >= 95 ? 'good' : security.complianceScore >= 85 ? 'warning' : 'critical'}
       />
-      
       <SecurityMetric
         label="Last Security Scan"
         value={security.lastScan ? new Date(security.lastScan).toLocaleDateString() : 'Never'}
         status="good"
       />
-
-      {threats.length > 0 && (
+      {threats.length > 0 && ()
         <div style={{ marginTop: '16px', padding: '12px', backgroundColor: '#fef2f2', borderRadius: '6px' }}>
           <div style={{ fontSize: '12px', fontWeight: '500', color: '#dc2626', marginBottom: '4px' }}>
             Recent Threats Detected
           </div>
-          {threats.slice(0, 2).map((threat: unknown, index: number) => (
+          {threats.slice(0, 2).map((threat: unknown, index: number) => ()
             <div key={index} style={{ fontSize: '11px', color: '#991b1b', marginBottom: '2px' }}>
               • {threat.type}: {threat.source}
             </div>
@@ -415,7 +386,6 @@ export const SecurityOverviewWidget: React.FC<MonitoringWidgetProps> = ({ data, 
 // Real-time Activity Feed Widget
 export const ActivityFeedWidget: React.FC<MonitoringWidgetProps> = ({ data, className }) => {
   const [activities, setActivities] = useState<any[]>(data?.activities || []);
-
   useEffect(() => {
     // Simulate real-time updates
     const interval = setInterval(() => {
@@ -424,15 +394,12 @@ export const ActivityFeedWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
         timestamp: new Date().toISOString(),
         type: 'info',
         message: 'System health check completed',
-        source: 'health-monitor'
+        source: 'health-monitor',
       };
-      
       setActivities(prev => [newActivity, ...prev.slice(0, 9)]);
     }, 30000);
-
     return () => clearInterval(interval);
   }, []);
-
   const getActivityIcon = (type: string) => {
     switch (type) {
     case 'error': return '🔴';
@@ -442,9 +409,8 @@ export const ActivityFeedWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
     default: return '⚪';
     }
   };
-
-  return (
-    <div className={`activity-feed-widget ${className}`} style={{
+  return ()
+    <div className={`activity-feed-widget ${className}`} style={{}
       backgroundColor: '#FFFFFF',
       borderRadius: '8px',
       padding: '20px',
@@ -453,22 +419,21 @@ export const ActivityFeedWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
       <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
         Recent Activity
       </h3>
-      
       <div style={{
         maxHeight: '300px',
         overflowY: 'auto',
         display: 'flex',
         flexDirection: 'column',
-        gap: '8px'
+        gap: '8px',
       }}>
-        {activities.slice(0, 10).map((activity, index) => (
+        {activities.slice(0, 10).map((activity, index) => ()
           <div key={activity.id || index} style={{
             display: 'flex',
             alignItems: 'flex-start',
             gap: '8px',
             padding: '8px',
             backgroundColor: '#f9fafb',
-            borderRadius: '4px'
+            borderRadius: '4px',
           }}>
             <span style={{ fontSize: '12px', marginTop: '2px' }}>
               {getActivityIcon(activity.type)}
@@ -491,12 +456,10 @@ export const ActivityFeedWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
 // Configurable Widget Container
 export const MonitoringWidget: React.FC<MonitoringWidgetProps> = (props) => {
   const { config, userRole } = props;
-  
   // Check permissions
   if (!config.requiredPermissions.includes(userRole) && !config.requiredPermissions.includes('all')) {
     return null;
   }
-
   const getSizeStyles = (size: WidgetConfig['size']) => {
     switch (size) {
     case 'small': return { gridColumn: 'span 1', minHeight: '200px' };
@@ -506,7 +469,6 @@ export const MonitoringWidget: React.FC<MonitoringWidgetProps> = (props) => {
     default: return { gridColumn: 'span 2', minHeight: '250px' };
     }
   };
-
   const renderWidget = () => {
     switch (config.type) {
     case 'metric':
@@ -525,8 +487,7 @@ export const MonitoringWidget: React.FC<MonitoringWidgetProps> = (props) => {
     }
     return <div>Unknown widget: {config.id}</div>;
   };
-
-  return (
+  return ()
     <div style={getSizeStyles(config.size)}>
       {renderWidget()}
     </div>

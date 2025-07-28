@@ -27,13 +27,13 @@ export interface RegionAnnotation {
 }
 export interface RegionArea {
     shape: 'rectangle' | 'circle' | 'polygon' | 'freehand';
-    bounds: {
+    bounds: {,
         x: number;
         y: number;
         width: number;
         height: number;
     };
-    points: Array<{
+    points: Array<{,
         x: number;
         y: number;
     }>;

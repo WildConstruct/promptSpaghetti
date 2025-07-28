@@ -1,6 +1,5 @@
 // Version Selector - UI for selecting source and target versions
 // Story 9.3.2 - Visual Diff Tool
-
 import React, { useMemo } from 'react';
 
 export interface Version {
@@ -21,7 +20,7 @@ export interface VersionSelectorProps {
   className?: string;
 }
 
-export const VersionSelector: React.FC<VersionSelectorProps> = ({
+export const VersionSelector: React.FC<VersionSelectorProps> = ({)
   graphId,
   versions,
   sourceVersionId,
@@ -33,75 +32,65 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
   const sortedVersions = useMemo(() => {
     return [...versions].sort((a, b) => b.version_number - a.version_number);
   }, [versions]);
-
   // Format version display
   const formatVersion = (version: Version) => {
     const date = new Date(version.created_at).toLocaleDateString();
-    const time = new Date(version.created_at).toLocaleTimeString([], { 
+    const time = new Date(version.created_at).toLocaleTimeString([], { )
       hour: '2-digit', 
-      minute: '2-digit' 
+      minute: '2-digit' ,
     });
-    
-    return `v${version.version_number} - ${version.description || 'No description'} (${date} ${time})`;
+    return `v${version.version_number} - ${version.description || 'No description'} (${date} ${time})`;}
   };
-
   // Handle source version change
   const handleSourceChange = (versionId: string) => {
     if (versionId !== targetVersionId) {
       onVersionChange(versionId, targetVersionId);
     }
   };
-
   // Handle target version change
   const handleTargetChange = (versionId: string) => {
     if (versionId !== sourceVersionId) {
       onVersionChange(sourceVersionId, versionId);
     }
   };
-
   // Get quick compare options (recent versions)
   const getQuickCompareOptions = () => {
     if (sortedVersions.length < 2) return [];
-
     return [
       {
         label: 'Current vs Previous',
         source: sortedVersions[1]?.id,
-        target: sortedVersions[0]?.id
+        target: sortedVersions[0]?.id,
       },
       {
         label: 'Current vs 2 versions ago',
         source: sortedVersions[2]?.id,
-        target: sortedVersions[0]?.id
+        target: sortedVersions[0]?.id,
       },
       {
         label: 'Previous vs 2 versions ago',
         source: sortedVersions[2]?.id,
-        target: sortedVersions[1]?.id
+        target: sortedVersions[1]?.id,
       }
     ].filter(option => option.source && option.target);
   };
-
   const quickOptions = getQuickCompareOptions();
-
   if (versions.length === 0) {
-    return (
-      <div className={`text-center py-4 text-gray-500 ${className}`}>
+    return ()
+      <div className={`text-center py-4 text-gray-500 ${className}`}>}
         No versions available for comparison
       </div>
     );
   }
-
   if (versions.length === 1) {
-    return (
-      <div className={`text-center py-4 text-gray-500 ${className}`}>
+    return ()
+      <div className={`text-center py-4 text-gray-500 ${className}`}>}
         Need at least 2 versions to compare
       </div>
     );
   }
-
-  return (
-    <div className={`space-y-4 ${className}`}>
+  return ()
+    <div className={`space-y-4 ${className}`}>}
       {/* Version Selectors */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Source Version */}
@@ -115,7 +104,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
             className="w-full rounded border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500"
           >
             <option value="">Select source version...</option>
-            {sortedVersions.map((version) => (
+            {sortedVersions.map((version) => ()
               <option 
                 key={version.id} 
                 value={version.id}
@@ -127,7 +116,6 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
             ))}
           </select>
         </div>
-
         {/* Target Version */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -139,7 +127,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
             className="w-full rounded border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500"
           >
             <option value="">Select target version...</option>
-            {sortedVersions.map((version) => (
+            {sortedVersions.map((version) => ()
               <option 
                 key={version.id} 
                 value={version.id}
@@ -152,15 +140,14 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
           </select>
         </div>
       </div>
-
       {/* Quick Compare Options */}
-      {quickOptions.length > 0 && (
+      {quickOptions.length > 0 && ()
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Quick Compare Options
           </label>
           <div className="flex flex-wrap gap-2">
-            {quickOptions.map((option, index) => (
+            {quickOptions.map((option, index) => ()
               <button
                 key={index}
                 onClick={() => onVersionChange(option.source!, option.target!)}
@@ -172,9 +159,8 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
           </div>
         </div>
       )}
-
       {/* Swap Button */}
-      {sourceVersionId && targetVersionId && (
+      {sourceVersionId && targetVersionId && ()
         <div className="flex justify-center">
           <button
             onClick={() => onVersionChange(targetVersionId, sourceVersionId)}
@@ -187,9 +173,8 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
           </button>
         </div>
       )}
-
       {/* Validation Message */}
-      {sourceVersionId && targetVersionId && sourceVersionId === targetVersionId && (
+      {sourceVersionId && targetVersionId && sourceVersionId === targetVersionId && ()
         <div className="text-sm text-orange-600 bg-orange-50 border border-orange-200 rounded p-2">
           <div className="flex items-center space-x-1">
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -199,9 +184,8 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
           </div>
         </div>
       )}
-
       {/* Success Message */}
-      {sourceVersionId && targetVersionId && sourceVersionId !== targetVersionId && (
+      {sourceVersionId && targetVersionId && sourceVersionId !== targetVersionId && ()
         <div className="text-sm text-green-600 bg-green-50 border border-green-200 rounded p-2">
           <div className="flex items-center space-x-1">
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">

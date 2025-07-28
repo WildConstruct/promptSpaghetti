@@ -11,7 +11,7 @@ export interface MedievalClothing {
     gender: 'male' | 'female' | 'unisex';
     materials: string[];
     colors: string[];
-    period: {
+    period: {,
         start: number;
         end: number;
     };
@@ -66,7 +66,7 @@ export interface MedievalScene {
     title: string;
     setting: MedievalLocation;
     characters: MedievalCharacter[];
-    timeContext: {
+    timeContext: {,
         season: string;
         timeOfDay: string;
         weather?: string;
@@ -74,7 +74,7 @@ export interface MedievalScene {
     activities: string[];
     socialDynamics: string[];
     historicalElements: string[];
-    sensoryDetails: {
+    sensoryDetails: {,
         sights: string[];
         sounds: string[];
         smells: string[];
@@ -118,7 +118,7 @@ export declare class MedievalDemo {
     /**
      * Generate historically accurate medieval scene
      */
-    generateMedievalScene(options?: {
+    generateMedievalScene(options?: {)
         socialClass?: string;
         location?: string;
         timeOfDay?: string;
@@ -128,7 +128,7 @@ export declare class MedievalDemo {
     /**
      * Get clothing appropriate for character and context
      */
-    getAppropriateClothing(character: MedievalCharacter, context: {
+    getAppropriateClothing(character: MedievalCharacter, context: {)
         occasion?: string;
         season?: string;
         socialSetting?: string;
@@ -136,7 +136,7 @@ export declare class MedievalDemo {
     /**
      * Validate medieval content for historical accuracy
      */
-    validateHistoricalAccuracy(content: {
+    validateHistoricalAccuracy(content: {)
         era?: string;
         materials?: string[];
         socialClasses?: string[];

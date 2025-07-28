@@ -331,7 +331,7 @@ export interface CampaignMetrics {
     costPerClick?: number;
     costPerConversion?: number;
     returnOnAdSpend?: number;
-    kpiProgress: Array<{
+    kpiProgress: Array<{,
         kpi: string;
         current: number;
         target: number;
@@ -353,7 +353,7 @@ export interface PlacementAnalytics {
     activeSlots: number;
     totalPlacements: number;
     activePlacements: number;
-    overallPerformance: {
+    overallPerformance: {,
         totalImpressions: number;
         totalClicks: number;
         averageCTR: number;
@@ -393,7 +393,7 @@ export interface PlacementPreview {
     slotId: string;
     placements: ContentPlacement[];
     previewMode: 'live' | 'staged' | 'test';
-    viewerContext: {
+    viewerContext: {,
         userSegment?: string;
         deviceType: 'desktop' | 'mobile' | 'tablet';
         location?: string;
@@ -412,7 +412,7 @@ export interface PlacementPreview {
 export interface RenderedPlacement {
     placementId: string;
     slotPosition: number;
-    content: {
+    content: {,
         id: string;
         type: ContentType;
         title: string;
@@ -458,7 +458,7 @@ export interface BulkPlacementOperation {
     progress: number;
     successCount: number;
     failureCount: number;
-    errors: Array<{
+    errors: Array<{,
         placementId: string;
         error: string;
     }>;

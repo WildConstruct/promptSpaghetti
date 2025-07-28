@@ -101,7 +101,7 @@ declare class TemplateParser {
 }
 export declare const templateParser: TemplateParser;
 export declare const parseTemplate: (template: string) => TemplateParseResult;
-export declare const getVariableSuggestions: (
+export declare const getVariableSuggestions: ()
   partialName?: string,
   context?: string,
   includeHistory?: boolean

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { NodeData } from '../../types/NodeTypes';
-
 interface RichTextEditorProps {
   value: string;
   onChange: (value: string) => void;
@@ -12,7 +11,7 @@ interface RichTextEditorProps {
   theme?: 'light' | 'dark' | 'cinema';
 }
 
-export const RichTextEditor: React.FC<RichTextEditorProps> = ({
+export const RichTextEditor: React.FC<RichTextEditorProps> = ({)
   value,
   onChange,
   placeholder = 'Enter text...',
@@ -25,32 +24,27 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const [isFocused, setIsFocused] = useState(false);
   const [cursorPosition, setCursorPosition] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
   // Syntax highlighting for template variables
   const highlightSyntax = useCallback((text: string): JSX.Element[] => {
     if (!enableSyntaxHighlighting) {
       return [<span key="text">{text}</span>];
     }
-
     const parts: JSX.Element[] = [];
     let lastIndex = 0;
-
     // Match template variables like {{variable}}
     const variableRegex = /\{\{([^}]+)\}\}/g;
     let match;
-
     while ((match = variableRegex.exec(text)) !== null) {
       // Add text before variable
       if (match.index > lastIndex) {
-        parts.push(
-          <span key={`text-${lastIndex}`}>
+        parts.push()
+          <span key={`text-${lastIndex}`}>}
             {text.slice(lastIndex, match.index)}
           </span>
         );
       }
-
       // Add highlighted variable
-      parts.push(
+      parts.push()
         <span
           key={`var-${match.index}`}
           style={{
@@ -59,58 +53,47 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             padding: '2px 6px',
             borderRadius: 4,
             fontSize: '0.9em',
-            fontWeight: 600
+            fontWeight: 600,
           }}
         >
           {match[0]}
         </span>
       );
-
       lastIndex = match.index + match[0].length;
     }
-
     // Add remaining text
     if (lastIndex < text.length) {
-      parts.push(
-        <span key={`text-${lastIndex}`}>
+      parts.push()
+        <span key={`text-${lastIndex}`}>}
           {text.slice(lastIndex)}
         </span>
       );
     }
-
     return parts.length > 0 ? parts : [<span key="empty">{text}</span>];
   }, [enableSyntaxHighlighting]);
-
   // Toolbar actions
   const insertText = useCallback((textToInsert: string) => {
     if (!textareaRef.current) return;
-
     const textarea = textareaRef.current;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const newValue = value.slice(0, start) + textToInsert + value.slice(end);
-    
     onChange(newValue);
-    
     // Set cursor position after inserted text
     setTimeout(() => {
       textarea.focus();
       textarea.setSelectionRange(start + textToInsert.length, start + textToInsert.length);
     }, 0);
   }, [value, onChange]);
-
   const insertVariable = useCallback(() => {
     insertText('{{variable}}');
   }, [insertText]);
-
   const insertCondition = useCallback(() => {
     insertText('{{if condition}}{{endif}}');
   }, [insertText]);
-
   const insertLoop = useCallback(() => {
     insertText('{{for item in items}}{{endfor}}');
   }, [insertText]);
-
   // Get theme colors
   const getThemeColors = () => {
     switch (theme) {
@@ -120,7 +103,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           border: '#718096',
           text: '#e2e8f0',
           accent: '#4299e1',
-          toolbar: '#2d3748'
+          toolbar: '#2d3748',
         };
       case 'dark':
         return {
@@ -128,7 +111,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           border: '#4a5568',
           text: '#f7fafc',
           accent: '#38a169',
-          toolbar: '#1a202c'
+          toolbar: '#1a202c',
         };
       case 'light':
       default:
@@ -137,17 +120,15 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           border: '#e2e8f0',
           text: '#2d3748',
           accent: '#3182ce',
-          toolbar: '#f7fafc'
+          toolbar: '#f7fafc',
         };
     }
   };
-
   const colors = getThemeColors();
-
-  return (
+  return ()
     <div className="rich-text-editor" style={{ position: 'relative' }}>
       {/* Toolbar */}
-      {showToolbar && (
+      {showToolbar && ()
         <div
           style={{
             display: 'flex',
@@ -155,7 +136,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             padding: 8,
             background: colors.toolbar,
             borderRadius: '6px 6px 0 0',
-            borderBottom: `1px solid ${colors.border}`
+            borderBottom: `1px solid ${colors.border}`}
           }}
         >
           <ToolbarButton
@@ -165,8 +146,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           >
             {'{{var}}'}
           </ToolbarButton>
-          
-          {nodeType === 'concat' && (
+          {nodeType === 'concat' && ()
             <>
               <ToolbarButton
                 onClick={insertCondition}
@@ -184,24 +164,21 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
               </ToolbarButton>
             </>
           )}
-          
           <div style={{ flex: 1 }} />
-          
           <span style={{
             fontSize: 11,
             color: colors.text,
             opacity: 0.7,
-            alignSelf: 'center'
+            alignSelf: 'center',
           }}>
             {value.length} chars
           </span>
         </div>
       )}
-
       {/* Editor Container */}
       <div style={{ position: 'relative' }}>
         {/* Syntax Highlighting Overlay */}
-        {enableSyntaxHighlighting && (
+        {enableSyntaxHighlighting && ()
           <div
             style={{
               position: 'absolute',
@@ -218,13 +195,12 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
               whiteSpace: 'pre-wrap',
               wordWrap: 'break-word',
               overflow: 'hidden',
-              zIndex: 1
+              zIndex: 1,
             }}
           >
             {highlightSyntax(value)}
           </div>
         )}
-
         {/* Actual Textarea */}
         <textarea
           ref={textareaRef}
@@ -242,9 +218,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             height,
             padding: 12,
             background: enableSyntaxHighlighting ? 'transparent' : colors.background,
-            border: `2px solid ${isFocused ? colors.accent : colors.border}`,
+            border: `2px solid ${isFocused ? colors.accent : colors.border}`,}
             borderRadius: showToolbar ? '0 0 6px 6px' : 6,
-            borderTop: showToolbar ? 'none' : `2px solid ${isFocused ? colors.accent : colors.border}`,
+            borderTop: showToolbar ? 'none' : `2px solid ${isFocused ? colors.accent : colors.border}`,}
             color: enableSyntaxHighlighting ? 'transparent' : colors.text,
             fontSize: 14,
             fontFamily: 'SFMono-Regular, Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace',
@@ -253,21 +229,20 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             outline: 'none',
             caretColor: colors.text,
             position: 'relative',
-            zIndex: 2
+            zIndex: 2,
           }}
         />
       </div>
-
       {/* Live Preview for template nodes */}
-      {(nodeType === 'concat' || nodeType === 'template') && value.includes('{{') && (
+      {(nodeType === 'concat' || nodeType === 'template') && value.includes('{{') && ()
         <div
           style={{
             marginTop: 8,
             padding: 8,
             background: colors.toolbar,
-            border: `1px solid ${colors.border}`,
+            border: `1px solid ${colors.border}`,}
             borderRadius: 4,
-            fontSize: 12
+            fontSize: 12,
           }}
         >
           <div style={{ color: colors.text, opacity: 0.7, marginBottom: 4 }}>
@@ -289,7 +264,6 @@ interface ToolbarButtonProps {
   children: React.ReactNode;
   theme: 'light' | 'dark' | 'cinema';
 }
-
 const ToolbarButton: React.FC<ToolbarButtonProps> = ({ onClick, title, children, theme }) => {
   const getButtonColors = () => {
     switch (theme) {
@@ -302,10 +276,8 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({ onClick, title, children,
         return { bg: '#e2e8f0', hover: '#cbd5e0', text: '#2d3748' };
     }
   };
-
   const colors = getButtonColors();
-
-  return (
+  return ()
     <button
       onClick={onClick}
       title={title}
@@ -337,7 +309,6 @@ const renderTemplatePreview = (template: string): string => {
   return template
     .replace(/\{\{([^}]+)\}\}/g, (match, variable) => {
       const varName = variable.trim();
-      
       // Sample data for preview
       const sampleData: Record<string, string> = {
         'name': 'John Doe',
@@ -348,8 +319,7 @@ const renderTemplatePreview = (template: string): string => {
         'item': 'example_item',
         'condition': 'true'
       };
-      
-      return sampleData[varName] || `[${varName}]`;
+      return sampleData[varName] || `[${varName}]`;}
     });
 };
 
@@ -362,7 +332,6 @@ export const NodeSpecificRichEditor: React.FC<{
   theme?: 'light' | 'dark' | 'cinema';
 }> = ({ nodeType, data, field, onChange, theme = 'cinema' }) => {
   const value = (data as any)[field] || '';
-
   const getEditorConfig = () => {
     switch (nodeType) {
       case 'concat':
@@ -370,35 +339,33 @@ export const NodeSpecificRichEditor: React.FC<{
           placeholder: 'Enter template with {{variable}} placeholders...',
           height: 100,
           showToolbar: true,
-          enableSyntaxHighlighting: true
+          enableSyntaxHighlighting: true,
         };
       case 'conditional':
         return {
           placeholder: 'Enter condition expression...',
           height: 60,
           showToolbar: true,
-          enableSyntaxHighlighting: true
+          enableSyntaxHighlighting: true,
         };
       case 'output':
         return {
           placeholder: 'Enter output text or template...',
           height: 80,
           showToolbar: false,
-          enableSyntaxHighlighting: false
+          enableSyntaxHighlighting: false,
         };
       default:
         return {
           placeholder: 'Enter text...',
           height: 80,
           showToolbar: false,
-          enableSyntaxHighlighting: false
+          enableSyntaxHighlighting: false,
         };
     }
   };
-
   const config = getEditorConfig();
-
-  return (
+  return ()
     <RichTextEditor
       value={value}
       onChange={(newValue) => onChange(field, newValue)}

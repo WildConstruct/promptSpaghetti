@@ -15,13 +15,13 @@ export interface HistoricalDataPoint {
 export interface ComplianceTrendReport {
     reportId: string;
     generatedAt: Date;
-    period: {
+    period: {,
         startDate: Date;
         endDate: Date;
         duration: string;
     };
     framework: string;
-    summary: {
+    summary: {,
         totalDataPoints: number;
         averageCompliance: number;
         bestPerformingMetric: string;
@@ -29,7 +29,7 @@ export interface ComplianceTrendReport {
         improvementTrend: 'positive' | 'negative' | 'stable';
         criticalIncidents: number;
     };
-    metrics: {
+    metrics: {,
         name: string;
         currentValue: number;
         historicalAverage: number;
@@ -38,13 +38,13 @@ export interface ComplianceTrendReport {
         complianceRate: number;
         recommendations: string[];
     }[];
-    keyEvents: {
+    keyEvents: {,
         date: Date;
         event: string;
         impact: 'positive' | 'negative' | 'neutral';
         description: string;
     }[];
-    periodicComparison: {
+    periodicComparison: {,
         currentPeriod: number;
         previousPeriod: number;
         change: number;
@@ -54,10 +54,10 @@ export interface ComplianceTrendReport {
 export interface ComplianceForecasting {
     baselineId: string;
     forecastHorizon: number;
-    predictedValues: {
+    predictedValues: {,
         date: Date;
         predictedValue: number;
-        confidenceInterval: {
+        confidenceInterval: {,
             lower: number;
             upper: number;
         };
@@ -65,7 +65,7 @@ export interface ComplianceForecasting {
     }[];
     forecastAccuracy: number;
     assumptions: string[];
-    riskFactors: {
+    riskFactors: {,
         factor: string;
         impact: 'high' | 'medium' | 'low';
         likelihood: number;
@@ -73,13 +73,13 @@ export interface ComplianceForecasting {
 }
 export interface ComplianceAuditTrail {
     auditId: string;
-    auditPeriod: {
+    auditPeriod: {,
         startDate: Date;
         endDate: Date;
     };
     framework: string;
     auditType: 'internal' | 'external' | 'certification';
-    findings: {
+    findings: {,
         category: 'strength' | 'weakness' | 'non_compliance' | 'improvement_opportunity';
         description: string;
         severity: 'low' | 'medium' | 'high' | 'critical';
@@ -120,11 +120,11 @@ export declare class ComplianceHistoricalAnalyzer {
      * Export historical data for external analysis
      */
     exportHistoricalData(framework?: string): {
-        metadata: {
+        metadata: {,
             exportDate: Date;
             framework?: string;
             totalDataPoints: number;
-            dateRange: {
+            dateRange: {,
                 earliest: Date;
                 latest: Date;
             };

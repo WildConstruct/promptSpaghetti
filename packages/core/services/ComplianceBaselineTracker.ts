@@ -55,7 +55,7 @@ export interface BaselineDashboard {
   }>;
   recentDeviations: ComplianceMeasurement[];
   trendAnalysis: BaselineTrend[];
-  improvementOpportunities: {
+  improvementOpportunities: {,
     baselineId: string;
     name: string;
     currentGap: number;
@@ -63,7 +63,7 @@ export interface BaselineDashboard {
     difficulty: 'low' | 'medium' | 'high';
     estimatedTimeframe: string;
   }[];
-  alerts: {
+  alerts: {,
     id: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     message: string;
@@ -77,11 +77,9 @@ export class ComplianceBaselineTracker {
   private baselines: Map<string, ComplianceBaseline> = new Map();
   private measurements: ComplianceMeasurement[] = [];
   private alerts: any[] = [];
-  
   constructor() {
     this.initializeBaselines();
   }
-
   /**
    * Initialize default compliance baselines
    */
@@ -100,7 +98,7 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'daily',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
       {
         id: 'gdpr_consent_coverage',
@@ -114,7 +112,7 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'realtime',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
       {
         id: 'gdpr_data_retention_compliance',
@@ -128,7 +126,7 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'daily',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
       {
         id: 'gdpr_breach_response_time',
@@ -142,9 +140,8 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'realtime',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
-
       // SOC 2 Baselines
       {
         id: 'soc2_security_score',
@@ -158,7 +155,7 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'daily',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
       {
         id: 'soc2_access_control_effectiveness',
@@ -172,7 +169,7 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'hourly',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
       {
         id: 'soc2_audit_log_completeness',
@@ -186,7 +183,7 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'hourly',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
       {
         id: 'soc2_incident_response_time',
@@ -200,9 +197,8 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'realtime',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
-
       // MPA Content Security Baselines
       {
         id: 'mpa_content_encryption_rate',
@@ -216,7 +212,7 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'realtime',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
       {
         id: 'mpa_access_audit_coverage',
@@ -230,7 +226,7 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'hourly',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
       {
         id: 'mpa_unauthorized_access_incidents',
@@ -244,9 +240,8 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'daily',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
-
       // Internal Security Baselines
       {
         id: 'internal_ssl_certificate_health',
@@ -260,7 +255,7 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'daily',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
       {
         id: 'internal_security_patch_compliance',
@@ -274,7 +269,7 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'daily',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       },
       {
         id: 'internal_vulnerability_remediation_time',
@@ -288,21 +283,18 @@ export class ComplianceBaselineTracker {
         measurementFrequency: 'daily',
         baselineEstablishedAt: new Date('2025-01-01'),
         lastUpdatedAt: new Date(),
-        isActive: true
+        isActive: true,
       }
     ];
-
-    defaultBaselines.forEach(baseline => {
+    defaultBaselines.forEach(baseline => {)
       this.baselines.set(baseline.id, baseline);
     });
-
-    console.log(`✅ Initialized ${defaultBaselines.length} compliance baselines`);
+    console.log(`✅ Initialized ${defaultBaselines.length} compliance baselines`);}
   }
-
   /**
    * Record a new measurement against a baseline
    */
-  async recordMeasurement(
+  async recordMeasurement()
     baselineId: string,
     actualValue: number,
     context?: Record<string, any>,
@@ -310,14 +302,12 @@ export class ComplianceBaselineTracker {
   ): Promise<ComplianceMeasurement> {
     const baseline = this.baselines.get(baselineId);
     if (!baseline) {
-      throw new Error(`Baseline not found: ${baselineId}`);
+      throw new Error(`Baseline not found: ${baselineId}`);}
     }
-
     const deviation = this.calculateDeviation(actualValue, baseline.targetValue);
     const status = this.determineStatus(deviation, baseline.toleranceThreshold);
-
     const measurement: ComplianceMeasurement = {
-      id: `measurement_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `measurement_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,}
       baselineId,
       actualValue,
       targetValue: baseline.targetValue,
@@ -327,30 +317,26 @@ export class ComplianceBaselineTracker {
       context,
       notes
     };
-
     this.measurements.push(measurement);
-
     // Check for alerts
     if (status === 'critical_deviation') {
-      await this.createAlert({
+      await this.createAlert({)
         severity: 'critical',
-        message: `Critical deviation detected for ${baseline.name}: ${actualValue}${this.getUnitSymbol(baseline.measurementUnit)} (target: ${baseline.targetValue}${this.getUnitSymbol(baseline.measurementUnit)})`,
+        message: `Critical deviation detected for ${baseline.name}: ${actualValue}${this.getUnitSymbol(baseline.measurementUnit)} (target: ${baseline.targetValue}${this.getUnitSymbol(baseline.measurementUnit)})`,}
         baselineId,
         measurement
       });
     } else if (status === 'below_baseline' && Math.abs(deviation) > baseline.toleranceThreshold / 2) {
-      await this.createAlert({
+      await this.createAlert({)
         severity: 'medium',
-        message: `Below baseline performance for ${baseline.name}: ${actualValue}${this.getUnitSymbol(baseline.measurementUnit)} (target: ${baseline.targetValue}${this.getUnitSymbol(baseline.measurementUnit)})`,
+        message: `Below baseline performance for ${baseline.name}: ${actualValue}${this.getUnitSymbol(baseline.measurementUnit)} (target: ${baseline.targetValue}${this.getUnitSymbol(baseline.measurementUnit)})`,}
         baselineId,
         measurement
       });
     }
-
-    console.log(`📊 Recorded measurement for ${baseline.name}: ${actualValue}${this.getUnitSymbol(baseline.measurementUnit)} (${status})`);
+    console.log(`📊 Recorded measurement for ${baseline.name}: ${actualValue}${this.getUnitSymbol(baseline.measurementUnit)} (${status})`);}
     return measurement;
   }
-
   /**
    * Get baseline trend analysis
    */
@@ -359,21 +345,17 @@ export class ComplianceBaselineTracker {
     if (!baseline) {
       return null;
     }
-
     const cutoffDate = new Date(Date.now() - daysPeriod * 24 * 60 * 60 * 1000);
-    const measurements = this.measurements
+    const measurements = this.measurements;
       .filter(m => m.baselineId === baselineId && m.measuredAt >= cutoffDate)
       .sort((a, b) => a.measuredAt.getTime() - b.measuredAt.getTime());
-
     if (measurements.length === 0) {
       return null;
     }
-
     const averageDeviation = measurements.reduce((sum, m) => sum + Math.abs(m.deviation), 0) / measurements.length;
     const consistencyScore = this.calculateConsistencyScore(measurements);
     const trendDirection = this.analyzeTrendDirection(measurements);
     const recommendedActions = this.generateRecommendations(baseline, measurements, trendDirection);
-
     return {
       baselineId,
       framework: baseline.framework,
@@ -387,7 +369,6 @@ export class ComplianceBaselineTracker {
       recommendedActions
     };
   }
-
   /**
    * Generate comprehensive baseline dashboard
    */
@@ -395,45 +376,36 @@ export class ComplianceBaselineTracker {
     const frameworkHealth: Record<string, any> = {};
     const trendAnalysis: BaselineTrend[] = [];
     const recentDeviations: ComplianceMeasurement[] = [];
-
     // Calculate framework health scores
     const frameworks = ['GDPR', 'SOC2', 'MPA', 'INTERNAL'];
     for (const framework of frameworks) {
-      const frameworkBaselines = Array.from(this.baselines.values())
+      const frameworkBaselines = Array.from(this.baselines.values());
         .filter(b => b.framework === framework && b.isActive);
-
       let totalScore = 0;
       let baselinesMet = 0;
       let criticalDeviations = 0;
-
       for (const baseline of frameworkBaselines) {
-        const trend = this.getBaselineTrend(baseline.id, 7); // Last 7 days
+        const trend = this.getBaselineTrend(baseline.id, 7); // Last 7 days;
         if (trend && trend.lastMeasurement) {
           const score = Math.max(0, 100 - Math.abs(trend.lastMeasurement.deviation));
           totalScore += score;
-
           if (trend.lastMeasurement.status === 'at_baseline' || trend.lastMeasurement.status === 'above_baseline') {
             baselinesMet++;
           }
-
           if (trend.lastMeasurement.status === 'critical_deviation') {
             criticalDeviations++;
           }
-
           // Add to trend analysis
           trendAnalysis.push(trend);
-
           // Collect recent deviations
           if (Math.abs(trend.lastMeasurement.deviation) > baseline.toleranceThreshold) {
             recentDeviations.push(trend.lastMeasurement);
           }
         }
       }
-
       const averageScore = frameworkBaselines.length > 0 ? totalScore / frameworkBaselines.length : 0;
-      const status = averageScore >= 90 ? 'healthy' : 
+      const status = averageScore >= 90 ? 'healthy' : ;
         averageScore >= 70 ? 'warning' : 'critical';
-
       frameworkHealth[framework] = {
         score: Math.round(averageScore),
         status,
@@ -442,74 +414,64 @@ export class ComplianceBaselineTracker {
         criticalDeviations
       };
     }
-
     // Calculate overall health score
-    const overallHealthScore = Object.values(frameworkHealth)
+    const overallHealthScore = Object.values(frameworkHealth);
       .reduce((sum: number, fh: any) => sum + fh.score, 0) / Object.keys(frameworkHealth).length;
-
     // Generate improvement opportunities
     const improvementOpportunities = this.identifyImprovementOpportunities(trendAnalysis);
-
     // Get recent alerts
-    const recentAlerts = this.alerts
+    const recentAlerts = this.alerts;
       .filter(a => Date.now() - a.triggeredAt.getTime() < 7 * 24 * 60 * 60 * 1000) // Last 7 days
       .sort((a, b) => b.triggeredAt.getTime() - a.triggeredAt.getTime())
       .slice(0, 10);
-
     return {
       overallHealthScore: Math.round(overallHealthScore),
       frameworkHealth,
-      recentDeviations: recentDeviations
+      recentDeviations: recentDeviations,
         .sort((a, b) => b.measuredAt.getTime() - a.measuredAt.getTime())
         .slice(0, 10),
-      trendAnalysis: trendAnalysis
+      trendAnalysis: trendAnalysis,
         .sort((a, b) => Math.abs(b.averageDeviation) - Math.abs(a.averageDeviation))
         .slice(0, 20),
       improvementOpportunities,
-      alerts: recentAlerts
+      alerts: recentAlerts,
     };
   }
-
   /**
    * Update baseline target or tolerance
    */
-  async updateBaseline(
+  async updateBaseline()
     baselineId: string,
     updates: Partial<Pick<ComplianceBaseline, 'targetValue' | 'toleranceThreshold' | 'isActive'>>
   ): Promise<void> {
     const baseline = this.baselines.get(baselineId);
     if (!baseline) {
-      throw new Error(`Baseline not found: ${baselineId}`);
+      throw new Error(`Baseline not found: ${baselineId}`);}
     }
-
     const updatedBaseline = {
       ...baseline,
       ...updates,
       lastUpdatedAt: new Date()
     };
-
     this.baselines.set(baselineId, updatedBaseline);
-    console.log(`📝 Updated baseline ${baseline.name}`);
+    console.log(`📝 Updated baseline ${baseline.name}`);}
   }
-
   /**
    * Create custom baseline
    */
-  async createCustomBaseline(
+  async createCustomBaseline()
     baseline: Omit<ComplianceBaseline, 'id' | 'baselineEstablishedAt' | 'lastUpdatedAt'>
   ): Promise<ComplianceBaseline> {
     const customBaseline: ComplianceBaseline = {
       ...baseline,
-      id: `custom_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `custom_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,}
       baselineEstablishedAt: new Date(),
       lastUpdatedAt: new Date()
     };
-
     this.baselines.set(customBaseline.id, customBaseline);
-    console.log(`✅ Created custom baseline: ${customBaseline.name}`);
+    console.log(`✅ Created custom baseline: ${customBaseline.name}`);}
     return customBaseline;
   }
-
   /**
    * Get all active baselines
    */
@@ -518,7 +480,6 @@ export class ComplianceBaselineTracker {
       .filter(b => b.isActive)
       .sort((a, b) => a.framework.localeCompare(b.framework));
   }
-
   /**
    * Export baseline data for reporting
    */
@@ -527,16 +488,14 @@ export class ComplianceBaselineTracker {
     measurements: ComplianceMeasurement[];
     summary: Record<string, any>;
   } {
-    const baselines = Array.from(this.baselines.values())
+    const baselines = Array.from(this.baselines.values());
       .filter(b => b.isActive && (!framework || b.framework === framework));
-
     const cutoffDate = new Date(Date.now() - daysPeriod * 24 * 60 * 60 * 1000);
-    const measurements = this.measurements
-      .filter(m => {
+    const measurements = this.measurements;
+      .filter(m => {)
         const baseline = this.baselines.get(m.baselineId);
         return baseline && baselines.includes(baseline) && m.measuredAt >= cutoffDate;
       });
-
     const summary = {
       totalBaselines: baselines.length,
       totalMeasurements: measurements.length,
@@ -544,22 +503,17 @@ export class ComplianceBaselineTracker {
         ? measurements.reduce((sum, m) => sum + (100 - Math.abs(m.deviation)), 0) / measurements.length 
         : 0,
       criticalDeviations: measurements.filter(m => m.status === 'critical_deviation').length,
-      period: `${daysPeriod} days`,
+      period: `${daysPeriod} days`,}
       generatedAt: new Date()
     };
-
     return { baselines, measurements, summary };
   }
-
   // Private helper methods
-
   private calculateDeviation(actualValue: number, targetValue: number): number {
     return ((actualValue - targetValue) / targetValue) * 100;
   }
-
   private determineStatus(deviation: number, toleranceThreshold: number): ComplianceMeasurement['status'] {
     const absDeviation = Math.abs(deviation);
-    
     if (absDeviation <= toleranceThreshold) {
       return deviation >= 0 ? 'above_baseline' : 'at_baseline';
     } else if (absDeviation <= toleranceThreshold * 2) {
@@ -568,29 +522,22 @@ export class ComplianceBaselineTracker {
       return 'critical_deviation';
     }
   }
-
   private calculateConsistencyScore(measurements: ComplianceMeasurement[]): number {
     if (measurements.length < 2) return 100;
-
     const deviations = measurements.map(m => Math.abs(m.deviation));
     const average = deviations.reduce((sum, d) => sum + d, 0) / deviations.length;
     const variance = deviations.reduce((sum, d) => sum + Math.pow(d - average, 2), 0) / deviations.length;
     const standardDeviation = Math.sqrt(variance);
-
     // Convert to 0-100 score (lower std deviation = higher consistency)
     return Math.max(0, 100 - standardDeviation * 2);
   }
-
   private analyzeTrendDirection(measurements: ComplianceMeasurement[]): BaselineTrend['trendDirection'] {
     if (measurements.length < 3) return 'stable';
-
-    const recentMeasurements = measurements.slice(-5); // Last 5 measurements
+    const recentMeasurements = measurements.slice(-5); // Last 5 measurements;
     const first = recentMeasurements[0];
     const last = recentMeasurements[recentMeasurements.length - 1];
-
     const trendValue = last.actualValue - first.actualValue;
     const criticalCount = recentMeasurements.filter(m => m.status === 'critical_deviation').length;
-
     if (criticalCount >= recentMeasurements.length / 2) {
       return 'critical';
     } else if (Math.abs(trendValue) < first.targetValue * 0.02) { // Less than 2% change
@@ -601,44 +548,38 @@ export class ComplianceBaselineTracker {
       return 'declining';
     }
   }
-
-  private generateRecommendations(
+  private generateRecommendations()
     baseline: ComplianceBaseline, 
     measurements: ComplianceMeasurement[], 
-    trend: BaselineTrend['trendDirection']
+    trend: BaselineTrend['trendDirection'],
   ): string[] {
     const recommendations: string[] = [];
     const lastMeasurement = measurements[measurements.length - 1];
-
     switch (trend) {
     case 'critical':
-      recommendations.push(`Immediate action required: ${baseline.name} shows critical deviations`);
+      recommendations.push(`Immediate action required: ${baseline.name} shows critical deviations`);}
       recommendations.push('Engage incident response team and compliance officer');
       recommendations.push('Review and update security controls immediately');
       break;
-
     case 'declining':
-      recommendations.push(`Address declining trend in ${baseline.name}`);
+      recommendations.push(`Address declining trend in ${baseline.name}`);}
       recommendations.push('Investigate root causes of performance degradation');
       recommendations.push('Consider adjusting baseline targets if industry standards have changed');
       break;
-
     case 'stable':
       if (lastMeasurement.status === 'below_baseline') {
-        recommendations.push(`Optimize ${baseline.name} to exceed baseline targets`);
+        recommendations.push(`Optimize ${baseline.name} to exceed baseline targets`);}
         recommendations.push('Implement continuous improvement initiatives');
       } else {
-        recommendations.push(`Maintain current performance levels for ${baseline.name}`);
+        recommendations.push(`Maintain current performance levels for ${baseline.name}`);}
       }
       break;
-
     case 'improving':
-      recommendations.push(`Continue positive momentum for ${baseline.name}`);
+      recommendations.push(`Continue positive momentum for ${baseline.name}`);}
       recommendations.push('Document successful practices for replication');
       recommendations.push('Consider raising baseline targets to drive further improvement');
       break;
     }
-
     // Framework-specific recommendations
     switch (baseline.framework) {
     case 'GDPR':
@@ -647,14 +588,12 @@ export class ComplianceBaselineTracker {
         recommendations.push('Audit data retention and deletion procedures');
       }
       break;
-
     case 'SOC2':
       if (lastMeasurement.status !== 'at_baseline' && lastMeasurement.status !== 'above_baseline') {
         recommendations.push('Review access controls and audit logging mechanisms');
         recommendations.push('Validate security monitoring and incident response procedures');
       }
       break;
-
     case 'MPA':
       if (lastMeasurement.status !== 'at_baseline' && lastMeasurement.status !== 'above_baseline') {
         recommendations.push('Strengthen content encryption and access tracking');
@@ -662,53 +601,47 @@ export class ComplianceBaselineTracker {
       }
       break;
     }
-
     return recommendations.slice(0, 5); // Limit to top 5 recommendations
   }
-
   private identifyImprovementOpportunities(trends: BaselineTrend[]): BaselineDashboard['improvementOpportunities'] {
     return trends
       .filter(trend => trend.trendDirection === 'declining' || trend.lastMeasurement.status === 'below_baseline')
-      .map(trend => {
+      .map(trend => {)
         const gap = Math.abs(trend.lastMeasurement.deviation);
         const impact = gap > 20 ? 'high' : gap > 10 ? 'medium' : 'low';
         const difficulty: 'low' | 'medium' | 'high' = trend.framework === 'GDPR' ? 'high' : 
           trend.framework === 'SOC2' ? 'medium' : 'low';
-        const timeframe = difficulty === 'high' ? '3-6 months' : 
+        const timeframe = difficulty === 'high' ? '3-6 months' : ;
           difficulty === 'medium' ? '1-3 months' : '2-4 weeks';
-
         return {
           baselineId: trend.baselineId,
           name: trend.name,
           currentGap: Math.round(gap),
-          potentialImpact: `Improve ${trend.framework} compliance by ${Math.round(gap)}%`,
+          potentialImpact: `Improve ${trend.framework} compliance by ${Math.round(gap)}%`,}
           difficulty,
-          estimatedTimeframe: timeframe
+          estimatedTimeframe: timeframe,
         };
       })
       .sort((a, b) => b.currentGap - a.currentGap)
       .slice(0, 10);
   }
-
-  private async createAlert(alertData: {
+  private async createAlert(alertData: {)
     severity: 'low' | 'medium' | 'high' | 'critical';
     message: string;
     baselineId: string;
     measurement: ComplianceMeasurement;
   }): Promise<void> {
     const alert = {
-      id: `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,}
       severity: alertData.severity,
       message: alertData.message,
       baselineId: alertData.baselineId,
       triggeredAt: new Date(),
-      acknowledged: false
+      acknowledged: false,
     };
-
     this.alerts.push(alert);
-    console.log(`🚨 ${alertData.severity.toUpperCase()} ALERT: ${alertData.message}`);
+    console.log(`🚨 ${alertData.severity.toUpperCase()} ALERT: ${alertData.message}`);}
   }
-
   private getUnitSymbol(unit: ComplianceBaseline['measurementUnit']): string {
     switch (unit) {
     case 'percentage': return '%';

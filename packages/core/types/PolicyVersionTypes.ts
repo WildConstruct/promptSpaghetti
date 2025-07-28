@@ -34,36 +34,29 @@ export interface PolicyVersion {
   majorVersion: number;
   minorVersion: number;
   patchVersion: number;
-  
   // Content
   title: string;
   content: PolicyContent;
   contentType: ContentType;
-  
   // Status and workflow
   status: PolicyStatus;
-  
   // Timing
   publishedAt?: Date;
   effectiveDate?: Date;
   expirationDate?: Date;
-  
   // Change tracking
   changeSummary?: string;
   changeType: ChangeType;
   parentVersionId?: string;
-  
   // Authorship
   createdBy: string;
   reviewedBy?: string;
   publishedBy?: string;
-  
   // Compliance and metadata
   complianceFrameworks: ComplianceFramework[];
   tags: string[];
   severityLevel: SeverityLevel;
   metadata: Record<string, any>;
-  
   // Timestamps
   createdAt: Date;
   updatedAt: Date;
@@ -216,7 +209,7 @@ export interface PolicyVersionComparison {
   fromVersion: PolicyVersion;
   toVersion: PolicyVersion;
   changes: PolicyVersionDiff[];
-  summary: {
+  summary: {,
     addedSections: number;
     removedSections: number;
     modifiedSections: number;
@@ -247,7 +240,7 @@ export type DiffImpact =
 
 export interface PolicyVersionListResponse {
   versions: PolicyVersion[];
-  pagination: {
+  pagination: {,
     page: number;
     pageSize: number;
     total: number;
@@ -292,7 +285,7 @@ export interface PolicyVersionAnalytics {
   averageTimeToPublish: number; // in hours
   mostActiveContributor: string;
   complianceFrameworkUsage: Record<ComplianceFramework, number>;
-  versionsByMonth: Array<{
+  versionsByMonth: Array<{,
     month: string;
     count: number;
   }>;

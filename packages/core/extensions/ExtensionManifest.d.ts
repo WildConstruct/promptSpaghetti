@@ -10,7 +10,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     name: z.ZodString;
     version: z.ZodString;
     description: z.ZodString;
-    author: z.ZodObject<{
+    author: z.ZodObject<{,
         name: z.ZodString;
         email: z.ZodOptional<z.ZodString>;
         url: z.ZodOptional<z.ZodString>;
@@ -25,7 +25,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     }>;
     extension_type: z.ZodEnum<["node", "ui", "transform", "storage"]>;
     main: z.ZodString;
-    dependencies: z.ZodOptional<z.ZodObject<{
+    dependencies: z.ZodOptional<z.ZodObject<{,
         system: z.ZodOptional<z.ZodString>;
         extensions: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
         npm: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
@@ -39,7 +39,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         npm?: Record<string, string> | undefined;
     }>>;
     permissions: z.ZodOptional<z.ZodArray<z.ZodEnum<["file-system-read", "file-system-write", "network", "storage", "ui-components", "runtime-nodes", "system-info", "extensions-api"]>, "many">>;
-    capabilities: z.ZodOptional<z.ZodObject<{
+    capabilities: z.ZodOptional<z.ZodObject<{,
         provides: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         requires: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         optional: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -52,7 +52,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         provides?: string[] | undefined;
         requires?: string[] | undefined;
     }>>;
-    ui: z.ZodOptional<z.ZodObject<{
+    ui: z.ZodOptional<z.ZodObject<{,
         icon: z.ZodOptional<z.ZodString>;
         category: z.ZodOptional<z.ZodString>;
         themes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -71,7 +71,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         css?: string[] | undefined;
         components?: Record<string, string> | undefined;
     }>>;
-    runtime: z.ZodOptional<z.ZodObject<{
+    runtime: z.ZodOptional<z.ZodObject<{,
         node_types: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         transforms: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         storage_providers: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -87,7 +87,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         storage_providers?: string[] | undefined;
         background_tasks?: string[] | undefined;
     }>>;
-    build: z.ZodOptional<z.ZodObject<{
+    build: z.ZodOptional<z.ZodObject<{,
         output_dir: z.ZodDefault<z.ZodString>;
         entry_point: z.ZodOptional<z.ZodString>;
         externals: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -104,7 +104,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         assets?: string[] | undefined;
     }>>;
     activation_events: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    configuration: z.ZodOptional<z.ZodObject<{
+    configuration: z.ZodOptional<z.ZodObject<{,
         schema: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
         defaults: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
         ui_schema: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
@@ -117,7 +117,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         defaults?: Record<string, any> | undefined;
         ui_schema?: Record<string, any> | undefined;
     }>>;
-    metadata: z.ZodOptional<z.ZodObject<{
+    metadata: z.ZodOptional<z.ZodObject<{,
         license: z.ZodOptional<z.ZodString>;
         repository: z.ZodOptional<z.ZodString>;
         homepage: z.ZodOptional<z.ZodString>;
@@ -145,7 +145,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         changelog?: string | undefined;
         readme?: string | undefined;
     }>>;
-    compatibility: z.ZodOptional<z.ZodObject<{
+    compatibility: z.ZodOptional<z.ZodObject<{,
         min_system_version: z.ZodOptional<z.ZodString>;
         max_system_version: z.ZodOptional<z.ZodString>;
         platforms: z.ZodOptional<z.ZodArray<z.ZodEnum<["web", "desktop", "server"]>, "many">>;
@@ -161,9 +161,9 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         platforms?: ("web" | "desktop" | "server")[] | undefined;
         browsers?: Record<string, string> | undefined;
     }>>;
-    security: z.ZodOptional<z.ZodObject<{
+    security: z.ZodOptional<z.ZodObject<{,
         content_security_policy: z.ZodOptional<z.ZodString>;
-        sandbox: z.ZodOptional<z.ZodObject<{
+        sandbox: z.ZodOptional<z.ZodObject<{,
             enabled: z.ZodDefault<z.ZodBoolean>;
             permissions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
@@ -189,7 +189,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         } | undefined;
         trusted_domains?: string[] | undefined;
     }>>;
-    publishing: z.ZodOptional<z.ZodObject<{
+    publishing: z.ZodOptional<z.ZodObject<{,
         private: z.ZodDefault<z.ZodBoolean>;
         registry: z.ZodOptional<z.ZodString>;
         access: z.ZodDefault<z.ZodEnum<["public", "private", "restricted"]>>;
@@ -210,7 +210,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     name: string;
     description: string;
     version: string;
-    author: {
+    author: {,
         name: string;
         email?: string | undefined;
         url?: string | undefined;
@@ -289,7 +289,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     name: string;
     description: string;
     version: string;
-    author: {
+    author: {,
         name: string;
         email?: string | undefined;
         url?: string | undefined;
@@ -381,7 +381,7 @@ export declare class ExtensionManifestParser {
     /**
      * Validate manifest dependencies
      */
-    validateDependencies(
+    validateDependencies()
       manifest: ExtensionManifest,
       availableExtensions: Map<string,
       ExtensionManifest>

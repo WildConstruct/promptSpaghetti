@@ -1,6 +1,5 @@
 // Epic 9.4 - Workflow State Manager Component
 // Main UI component for managing workflow states and transitions
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   CheckCircleIcon, 
@@ -21,7 +20,6 @@ import {
 } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
 import { WorkflowState, WorkflowTransition, WorkflowApproval, WorkflowLock, WorkflowStatistics } from '../types/workflow';
-
 interface WorkflowStateManagerProps {
   workspaceId: string;
   resourceId?: string;
@@ -31,7 +29,7 @@ interface WorkflowStateManagerProps {
   onLockReleased?: (lockId: string) => void;
 }
 
-export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
+export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
   workspaceId,
   resourceId,
   currentUserId,
@@ -63,13 +61,11 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
     createTransition,
     deleteTransition
   } = useWorkflowStore();
-
   const [activeTab, setActiveTab] = useState<'states' | 'approvals' | 'locks' | 'history' | 'statistics'>('states');
   const [__showCreateState, setShowCreateState] = useState(false);
   const [__showCreateTransition, __setShowCreateTransition] = useState(false);
   const [__selectedState, setSelectedState] = useState<WorkflowState | null>(null);
   const [expandedStates, setExpandedStates] = useState<Set<string>>(new Set());
-
   // Load initial data
   useEffect(() => {
     fetchStates(workspaceId);
@@ -78,37 +74,30 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
     fetchLocks(workspaceId);
     fetchStatistics(workspaceId);
   }, [workspaceId]);
-
   // Get current resource state
-  const currentResourceState = resourceId 
+  const currentResourceState = resourceId ;
     ? states.find(state => state.id === resourceId) // This would need to be fetched from resource data
     : null;
-
   // Get available transitions for current state
-  const availableTransitions = currentResourceState 
+  const availableTransitions = currentResourceState ;
     ? transitions.filter(t => t.from_state_id === currentResourceState.id)
     : [];
-
   // Get resource locks
-  const resourceLocks = resourceId 
+  const resourceLocks = resourceId ;
     ? locks.filter(lock => lock.resource_id === resourceId)
     : [];
-
   // Get pending approvals for current user
-  const pendingApprovals = approvals.filter(approval => 
+  const pendingApprovals = approvals.filter(approval => ;)
     approval.status === 'pending' && 
     (approval.requester_id === currentUserId || approval.approved_by === currentUserId)
   );
-
   const handleStateTransition = useCallback(async (toStateId: string, comment?: string) => {
     if (!resourceId) return;
-
     try {
-      const result = await transitionResourceState(resourceId, toStateId, currentUserId, {
+      const result = await transitionResourceState(resourceId, toStateId, currentUserId, {)
         comment,
-        force: false
+        force: false,
       });
-
       if (result.success) {
         if (result.approval_required) {
           // Show approval request confirmation
@@ -121,8 +110,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
       console.error('Failed to transition state:', error);
     }
   }, [resourceId, currentUserId, transitionResourceState, onStateChange]);
-
-  const handleApprovalAction = useCallback(async (
+  const handleApprovalAction = useCallback(async (;)
     approvalId: string, 
     action: 'approve' | 'reject', 
     comment?: string
@@ -133,25 +121,22 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
       } else {
         await rejectWorkflow(approvalId, currentUserId, comment || 'Rejected');
       }
-      
       // Refresh data
       fetchApprovals(workspaceId);
       fetchStates(workspaceId);
     } catch (error) {
-      console.error(`Failed to ${action} workflow:`, error);
+      console.error(`Failed to ${action} workflow:`, error);}
     }
   }, [currentUserId, approveWorkflow, rejectWorkflow, fetchApprovals, fetchStates, workspaceId]);
-
-  const handleLockAction = useCallback(async (
+  const handleLockAction = useCallback(async (;)
     action: 'acquire' | 'release',
     lockId?: string,
     lockType?: 'edit' | 'state_change' | 'delete' | 'custom'
   ) => {
     if (!resourceId) return;
-
     try {
       if (action === 'acquire') {
-        const lock = await acquireLock(resourceId, currentUserId, lockType || 'edit', {
+        const lock = await acquireLock(resourceId, currentUserId, lockType || 'edit', {)
           reason: 'Manual lock acquisition'
         });
         onLockAcquired?.(lock.id);
@@ -159,14 +144,12 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
         await releaseLock(lockId, currentUserId);
         onLockReleased?.(lockId);
       }
-      
       // Refresh locks
       fetchLocks(workspaceId);
     } catch (error) {
-      console.error(`Failed to ${action} lock:`, error);
+      console.error(`Failed to ${action} lock:`, error);}
     }
   }, [resourceId, currentUserId, acquireLock, releaseLock, onLockAcquired, onLockReleased, fetchLocks, workspaceId]);
-
   const toggleStateExpansion = (stateId: string) => {
     const newExpanded = new Set(expandedStates);
     if (newExpanded.has(stateId)) {
@@ -176,7 +159,6 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
     }
     setExpandedStates(newExpanded);
   };
-
   const getStateIcon = (state: WorkflowState) => {
     switch (state.icon) {
     case 'CheckCircleIcon': return <CheckCircleIcon className="h-4 w-4" />;
@@ -187,21 +169,18 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
     default: return <DocumentTextIcon className="h-4 w-4" />;
     }
   };
-
   const getStateTransitions = (stateId: string) => {
     return transitions.filter(t => t.from_state_id === stateId);
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <XCircleIcon className="h-5 w-5 text-red-400" />
@@ -213,8 +192,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="bg-white rounded-lg shadow">
       {/* Header */}
       <div className="border-b border-gray-200">
@@ -226,7 +204,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                 Manage workflow states, approvals, and transitions
               </p>
             </div>
-            {resourceId && currentResourceState && (
+            {resourceId && currentResourceState && ()
               <div className="flex items-center space-x-2">
                 <div 
                   className="flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium"
@@ -235,7 +213,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                   {getStateIcon(currentResourceState)}
                   <span>{currentResourceState.name}</span>
                 </div>
-                {resourceLocks.length > 0 && (
+                {resourceLocks.length > 0 && ()
                   <div className="flex items-center space-x-1 px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs">
                     <LockClosedIcon className="h-3 w-3" />
                     <span>{resourceLocks.length} lock(s)</span>
@@ -245,7 +223,6 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
             )}
           </div>
         </div>
-
         {/* Tab Navigation */}
         <div className="flex space-x-8 px-6">
           {[
@@ -253,7 +230,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
             { id: 'approvals', label: 'Approvals', count: pendingApprovals.length },
             { id: 'locks', label: 'Locks', count: resourceLocks.length },
             { id: 'statistics', label: 'Statistics', count: null }
-          ].map(tab => (
+          ].map(tab => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
@@ -264,7 +241,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
               }`}
             >
               {tab.label}
-              {tab.count !== null && (
+              {tab.count !== null && ()
                 <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
                   activeTab === tab.id
                     ? 'bg-blue-100 text-blue-600'
@@ -277,10 +254,9 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
           ))}
         </div>
       </div>
-
       {/* Tab Content */}
       <div className="p-6">
-        {activeTab === 'states' && (
+        {activeTab === 'states' && ()
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-medium text-gray-900">Workflow States</h3>
@@ -292,10 +268,9 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                 Add State
               </button>
             </div>
-
             {/* States List */}
             <div className="space-y-3">
-              {states.map(state => (
+              {states.map(state => ()
                 <div
                   key={state.id}
                   className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50"
@@ -306,9 +281,9 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                         onClick={() => toggleStateExpansion(state.id)}
                         className="text-gray-400 hover:text-gray-600"
                       >
-                        {expandedStates.has(state.id) ? (
+                        {expandedStates.has(state.id) ? ()
                           <ChevronDownIcon className="h-4 w-4" />
-                        ) : (
+                        ) : ()
                           <ChevronRightIcon className="h-4 w-4" />
                         )}
                       </button>
@@ -319,26 +294,26 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                         {getStateIcon(state)}
                         <span>{state.name}</span>
                       </div>
-                      {state.is_initial && (
+                      {state.is_initial && ()
                         <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
                           Initial
                         </span>
                       )}
-                      {state.is_final && (
+                      {state.is_final && ()
                         <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded">
                           Final
                         </span>
                       )}
-                      {state.is_locked && (
+                      {state.is_locked && ()
                         <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded">
                           Locked
                         </span>
                       )}
                     </div>
                     <div className="flex items-center space-x-2">
-                      {resourceId && currentResourceState?.id === state.id && (
+                      {resourceId && currentResourceState?.id === state.id && ()
                         <div className="flex items-center space-x-2">
-                          {availableTransitions.map(transition => (
+                          {availableTransitions.map(transition => ()
                             <button
                               key={transition.id}
                               onClick={() => handleStateTransition(transition.to_state_id)}
@@ -359,25 +334,23 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                       </button>
                     </div>
                   </div>
-
-                  {state.description && (
+                  {state.description && ()
                     <p className="mt-2 text-sm text-gray-600">{state.description}</p>
                   )}
-
                   {/* Expanded State Details */}
-                  {expandedStates.has(state.id) && (
+                  {expandedStates.has(state.id) && ()
                     <div className="mt-4 space-y-3">
                       <div className="border-t pt-3">
                         <h4 className="text-sm font-medium text-gray-900 mb-2">Available Transitions</h4>
                         <div className="space-y-2">
-                          {getStateTransitions(state.id).map(transition => (
+                          {getStateTransitions(state.id).map(transition => ()
                             <div
                               key={transition.id}
                               className="flex items-center justify-between p-2 bg-gray-50 rounded"
                             >
                               <div className="flex items-center space-x-2">
                                 <span className="text-sm font-medium">{transition.name}</span>
-                                {transition.requires_approval && (
+                                {transition.requires_approval && ()
                                   <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded">
                                     Requires Approval
                                   </span>
@@ -387,7 +360,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                                 <span className="text-sm text-gray-600">
                                   → {states.find(s => s.id === transition.to_state_id)?.name}
                                 </span>
-                                {resourceId && currentResourceState?.id === state.id && (
+                                {resourceId && currentResourceState?.id === state.id && ()
                                   <button
                                     onClick={() => handleStateTransition(transition.to_state_id)}
                                     className="px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
@@ -398,7 +371,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                               </div>
                             </div>
                           ))}
-                          {getStateTransitions(state.id).length === 0 && (
+                          {getStateTransitions(state.id).length === 0 && ()
                             <p className="text-sm text-gray-500 italic">No transitions available</p>
                           )}
                         </div>
@@ -410,12 +383,10 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
             </div>
           </div>
         )}
-
-        {activeTab === 'approvals' && (
+        {activeTab === 'approvals' && ()
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-gray-900">Pending Approvals</h3>
-            
-            {pendingApprovals.length === 0 ? (
+            {pendingApprovals.length === 0 ? ()
               <div className="text-center py-8">
                 <ClipboardDocumentListIcon className="mx-auto h-12 w-12 text-gray-400" />
                 <h3 className="mt-2 text-sm font-medium text-gray-900">No pending approvals</h3>
@@ -423,9 +394,9 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                   All workflow approvals are up to date.
                 </p>
               </div>
-            ) : (
+            ) : ()
               <div className="space-y-3">
-                {pendingApprovals.map(approval => (
+                {pendingApprovals.map(approval => ()
                   <div
                     key={approval.id}
                     className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50"
@@ -464,7 +435,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                     <div className="mt-2 text-sm text-gray-600">
                       <p>Requested by: {approval.requester_id}</p>
                       <p>Resource: {approval.resource_id}</p>
-                      {approval.due_date && (
+                      {approval.due_date && ()
                         <p>Due: {new Date(approval.due_date).toLocaleDateString()}</p>
                       )}
                     </div>
@@ -474,12 +445,11 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
             )}
           </div>
         )}
-
-        {activeTab === 'locks' && (
+        {activeTab === 'locks' && ()
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-medium text-gray-900">Resource Locks</h3>
-              {resourceId && (
+              {resourceId && ()
                 <button
                   onClick={() => handleLockAction('acquire')}
                   className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
@@ -489,8 +459,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                 </button>
               )}
             </div>
-
-            {resourceLocks.length === 0 ? (
+            {resourceLocks.length === 0 ? ()
               <div className="text-center py-8">
                 <LockClosedIcon className="mx-auto h-12 w-12 text-gray-400" />
                 <h3 className="mt-2 text-sm font-medium text-gray-900">No active locks</h3>
@@ -498,9 +467,9 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                   This resource is not currently locked.
                 </p>
               </div>
-            ) : (
+            ) : ()
               <div className="space-y-3">
-                {resourceLocks.map(lock => (
+                {resourceLocks.map(lock => ()
                   <div
                     key={lock.id}
                     className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50"
@@ -516,12 +485,12 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        {lock.expires_at && (
+                        {lock.expires_at && ()
                           <span className="text-xs text-gray-500">
                             Expires: {new Date(lock.expires_at).toLocaleString()}
                           </span>
                         )}
-                        {lock.locked_by === currentUserId && (
+                        {lock.locked_by === currentUserId && ()
                           <button
                             onClick={() => handleLockAction('release', lock.id)}
                             className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
@@ -531,7 +500,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                         )}
                       </div>
                     </div>
-                    {lock.lock_reason && (
+                    {lock.lock_reason && ()
                       <p className="mt-2 text-sm text-gray-600">{lock.lock_reason}</p>
                     )}
                   </div>
@@ -540,12 +509,10 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
             )}
           </div>
         )}
-
-        {activeTab === 'statistics' && (
+        {activeTab === 'statistics' && ()
           <div className="space-y-6">
             <h3 className="text-lg font-medium text-gray-900">Workflow Statistics</h3>
-            
-            {statistics && (
+            {statistics && ()
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <div className="flex items-center">
@@ -556,7 +523,6 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                     </div>
                   </div>
                 </div>
-                
                 <div className="bg-green-50 p-4 rounded-lg">
                   <div className="flex items-center">
                     <CheckCircleIcon className="h-8 w-8 text-green-600" />
@@ -566,7 +532,6 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                     </div>
                   </div>
                 </div>
-                
                 <div className="bg-yellow-50 p-4 rounded-lg">
                   <div className="flex items-center">
                     <ClockIcon className="h-8 w-8 text-yellow-600" />
@@ -576,7 +541,6 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                     </div>
                   </div>
                 </div>
-                
                 <div className="bg-red-50 p-4 rounded-lg">
                   <div className="flex items-center">
                     <LockClosedIcon className="h-8 w-8 text-red-600" />

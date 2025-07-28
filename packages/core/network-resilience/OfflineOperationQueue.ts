@@ -24,7 +24,7 @@ export interface QueueMetrics {
   expiredOperations: number;
   averageQueueTime: number;
   oldestOperationAge: number;
-  queueSizeByPriority: {
+  queueSizeByPriority: {,
     high: number;
     medium: number;
     low: number;
@@ -42,7 +42,7 @@ export interface OfflineQueueConfig {
   storageKey: string;
   compressionEnabled: boolean;
   batchSizeLimit: number;
-  priorityWeights: {
+  priorityWeights: {,
     high: number;
     medium: number;
     low: number;
@@ -57,10 +57,8 @@ export class OfflineOperationQueue extends EventEmitter {
   private metrics: QueueMetrics;
   private cleanupTimer: NodeJS.Timeout | null = null;
   private persistenceTimer: NodeJS.Timeout | null = null;
-
   constructor(config: Partial<OfflineQueueConfig> = {}) {
     super();
-    
     this.config = {
       maxQueueSize: 1000,
       maxRetries: 3,
@@ -71,14 +69,13 @@ export class OfflineOperationQueue extends EventEmitter {
       storageKey: 'prompt-spaghetti-offline-queue',
       compressionEnabled: false,
       batchSizeLimit: 50,
-      priorityWeights: {
+      priorityWeights: {,
         high: 3,
         medium: 2,
-        low: 1
+        low: 1,
       },
       ...config
     };
-
     this.metrics = {
       totalOperations: 0,
       pendingOperations: 0,
@@ -87,19 +84,17 @@ export class OfflineOperationQueue extends EventEmitter {
       expiredOperations: 0,
       averageQueueTime: 0,
       oldestOperationAge: 0,
-      queueSizeByPriority: {
+      queueSizeByPriority: {,
         high: 0,
         medium: 0,
-        low: 0
+        low: 0,
       },
       operationsByType: new Map()
     };
-
     this.startCleanupTimer();
     this.startPersistenceTimer();
     this.loadFromPersistence();
   }
-
   /**
    * Add operation to the queue
    */
@@ -108,7 +103,6 @@ export class OfflineOperationQueue extends EventEmitter {
     if (this.queue.length >= this.config.maxQueueSize) {
       this.evictOldestOperation();
     }
-
     const queuedOperation: QueuedOperation = {
       id: uuidv4(),
       timestamp: Date.now(),
@@ -117,29 +111,22 @@ export class OfflineOperationQueue extends EventEmitter {
       maxRetries: operation.maxRetries || this.config.maxRetries,
       ...operation
     };
-
     // Insert operation in priority order
     this.insertByPriority(queuedOperation);
-    
     this.updateMetrics();
     this.persistToStorage();
-    
     this.emit('operation_queued', queuedOperation);
-    
-    console.log(`Queued operation ${queuedOperation.type} with priority ${queuedOperation.priority}`);
-    
+    console.log(`Queued operation ${queuedOperation.type} with priority ${queuedOperation.priority}`);}
     return queuedOperation.id;
   }
-
   /**
    * Get next batch of operations to process
    */
   dequeue(batchSize: number = this.config.batchSizeLimit): QueuedOperation[] {
     const batch: QueuedOperation[] = [];
     const now = Date.now();
-
     // Filter out expired operations
-    this.queue = this.queue.filter(op => {
+    this.queue = this.queue.filter(op => {)
       if (op.expiresAt && op.expiresAt < now) {
         this.metrics.expiredOperations++;
         this.emit('operation_expired', op);
@@ -147,18 +134,15 @@ export class OfflineOperationQueue extends EventEmitter {
       }
       return true;
     });
-
     // Sort by priority and age
     this.queue.sort((a, b) => {
       const priorityDiff = this.config.priorityWeights[b.priority] - this.config.priorityWeights[a.priority];
       if (priorityDiff !== 0) return priorityDiff;
       return a.timestamp - b.timestamp; // Older operations first
     });
-
     // Extract batch
     while (batch.length < batchSize && this.queue.length > 0) {
       const operation = this.queue.shift()!;
-      
       // Check dependencies
       if (this.areDependenciesSatisfied(operation)) {
         batch.push(operation);
@@ -169,184 +153,148 @@ export class OfflineOperationQueue extends EventEmitter {
         break;
       }
     }
-
     this.updateMetrics();
-    
     if (batch.length > 0) {
-      console.log(`Dequeued batch of ${batch.length} operations`);
+      console.log(`Dequeued batch of ${batch.length} operations`);}
       this.emit('batch_dequeued', batch);
     }
-
     return batch;
   }
-
   /**
    * Mark operation as successfully processed
    */
   markSuccess(operationId: string): void {
     const operation = this.processingQueue.get(operationId);
-    
     if (operation) {
       this.processingQueue.delete(operationId);
       this.failedOperations.delete(operationId);
-      
       const processingTime = Date.now() - operation.timestamp;
       this.updateAverageQueueTime(processingTime);
-      
       this.updateMetrics();
       this.persistToStorage();
-      
       this.emit('operation_success', operation);
-      console.log(`Operation ${operation.type} completed successfully after ${processingTime}ms`);
+      console.log(`Operation ${operation.type} completed successfully after ${processingTime}ms`);}
     }
   }
-
   /**
    * Mark operation as failed and handle retry logic
    */
   markFailure(operationId: string, error: Error): void {
     const operation = this.processingQueue.get(operationId);
-    
     if (!operation) {
       return;
     }
-
     operation.retryCount++;
     this.processingQueue.delete(operationId);
-
     if (operation.retryCount >= operation.maxRetries) {
       // Max retries reached, move to failed operations
       this.failedOperations.set(operationId, operation);
       this.metrics.failedOperations++;
-      
       this.emit('operation_failed', operation, error);
-      console.error(`Operation ${operation.type} failed permanently after ${operation.retryCount} retries:`, error);
+      console.error(`Operation ${operation.type} failed permanently after ${operation.retryCount} retries:`, error);}
     } else {
       // Schedule retry with exponential backoff
-      const backoffTime = Math.min(
+      const backoffTime = Math.min(;)
         this.config.retryBackoffMs * Math.pow(2, operation.retryCount - 1),
         this.config.maxBackoffMs
       );
-
       setTimeout(() => {
         // Re-queue the operation
         this.insertByPriority(operation);
         this.metrics.retryingOperations++;
-        
         this.updateMetrics();
         this.persistToStorage();
-        
         this.emit('operation_retry', operation, backoffTime);
-        console.log(`Retrying operation ${operation.type} (attempt ${operation.retryCount}) after ${backoffTime}ms`);
+        console.log(`Retrying operation ${operation.type} (attempt ${operation.retryCount}) after ${backoffTime}ms`);}
       }, backoffTime);
     }
   }
-
   /**
    * Get all operations for a specific document
    */
   getOperationsForDocument(documentId: string): QueuedOperation[] {
     return this.queue.filter(op => op.documentId === documentId);
   }
-
   /**
    * Remove all operations for a specific document
    */
   clearDocument(documentId: string): number {
     const initialLength = this.queue.length;
     this.queue = this.queue.filter(op => op.documentId !== documentId);
-    
     // Also clear from processing and failed queues
     for (const [id, op] of this.processingQueue.entries()) {
       if (op.documentId === documentId) {
         this.processingQueue.delete(id);
       }
     }
-    
     for (const [id, op] of this.failedOperations.entries()) {
       if (op.documentId === documentId) {
         this.failedOperations.delete(id);
       }
     }
-
     const removedCount = initialLength - this.queue.length;
-    
     if (removedCount > 0) {
       this.updateMetrics();
       this.persistToStorage();
       this.emit('document_cleared', documentId, removedCount);
     }
-
     return removedCount;
   }
-
   /**
    * Clear all operations
    */
   clear(): void {
     const totalCleared = this.queue.length + this.processingQueue.size + this.failedOperations.size;
-    
     this.queue = [];
     this.processingQueue.clear();
     this.failedOperations.clear();
-    
     this.updateMetrics();
     this.persistToStorage();
-    
     this.emit('queue_cleared', totalCleared);
-    console.log(`Cleared ${totalCleared} operations from queue`);
+    console.log(`Cleared ${totalCleared} operations from queue`);}
   }
-
   /**
    * Get current queue metrics
    */
   getMetrics(): QueueMetrics {
     return { ...this.metrics };
   }
-
   /**
    * Get queue size
    */
   size(): number {
     return this.queue.length;
   }
-
   /**
    * Check if queue is empty
    */
   isEmpty(): boolean {
     return this.queue.length === 0 && this.processingQueue.size === 0;
   }
-
   /**
    * Get failed operations for debugging/recovery
    */
   getFailedOperations(): QueuedOperation[] {
     return Array.from(this.failedOperations.values());
   }
-
   /**
    * Retry all failed operations
    */
   retryFailedOperations(): number {
     const failedOps = Array.from(this.failedOperations.values());
-    
     for (const operation of failedOps) {
       operation.retryCount = 0; // Reset retry count
       operation.expiresAt = Date.now() + this.config.operationTtlMs; // Extend expiry
       this.insertByPriority(operation);
       this.failedOperations.delete(operation.id);
     }
-
     if (failedOps.length > 0) {
       this.updateMetrics();
       this.persistToStorage();
       this.emit('failed_operations_retried', failedOps.length);
     }
-
     return failedOps.length;
   }
-
   /**
    * Cleanup expired operations and reset metrics
    */
@@ -354,34 +302,28 @@ export class OfflineOperationQueue extends EventEmitter {
     if (this.cleanupTimer) {
       clearInterval(this.cleanupTimer);
     }
-    
     if (this.persistenceTimer) {
       clearInterval(this.persistenceTimer);
     }
-    
     this.clear();
   }
-
   /**
    * Insert operation by priority
    */
   private insertByPriority(operation: QueuedOperation): void {
     const weight = this.config.priorityWeights[operation.priority];
     let insertIndex = this.queue.length;
-
     // Find insertion point to maintain priority order
     for (let i = 0; i < this.queue.length; i++) {
       const existingWeight = this.config.priorityWeights[this.queue[i].priority];
-      if (weight > existingWeight || 
+      if (weight > existingWeight || )
           (weight === existingWeight && operation.timestamp < this.queue[i].timestamp)) {
         insertIndex = i;
         break;
       }
     }
-
     this.queue.splice(insertIndex, 0, operation);
   }
-
   /**
    * Check if operation dependencies are satisfied
    */
@@ -389,69 +331,58 @@ export class OfflineOperationQueue extends EventEmitter {
     if (!operation.dependencies || operation.dependencies.length === 0) {
       return true;
     }
-
     // Check if any dependencies are still in queue or processing
     for (const depId of operation.dependencies) {
       if (this.queue.some(op => op.id === depId) || this.processingQueue.has(depId)) {
         return false;
       }
     }
-
     return true;
   }
-
   /**
    * Evict oldest operation when queue is full
    */
   private evictOldestOperation(): void {
     if (this.queue.length === 0) return;
-
     // Find lowest priority, oldest operation
     let oldestIndex = 0;
     let oldestTimestamp = this.queue[0].timestamp;
     let lowestPriority = this.config.priorityWeights[this.queue[0].priority];
-
     for (let i = 1; i < this.queue.length; i++) {
       const priority = this.config.priorityWeights[this.queue[i].priority];
       const timestamp = this.queue[i].timestamp;
-
-      if (priority < lowestPriority || 
+      if (priority < lowestPriority || )
           (priority === lowestPriority && timestamp < oldestTimestamp)) {
         oldestIndex = i;
         oldestTimestamp = timestamp;
         lowestPriority = priority;
       }
     }
-
     const evicted = this.queue.splice(oldestIndex, 1)[0];
     this.emit('operation_evicted', evicted);
-    console.warn(`Evicted operation ${evicted.type} due to queue size limit`);
+    console.warn(`Evicted operation ${evicted.type} due to queue size limit`);}
   }
-
   /**
    * Update queue metrics
    */
   private updateMetrics(): void {
     this.metrics.pendingOperations = this.queue.length;
     this.metrics.totalOperations = this.queue.length + this.processingQueue.size + this.failedOperations.size;
-    
     // Update priority counts
     this.metrics.queueSizeByPriority = {
       high: this.queue.filter(op => op.priority === 'high').length,
       medium: this.queue.filter(op => op.priority === 'medium').length,
       low: this.queue.filter(op => op.priority === 'low').length
     };
-
     // Update operation type counts
     this.metrics.operationsByType.clear();
     for (const operation of this.queue) {
       const count = this.metrics.operationsByType.get(operation.type) || 0;
       this.metrics.operationsByType.set(operation.type, count + 1);
     }
-
     // Calculate oldest operation age
     if (this.queue.length > 0) {
-      const oldestOperation = this.queue.reduce((oldest, current) => 
+      const oldestOperation = this.queue.reduce((oldest, current) => ;
         current.timestamp < oldest.timestamp ? current : oldest
       );
       this.metrics.oldestOperationAge = Date.now() - oldestOperation.timestamp;
@@ -459,7 +390,6 @@ export class OfflineOperationQueue extends EventEmitter {
       this.metrics.oldestOperationAge = 0;
     }
   }
-
   /**
    * Update average queue time
    */
@@ -467,7 +397,6 @@ export class OfflineOperationQueue extends EventEmitter {
     // Simple moving average
     this.metrics.averageQueueTime = (this.metrics.averageQueueTime * 0.9) + (newTime * 0.1);
   }
-
   /**
    * Start cleanup timer
    */
@@ -475,9 +404,8 @@ export class OfflineOperationQueue extends EventEmitter {
     this.cleanupTimer = setInterval(() => {
       const now = Date.now();
       const initialLength = this.queue.length;
-      
       // Remove expired operations
-      this.queue = this.queue.filter(op => {
+      this.queue = this.queue.filter(op => {)
         if (op.expiresAt && op.expiresAt < now) {
           this.metrics.expiredOperations++;
           this.emit('operation_expired', op);
@@ -485,27 +413,23 @@ export class OfflineOperationQueue extends EventEmitter {
         }
         return true;
       });
-
       const expiredCount = initialLength - this.queue.length;
       if (expiredCount > 0) {
         this.updateMetrics();
         this.persistToStorage();
-        console.log(`Cleaned up ${expiredCount} expired operations`);
+        console.log(`Cleaned up ${expiredCount} expired operations`);}
       }
     }, 60000); // Run every minute
   }
-
   /**
    * Start persistence timer
    */
   private startPersistenceTimer(): void {
     if (!this.config.persistToLocalStorage) return;
-
     this.persistenceTimer = setInterval(() => {
       this.persistToStorage();
     }, 30000); // Persist every 30 seconds
   }
-
   /**
    * Persist queue to localStorage
    */
@@ -513,21 +437,18 @@ export class OfflineOperationQueue extends EventEmitter {
     if (!this.config.persistToLocalStorage || typeof localStorage === 'undefined') {
       return;
     }
-
     try {
       const data = {
         queue: this.queue,
         failedOperations: Array.from(this.failedOperations.entries()),
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
-
       const serialized = JSON.stringify(data);
       localStorage.setItem(this.config.storageKey, serialized);
     } catch (error) {
       console.error('Failed to persist queue to localStorage:', error);
     }
   }
-
   /**
    * Load queue from localStorage
    */
@@ -535,27 +456,20 @@ export class OfflineOperationQueue extends EventEmitter {
     if (!this.config.persistToLocalStorage || typeof localStorage === 'undefined') {
       return;
     }
-
     try {
       const stored = localStorage.getItem(this.config.storageKey);
       if (!stored) return;
-
       const data = JSON.parse(stored);
-      
       // Check if data is recent (within TTL)
       if (Date.now() - data.timestamp > this.config.operationTtlMs) {
         localStorage.removeItem(this.config.storageKey);
         return;
       }
-
       this.queue = data.queue || [];
       this.failedOperations = new Map(data.failedOperations || []);
-      
       this.updateMetrics();
-      
-      console.log(`Restored ${this.queue.length} operations from localStorage`);
+      console.log(`Restored ${this.queue.length} operations from localStorage`);}
       this.emit('queue_restored', this.queue.length);
-      
     } catch (error) {
       console.error('Failed to load queue from localStorage:', error);
       localStorage.removeItem(this.config.storageKey);

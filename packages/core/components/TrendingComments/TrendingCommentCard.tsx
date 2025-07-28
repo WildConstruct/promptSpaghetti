@@ -6,10 +6,8 @@
  * 
  * Task: E16-1753114247017-86B04D - Implement trending comments
  */
-
 import React, { useState } from 'react';
 import { TrendingComment } from '../../types/TrendingCommentsTypes';
-
 interface TrendingCommentCardProps {
   comment: TrendingComment;
   rank: number;
@@ -18,7 +16,7 @@ interface TrendingCommentCardProps {
   isReply?: boolean;
 }
 
-export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
+export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({)
   comment,
   rank,
   onEngagement,
@@ -27,39 +25,34 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
 }) => {
   const [showAllReplies, setShowAllReplies] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffHours / 24);
-    
     if (diffHours < 1) {
       const diffMinutes = Math.floor(diffMs / (1000 * 60));
-      return diffMinutes < 1 ? 'Just now' : `${diffMinutes}m ago`;
+      return diffMinutes < 1 ? 'Just now' : `${diffMinutes}m ago`;}
     } else if (diffHours < 24) {
-      return `${diffHours}h ago`;
+      return `${diffHours}h ago`;}
     } else if (diffDays < 7) {
-      return `${diffDays}d ago`;
+      return `${diffDays}d ago`;}
     } else {
       return date.toLocaleDateString();
     }
   };
-
   const formatNumber = (num: number) => {
     if (num >= 1000) {
       return (num / 1000).toFixed(1) + 'K';
     }
     return num.toString();
   };
-
   const getTrendingBadgeColor = (score: number) => {
     if (score >= 80) return { bg: '#dcfce7', text: '#166534', icon: '🔥' };
     if (score >= 60) return { bg: '#fef3c7', text: '#92400e', icon: '🔊' };
     if (score >= 40) return { bg: '#dbeafe', text: '#1e40af', icon: '📈' };
     return { bg: '#f3f4f6', text: '#374151', icon: '💬' };
   };
-
   const getVelocityIcon = (trend: string) => {
     switch (trend) {
     case 'accelerating': return '🚀';
@@ -68,35 +61,30 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
     default: return '🔆';
     }
   };
-
   const shouldTruncateContent = (content: string) => {
     return content.length > 300;
   };
-
   const getTruncatedContent = (content: string) => {
     return content.substring(0, 300) + '...';
   };
-
   const trendingBadge = getTrendingBadgeColor(comment.score.scores.trendingScore);
-  const contentToShow = (!isExpanded && shouldTruncateContent(comment.content)) 
+  const contentToShow = (!isExpanded && shouldTruncateContent(comment.content)) ;
     ? getTruncatedContent(comment.content) 
     : comment.content;
-
   const handleEngagementClick = (engagementType: string) => {
     onEngagement(comment.commentId, engagementType);
   };
-
-  return (
+  return ()
     <div style={{
       backgroundColor: isReply ? '#fafbfc' : 'white',
       border: '1px solid #e5e7eb',
       borderRadius: '12px',
       padding: isReply ? '12px' : '16px',
       marginLeft: isReply ? '40px' : '0',
-      position: 'relative'
+      position: 'relative',
     }}>
       {/* Trending Rank Badge */}
-      {!isReply && (
+      {!isReply && ()
         <div style={{
           position: 'absolute',
           top: '-8px',
@@ -117,7 +105,6 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
           #{rank}
         </div>
       )}
-
       {/* Comment Header */}
       <div style={{
         display: 'flex',
@@ -138,52 +125,48 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
           fontSize: isReply ? '12px' : '14px',
           fontWeight: '600',
           color: '#6b7280',
-          backgroundImage: comment.authorAvatarUrl ? `url(${comment.authorAvatarUrl})` : undefined,
+          backgroundImage: comment.authorAvatarUrl ? `url(${comment.authorAvatarUrl})` : undefined,}
           backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          backgroundPosition: 'center',
         }}>
           {!comment.authorAvatarUrl && comment.authorDisplayName.charAt(0).toUpperCase()}
         </div>
-
         {/* Author Info */}
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{
               fontSize: isReply ? '13px' : '14px',
               fontWeight: '600',
-              color: '#111827'
+              color: '#111827',
             }}>
               {comment.authorDisplayName}
             </span>
-            
-            {comment.authorVerified && (
+            {comment.authorVerified && ()
               <span style={{
                 fontSize: '12px',
-                color: '#059669'
+                color: '#059669',
               }}>
                 ✓
               </span>
             )}
-            
-            {comment.authorReputation > 0 && (
+            {comment.authorReputation > 0 && ()
               <span style={{
                 fontSize: '11px',
                 color: '#6b7280',
                 backgroundColor: '#f3f4f6',
                 padding: '2px 6px',
-                borderRadius: '4px'
+                borderRadius: '4px',
               }}>
                 {formatNumber(comment.authorReputation)} rep
               </span>
             )}
           </div>
-          
           <div style={{
             fontSize: '12px',
             color: '#6b7280',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '8px',
           }}>
             <span>{formatTimeAgo(comment.createdAt)}</span>
             {comment.isEdited && <span>• edited</span>}
@@ -191,36 +174,33 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
             {comment.isHighlighted && <span>• ✨ highlighted</span>}
           </div>
         </div>
-
         {/* Trending Score */}
-        {!isReply && (
+        {!isReply && ()
           <div style={{
             display: 'flex',
             alignItems: 'center',
             gap: '4px',
             fontSize: '12px',
-            color: '#6b7280'
+            color: '#6b7280',
           }}>
             <span>{getVelocityIcon(comment.score.trends.velocityTrend)}</span>
             <span>{comment.score.scores.trendingScore.toFixed(1)}</span>
           </div>
         )}
       </div>
-
       {/* Comment Content */}
       <div style={{
         marginBottom: '12px',
-        lineHeight: '1.5'
+        lineHeight: '1.5',
       }}>
         <div style={{
           fontSize: isReply ? '13px' : '14px',
           color: '#374151',
-          whiteSpace: 'pre-wrap'
+          whiteSpace: 'pre-wrap',
         }}>
           {contentToShow}
         </div>
-        
-        {shouldTruncateContent(comment.content) && (
+        {shouldTruncateContent(comment.content) && ()
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             style={{
@@ -231,17 +211,16 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
               color: '#3b82f6',
               fontSize: '12px',
               cursor: 'pointer',
-              fontWeight: '500'
+              fontWeight: '500',
             }}
           >
             {isExpanded ? 'Show less' : 'Show more'}
           </button>
         )}
-
         {/* Hashtags */}
-        {comment.hashtags.length > 0 && (
+        {comment.hashtags.length > 0 && ()
           <div style={{ marginTop: '8px' }}>
-            {comment.hashtags.map(hashtag => (
+            {comment.hashtags.map(hashtag => ()
               <span
                 key={hashtag}
                 style={{
@@ -252,7 +231,7 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
                   borderRadius: '4px',
                   fontSize: '11px',
                   marginRight: '6px',
-                  marginBottom: '4px'
+                  marginBottom: '4px',
                 }}
               >
                 #{hashtag}
@@ -260,11 +239,10 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
             ))}
           </div>
         )}
-
         {/* Attachments */}
-        {comment.attachments.length > 0 && (
+        {comment.attachments.length > 0 && ()
           <div style={{ marginTop: '8px' }}>
-            {comment.attachments.map(attachment => (
+            {comment.attachments.map(attachment => ()
               <div
                 key={attachment.attachmentId}
                 style={{
@@ -274,11 +252,11 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
                   borderRadius: '6px',
                   fontSize: '12px',
                   color: '#6b7280',
-                  marginBottom: '4px'
+                  marginBottom: '4px',
                 }}
               >
                 📁 {attachment.title || 'Attachment'}
-                {attachment.description && (
+                {attachment.description && ()
                   <div style={{ marginTop: '4px', fontSize: '11px' }}>
                     {attachment.description}
                   </div>
@@ -288,7 +266,6 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
           </div>
         )}
       </div>
-
       {/* Engagement Metrics and Actions */}
       <div style={{
         display: 'flex',
@@ -301,7 +278,7 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '12px'
+          gap: '12px',
         }}>
           <button
             onClick={() => handleEngagementClick('like')}
@@ -317,13 +294,12 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
               fontSize: '12px',
               color: '#6b7280',
               ':hover': {
-                backgroundColor: '#f3f4f6'
+                backgroundColor: '#f3f4f6',
               }
             }}
           >
             👍 {formatNumber(comment.score.metrics.totalLikes)}
           </button>
-
           <button
             onClick={() => handleEngagementClick('reply')}
             style={{
@@ -336,12 +312,11 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
               borderRadius: '4px',
               cursor: 'pointer',
               fontSize: '12px',
-              color: '#6b7280'
+              color: '#6b7280',
             }}
           >
             💬 {formatNumber(comment.score.metrics.totalReplies)}
           </button>
-
           <button
             onClick={() => handleEngagementClick('share')}
             style={{
@@ -354,12 +329,11 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
               borderRadius: '4px',
               cursor: 'pointer',
               fontSize: '12px',
-              color: '#6b7280'
+              color: '#6b7280',
             }}
           >
             📤 {formatNumber(comment.score.metrics.totalShares)}
           </button>
-
           <button
             onClick={() => handleEngagementClick('helpful')}
             style={{
@@ -372,21 +346,20 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
               borderRadius: '4px',
               cursor: 'pointer',
               fontSize: '12px',
-              color: '#6b7280'
+              color: '#6b7280',
             }}
           >
             ✨ {formatNumber(comment.score.metrics.totalHelpfulVotes)}
           </button>
         </div>
-
         {/* Quality Score */}
-        {!isReply && (
+        {!isReply && ()
           <div style={{
             fontSize: '11px',
             color: '#6b7280',
             display: 'flex',
             alignItems: 'center',
-            gap: '4px'
+            gap: '4px',
           }}>
             <span>Quality:</span>
             <span style={{
@@ -399,12 +372,11 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
           </div>
         )}
       </div>
-
       {/* Replies */}
-      {showReplies && comment.replyTree.length > 0 && (
+      {showReplies && comment.replyTree.length > 0 && ()
         <div style={{ marginTop: '16px' }}>
           {/* Show Replies Button */}
-          {!showAllReplies && comment.replyTree.length > 2 && (
+          {!showAllReplies && comment.replyTree.length > 2 && ()
             <button
               onClick={() => setShowAllReplies(true)}
               style={{
@@ -415,15 +387,14 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
                 fontSize: '12px',
                 color: '#6b7280',
                 cursor: 'pointer',
-                marginBottom: '12px'
+                marginBottom: '12px',
               }}
             >
               👇 Show {comment.replyTree.length} replies
             </button>
           )}
-
           {/* Reply List */}
-          {(showAllReplies ? comment.replyTree : comment.replyTree.slice(0, 2)).map(reply => (
+          {(showAllReplies ? comment.replyTree : comment.replyTree.slice(0, 2)).map(reply => ()
             <TrendingCommentCard
               key={reply.commentId}
               comment={reply}
@@ -433,9 +404,8 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
               isReply={true}
             />
           ))}
-
           {/* Hide Replies Button */}
-          {showAllReplies && comment.replyTree.length > 2 && (
+          {showAllReplies && comment.replyTree.length > 2 && ()
             <button
               onClick={() => setShowAllReplies(false)}
               style={{
@@ -445,7 +415,7 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
                 fontSize: '12px',
                 color: '#6b7280',
                 cursor: 'pointer',
-                marginTop: '8px'
+                marginTop: '8px',
               }}
             >
               👆 Hide replies

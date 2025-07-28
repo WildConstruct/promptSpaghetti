@@ -8,7 +8,6 @@
  * Task: E17-1753114397354-F17F8C - Create fraud monitoring
  * Epic: 17 - Backstage Admin Controls
  */
-
 import { TimeRange } from '../marketplace/analytics.types';
 import { ActionSeverity } from './EnforcementTypes';
 import { RiskFactor, FraudIndicator } from './TrustTypes';
@@ -676,22 +675,16 @@ export interface DateRange {
 export interface FraudAnalytics {
   period: AnalyticsPeriod;
   generatedAt: Date;
-  
   // Overall fraud metrics
   overallMetrics: FraudOverallMetrics;
-  
   // Detection performance
   detectionMetrics: DetectionMetrics;
-  
   // Fraud trends
   trends: FraudTrends;
-  
   // False positive analysis
   falsePositiveAnalysis: FalsePositiveAnalysis;
-  
   // Financial impact
   financialImpact: FinancialImpact;
-  
   // Insights and recommendations
   insights: FraudInsight[];
   recommendations: FraudAnalyticsRecommendation[];
@@ -710,13 +703,11 @@ export interface FraudOverallMetrics {
   blockedTransactions: number;
   reviewedTransactions: number;
   averageFraudScore: number;
-  
   // Detection metrics
   truePositives: number;
   falsePositives: number;
   trueNegatives: number;
   falseNegatives: number;
-  
   // Performance metrics
   accuracy: number;
   precision: number;
@@ -758,14 +749,11 @@ export interface ResponseTimeMetrics {
 export interface FraudTrends {
   fraudRateTrend: 'increasing' | 'stable' | 'decreasing';
   volumeTrend: 'increasing' | 'stable' | 'decreasing';
-  
   // Time series data
   dailyFraudRates: number[];
   dailyVolumes: number[];
-  
   // Seasonal patterns
   seasonalPatterns: SeasonalFraudPattern[];
-  
   // Emerging patterns
   emergingThreats: EmergingThreat[];
 }
@@ -815,7 +803,6 @@ export interface FinancialImpact {
   operationalCost: number; // cost of fraud operations
   netBenefit: number; // fraudPrevented - falsePositiveCost - operationalCost
   roi: number; // return on investment
-  
   // Breakdown by type
   paymentFraudPrevented: number;
   accountFraudPrevented: number;
@@ -841,7 +828,7 @@ export interface FraudAnalyticsRecommendation {
   title: string;
   description: string;
   expectedImpact: string;
-  implementation: {
+  implementation: {,
     effort: 'low' | 'medium' | 'high';
     timeline: string;
     resources: string[];
@@ -859,19 +846,14 @@ export interface FraudMonitoringConfig {
   realTimeMonitoring: boolean;
   mlModelsEnabled: boolean;
   rulesEngineEnabled: boolean;
-  
   // Detection thresholds
   thresholds: FraudThresholds;
-  
   // Response configuration
   responseConfig: FraudResponseConfig;
-  
   // Integration settings
   integrations: ExternalIntegrations;
-  
   // Performance settings
   performance: PerformanceConfig;
-  
   // Notification settings
   notifications: NotificationConfig;
 }
@@ -882,7 +864,6 @@ export interface FraudThresholds {
   highRisk: number; // 51-75
   veryHighRisk: number; // 76-90
   criticalRisk: number; // 91-100
-  
   // Auto-action thresholds
   autoApprove: number;
   autoChallenge: number;
@@ -894,10 +875,8 @@ export interface FraudResponseConfig {
   autoActions: boolean;
   challengeEnabled: boolean;
   reviewQueueEnabled: boolean;
-  
   // Escalation settings
   escalationThresholds: EscalationThreshold[];
-  
   // Appeal settings
   appealEnabled: boolean;
   appealWindow: number; // hours

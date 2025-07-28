@@ -4,7 +4,6 @@
  * Extended transaction tracking types for Epic 17 - Backstage Admin Controls.
  * Provides comprehensive transaction monitoring capabilities for marketplace administrators.
  */
-
 import { TimeRange } from '../marketplace/analytics.types';
 
 // Base transaction status and types (extending existing)
@@ -47,35 +46,28 @@ export interface TrackedTransaction {
   id: string;
   externalId: string; // Provider transaction ID
   parentTransactionId?: string; // For refunds/chargebacks
-  
   // Basic transaction info
   type: TransactionType;
   status: TransactionStatus;
   amount: TransactionAmount;
   currency: string;
-  
   // Parties involved
   buyer: TransactionParty;
   seller: TransactionParty;
   template?: TransactionTemplate;
-  
   // Payment details
   paymentMethod: PaymentMethodDetails;
   provider: PaymentProviderDetails;
-  
   // Risk and fraud
   riskAssessment: TransactionRiskAssessment;
   fraudFlags: FraudFlag[];
-  
   // Timing and lifecycle
   timestamps: TransactionTimestamps;
   lifecycle: TransactionLifecycleEvent[];
-  
   // Admin tracking
   adminNotes: AdminNote[];
   flags: AdminFlag[];
   monitoring: MonitoringMetrics;
-  
   // Metadata
   metadata: Record<string, any>;
   tags: string[];
@@ -226,36 +218,29 @@ export interface TransactionSearchQuery {
   status?: TransactionStatus[];
   type?: TransactionType[];
   provider?: PaymentProvider[];
-  
   // Amount filters
   minAmount?: number;
   maxAmount?: number;
   currency?: string;
-  
   // Date filters
   dateRange?: {
     start: Date;
     end: Date;
   };
-  
   // Party filters
   buyerId?: string;
   sellerId?: string;
   templateId?: string;
-  
   // Risk and fraud filters
   riskLevel?: ('low' | 'medium' | 'high' | 'critical')[];
   hasFraudFlags?: boolean;
   requiresReview?: boolean;
-  
   // Text search
   search?: string; // Search in transaction ID, buyer/seller names, template titles
-  
   // Admin filters
   hasAdminNotes?: boolean;
   hasFlags?: boolean;
   flagType?: string[];
-  
   // Pagination and sorting
   page?: number;
   pageSize?: number;
@@ -275,7 +260,7 @@ export type TransactionSortField =
 
 export interface TransactionSearchResults {
   transactions: TrackedTransaction[];
-  pagination: {
+  pagination: {,
     page: number;
     pageSize: number;
     total: number;
@@ -298,7 +283,7 @@ export interface TransactionAggregations {
 
 export interface AppliedFilters {
   count: number;
-  filters: Array<{
+  filters: Array<{,
     field: string;
     operator: string;
     value: any;
@@ -320,7 +305,7 @@ export interface MonitoringThresholds {
   largeTransactionAlert: number; // amount threshold
   failureRateAlert: number; // percentage
   averageProcessingTimeAlert: number; // milliseconds
-  suspiciousPatternAlert: {
+  suspiciousPatternAlert: {,
     velocityThreshold: number;
     locationAnomalyThreshold: number;
     newPaymentMethodThreshold: number;
@@ -558,7 +543,7 @@ export interface TransactionRecommendation {
   title: string;
   description: string;
   expectedImpact: string;
-  implementation: {
+  implementation: {,
     complexity: 'low' | 'medium' | 'high';
     timeframe: string;
     requirements: string[];
@@ -570,22 +555,22 @@ export interface TransactionRecommendation {
 export interface TransactionTrackingConfig {
   realTimeMonitoring: boolean;
   dataRetentionDays: number;
-  exportLimits: {
+  exportLimits: {,
     maxRecords: number;
     maxFileSize: number; // MB
     allowedFormats: string[];
   };
-  alertSettings: {
+  alertSettings: {,
     enabled: boolean;
     channels: AlertChannel[];
     thresholds: MonitoringThresholds;
   };
-  riskSettings: {
+  riskSettings: {,
     enableMLDetection: boolean;
     manualReviewThreshold: number;
     autoFlagThreshold: number;
   };
-  integrations: {
+  integrations: {,
     stripe: boolean;
     paypal: boolean;
     analytics: boolean;

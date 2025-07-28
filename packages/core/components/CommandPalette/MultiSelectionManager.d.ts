@@ -20,7 +20,7 @@ export interface MultiSelectionManagerProps {
     selectedEdges: Edge[];
     onNodesSelect: (nodes: Node[]) => void;
     onEdgesSelect: (edges: Edge[]) => void;
-    onSelectionChange: (selection: {
+    onSelectionChange: (selection: {)
         nodes: Node[];
         edges: Edge[];
     }) => void;

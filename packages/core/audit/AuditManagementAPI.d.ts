@@ -162,7 +162,7 @@ export declare const AuditAnalyticsRequest: z.ZodObject<{
     end_date: z.ZodOptional<z.ZodString>;
     metrics: z.ZodArray<z.ZodEnum<["event_count", "unique_users", "risk_score_average", "severity_distribution", "compliance_violations", "geographic_distribution", "system_component_activity", "trend_analysis", "anomaly_detection"]>, "many">;
     group_by: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    filters: z.ZodOptional<z.ZodObject<{
+    filters: z.ZodOptional<z.ZodObject<{,
         page: z.ZodDefault<z.ZodNumber>;
         limit: z.ZodDefault<z.ZodNumber>;
         sort_field: z.ZodDefault<z.ZodString>;
@@ -378,7 +378,7 @@ export declare class AuditManagementAPI {
      * Export audit data
      * POST /api/audit/export
      */
-    exportAuditData(request: {
+    exportAuditData(request: {)
         format: 'csv' | 'json' | 'pdf';
         query?: AuditQueryRequestType;
         include_metadata?: boolean;

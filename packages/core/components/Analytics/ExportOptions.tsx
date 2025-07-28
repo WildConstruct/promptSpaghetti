@@ -7,7 +7,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Alert, AlertDescription } from '../ui/Alert';
 import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 import { Download, FileText, Table, Image, Settings } from 'lucide-react';
-
 /**
  * Export configuration interface
  */
@@ -17,13 +16,12 @@ interface ExportConfig {
   includeCostAnalysis: boolean;
   includePatterns: boolean;
   includeRecommendations: boolean;
-  dateRange: {
+  dateRange: {,
     startTime: number;
     endTime: number;
   };
   customName?: string;
 }
-
 /**
  * Export options props
  */
@@ -32,11 +30,10 @@ export interface ExportOptionsProps {
   timeRange: { startTime: number; endTime: number };
   className?: string;
 }
-
 /**
  * Export options component
  */
-export const ExportOptions: React.FC<ExportOptionsProps> = ({
+export const ExportOptions: React.FC<ExportOptionsProps> = ({)
   analyticsClient,
   timeRange,
   className = ''
@@ -44,49 +41,45 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
-  const [exportConfig, setExportConfig] = useState<ExportConfig>({
+  const [exportConfig, setExportConfig] = useState<ExportConfig>({)
     format: 'json',
     includeHeatMap: false,
     includeCostAnalysis: true,
     includePatterns: true,
     includeRecommendations: true,
     dateRange: timeRange,
-    customName: ''
+    customName: '',
   });
-
   /**
    * Handle export configuration change
    */
   const handleConfigChange = useCallback((key: keyof ExportConfig, value: Error) => {
-    setExportConfig(prev => ({
+    setExportConfig(prev => ({)
       ...prev,
       [key]: value
     }));
   }, []);
-
   /**
    * Handle date range change
    */
   const handleDateRangeChange = useCallback((field: 'startTime' | 'endTime', value: string) => {
     const timestamp = new Date(value).getTime();
-    setExportConfig(prev => ({
+    setExportConfig(prev => ({)
       ...prev,
-      dateRange: {
+      dateRange: {,
         ...prev.dateRange,
         [field]: timestamp
       }
     }));
   }, []);
-
   /**
    * Generate filename
    */
   const generateFilename = useCallback((format: string) => {
     const timestamp = new Date().toISOString().slice(0, 10);
     const customName = exportConfig.customName || 'analytics_report';
-    return `${customName}_${timestamp}.${format}`;
+    return `${customName}_${timestamp}.${format}`;}
   }, [exportConfig.customName]);
-
   /**
    * Handle export
    */
@@ -94,26 +87,22 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
     try {
       setIsExporting(true);
       setExportError(null);
-
       const reportConfig = {
         startTime: exportConfig.dateRange.startTime,
         endTime: exportConfig.dateRange.endTime,
         format: exportConfig.format,
         includeHeatMap: exportConfig.includeHeatMap,
         includeCostAnalysis: exportConfig.includeCostAnalysis,
-        includePatterns: exportConfig.includePatterns
+        includePatterns: exportConfig.includePatterns,
       };
-
       const reportData = await analyticsClient.generateReport(reportConfig);
-
       // Create blob and download
-      const blob = new Blob([reportData], {
+      const blob = new Blob([reportData], {)
         type: exportConfig.format === 'json' ? 'application/json' :
           exportConfig.format === 'csv' ? 'text/csv' :
             exportConfig.format === 'html' ? 'text/html' :
               'application/pdf'
       });
-
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -122,7 +111,6 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-
       setIsDialogOpen(false);
     } catch (error) {
       console.error('Export failed:', error);
@@ -131,7 +119,6 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
       setIsExporting(false);
     }
   }, [analyticsClient, exportConfig, generateFilename]);
-
   /**
    * Handle quick export
    */
@@ -139,15 +126,13 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
     try {
       setIsExporting(true);
       const data = await analyticsClient.exportData(timeRange, format);
-      
-      const blob = new Blob([data], {
+      const blob = new Blob([data], {)
         type: format === 'json' ? 'application/json' : 'text/csv'
       });
-      
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `analytics_data_${new Date().toISOString().slice(0, 10)}.${format}`;
+      a.download = `analytics_data_${new Date().toISOString().slice(0, 10)}.${format}`;}
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -158,14 +143,12 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
       setIsExporting(false);
     }
   }, [analyticsClient, timeRange]);
-
   /**
    * Format date for input
    */
   const formatDateForInput = (timestamp: number) => {
     return new Date(timestamp).toISOString().slice(0, 16);
   };
-
   /**
    * Get format icon
    */
@@ -183,7 +166,6 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
       return <FileText className="w-4 h-4" />;
     }
   };
-
   /**
    * Get format description
    */
@@ -201,9 +183,8 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
       return '';
     }
   };
-
-  return (
-    <div className={`export-options ${className}`}>
+  return ()
+    <div className={`export-options ${className}`}>}
       <div className="flex items-center gap-2">
         {/* Quick Export Buttons */}
         <Button
@@ -216,7 +197,6 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
           <Download className="w-4 h-4" />
           JSON
         </Button>
-        
         <Button
           size="sm"
           variant="outline"
@@ -227,7 +207,6 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
           <Download className="w-4 h-4" />
           CSV
         </Button>
-
         {/* Advanced Export Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
@@ -240,18 +219,16 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
               Advanced Export
             </Button>
           </DialogTrigger>
-          
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>Export Analytics Report</DialogTitle>
             </DialogHeader>
-            
             <div className="space-y-6">
               {/* Export Format Selection */}
               <div className="space-y-3">
                 <Label>Export Format</Label>
                 <div className="grid grid-cols-2 gap-3">
-                  {(['json', 'csv', 'html', 'pdf'] as const).map((format) => (
+                  {(['json', 'csv', 'html', 'pdf'] as const).map((format) => ()
                     <div
                       key={format}
                       className={`p-3 border rounded-lg cursor-pointer transition-all ${
@@ -272,7 +249,6 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                   ))}
                 </div>
               </div>
-
               {/* Date Range Selection */}
               <div className="space-y-3">
                 <Label>Date Range</Label>
@@ -297,7 +273,6 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                   </div>
                 </div>
               </div>
-
               {/* Content Options */}
               <div className="space-y-3">
                 <Label>Include in Export</Label>
@@ -312,7 +287,6 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                       Cost Analysis & Budget Data
                     </Label>
                   </div>
-                  
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="includePatterns"
@@ -323,7 +297,6 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                       Usage Patterns & Trends
                     </Label>
                   </div>
-                  
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="includeHeatMap"
@@ -334,7 +307,6 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                       Heat Map Data
                     </Label>
                   </div>
-                  
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="includeRecommendations"
@@ -347,7 +319,6 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                   </div>
                 </div>
               </div>
-
               {/* Custom Filename */}
               <div className="space-y-2">
                 <Label htmlFor="customName">Custom Filename (optional)</Label>
@@ -361,14 +332,12 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
                   Preview: {generateFilename(exportConfig.format)}
                 </div>
               </div>
-
               {/* Export Error */}
-              {exportError && (
+              {exportError && ()
                 <Alert variant="destructive">
                   <AlertDescription>{exportError}</AlertDescription>
                 </Alert>
               )}
-
               {/* Export Button */}
               <div className="flex justify-between items-center">
                 <div className="text-sm text-gray-600">
@@ -398,31 +367,26 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
     </div>
   );
 };
-
 /**
  * Export options styles
  */
-const styles = `
+const styles = `;
   .export-options {
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
-
   .export-options button {
     transition: all 0.2s ease-in-out;
   }
-
   .export-options button:hover {
     transform: translateY(-1px);
   }
-
   .export-options button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
   }
-
   @media (max-width: 768px) {
     .export-options {
       flex-direction: column;

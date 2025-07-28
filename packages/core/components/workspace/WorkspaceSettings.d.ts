@@ -6,7 +6,7 @@ import React from 'react';
 import { WorkspaceWithMembership } from '../../types/workspace';
 interface WorkspaceSettingsProps {
     workspace: WorkspaceWithMembership;
-    onUpdate: (updates: {
+    onUpdate: (updates: {)
         name?: string;
         description?: string;
     }) => void;

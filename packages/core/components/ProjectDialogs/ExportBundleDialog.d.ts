@@ -8,7 +8,7 @@ interface ExportBundleDialogProps {
     onClose: () => void;
     nodes: Node[];
     edges: Edge[];
-    onExport?: (result: {
+    onExport?: (result: {)
         success: boolean;
         error?: string;
     }) => void;

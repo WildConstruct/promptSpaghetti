@@ -2,7 +2,6 @@ import React, { memo, useState, useRef, useEffect } from 'react';
 import { Handle, Position } from 'reactflow';
 import { NodeMeta } from '../Palette';
 import { useSmoothHover, globalAnimationManager } from '../utils/smoothAnimations';
-
 interface NodeRendererProps {
   id: string;
   data: Record<string, unknown>;
@@ -12,7 +11,7 @@ interface NodeRendererProps {
   getCategoryColor: (category: string) => string;
 }
 
-export const NodeRenderer = memo<NodeRendererProps>(({
+export const NodeRenderer = memo<NodeRendererProps>(({)
   id,
   data,
   selected = false,
@@ -24,17 +23,15 @@ export const NodeRenderer = memo<NodeRendererProps>(({
   const [isDeleting, _____setIsDeleting] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const { isHovered, hoverProps } = useSmoothHover(150); // 150ms for micro-interactions
-
   // Node creation animation effect
   useEffect(() => {
     if (nodeRef.current) {
       // Register creation animation if this is a new node
-      const animationId = `node-create-${id}`;
+      const animationId = `node-create-${id}`;}
       if (globalAnimationManager.registerAnimation(animationId)) {
         setIsCreating(true);
         // Add CSS class for creation animation
         nodeRef.current.classList.add('animate-node-create');
-        
         // Clean up after animation
         setTimeout(() => {
           setIsCreating(false);
@@ -46,19 +43,16 @@ export const NodeRenderer = memo<NodeRendererProps>(({
       }
     }
   }, [id]);
-
   try {
     const hasVariations = data?.variations && data.variations.length > 0;
     const nodeType = data?.nodeType || data?.type || 'WeightedChoice';
     const nodeMeta = getNodeMeta(nodeType);
     const categoryColor = getCategoryColor(nodeMeta.category || 'general');
-  
     // Get non-label properties for display
     const properties = Object.entries(data || {})
       .filter(([k]) => k !== 'label' && k !== 'variations' && k !== 'type')
       .slice(0, 3); // Limit to 3 properties for clean display
-    
-    return (
+    return ()
       <div
         ref={nodeRef}
         role="button"
@@ -79,10 +73,10 @@ export const NodeRenderer = memo<NodeRendererProps>(({
         style={{
           cursor: 'pointer',
           // Professional gradient background inspired by Cinema 4D panels
-          background: `linear-gradient(
+          background: `linear-gradient(),
             135deg,
             var(--bg-tertiary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%)`,
-          border: selected 
+          border: selected ,
             ? '2px solid var(--accent-orange)' 
             : '1px solid var(--border)',
           borderRadius: 'var(--radius-md)',
@@ -122,19 +116,19 @@ export const NodeRenderer = memo<NodeRendererProps>(({
           WebkitBackfaceVisibility: 'hidden',
           backfaceVisibility: 'hidden',
           WebkitPerspective: 1000,
-          perspective: 1000
+          perspective: 1000,
         }}
         aria-label={(() => {
           const label = data?.label ?? nodeMeta.label;
-          const summary = properties.map(([k, v]) => `${k}: ${String(v)}`).join(', ');
-          return summary ? `${label}. ${summary}` : label;
+          const summary = properties.map(([k, v]) => `${k}: ${String(v)}`).join(', ');}
+          return summary ? `${label}. ${summary}` : label;}
         })()}
       >
         {/* Header Section */}
         <div
           style={{
             // Cinema 4D inspired header gradient
-            background: `linear-gradient(135deg, ${categoryColor} 0%, ${categoryColor}dd 100%)`,
+            background: `linear-gradient(135deg, ${categoryColor} 0%, ${categoryColor}dd 100%)`,}
             color: '#ffffff',
             padding: 'var(--space-2) var(--space-3)',
             fontSize: 'var(--font-size-xs)',
@@ -156,7 +150,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
             {typeof nodeMeta.icon === 'string' ? nodeMeta.icon : '🔧'}
           </span>
           <span style={{ letterSpacing: '0.01em' }}>{nodeMeta.label}</span>
-          {hasVariations && (
+          {hasVariations && ()
             <div
               style={{
                 marginLeft: 'auto',
@@ -178,7 +172,6 @@ export const NodeRenderer = memo<NodeRendererProps>(({
             </div>
           )}
         </div>
-
         {/* Content Section */}
         <div style={{ 
           padding: 'var(--space-3)',
@@ -194,29 +187,28 @@ export const NodeRenderer = memo<NodeRendererProps>(({
             color: 'var(--text-primary)',
             lineHeight: 1.3,
             // Subtle glow for selected state
-            ...(selected && {
+            ...(selected && {)
               textShadow: '0 0 8px var(--accent-orange)40'
             })
           }}>
             {data?.label || nodeMeta.label || nodeType || id}
           </div>
-          
           {/* Properties */}
-          {properties.length > 0 && (
+          {properties.length > 0 && ()
             <div style={{ 
               fontSize: 'var(--font-size-xs)', 
               color: 'var(--text-secondary)', 
               lineHeight: 1.4,
               fontFamily: 'var(--font-mono)' // Monospace for technical properties
             }}>
-              {properties.map(([k, v], idx) => (
+              {properties.map(([k, v], idx) => ()
                 <div key={k} style={{ 
                   marginBottom: idx < properties.length - 1 ? '3px' : 0,
-                  opacity: 0.8
+                  opacity: 0.8,
                 }}>
                   <span style={{ 
                     color: 'var(--text-tertiary)', 
-                    fontWeight: 500 
+                    fontWeight: 500 ,
                   }}>{k}:</span>{' '}
                   <span style={{ color: 'var(--text-secondary)' }}>
                     {String(v).length > 22 ? String(v).slice(0, 22) + '…' : String(v)}
@@ -226,7 +218,6 @@ export const NodeRenderer = memo<NodeRendererProps>(({
             </div>
           )}
         </div>
-
         {/* Input Handle - Professional styling with smooth animations */}
         <Handle
           type="target"
@@ -247,7 +238,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
             boxShadow: 'var(--shadow-sm)',
             // Force hardware acceleration
             WebkitBackfaceVisibility: 'hidden',
-            backfaceVisibility: 'hidden'
+            backfaceVisibility: 'hidden',
           }}
           onMouseEnter={(e) => {
             const target = e.currentTarget as HTMLElement;
@@ -263,7 +254,6 @@ export const NodeRenderer = memo<NodeRendererProps>(({
           }}
           isConnectable={true}
         />
-
         {/* Output Handle - Professional styling with smooth animations */}
         <Handle
           type="source"
@@ -284,12 +274,12 @@ export const NodeRenderer = memo<NodeRendererProps>(({
             boxShadow: 'var(--shadow-sm)',
             // Force hardware acceleration
             WebkitBackfaceVisibility: 'hidden',
-            backfaceVisibility: 'hidden'
+            backfaceVisibility: 'hidden',
           }}
           onMouseEnter={(e) => {
             const target = e.currentTarget as HTMLElement;
             target.style.transform = 'scale(1.15)';
-            target.style.boxShadow = `var(--shadow-md), 0 0 12px ${categoryColor}60`;
+            target.style.boxShadow = `var(--shadow-md), 0 0 12px ${categoryColor}60`;}
           }}
           onMouseLeave={(e) => {
             const target = e.currentTarget as HTMLElement;
@@ -303,7 +293,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
   } catch (error) {
     console.error('NodeRenderer error:', error, 'Props:', { id, data });
     // Professional error state
-    return (
+    return ()
       <div
         style={{
           cursor: 'pointer',
@@ -319,14 +309,14 @@ export const NodeRenderer = memo<NodeRendererProps>(({
           justifyContent: 'center',
           fontFamily: 'var(--font-primary)',
           boxShadow: 'var(--shadow-md)',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
       >
         <div>
           <div style={{ 
             fontSize: 'var(--font-size-lg)', 
             marginBottom: 'var(--space-2)',
-            color: 'var(--accent-red)' 
+            color: 'var(--accent-red)' ,
           }}>
             ⚠️
           </div>
@@ -338,5 +328,4 @@ export const NodeRenderer = memo<NodeRendererProps>(({
     );
   }
 });
-
 NodeRenderer.displayName = 'NodeRenderer';

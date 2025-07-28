@@ -23,7 +23,7 @@ export interface SyncDelta {
     fromVersion: number;
     toVersion: number;
     conflicts: ConflictInfo[];
-    metadata: {
+    metadata: {,
         operationCount: number;
         estimatedSize: number;
         compression?: string;
@@ -89,10 +89,10 @@ export declare class SynchronizationRecovery extends EventEmitter {
     /**
      * Start synchronization recovery for a document
      */
-    startRecovery(
+    startRecovery()
       documentId: string,
       localState: DocumentState,
-      serverStateProvider: (
+      serverStateProvider: (),
     ) => Promise<DocumentState>): Promise<SyncDelta>;
     /**
      * Calculate differential sync between local and server state

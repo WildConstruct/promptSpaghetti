@@ -45,12 +45,12 @@ export interface ShareSecurityConfig {
   dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';
   encryptionRequired: boolean;
   auditingEnabled: boolean;
-  retentionPolicy: {
+  retentionPolicy: {,
     maxShareDuration: number; // days
     autoExpire: boolean;
     dataRetentionDays: number;
   };
-  accessControls: {
+  accessControls: {,
     ipWhitelist: string[];
     geoRestrictions: string[];
     requireAuthentication: boolean;
@@ -321,7 +321,7 @@ export interface ShareAnalyticsResponse {
 
 // Error types
 export class ShareError extends Error {
-  constructor(
+  constructor()
     message: string,
     public code: ShareErrorCode,
     public details?: any

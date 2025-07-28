@@ -2,28 +2,23 @@
  * Storage Extension Interface - Epic 8.4 Story 8.4.2
  * Defines interfaces for extending the storage and persistence system
  */
-
 import { z } from 'zod';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 
 // Storage Extension Interface
 export interface StorageExtension extends BaseExtension {
   readonly extensionType: 'storage';
-  
   // Storage provider registration
   getStorageProviders(): StorageProviderDefinition[];
   createStorageProvider(providerId: string, config: any): StorageProvider;
-  
   // Storage validation
   validateStorageConfig(providerId: string, config: any): ExtensionValidationResult;
   getStorageSchema(providerId: string): z.ZodSchema<any>;
-  
   // Storage lifecycle hooks
   onStorageCreated?(provider: StorageProvider): void;
   onStorageConnected?(provider: StorageProvider): void;
   onStorageDisconnected?(provider: StorageProvider): void;
   onStorageError?(provider: StorageProvider, error: Error): void;
-  
   // Migration support
   supportsMigration(): boolean;
   createMigration?(from: StorageProvider, to: StorageProvider): StorageMigration;
@@ -35,70 +30,55 @@ export interface StorageProvider {
   readonly name: string;
   readonly type: StorageType;
   readonly version: string;
-  
   // Connection management
   connect(config: any): Promise<void>;
   disconnect(): Promise<void>;
   isConnected(): boolean;
-  
   // Basic operations
   get<T>(key: string): Promise<T | undefined>;
   set<T>(key: string, value: T, options?: StorageSetOptions): Promise<void>;
   delete(key: string): Promise<void>;
   exists(key: string): Promise<boolean>;
   clear(): Promise<void>;
-  
   // Batch operations
   getMany<T>(keys: string[]): Promise<Array<T | undefined>>;
   setMany<T>(entries: Array<{ key: string; value: T; options?: StorageSetOptions }>): Promise<void>;
   deleteMany(keys: string[]): Promise<void>;
-  
   // Key operations
   keys(pattern?: string): Promise<string[]>;
   count(pattern?: string): Promise<number>;
-  
   // Advanced operations
   increment(key: string, amount?: number): Promise<number>;
   decrement(key: string, amount?: number): Promise<number>;
   expire(key: string, ttl: number): Promise<void>;
   ttl(key: string): Promise<number>;
-  
   // Collection operations (if supported)
   supportsCollections(): boolean;
   createCollection?(name: string, schema?: any): Promise<StorageCollection>;
   getCollection?(name: string): Promise<StorageCollection | undefined>;
   deleteCollection?(name: string): Promise<void>;
   listCollections?(): Promise<string[]>;
-  
   // Transaction support (if supported)
   supportsTransactions(): boolean;
   beginTransaction?(): Promise<StorageTransaction>;
-  
   // Query support (if supported)
   supportsQueries(): boolean;
   query?<T>(query: StorageQuery): Promise<T[]>;
-  
   // Streaming support (if supported)
   supportsStreaming(): boolean;
   stream?<T>(pattern?: string): AsyncIterableIterator<{ key: string; value: T }>;
-  
   // Backup and restore
   backup?(destination: string): Promise<void>;
   restore?(source: string): Promise<void>;
-  
   // Statistics
   getStats(): Promise<StorageStats>;
-  
   // Health checking
   healthCheck(): Promise<StorageHealthStatus>;
-  
   // Configuration
   getConfiguration(): any;
   setConfiguration(config: any): void;
-  
   // Metadata
   getMetadata(): StorageProviderMetadata;
-  
   // Lifecycle
   initialize(context: ExtensionContext): Promise<void>;
   dispose(): Promise<void>;
@@ -135,22 +115,16 @@ export interface StorageProviderDefinition {
   description: string;
   version: string;
   type: StorageType;
-  
   // Provider class
   providerClass: new (id: string, config: any) => StorageProvider;
-  
   // Configuration schema
   configSchema: z.ZodSchema<any>;
-  
   // UI configuration
   ui: StorageUIConfiguration;
-  
   // Runtime configuration
   runtime: StorageRuntimeConfiguration;
-  
   // Capabilities
   capabilities: StorageCapabilities;
-  
   // Metadata
   metadata: StorageProviderMetadata;
 }
@@ -161,13 +135,10 @@ export interface StorageUIConfiguration {
   icon?: string;
   color?: string;
   category?: string;
-  
   // Configuration editor
   editor?: StorageEditorConfiguration;
-  
   // Connection wizard
   wizard?: StorageWizardConfiguration;
-  
   // Monitoring dashboard
   dashboard?: StorageDashboardConfiguration;
 }
@@ -176,17 +147,13 @@ export interface StorageUIConfiguration {
 export interface StorageEditorConfiguration {
   // Custom editor component
   component?: React.ComponentType<StorageEditorProps>;
-  
   // Form generation
   autoGenerateForm?: boolean;
   formLayout?: 'vertical' | 'horizontal' | 'grid';
-  
   // Field customization
   fields?: Record<string, StorageFieldConfiguration>;
-  
   // Validation
   validation?: StorageEditorValidation;
-  
   // Connection testing
   testConnection?: boolean;
 }
@@ -209,11 +176,9 @@ export interface StorageFieldConfiguration {
   validation?: z.ZodSchema<any>;
   options?: Array<{ value: any; label: string }>;
   component?: React.ComponentType<any>;
-  
   // Security
   sensitive?: boolean;
   masked?: boolean;
-  
   // Advanced options
   multiline?: boolean;
   fileFilter?: string;
@@ -267,16 +232,12 @@ export interface StorageDashboardChart {
 export interface StorageRuntimeConfiguration {
   // Connection settings
   connection?: StorageConnectionConfiguration;
-  
   // Performance settings
   performance?: StoragePerformanceConfiguration;
-  
   // Security settings
   security?: StorageSecurityConfiguration;
-  
   // Backup settings
   backup?: StorageBackupConfiguration;
-  
   // Monitoring settings
   monitoring?: StorageMonitoringConfiguration;
 }
@@ -291,7 +252,6 @@ export interface StorageConnectionConfiguration {
     acquireTimeout?: number;
     idleTimeout?: number;
   };
-  
   // Retry configuration
   retry?: {
     enabled?: boolean;
@@ -299,14 +259,12 @@ export interface StorageConnectionConfiguration {
     retryDelay?: number;
     backoffStrategy?: 'fixed' | 'exponential' | 'linear';
   };
-  
   // Timeout configuration
   timeout?: {
     connection?: number;
     query?: number;
     idle?: number;
   };
-  
   // SSL/TLS configuration
   ssl?: {
     enabled?: boolean;
@@ -326,21 +284,18 @@ export interface StoragePerformanceConfiguration {
     ttl?: number;
     strategy?: 'lru' | 'lfu' | 'fifo';
   };
-  
   // Compression
   compression?: {
     enabled?: boolean;
     algorithm?: 'gzip' | 'deflate' | 'brotli';
     level?: number;
   };
-  
   // Batching
   batching?: {
     enabled?: boolean;
     size?: number;
     timeout?: number;
   };
-  
   // Optimization
   optimization?: {
     indexing?: boolean;
@@ -358,21 +313,18 @@ export interface StorageSecurityConfiguration {
     keyRotation?: boolean;
     keyRotationInterval?: number;
   };
-  
   // Access control
   accessControl?: {
     enabled?: boolean;
     users?: StorageUser[];
     roles?: StorageRole[];
   };
-  
   // Audit logging
   audit?: {
     enabled?: boolean;
     events?: string[];
     destination?: string;
   };
-  
   // Data masking
   masking?: {
     enabled?: boolean;
@@ -443,39 +395,30 @@ export interface StorageCapabilities {
   delete: boolean;
   exists: boolean;
   clear: boolean;
-  
   // Batch operations
   batchGet: boolean;
   batchSet: boolean;
   batchDelete: boolean;
-  
   // Key operations
   keys: boolean;
   count: boolean;
   pattern: boolean;
-  
   // Advanced operations
   increment: boolean;
   decrement: boolean;
   expire: boolean;
   ttl: boolean;
-  
   // Collections
   collections: boolean;
-  
   // Transactions
   transactions: boolean;
-  
   // Queries
   queries: boolean;
-  
   // Streaming
   streaming: boolean;
-  
   // Backup/Restore
   backup: boolean;
   restore: boolean;
-  
   // Custom capabilities
   custom?: Record<string, boolean>;
 }
@@ -487,14 +430,12 @@ export interface StorageProviderMetadata {
   repository?: string;
   documentation?: string;
   examples?: StorageExample[];
-  
   // Performance characteristics
   performance?: {
     throughput: 'low' | 'medium' | 'high';
     latency: 'low' | 'medium' | 'high';
     scalability: 'single' | 'cluster' | 'distributed';
   };
-  
   // Compatibility
   compatibility?: {
     minVersion: string;
@@ -502,7 +443,6 @@ export interface StorageProviderMetadata {
     platforms?: string[];
     dependencies?: string[];
   };
-  
   // Categories and tags
   categories?: string[];
   tags?: string[];
@@ -529,7 +469,6 @@ export interface StorageOperation {
 export interface StorageCollection {
   readonly name: string;
   readonly schema?: any;
-  
   // Document operations
   insert<T>(document: T): Promise<string>;
   update<T>(id: string, document: Partial<T>): Promise<void>;
@@ -538,20 +477,16 @@ export interface StorageCollection {
   findMany<T>(query: any): Promise<T[]>;
   delete(id: string): Promise<void>;
   deleteMany(query: any): Promise<number>;
-  
   // Collection operations
   count(query?: any): Promise<number>;
   exists(id: string): Promise<boolean>;
   clear(): Promise<void>;
-  
   // Indexing
   createIndex(fields: string[], options?: any): Promise<void>;
   deleteIndex(name: string): Promise<void>;
   listIndexes(): Promise<string[]>;
-  
   // Aggregation
   aggregate<T>(pipeline: any[]): Promise<T[]>;
-  
   // Streaming
   stream<T>(query?: any): AsyncIterableIterator<T>;
 }
@@ -559,16 +494,13 @@ export interface StorageCollection {
 // Storage Transaction Interface
 export interface StorageTransaction {
   readonly id: string;
-  
   // Transaction operations
   get<T>(key: string): Promise<T | undefined>;
   set<T>(key: string, value: T, options?: StorageSetOptions): Promise<void>;
   delete(key: string): Promise<void>;
-  
   // Transaction control
   commit(): Promise<void>;
   rollback(): Promise<void>;
-  
   // Transaction status
   isActive(): boolean;
   isCommitted(): boolean;
@@ -579,22 +511,17 @@ export interface StorageTransaction {
 export interface StorageQuery {
   // Query type
   type: 'select' | 'insert' | 'update' | 'delete' | 'aggregate';
-  
   // Query conditions
   where?: StorageQueryCondition;
-  
   // Query options
   limit?: number;
   offset?: number;
   orderBy?: Array<{ field: string; direction: 'asc' | 'desc' }>;
-  
   // Projection
   select?: string[];
-  
   // Aggregation
   groupBy?: string[];
   having?: StorageQueryCondition;
-  
   // Joins (if supported)
   joins?: StorageQueryJoin[];
 }
@@ -604,7 +531,6 @@ export interface StorageQueryCondition {
   field: string;
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'nin' | 'like' | 'regex';
   value: any;
-  
   // Logical operators
   and?: StorageQueryCondition[];
   or?: StorageQueryCondition[];
@@ -621,40 +547,36 @@ export interface StorageQueryJoin {
 // Storage Stats
 export interface StorageStats {
   // Connection stats
-  connections: {
+  connections: {,
     total: number;
     active: number;
     idle: number;
   };
-  
   // Operation stats
-  operations: {
+  operations: {,
     total: number;
     reads: number;
     writes: number;
     deletes: number;
     errors: number;
   };
-  
   // Performance stats
-  performance: {
+  performance: {,
     averageLatency: number;
     throughput: number;
     errorRate: number;
     cacheHitRate?: number;
   };
-  
   // Storage stats
-  storage: {
+  storage: {,
     totalSize: number;
     usedSize: number;
     availableSize: number;
     keyCount: number;
     collectionCount?: number;
   };
-  
   // Memory stats
-  memory: {
+  memory: {,
     used: number;
     available: number;
     cached: number;
@@ -679,16 +601,12 @@ export interface StorageMigration {
   readonly id: string;
   readonly from: StorageProvider;
   readonly to: StorageProvider;
-  
   // Migration execution
   migrate(options?: StorageMigrationOptions): Promise<StorageMigrationResult>;
-  
   // Migration validation
   validate(): Promise<ExtensionValidationResult>;
-  
   // Migration progress
   getProgress(): StorageMigrationProgress;
-  
   // Migration control
   pause(): Promise<void>;
   resume(): Promise<void>;
@@ -740,7 +658,6 @@ export namespace StorageExtensionHelpers {
         name = config.name || 'Custom Storage';
         type = config.type || StorageType.CUSTOM;
         version = config.version || '1.0.0';
-        
         async connect() {}
         async disconnect() {}
         isConnected() { return true; }
@@ -794,11 +711,11 @@ export namespace StorageExtensionHelpers {
         queries: false,
         streaming: false,
         backup: false,
-        restore: false
+        restore: false,
       },
       metadata: config.metadata || {
         author: 'Unknown',
-        license: 'MIT'
+        license: 'MIT',
       }
     };
   }

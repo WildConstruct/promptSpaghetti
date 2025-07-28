@@ -95,7 +95,7 @@ export interface TimeRestriction {
 }
 export interface TimeSchedule {
     days: string[];
-    hours: {
+    hours: {,
         start: string;
         end: string;
     };
@@ -239,7 +239,7 @@ export interface QRCodeConfig {
     customization: QRCustomization;
 }
 export interface QRCustomization {
-    colors: {
+    colors: {,
         foreground: string;
         background: string;
     };
@@ -612,15 +612,15 @@ export declare class DirectLinkSharing extends EventEmitter {
     getLink(linkId: string): Promise<ShareLink | null>;
     getLinkByShortCode(shortCode: string): Promise<ShareLink | null>;
     accessLink(shortCode: string, accessContext: AccessContext): Promise<AccessResult>;
-    getLinkAnalytics(linkId: string, timeRange?: {
+    getLinkAnalytics(linkId: string, timeRange?: {)
         start: Date;
         end: Date;
     }): Promise<LinkAnalyticsReport>;
-    getBulkAnalytics(linkIds: string[], timeRange?: {
+    getBulkAnalytics(linkIds: string[], timeRange?: {)
         start: Date;
         end: Date;
     }): Promise<BulkAnalyticsReport>;
-    getUserAnalytics(userId: string, timeRange?: {
+    getUserAnalytics(userId: string, timeRange?: {)
         start: Date;
         end: Date;
     }): Promise<UserAnalyticsReport>;
@@ -760,23 +760,23 @@ export interface ScheduledShare {
 }
 export interface LinkAnalyticsReport {
     linkId: string;
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };
-    summary: {
+    summary: {,
         totalClicks: number;
         uniqueClicks: number;
         conversionRate: number;
         averageClicksPerDay: number;
     };
-    breakdown: {
+    breakdown: {,
         byCountry: Record<string, number>;
         byDevice: Record<string, number>;
         byReferrer: Record<string, number>;
         byHour: Record<string, number>;
     };
-    trends: Array<{
+    trends: Array<{,
         date: Date;
         clicks: number;
     }>;
@@ -784,17 +784,17 @@ export interface LinkAnalyticsReport {
 }
 export interface BulkAnalyticsReport {
     totalLinks: number;
-    summary: {
+    summary: {,
         totalClicks: number;
         uniqueClicks: number;
         conversionRate: number;
         averageClicksPerDay: number;
     };
-    topPerformers: Array<{
+    topPerformers: Array<{,
         linkId: string;
         clicks: number;
     }>;
-    trends: Array<{
+    trends: Array<{,
         date: Date;
         clicks: number;
     }>;
@@ -804,13 +804,13 @@ export interface UserAnalyticsReport {
     userId: string;
     totalLinks: number;
     activeLinks: number;
-    summary: {
+    summary: {,
         totalClicks: number;
         uniqueClicks: number;
         conversionRate: number;
         averageClicksPerDay: number;
     };
-    topLinks: Array<{
+    topLinks: Array<{,
         linkId: string;
         clicks: number;
     }>;
@@ -822,11 +822,11 @@ export interface SystemStats {
     totalClicks: number;
     uniqueVisitors: number;
     averageClicksPerLink: number;
-    topDomains: Array<{
+    topDomains: Array<{,
         domain: string;
         count: number;
     }>;
-    recentActivity: Array<{
+    recentActivity: Array<{,
         type: string;
         timestamp: Date;
         data: any;

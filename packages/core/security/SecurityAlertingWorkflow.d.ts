@@ -40,13 +40,13 @@ export interface SecurityAlert {
     title: string;
     description: string;
     source: string;
-    sourceData: {
+    sourceData: {,
         eventIds?: string[];
         patternIds?: string[];
         insightIds?: string[];
         metrics?: Record<string, number>;
     };
-    context: {
+    context: {,
         affectedSystems: string[];
         affectedUsers: string[];
         ipAddresses: string[];
@@ -56,21 +56,21 @@ export interface SecurityAlert {
             confidence: number;
         };
     };
-    risk: {
+    risk: {,
         score: number;
-        factors: Array<{
+        factors: Array<{,
             factor: string;
             impact: number;
         }>;
         likelihood: number;
         impact: number;
     };
-    compliance: {
+    compliance: {,
         frameworks: ComplianceFramework[];
         reportingRequired: boolean;
         deadline?: Date;
     };
-    escalation: {
+    escalation: {,
         level: number;
         maxLevel: number;
         nextEscalation?: Date;
@@ -83,7 +83,7 @@ export interface SecurityAlert {
         preventionMeasures: string[];
         lessonsLearned: string[];
     };
-    metadata: {
+    metadata: {,
         correlationId: string;
         workflowVersion: string;
         processingTime: number;
@@ -139,7 +139,7 @@ export interface EscalationStep {
 export interface NotificationRecipient {
     type: 'user' | 'team' | 'role';
     identifier: string;
-    contactMethods: Array<{
+    contactMethods: Array<{,
         channel: AlertChannel;
         address: string;
         priority: number;
@@ -196,7 +196,7 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
     /**
      * Create and process a new security alert
      */
-    createAlert(
+    createAlert()
       source: string,
       severity: AlertSeverity,
       category: ThreatCategory,
@@ -220,7 +220,7 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
     /**
      * Resolve an alert
      */
-    resolveAlert(
+    resolveAlert()
       alertId: string,
       resolvedBy: string,
       solution: string,
@@ -230,7 +230,7 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
     /**
      * Get alerts with filtering and pagination
      */
-    getAlerts(options?: {
+    getAlerts(options?: {)
         severity?: AlertSeverity[];
         state?: AlertState[];
         category?: ThreatCategory[];
@@ -246,7 +246,7 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
     /**
      * Get alert metrics and statistics
      */
-    getAlertMetrics(timeframe: {
+    getAlertMetrics(timeframe: {)
         start: Date;
         end: Date;
     }): {
@@ -257,7 +257,7 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
         averageResponseTime: number;
         averageResolutionTime: number;
         escalationRate: number;
-        topAlertSources: Array<{
+        topAlertSources: Array<{,
             source: string;
             count: number;
         }>;
@@ -321,9 +321,9 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
     private cleanupOldAlerts;
     private setupAnalyticsIntegration;
 }
-export declare function createSecurityAlertingWorkflow(
+export declare function createSecurityAlertingWorkflow()
   analytics: SecurityEventAnalytics,
-  securityLogger: SecurityLogger
+  securityLogger: SecurityLogger,
 ): SecurityAlertingWorkflow;
 export default SecurityAlertingWorkflow;
 //# sourceMappingURL=SecurityAlertingWorkflow.d.ts.map

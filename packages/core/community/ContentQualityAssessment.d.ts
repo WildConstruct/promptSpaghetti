@@ -28,31 +28,31 @@ export interface CommunityContentQualityMetrics {
 }
 export interface EditorialQualityMetrics {
     score: number;
-    accuracy: {
+    accuracy: {,
         factual_correctness: number;
         source_reliability: number;
         claim_verification: number;
         up_to_date: number;
     };
-    clarity: {
+    clarity: {,
         writing_quality: number;
         language_proficiency: number;
         structure_organization: number;
         readability: number;
     };
-    completeness: {
+    completeness: {,
         topic_coverage: number;
         depth_of_analysis: number;
         supporting_evidence: number;
         actionable_insights: number;
     };
-    educational_value: {
+    educational_value: {,
         learning_objectives_clarity: number;
         skill_development_potential: number;
         practical_applicability: number;
         difficulty_appropriateness: number;
     };
-    originality: {
+    originality: {,
         novelty_score: number;
         unique_perspective: number;
         creative_approach: number;
@@ -61,25 +61,25 @@ export interface EditorialQualityMetrics {
 }
 export interface TechnicalQualityMetrics {
     score: number;
-    formatting: {
+    formatting: {,
         markdown_quality: number;
         structure_consistency: number;
         visual_hierarchy: number;
         code_formatting: number;
     };
-    media_quality: {
+    media_quality: {,
         image_quality: number;
         image_relevance: number;
         alt_text_quality: number;
         media_accessibility: number;
     };
-    seo_optimization: {
+    seo_optimization: {,
         title_optimization: number;
         meta_description_quality: number;
         keyword_usage: number;
         internal_linking: number;
     };
-    accessibility: {
+    accessibility: {,
         screen_reader_compatibility: number;
         language_accessibility: number;
         cognitive_accessibility: number;
@@ -94,25 +94,25 @@ export interface TechnicalQualityMetrics {
 }
 export interface ContentEngagementMetrics {
     score: number;
-    engagement_potential: {
+    engagement_potential: {,
         hook_effectiveness: number;
         reader_retention_likelihood: number;
         interactive_elements: number;
         call_to_action_clarity: number;
     };
-    shareability: {
+    shareability: {,
         viral_potential: number;
         social_media_optimization: number;
         quotable_content: number;
         discussion_trigger_potential: number;
     };
-    utility: {
+    utility: {,
         actionability: number;
         problem_solving_value: number;
         reference_value: number;
         time_investment_worthiness: number;
     };
-    audience_fit: {
+    audience_fit: {,
         difficulty_level_appropriateness: number;
         prerequisite_clarity: number;
         tone_consistency: number;
@@ -121,25 +121,25 @@ export interface ContentEngagementMetrics {
 }
 export interface CommunityValueMetrics {
     score: number;
-    contribution_value: {
+    contribution_value: {,
         knowledge_gap_filling: number;
         community_need_alignment: number;
         expertise_sharing_quality: number;
         collaborative_potential: number;
     };
-    sustainability: {
+    sustainability: {,
         evergreen_content_potential: number;
         maintenance_requirements: number;
         update_frequency_needs: number;
         deprecation_risk: number;
     };
-    standards_compliance: {
+    standards_compliance: {,
         community_guidelines_adherence: number;
         code_of_conduct_compliance: number;
         content_policy_alignment: number;
         ethical_considerations: number;
     };
-    knowledge_transfer: {
+    knowledge_transfer: {,
         teaching_effectiveness: number;
         mentorship_quality: number;
         skill_building_support: number;
@@ -147,36 +147,36 @@ export interface CommunityValueMetrics {
     };
 }
 export interface AutomatedContentAnalysis {
-    language_analysis: {
+    language_analysis: {,
         grammar_score: number;
         spelling_accuracy: number;
         style_consistency: number;
-        tone_analysis: {
+        tone_analysis: {,
             detected_tone: string[];
             tone_consistency: number;
             appropriateness: number;
         };
     };
-    readability: {
+    readability: {,
         flesch_reading_ease: number;
         flesch_kincaid_grade: number;
         average_sentence_length: number;
         complex_words_percentage: number;
         estimated_reading_time: number;
     };
-    structure: {
+    structure: {,
         heading_hierarchy_score: number;
         paragraph_length_consistency: number;
         list_usage_effectiveness: number;
         table_of_contents_quality: number;
     };
-    seo: {
+    seo: {,
         keyword_density: Record<string, number>;
         meta_data_completeness: number;
         internal_link_quality: number;
         external_link_authority: number;
     };
-    classification: {
+    classification: {,
         detected_categories: string[];
         difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
         content_type_confidence: number;
@@ -187,7 +187,7 @@ export interface AutomatedContentAnalysis {
 export interface AutomatedIssue {
     type: 'grammar' | 'spelling' | 'formatting' | 'accessibility' | 'seo' | 'structure' | 'plagiarism' | 'factual';
     severity: 'low' | 'medium' | 'high' | 'critical';
-    location: {
+    location: {,
         section?: string;
         line?: number;
         character_range?: [number, number];
@@ -259,7 +259,7 @@ export interface QualityAssessmentWorkflow {
     current_status: 'pending' | 'in_review' | 'revision_needed' | 'approved' | 'rejected' | 'on_hold';
     blocking_issues: QualityFlag[];
     escalation_level: 'normal' | 'priority' | 'urgent';
-    notification_settings: {
+    notification_settings: {,
         notify_author: boolean;
         notify_reviewers: boolean;
         notify_community: boolean;
@@ -276,21 +276,21 @@ export interface WorkflowStep {
 export declare class ContentQualityAssessmentService {
     private apiClient;
     constructor(apiClient: any);
-    runComprehensiveAssessment(contentId: string, versionId: string, options?: {
+    runComprehensiveAssessment(contentId: string, versionId: string, options?: {)
         include_automated?: boolean;
         include_editorial?: boolean;
         include_community?: boolean;
         assigned_reviewer?: string;
         priority?: 'normal' | 'high' | 'urgent';
     }): Promise<CommunityContentQualityMetrics>;
-    runAutomatedAnalysis(contentId: string, versionId: string, options?: {
+    runAutomatedAnalysis(contentId: string, versionId: string, options?: {)
         include_plagiarism_check?: boolean;
         include_fact_checking?: boolean;
         include_accessibility_audit?: boolean;
         include_seo_analysis?: boolean;
         language?: string;
     }): Promise<AutomatedContentAnalysis>;
-    assignEditorialReview(contentId: string, versionId: string, reviewerId: string, options?: {
+    assignEditorialReview(contentId: string, versionId: string, reviewerId: string, options?: {)
         review_type?: 'quick_review' | 'comprehensive_review' | 'specialist_review';
         target_completion?: string;
         special_instructions?: string;
@@ -298,7 +298,7 @@ export declare class ContentQualityAssessmentService {
     submitEditorialReview(contentId: string, versionId: string, review: Omit<EditorialReview, 'reviewer_id' | 'reviewer_name' | 'review_date'>): Promise<EditorialReview>;
     getReviewWorkflow(contentId: string, versionId: string): Promise<QualityAssessmentWorkflow>;
     flagQualityIssue(contentId: string, versionId: string, flag: Omit<QualityFlag, 'auto_detected'>): Promise<QualityFlag>;
-    resolveQualityIssue(contentId: string, versionId: string, flagId: string, resolution: {
+    resolveQualityIssue(contentId: string, versionId: string, flagId: string, resolution: {)
         resolution_type: 'fixed' | 'false_positive' | 'accepted_risk';
         resolution_notes: string;
         resolved_by: string;
@@ -306,12 +306,12 @@ export declare class ContentQualityAssessmentService {
     getQualityBenchmarks(category?: string, contentType?: string, timeRange?: 'week' | 'month' | 'quarter' | 'year'): Promise<{
         overall_average: number;
         grade_distribution: Record<string, number>;
-        common_issues: Array<{
+        common_issues: Array<{,
             issue_type: string;
             frequency: number;
             avg_severity: number;
         }>;
-        improvement_trends: Array<{
+        improvement_trends: Array<{,
             metric: string;
             trend: 'improving' | 'stable' | 'declining';
             change_percentage: number;
@@ -324,22 +324,22 @@ export declare class ContentQualityAssessmentService {
             improvement_over_time: number;
             recent_reviews: EditorialReview[];
         };
-        community_stats: {
+        community_stats: {,
             total_content_assessed: number;
             avg_community_quality: number;
             quality_distribution: Record<string, number>;
-            top_contributors: Array<{
+            top_contributors: Array<{,
                 user_id: string;
                 username: string;
                 avg_quality: number;
                 content_count: number;
             }>;
         };
-        review_queue: {
+        review_queue: {,
             pending_reviews: number;
             avg_review_time: number;
             urgent_items: number;
-            reviewer_workload: Array<{
+            reviewer_workload: Array<{,
                 reviewer_id: string;
                 pending_count: number;
                 avg_turnaround: number;
@@ -359,7 +359,7 @@ export declare class ContentQualityAssessmentService {
         fixes_available: number;
         new_version_id?: string;
         quality_improvement: number;
-        applied_fixes: Array<{
+        applied_fixes: Array<{,
             type: string;
             description: string;
             confidence: number;
@@ -368,13 +368,13 @@ export declare class ContentQualityAssessmentService {
     getQualityGuidelines(contentType?: string, difficultyLevel?: string): Promise<{
         general_guidelines: string[];
         specific_criteria: Record<string, string[]>;
-        examples: Array<{
+        examples: Array<{,
             title: string;
             description: string;
             quality_score: number;
             exemplary_aspects: string[];
         }>;
-        common_mistakes: Array<{
+        common_mistakes: Array<{,
             mistake: string;
             impact: string;
             how_to_avoid: string;

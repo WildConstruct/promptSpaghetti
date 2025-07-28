@@ -41,25 +41,21 @@ import {
   ReviewStatus
 } from '../../types/branching';
 import { useBranching } from '../../hooks/useBranching';
-
 const { Title, Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
-
 interface MergeRequestPanelProps {
   projectId: string;
   visible: boolean;
   onClose: () => void;
 }
-
 interface MergeRequestItemProps {
   mergeRequest: BranchMergeRequest;
   onView: (mergeRequest: BranchMergeRequest) => void;
   onMerge: (mergeRequest: BranchMergeRequest) => void;
   onClose: (mergeRequest: BranchMergeRequest) => void;
 }
-
-const MergeRequestItem: React.FC<MergeRequestItemProps> = ({ 
+const MergeRequestItem: React.FC<MergeRequestItemProps> = ({ )
   mergeRequest, 
   onView, 
   onMerge, 
@@ -79,17 +75,15 @@ const MergeRequestItem: React.FC<MergeRequestItemProps> = ({
       return 'default';
     }
   };
-
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString();
   };
-
-  const menu = (
+  const menu = (;)
     <Menu>
       <Menu.Item key="view" icon={<EyeOutlined />} onClick={() => onView(mergeRequest)}>
         View Details
       </Menu.Item>
-      {mergeRequest.status === 'open' && (
+      {mergeRequest.status === 'open' && ()
         <>
           <Menu.Item key="merge" icon={<MergeOutlined />} onClick={() => onMerge(mergeRequest)}>
             Merge
@@ -101,8 +95,7 @@ const MergeRequestItem: React.FC<MergeRequestItemProps> = ({
       )}
     </Menu>
   );
-
-  return (
+  return ()
     <Card size="small" style={{ marginBottom: '8px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div style={{ flex: 1 }}>
@@ -112,7 +105,6 @@ const MergeRequestItem: React.FC<MergeRequestItemProps> = ({
               {mergeRequest.status.toUpperCase()}
             </Tag>
           </div>
-          
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
             <Space size="small">
               <BranchesOutlined />
@@ -121,14 +113,12 @@ const MergeRequestItem: React.FC<MergeRequestItemProps> = ({
                 source → target
               </Text>
             </Space>
-            
             <Space size="small">
               <UserOutlined />
               <Text type="secondary" style={{ fontSize: '11px' }}>
                 Created by User
               </Text>
             </Space>
-            
             <Space size="small">
               <ClockCircleOutlined />
               <Text type="secondary" style={{ fontSize: '11px' }}>
@@ -136,13 +126,11 @@ const MergeRequestItem: React.FC<MergeRequestItemProps> = ({
               </Text>
             </Space>
           </div>
-          
-          {mergeRequest.description && (
+          {mergeRequest.description && ()
             <Text type="secondary" style={{ fontSize: '12px' }}>
               {mergeRequest.description}
             </Text>
           )}
-          
           <div style={{ marginTop: '8px' }}>
             <Space>
               <Badge count={mergeRequest.commitsCount} size="small">
@@ -157,7 +145,6 @@ const MergeRequestItem: React.FC<MergeRequestItemProps> = ({
             </Space>
           </div>
         </div>
-        
         <Dropdown overlay={menu} trigger={['click']}>
           <Button type="text" size="small" icon={<MoreOutlined />} />
         </Dropdown>
@@ -166,7 +153,7 @@ const MergeRequestItem: React.FC<MergeRequestItemProps> = ({
   );
 };
 
-export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
+export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({)
   projectId,
   visible,
   onClose
@@ -176,7 +163,6 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedMergeRequest, setSelectedMergeRequest] = useState<BranchMergeRequest | null>(null);
   const [form] = Form.useForm();
-
   const { 
     listBranches,
     createMergeRequest,
@@ -184,16 +170,14 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
     loading,
     error
   } = useBranching();
-
   useEffect(() => {
     if (visible) {
       loadData();
     }
   }, [visible, projectId]);
-
   const loadData = async () => {
     try {
-      const [branchesData] = await Promise.all([
+      const [branchesData] = await Promise.all([)
         listBranches({ projectId, limit: 100 })
         // Would also load merge requests here
       ]);
@@ -203,7 +187,6 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
       console.error('Failed to load data:', error);
     }
   };
-
   const handleCreateMergeRequest = async (values: unknown) => {
     try {
       const request: CreateMergeRequestRequest = {
@@ -219,7 +202,6 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
         allowRebaseMerge: values.allowRebaseMerge || false,
         deleteSourceBranch: values.deleteSourceBranch || false
       };
-
       await createMergeRequest(request);
       setShowCreateModal(false);
       form.resetFields();
@@ -228,30 +210,26 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
       console.error('Failed to create merge request:', error);
     }
   };
-
   const handleMergeBranch = async (mergeRequest: BranchMergeRequest) => {
     try {
-      await mergeBranch({
+      await mergeBranch({)
         mergeRequestId: mergeRequest.id,
         mergeStrategy: 'merge',
-        deleteSourceBranch: mergeRequest.deleteSourceBranch
+        deleteSourceBranch: mergeRequest.deleteSourceBranch,
       });
       loadData();
     } catch (error) {
       console.error('Failed to merge branch:', error);
     }
   };
-
   const handleCloseMergeRequest = async (mergeRequest: BranchMergeRequest) => {
     // Would implement close functionality
     console.log('Closing merge request:', mergeRequest.id);
   };
-
   const handleViewMergeRequest = (mergeRequest: BranchMergeRequest) => {
     setSelectedMergeRequest(mergeRequest);
   };
-
-  return (
+  return ()
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <Title level={4} style={{ margin: 0 }}>
@@ -261,8 +239,7 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
           Create Merge Request
         </Button>
       </div>
-
-      {error && (
+      {error && ()
         <Alert
           message="Error"
           description={error}
@@ -272,12 +249,11 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
           style={{ marginBottom: '16px' }}
         />
       )}
-
       <div style={{ minHeight: '400px' }}>
-        {mergeRequests.length > 0 ? (
+        {mergeRequests.length > 0 ? ()
           <List
             dataSource={mergeRequests}
-            renderItem={(mergeRequest) => (
+            renderItem={(mergeRequest) => ()
               <MergeRequestItem
                 key={mergeRequest.id}
                 mergeRequest={mergeRequest}
@@ -287,13 +263,12 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
               />
             )}
           />
-        ) : (
+        ) : ()
           <div style={{ textAlign: 'center', padding: '40px' }}>
             <Text type="secondary">No merge requests found</Text>
           </div>
         )}
       </div>
-
       {/* Create Merge Request Modal */}
       <Modal
         title="Create Merge Request"
@@ -313,51 +288,45 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
           >
             <Input placeholder="e.g., Add user authentication feature" />
           </Form.Item>
-
           <Form.Item name="description" label="Description">
             <TextArea rows={3} placeholder="Describe the changes in this merge request..." />
           </Form.Item>
-
           <Form.Item
             name="sourceBranchId"
             label="Source Branch"
             rules={[{ required: true, message: 'Please select source branch' }]}
           >
             <Select placeholder="Select source branch">
-              {branches.map(branch => (
+              {branches.map(branch => ()
                 <Option key={branch.id} value={branch.id}>
                   {branch.displayName || branch.name}
                 </Option>
               ))}
             </Select>
           </Form.Item>
-
           <Form.Item
             name="targetBranchId"
             label="Target Branch"
             rules={[{ required: true, message: 'Please select target branch' }]}
           >
             <Select placeholder="Select target branch">
-              {branches.map(branch => (
+              {branches.map(branch => ()
                 <Option key={branch.id} value={branch.id}>
                   {branch.displayName || branch.name}
                 </Option>
               ))}
             </Select>
           </Form.Item>
-
           <Form.Item name="reviewers" label="Reviewers">
             <Select mode="multiple" placeholder="Select reviewers">
               {/* Would populate with project members */}
             </Select>
           </Form.Item>
-
           <Form.Item name="assignedTo" label="Assignee">
             <Select placeholder="Select assignee">
               {/* Would populate with project members */}
             </Select>
           </Form.Item>
-
           <div style={{ textAlign: 'right', marginTop: '24px' }}>
             <Space>
               <Button onClick={() => setShowCreateModal(false)}>
@@ -370,7 +339,6 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
           </div>
         </Form>
       </Modal>
-
       {/* Merge Request Details Modal */}
       <Modal
         title="Merge Request Details"
@@ -379,7 +347,7 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
         footer={null}
         width={800}
       >
-        {selectedMergeRequest && (
+        {selectedMergeRequest && ()
           <div>
             <Title level={4}>{selectedMergeRequest.title}</Title>
             <div style={{ marginBottom: '16px' }}>
@@ -388,9 +356,7 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
               </Tag>
             </div>
             <Text>{selectedMergeRequest.description}</Text>
-            
             <Divider />
-            
             <div>
               <Text strong>Changes:</Text>
               <div style={{ marginTop: '8px' }}>
@@ -402,15 +368,13 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
                 </Space>
               </div>
             </div>
-            
             <Divider />
-            
             <div>
               <Text strong>Reviews:</Text>
               <div style={{ marginTop: '8px' }}>
-                {selectedMergeRequest.reviewers.length > 0 ? (
+                {selectedMergeRequest.reviewers.length > 0 ? ()
                   <Text>Reviews pending from {selectedMergeRequest.reviewers.length} reviewers</Text>
-                ) : (
+                ) : ()
                   <Text type="secondary">No reviewers assigned</Text>
                 )}
               </div>

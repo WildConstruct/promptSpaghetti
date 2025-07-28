@@ -44,7 +44,7 @@ export declare     activeAudiences: TargetingAudience[];
 export declare     selectedRegions: string[];
     selectedCities: string[];
     excludeMode: boolean;
-    availableLocations: {
+    availableLocations: {,
         countries: never[];
         regions: never[];
         cities: never[];
@@ -63,7 +63,7 @@ export declare     selectedRegions: string[];
         cities: string[];
         excludeMode: boolean;
     };
-    loadFromConfig: (config: {
+    loadFromConfig: (config: {)
         countries?: string[];
         regions?: string[];
         cities?: string[];

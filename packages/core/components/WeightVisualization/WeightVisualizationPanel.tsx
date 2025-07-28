@@ -4,7 +4,6 @@
  * 
  * Comprehensive visualization panel for creative weight management
  */
-
 import React, { useState, useMemo, useCallback } from 'react';
 import { WeightDistributionChart, ChartType } from './WeightDistributionChart';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
@@ -24,7 +23,7 @@ export interface WeightVisualizationPanelProps {
   style?: React.CSSProperties;
 }
 
-export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> = ({
+export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> = ({)
   options,
   title = 'Weight Distribution',
   defaultChartType = 'pie',
@@ -41,25 +40,20 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
   const [colorScheme, setColorScheme] = useState<'professional' | 'cinema4d' | 'warm' | 'cool'>('cinema4d');
   const [showLabels, setShowLabels] = useState(true);
   const [showPercentages, setShowPercentages] = useState(true);
-
   // Calculate statistics
   const statistics = useMemo(() => {
     if (options.length === 0) return null;
-
     const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
     const weights = options.map(opt => opt.weight);
     const normalizedWeights = weights.map(w => totalWeight > 0 ? w / totalWeight : 1 / options.length);
-
     // Calculate entropy (measure of distribution evenness)
     const entropy = -normalizedWeights.reduce((sum, p) => p > 0 ? sum + p * Math.log2(p) : sum, 0);
     const maxEntropy = Math.log2(options.length);
     const evenness = maxEntropy > 0 ? entropy / maxEntropy : 0;
-
     // Find dominant option
     const maxWeightIndex = weights.indexOf(Math.max(...weights));
     const dominantOption = options[maxWeightIndex];
     const dominancePercentage = normalizedWeights[maxWeightIndex] * 100;
-
     return {
       totalWeight,
       minWeight: Math.min(...weights),
@@ -70,18 +64,17 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
       dominantOption,
       dominancePercentage,
       isBalanced: evenness > 0.8, // Consider balanced if entropy > 80% of max
-      optionCount: options.length
+      optionCount: options.length,
     };
   }, [options]);
-
   // Chart type controls
-  const ChartTypeSelector = () => (
+  const ChartTypeSelector = () => (;)
     <div style={{ display: 'flex', gap: 4, marginBottom: 12 }}>
       {[
         { type: 'pie' as ChartType, icon: '◯', label: 'Pie' },
         { type: 'donut' as ChartType, icon: '○', label: 'Donut' },
         { type: 'bar' as ChartType, icon: '▬', label: 'Bar' }
-      ].map(({ type, icon, label }) => (
+      ].map(({ type, icon, label }) => ()
         <button
           key={type}
           onClick={() => setChartType(type)}
@@ -97,7 +90,7 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
             transition: 'all 0.2s ease',
             display: 'flex',
             alignItems: 'center',
-            gap: 4
+            gap: 4,
           }}
           onMouseEnter={(e) => {
             if (chartType !== type) {
@@ -118,9 +111,8 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
       ))}
     </div>
   );
-
   // Color scheme selector
-  const ColorSchemeSelector = () => (
+  const ColorSchemeSelector = () => (;)
     <div style={{ marginBottom: 12 }}>
       <label style={{ fontSize: 11, color: '#9ca3af', marginBottom: 6, display: 'block' }}>
         Color Scheme
@@ -136,7 +128,7 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
           border: '1px solid rgba(55, 65, 81, 0.6)',
           borderRadius: 4,
           color: '#e5e7eb',
-          cursor: 'pointer'
+          cursor: 'pointer',
         }}
       >
         <option value="cinema4d">Cinema 4D Orange</option>
@@ -146,9 +138,8 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
       </select>
     </div>
   );
-
   // Display options
-  const DisplayOptions = () => (
+  const DisplayOptions = () => (;)
     <div style={{ marginBottom: 12 }}>
       <label style={{ fontSize: 11, color: '#9ca3af', marginBottom: 6, display: 'block' }}>
         Display Options
@@ -175,12 +166,10 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
       </div>
     </div>
   );
-
   // Statistics display
   const StatisticsDisplay = () => {
     if (!statistics || !showStatistics) return null;
-
-    return (
+    return ()
       <div
         style={{
           marginTop: 16,
@@ -196,11 +185,10 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
           color: '#e5e7eb', 
           marginBottom: 8,
           textTransform: 'uppercase',
-          letterSpacing: '0.5px'
+          letterSpacing: '0.5px',
         }}>
           Distribution Statistics
         </h4>
-        
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, fontSize: 10 }}>
           <div style={{ color: '#9ca3af' }}>
             <div>Options: <span style={{ color: '#e5e7eb', fontWeight: 500 }}>{statistics.optionCount}</span></div>
@@ -213,7 +201,6 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
             <div>Range: <span style={{ color: '#e5e7eb', fontWeight: 500 }}>{(statistics.maxWeight - statistics.minWeight).toFixed(2)}</span></div>
           </div>
         </div>
-        
         <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(55, 65, 81, 0.4)' }}>
           <div style={{ fontSize: 10, color: '#9ca3af', marginBottom: 4 }}>
             Dominant Option: <span style={{ color: '#ff7c00', fontWeight: 500 }}>
@@ -223,7 +210,7 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
           <div style={{ fontSize: 10, color: '#9ca3af' }}>
             Balance Score: <span style={{ 
               color: statistics.isBalanced ? '#10b981' : '#f59e0b', 
-              fontWeight: 500 
+              fontWeight: 500 ,
             }}>
               {(statistics.evenness * 100).toFixed(0)}%
             </span>
@@ -235,18 +222,16 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
       </div>
     );
   };
-
-  const content = (
+  const content = (;)
     <div style={{ padding: '0 4px' }}>
       {/* Chart Controls */}
-      {showChartControls && (
+      {showChartControls && ()
         <>
           <ChartTypeSelector />
           <ColorSchemeSelector />
           <DisplayOptions />
         </>
       )}
-      
       {/* Main Chart */}
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8 }}>
         <WeightDistributionChart
@@ -261,15 +246,13 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
           onOptionClick={onOptionClick}
         />
       </div>
-      
       {/* Statistics */}
       <StatisticsDisplay />
     </div>
   );
-
   // If no onCollapseChange provided, render non-collapsible version
   if (!onCollapseChange) {
-    return (
+    return ()
       <div className={className} style={style}>
         <div style={{ 
           marginBottom: 12,
@@ -283,7 +266,7 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
             margin: 0,
             display: 'flex',
             alignItems: 'center',
-            gap: 6
+            gap: 6,
           }}>
             📊 {title}
           </h3>
@@ -292,9 +275,8 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
       </div>
     );
   }
-
   // Collapsible version
-  return (
+  return ()
     <div className={className} style={style}>
       <CollapsibleSection
         title={`📊 ${title}`}

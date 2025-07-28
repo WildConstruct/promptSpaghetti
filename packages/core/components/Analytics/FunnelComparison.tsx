@@ -14,7 +14,6 @@
  * - Segment-based comparison
  * - Export and reporting capabilities
  */
-
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { 
   ConversionFunnelDefinition, 
@@ -109,22 +108,22 @@ export interface StepPerformanceData {
 }
 
 export interface PerformanceDelta {
-  overallConversionRate: {
+  overallConversionRate: {,
     absolute: number;
     relative: number;
     direction: 'improvement' | 'decline' | 'no_change';
   };
-  totalConversions: {
+  totalConversions: {,
     absolute: number;
     relative: number;
     direction: 'improvement' | 'decline' | 'no_change';
   };
-  averageTimeToConvert: {
+  averageTimeToConvert: {,
     absolute: number;
     relative: number;
     direction: 'improvement' | 'decline' | 'no_change';
   };
-  totalValue: {
+  totalValue: {,
     absolute: number;
     relative: number;
     direction: 'improvement' | 'decline' | 'no_change';
@@ -134,12 +133,12 @@ export interface PerformanceDelta {
 
 export interface StepDelta {
   stepId: string;
-  conversionRate: {
+  conversionRate: {,
     absolute: number;
     relative: number;
     direction: 'improvement' | 'decline' | 'no_change';
   };
-  dropOffRate: {
+  dropOffRate: {,
     absolute: number;
     relative: number;
     direction: 'improvement' | 'decline' | 'no_change';
@@ -189,7 +188,7 @@ export interface ComparisonMetadata {
   comparisonId: string;
   generatedAt: number;
   configuration: ComparisonConfiguration;
-  dataQuality: {
+  dataQuality: {,
     baselineSampleSize: number;
     comparisonSampleSize: number;
     dataCompleteness: number;
@@ -202,7 +201,7 @@ export interface ComparisonMetadata {
 
 export interface ComparisonExportData {
   comparison: ComparisonResult;
-  rawData: {
+  rawData: {,
     baselineEvents: FlexibleConversionEvent[];
     comparisonEvents: FlexibleConversionEvent[];
   };
@@ -247,11 +246,10 @@ export interface ABTestSuccessCriteria {
   minimumRunTime: number; // days
   minimumSampleSize: number;
 }
-
 /**
  * Main Funnel Comparison Component
  */
-export const FunnelComparison: React.FC<FunnelComparisonProps> = ({
+export const FunnelComparison: React.FC<FunnelComparisonProps> = ({)
   analyticsInfrastructure,
   primaryFunnel,
   comparisonMode,
@@ -264,60 +262,50 @@ export const FunnelComparison: React.FC<FunnelComparisonProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [selectedInsight, setSelectedInsight] = useState<ComparisonInsight | null>(null);
   const [viewMode, setViewMode] = useState<'overview' | 'detailed' | 'statistical'>('overview');
-
   // Load comparison data
   const loadComparisonData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
-      const result = await performFunnelComparison(
+      const result = await performFunnelComparison(;)
         analyticsInfrastructure,
         primaryFunnel,
         comparisonConfig
       );
-
       setComparisonResult(result);
-
       if (comparisonConfig.autoGenerateInsights && result.insights.length > 0) {
         onInsightGenerated?.(result.insights);
       }
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load comparison data');
     } finally {
       setLoading(false);
     }
   }, [analyticsInfrastructure, primaryFunnel, comparisonConfig, onInsightGenerated]);
-
   useEffect(() => {
     loadComparisonData();
   }, [loadComparisonData]);
-
   const handleExport = useCallback(() => {
     if (comparisonResult && onExportRequest) {
       const exportData: ComparisonExportData = {
         comparison: comparisonResult,
-        rawData: {
+        rawData: {,
           baselineEvents: [], // TODO: Include actual raw data
-          comparisonEvents: []
+          comparisonEvents: [],
         },
         visualizations: generateComparisonVisualizations(comparisonResult),
-        reportSummary: generateReportSummary(comparisonResult)
+        reportSummary: generateReportSummary(comparisonResult),
       };
       onExportRequest(exportData);
     }
   }, [comparisonResult, onExportRequest]);
-
   if (loading) {
     return <ComparisonLoadingState />;
   }
-
   if (error || !comparisonResult) {
     return <ComparisonErrorState error={error || 'No data available'} onRetry={loadComparisonData} />;
   }
-
-  return (
+  return ()
     <div className="funnel-comparison">
       <ComparisonHeader
         configuration={comparisonConfig}
@@ -326,31 +314,27 @@ export const FunnelComparison: React.FC<FunnelComparisonProps> = ({
         onViewModeChange={setViewMode}
         onExport={handleExport}
       />
-
       <ComparisonSummary
         baseline={comparisonResult.baseline}
         comparison={comparisonResult.comparison}
         delta={comparisonResult.delta}
         mode={comparisonMode}
       />
-
-      {comparisonResult.insights.length > 0 && (
+      {comparisonResult.insights.length > 0 && ()
         <InsightsPanel
           insights={comparisonResult.insights}
           selectedInsight={selectedInsight}
           onInsightSelect={setSelectedInsight}
         />
       )}
-
-      {viewMode === 'overview' && (
+      {viewMode === 'overview' && ()
         <OverviewComparison
           baseline={comparisonResult.baseline}
           comparison={comparisonResult.comparison}
           delta={comparisonResult.delta}
         />
       )}
-
-      {viewMode === 'detailed' && (
+      {viewMode === 'detailed' && ()
         <DetailedComparison
           baseline={comparisonResult.baseline}
           comparison={comparisonResult.comparison}
@@ -358,16 +342,14 @@ export const FunnelComparison: React.FC<FunnelComparisonProps> = ({
           funnelDefinition={primaryFunnel}
         />
       )}
-
-      {viewMode === 'statistical' && (
+      {viewMode === 'statistical' && ()
         <StatisticalAnalysis
           statisticalTests={comparisonResult.statisticalTests}
           metadata={comparisonResult.metadata}
           configuration={comparisonConfig}
         />
       )}
-
-      {selectedInsight && (
+      {selectedInsight && ()
         <InsightDetailModal
           insight={selectedInsight}
           comparisonResult={comparisonResult}
@@ -377,7 +359,6 @@ export const FunnelComparison: React.FC<FunnelComparisonProps> = ({
     </div>
   );
 };
-
 /**
  * Comparison Header Component
  */
@@ -388,15 +369,14 @@ interface ComparisonHeaderProps {
   onViewModeChange: (mode: 'overview' | 'detailed' | 'statistical') => void;
   onExport: () => void;
 }
-
-const ComparisonHeader: React.FC<ComparisonHeaderProps> = ({
+const ComparisonHeader: React.FC<ComparisonHeaderProps> = ({)
   configuration,
   result,
   viewMode,
   onViewModeChange,
   onExport
 }) => {
-  return (
+  return ()
     <div className="comparison-header">
       <div className="header-info">
         <h2>Funnel Comparison</h2>
@@ -410,10 +390,9 @@ const ComparisonHeader: React.FC<ComparisonHeaderProps> = ({
           </span>
         </div>
       </div>
-
       <div className="header-controls">
         <div className="view-mode-selector">
-          {(['overview', 'detailed', 'statistical'] as const).map(mode => (
+          {(['overview', 'detailed', 'statistical'] as const).map(mode => ()
             <button
               key={mode}
               onClick={() => onViewModeChange(mode)}
@@ -423,7 +402,6 @@ const ComparisonHeader: React.FC<ComparisonHeaderProps> = ({
             </button>
           ))}
         </div>
-
         <button onClick={onExport} className="export-button">
           Export Report
         </button>
@@ -431,7 +409,6 @@ const ComparisonHeader: React.FC<ComparisonHeaderProps> = ({
     </div>
   );
 };
-
 /**
  * Comparison Summary Component
  */
@@ -441,14 +418,13 @@ interface ComparisonSummaryProps {
   delta: PerformanceDelta;
   mode: ComparisonMode;
 }
-
-const ComparisonSummary: React.FC<ComparisonSummaryProps> = ({
+const ComparisonSummary: React.FC<ComparisonSummaryProps> = ({)
   baseline,
   comparison,
   delta,
   mode
 }) => {
-  return (
+  return ()
     <div className="comparison-summary">
       <div className="summary-grid">
         <MetricComparisonCard
@@ -458,7 +434,6 @@ const ComparisonSummary: React.FC<ComparisonSummaryProps> = ({
           delta={delta.overallConversionRate}
           format="percentage"
         />
-
         <MetricComparisonCard
           title="Total Conversions"
           baseline={baseline.totalConversions}
@@ -466,7 +441,6 @@ const ComparisonSummary: React.FC<ComparisonSummaryProps> = ({
           delta={delta.totalConversions}
           format="number"
         />
-
         <MetricComparisonCard
           title="Average Time to Convert"
           baseline={baseline.averageTimeToConvert}
@@ -474,7 +448,6 @@ const ComparisonSummary: React.FC<ComparisonSummaryProps> = ({
           delta={delta.averageTimeToConvert}
           format="duration"
         />
-
         <MetricComparisonCard
           title="Total Value"
           baseline={baseline.totalValue}
@@ -486,7 +459,6 @@ const ComparisonSummary: React.FC<ComparisonSummaryProps> = ({
     </div>
   );
 };
-
 /**
  * Metric Comparison Card Component
  */
@@ -494,15 +466,14 @@ interface MetricComparisonCardProps {
   title: string;
   baseline: number;
   comparison: number;
-  delta: {
+  delta: {,
     absolute: number;
     relative: number;
     direction: 'improvement' | 'decline' | 'no_change';
   };
   format: 'number' | 'percentage' | 'duration' | 'currency';
 }
-
-const MetricComparisonCard: React.FC<MetricComparisonCardProps> = ({
+const MetricComparisonCard: React.FC<MetricComparisonCardProps> = ({)
   title,
   baseline,
   comparison,
@@ -512,40 +483,36 @@ const MetricComparisonCard: React.FC<MetricComparisonCardProps> = ({
   const formatValue = (value: number) => {
     switch (format) {
       case 'percentage':
-        return `${value.toFixed(2)}%`;
+        return `${value.toFixed(2)}%`;}
       case 'duration':
         return formatDuration(value);
       case 'currency':
-        return `$${value.toLocaleString()}`;
+        return `$${value.toLocaleString()}`;}
       default:
         return value.toLocaleString();
     }
   };
-
-  return (
+  return ()
     <div className="metric-comparison-card">
       <h4 className="metric-title">{title}</h4>
-      
       <div className="metric-values">
         <div className="baseline-value">
           <span className="label">Baseline</span>
           <span className="value">{formatValue(baseline)}</span>
         </div>
-        
         <div className="comparison-value">
           <span className="label">Comparison</span>
           <span className="value">{formatValue(comparison)}</span>
         </div>
       </div>
-
-      <div className={`metric-delta ${delta.direction}`}>
+      <div className={`metric-delta ${delta.direction}`}>}
         <span className="delta-value">
           {delta.relative > 0 ? '+' : ''}{delta.relative.toFixed(1)}%
         </span>
         <span className="delta-absolute">
           ({delta.absolute > 0 ? '+' : ''}{formatValue(delta.absolute)})
         </span>
-        <span className={`delta-indicator ${delta.direction}`}>
+        <span className={`delta-indicator ${delta.direction}`}>}
           {delta.direction === 'improvement' ? '↗' : 
            delta.direction === 'decline' ? '↘' : '→'}
         </span>
@@ -553,7 +520,6 @@ const MetricComparisonCard: React.FC<MetricComparisonCardProps> = ({
     </div>
   );
 };
-
 /**
  * Insights Panel Component
  */
@@ -562,8 +528,7 @@ interface InsightsPanelProps {
   selectedInsight: ComparisonInsight | null;
   onInsightSelect: (insight: ComparisonInsight) => void;
 }
-
-const InsightsPanel: React.FC<InsightsPanelProps> = ({
+const InsightsPanel: React.FC<InsightsPanelProps> = ({)
   insights,
   selectedInsight,
   onInsightSelect
@@ -574,18 +539,15 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
       if (a.priority !== b.priority) {
         return b.priority - a.priority;
       }
-      
       const severityOrder = { critical: 4, high: 3, medium: 2, low: 1, info: 0 };
       return severityOrder[b.severity] - severityOrder[a.severity];
     });
   }, [insights]);
-
-  return (
+  return ()
     <div className="insights-panel">
       <h3>Key Insights</h3>
-      
       <div className="insights-grid">
-        {sortedInsights.map((insight, index) => (
+        {sortedInsights.map((insight, index) => ()
           <InsightCard
             key={index}
             insight={insight}
@@ -597,7 +559,6 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
     </div>
   );
 };
-
 /**
  * Insight Card Component
  */
@@ -606,9 +567,8 @@ interface InsightCardProps {
   isSelected: boolean;
   onClick: () => void;
 }
-
 const InsightCard: React.FC<InsightCardProps> = ({ insight, isSelected, onClick }) => {
-  return (
+  return ()
     <div 
       className={`insight-card ${insight.severity} ${isSelected ? 'selected' : ''}`}
       onClick={onClick}
@@ -617,24 +577,21 @@ const InsightCard: React.FC<InsightCardProps> = ({ insight, isSelected, onClick 
         <div className="insight-type">{insight.type.replace('_', ' ')}</div>
         <div className="insight-severity">{insight.severity}</div>
       </div>
-      
       <h4 className="insight-title">{insight.title}</h4>
       <p className="insight-description">{insight.description}</p>
-      
-      {insight.evidence.statisticalTest && (
+      {insight.evidence.statisticalTest && ()
         <div className="statistical-indicator">
           <span className="p-value">p = {insight.evidence.statisticalTest.pValue.toFixed(4)}</span>
-          <span className={`significance ${insight.evidence.statisticalTest.isSignificant ? 'significant' : 'not-significant'}`}>
+          <span className={`significance ${insight.evidence.statisticalTest.isSignificant ? 'significant' : 'not-significant'}`}>}
             {insight.evidence.statisticalTest.isSignificant ? 'Significant' : 'Not Significant'}
           </span>
         </div>
       )}
-      
-      {insight.recommendations && insight.recommendations.length > 0 && (
+      {insight.recommendations && insight.recommendations.length > 0 && ()
         <div className="insight-recommendations">
           <strong>Recommendations:</strong>
           <ul>
-            {insight.recommendations.slice(0, 2).map((rec, index) => (
+            {insight.recommendations.slice(0, 2).map((rec, index) => ()
               <li key={index}>{rec}</li>
             ))}
           </ul>
@@ -643,7 +600,6 @@ const InsightCard: React.FC<InsightCardProps> = ({ insight, isSelected, onClick 
     </div>
   );
 };
-
 /**
  * Overview Comparison Component
  */
@@ -652,26 +608,23 @@ interface OverviewComparisonProps {
   comparison: FunnelPerformanceData;
   delta: PerformanceDelta;
 }
-
-const OverviewComparison: React.FC<OverviewComparisonProps> = ({
+const OverviewComparison: React.FC<OverviewComparisonProps> = ({)
   baseline,
   comparison,
   delta
 }) => {
-  return (
+  return ()
     <div className="overview-comparison">
       <div className="funnel-charts">
         <div className="baseline-funnel">
           <h4>Baseline</h4>
           <SimpleFunnelChart steps={baseline.stepPerformance} />
         </div>
-        
         <div className="comparison-funnel">
           <h4>Comparison</h4>
           <SimpleFunnelChart steps={comparison.stepPerformance} />
         </div>
       </div>
-      
       <StepByStepComparison
         baselineSteps={baseline.stepPerformance}
         comparisonSteps={comparison.stepPerformance}
@@ -680,23 +633,19 @@ const OverviewComparison: React.FC<OverviewComparisonProps> = ({
     </div>
   );
 };
-
 /**
  * Simple Funnel Chart Component
  */
 interface SimpleFunnelChartProps {
   steps: StepPerformanceData[];
 }
-
 const SimpleFunnelChart: React.FC<SimpleFunnelChartProps> = ({ steps }) => {
   const maxEntries = Math.max(...steps.map(s => s.entries));
-
-  return (
+  return ()
     <div className="simple-funnel-chart">
       {steps.map((step, index) => {
         const width = (step.entries / maxEntries) * 100;
-        
-        return (
+        return ()
           <div key={step.stepId} className="funnel-step">
             <div 
               className="step-bar"
@@ -707,7 +656,7 @@ const SimpleFunnelChart: React.FC<SimpleFunnelChartProps> = ({ steps }) => {
                 <span className="step-rate">{step.conversionRate.toFixed(1)}%</span>
               </div>
             </div>
-            {index < steps.length - 1 && (
+            {index < steps.length - 1 && ()
               <div className="step-arrow">↓</div>
             )}
           </div>
@@ -716,7 +665,6 @@ const SimpleFunnelChart: React.FC<SimpleFunnelChartProps> = ({ steps }) => {
     </div>
   );
 };
-
 /**
  * Step-by-Step Comparison Component
  */
@@ -725,16 +673,14 @@ interface StepByStepComparisonProps {
   comparisonSteps: StepPerformanceData[];
   stepDeltas: StepDelta[];
 }
-
-const StepByStepComparison: React.FC<StepByStepComparisonProps> = ({
+const StepByStepComparison: React.FC<StepByStepComparisonProps> = ({)
   baselineSteps,
   comparisonSteps,
   stepDeltas
 }) => {
-  return (
+  return ()
     <div className="step-by-step-comparison">
       <h4>Step-by-Step Analysis</h4>
-      
       <div className="steps-table">
         <div className="table-header">
           <div>Step</div>
@@ -743,22 +689,19 @@ const StepByStepComparison: React.FC<StepByStepComparisonProps> = ({
           <div>Change</div>
           <div>Drop-off Change</div>
         </div>
-        
         {baselineSteps.map((baselineStep, index) => {
           const comparisonStep = comparisonSteps.find(s => s.stepId === baselineStep.stepId);
           const delta = stepDeltas.find(d => d.stepId === baselineStep.stepId);
-          
           if (!comparisonStep || !delta) return null;
-          
-          return (
+          return ()
             <div key={baselineStep.stepId} className="table-row">
               <div className="step-name">{baselineStep.stepName}</div>
               <div className="baseline-rate">{baselineStep.conversionRate.toFixed(1)}%</div>
               <div className="comparison-rate">{comparisonStep.conversionRate.toFixed(1)}%</div>
-              <div className={`conversion-change ${delta.conversionRate.direction}`}>
+              <div className={`conversion-change ${delta.conversionRate.direction}`}>}
                 {delta.conversionRate.relative > 0 ? '+' : ''}{delta.conversionRate.relative.toFixed(1)}%
               </div>
-              <div className={`dropoff-change ${delta.dropOffRate.direction}`}>
+              <div className={`dropoff-change ${delta.dropOffRate.direction}`}>}
                 {delta.dropOffRate.relative > 0 ? '+' : ''}{delta.dropOffRate.relative.toFixed(1)}%
               </div>
             </div>
@@ -768,48 +711,43 @@ const StepByStepComparison: React.FC<StepByStepComparisonProps> = ({
     </div>
   );
 };
-
 /**
  * Detailed Comparison Component
  */
-const DetailedComparison: React.FC<unknown> = () => (
+const DetailedComparison: React.FC<unknown> = () => ()
   <div className="detailed-comparison">
     <p>Detailed Comparison View (TODO: Implement)</p>
   </div>
 );
-
 /**
  * Statistical Analysis Component
  */
-const StatisticalAnalysis: React.FC<unknown> = () => (
+const StatisticalAnalysis: React.FC<unknown> = () => ()
   <div className="statistical-analysis">
     <p>Statistical Analysis View (TODO: Implement)</p>
   </div>
 );
-
 /**
  * Insight Detail Modal Component
  */
-const InsightDetailModal: React.FC<unknown> = () => (
+const InsightDetailModal: React.FC<unknown> = () => ()
   <div className="insight-detail-modal">
     <p>Insight Detail Modal (TODO: Implement)</p>
   </div>
 );
 
 // Loading and Error States
-const ComparisonLoadingState: React.FC = () => (
+const ComparisonLoadingState: React.FC = () => ()
   <div className="comparison-loading">
     <div className="loading-spinner"></div>
     <p>Analyzing funnel performance...</p>
   </div>
 );
-
 interface ComparisonErrorStateProps {
   error: string;
   onRetry: () => void;
 }
-
-const ComparisonErrorState: React.FC<ComparisonErrorStateProps> = ({ error, onRetry }) => (
+const ComparisonErrorState: React.FC<ComparisonErrorStateProps> = ({ error, onRetry }) => ()
   <div className="comparison-error">
     <div className="error-message">
       <h3>Error Loading Comparison</h3>
@@ -827,20 +765,17 @@ function formatDuration(milliseconds: number): string {
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
-
-  if (days > 0) return `${days}d ${hours % 24}h`;
-  if (hours > 0) return `${hours}h ${minutes % 60}m`;
-  if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
-  return `${seconds}s`;
+  if (days > 0) return `${days}d ${hours % 24}h`;}
+  if (hours > 0) return `${hours}h ${minutes % 60}m`;}
+  if (minutes > 0) return `${minutes}m ${seconds % 60}s`;}
+  return `${seconds}s`;}
 }
-
-async function performFunnelComparison(
+async function performFunnelComparison()
   analyticsInfrastructure: ConversionAnalyticsInfrastructure,
   funnelDefinition: ConversionFunnelDefinition,
-  configuration: ComparisonConfiguration
+  configuration: ComparisonConfiguration,
 ): Promise<ComparisonResult> {
   // Simplified implementation - in production would perform actual statistical analysis
-  
   const baselineData: FunnelPerformanceData = {
     targetId: configuration.baseline.id,
     totalEntries: 1000,
@@ -848,7 +783,7 @@ async function performFunnelComparison(
     overallConversionRate: 15.0,
     averageTimeToConvert: 86400000,
     totalValue: 3750,
-    stepPerformance: funnelDefinition.steps.map((step, index) => ({
+    stepPerformance: funnelDefinition.steps.map((step, index) => ({)
       stepId: step.id,
       stepName: step.name,
       order: step.order,
@@ -858,11 +793,10 @@ async function performFunnelComparison(
       dropOffCount: 150,
       dropOffRate: 17.6,
       averageTimeSpent: 120000,
-      value: 500
+      value: 500,
     })),
     additionalMetrics: {}
   };
-
   const comparisonData: FunnelPerformanceData = {
     targetId: configuration.comparison.id,
     totalEntries: 1200,
@@ -870,7 +804,7 @@ async function performFunnelComparison(
     overallConversionRate: 18.0,
     averageTimeToConvert: 72000000,
     totalValue: 5400,
-    stepPerformance: funnelDefinition.steps.map((step, index) => ({
+    stepPerformance: funnelDefinition.steps.map((step, index) => ({)
       stepId: step.id,
       stepName: step.name,
       order: step.order,
@@ -880,26 +814,24 @@ async function performFunnelComparison(
       dropOffCount: 150,
       dropOffRate: 12.5,
       averageTimeSpent: 100000,
-      value: 600
+      value: 600,
     })),
     additionalMetrics: {}
   };
-
   const delta = calculatePerformanceDelta(baselineData, comparisonData);
   const statisticalTests = performStatisticalTests(baselineData, comparisonData, configuration);
   const insights = generateComparisonInsights(baselineData, comparisonData, delta, statisticalTests);
-
   return {
     baseline: baselineData,
     comparison: comparisonData,
     delta,
     statisticalTests,
     insights,
-    metadata: {
-      comparisonId: `comparison-${Date.now()}`,
+    metadata: {,
+      comparisonId: `comparison-${Date.now()}`,}
       generatedAt: Date.now(),
       configuration,
-      dataQuality: {
+      dataQuality: {,
         baselineSampleSize: baselineData.totalEntries,
         comparisonSampleSize: comparisonData.totalEntries,
         dataCompleteness: 0.95,
@@ -907,29 +839,26 @@ async function performFunnelComparison(
         confidenceLevel: 1 - configuration.significanceLevel
       },
       executionTime: 1500,
-      cacheHit: false
+      cacheHit: false,
     }
   };
 }
-
-function calculatePerformanceDelta(
+function calculatePerformanceDelta()
   baseline: FunnelPerformanceData,
-  comparison: FunnelPerformanceData
+  comparison: FunnelPerformanceData,
 ): PerformanceDelta {
   const calculateDelta = (baseValue: number, compValue: number) => {
     const absolute = compValue - baseValue;
     const relative = baseValue > 0 ? (absolute / baseValue) * 100 : 0;
     const direction = absolute > 1 ? 'improvement' : absolute < -1 ? 'decline' : 'no_change';
-    
     return { absolute, relative, direction: direction as any };
   };
-
   return {
     overallConversionRate: calculateDelta(baseline.overallConversionRate, comparison.overallConversionRate),
     totalConversions: calculateDelta(baseline.totalConversions, comparison.totalConversions),
     averageTimeToConvert: calculateDelta(baseline.averageTimeToConvert, comparison.averageTimeToConvert),
     totalValue: calculateDelta(baseline.totalValue, comparison.totalValue),
-    stepDeltas: baseline.stepPerformance.map(baseStep => {
+    stepDeltas: baseline.stepPerformance.map(baseStep => {)
       const compStep = comparison.stepPerformance.find(s => s.stepId === baseStep.stepId);
       return {
         stepId: baseStep.stepId,
@@ -939,11 +868,10 @@ function calculatePerformanceDelta(
     })
   };
 }
-
-function performStatisticalTests(
+function performStatisticalTests()
   baseline: FunnelPerformanceData,
   comparison: FunnelPerformanceData,
-  configuration: ComparisonConfiguration
+  configuration: ComparisonConfiguration,
 ): StatisticalTestResult[] {
   // Simplified statistical test implementation
   return [
@@ -954,44 +882,40 @@ function performStatisticalTests(
       statisticValue: 2.28,
       isSignificant: true,
       confidenceInterval: [0.5, 5.2],
-      effectSize: 0.15
+      effectSize: 0.15,
     }
   ];
 }
-
-function generateComparisonInsights(
+function generateComparisonInsights()
   baseline: FunnelPerformanceData,
   comparison: FunnelPerformanceData,
   delta: PerformanceDelta,
-  statisticalTests: StatisticalTestResult[]
+  statisticalTests: StatisticalTestResult[],
 ): ComparisonInsight[] {
   const insights: ComparisonInsight[] = [];
-
   // Overall conversion rate insight
   if (delta.overallConversionRate.direction === 'improvement' && Math.abs(delta.overallConversionRate.relative) > 5) {
-    insights.push({
+    insights.push({)
       type: 'significant_improvement',
       severity: 'high',
       title: 'Significant Conversion Rate Improvement',
-      description: `The comparison funnel shows a ${delta.overallConversionRate.relative.toFixed(1)}% relative improvement in conversion rate.`,
+      description: `The comparison funnel shows a ${delta.overallConversionRate.relative.toFixed(1)}% relative improvement in conversion rate.`,}
       metric: 'overall_conversion_rate',
-      evidence: {
+      evidence: {,
         statisticalTest: statisticalTests.find(t => t.metric === 'overall_conversion_rate'),
         sampleSizes: { baseline: baseline.totalEntries, comparison: comparison.totalEntries },
         effectSize: 0.15,
-        confidenceLevel: 0.95
+        confidenceLevel: 0.95,
       },
-      recommendations: [
+      recommendations: [,
         'Consider implementing the comparison funnel configuration as the new standard',
         'Monitor the performance over time to ensure sustained improvement'
       ],
-      priority: 10
+      priority: 10,
     });
   }
-
   return insights;
 }
-
 function generateComparisonVisualizations(result: ComparisonResult): ComparisonVisualization[] {
   return [
     {
@@ -1002,9 +926,8 @@ function generateComparisonVisualizations(result: ComparisonResult): ComparisonV
     }
   ];
 }
-
 function generateReportSummary(result: ComparisonResult): string {
-  return `Funnel comparison completed with ${result.insights.length} key insights identified.`;
+  return `Funnel comparison completed with ${result.insights.length} key insights identified.`;}
 }
 
 export default FunnelComparison;

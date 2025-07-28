@@ -24,7 +24,7 @@ export interface TemplatePreviewConfig {
     showVariableSubstitution: boolean;
     errorOnUndefinedVariables: boolean;
 }
-export declare const useTemplatePreview: (
+export declare const useTemplatePreview: ()
   template: string,
   variableValues?: Record<string,
   string>,

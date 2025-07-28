@@ -14,7 +14,6 @@
  * - Export capabilities for charts
  * - Accessibility compliance
  */
-
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { 
   ConversionFunnelDefinition,
@@ -66,17 +65,17 @@ export interface StepMetrics {
 }
 
 export interface StepComparisonMetrics {
-  previousPeriod: {
+  previousPeriod: {,
     conversionRate: number;
     change: number;
     direction: 'improvement' | 'decline' | 'no_change';
   };
-  benchmark: {
+  benchmark: {,
     conversionRate: number;
     percentile: number;
     industry: string;
   };
-  segments: Array<{
+  segments: Array<{,
     segmentId: string;
     segmentName: string;
     conversionRate: number;
@@ -136,7 +135,7 @@ export interface SegmentFunnelComparison {
   segmentId: string;
   segmentName: string;
   overallConversionRate: number;
-  stepPerformance: Array<{
+  stepPerformance: Array<{,
     stepId: string;
     conversionRate: number;
     relativePerformance: number;
@@ -147,12 +146,12 @@ export interface SegmentFunnelComparison {
 export interface ChartExportData {
   chartMode: FunnelChartMode;
   data: FunnelChartData;
-  visualization: {
+  visualization: {,
     svg: string;
     png?: string;
     pdf?: string;
   };
-  metadata: {
+  metadata: {,
     exportedAt: number;
     timeRange: { start: number; end: number };
     filters: unknown[];
@@ -172,11 +171,10 @@ export interface StepTooltipContent {
   comparisonData?: StepComparisonMetrics;
   insights: string[];
 }
-
 /**
  * Main Funnel Chart Component
  */
-export const FunnelChart: React.FC<FunnelChartProps> = ({
+export const FunnelChart: React.FC<FunnelChartProps> = ({)
   funnelDefinition,
   analyticsInfrastructure,
   timeRange,
@@ -191,27 +189,24 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
   const [chartData, setChartData] = useState<FunnelChartData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [interactionState, setInteractionState] = useState<InteractionState>({
+  const [interactionState, setInteractionState] = useState<InteractionState>({)
     hoveredStep: null,
     selectedStep: null,
     tooltipPosition: null,
-    tooltipContent: null
+    tooltipContent: null,
   });
-
   const chartRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
   // Load funnel chart data
   const loadChartData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
       const query: ConversionMetricQuery = {
         funnelId: funnelDefinition.id,
         startDate: timeRange.start,
         endDate: timeRange.end,
-        metrics: [
+        metrics: [,
           'conversion_rate',
           'user_count',
           'revenue',
@@ -220,58 +215,49 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
           'step_completion_rate'
         ],
         groupBy: ['funnel_step', 'date'],
-        filters: [
-          ...segments.map(segment => ({
+        filters: [,
+          ...segments.map(segment => ({)
             field: 'userContext.segmentIds',
             operator: 'contains',
-            value: segment.id
+            value: segment.id,
           })),
-          ...cohorts.map(cohort => ({
+          ...cohorts.map(cohort => ({)
             field: 'userContext.cohortIds',
             operator: 'contains',
-            value: cohort.id
+            value: cohort.id,
           }))
         ],
         aggregation: { interval: 'day' }
       };
-
       const results = await analyticsInfrastructure.queryMetrics(query);
-      const processedData = await processFunnelChartData(
+      const processedData = await processFunnelChartData(;)
         funnelDefinition,
         results,
         segments,
         cohorts,
         timeRange
       );
-
       setChartData(processedData);
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load chart data');
     } finally {
       setLoading(false);
     }
   }, [funnelDefinition, analyticsInfrastructure, timeRange, segments, cohorts]);
-
   useEffect(() => {
     loadChartData();
   }, [loadChartData]);
-
   // Real-time updates
   useEffect(() => {
     if (!realTimeUpdates) return;
-
-    const interval = setInterval(loadChartData, 30000); // Update every 30 seconds
+    const interval = setInterval(loadChartData, 30000); // Update every 30 seconds;
     return () => clearInterval(interval);
   }, [realTimeUpdates, loadChartData]);
-
   // Chart dimensions and scaling
   const chartDimensions = useMemo(() => {
     if (!containerRef.current || !chartData) return null;
-
     const containerWidth = containerRef.current.clientWidth;
     const containerHeight = Math.min(containerWidth * 0.6, 500);
-
     return {
       width: containerWidth,
       height: containerHeight,
@@ -280,86 +266,75 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
       chartHeight: containerHeight - 100
     };
   }, [chartData, containerRef.current?.clientWidth]);
-
   // Handle step interactions
   const handleStepHover = useCallback((stepId: string | null, event?: React.MouseEvent) => {
     if (!chartData) return;
-
     if (stepId && event) {
       const step = chartData.steps.find(s => s.stepId === stepId);
       if (step) {
         const rect = event.currentTarget.getBoundingClientRect();
-        setInteractionState({
+        setInteractionState({)
           hoveredStep: stepId,
           selectedStep: interactionState.selectedStep,
           tooltipPosition: { x: rect.right + 10, y: rect.top },
-          tooltipContent: {
+          tooltipContent: {,
             stepName: step.stepName,
             metrics: step,
             comparisonData: step.comparisonData,
-            insights: generateStepInsights(step)
+            insights: generateStepInsights(step),
           }
         });
       }
     } else {
-      setInteractionState(prev => ({
+      setInteractionState(prev => ({)
         ...prev,
         hoveredStep: null,
         tooltipPosition: null,
-        tooltipContent: null
+        tooltipContent: null,
       }));
     }
   }, [chartData, interactionState.selectedStep]);
-
   const handleStepClick = useCallback((stepId: string) => {
     if (!chartData) return;
-
     const step = chartData.steps.find(s => s.stepId === stepId);
     if (step) {
-      setInteractionState(prev => ({
+      setInteractionState(prev => ({)
         ...prev,
         selectedStep: stepId === prev.selectedStep ? null : stepId
       }));
       onStepClick?.(funnelDefinition.steps.find(s => s.id === stepId)!, step);
     }
   }, [chartData, funnelDefinition.steps, onStepClick]);
-
   const handleExport = useCallback(async () => {
     if (!chartData || !chartRef.current) return;
-
     const svgElement = chartRef.current;
     const svgString = new XMLSerializer().serializeToString(svgElement);
-    
     const exportData: ChartExportData = {
       chartMode,
       data: chartData,
-      visualization: {
-        svg: svgString
+      visualization: {,
+        svg: svgString,
       },
-      metadata: {
+      metadata: {,
         exportedAt: Date.now(),
         timeRange,
-        filters: []
+        filters: [],
       }
     };
-
     onExport?.(exportData);
   }, [chartData, chartMode, timeRange, onExport]);
-
   if (loading) {
     return <FunnelChartLoadingState />;
   }
-
   if (error || !chartData) {
-    return (
+    return ()
       <FunnelChartErrorState 
         error={error || 'No data available'} 
         onRetry={loadChartData} 
       />
     );
   }
-
-  return (
+  return ()
     <div className="funnel-chart" ref={containerRef}>
       <FunnelChartHeader
         funnelDefinition={funnelDefinition}
@@ -367,16 +342,15 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
         chartMode={chartMode}
         onExport={handleExport}
       />
-
       <div className="chart-container">
-        {chartDimensions && (
+        {chartDimensions && ()
           <svg
             ref={chartRef}
             width={chartDimensions.width}
             height={chartDimensions.height}
             className="funnel-chart-svg"
           >
-            {chartMode === 'standard' && (
+            {chartMode === 'standard' && ()
               <StandardFunnelChart
                 data={chartData}
                 dimensions={chartDimensions}
@@ -385,8 +359,7 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
                 onStepClick={handleStepClick}
               />
             )}
-            
-            {chartMode === 'horizontal' && (
+            {chartMode === 'horizontal' && ()
               <HorizontalFunnelChart
                 data={chartData}
                 dimensions={chartDimensions}
@@ -395,8 +368,7 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
                 onStepClick={handleStepClick}
               />
             )}
-            
-            {chartMode === 'sankey' && (
+            {chartMode === 'sankey' && ()
               <SankeyFunnelChart
                 data={chartData}
                 dimensions={chartDimensions}
@@ -405,8 +377,7 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
                 onStepClick={handleStepClick}
               />
             )}
-            
-            {chartMode === 'waterfall' && (
+            {chartMode === 'waterfall' && ()
               <WaterfallFunnelChart
                 data={chartData}
                 dimensions={chartDimensions}
@@ -418,16 +389,13 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
           </svg>
         )}
       </div>
-
-      {showDropoffAnalysis && chartData.dropoffAnalysis.length > 0 && (
+      {showDropoffAnalysis && chartData.dropoffAnalysis.length > 0 && ()
         <DropoffAnalysisPanel dropoffAnalysis={chartData.dropoffAnalysis} />
       )}
-
-      {chartData.segmentComparisons.length > 0 && (
+      {chartData.segmentComparisons.length > 0 && ()
         <SegmentComparisonPanel segmentComparisons={chartData.segmentComparisons} />
       )}
-
-      {interactionState.tooltipContent && interactionState.tooltipPosition && (
+      {interactionState.tooltipContent && interactionState.tooltipPosition && ()
         <StepTooltip
           content={interactionState.tooltipContent}
           position={interactionState.tooltipPosition}
@@ -437,7 +405,6 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
     </div>
   );
 };
-
 /**
  * Funnel Chart Header Component
  */
@@ -447,20 +414,18 @@ interface FunnelChartHeaderProps {
   chartMode: FunnelChartMode;
   onExport: () => void;
 }
-
-const FunnelChartHeader: React.FC<FunnelChartHeaderProps> = ({
+const FunnelChartHeader: React.FC<FunnelChartHeaderProps> = ({)
   funnelDefinition,
   overallMetrics,
   chartMode,
   onExport
 }) => {
-  return (
+  return ()
     <div className="funnel-chart-header">
       <div className="funnel-info">
         <h3>{funnelDefinition.name}</h3>
         <p>{funnelDefinition.description}</p>
       </div>
-
       <div className="overall-metrics">
         <div className="metric">
           <span className="label">Total Entries</span>
@@ -472,14 +437,13 @@ const FunnelChartHeader: React.FC<FunnelChartHeaderProps> = ({
         </div>
         <div className="metric">
           <span className="label">Total Revenue</span>
-          <span className="value">${overallMetrics.totalRevenue.toLocaleString()}</span>
+          <span className="value">${overallMetrics.totalRevenue.toLocaleString()}</span>}
         </div>
         <div className="metric">
           <span className="label">Avg. Time to Convert</span>
           <span className="value">{formatDuration(overallMetrics.averageTimeToConvert)}</span>
         </div>
       </div>
-
       <div className="chart-controls">
         <span className="chart-mode">{chartMode}</span>
         <button onClick={onExport} className="export-button">
@@ -489,7 +453,6 @@ const FunnelChartHeader: React.FC<FunnelChartHeaderProps> = ({
     </div>
   );
 };
-
 /**
  * Standard Funnel Chart Component
  */
@@ -500,8 +463,7 @@ interface StandardFunnelChartProps {
   onStepHover: (stepId: string | null, event?: React.MouseEvent) => void;
   onStepClick: (stepId: string) => void;
 }
-
-const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({
+const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({)
   data,
   dimensions,
   interactionState,
@@ -510,24 +472,20 @@ const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({
 }) => {
   const { steps } = data;
   const { chartWidth, chartHeight, margin } = dimensions;
-
   // Calculate step positions and sizes
   const maxEntries = Math.max(...steps.map(s => s.totalEntries));
   const stepHeight = chartHeight / steps.length;
   const stepSpacing = stepHeight * 0.2;
   const stepBarHeight = stepHeight - stepSpacing;
-
-  return (
-    <g transform={`translate(${margin.left}, ${margin.top})`}>
+  return ()
+    <g transform={`translate(${margin.left}, ${margin.top})`}>}
       {steps.map((step, index) => {
         const width = (step.totalEntries / maxEntries) * chartWidth;
         const x = (chartWidth - width) / 2;
         const y = index * stepHeight;
-        
         const isHovered = interactionState.hoveredStep === step.stepId;
         const isSelected = interactionState.selectedStep === step.stepId;
-
-        return (
+        return ()
           <g key={step.stepId}>
             {/* Step bar */}
             <rect
@@ -544,7 +502,6 @@ const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({
               onMouseLeave={() => onStepHover(null)}
               onClick={() => onStepClick(step.stepId)}
             />
-
             {/* Step label */}
             <text
               x={chartWidth / 2}
@@ -558,7 +515,6 @@ const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({
             >
               {step.stepName}
             </text>
-
             {/* Conversion rate */}
             <text
               x={chartWidth / 2}
@@ -571,9 +527,8 @@ const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({
             >
               {step.conversionRate.toFixed(1)}%
             </text>
-
             {/* Drop-off indicator */}
-            {index < steps.length - 1 && step.dropOffCount > 0 && (
+            {index < steps.length - 1 && step.dropOffCount > 0 && ()
               <g className="dropoff-indicator">
                 <line
                   x1={x + width}
@@ -600,11 +555,10 @@ const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({
     </g>
   );
 };
-
 /**
  * Horizontal Funnel Chart Component
  */
-const HorizontalFunnelChart: React.FC<StandardFunnelChartProps> = ({
+const HorizontalFunnelChart: React.FC<StandardFunnelChartProps> = ({)
   data,
   dimensions,
   interactionState,
@@ -613,23 +567,19 @@ const HorizontalFunnelChart: React.FC<StandardFunnelChartProps> = ({
 }) => {
   const { steps } = data;
   const { chartWidth, chartHeight, margin } = dimensions;
-
   const maxEntries = Math.max(...steps.map(s => s.totalEntries));
   const stepWidth = chartWidth / steps.length;
   const stepSpacing = stepWidth * 0.1;
   const stepBarWidth = stepWidth - stepSpacing;
-
-  return (
-    <g transform={`translate(${margin.left}, ${margin.top})`}>
+  return ()
+    <g transform={`translate(${margin.left}, ${margin.top})`}>}
       {steps.map((step, index) => {
         const height = (step.totalEntries / maxEntries) * chartHeight;
         const x = index * stepWidth;
         const y = chartHeight - height;
-        
         const isHovered = interactionState.hoveredStep === step.stepId;
         const isSelected = interactionState.selectedStep === step.stepId;
-
-        return (
+        return ()
           <g key={step.stepId}>
             <rect
               x={x}
@@ -645,7 +595,6 @@ const HorizontalFunnelChart: React.FC<StandardFunnelChartProps> = ({
               onMouseLeave={() => onStepHover(null)}
               onClick={() => onStepClick(step.stepId)}
             />
-
             <text
               x={x + stepBarWidth / 2}
               y={chartHeight + 20}
@@ -655,7 +604,6 @@ const HorizontalFunnelChart: React.FC<StandardFunnelChartProps> = ({
             >
               {step.stepName}
             </text>
-
             <text
               x={x + stepBarWidth / 2}
               y={y + height / 2}
@@ -676,62 +624,54 @@ const HorizontalFunnelChart: React.FC<StandardFunnelChartProps> = ({
 };
 
 // Placeholder components for other chart modes
-const SankeyFunnelChart: React.FC<StandardFunnelChartProps> = () => (
+const SankeyFunnelChart: React.FC<StandardFunnelChartProps> = () => ()
   <g>
     <text x="50%" y="50%" textAnchor="middle" fontSize="16" fill="#666">
       Sankey Chart (Coming Soon)
     </text>
   </g>
 );
-
-const WaterfallFunnelChart: React.FC<StandardFunnelChartProps> = () => (
+const WaterfallFunnelChart: React.FC<StandardFunnelChartProps> = () => ()
   <g>
     <text x="50%" y="50%" textAnchor="middle" fontSize="16" fill="#666">
       Waterfall Chart (Coming Soon)
     </text>
   </g>
 );
-
 /**
  * Drop-off Analysis Panel Component
  */
 interface DropoffAnalysisPanelProps {
   dropoffAnalysis: DropoffAnalysis[];
 }
-
 const DropoffAnalysisPanel: React.FC<DropoffAnalysisPanelProps> = ({ dropoffAnalysis }) => {
-  const criticalDropoffs = dropoffAnalysis
+  const criticalDropoffs = dropoffAnalysis;
     .filter(d => d.severity === 'critical' || d.severity === 'high')
     .sort((a, b) => b.dropOffRate - a.dropOffRate);
-
-  return (
+  return ()
     <div className="dropoff-analysis-panel">
       <h4>Drop-off Analysis</h4>
-      
       <div className="critical-dropoffs">
-        {criticalDropoffs.map(dropoff => (
-          <div key={dropoff.stepId} className={`dropoff-item ${dropoff.severity}`}>
+        {criticalDropoffs.map(dropoff => ()
+          <div key={dropoff.stepId} className={`dropoff-item ${dropoff.severity}`}>}
             <div className="dropoff-header">
               <h5>{dropoff.stepName}</h5>
               <span className="dropoff-rate">{dropoff.dropOffRate.toFixed(1)}%</span>
             </div>
-            
             <div className="dropoff-details">
               <p>{dropoff.dropOffCount.toLocaleString()} users dropped off at this step</p>
-              
-              {dropoff.dropOffReasons.slice(0, 2).map((reason, index) => (
+              {dropoff.dropOffReasons.slice(0, 2).map((reason, index) => ()
                 <div key={index} className="dropoff-reason">
                   <span className="reason">{reason.reason}</span>
                   <span className="percentage">{reason.percentage.toFixed(1)}%</span>
                 </div>
               ))}
             </div>
-            
-            {dropoff.recommendedActions.length > 0 && (
+            {dropoff.recommendedActions.length > 0 && ()
               <div className="recommended-actions">
                 <strong>Recommended Actions:</strong>
                 <ul>
-                  {dropoff.recommendedActions.slice(0, 2).map((action, index) => (
+                  {dropoff.recommendedActions.slice(0, 2).map((action, index) => ()
                     <li key={index}>{action}</li>
                   ))}
                 </ul>
@@ -743,30 +683,26 @@ const DropoffAnalysisPanel: React.FC<DropoffAnalysisPanelProps> = ({ dropoffAnal
     </div>
   );
 };
-
 /**
  * Segment Comparison Panel Component
  */
 interface SegmentComparisonPanelProps {
   segmentComparisons: SegmentFunnelComparison[];
 }
-
 const SegmentComparisonPanel: React.FC<SegmentComparisonPanelProps> = ({ segmentComparisons }) => {
-  return (
+  return ()
     <div className="segment-comparison-panel">
       <h4>Segment Performance</h4>
-      
       <div className="segment-grid">
-        {segmentComparisons.map(segment => (
+        {segmentComparisons.map(segment => ()
           <div key={segment.segmentId} className="segment-comparison-card">
             <h5>{segment.segmentName}</h5>
             <div className="overall-rate">
               {segment.overallConversionRate.toFixed(1)}% conversion rate
             </div>
-            
-            {segment.insights.length > 0 && (
+            {segment.insights.length > 0 && ()
               <div className="segment-insights">
-                {segment.insights.slice(0, 2).map((insight, index) => (
+                {segment.insights.slice(0, 2).map((insight, index) => ()
                   <p key={index} className="insight">{insight}</p>
                 ))}
               </div>
@@ -777,7 +713,6 @@ const SegmentComparisonPanel: React.FC<SegmentComparisonPanelProps> = ({ segment
     </div>
   );
 };
-
 /**
  * Step Tooltip Component
  */
@@ -786,23 +721,21 @@ interface StepTooltipProps {
   position: { x: number; y: number };
   onClose: () => void;
 }
-
 const StepTooltip: React.FC<StepTooltipProps> = ({ content, position, onClose }) => {
-  return (
+  return ()
     <div 
       className="step-tooltip"
       style={{ 
         position: 'fixed',
         left: position.x,
         top: position.y,
-        zIndex: 1000
+        zIndex: 1000,
       }}
     >
       <div className="tooltip-header">
         <h4>{content.stepName}</h4>
         <button onClick={onClose} className="close-button">×</button>
       </div>
-      
       <div className="tooltip-metrics">
         <div className="metric">
           <span>Entries:</span>
@@ -822,15 +755,14 @@ const StepTooltip: React.FC<StepTooltipProps> = ({ content, position, onClose })
         </div>
         <div className="metric">
           <span>Revenue:</span>
-          <span>${content.metrics.revenue.toLocaleString()}</span>
+          <span>${content.metrics.revenue.toLocaleString()}</span>}
         </div>
       </div>
-      
-      {content.insights.length > 0 && (
+      {content.insights.length > 0 && ()
         <div className="tooltip-insights">
           <strong>Insights:</strong>
           <ul>
-            {content.insights.slice(0, 3).map((insight, index) => (
+            {content.insights.slice(0, 3).map((insight, index) => ()
               <li key={index}>{insight}</li>
             ))}
           </ul>
@@ -841,19 +773,17 @@ const StepTooltip: React.FC<StepTooltipProps> = ({ content, position, onClose })
 };
 
 // Loading and Error States
-const FunnelChartLoadingState: React.FC = () => (
+const FunnelChartLoadingState: React.FC = () => ()
   <div className="funnel-chart-loading">
     <div className="loading-spinner"></div>
     <p>Loading funnel chart...</p>
   </div>
 );
-
 interface FunnelChartErrorStateProps {
   error: string;
   onRetry: () => void;
 }
-
-const FunnelChartErrorState: React.FC<FunnelChartErrorStateProps> = ({ error, onRetry }) => (
+const FunnelChartErrorState: React.FC<FunnelChartErrorStateProps> = ({ error, onRetry }) => ()
   <div className="funnel-chart-error">
     <div className="error-message">
       <h3>Error Loading Chart</h3>
@@ -873,40 +803,32 @@ function getStepColor(conversionRate: number, index: number): string {
   if (conversionRate >= 40) return '#f97316'; // Orange for low conversion
   return '#ef4444'; // Red for very low conversion
 }
-
 function formatDuration(milliseconds: number): string {
   const seconds = Math.floor(milliseconds / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
-
-  if (days > 0) return `${days}d ${hours % 24}h`;
-  if (hours > 0) return `${hours}h ${minutes % 60}m`;
-  if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
-  return `${seconds}s`;
+  if (days > 0) return `${days}d ${hours % 24}h`;}
+  if (hours > 0) return `${hours}h ${minutes % 60}m`;}
+  if (minutes > 0) return `${minutes}m ${seconds % 60}s`;}
+  return `${seconds}s`;}
 }
-
 function generateStepInsights(step: StepMetrics): string[] {
   const insights: string[] = [];
-
   if (step.conversionRate > 80) {
     insights.push('High-performing step with excellent conversion rate');
   } else if (step.conversionRate < 40) {
     insights.push('Low conversion rate - optimization opportunity');
   }
-
   if (step.dropOffRate > 50) {
     insights.push('High drop-off rate - investigate user experience issues');
   }
-
   if (step.averageTimeSpent > 300000) { // 5 minutes
     insights.push('Users spend significant time on this step');
   }
-
   return insights;
 }
-
-async function processFunnelChartData(
+async function processFunnelChartData()
   funnelDefinition: ConversionFunnelDefinition,
   metricResults: ConversionMetricResult[],
   segments: UserSegment[],
@@ -914,7 +836,7 @@ async function processFunnelChartData(
   timeRange: { start: number; end: number }
 ): Promise<FunnelChartData> {
   // Simplified implementation - in production would process actual metrics
-  const steps: StepMetrics[] = funnelDefinition.steps.map((step, index) => ({
+  const steps: StepMetrics[] = funnelDefinition.steps.map((step, index) => ({)
     stepId: step.id,
     stepName: step.name,
     order: step.order,
@@ -927,18 +849,18 @@ async function processFunnelChartData(
     averageTimeSpent: 120000 + (index * 30000),
     revenue: 500 * (index + 1),
     revenuePerConversion: 25 + (index * 5),
-    comparisonData: {
-      previousPeriod: {
+    comparisonData: {,
+      previousPeriod: {,
         conversionRate: 75 + (Math.random() * 20),
         change: (Math.random() - 0.5) * 20,
         direction: Math.random() > 0.5 ? 'improvement' : 'decline'
       },
-      benchmark: {
+      benchmark: {,
         conversionRate: 70 + (Math.random() * 15),
         percentile: 60 + (Math.random() * 30),
-        industry: 'marketplace'
+        industry: 'marketplace',
       },
-      segments: segments.slice(0, 2).map(segment => ({
+      segments: segments.slice(0, 2).map(segment => ({)
         segmentId: segment.id,
         segmentName: segment.name,
         conversionRate: 60 + (Math.random() * 40),
@@ -946,7 +868,6 @@ async function processFunnelChartData(
       }))
     }
   }));
-
   const overallMetrics: OverallFunnelMetrics = {
     totalEntries: 1000,
     totalConversions: 150,
@@ -959,54 +880,51 @@ async function processFunnelChartData(
     biggestDropoffStep: steps[1]?.stepId || '',
     mostEfficientStep: steps[0]?.stepId || ''
   };
-
   const dropoffAnalysis: DropoffAnalysis[] = steps
     .filter(step => step.dropOffRate > 10)
-    .map(step => ({
+    .map(step => ({)
       stepId: step.stepId,
       stepName: step.stepName,
       dropOffCount: step.dropOffCount,
       dropOffRate: step.dropOffRate,
-      dropOffReasons: [
+      dropOffReasons: [,
         {
           reason: 'Complex form fields',
           category: 'user_experience',
           percentage: 35,
           count: Math.floor(step.dropOffCount * 0.35),
-          confidence: 0.85
+          confidence: 0.85,
         },
         {
           reason: 'Page load time',
           category: 'technical',
           percentage: 25,
           count: Math.floor(step.dropOffCount * 0.25),
-          confidence: 0.78
+          confidence: 0.78,
         }
       ],
       recoveryOpportunity: 45,
-      recommendedActions: [
+      recommendedActions: [,
         'Simplify form fields and reduce required information',
         'Optimize page loading performance',
         'Add progress indicators to improve user experience'
       ],
       severity: step.dropOffRate > 30 ? 'critical' : step.dropOffRate > 20 ? 'high' : 'medium'
     }));
-
-  const segmentComparisons: SegmentFunnelComparison[] = segments.map(segment => ({
+  const segmentComparisons: SegmentFunnelComparison[] = segments.map(segment => ({)
     segmentId: segment.id,
     segmentName: segment.name,
     overallConversionRate: segment.performance.averageConversionRate,
-    stepPerformance: steps.map(step => ({
+    stepPerformance: steps.map(step => ({)
       stepId: step.stepId,
       conversionRate: step.conversionRate * (0.8 + Math.random() * 0.4),
       relativePerformance: (Math.random() - 0.5) * 40
     })),
-    insights: [
-      `${segment.name} shows ${Math.random() > 0.5 ? 'above' : 'below'} average performance`,
-      `Strongest performance in step ${steps[Math.floor(Math.random() * steps.length)].stepName}`
+    insights: [,
+      `${segment.name} shows ${Math.random() > 0.5 ? 'above' : 'below'} average performance`,}
+      `Strongest performance in step ${steps[Math.floor(Math.random() * steps.length)].stepName}`}
     ]
   }));
-
   return {
     steps,
     overallMetrics,

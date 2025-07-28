@@ -15,14 +15,14 @@ export declare function useCollaborativeReactFlow(): {
     onEdgesChange: (changes: EdgeChange[]) => void;
     onConnect: (connection: Connection) => void;
     onNodeDrag: (event: React.MouseEvent, node: FlowNode) => void;
-    onSelectionChange: (params: {
+    onSelectionChange: (params: {)
         nodes: FlowNode[];
         edges: FlowEdge[];
     }) => void;
     onPaneClick: () => void;
     enableCollaboration: (options: import("./GraphCRDTAdapter").CollaborativeGraphOptions) => Promise<void>;
     disableCollaboration: () => void;
-    addNodeAtPosition: (node: Node, position: {
+    addNodeAtPosition: (node: Node, position: {)
         x: number;
         y: number;
     }) => void;
@@ -33,7 +33,7 @@ export declare function useCollaborativeReactFlow(): {
     getUserCursors: () => {
         userId: string;
         user: UserPresence;
-        position: {
+        position: {,
             x: number;
             y: number;
         };

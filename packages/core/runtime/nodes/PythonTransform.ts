@@ -2,7 +2,6 @@
  * PythonTransform Node Implementation
  * Epic 8 Story 8.1.4: Python executor integration
  */
-
 import { 
   AdvancedRuntimeNode, 
   AdvancedExecutionContext, 
@@ -31,24 +30,22 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
   private pythonClient: PythonExecutorClient;
   private pythonConfig: PythonTransformConfig;
   private ioHandler: AdvancedIOHandler;
-
   constructor(id: string, config: PythonTransformConfig) {
     // Create AdvancedNodeConfig for base class
     const advancedConfig = {
       deterministic: true,  // Python execution is deterministic with same inputs
       cacheable: config.pythonConfig?.enableCaching ?? false,
       stateful: true,  // Track execution statistics
-      performanceHints: {
+      performanceHints: {,
         expectedExecutionTime: 'medium' as const,
         memoryUsage: 'medium' as const
       }
     };
     super(id, advancedConfig);
     this.pythonConfig = config;
-    
     // Create a custom Python client if executor URL is specified
     if (config.pythonConfig?.executorUrl) {
-      this.pythonClient = new PythonExecutorClient({
+      this.pythonClient = new PythonExecutorClient({)
         baseUrl: config.pythonConfig.executorUrl,
         retryAttempts: config.pythonConfig.retryAttempts || 3,
         defaultStrictMode: config.pythonConfig.strictMode ?? true
@@ -56,42 +53,40 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
     } else {
       this.pythonClient = pythonExecutorClient;
     }
-    
     // Initialize IO handler
     this.ioHandler = new AdvancedIOHandler(this.defineIOSpec().build());
   }
-
   protected defineIOSpec(): IOSpecBuilder {
     return new IOSpecBuilder()
-      .addInput({
+      .addInput({)
         id: 'input',
         label: 'Input',
         dataType: 'string',
         required: true,
         description: 'Input data to transform'
       })
-      .addOutput({
+      .addOutput({)
         id: 'output',
         label: 'Output',
         dataType: 'string',
         required: false,
         description: 'Transformed output from Python code'
       })
-      .addOutput({
+      .addOutput({)
         id: 'executionTime',
         label: 'Execution Time',
         dataType: 'number',
         required: false,
         description: 'Execution time in seconds'
       })
-      .addOutput({
+      .addOutput({)
         id: 'memoryUsed',
         label: 'Memory Used',
         dataType: 'string',
         required: false,
         description: 'Memory used during execution'
       })
-      .addOutput({
+      .addOutput({)
         id: 'securityViolations',
         label: 'Security Violations',
         dataType: 'number',
@@ -99,53 +94,43 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
         description: 'Number of security violations detected'
       });
   }
-
   /**
    * Main execution method required by AdvancedRuntimeNode
    */
   async run(context: AdvancedExecutionContext): Promise<string> {
     // Record this node's execution
     context.executionMeta.nodeExecutionOrder.push(this.id);
-    
     // Execute with performance tracking
     const result = await this.measureExecution(context, 'python-transform', async () => {
       return await this.executeCore(context);
     });
-    
     return result;
   }
-
   /**
    * Validate node configuration
    */
   validate(): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
-    
     if (!this.pythonConfig.code || this.pythonConfig.code.trim() === '') {
       errors.push('Python code is required');
     }
-    
     if (this.pythonConfig.timeout && this.pythonConfig.timeout <= 0) {
       errors.push('Timeout must be positive');
     }
-    
     if (this.pythonConfig.memoryLimit) {
       const memMatch = this.pythonConfig.memoryLimit.match(/^(\d+)(MB|GB)$/);
       if (!memMatch) {
         errors.push('Memory limit must be in format: 128MB or 1GB');
       }
     }
-    
     // IO validation is performed at runtime
-    
     return {
       valid: errors.length === 0,
       errors,
       warnings
     };
   }
-
   /**
    * Serialize node data for persistence
    */
@@ -154,20 +139,19 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       id: this.id,
       type: 'pythonTransform',
       config: this.config,
-      data: {
+      data: {,
         code: this.pythonConfig.code,
         timeout: this.pythonConfig.timeout,
         memoryLimit: this.pythonConfig.memoryLimit,
         allowedModules: this.pythonConfig.allowedModules,
-        pythonConfig: this.pythonConfig.pythonConfig
+        pythonConfig: this.pythonConfig.pythonConfig,
       },
-      metadata: {
+      metadata: {,
         version: '1.0.0',
         created: new Date().toISOString()
       }
     };
   }
-
   /**
    * Get typed input helper
    */
@@ -178,7 +162,6 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
     }
     return '';
   }
-
   /**
    * Set output helper
    */
@@ -189,15 +172,12 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
     }
     context.outputs[outputId] = value;
   }
-
   protected async executeCore(context: AdvancedExecutionContext): Promise<string> {
     const inputData = this.getTypedInput('input', context);
-    
     // Validate that we have code to execute
     if (!this.pythonConfig.code || this.pythonConfig.code.trim() === '') {
       throw new Error('Python code is required');
     }
-
     // Prepare execution request
     const executionRequest = {
       code: this.pythonConfig.code,
@@ -208,31 +188,25 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       context: this.extractContextForPython(context),
       strict_mode: this.pythonConfig.pythonConfig?.strictMode ?? true
     };
-
     try {
       // Execute Python code
       const result = await this.pythonClient.execute(executionRequest);
-
       // Handle execution result
       if (result.success) {
         // Set additional outputs
         this.setOutput('executionTime', result.execution_time, context);
         this.setOutput('memoryUsed', result.memory_used, context);
         this.setOutput('securityViolations', result.sandbox_violations, context);
-
         // Log security events if any
         if (result.security_events && result.security_events.length > 0) {
           this.logSecurityEvents(result.security_events, context);
         }
-
         // Log warnings if any
         if (result.warnings && result.warnings.length > 0) {
           this.logWarnings(result.warnings, context);
         }
-
         // Store execution metadata for statistics
         this.storeExecutionMetadata(context, true, result.execution_time, result.sandbox_violations);
-
         return this.processResult(result.result);
       } else {
         // Store execution metadata for failed execution
@@ -245,7 +219,6 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       return this.handleClientError(error as Error);
     }
   }
-
   /**
    * Extract relevant context data for Python execution
    */
@@ -253,11 +226,10 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
     return {
       variables: context.variables,
       nodeId: this.id,
-      seed: context.seed
+      seed: context.seed,
       // Don't expose sensitive internal state
     };
   }
-
   /**
    * Process the Python execution result
    */
@@ -271,117 +243,103 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       return '';
     }
   }
-
   /**
    * Handle Python execution failure
    */
   private handleExecutionFailure(result: PythonExecutionResult): string {
     const fallbackBehavior = this.pythonConfig.pythonConfig?.fallbackBehavior || 'error';
-
     switch (fallbackBehavior) {
     case 'skip':
       // Return empty string and log warning
-      console.warn(`Python execution failed for node ${this.id}: ${result.error_message}`);
+      console.warn(`Python execution failed for node ${this.id}: ${result.error_message}`);}
       return '';
-
     case 'default':
       // Return default output if specified
       const defaultOutput = this.pythonConfig.pythonConfig?.defaultOutput || '';
-      console.warn(`Python execution failed for node ${this.id}, using default output: ${result.error_message}`);
+      console.warn(`Python execution failed for node ${this.id}, using default output: ${result.error_message}`);}
       return defaultOutput;
-
     case 'error':
     default:
       // Throw error with detailed information
-      const errorMessage = `Python execution failed: ${result.error_message}`;
+      const errorMessage = `Python execution failed: ${result.error_message}`;}
       const error = new Error(errorMessage);
       (error as any).pythonError = {
         type: result.error_type,
         code: result.error_code,
         line: result.error_line,
-        traceback: result.traceback
+        traceback: result.traceback,
       };
       throw error;
     }
   }
-
   /**
    * Handle client errors (network, service unavailable, etc.)
    */
   private handleClientError(error: Error): string {
     const fallbackBehavior = this.pythonConfig.pythonConfig?.fallbackBehavior || 'error';
-
     switch (fallbackBehavior) {
     case 'skip':
-      console.warn(`Python executor service unavailable for node ${this.id}: ${error.message}`);
+      console.warn(`Python executor service unavailable for node ${this.id}: ${error.message}`);}
       return '';
-
     case 'default':
       const defaultOutput = this.pythonConfig.pythonConfig?.defaultOutput || '';
-      console.warn(`Python executor service unavailable for node ${this.id}, using default output: ${error.message}`);
+      console.warn(`Python executor service unavailable for node ${this.id}, using default output: ${error.message}`);}
       return defaultOutput;
-
     case 'error':
     default:
       // Re-throw with additional context
-      const enhancedError = new Error(`Python executor service error: ${error.message}`);
+      const enhancedError = new Error(`Python executor service error: ${error.message}`);}
       (enhancedError as any).originalError = error;
       throw enhancedError;
     }
   }
-
   /**
    * Log security events from Python execution
    */
   private logSecurityEvents(events: unknown[], ______context: AdvancedExecutionContext): void {
     for (const event of events) {
       const eventObj = event as any;
-      console.warn(`Python security event in node ${this.id}:`, {
+      console.warn(`Python security event in node ${this.id}:`, {)}
         level: eventObj?.level,
         type: eventObj?.type,
         message: eventObj?.message,
         timestamp: eventObj?.timestamp,
-        nodeId: this.id
+        nodeId: this.id,
       });
     }
   }
-
   /**
    * Log warnings from Python execution
    */
   private logWarnings(warnings: string[], ______context: AdvancedExecutionContext): void {
     for (const warning of warnings) {
-      console.warn(`Python warning in node ${this.id}:`, {
+      console.warn(`Python warning in node ${this.id}:`, {)}
         warning,
-        nodeId: this.id
+        nodeId: this.id,
       });
     }
   }
-
   /**
    * Get node configuration for inspection
    */
   getPythonConfig(): PythonTransformConfig {
     return { ...this.pythonConfig };
   }
-
   /**
    * Update node configuration
    */
   updateConfig(newConfig: Partial<PythonTransformConfig>): void {
     this.pythonConfig = { ...this.pythonConfig, ...newConfig };
-    
     // Update Python client if executor URL changed
-    if (newConfig.pythonConfig?.executorUrl && 
+    if (newConfig.pythonConfig?.executorUrl && )
         newConfig.pythonConfig.executorUrl !== this.pythonConfig.pythonConfig?.executorUrl) {
-      this.pythonClient = new PythonExecutorClient({
+      this.pythonClient = new PythonExecutorClient({)
         baseUrl: newConfig.pythonConfig.executorUrl,
         retryAttempts: newConfig.pythonConfig.retryAttempts || 3,
         defaultStrictMode: newConfig.pythonConfig.strictMode ?? true
       });
     }
   }
-
   /**
    * Validate Python code before execution
    */
@@ -390,30 +348,27 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       return {
         valid: false,
         errors: ['Python code is required'],
-        warnings: []
+        warnings: [],
       };
     }
-
     try {
-      const result = await this.pythonClient.validate({
+      const result = await this.pythonClient.validate({)
         code: this.pythonConfig.code,
         strict_mode: this.pythonConfig.pythonConfig?.strictMode ?? true
       });
-
       return {
         valid: result.valid,
         errors: result.errors,
-        warnings: result.warnings
+        warnings: result.warnings,
       };
     } catch (error) {
       return {
         valid: false,
-        errors: [`Validation service error: ${error instanceof Error ? error.message : 'Unknown error'}`],
-        warnings: []
+        errors: [`Validation service error: ${error instanceof Error ? error.message : 'Unknown error'}`],}
+        warnings: [],
       };
     }
   }
-
   /**
    * Check if Python executor service is available
    */
@@ -425,7 +380,6 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       return false;
     }
   }
-
   /**
    * Get service health information
    */
@@ -436,7 +390,6 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       return null;
     }
   }
-
   /**
    * Get execution statistics
    */
@@ -448,57 +401,50 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
   } {
     const state = this.getState(context) as any;
     const executions = state?.executions || [];
-    
     if (executions.length === 0) {
       return {
         executionsRun: 0,
         successRate: 0,
         averageExecutionTime: 0,
-        securityViolations: 0
+        securityViolations: 0,
       };
     }
-
     const successful = executions.filter((e: unknown) => (e as any).success).length;
     const totalTime = executions.reduce((sum: number, e: unknown) => sum + ((e as any).executionTime || 0), 0);
-    const totalViolations = executions.reduce(
-      (sum: number,
-      e: unknown
+    const totalViolations = executions.reduce(;)
+      (sum: number,)
+      e: unknown,
     ) => sum + ((e as any).securityViolations || 0), 0);
-
     return {
       executionsRun: executions.length,
       successRate: successful / executions.length,
       averageExecutionTime: totalTime / executions.length,
-      securityViolations: totalViolations
+      securityViolations: totalViolations,
     };
   }
-
   /**
    * Store execution metadata for statistics
    */
-  protected storeExecutionMetadata(
+  protected storeExecutionMetadata()
     context: AdvancedExecutionContext,
     success: boolean,
     executionTime: number,
-    securityViolations: number
+    securityViolations: number,
   ): void {
     const state = (this.getState(context) as any) || {};
     if (!state.executions) {
       state.executions = [];
     }
-
-    state.executions.push({
+    state.executions.push({)
       timestamp: Date.now(),
       success,
       executionTime,
       securityViolations
     });
-
     // Keep only last 100 executions
     if (state.executions.length > 100) {
       state.executions = state.executions.slice(-100);
     }
-
     this.setState(context, state);
   }
 }

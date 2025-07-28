@@ -2,7 +2,6 @@
  * Extension Upgrade Advisor - Epic 8.4 Story 8.4.4
  * Provides intelligent upgrade recommendations and migration assistance
  */
-
 import { ExtensionManifest } from './ExtensionManifest';
 import { SemanticVersion, VersionRange, UpgradePath, UpgradeStep, extensionVersionManager } from './ExtensionVersionManager';
 import { ExtensionCompatibilityResult, extensionCompatibilityChecker } from './ExtensionCompatibilityChecker';
@@ -13,44 +12,38 @@ export class ExtensionUpgradeAdvisor {
   private upgradeStrategies: Map<string, UpgradeStrategy> = new Map();
   private migrationRules: Map<string, MigrationRule[]> = new Map();
   private breakingChanges: Map<string, BreakingChange[]> = new Map();
-
   private constructor() {
     this.initializeDefaultStrategies();
   }
-
   public static getInstance(): ExtensionUpgradeAdvisor {
     if (!ExtensionUpgradeAdvisor.instance) {
       ExtensionUpgradeAdvisor.instance = new ExtensionUpgradeAdvisor();
     }
     return ExtensionUpgradeAdvisor.instance;
   }
-
   /**
    * Get upgrade recommendations for an extension
    */
-  public getUpgradeRecommendations(
+  public getUpgradeRecommendations()
     currentExtension: ExtensionManifest,
     availableVersions: string[],
-    context: UpgradeContext
+    context: UpgradeContext,
   ): UpgradeRecommendation {
     const currentVersion = new SemanticVersion(currentExtension.version);
-    const availableSemanticVersions = availableVersions
+    const availableSemanticVersions = availableVersions;
       .map(v => new SemanticVersion(v))
       .filter(v => v.compareTo(currentVersion) > 0)
       .sort((a, b) => a.compareTo(b));
-
     if (availableSemanticVersions.length === 0) {
       return {
         hasUpdates: false,
         currentVersion: currentExtension.version,
         recommendations: [],
-        strategy: 'none'
+        strategy: 'none',
       };
     }
-
     const recommendations: VersionRecommendation[] = [];
     const strategy = this.determineUpgradeStrategy(currentExtension, availableSemanticVersions, context);
-
     // Generate recommendations based on strategy
     switch (strategy) {
     case 'conservative':
@@ -66,7 +59,6 @@ export class ExtensionUpgradeAdvisor {
       recommendations.push(...this.getSecurityRecommendations(currentVersion, availableSemanticVersions, context));
       break;
     }
-
     return {
       hasUpdates: true,
       currentVersion: currentExtension.version,
@@ -74,22 +66,20 @@ export class ExtensionUpgradeAdvisor {
       strategy
     };
   }
-
   /**
    * Analyze upgrade path for specific target version
    */
-  public analyzeUpgradePath(
+  public analyzeUpgradePath()
     currentExtension: ExtensionManifest,
     targetVersion: string,
     availableVersions: string[],
-    context: UpgradeContext
+    context: UpgradeContext,
   ): UpgradeAnalysis {
-    const upgradePath = extensionVersionManager.getUpgradePath(
+    const upgradePath = extensionVersionManager.getUpgradePath(;)
       currentExtension.version,
       targetVersion,
       availableVersions
     );
-
     if (!upgradePath.possible) {
       return {
         feasible: false,
@@ -97,14 +87,12 @@ export class ExtensionUpgradeAdvisor {
         path: upgradePath,
         migrationTasks: [],
         risks: [],
-        benefits: []
+        benefits: [],
       };
     }
-
     const migrationTasks = this.generateMigrationTasks(currentExtension, targetVersion, upgradePath);
     const risks = this.assessUpgradeRisks(currentExtension, targetVersion, upgradePath, context);
     const benefits = this.identifyUpgradeBenefits(currentExtension, targetVersion, context);
-
     return {
       feasible: true,
       path: upgradePath,
@@ -115,34 +103,30 @@ export class ExtensionUpgradeAdvisor {
       timeline: this.generateUpgradeTimeline(upgradePath, migrationTasks)
     };
   }
-
   /**
    * Generate migration plan for upgrade
    */
-  public generateMigrationPlan(
+  public generateMigrationPlan()
     currentExtension: ExtensionManifest,
     targetVersion: string,
-    context: UpgradeContext
+    context: UpgradeContext,
   ): MigrationPlan {
-    const analysis = this.analyzeUpgradePath(
+    const analysis = this.analyzeUpgradePath(;)
       currentExtension,
       targetVersion,
       [targetVersion],
       context
     );
-
     if (!analysis.feasible) {
       return {
         viable: false,
         reason: analysis.reason,
-        phases: []
+        phases: [],
       };
     }
-
     const phases = this.generateMigrationPhases(analysis);
     const rollbackPlan = this.generateRollbackPlan(currentExtension, targetVersion);
     const testingPlan = this.generateTestingPlan(currentExtension, targetVersion);
-
     return {
       viable: true,
       phases,
@@ -153,24 +137,21 @@ export class ExtensionUpgradeAdvisor {
       prerequisites: this.identifyPrerequisites(currentExtension, targetVersion, context)
     };
   }
-
   /**
    * Check for breaking changes between versions
    */
-  public checkBreakingChanges(
+  public checkBreakingChanges()
     extensionId: string,
     fromVersion: string,
-    toVersion: string
+    toVersion: string,
   ): BreakingChangeAnalysis {
     const fromVer = new SemanticVersion(fromVersion);
     const toVer = new SemanticVersion(toVersion);
-    
     const changes = this.breakingChanges.get(extensionId) || [];
-    const applicableChanges = changes.filter(change => {
+    const applicableChanges = changes.filter(change => {)
       const changeVer = new SemanticVersion(change.introducedIn);
       return changeVer.compareTo(fromVer) > 0 && changeVer.compareTo(toVer) <= 0;
     });
-
     return {
       hasBreakingChanges: applicableChanges.length > 0,
       changes: applicableChanges,
@@ -179,37 +160,33 @@ export class ExtensionUpgradeAdvisor {
       automatedMigration: applicableChanges.every(c => c.automatedMigration)
     };
   }
-
   /**
    * Validate upgrade compatibility
    */
-  public validateUpgradeCompatibility(
+  public validateUpgradeCompatibility()
     currentExtension: ExtensionManifest,
     targetExtension: ExtensionManifest,
-    context: UpgradeContext
+    context: UpgradeContext,
   ): UpgradeCompatibilityResult {
-    const compatibilityResult = extensionCompatibilityChecker.checkExtensionCompatibility(
+    const compatibilityResult = extensionCompatibilityChecker.checkExtensionCompatibility(;)
       targetExtension,
       {
         systemVersion: context.systemVersion,
         platform: context.platform,
         availableExtensions: context.availableExtensions,
         grantedPermissions: context.grantedPermissions,
-        browserInfo: context.browserInfo
+        browserInfo: context.browserInfo,
       }
     );
-
-    const dependencyConflicts = this.checkDependencyConflicts(
+    const dependencyConflicts = this.checkDependencyConflicts(;)
       currentExtension,
       targetExtension,
       context
     );
-
-    const permissionChanges = this.analyzePermissionChanges(
+    const permissionChanges = this.analyzePermissionChanges(;)
       currentExtension,
       targetExtension
     );
-
     return {
       compatible: compatibilityResult.compatible && dependencyConflicts.length === 0,
       compatibilityResult,
@@ -219,20 +196,18 @@ export class ExtensionUpgradeAdvisor {
       dataBackupRequired: this.requiresDataBackup(currentExtension, targetExtension)
     };
   }
-
   /**
    * Determine upgrade strategy based on context
    */
-  private determineUpgradeStrategy(
+  private determineUpgradeStrategy()
     extension: ExtensionManifest,
     availableVersions: SemanticVersion[],
-    context: UpgradeContext
+    context: UpgradeContext,
   ): UpgradeStrategyType {
     const strategy = this.upgradeStrategies.get(extension.id);
     if (strategy) {
       return strategy.type;
     }
-
     // Default strategy based on context
     if (context.securityPriority) {
       return 'security';
@@ -243,138 +218,117 @@ export class ExtensionUpgradeAdvisor {
     if (context.featurePriority) {
       return 'aggressive';
     }
-
     return 'moderate';
   }
-
   /**
    * Get conservative upgrade recommendations
    */
-  private getConservativeRecommendations(
+  private getConservativeRecommendations()
     currentVersion: SemanticVersion,
     availableVersions: SemanticVersion[],
-    context: UpgradeContext
+    context: UpgradeContext,
   ): VersionRecommendation[] {
     const recommendations: VersionRecommendation[] = [];
-
     // Latest patch version
-    const latestPatch = availableVersions
+    const latestPatch = availableVersions;
       .filter(v => v.major === currentVersion.major && v.minor === currentVersion.minor)
       .pop();
-    
     if (latestPatch) {
-      recommendations.push({
+      recommendations.push({)
         version: latestPatch.toString(),
         priority: 'high',
         reason: 'Latest patch version with bug fixes and security updates',
         risk: 'low',
         benefits: ['Bug fixes', 'Security updates'],
-        effort: 'minimal'
+        effort: 'minimal',
       });
     }
-
     // Latest minor version (if stable)
-    const latestMinor = availableVersions
+    const latestMinor = availableVersions;
       .filter(v => v.major === currentVersion.major && v.isStable())
       .pop();
-    
     if (latestMinor && latestMinor.minor > currentVersion.minor) {
-      recommendations.push({
+      recommendations.push({)
         version: latestMinor.toString(),
         priority: 'medium',
         reason: 'Latest minor version with new features',
         risk: 'low',
         benefits: ['New features', 'Improvements', 'Bug fixes'],
-        effort: 'low'
+        effort: 'low',
       });
     }
-
     return recommendations;
   }
-
   /**
    * Get moderate upgrade recommendations
    */
-  private getModerateRecommendations(
+  private getModerateRecommendations()
     currentVersion: SemanticVersion,
     availableVersions: SemanticVersion[],
-    context: UpgradeContext
+    context: UpgradeContext,
   ): VersionRecommendation[] {
     const recommendations: VersionRecommendation[] = [];
-
     // Include conservative recommendations
     recommendations.push(...this.getConservativeRecommendations(currentVersion, availableVersions, context));
-
     // Latest stable version
-    const latestStable = availableVersions
+    const latestStable = availableVersions;
       .filter(v => v.isStable())
       .pop();
-    
     if (latestStable && latestStable.major > currentVersion.major) {
-      recommendations.push({
+      recommendations.push({)
         version: latestStable.toString(),
         priority: 'medium',
         reason: 'Latest stable major version with significant improvements',
         risk: 'medium',
         benefits: ['Major improvements', 'New features', 'Performance gains'],
-        effort: 'medium'
+        effort: 'medium',
       });
     }
-
     return recommendations;
   }
-
   /**
    * Get aggressive upgrade recommendations
    */
-  private getAggressiveRecommendations(
+  private getAggressiveRecommendations()
     currentVersion: SemanticVersion,
     availableVersions: SemanticVersion[],
-    context: UpgradeContext
+    context: UpgradeContext,
   ): VersionRecommendation[] {
     const recommendations: VersionRecommendation[] = [];
-
     // Include moderate recommendations
     recommendations.push(...this.getModerateRecommendations(currentVersion, availableVersions, context));
-
     // Latest version (including prereleases)
     const latestVersion = availableVersions[availableVersions.length - 1];
-    
     if (latestVersion && latestVersion.isPrerelease()) {
-      recommendations.push({
+      recommendations.push({)
         version: latestVersion.toString(),
         priority: 'low',
         reason: 'Latest prerelease version with cutting-edge features',
         risk: 'high',
         benefits: ['Latest features', 'Early access to improvements'],
-        effort: 'high'
+        effort: 'high',
       });
     }
-
     return recommendations;
   }
-
   /**
    * Get security-focused upgrade recommendations
    */
-  private getSecurityRecommendations(
+  private getSecurityRecommendations()
     currentVersion: SemanticVersion,
     availableVersions: SemanticVersion[],
-    context: UpgradeContext
+    context: UpgradeContext,
   ): VersionRecommendation[] {
     const recommendations: VersionRecommendation[] = [];
-
     // Filter versions with security fixes
-    const securityVersions = availableVersions.filter(v => {
+    const securityVersions = availableVersions.filter(v => {)
       // In a real implementation, this would check release notes or security advisories
       return v.compareTo(currentVersion) > 0;
     });
-
     for (const version of securityVersions) {
       const priority = version.major > currentVersion.major ? 'high' : 'medium';
       const risk = version.major > currentVersion.major ? 'medium' : 'low';
-      
-      recommendations.push({
+      recommendations.push({)
         version: version.toString(),
         priority,
         reason: 'Contains security fixes',
@@ -383,22 +337,19 @@ export class ExtensionUpgradeAdvisor {
         effort: risk === 'medium' ? 'medium' : 'low'
       });
     }
-
     return recommendations;
   }
-
   /**
    * Generate migration tasks
    */
-  private generateMigrationTasks(
+  private generateMigrationTasks()
     currentExtension: ExtensionManifest,
     targetVersion: string,
-    upgradePath: UpgradePath
+    upgradePath: UpgradePath,
   ): MigrationTask[] {
     const tasks: MigrationTask[] = [];
-
     // Standard migration tasks
-    tasks.push({
+    tasks.push({)
       id: 'backup',
       title: 'Backup current extension',
       description: 'Create backup of current extension and data',
@@ -407,8 +358,7 @@ export class ExtensionUpgradeAdvisor {
       automated: false,
       estimatedDuration: '5 minutes'
     });
-
-    tasks.push({
+    tasks.push({)
       id: 'validate-dependencies',
       title: 'Validate dependencies',
       description: 'Ensure all dependencies are compatible with target version',
@@ -417,7 +367,6 @@ export class ExtensionUpgradeAdvisor {
       automated: true,
       estimatedDuration: '2 minutes'
     });
-
     // Add version-specific migration tasks
     const rules = this.migrationRules.get(currentExtension.id) || [];
     for (const rule of rules) {
@@ -425,141 +374,123 @@ export class ExtensionUpgradeAdvisor {
         tasks.push(...rule.generateTasks(currentExtension, targetVersion));
       }
     }
-
     return tasks;
   }
-
   /**
    * Assess upgrade risks
    */
-  private assessUpgradeRisks(
+  private assessUpgradeRisks()
     currentExtension: ExtensionManifest,
     targetVersion: string,
     upgradePath: UpgradePath,
-    context: UpgradeContext
+    context: UpgradeContext,
   ): UpgradeRisk[] {
     const risks: UpgradeRisk[] = [];
-
     // Breaking changes risk
-    const breakingChanges = this.checkBreakingChanges(
+    const breakingChanges = this.checkBreakingChanges(;)
       currentExtension.id,
       currentExtension.version,
       targetVersion
     );
-
     if (breakingChanges.hasBreakingChanges) {
-      risks.push({
+      risks.push({)
         type: 'breaking-changes',
         severity: breakingChanges.impactLevel,
-        description: `${breakingChanges.changes.length} breaking changes detected`,
+        description: `${breakingChanges.changes.length} breaking changes detected`,}
         mitigation: 'Review breaking changes and update extension code accordingly',
-        probability: 'high'
+        probability: 'high',
       });
     }
-
     // Dependency conflicts risk
-    risks.push({
+    risks.push({)
       type: 'dependency-conflicts',
       severity: 'medium',
       description: 'Potential conflicts with existing dependencies',
       mitigation: 'Validate all dependencies before upgrade',
-      probability: 'medium'
+      probability: 'medium',
     });
-
     // Data loss risk
     if (this.requiresDataBackup(currentExtension, { version: targetVersion } as ExtensionManifest)) {
-      risks.push({
+      risks.push({)
         type: 'data-loss',
         severity: 'high',
         description: 'Potential data loss during upgrade',
         mitigation: 'Create comprehensive backup before upgrade',
-        probability: 'low'
+        probability: 'low',
       });
     }
-
     return risks;
   }
-
   /**
    * Identify upgrade benefits
    */
-  private identifyUpgradeBenefits(
+  private identifyUpgradeBenefits()
     currentExtension: ExtensionManifest,
     targetVersion: string,
-    context: UpgradeContext
+    context: UpgradeContext,
   ): UpgradeBenefit[] {
     const benefits: UpgradeBenefit[] = [];
-
     const currentVer = new SemanticVersion(currentExtension.version);
     const targetVer = new SemanticVersion(targetVersion);
-
     // Version-based benefits
     if (targetVer.major > currentVer.major) {
-      benefits.push({
+      benefits.push({)
         type: 'features',
         description: 'Major new features and improvements',
-        impact: 'high'
+        impact: 'high',
       });
     }
-
     if (targetVer.minor > currentVer.minor) {
-      benefits.push({
+      benefits.push({)
         type: 'features',
         description: 'New features and enhancements',
-        impact: 'medium'
+        impact: 'medium',
       });
     }
-
     if (targetVer.patch > currentVer.patch) {
-      benefits.push({
+      benefits.push({)
         type: 'stability',
         description: 'Bug fixes and stability improvements',
-        impact: 'low'
+        impact: 'low',
       });
     }
-
     // Always include security benefits
-    benefits.push({
+    benefits.push({)
       type: 'security',
       description: 'Latest security updates and fixes',
-      impact: 'high'
+      impact: 'high',
     });
-
     return benefits;
   }
-
   /**
    * Initialize default upgrade strategies
    */
   private initializeDefaultStrategies(): void {
-    this.upgradeStrategies.set('conservative', {
+    this.upgradeStrategies.set('conservative', {)
       type: 'conservative',
       name: 'Conservative',
       description: 'Prioritizes stability over new features',
       maxMajorVersionJump: 0,
       allowPrerelease: false,
-      requiresManualApproval: false
+      requiresManualApproval: false,
     });
-
-    this.upgradeStrategies.set('moderate', {
+    this.upgradeStrategies.set('moderate', {)
       type: 'moderate',
       name: 'Moderate',
       description: 'Balances stability and new features',
       maxMajorVersionJump: 1,
       allowPrerelease: false,
-      requiresManualApproval: true
+      requiresManualApproval: true,
     });
-
-    this.upgradeStrategies.set('aggressive', {
+    this.upgradeStrategies.set('aggressive', {)
       type: 'aggressive',
       name: 'Aggressive',
       description: 'Prioritizes latest features over stability',
       maxMajorVersionJump: 999,
       allowPrerelease: true,
-      requiresManualApproval: true
+      requiresManualApproval: true,
     });
   }
-
   /**
    * Helper methods
    */
@@ -570,42 +501,36 @@ export class ExtensionUpgradeAdvisor {
     if (changes.length > 3) return 'high';
     return 'medium';
   }
-
-  private checkDependencyConflicts(
+  private checkDependencyConflicts()
     currentExtension: ExtensionManifest,
     targetExtension: ExtensionManifest,
-    context: UpgradeContext
+    context: UpgradeContext,
   ): DependencyConflict[] {
     const conflicts: DependencyConflict[] = [];
     // Implementation would check for actual conflicts
     return conflicts;
   }
-
-  private analyzePermissionChanges(
+  private analyzePermissionChanges()
     currentExtension: ExtensionManifest,
-    targetExtension: ExtensionManifest
+    targetExtension: ExtensionManifest,
   ): PermissionChange[] {
     const changes: PermissionChange[] = [];
     // Implementation would analyze permission differences
     return changes;
   }
-
   private requiresRestart(currentExtension: ExtensionManifest, targetExtension: ExtensionManifest): boolean {
     // Check if upgrade requires system restart
     return currentExtension.extension_type !== targetExtension.extension_type;
   }
-
   private requiresDataBackup(currentExtension: ExtensionManifest, targetExtension: ExtensionManifest): boolean {
     // Check if upgrade might affect data
     const currentVer = new SemanticVersion(currentExtension.version);
     const targetVer = new SemanticVersion(targetExtension.version);
     return targetVer.major > currentVer.major;
   }
-
   private estimateUpgradeEffort(tasks: MigrationTask[], risks: UpgradeRisk[]): EffortEstimate {
     const totalTasks = tasks.length;
     const highRiskTasks = risks.filter(r => r.severity === 'high').length;
-    
     if (totalTasks <= 3 && highRiskTasks === 0) {
       return { level: 'low', duration: '30 minutes', complexity: 'simple' };
     }
@@ -614,10 +539,9 @@ export class ExtensionUpgradeAdvisor {
     }
     return { level: 'high', duration: '1 day', complexity: 'complex' };
   }
-
   private generateUpgradeTimeline(path: UpgradePath, tasks: MigrationTask[]): UpgradeTimeline {
     return {
-      phases: [
+      phases: [,
         { name: 'Preparation', duration: '15 minutes', tasks: tasks.filter(t => t.type === 'preparation') },
         { name: 'Validation', duration: '10 minutes', tasks: tasks.filter(t => t.type === 'validation') },
         { name: 'Migration', duration: '30 minutes', tasks: tasks.filter(t => t.type === 'migration') },
@@ -626,7 +550,6 @@ export class ExtensionUpgradeAdvisor {
       totalDuration: path.estimatedDuration || '1 hour'
     };
   }
-
   private generateMigrationPhases(analysis: UpgradeAnalysis): MigrationPhase[] {
     return [
       {
@@ -649,10 +572,9 @@ export class ExtensionUpgradeAdvisor {
       }
     ];
   }
-
   private generateRollbackPlan(currentExtension: ExtensionManifest, targetVersion: string): RollbackPlan {
     return {
-      steps: [
+      steps: [,
         'Stop the upgraded extension',
         'Restore extension files from backup',
         'Restore extension data from backup',
@@ -660,39 +582,35 @@ export class ExtensionUpgradeAdvisor {
         'Verify rollback success'
       ],
       estimatedDuration: '10 minutes',
-      dataLossRisk: 'low'
+      dataLossRisk: 'low',
     };
   }
-
   private generateTestingPlan(currentExtension: ExtensionManifest, targetVersion: string): TestingPlan {
     return {
-      preUpgradeTests: [
+      preUpgradeTests: [,
         'Verify current functionality',
         'Test critical workflows',
         'Validate data integrity'
       ],
-      postUpgradeTests: [
+      postUpgradeTests: [,
         'Verify upgrade success',
         'Test all functionality',
         'Validate data migration',
         'Check performance'
       ],
-      rollbackTests: [
+      rollbackTests: [,
         'Verify rollback success',
         'Test restored functionality',
         'Validate data restoration'
       ]
     };
   }
-
   private identifyPrerequisites(currentExtension: ExtensionManifest, targetVersion: string, context: UpgradeContext): string[] {
     const prerequisites: string[] = [];
-    
     prerequisites.push('Ensure system meets minimum requirements');
     prerequisites.push('Verify all dependencies are available');
     prerequisites.push('Create backup of current extension');
     prerequisites.push('Review breaking changes documentation');
-    
     return prerequisites;
   }
 }
@@ -746,7 +664,6 @@ export interface MigrationPlan {
   riskLevel?: 'low' | 'medium' | 'high';
   prerequisites?: string[];
 }
-
 interface UpgradeStrategy {
   type: UpgradeStrategyType;
   name: string;
@@ -755,12 +672,10 @@ interface UpgradeStrategy {
   allowPrerelease: boolean;
   requiresManualApproval: boolean;
 }
-
 interface MigrationRule {
   appliesTo: (fromVersion: string, toVersion: string) => boolean;
   generateTasks: (currentExtension: ExtensionManifest, targetVersion: string) => MigrationTask[];
 }
-
 interface BreakingChange {
   introducedIn: string;
   type: 'api' | 'config' | 'behavior' | 'dependency';
@@ -770,7 +685,6 @@ interface BreakingChange {
   automatedMigration: boolean;
   migrationGuide?: string;
 }
-
 interface BreakingChangeAnalysis {
   hasBreakingChanges: boolean;
   changes: BreakingChange[];
@@ -778,7 +692,6 @@ interface BreakingChangeAnalysis {
   migrationRequired: boolean;
   automatedMigration: boolean;
 }
-
 interface UpgradeCompatibilityResult {
   compatible: boolean;
   compatibilityResult: ExtensionCompatibilityResult;
@@ -787,21 +700,18 @@ interface UpgradeCompatibilityResult {
   requiresRestart: boolean;
   dataBackupRequired: boolean;
 }
-
 interface DependencyConflict {
   dependencyId: string;
   conflictType: 'version' | 'missing' | 'incompatible';
   description: string;
   resolution: string;
 }
-
 interface PermissionChange {
   permission: string;
   changeType: 'added' | 'removed' | 'modified';
   description: string;
   impact: 'low' | 'medium' | 'high';
 }
-
 interface MigrationTask {
   id: string;
   title: string;
@@ -811,7 +721,6 @@ interface MigrationTask {
   automated: boolean;
   estimatedDuration: string;
 }
-
 interface UpgradeRisk {
   type: 'breaking-changes' | 'dependency-conflicts' | 'data-loss' | 'performance' | 'security';
   severity: 'low' | 'medium' | 'high';
@@ -819,47 +728,40 @@ interface UpgradeRisk {
   mitigation: string;
   probability: 'low' | 'medium' | 'high';
 }
-
 interface UpgradeBenefit {
   type: 'features' | 'performance' | 'security' | 'stability' | 'compatibility';
   description: string;
   impact: 'low' | 'medium' | 'high';
 }
-
 interface EffortEstimate {
   level: 'low' | 'medium' | 'high';
   duration: string;
   complexity: 'simple' | 'moderate' | 'complex';
 }
-
 interface UpgradeTimeline {
-  phases: Array<{
+  phases: Array<{,
     name: string;
     duration: string;
     tasks: MigrationTask[];
   }>;
   totalDuration: string;
 }
-
 interface MigrationPhase {
   name: string;
   description: string;
   tasks: MigrationTask[];
   duration: string;
 }
-
 interface RollbackPlan {
   steps: string[];
   estimatedDuration: string;
   dataLossRisk: 'low' | 'medium' | 'high';
 }
-
 interface TestingPlan {
   preUpgradeTests: string[];
   postUpgradeTests: string[];
   rollbackTests: string[];
 }
-
 type UpgradeStrategyType = 'conservative' | 'moderate' | 'aggressive' | 'security' | 'none';
 
 // Export singleton

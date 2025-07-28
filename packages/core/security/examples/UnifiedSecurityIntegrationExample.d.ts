@@ -31,7 +31,7 @@ export declare function createCustomSecuritySetup(): {
         scalingAnalytics?: import("../ApiScalingAnalyticsIntegration").ApiScalingAnalyticsIntegration;
     };
 };
-export declare function handleSecurityRequest(integration: AdaptiveRateLimitingIntegration, requestData: {
+export declare function handleSecurityRequest(integration: AdaptiveRateLimitingIntegration, requestData: {)
     ip: string;
     endpoint: string;
     method: string;
@@ -42,7 +42,7 @@ export declare function monitorSecurityHealth(integration: AdaptiveRateLimitingI
     config: import("../AdaptiveRateLimitingIntegration").IntegrationConfig;
     performance: any;
     learning: import("../AdaptiveRateLimitingIntegration").CrossSystemLearning;
-    systemHealth: {
+    systemHealth: {,
         rateLimitingHealth: number;
         throttlingHealth: number;
         integrationHealth: number;

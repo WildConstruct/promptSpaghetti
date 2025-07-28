@@ -9,7 +9,7 @@ export interface InspectorPanelProps {
     minWidth?: number;
     maxWidth?: number;
 }
-export declare const InspectorPanel: ({ node, schema, onChange, onClose, onGlobalPreviewRequest, initialWidth, minWidth, maxWidth }: {
+export declare const InspectorPanel: ({ node, schema, onChange, onClose, onGlobalPreviewRequest, initialWidth, minWidth, maxWidth }: {)
     node: any;
     schema: any;
     onChange: any;

@@ -12,35 +12,35 @@ export type MarketplaceTutorialCategory = 'marketplace-basics' | 'template-disco
 export type TutorialInteractionType = 'marketplace-navigation' | 'template-search' | 'template-preview' | 'purchase-flow' | 'template-upload' | 'pricing-strategy' | 'analytics-review' | 'community-contribution' | 'review-management' | 'support-interaction';
 export interface MarketplaceTutorial extends Tutorial {
     marketplace_category: MarketplaceTutorialCategory;
-    skill_requirements: Array<{
+    skill_requirements: Array<{,
         domain: SkillDomain;
         level: SkillLevel;
         critical: boolean;
     }>;
-    skill_outcomes: Array<{
+    skill_outcomes: Array<{,
         domain: SkillDomain;
         target_level: SkillLevel;
         competencies: string[];
     }>;
-    marketplace_context: {
+    marketplace_context: {,
         user_roles: ('buyer' | 'seller' | 'creator' | 'contributor' | 'admin')[];
         template_types: string[];
         use_cases: string[];
         business_objectives: string[];
     };
-    integration_points: {
+    integration_points: {,
         requires_real_templates: boolean;
         requires_marketplace_account: boolean;
         requires_payment_setup: boolean;
         requires_community_profile: boolean;
     };
-    success_metrics: {
+    success_metrics: {,
         completion_threshold: number;
         time_limit_minutes?: number;
         accuracy_threshold?: number;
         engagement_score_target?: number;
     };
-    adaptive_elements: {
+    adaptive_elements: {,
         personalizes_to_role: boolean;
         adjusts_to_skill_level: boolean;
         recommends_next_tutorials: boolean;
@@ -49,14 +49,14 @@ export interface MarketplaceTutorial extends Tutorial {
 }
 export interface MarketplaceTutorialStep extends TutorialStep {
     marketplace_interactions: MarketplaceTutorialInteraction[];
-    real_world_context: {
+    real_world_context: {,
         scenario_description: string;
         business_context: string;
         success_criteria: string[];
         common_mistakes: string[];
     };
     skill_checkpoints: SkillCheckpoint[];
-    personalization: {
+    personalization: {,
         role_specific_content: Record<string, string>;
         skill_level_variations: Record<SkillLevel, StepVariation>;
         user_data_integration: UserDataIntegration[];
@@ -66,13 +66,13 @@ export interface MarketplaceTutorialInteraction extends TutorialAction {
     interaction_type: TutorialInteractionType;
     marketplace_element: string;
     validation_criteria: ValidationCriterion[];
-    help_resources: {
+    help_resources: {,
         tooltip_text?: string;
         help_article_id?: string;
         video_explanation?: string;
         community_examples?: string[];
     };
-    analytics_tracking: {
+    analytics_tracking: {,
         event_name: string;
         parameters: Record<string, any>;
         success_metrics: string[];
@@ -82,13 +82,13 @@ export interface SkillCheckpoint {
     skill_domain: SkillDomain;
     checkpoint_type: 'knowledge' | 'practical' | 'application' | 'mastery';
     assessment_method: 'quiz' | 'demonstration' | 'task_completion' | 'peer_evaluation';
-    passing_criteria: {
+    passing_criteria: {,
         minimum_score?: number;
         required_actions?: string[];
         time_limit_seconds?: number;
         accuracy_threshold?: number;
     };
-    feedback_mechanism: {
+    feedback_mechanism: {,
         immediate_feedback: boolean;
         detailed_explanation: boolean;
         improvement_suggestions: boolean;
@@ -111,7 +111,7 @@ export interface ValidationCriterion {
     criterion_type: 'element_interaction' | 'data_entry' | 'navigation' | 'completion_state';
     validation_method: 'dom_inspection' | 'api_verification' | 'user_confirmation' | 'automated_detection';
     success_condition: string;
-    error_messages: {
+    error_messages: {,
         validation_failed: string;
         help_suggestion: string;
         retry_guidance: string;
@@ -165,13 +165,13 @@ export interface PersonalizationSettings {
     difficulty_adaptation: DifficultyAdaptation;
 }
 export interface RealWorldContext {
-    simulated_scenario: {
+    simulated_scenario: {,
         business_situation: string;
         marketplace_conditions: string;
         user_goals: string[];
         success_metrics: string[];
     };
-    live_marketplace_integration: {
+    live_marketplace_integration: {,
         uses_real_templates: boolean;
         connects_to_analytics: boolean;
         affects_real_data: boolean;
@@ -211,32 +211,32 @@ export interface TutorialCompletionResult {
     marketplace_benefits: MarketplaceBenefit[];
 }
 export interface CommunityTutorialSubmission {
-    basic_info: {
+    basic_info: {,
         title: string;
         description: string;
         category: MarketplaceTutorialCategory;
         target_audience: string[];
         estimated_time_minutes: number;
     };
-    content_structure: {
+    content_structure: {,
         learning_objectives: string[];
         prerequisites: SkillRequirement[];
         tutorial_steps: CommunityTutorialStepSubmission[];
         assessment_methods: AssessmentMethod[];
     };
-    marketplace_integration: {
+    marketplace_integration: {,
         required_marketplace_features: string[];
         template_dependencies: string[];
         real_data_requirements: string[];
         permission_requirements: string[];
     };
-    quality_assurance: {
+    quality_assurance: {,
         self_testing_completed: boolean;
         accessibility_compliance: boolean;
         content_accuracy_verified: boolean;
         user_testing_feedback: UserTestingFeedback[];
     };
-    contribution_metadata: {
+    contribution_metadata: {,
         author_expertise: ExpertiseCredential[];
         collaboration_openness: 'individual' | 'collaborative' | 'community';
         maintenance_commitment: MaintenanceCommitment;
@@ -245,13 +245,13 @@ export interface CommunityTutorialSubmission {
 }
 export interface CommunityTutorialStepSubmission {
     step_content: Omit<MarketplaceTutorialStep, 'id'>;
-    validation_data: {
+    validation_data: {,
         tested_interactions: string[];
         verified_outcomes: string[];
         accessibility_checked: boolean;
         cross_browser_tested: boolean;
     };
-    author_notes: {
+    author_notes: {,
         implementation_notes: string[];
         known_limitations: string[];
         improvement_suggestions: string[];
@@ -259,25 +259,25 @@ export interface CommunityTutorialStepSubmission {
     };
 }
 export interface TutorialReviewData {
-    content_quality: {
+    content_quality: {,
         accuracy_score: number;
         clarity_score: number;
         completeness_score: number;
         engagement_score: number;
     };
-    technical_validation: {
+    technical_validation: {,
         interaction_testing_results: InteractionTestResult[];
         marketplace_integration_verification: IntegrationVerification[];
         accessibility_compliance: AccessibilityCheck[];
         performance_assessment: PerformanceMetric[];
     };
-    educational_effectiveness: {
+    educational_effectiveness: {,
         learning_objective_alignment: number;
         skill_development_potential: number;
         real_world_applicability: number;
         progression_logic: number;
     };
-    community_value: {
+    community_value: {,
         uniqueness_score: number;
         market_demand_score: number;
         contribution_quality: number;
@@ -289,7 +289,7 @@ export interface TutorialReviewData {
 export interface TutorialAnalytics {
     tutorial_id: string;
     analysis_period: string;
-    engagement_metrics: {
+    engagement_metrics: {,
         total_starts: number;
         completion_rate: number;
         average_time_to_complete: number;
@@ -297,19 +297,19 @@ export interface TutorialAnalytics {
         drop_off_points: DropOffAnalysis[];
         user_satisfaction_score: number;
     };
-    learning_effectiveness: {
+    learning_effectiveness: {,
         skill_acquisition_rate: Record<SkillDomain, number>;
         knowledge_retention_score: number;
         real_world_application_success: number;
         user_confidence_improvement: number;
     };
-    community_impact: {
+    community_impact: {,
         marketplace_adoption_influence: number;
         community_discussion_generation: number;
         follow_up_contribution_rate: number;
         knowledge_sharing_amplification: number;
     };
-    technical_performance: {
+    technical_performance: {,
         interaction_success_rates: Record<string, number>;
         error_frequency: ErrorFrequencyAnalysis[];
         performance_bottlenecks: PerformanceBottleneck[];
@@ -318,25 +318,25 @@ export interface TutorialAnalytics {
 }
 export interface TutorialSystemInsights {
     time_period: string;
-    system_health: {
+    system_health: {,
         total_active_tutorials: number;
         average_completion_rate: number;
         user_engagement_trend: 'increasing' | 'stable' | 'declining';
         content_quality_score: number;
     };
-    user_behavior_patterns: {
+    user_behavior_patterns: {,
         popular_learning_paths: LearningPathPopularity[];
         skill_development_trends: SkillTrend[];
         user_progression_patterns: ProgressionPattern[];
         content_preference_analysis: ContentPreferenceAnalysis;
     };
-    marketplace_impact: {
+    marketplace_impact: {,
         tutorial_to_marketplace_conversion: number;
         skill_development_to_revenue_correlation: number;
         community_contribution_growth: number;
         user_retention_improvement: number;
     };
-    content_optimization_opportunities: {
+    content_optimization_opportunities: {,
         high_impact_content_gaps: ContentGap[];
         underperforming_tutorials: TutorialPerformanceIssue[];
         improvement_priorities: ImprovementPriority[];
@@ -349,24 +349,24 @@ export interface LearningPath {
     description: string;
     target_user_profile: UserProfilePattern;
     estimated_duration_hours: number;
-    path_structure: {
+    path_structure: {,
         prerequisite_tutorials: string[];
         core_tutorial_sequence: PathTutorialEntry[];
         optional_enrichment_tutorials: string[];
         capstone_project?: CapstoneProject;
     };
-    skill_progression: {
+    skill_progression: {,
         entry_requirements: SkillRequirement[];
         intermediate_milestones: SkillMilestone[];
         completion_outcomes: SkillOutcome[];
         continuing_education_paths: string[];
     };
-    personalization: {
+    personalization: {,
         role_based_variations: Record<string, RoleVariation>;
         skill_based_adaptations: Record<SkillLevel, SkillAdaptation>;
         context_based_modifications: ContextModification[];
     };
-    success_tracking: {
+    success_tracking: {,
         completion_criteria: CompletionCriterion[];
         progress_milestones: ProgressMilestone[];
         assessment_points: AssessmentPoint[];

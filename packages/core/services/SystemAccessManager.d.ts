@@ -201,14 +201,14 @@ export interface AccessStats {
     byStatus: Record<UserStatus, number>;
     byAccessLevel: Record<SystemAccessLevel, number>;
     bySecurityClearance: Record<SecurityClearance, number>;
-    recentActivity: {
+    recentActivity: {,
         newUsers: number;
         accessGranted: number;
         accessRevoked: number;
         loginAttempts: number;
         failedLogins: number;
     };
-    compliance: {
+    compliance: {,
         mfaEnabled: number;
         termsAccepted: number;
         overdueCertifications: number;
@@ -235,7 +235,7 @@ export declare class SystemAccessManager {
     /**
      * Role Management
      */
-    assignRole(userId: string, roleId: string, assignedBy: string, options?: {
+    assignRole(userId: string, roleId: string, assignedBy: string, options?: {)
         expiresAt?: Date;
         scope?: RoleScope;
         context?: Record<string, any>;
@@ -244,7 +244,7 @@ export declare class SystemAccessManager {
     /**
      * Permission Management
      */
-    grantPermission(userId: string, permission: string, resource: string, action: string, grantedBy: string, options?: {
+    grantPermission(userId: string, permission: string, resource: string, action: string, grantedBy: string, options?: {)
         resourceId?: string;
         expiresAt?: Date;
         conditions?: PermissionCondition[];

@@ -14,7 +14,6 @@
  * - Attribution data-driven budget allocation recommendations
  * - Cross-device attribution tracking
  */
-
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { 
   ConversionFunnelDefinition,
@@ -480,18 +479,16 @@ export interface AttributionAnalysisExportData {
 
 // Default configuration
 
-export   const [error, setError] = useState<string | null>(null);
+export const [error, setError] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState<AttributionModel>('linear');
   const [activeTab, setActiveTab] = useState<'channels' | 'journeys' | 'models' | 'insights'>('channels');
   const [selectedChannel, setSelectedChannel] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'table' | 'chart' | 'journey'>('table');
-
   // Load attribution analysis data
   const loadAttributionData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
       const query: ConversionMetricQuery = {
         funnelId: funnelDefinition.id,
         timeRange,
@@ -499,26 +496,22 @@ export   const [error, setError] = useState<string | null>(null);
         cohorts: cohorts.map(c => c.id),
         metrics: ['attribution_analysis', 'journey_data', 'touchpoint_analysis'],
         aggregation: 'detailed',
-        filters: [
+        filters: [,
           { field: 'attribution_models', operator: 'in', value: attributionConfig.models },
           { field: 'channels', operator: 'in', value: channels.map(c => c.id) }
         ]
       };
-
       const result = await analyticsInfrastructure.executeQuery(query);
-      
       if (result.success && result.data) {
-        const analysisData = await processAttributionData(
+        const analysisData = await processAttributionData(;)
           result.data,
           attributionConfig,
           channels
         );
-        
         setAttributionData(analysisData);
-        
         // Generate insights
         const insights = generateAttributionInsights(analysisData);
-        insights.forEach(insight => {
+        insights.forEach(insight => {)
           if (onInsightGenerated) {
             onInsightGenerated(insight);
           }
@@ -532,18 +525,16 @@ export   const [error, setError] = useState<string | null>(null);
       setLoading(false);
     }
   }, [funnelDefinition, analyticsInfrastructure, timeRange, segments, cohorts, attributionConfig, channels, onInsightGenerated]);
-
   // Process attribution data
-  const processAttributionData = async (
+  const processAttributionData = async (;)
     rawData: unknown,
     config: AttributionConfiguration,
-    channelList: MarketingChannel[]
+    channelList: MarketingChannel[],
   ): Promise<AttributionAnalysisData> => {
     // Simulate comprehensive attribution analysis processing
     const channelAttribution = generateChannelAttributionData(channelList, config.models);
     const journeyAnalysis = generateCustomerJourneyData(channelList);
     const modelComparison = generateModelComparison(config.models);
-    
     return {
       channelAttribution,
       journeyAnalysis,
@@ -553,16 +544,15 @@ export   const [error, setError] = useState<string | null>(null);
       budgetRecommendations: generateBudgetRecommendations(channelList),
       roiAnalysis: generateROIAnalysis(channelList),
       conversionPaths: generateConversionPaths(channelList),
-      attributionTrends: generateAttributionTrends(channelList)
+      attributionTrends: generateAttributionTrends(channelList),
     };
   };
-
   // Generate channel attribution data
-  const generateChannelAttributionData = (
+  const generateChannelAttributionData = (;)
     channelList: MarketingChannel[],
-    models: AttributionModel[]
+    models: AttributionModel[],
   ): ChannelAttributionData[] => {
-    return channelList.map(channel => ({
+    return channelList.map(channel => ({)
       channelId: channel.id,
       channelName: channel.name,
       category: channel.category,
@@ -576,7 +566,7 @@ export   const [error, setError] = useState<string | null>(null);
         };
         return acc;
       }, {} as Record<AttributionModel, ChannelAttribution>),
-      performance: {
+      performance: {,
         impressions: Math.floor(Math.random() * 100000 + 50000),
         clicks: Math.floor(Math.random() * 5000 + 1000),
         sessions: Math.floor(Math.random() * 3000 + 500),
@@ -585,7 +575,7 @@ export   const [error, setError] = useState<string | null>(null);
         pagesPerSession: Math.random() * 3 + 1,
         goalCompletions: Math.floor(Math.random() * 500 + 50)
       },
-      touchpointMetrics: {
+      touchpointMetrics: {,
         totalTouchpoints: Math.floor(Math.random() * 10000 + 2000),
         uniqueUsers: Math.floor(Math.random() * 5000 + 1000),
         averageTouchpointsPerUser: Math.random() * 3 + 1.5,
@@ -594,7 +584,7 @@ export   const [error, setError] = useState<string | null>(null);
         middleTouchPercent: Math.random() * 45 + 20,
         assistedConversions: Math.floor(Math.random() * 300 + 50)
       },
-      conversionContribution: {
+      conversionContribution: {,
         directConversions: Math.floor(Math.random() * 200 + 50),
         assistedConversions: Math.floor(Math.random() * 150 + 30),
         totalConversions: 0, // Will be calculated
@@ -602,23 +592,23 @@ export   const [error, setError] = useState<string | null>(null);
         averageTimeToConversion: Math.floor(Math.random() * 10 + 1),
         conversionValue: Math.floor(Math.random() * 5000 + 1000)
       },
-      journeyRole: {
-        primaryRole: (
+      journeyRole: {,
+        primaryRole: (),
           ['discovery',
           'consideration',
           'conversion',
           'retention'] as const
         )[Math.floor(Math.random() * 4)],
-        roleDistribution: {
+        roleDistribution: {,
           discovery: Math.random() * 0.4,
           consideration: Math.random() * 0.3,
           conversion: Math.random() * 0.2,
           retention: Math.random() * 0.1
         },
         synergisticChannels: [],
-        competingChannels: []
+        competingChannels: [],
       },
-      efficiency: {
+      efficiency: {,
         costPerConversion: Math.floor(Math.random() * 100 + 20),
         returnOnAdSpend: Math.random() * 5 + 2,
         costPerClick: Math.random() * 5 + 0.5,
@@ -628,12 +618,11 @@ export   const [error, setError] = useState<string | null>(null);
       }
     }));
   };
-
   // Generate customer journey data
   const generateCustomerJourneyData = (channelList: MarketingChannel[]): CustomerJourneyData[] => {
-    return Array.from({ length: 50 }, (_, i) => ({
-      journeyId: `journey-${i + 1}`,
-      userId: `user-${Math.floor(Math.random() * 10000)}`,
+    return Array.from({ length: 50 }, (_, i) => ({)
+      journeyId: `journey-${i + 1}`,}
+      userId: `user-${Math.floor(Math.random() * 10000)}`,}
       startTimestamp: Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000,
       conversionTimestamp: Math.random() > 0.3 ? Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000 : undefined,
       totalTouchpoints: Math.floor(Math.random() * 8 + 2),
@@ -642,24 +631,22 @@ export   const [error, setError] = useState<string | null>(null);
       conversionValue: Math.floor(Math.random() * 500 + 50),
       journeyType: Math.random() > 0.7 ? 'converted' : Math.random() > 0.5 ? 'abandoned' : 'ongoing',
       complexity: (['simple', 'moderate', 'complex', 'very_complex'] as const)[Math.floor(Math.random() * 4)],
-      patterns: []
+      patterns: [],
     }));
   };
-
   // Generate model comparison data
   const generateModelComparison = (models: AttributionModel[]): AttributionModelComparison[] => {
     const comparisons: AttributionModelComparison[] = [];
-    
     for (let i = 0; i < models.length; i++) {
       for (let j = i + 1; j < models.length; j++) {
-        comparisons.push({
+        comparisons.push({)
           modelA: models[i],
           modelB: models[j],
           conversionDifference: Math.random() * 200 - 100,
           revenueDifference: Math.random() * 10000 - 5000,
           channelRankingChanges: [],
           correlationScore: Math.random() * 0.4 + 0.6,
-          modelAccuracy: {
+          modelAccuracy: {,
             model: models[i],
             accuracy: Math.random() * 0.2 + 0.8,
             precision: Math.random() * 0.2 + 0.75,
@@ -667,29 +654,26 @@ export   const [error, setError] = useState<string | null>(null);
             f1Score: Math.random() * 0.2 + 0.75,
             incrementalityScore: Math.random() * 0.3 + 0.6
           },
-          recommendations: []
+          recommendations: [],
         });
       }
     }
-    
     return comparisons;
   };
-
   // Generate touchpoint analysis
   const generateTouchpointAnalysis = (): TouchpointAnalysisData[] => {
-    return funnelDefinition.steps.map(step => ({
+    return funnelDefinition.steps.map(step => ({)
       step,
       channelContributions: [],
-      dropoffAnalysis: {
+      dropoffAnalysis: {,
         totalDropoffs: Math.floor(Math.random() * 1000 + 100),
         channelDropoffs: [],
         dropoffReasons: [],
-        recoveryOpportunities: []
+        recoveryOpportunities: [],
       },
-      optimizationOpportunities: []
+      optimizationOpportunities: [],
     }));
   };
-
   // Generate cross-channel insights
   const generateCrossChannelInsights = (channelList: MarketingChannel[]): CrossChannelInsight[] => {
     return [
@@ -713,17 +697,16 @@ export   const [error, setError] = useState<string | null>(null);
       }
     ];
   };
-
   // Generate budget recommendations
   const generateBudgetRecommendations = (channelList: MarketingChannel[]): BudgetAllocationRecommendation[] => {
-    return channelList.map(channel => ({
+    return channelList.map(channel => ({)
       channelId: channel.id,
       channelName: channel.name,
       currentBudget: channel.budget,
       recommendedBudget: channel.budget * (0.8 + Math.random() * 0.4),
       budgetChange: 0, // Will be calculated
       budgetChangePercent: 0, // Will be calculated
-      expectedImpact: {
+      expectedImpact: {,
         conversionIncrease: Math.random() * 20,
         revenueIncrease: Math.random() * 10000,
         roiImprovement: Math.random() * 0.5,
@@ -735,10 +718,9 @@ export   const [error, setError] = useState<string | null>(null);
       priority: (['immediate', 'high', 'medium', 'low'] as const)[Math.floor(Math.random() * 4)]
     }));
   };
-
   // Generate ROI analysis
   const generateROIAnalysis = (channelList: MarketingChannel[]): ChannelROIAnalysis[] => {
-    return channelList.map(channel => ({
+    return channelList.map(channel => ({)
       channelId: channel.id,
       channelName: channel.name,
       cost: channel.cost,
@@ -749,22 +731,20 @@ export   const [error, setError] = useState<string | null>(null);
       marginalROI: Math.random() * 1.5 + 0.5,
       saturationPoint: channel.budget * (1.2 + Math.random() * 0.8),
       optimalSpend: channel.budget * (0.9 + Math.random() * 0.2),
-      roiTrend: []
+      roiTrend: [],
     }));
   };
-
   // Generate conversion paths
   const generateConversionPaths = (channelList: MarketingChannel[]): ConversionPathData[] => {
-    const paths = [
+    const paths = [;
       ['organic_search', 'email', 'direct'],
       ['social_media', 'display', 'organic_search'],
       ['paid_search', 'direct'],
       ['display', 'organic_search', 'email', 'direct'],
       ['social_media', 'direct']
     ];
-
-    return paths.map((path, index) => ({
-      pathId: `path-${index + 1}`,
+    return paths.map((path, index) => ({)
+      pathId: `path-${index + 1}`,}
       path,
       frequency: Math.floor(Math.random() * 500 + 50),
       conversionRate: Math.random() * 0.1 + 0.02,
@@ -773,7 +753,7 @@ export   const [error, setError] = useState<string | null>(null);
       pathLength: path.length,
       pathDuration: Math.floor(Math.random() * 15 + 2),
       efficiency: Math.random() * 0.4 + 0.6,
-      optimization: {
+      optimization: {,
         bottlenecks: [],
         opportunities: [],
         alternativePaths: [],
@@ -781,14 +761,12 @@ export   const [error, setError] = useState<string | null>(null);
       }
     }));
   };
-
   // Generate attribution trends
   const generateAttributionTrends = (channelList: MarketingChannel[]): AttributionTrendData[] => {
     const periods = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-    
-    return periods.map(period => ({
+    return periods.map(period => ({)
       period,
-      channelTrends: channelList.map(channel => ({
+      channelTrends: channelList.map(channel => ({)
         channelId: channel.id,
         channelName: channel.name,
         trendDirection: (['increasing', 'decreasing', 'stable'] as const)[Math.floor(Math.random() * 3)],
@@ -797,10 +775,9 @@ export   const [error, setError] = useState<string | null>(null);
         confidence: Math.random() * 0.3 + 0.7
       })),
       modelStability: [],
-      seasonalityFactors: []
+      seasonalityFactors: [],
     }));
   };
-
   // Generate attribution insights
   const generateAttributionInsights = (data: AttributionAnalysisData): AttributionInsight[] => {
     return [
@@ -812,7 +789,7 @@ export   const [error, setError] = useState<string | null>(null);
         confidence: 0.85,
         affectedChannels: ['email'],
         actionable: true,
-        recommendations: [
+        recommendations: [,
           { action: 'Review email campaign segmentation', impact: 0.15, effort: 'medium', timeline: '2 weeks', resources: ['Marketing Team'] },
           { action: 'A/B test subject lines and content', impact: 0.12, effort: 'low', timeline: '1 week', resources: ['Content Team'] }
         ],
@@ -826,23 +803,20 @@ export   const [error, setError] = useState<string | null>(null);
         confidence: 0.78,
         affectedChannels: ['social_media', 'paid_search'],
         actionable: true,
-        recommendations: [
+        recommendations: [,
           { action: 'Increase social media retargeting budget', impact: 0.18, effort: 'low', timeline: '1 week', resources: ['Media Buying Team'] }
         ],
         data: {}
       }
     ];
   };
-
   // Initial data load
   useEffect(() => {
     loadAttributionData();
   }, [loadAttributionData]);
-
   // Handle export
   const handleExport = useCallback(() => {
     if (!attributionData || !onExport) return;
-    
     const exportData: AttributionAnalysisExportData = {
       channelAttribution: attributionData.channelAttribution,
       journeyAnalysis: attributionData.journeyAnalysis,
@@ -852,7 +826,7 @@ export   const [error, setError] = useState<string | null>(null);
       conversionPaths: attributionData.conversionPaths,
       exportTimestamp: Date.now(),
       configuration: attributionConfig,
-      insights: attributionData.crossChannelInsights.map(insight => ({
+      insights: attributionData.crossChannelInsights.map(insight => ({)
         type: 'cross_channel_effect' as AttributionInsightType,
         title: insight.description,
         description: insight.description,
@@ -860,7 +834,7 @@ export   const [error, setError] = useState<string | null>(null);
         confidence: insight.confidence,
         affectedChannels: insight.channels,
         actionable: insight.actionable,
-        recommendations: insight.recommendations.map(rec => ({
+        recommendations: insight.recommendations.map(rec => ({)
           action: rec,
           impact: 0.1,
           effort: 'medium' as const,
@@ -870,21 +844,18 @@ export   const [error, setError] = useState<string | null>(null);
         data: {}
       }))
     };
-    
     onExport(exportData);
   }, [attributionData, attributionConfig, onExport]);
-
   if (loading) {
-    return (
+    return ()
       <div className="funnel-attribution-analysis-loading">
         <div className="loading-spinner"></div>
         <p>Loading attribution analysis data...</p>
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="funnel-attribution-analysis-error">
         <h3>Error Loading Attribution Analysis</h3>
         <p className="error-message">{error}</p>
@@ -894,32 +865,28 @@ export   const [error, setError] = useState<string | null>(null);
       </div>
     );
   }
-
   if (!attributionData) {
     return <div className="funnel-attribution-analysis-error">No data available</div>;
   }
-
-  return (
+  return ()
     <div className="funnel-attribution-analysis">
       <div className="attribution-header">
         <div className="attribution-info">
           <h3>Funnel Attribution Analysis</h3>
           <p>Multi-touch attribution analysis for {funnelDefinition.name}</p>
         </div>
-        
         <div className="attribution-controls">
           <select
             value={selectedModel}
             onChange={(e) => setSelectedModel(e.target.value as AttributionModel)}
             className="model-selector"
           >
-            {attributionConfig.models.map(model => (
+            {attributionConfig.models.map(model => ()
               <option key={model} value={model}>
                 {model.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </option>
             ))}
           </select>
-          
           <select
             value={viewMode}
             onChange={(e) => setViewMode(e.target.value as 'table' | 'chart' | 'journey')}
@@ -929,13 +896,11 @@ export   const [error, setError] = useState<string | null>(null);
             <option value="chart">Chart View</option>
             <option value="journey">Journey View</option>
           </select>
-          
           <button onClick={handleExport} className="export-button">
             Export Analysis
           </button>
         </div>
       </div>
-
       <div className="attribution-tabs">
         <button
           className={`tab ${activeTab === 'channels' ? 'active' : ''}`}
@@ -962,20 +927,18 @@ export   const [error, setError] = useState<string | null>(null);
           Insights & Recommendations
         </button>
       </div>
-
       <div className="attribution-content">
-        {activeTab === 'channels' && (
+        {activeTab === 'channels' && ()
           <div className="channel-attribution">
             <div className="channel-grid">
-              {attributionData.channelAttribution.map(channel => (
+              {attributionData.channelAttribution.map(channel => ()
                 <div key={channel.channelId} className="channel-card">
                   <div className="channel-header">
                     <h4>{channel.channelName}</h4>
-                    <span className={`category-badge ${channel.category}`}>
+                    <span className={`category-badge ${channel.category}`}>}
                       {channel.category.replace('_', ' ')}
                     </span>
                   </div>
-                  
                   <div className="attribution-metrics">
                     <div className="metric">
                       <span className="label">Conversions</span>
@@ -1002,11 +965,9 @@ export   const [error, setError] = useState<string | null>(null);
                       </span>
                     </div>
                   </div>
-                  
                   <div className="channel-role">
                     <strong>Primary Role:</strong> {channel.journeyRole.primaryRole.replace('_', ' ')}
                   </div>
-                  
                   <button
                     onClick={() => setSelectedChannel(channel.channelId)}
                     className="details-button"
@@ -1018,8 +979,7 @@ export   const [error, setError] = useState<string | null>(null);
             </div>
           </div>
         )}
-
-        {activeTab === 'journeys' && (
+        {activeTab === 'journeys' && ()
           <div className="journey-analysis">
             <div className="journey-summary">
               <h4>Journey Summary</h4>
@@ -1031,7 +991,7 @@ export   const [error, setError] = useState<string | null>(null);
                 <div className="metric">
                   <span className="label">Conversion Rate</span>
                   <span className="value">
-                    {Math.round(
+                    {Math.round()
                       (attributionData.journeyAnalysis.filter(j => j.journeyType === 'converted').length /
                         attributionData.journeyAnalysis.length) * 100
                     )}%
@@ -1040,7 +1000,7 @@ export   const [error, setError] = useState<string | null>(null);
                 <div className="metric">
                   <span className="label">Avg. Journey Length</span>
                   <span className="value">
-                    {Math.round(
+                    {Math.round()
                       attributionData.journeyAnalysis.reduce((sum, j) => sum + j.totalTouchpoints, 0) /
                         attributionData.journeyAnalysis.length
                     )} touchpoints
@@ -1048,14 +1008,13 @@ export   const [error, setError] = useState<string | null>(null);
                 </div>
               </div>
             </div>
-            
             <div className="conversion-paths">
               <h4>Top Conversion Paths</h4>
               <div className="path-list">
-                {attributionData.conversionPaths.slice(0, 10).map(path => (
+                {attributionData.conversionPaths.slice(0, 10).map(path => ()
                   <div key={path.pathId} className="path-item">
                     <div className="path-sequence">
-                      {path.path.map((channel, index) => (
+                      {path.path.map((channel, index) => ()
                         <React.Fragment key={index}>
                           <span className="channel-step">{channel.replace('_', ' ')}</span>
                           {index < path.path.length - 1 && <span className="arrow">→</span>}
@@ -1065,7 +1024,7 @@ export   const [error, setError] = useState<string | null>(null);
                     <div className="path-metrics">
                       <span>Frequency: {path.frequency}</span>
                       <span>Conversion Rate: {Math.round(path.conversionRate * 100)}%</span>
-                      <span>Avg. Value: ${path.averageValue}</span>
+                      <span>Avg. Value: ${path.averageValue}</span>}
                     </div>
                   </div>
                 ))}
@@ -1073,12 +1032,11 @@ export   const [error, setError] = useState<string | null>(null);
             </div>
           </div>
         )}
-
-        {activeTab === 'models' && (
+        {activeTab === 'models' && ()
           <div className="model-comparison">
             <h4>Attribution Model Comparison</h4>
             <div className="comparison-grid">
-              {attributionData.modelComparison.map((comparison, index) => (
+              {attributionData.modelComparison.map((comparison, index) => ()
                 <div key={index} className="comparison-card">
                   <div className="comparison-header">
                     <h5>{comparison.modelA.replace('_', ' ')} vs {comparison.modelB.replace('_', ' ')}</h5>
@@ -1086,22 +1044,20 @@ export   const [error, setError] = useState<string | null>(null);
                       Correlation: {Math.round(comparison.correlationScore * 100)}%
                     </span>
                   </div>
-                  
                   <div className="comparison-metrics">
                     <div className="metric">
                       <span className="label">Conversion Difference</span>
-                      <span className={`value ${comparison.conversionDifference >= 0 ? 'positive' : 'negative'}`}>
+                      <span className={`value ${comparison.conversionDifference >= 0 ? 'positive' : 'negative'}`}>}
                         {comparison.conversionDifference >= 0 ? '+' : ''}{Math.round(comparison.conversionDifference)}
                       </span>
                     </div>
                     <div className="metric">
                       <span className="label">Revenue Difference</span>
-                      <span className={`value ${comparison.revenueDifference >= 0 ? 'positive' : 'negative'}`}>
+                      <span className={`value ${comparison.revenueDifference >= 0 ? 'positive' : 'negative'}`}>}
                         {comparison.revenueDifference >= 0 ? '+' : ''}${Math.round(comparison.revenueDifference).toLocaleString()}
                       </span>
                     </div>
                   </div>
-                  
                   <div className="model-accuracy">
                     <strong>Model A Accuracy:</strong> {Math.round(comparison.modelAccuracy.accuracy * 100)}%
                   </div>
@@ -1110,29 +1066,27 @@ export   const [error, setError] = useState<string | null>(null);
             </div>
           </div>
         )}
-
-        {activeTab === 'insights' && (
+        {activeTab === 'insights' && ()
           <div className="attribution-insights">
             <div className="budget-recommendations">
               <h4>Budget Allocation Recommendations</h4>
               <div className="recommendation-list">
-                {attributionData.budgetRecommendations.slice(0, 5).map(rec => (
-                  <div key={rec.channelId} className={`recommendation-card ${rec.priority}`}>
+                {attributionData.budgetRecommendations.slice(0, 5).map(rec => ()
+                  <div key={rec.channelId} className={`recommendation-card ${rec.priority}`}>}
                     <div className="recommendation-header">
                       <h5>{rec.channelName}</h5>
-                      <span className={`priority-badge ${rec.priority}`}>
+                      <span className={`priority-badge ${rec.priority}`}>}
                         {rec.priority.toUpperCase()}
                       </span>
                     </div>
-                    
                     <div className="budget-comparison">
                       <div className="budget-metric">
                         <span className="label">Current Budget</span>
-                        <span className="value">${rec.currentBudget.toLocaleString()}</span>
+                        <span className="value">${rec.currentBudget.toLocaleString()}</span>}
                       </div>
                       <div className="budget-metric">
                         <span className="label">Recommended Budget</span>
-                        <span className="value">${rec.recommendedBudget.toLocaleString()}</span>
+                        <span className="value">${rec.recommendedBudget.toLocaleString()}</span>}
                       </div>
                       <div className="budget-metric">
                         <span className="label">Expected Revenue Increase</span>
@@ -1141,7 +1095,6 @@ export   const [error, setError] = useState<string | null>(null);
                         </span>
                       </div>
                     </div>
-                    
                     <div className="recommendation-justification">
                       <p>{rec.justification}</p>
                     </div>
@@ -1149,33 +1102,30 @@ export   const [error, setError] = useState<string | null>(null);
                 ))}
               </div>
             </div>
-            
             <div className="cross-channel-insights">
               <h4>Cross-Channel Insights</h4>
               <div className="insight-list">
-                {attributionData.crossChannelInsights.map((insight, index) => (
+                {attributionData.crossChannelInsights.map((insight, index) => ()
                   <div key={index} className="insight-card">
                     <div className="insight-header">
                       <h5>{insight.description}</h5>
-                      <span className={`impact-badge ${insight.impact > 0.2 ? 'high' : insight.impact > 0.1 ? 'medium' : 'low'}`}>
+                      <span className={`impact-badge ${insight.impact > 0.2 ? 'high' : insight.impact > 0.1 ? 'medium' : 'low'}`}>}
                         {insight.impact > 0.2 ? 'HIGH' : insight.impact > 0.1 ? 'MEDIUM' : 'LOW'} IMPACT
                       </span>
                     </div>
-                    
                     <div className="insight-details">
                       <div className="affected-channels">
                         <strong>Affected Channels:</strong>
-                        {insight.channels.map(channelId => (
+                        {insight.channels.map(channelId => ()
                           <span key={channelId} className="channel-tag">
                             {channels.find(c => c.id === channelId)?.name || channelId}
                           </span>
                         ))}
                       </div>
-                      
                       <div className="recommendations">
                         <strong>Recommendations:</strong>
                         <ul>
-                          {insight.recommendations.map((rec, recIndex) => (
+                          {insight.recommendations.map((rec, recIndex) => ()
                             <li key={recIndex}>{rec}</li>
                           ))}
                         </ul>

@@ -4,7 +4,6 @@
  * Professional drawing and markup tools for VFX directors.
  * Canvas-based overlay system for visual communication and creative direction.
  */
-
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -103,7 +102,7 @@ const DRAWING_TOOLS = {
 };
 
 // Predefined colors for VFX workflow
-const DRAWING_COLORS = [
+const DRAWING_COLORS = [;
   '#ff0000', // Red - Critical/Revision
   '#ff7c00', // Orange - Cinema4D orange
   '#ffff00', // Yellow - Caution/Notes
@@ -117,7 +116,7 @@ const DRAWING_COLORS = [
 ];
 
 // Layer configurations for VFX pipeline
-const DRAWING_LAYERS = [
+const DRAWING_LAYERS = [;
   { id: 0, name: 'Background', color: '#6b7280', defaultVisible: true },
   { id: 1, name: 'Technical', color: '#3b82f6', defaultVisible: true },
   { id: 2, name: 'Creative', color: '#8b5cf6', defaultVisible: true },
@@ -126,7 +125,7 @@ const DRAWING_LAYERS = [
   { id: 5, name: 'Markup', color: '#f59e0b', defaultVisible: true }
 ];
 
-export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
+export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
   width,
   height,
   annotations,
@@ -142,18 +141,16 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayCanvasRef = useRef<HTMLCanvasElement>(null);
   const backgroundCanvasRef = useRef<HTMLCanvasElement>(null);
-  
   // Drawing state
   const [currentTool, setCurrentTool] = useState<keyof typeof DRAWING_TOOLS>('freehand');
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentPoints, setCurrentPoints] = useState<Array<{ x: number; y: number }>>([]);
   const [currentLayer, setCurrentLayer] = useState(1);
-  const [layerVisibility, setLayerVisibility] = useState<{ [key: number]: boolean }>(
+  const [layerVisibility, setLayerVisibility] = useState<{ [key: number]: boolean }>()
     DRAWING_LAYERS.reduce((acc, layer) => ({ ...acc, [layer.id]: layer.defaultVisible }), {})
   );
-  
   // Drawing style state
-  const [drawingStyle, setDrawingStyle] = useState<DrawingStyle>({
+  const [drawingStyle, setDrawingStyle] = useState<DrawingStyle>({)
     color: currentUser.color || '#ff7c00',
     thickness: 3,
     opacity: 1,
@@ -161,9 +158,8 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
     lineJoin: 'round',
     fontSize: 16,
     fontFamily: 'Arial',
-    fontWeight: 'normal'
+    fontWeight: 'normal',
   });
-  
   // UI state
   const [_____selectedAnnotation, _____setSelectedAnnotation] = useState<string | null>(null);
   const [showLayers, setShowLayers] = useState(false);
@@ -172,38 +168,31 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
   const [pan, _____setPan] = useState({ x: 0, y: 0 });
   const [history, setHistory] = useState<DrawingAnnotation[][]>([annotations]);
   const [historyIndex, setHistoryIndex] = useState(0);
-
   // Get canvas context
   const getContext = useCallback((canvasRef: React.RefObject<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
     return canvas.getContext('2d');
   }, []);
-
   // Convert screen coordinates to canvas coordinates
   const getCanvasCoordinates = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = overlayCanvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
-    
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    
     return {
       x: (event.clientX - rect.left) * scaleX / zoom - pan.x,
       y: (event.clientY - rect.top) * scaleY / zoom - pan.y
     };
   }, [zoom, pan]);
-
   // Draw background grid
   const drawGrid = useCallback((ctx: CanvasRenderingContext2D) => {
     if (!showGrid) return;
-    
     ctx.save();
     ctx.strokeStyle = '#e5e7eb';
     ctx.lineWidth = 0.5;
     ctx.setLineDash([]);
-    
     // Vertical lines
     for (let x = 0; x <= width; x += gridSize) {
       ctx.beginPath();
@@ -211,7 +200,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
       ctx.lineTo(x, height);
       ctx.stroke();
     }
-    
     // Horizontal lines
     for (let y = 0; y <= height; y += gridSize) {
       ctx.beginPath();
@@ -219,16 +207,12 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
       ctx.lineTo(width, y);
       ctx.stroke();
     }
-    
     ctx.restore();
   }, [showGrid, width, height, gridSize]);
-
   // Draw single annotation
   const drawAnnotation = useCallback((ctx: CanvasRenderingContext2D, annotation: DrawingAnnotation) => {
     if (!annotation.visible || !layerVisibility[annotation.layer]) return;
-    
     ctx.save();
-    
     // Apply style
     ctx.globalAlpha = annotation.style.opacity;
     ctx.strokeStyle = annotation.style.color;
@@ -236,22 +220,18 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
     ctx.lineWidth = annotation.style.thickness;
     ctx.lineCap = annotation.style.lineCap;
     ctx.lineJoin = annotation.style.lineJoin;
-    
     if (annotation.style.dashPattern) {
       ctx.setLineDash(annotation.style.dashPattern);
     }
-    
     // Apply transform if exists
     if (annotation.transform) {
       const centerX = annotation.points.reduce((sum, p) => sum + p.x, 0) / annotation.points.length;
       const centerY = annotation.points.reduce((sum, p) => sum + p.y, 0) / annotation.points.length;
-      
       ctx.translate(centerX, centerY);
       ctx.rotate(annotation.transform.rotation * Math.PI / 180);
       ctx.scale(annotation.transform.scale.x, annotation.transform.scale.y);
       ctx.translate(-centerX, -centerY);
     }
-    
     switch (annotation.type) {
     case 'freehand':
       if (annotation.points.length > 1) {
@@ -263,7 +243,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
         ctx.stroke();
       }
       break;
-        
     case 'line':
       if (annotation.points.length >= 2) {
         ctx.beginPath();
@@ -272,7 +251,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
         ctx.stroke();
       }
       break;
-        
     case 'arrow':
       if (annotation.points.length >= 2) {
         const start = annotation.points[0];
@@ -280,36 +258,32 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
         const angle = Math.atan2(end.y - start.y, end.x - start.x);
         const arrowLength = 15;
         const arrowAngle = Math.PI / 6;
-          
         // Draw line
         ctx.beginPath();
         ctx.moveTo(start.x, start.y);
         ctx.lineTo(end.x, end.y);
         ctx.stroke();
-          
         // Draw arrowhead
         ctx.beginPath();
         ctx.moveTo(end.x, end.y);
-        ctx.lineTo(
+        ctx.lineTo()
           end.x - arrowLength * Math.cos(angle - arrowAngle),
           end.y - arrowLength * Math.sin(angle - arrowAngle)
         );
         ctx.moveTo(end.x, end.y);
-        ctx.lineTo(
+        ctx.lineTo()
           end.x - arrowLength * Math.cos(angle + arrowAngle),
           end.y - arrowLength * Math.sin(angle + arrowAngle)
         );
         ctx.stroke();
       }
       break;
-        
     case 'rectangle':
       if (annotation.points.length >= 2) {
         const startX = Math.min(annotation.points[0].x, annotation.points[1].x);
         const startY = Math.min(annotation.points[0].y, annotation.points[1].y);
         const width = Math.abs(annotation.points[1].x - annotation.points[0].x);
         const height = Math.abs(annotation.points[1].y - annotation.points[0].y);
-          
         ctx.beginPath();
         ctx.rect(startX, startY, width, height);
         if (annotation.style.fillOpacity && annotation.style.fillOpacity > 0) {
@@ -320,16 +294,14 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
         ctx.stroke();
       }
       break;
-        
     case 'circle':
       if (annotation.points.length >= 2) {
         const centerX = annotation.points[0].x;
         const centerY = annotation.points[0].y;
-        const radius = Math.sqrt(
+        const radius = Math.sqrt(;)
           Math.pow(annotation.points[1].x - centerX, 2) +
             Math.pow(annotation.points[1].y - centerY, 2)
         );
-          
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
         if (annotation.style.fillOpacity && annotation.style.fillOpacity > 0) {
@@ -340,33 +312,26 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
         ctx.stroke();
       }
       break;
-        
     case 'text':
       if (annotation.points.length > 0 && annotation.text) {
-        ctx.font = `${annotation.style.fontWeight} ${annotation.style.fontSize}px ${annotation.style.fontFamily}`;
+        ctx.font = `${annotation.style.fontWeight} ${annotation.style.fontSize}px ${annotation.style.fontFamily}`;}
         ctx.fillStyle = annotation.style.color;
         ctx.fillText(annotation.text, annotation.points[0].x, annotation.points[0].y);
       }
       break;
     }
-    
     ctx.restore();
   }, [layerVisibility]);
-
   // Render all annotations
   const renderAnnotations = useCallback(() => {
     const ctx = getContext(canvasRef);
     if (!ctx) return;
-    
     ctx.clearRect(0, 0, width, height);
-    
     // Draw grid
     drawGrid(ctx);
-    
     // Draw annotations by layer order
     const sortedAnnotations = [...annotations].sort((a, b) => a.layer - b.layer);
     sortedAnnotations.forEach(annotation => drawAnnotation(ctx, annotation));
-    
     // Draw current drawing
     if (isDrawing && currentPoints.length > 0) {
       ctx.save();
@@ -375,7 +340,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
       ctx.lineWidth = drawingStyle.thickness;
       ctx.lineCap = drawingStyle.lineCap;
       ctx.lineJoin = drawingStyle.lineJoin;
-      
       switch (currentTool) {
       case 'freehand':
         if (currentPoints.length > 1) {
@@ -387,7 +351,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
           ctx.stroke();
         }
         break;
-          
       case 'line':
       case 'arrow':
         if (currentPoints.length === 2) {
@@ -397,55 +360,46 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
           ctx.stroke();
         }
         break;
-          
       case 'rectangle':
         if (currentPoints.length === 2) {
           const startX = Math.min(currentPoints[0].x, currentPoints[1].x);
           const startY = Math.min(currentPoints[0].y, currentPoints[1].y);
           const rectWidth = Math.abs(currentPoints[1].x - currentPoints[0].x);
           const rectHeight = Math.abs(currentPoints[1].y - currentPoints[0].y);
-            
           ctx.beginPath();
           ctx.rect(startX, startY, rectWidth, rectHeight);
           ctx.stroke();
         }
         break;
-          
       case 'circle':
         if (currentPoints.length === 2) {
           const centerX = currentPoints[0].x;
           const centerY = currentPoints[0].y;
-          const radius = Math.sqrt(
+          const radius = Math.sqrt(;)
             Math.pow(currentPoints[1].x - centerX, 2) +
               Math.pow(currentPoints[1].y - centerY, 2)
           );
-            
           ctx.beginPath();
           ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
           ctx.stroke();
         }
         break;
       }
-      
       ctx.restore();
     }
   }, [annotations, drawingStyle, currentTool, currentPoints, isDrawing, width, height, drawGrid, drawAnnotation, getContext]);
-
   // Handle mouse down
   const handleMouseDown = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => {
     if (readonly) return;
-    
     const point = getCanvasCoordinates(event);
-    
     if (currentTool === 'eraser') {
       // Find annotation to erase
-      const annotationToErase = annotations.find(annotation => {
+      const annotationToErase = annotations.find(annotation => {)
         // Simple hit detection - could be improved
-        return annotation.points.some(p => 
+        return annotation.points.some(p => )
           Math.abs(p.x - point.x) < 10 && Math.abs(p.y - point.y) < 10
         );
       });
-      
       if (annotationToErase) {
         const updatedAnnotations = annotations.filter(a => a.id !== annotationToErase.id);
         onAnnotationsChange(updatedAnnotations);
@@ -453,31 +407,25 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
       }
       return;
     }
-    
     setIsDrawing(true);
     setCurrentPoints([point]);
   }, [readonly, currentTool, annotations, onAnnotationsChange, getCanvasCoordinates]);
-
   // Handle mouse move
   const handleMouseMove = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isDrawing || readonly) return;
-    
     const point = getCanvasCoordinates(event);
-    
     if (currentTool === 'freehand') {
       setCurrentPoints(prev => [...prev, point]);
     } else {
       setCurrentPoints(prev => [prev[0], point]);
     }
   }, [isDrawing, readonly, currentTool, getCanvasCoordinates]);
-
   // Handle mouse up
   const handleMouseUp = useCallback(() => {
     if (!isDrawing || readonly) return;
-    
     if (currentPoints.length > 0) {
       const newAnnotation: DrawingAnnotation = {
-        id: `drawing-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: `drawing-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,}
         type: currentTool === 'eraser' ? 'freehand' : currentTool,
         points: [...currentPoints],
         style: { ...drawingStyle },
@@ -485,18 +433,15 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
         author: currentUser,
         timestamp: new Date().toISOString(),
         visible: true,
-        locked: false
+        locked: false,
       };
-      
       const updatedAnnotations = [...annotations, newAnnotation];
       onAnnotationsChange(updatedAnnotations);
       addToHistory(updatedAnnotations);
     }
-    
     setIsDrawing(false);
     setCurrentPoints([]);
   }, [isDrawing, readonly, currentPoints, currentTool, drawingStyle, currentLayer, currentUser, annotations, onAnnotationsChange]);
-
   // History management
   const addToHistory = useCallback((newAnnotations: DrawingAnnotation[]) => {
     const newHistory = history.slice(0, historyIndex + 1);
@@ -504,7 +449,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
     setHistory(newHistory);
     setHistoryIndex(newHistory.length - 1);
   }, [history, historyIndex]);
-
   // Undo/Redo
   const undo = useCallback(() => {
     if (historyIndex > 0) {
@@ -513,7 +457,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
       onAnnotationsChange([...history[newIndex]]);
     }
   }, [historyIndex, history, onAnnotationsChange]);
-
   const redo = useCallback(() => {
     if (historyIndex < history.length - 1) {
       const newIndex = historyIndex + 1;
@@ -521,40 +464,34 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
       onAnnotationsChange([...history[newIndex]]);
     }
   }, [historyIndex, history, onAnnotationsChange]);
-
   // Clear all annotations
   const clearAll = useCallback(() => {
     onAnnotationsChange([]);
     addToHistory([]);
   }, [onAnnotationsChange, addToHistory]);
-
   // Export annotations as image
   const exportAsImage = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
     const link = document.createElement('a');
-    link.download = `annotations-${Date.now()}.png`;
+    link.download = `annotations-${Date.now()}.png`;}
     link.href = canvas.toDataURL();
     link.click();
   }, []);
-
   // Re-render when annotations change
   useEffect(() => {
     renderAnnotations();
   }, [renderAnnotations]);
-
   // Layer visibility statistics
   const layerStats = useMemo(() => {
-    return DRAWING_LAYERS.map(layer => ({
+    return DRAWING_LAYERS.map(layer => ({)
       ...layer,
       count: annotations.filter(a => a.layer === layer.id).length,
-      visible: layerVisibility[layer.id]
+      visible: layerVisibility[layer.id],
     }));
   }, [annotations, layerVisibility]);
-
-  return (
-    <div className={`drawing-annotations ${className}`}>
+  return ()
+    <div className={`drawing-annotations ${className}`}>}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
@@ -565,7 +502,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                 {annotations.length} drawings
               </Badge>
             </div>
-            
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -581,7 +517,7 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
               >
                 <Palette className="w-4 h-4" />
               </Button>
-              {onSave && (
+              {onSave && ()
                 <Button
                   variant="default"
                   size="sm"
@@ -593,12 +529,11 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
               )}
             </div>
           </CardTitle>
-          
           {/* Toolbar */}
           <div className="flex items-center gap-2 py-2 border-t">
             {/* Drawing Tools */}
             <div className="flex items-center gap-1 pr-2 border-r">
-              {Object.entries(DRAWING_TOOLS).map(([tool, config]) => (
+              {Object.entries(DRAWING_TOOLS).map(([tool, config]) => ()
                 <Button
                   key={tool}
                   variant={currentTool === tool ? 'default' : 'ghost'}
@@ -611,7 +546,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                 </Button>
               ))}
             </div>
-            
             {/* History Controls */}
             <div className="flex items-center gap-1 pr-2 border-r">
               <Button
@@ -633,7 +567,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                 <Redo className="w-4 h-4" />
               </Button>
             </div>
-            
             {/* Utility Controls */}
             <div className="flex items-center gap-1 pr-2 border-r">
               <Button
@@ -654,7 +587,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                 <Trash2 className="w-4 h-4" />
               </Button>
             </div>
-            
             {/* Current Layer */}
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600">Layer:</span>
@@ -666,7 +598,7 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {DRAWING_LAYERS.map(layer => (
+                  {DRAWING_LAYERS.map(layer => ()
                     <SelectItem key={layer.id} value={layer.id.toString()}>
                       <div className="flex items-center gap-2">
                         <div 
@@ -682,11 +614,10 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
             </div>
           </div>
         </CardHeader>
-
         <CardContent>
           <div className="space-y-4">
             {/* Style Panel */}
-            {showStyles && (
+            {showStyles && ()
               <Card>
                 <CardHeader>
                   <CardTitle className="text-sm">Drawing Style</CardTitle>
@@ -696,7 +627,7 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                     <div>
                       <label className="block text-xs font-medium mb-2">Color</label>
                       <div className="flex flex-wrap gap-1">
-                        {DRAWING_COLORS.map(color => (
+                        {DRAWING_COLORS.map(color => ()
                           <button
                             key={color}
                             className={`w-6 h-6 rounded border-2 ${
@@ -708,7 +639,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                         ))}
                       </div>
                     </div>
-                    
                     <div>
                       <label className="block text-xs font-medium mb-2">Thickness</label>
                       <Slider
@@ -720,7 +650,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                       />
                       <div className="text-xs text-gray-500 mt-1">{drawingStyle.thickness}px</div>
                     </div>
-                    
                     <div>
                       <label className="block text-xs font-medium mb-2">Opacity</label>
                       <Slider
@@ -732,12 +661,11 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                       />
                       <div className="text-xs text-gray-500 mt-1">{Math.round(drawingStyle.opacity * 100)}%</div>
                     </div>
-                    
                     <div>
                       <label className="block text-xs font-medium mb-2">Line Style</label>
                       <Select
                         value={drawingStyle.dashPattern ? 'dashed' : 'solid'}
-                        onValueChange={(value) => setDrawingStyle(prev => ({ 
+                        onValueChange={(value) => setDrawingStyle(prev => ({ )
                           ...prev, 
                           dashPattern: value === 'dashed' ? [5, 5] : undefined 
                         }))}
@@ -755,16 +683,15 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                 </CardContent>
               </Card>
             )}
-            
             {/* Layer Panel */}
-            {showLayers && (
+            {showLayers && ()
               <Card>
                 <CardHeader>
                   <CardTitle className="text-sm">Layers</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {layerStats.map(layer => (
+                    {layerStats.map(layer => ()
                       <div key={layer.id} className="flex items-center justify-between p-2 rounded border">
                         <div className="flex items-center gap-3">
                           <Switch
@@ -788,27 +715,25 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                 </CardContent>
               </Card>
             )}
-
             {/* Canvas Container */}
             <div 
               className="relative border border-gray-300 rounded-lg overflow-hidden"
               style={{ width, height }}
             >
               {/* Background canvas for static content */}
-              {backgroundImageUrl && (
+              {backgroundImageUrl && ()
                 <canvas
                   ref={backgroundCanvasRef}
                   width={width}
                   height={height}
                   className="absolute inset-0"
                   style={{
-                    backgroundImage: `url(${backgroundImageUrl})`,
+                    backgroundImage: `url(${backgroundImageUrl})`,}
                     backgroundSize: 'cover',
-                    backgroundPosition: 'center'
+                    backgroundPosition: 'center',
                   }}
                 />
               )}
-              
               {/* Main drawing canvas */}
               <canvas
                 ref={canvasRef}
@@ -816,7 +741,6 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                 height={height}
                 className="absolute inset-0"
               />
-              
               {/* Overlay canvas for interactions */}
               <canvas
                 ref={overlayCanvasRef}
@@ -835,9 +759,8 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
                   pointerEvents: readonly ? 'none' : 'all'
                 }}
               />
-              
               {/* Readonly overlay */}
-              {readonly && (
+              {readonly && ()
                 <div className="absolute inset-0 bg-gray-500 bg-opacity-10 flex items-center justify-center">
                   <Badge variant="secondary">Read Only</Badge>
                 </div>

@@ -5,7 +5,6 @@
  * Displays verification status, trust scores, and professional credentials
  * across the platform interface.
  */
-
 import React from 'react';
 import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
@@ -57,11 +56,10 @@ export interface VerificationBadgesProps {
   size?: 'small' | 'medium' | 'large';
   className?: string;
 }
-
 /**
  * Main trust indicator component
  */
-export const TrustIndicator: React.FC<TrustIndicatorProps> = ({
+export const TrustIndicator: React.FC<TrustIndicatorProps> = ({)
   trustScore,
   size = 'medium',
   variant = 'detailed',
@@ -70,14 +68,13 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({
   className = ''
 }) => {
   if (!trustScore) {
-    return (
-      <div className={`trust-indicator unverified ${size} ${className}`}>
+    return ()
+      <div className={`trust-indicator unverified ${size} ${className}`}>}
         <Shield className="trust-icon unverified-icon" />
         {showLabel && <span className="trust-label">Unverified</span>}
       </div>
     );
   }
-
   const getTrustIcon = (tier: string) => {
     switch (tier) {
     case 'expert':
@@ -92,7 +89,6 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({
       return <Shield className="trust-icon unverified-icon" />;
     }
   };
-
   const getTrustColor = (tier: string) => {
     switch (tier) {
     case 'expert': return 'trust-expert';
@@ -102,7 +98,6 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({
     default: return 'trust-unverified';
     }
   };
-
   const getTrustLabel = (tier: string) => {
     switch (tier) {
     case 'expert': return 'Expert';
@@ -112,24 +107,21 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({
     default: return 'Unverified';
     }
   };
-
-  const indicator = (
-    <div className={`trust-indicator ${getTrustColor(trustScore.tier)} ${size} ${variant} ${className}`}>
+  const indicator = (;)
+    <div className={`trust-indicator ${getTrustColor(trustScore.tier)} ${size} ${variant} ${className}`}>}
       {getTrustIcon(trustScore.tier)}
-      {showLabel && (
+      {showLabel && ()
         <span className="trust-label">{getTrustLabel(trustScore.tier)}</span>
       )}
-      {variant === 'detailed' && (
+      {variant === 'detailed' && ()
         <span className="trust-score">{trustScore.overall}/100</span>
       )}
     </div>
   );
-
   if (!showTooltip) {
     return indicator;
   }
-
-  return (
+  return ()
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
@@ -159,11 +151,11 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({
                 <span>{trustScore.components.activity}/100</span>
               </div>
             </div>
-            {trustScore.badges.length > 0 && (
+            {trustScore.badges.length > 0 && ()
               <div className="tooltip-badges">
                 <strong>Badges:</strong>
                 <div className="badge-list">
-                  {trustScore.badges.map((badge, index) => (
+                  {trustScore.badges.map((badge, index) => ()
                     <Badge key={index} variant="outline" className="tooltip-badge">
                       {badge.replace('_', ' ')}
                     </Badge>
@@ -177,11 +169,10 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({
     </TooltipProvider>
   );
 };
-
 /**
  * Creator trust badge with comprehensive information
  */
-export const CreatorTrustBadge: React.FC<CreatorTrustBadgeProps> = ({
+export const CreatorTrustBadge: React.FC<CreatorTrustBadgeProps> = ({)
   creatorId,
   creatorName,
   trustScore,
@@ -191,9 +182,8 @@ export const CreatorTrustBadge: React.FC<CreatorTrustBadgeProps> = ({
 }) => {
   const hasHighTrust = trustScore && trustScore.overall >= 80;
   const hasVerifications = verifications.length > 0;
-
-  return (
-    <div className={`creator-trust-badge ${className}`}>
+  return ()
+    <div className={`creator-trust-badge ${className}`}>}
       <div className="creator-info">
         <div className="creator-avatar">
           {/* Placeholder for creator avatar */}
@@ -204,7 +194,7 @@ export const CreatorTrustBadge: React.FC<CreatorTrustBadgeProps> = ({
         <div className="creator-details">
           <div className="creator-name">
             <span>{creatorName}</span>
-            {hasHighTrust && (
+            {hasHighTrust && ()
               <Verified className="verified-icon" />
             )}
           </div>
@@ -215,7 +205,7 @@ export const CreatorTrustBadge: React.FC<CreatorTrustBadgeProps> = ({
               variant="compact"
               showTooltip={true}
             />
-            {hasVerifications && (
+            {hasVerifications && ()
               <VerificationBadges 
                 verifications={verifications}
                 maxDisplay={3}
@@ -225,8 +215,7 @@ export const CreatorTrustBadge: React.FC<CreatorTrustBadgeProps> = ({
           </div>
         </div>
       </div>
-      
-      {showFullDetails && trustScore && (
+      {showFullDetails && trustScore && ()
         <div className="trust-details">
           <TrustScoreDisplay trustScore={trustScore} />
         </div>
@@ -234,31 +223,29 @@ export const CreatorTrustBadge: React.FC<CreatorTrustBadgeProps> = ({
     </div>
   );
 };
-
 /**
  * Detailed trust score display with breakdown
  */
-export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
+export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({)
   trustScore,
   showBreakdown = true,
   orientation = 'horizontal',
   className = ''
 }) => {
-  return (
-    <div className={`trust-score-display ${orientation} ${className}`}>
+  return ()
+    <div className={`trust-score-display ${orientation} ${className}`}>}
       <div className="overall-score">
         <div className="score-circle">
           <div className="score-value">{trustScore.overall}</div>
           <div className="score-max">/100</div>
         </div>
         <div className="score-tier">
-          <Badge className={`tier-badge tier-${trustScore.tier}`}>
+          <Badge className={`tier-badge tier-${trustScore.tier}`}>}
             {trustScore.tier.toUpperCase()}
           </Badge>
         </div>
       </div>
-      
-      {showBreakdown && (
+      {showBreakdown && ()
         <div className="score-breakdown">
           <div className="component-score">
             <span className="component-label">Identity</span>
@@ -285,11 +272,10 @@ export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
     </div>
   );
 };
-
 /**
  * Verification badges display
  */
-export const VerificationBadges: React.FC<VerificationBadgesProps> = ({
+export const VerificationBadges: React.FC<VerificationBadgesProps> = ({)
   verifications,
   maxDisplay = 5,
   size = 'medium',
@@ -306,10 +292,8 @@ export const VerificationBadges: React.FC<VerificationBadgesProps> = ({
       'social_verified': <Users className="verification-icon" />,
       'industry_member': <TrendingUp className="verification-icon" />
     };
-
     return iconMap[verification] || <Info className="verification-icon" />;
   };
-
   const getVerificationLabel = (verification: string) => {
     const labelMap: Record<string, string> = {
       'verified_email': 'Email Verified',
@@ -321,10 +305,8 @@ export const VerificationBadges: React.FC<VerificationBadgesProps> = ({
       'social_verified': 'Social Verified',
       'industry_member': 'Industry Member'
     };
-
     return labelMap[verification] || verification.replace('_', ' ');
   };
-
   const getVerificationColor = (verification: string) => {
     if (verification.includes('director') || verification.includes('professional')) {
       return 'verification-professional';
@@ -334,13 +316,11 @@ export const VerificationBadges: React.FC<VerificationBadgesProps> = ({
     }
     return 'verification-basic';
   };
-
   const displayedVerifications = verifications.slice(0, maxDisplay);
   const remainingCount = verifications.length - maxDisplay;
-
-  return (
-    <div className={`verification-badges ${size} ${className}`}>
-      {displayedVerifications.map((verification, index) => (
+  return ()
+    <div className={`verification-badges ${size} ${className}`}>}
+      {displayedVerifications.map((verification, index) => ()
         <TooltipProvider key={index}>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -360,8 +340,7 @@ export const VerificationBadges: React.FC<VerificationBadgesProps> = ({
           </Tooltip>
         </TooltipProvider>
       ))}
-      
-      {remainingCount > 0 && (
+      {remainingCount > 0 && ()
         <Badge variant="outline" className="remaining-badge">
           +{remainingCount} more
         </Badge>
@@ -369,7 +348,6 @@ export const VerificationBadges: React.FC<VerificationBadgesProps> = ({
     </div>
   );
 };
-
 /**
  * Template trust indicator for marketplace
  */
@@ -382,7 +360,7 @@ export interface TemplateTrustIndicatorProps {
   className?: string;
 }
 
-export const TemplateTrustIndicator: React.FC<TemplateTrustIndicatorProps> = ({
+export const TemplateTrustIndicator: React.FC<TemplateTrustIndicatorProps> = ({)
   creatorTrustScore,
   templateQualityScore = 0,
   downloadCount = 0,
@@ -396,44 +374,38 @@ export const TemplateTrustIndicator: React.FC<TemplateTrustIndicatorProps> = ({
     if (score >= 60) return { level: 'good', color: 'quality-good' };
     return { level: 'standard', color: 'quality-standard' };
   };
-
   const qualityInfo = getQualityLevel(templateQualityScore);
   const isPopular = downloadCount > 100;
   const isHighRated = rating > 4.0;
-
-  return (
-    <div className={`template-trust-indicator ${className}`}>
+  return ()
+    <div className={`template-trust-indicator ${className}`}>}
       <div className="trust-elements">
-        {isVerifiedCreator && (
+        {isVerifiedCreator && ()
           <Badge variant="default" className="creator-verified">
             <Verified className="w-3 h-3 mr-1" />
             Verified Creator
           </Badge>
         )}
-        
-        {templateQualityScore > 0 && (
-          <Badge variant="secondary" className={`quality-badge ${qualityInfo.color}`}>
+        {templateQualityScore > 0 && ()
+          <Badge variant="secondary" className={`quality-badge ${qualityInfo.color}`}>}
             <Star className="w-3 h-3 mr-1" />
             {qualityInfo.level.toUpperCase()} QUALITY
           </Badge>
         )}
-        
-        {isPopular && (
+        {isPopular && ()
           <Badge variant="outline" className="popularity-badge">
             <TrendingUp className="w-3 h-3 mr-1" />
             Popular
           </Badge>
         )}
-        
-        {isHighRated && (
+        {isHighRated && ()
           <Badge variant="outline" className="rating-badge">
             <Star className="w-3 h-3 mr-1" />
             {rating.toFixed(1)} ★
           </Badge>
         )}
       </div>
-
-      {creatorTrustScore && (
+      {creatorTrustScore && ()
         <div className="creator-trust-summary">
           <TrustIndicator 
             trustScore={creatorTrustScore}
@@ -446,7 +418,6 @@ export const TemplateTrustIndicator: React.FC<TemplateTrustIndicatorProps> = ({
     </div>
   );
 };
-
 /**
  * Inline trust status for compact displays
  */
@@ -457,7 +428,7 @@ export interface InlineTrustStatusProps {
   className?: string;
 }
 
-export const InlineTrustStatus: React.FC<InlineTrustStatusProps> = ({
+export const InlineTrustStatus: React.FC<InlineTrustStatusProps> = ({)
   trustTier = 'unverified',
   isVerified = false,
   size = 'small',
@@ -466,9 +437,8 @@ export const InlineTrustStatus: React.FC<InlineTrustStatusProps> = ({
   if (!isVerified && trustTier === 'unverified') {
     return null;
   }
-
-  return (
-    <span className={`inline-trust-status ${size} ${className}`}>
+  return ()
+    <span className={`inline-trust-status ${size} ${className}`}>}
       {trustTier === 'expert' && <Crown className="inline-icon expert" />}
       {trustTier === 'professional' && <Award className="inline-icon professional" />}
       {(trustTier === 'verified' || isVerified) && <CheckCircle className="inline-icon verified" />}

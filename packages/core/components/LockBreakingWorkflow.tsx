@@ -1,10 +1,8 @@
 // Epic 9.4.3 - Lock Breaking Workflow Component
 // Workflow for breaking existing locks with proper authorization
-
 import React, { useState, useEffect } from 'react';
 import { X, AlertTriangle, Shield, Clock, User, FileText } from 'lucide-react';
 import { WorkflowLock } from '../types/locking';
-
 interface LockBreakingWorkflowProps {
   isOpen: boolean;
   onClose: () => void;
@@ -13,7 +11,7 @@ interface LockBreakingWorkflowProps {
   userId: string;
 }
 
-export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
+export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({)
   isOpen,
   onClose,
   resourceId,
@@ -30,17 +28,16 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
     canBreakLocks: boolean;
     requiresJustification: boolean;
     roles: string[];
-  }>({
+  }>({)
     canBreakLocks: false,
     requiresJustification: true,
-    roles: []
+    roles: [],
   });
-
   // Mock data - in real implementation, this would come from API
   useEffect(() => {
     if (isOpen && resourceId) {
       // Mock locks data
-      setLocks([
+      setLocks([)
         {
           id: 'lock-1',
           resource_id: resourceId,
@@ -50,24 +47,21 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
           locked_at: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
           expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
           auto_release: true,
-          workspace_id: 'workspace-123'
+          workspace_id: 'workspace-123',
         }
       ]);
-
       // Mock user permissions
-      setUserPermissions({
+      setUserPermissions({)
         canBreakLocks: true,
         requiresJustification: true,
         roles: ['admin', 'editor']
       });
     }
   }, [isOpen, resourceId]);
-
   const handleLockSelect = (lock: WorkflowLock) => {
     setSelectedLock(lock);
     setCurrentStep('confirm');
   };
-
   const handleConfirmBreak = () => {
     if (userPermissions.requiresJustification) {
       setCurrentStep('justification');
@@ -75,18 +69,14 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
       handleBreakLock();
     }
   };
-
   const handleBreakLock = async () => {
     if (!selectedLock) return;
-
     setIsSubmitting(true);
     setError(null);
-
     try {
       if (userPermissions.requiresJustification && !justification.trim()) {
         throw new Error('Justification is required');
       }
-
       await onBreakLock(selectedLock.id, resourceId, justification);
       onClose();
     } catch (error) {
@@ -95,7 +85,6 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
       setIsSubmitting(false);
     }
   };
-
   const handleCancel = () => {
     setCurrentStep('select');
     setSelectedLock(null);
@@ -103,26 +92,20 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
     setError(null);
     onClose();
   };
-
   const formatTimeRemaining = (expiresAt: string) => {
     const now = new Date();
     const expires = new Date(expiresAt);
     const diff = expires.getTime() - now.getTime();
-    
     if (diff < 0) return 'Expired';
-    
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    
     if (hours > 0) {
-      return `${hours}h ${minutes}m`;
+      return `${hours}h ${minutes}m`;}
     }
-    return `${minutes}m`;
+    return `${minutes}m`;}
   };
-
   if (!isOpen) return null;
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
@@ -138,11 +121,10 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
             <X className="h-5 w-5" />
           </button>
         </div>
-
         {/* Content */}
         <div className="p-6">
           {/* Error Display */}
-          {error && (
+          {error && ()
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
               <div className="flex items-center">
                 <AlertTriangle className="h-4 w-4 text-red-400 mr-2" />
@@ -150,9 +132,8 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
               </div>
             </div>
           )}
-
           {/* Step 1: Select Lock */}
-          {currentStep === 'select' && (
+          {currentStep === 'select' && ()
             <div className="space-y-4">
               <div className="bg-amber-50 border border-amber-200 rounded-md p-4">
                 <div className="flex items-start space-x-2">
@@ -166,13 +147,12 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
                   </div>
                 </div>
               </div>
-
               <div>
                 <h3 className="text-sm font-medium text-gray-700 mb-3">
                   Select lock to break:
                 </h3>
                 <div className="space-y-2">
-                  {locks.map((lock) => (
+                  {locks.map((lock) => ()
                     <div
                       key={lock.id}
                       className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50"
@@ -199,7 +179,7 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
                                 {formatTimeRemaining(lock.expires_at)}
                               </span>
                             </div>
-                            {lock.lock_reason && (
+                            {lock.lock_reason && ()
                               <p className="text-sm text-gray-600 mt-1">
                                 Reason: {lock.lock_reason}
                               </p>
@@ -216,7 +196,6 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
                   ))}
                 </div>
               </div>
-
               {/* Permissions Info */}
               <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
                 <div className="flex items-start space-x-2">
@@ -233,9 +212,8 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
               </div>
             </div>
           )}
-
           {/* Step 2: Confirm Break */}
-          {currentStep === 'confirm' && selectedLock && (
+          {currentStep === 'confirm' && selectedLock && ()
             <div className="space-y-4">
               <div className="bg-red-50 border border-red-200 rounded-md p-4">
                 <div className="flex items-start space-x-2">
@@ -248,7 +226,6 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
                   </div>
                 </div>
               </div>
-
               <div className="border border-gray-200 rounded-lg p-4">
                 <h3 className="font-medium text-gray-900 mb-3">Lock Details:</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
@@ -274,7 +251,7 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
                       {formatTimeRemaining(selectedLock.expires_at)}
                     </span>
                   </div>
-                  {selectedLock.lock_reason && (
+                  {selectedLock.lock_reason && ()
                     <div className="col-span-2">
                       <span className="text-gray-500">Reason:</span>
                       <span className="ml-2 font-medium">{selectedLock.lock_reason}</span>
@@ -282,7 +259,6 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
                   )}
                 </div>
               </div>
-
               <div className="flex justify-end space-x-3">
                 <button
                   type="button"
@@ -301,9 +277,8 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
               </div>
             </div>
           )}
-
           {/* Step 3: Justification */}
-          {currentStep === 'justification' && selectedLock && (
+          {currentStep === 'justification' && selectedLock && ()
             <div className="space-y-4">
               <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
                 <div className="flex items-start space-x-2">
@@ -317,7 +292,6 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
                   </div>
                 </div>
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Justification <span className="text-red-500">*</span>
@@ -334,7 +308,6 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({
                   Be specific about the urgency and business need
                 </p>
               </div>
-
               <div className="flex justify-end space-x-3">
                 <button
                   type="button"

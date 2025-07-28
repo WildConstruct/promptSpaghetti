@@ -1,10 +1,8 @@
 import { useMemo } from 'react';
 import { NodeMeta } from '../Palette';
-
 interface UseNodeUtilsProps {
   nodeTypes: NodeMeta[];
 }
-
 interface UseNodeUtilsReturn {
   getNodeMeta: (nodeType: string) => NodeMeta;
   getCategoryColor: (category: string) => string;
@@ -23,17 +21,15 @@ export const useNodeUtils = ({ nodeTypes }: UseNodeUtilsProps): UseNodeUtilsRetu
           tooltip: 'Unknown node type'
         };
       }
-      
       return nodeTypes.find(n => n.id === nodeType) || { 
         id: nodeType, 
         label: nodeType.charAt(0).toUpperCase() + nodeType.slice(1), 
         icon: '🔧', 
         category: 'unknown',
-        tooltip: `${nodeType} node`
+        tooltip: `${nodeType} node`}
       };
     };
   }, [nodeTypes]);
-
   const getCategoryColor = useMemo(() => {
     return (category: string): string => {
       switch (category) {
@@ -45,7 +41,6 @@ export const useNodeUtils = ({ nodeTypes }: UseNodeUtilsProps): UseNodeUtilsRetu
       }
     };
   }, []);
-
   return {
     getNodeMeta,
     getCategoryColor

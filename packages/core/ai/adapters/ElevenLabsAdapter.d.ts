@@ -34,7 +34,7 @@ export interface ElevenLabsRequestOptions {
     };
 }
 export interface ElevenLabsGenerationResult {
-    audio: {
+    audio: {,
         data: ArrayBuffer;
         format: string;
         duration: number;
@@ -42,7 +42,7 @@ export interface ElevenLabsGenerationResult {
         channels: number;
         bit_depth: number;
     };
-    metadata: {
+    metadata: {,
         voice_id: string;
         voice_name: string;
         model_id: string;
@@ -52,7 +52,7 @@ export interface ElevenLabsGenerationResult {
         generation_time: number;
         request_id?: string;
     };
-    usage: {
+    usage: {,
         characters: number;
         cost: number;
         quota_remaining?: number;
@@ -69,17 +69,17 @@ export interface ElevenLabsVoice {
         hash: string;
     }>;
     category: 'premade' | 'cloned' | 'generated' | 'professional';
-    fine_tuning: {
+    fine_tuning: {,
         is_allowed_to_fine_tune: boolean;
         finetuning_requested: boolean;
         finetuning_state: string;
-        verification_attempts: Array<{
+        verification_attempts: Array<{,
             text: string;
             date_unix: number;
             accepted: boolean;
             similarity: number;
             levenshtein_distance: number;
-            recording: {
+            recording: {,
                 recording_id: string;
                 mime_type: string;
                 size_bytes: number;
@@ -89,10 +89,10 @@ export interface ElevenLabsVoice {
         verification_failures: string[];
         verification_attempts_count: number;
         slice_ids: string[];
-        manual_verification: {
+        manual_verification: {,
             extra_text: string;
             request_time_unix: number;
-            files: Array<{
+            files: Array<{,
                 file_id: string;
                 file_name: string;
                 mime_type: string;
@@ -141,7 +141,7 @@ export interface ElevenLabsModel {
     requires_alpha_access: boolean;
     max_characters_request_free_user: number;
     max_characters_request_subscribed_user: number;
-    languages: Array<{
+    languages: Array<{,
         language_id: string;
         name: string;
     }>;
@@ -159,7 +159,7 @@ export declare class ElevenLabsAdapter extends BaseAIModel {
     getAvailableVoices(): Promise<ElevenLabsVoice[]>;
     getAvailableModels(): Promise<ElevenLabsModel[]>;
     getQuotaInfo(): Promise<any>;
-    createCustomVoice(
+    createCustomVoice()
       name: string,
       audioFiles: File[],
       description?: string,
@@ -170,7 +170,7 @@ export declare class ElevenLabsAdapter extends BaseAIModel {
     deleteVoice(voiceId: string): Promise<void>;
     getVoiceSettings(voiceId: string): Promise<any>;
     updateVoiceSettings(voiceId: string, settings: any): Promise<void>;
-    generateWithStream(
+    generateWithStream()
       text: string,
       voiceId: string,
       options?: Partial<ElevenLabsRequestOptions>

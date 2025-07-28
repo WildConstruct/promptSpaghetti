@@ -8,7 +8,6 @@ import {
   ConditionalEditor,
   OutputEditor
 } from './NodeSpecificEditors';
-
 interface InlineNodeEditorProps {
   node: Node<NodeData>;
   isActive: boolean;
@@ -20,7 +19,7 @@ interface InlineNodeEditorProps {
   maxHeight?: number;
 }
 
-export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
+export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({)
   node,
   isActive,
   onUpdate,
@@ -35,7 +34,6 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
   const [isDirty, setIsDirty] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
-
   // Auto-focus first field when editor becomes active
   useEffect(() => {
     if (isActive && firstInputRef.current) {
@@ -43,7 +41,6 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
       firstInputRef.current.select();
     }
   }, [isActive]);
-
   // Handle clicks outside editor to close
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -51,16 +48,13 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
         handleSubmit();
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isActive]);
-
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!isActive) return;
-
       switch (event.key) {
         case 'Escape':
           event.preventDefault();
@@ -77,19 +71,15 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
           break;
       }
     };
-
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isActive]);
-
   const validateData = useCallback((data: NodeData): Record<string, string> => {
     const newErrors: Record<string, string> = {};
-
     // Basic validation
     if (!data.label?.trim()) {
       newErrors.label = 'Label is required';
     }
-
     // Node-type specific validation
     switch (node.type) {
       case 'weightedChoice':
@@ -108,46 +98,37 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
         }
         break;
     }
-
     return newErrors;
   }, [node.type]);
-
   const handleInputChange = useCallback((field: string, value: any) => {
     const newData = { ...localData, [field]: value };
     setLocalData(newData);
     setIsDirty(true);
-
     // Real-time validation
     const newErrors = validateData(newData);
     setErrors(newErrors);
-
     // Auto-save for simple changes
     if (Object.keys(newErrors).length === 0) {
       onUpdate(node.id, { [field]: value });
     }
   }, [localData, node.id, onUpdate, validateData]);
-
   const handleSubmit = useCallback(() => {
     const newErrors = validateData(localData);
     setErrors(newErrors);
-
     if (Object.keys(newErrors).length === 0) {
       onUpdate(node.id, localData);
       onSubmit();
       setIsDirty(false);
     }
   }, [localData, node.id, onUpdate, onSubmit, validateData]);
-
   const handleCancel = useCallback(() => {
     setLocalData(node.data);
     setErrors({});
     setIsDirty(false);
     onClose();
   }, [node.data, onClose]);
-
   if (!isActive) return null;
-
-  return (
+  return ()
     <div
       ref={editorRef}
       className="inline-node-editor"
@@ -181,16 +162,16 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
           margin: 0, 
           fontSize: 16, 
           color: '#e2e8f0',
-          fontWeight: 600
+          fontWeight: 600,
         }}>
           Edit {node.type} Node
         </h3>
         <div style={{ display: 'flex', gap: 8 }}>
-          {isDirty && (
+          {isDirty && ()
             <span style={{ 
               fontSize: 12, 
               color: '#f6ad55',
-              fontStyle: 'italic'
+              fontStyle: 'italic',
             }}>
               Modified
             </span>
@@ -205,7 +186,7 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
               fontSize: 18,
               padding: 0,
               width: 20,
-              height: 20
+              height: 20,
             }}
             title="Cancel (Esc)"
           >
@@ -213,7 +194,6 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
           </button>
         </div>
       </div>
-
       {/* Basic Properties */}
       <div style={{ marginBottom: 16 }}>
         <label style={{ 
@@ -221,7 +201,7 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
           marginBottom: 4, 
           fontSize: 12, 
           color: '#e2e8f0',
-          fontWeight: 500
+          fontWeight: 500,
         }}>
           Label
         </label>
@@ -237,17 +217,16 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
             border: errors.label ? '1px solid #e53e3e' : '1px solid #718096',
             borderRadius: 4,
             color: 'white',
-            fontSize: 14
+            fontSize: 14,
           }}
           placeholder="Enter node label"
         />
-        {errors.label && (
+        {errors.label && ()
           <span style={{ color: '#e53e3e', fontSize: 12, marginTop: 4 }}>
             {errors.label}
           </span>
         )}
       </div>
-
       {/* Node-specific properties */}
       <NodeSpecificEditor
         nodeType={node.type}
@@ -256,7 +235,6 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
         errors={errors}
         theme="cinema"
       />
-
       {/* Footer */}
       <div style={{ 
         display: 'flex', 
@@ -279,7 +257,7 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
               border: 'none',
               borderRadius: 4,
               cursor: 'pointer',
-              fontSize: 12
+              fontSize: 12,
             }}
           >
             Cancel
@@ -294,14 +272,13 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
               border: 'none',
               borderRadius: 4,
               cursor: Object.keys(errors).length > 0 ? 'not-allowed' : 'pointer',
-              fontSize: 12
+              fontSize: 12,
             }}
           >
             Save
           </button>
         </div>
       </div>
-
       <style>{`
         @keyframes slideIn {
           from {
@@ -326,8 +303,7 @@ interface NodeSpecificEditorProps {
   errors: Record<string, string>;
   theme?: 'light' | 'dark' | 'cinema';
 }
-
-const NodeSpecificEditor: React.FC<NodeSpecificEditorProps> = ({
+const NodeSpecificEditor: React.FC<NodeSpecificEditorProps> = ({)
   nodeType,
   data,
   onChange,
@@ -335,7 +311,6 @@ const NodeSpecificEditor: React.FC<NodeSpecificEditorProps> = ({
   theme = 'cinema'
 }) => {
   const editorProps = { data, onChange, errors, theme };
-
   switch (nodeType) {
     case 'weightedChoice':
       return <WeightedChoiceEditor {...editorProps} />;
@@ -348,13 +323,13 @@ const NodeSpecificEditor: React.FC<NodeSpecificEditorProps> = ({
     case 'output':
       return <OutputEditor {...editorProps} />;
     default:
-      return (
+      return ()
         <div style={{ 
           padding: 12, 
           textAlign: 'center', 
           color: '#a0aec0',
           fontSize: 12,
-          fontStyle: 'italic'
+          fontStyle: 'italic',
         }}>
           No specialized editor for {nodeType} nodes
         </div>

@@ -1,9 +1,7 @@
 // Epic 9.4.3 - Lock Request Dialog Component
 // Dialog for requesting locks on resources
-
 import React, { useState, useEffect } from 'react';
 import { X, Lock, Clock, AlertTriangle, Info } from 'lucide-react';
-
 interface LockRequestDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -12,7 +10,7 @@ interface LockRequestDialogProps {
   userId: string;
 }
 
-export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
+export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({)
   isOpen,
   onClose,
   onRequest,
@@ -25,45 +23,42 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
   const [duration, setDuration] = useState<number>(60);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     if (resourceId) {
       setSelectedResource(resourceId);
     }
   }, [resourceId]);
-
-  const lockTypes = [
+  const lockTypes = [;
     {
       value: 'edit',
       label: 'Edit Lock',
       description: 'Prevents others from editing this resource',
       icon: Lock,
-      color: 'text-blue-500'
+      color: 'text-blue-500',
     },
     {
       value: 'state_change',
       label: 'State Change Lock',
       description: 'Prevents workflow state changes',
       icon: Clock,
-      color: 'text-orange-500'
+      color: 'text-orange-500',
     },
     {
       value: 'delete',
       label: 'Delete Lock',
       description: 'Prevents resource deletion',
       icon: AlertTriangle,
-      color: 'text-red-500'
+      color: 'text-red-500',
     },
     {
       value: 'admin',
       label: 'Admin Lock',
       description: 'Administrative lock with full restrictions',
       icon: AlertTriangle,
-      color: 'text-purple-500'
+      color: 'text-purple-500',
     }
   ];
-
-  const durationOptions = [
+  const durationOptions = [;
     { value: 15, label: '15 minutes' },
     { value: 30, label: '30 minutes' },
     { value: 60, label: '1 hour' },
@@ -72,21 +67,17 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
     { value: 480, label: '8 hours' },
     { value: 1440, label: '24 hours' }
   ];
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);
-
     try {
       if (!selectedResource) {
         throw new Error('Please select a resource');
       }
-
       if (!reason.trim()) {
         throw new Error('Please provide a reason for the lock');
       }
-
       await onRequest(selectedResource, lockType, reason);
       onClose();
     } catch (error) {
@@ -95,7 +86,6 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
       setIsSubmitting(false);
     }
   };
-
   const handleCancel = () => {
     setSelectedResource('');
     setLockType('edit');
@@ -104,10 +94,8 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
     setError(null);
     onClose();
   };
-
   if (!isOpen) return null;
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
@@ -123,11 +111,10 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
             <X className="h-5 w-5" />
           </button>
         </div>
-
         {/* Content */}
         <form onSubmit={handleSubmit} className="p-6">
           {/* Error Display */}
-          {error && (
+          {error && ()
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
               <div className="flex items-center">
                 <AlertTriangle className="h-4 w-4 text-red-400 mr-2" />
@@ -135,7 +122,6 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
               </div>
             </div>
           )}
-
           {/* Resource Selection */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -153,7 +139,6 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
               The unique identifier of the resource you want to lock
             </p>
           </div>
-
           {/* Lock Type Selection */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -162,7 +147,7 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {lockTypes.map((type) => {
                 const Icon = type.icon;
-                return (
+                return ()
                   <div key={type.value}>
                     <label className="flex items-start space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                       <input
@@ -173,7 +158,7 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
                         onChange={(e) => setLockType(e.target.value)}
                         className="mt-1"
                       />
-                      <Icon className={`h-5 w-5 ${type.color} mt-0.5`} />
+                      <Icon className={`h-5 w-5 ${type.color} mt-0.5`} />}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900">
                           {type.label}
@@ -188,7 +173,6 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
               })}
             </div>
           </div>
-
           {/* Duration Selection */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -199,7 +183,7 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
               onChange={(e) => setDuration(parseInt(e.target.value))}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {durationOptions.map((option) => (
+              {durationOptions.map((option) => ()
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -209,7 +193,6 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
               How long should the lock be active?
             </p>
           </div>
-
           {/* Reason */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -227,7 +210,6 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
               A brief explanation of why you need this lock
             </p>
           </div>
-
           {/* Lock Policy Information */}
           <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
             <div className="flex items-start space-x-2">
@@ -243,7 +225,6 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({
               </div>
             </div>
           </div>
-
           {/* Actions */}
           <div className="flex justify-end space-x-3">
             <button

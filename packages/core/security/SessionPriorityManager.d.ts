@@ -43,7 +43,7 @@ export interface SessionPriorityConfig {
     maxTotalSessions: number;
     evictionPolicy: EvictionPolicy;
     conflictResolution: ConflictResolution;
-    priorityWeights: {
+    priorityWeights: {,
         userRole: number;
         deviceTrust: number;
         location: number;
@@ -93,7 +93,7 @@ export interface SessionConflict {
     id: string;
     type: 'user_limit' | 'device_limit' | 'total_limit' | 'resource_contention';
     affectedSessions: string[];
-    newSessionRequest: {
+    newSessionRequest: {,
         userId: string;
         deviceId: string;
         priority: SessionPriority;
@@ -112,7 +112,7 @@ export interface PriorityMetrics {
     conflictRate: number;
     averageSessionScore: number;
     utilizationPercentage: number;
-    topEvictionReasons: Array<{
+    topEvictionReasons: Array<{,
         reason: string;
         count: number;
     }>;
@@ -134,12 +134,12 @@ export declare class SessionPriorityManager extends EventEmitter {
     /**
      * Register a new session with priority management
      */
-    registerSession(
+    registerSession()
       sessionId: string,
       userId: string,
       deviceId: string,
       priority: SessionPriority,
-      factors: PriorityFactors
+      factors: PriorityFactors,
     ): {
         allowed: boolean;
         conflicts?: SessionConflict[];

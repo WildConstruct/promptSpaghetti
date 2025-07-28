@@ -3,52 +3,44 @@
  * 
  * Interactive charts and visualizations for creative variance data.
  */
-
 import React, { useMemo, useState } from 'react';
 import { VarianceAnalysis, EnhancedPreviewResult } from '../../hooks/useEnhancedPreview';
-
 interface VarianceVisualizationProps {
   results: EnhancedPreviewResult[];
   varianceAnalysis: VarianceAnalysis | null;
   className?: string;
 }
-
 interface ChartDataPoint {
   label: string;
   value: number;
   color: string;
 }
 
-export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
+export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({)
   results,
   varianceAnalysis,
   className = ''
 }) => {
   const [activeChart, setActiveChart] = useState<'length' | 'similarity' | 'content' | 'creativity'>('length');
-
   // Prepare chart data
   const chartData = useMemo(() => {
     const validResults = results.filter(r => !r.error && r.output);
-
-    const lengthData: ChartDataPoint[] = validResults.map((result, index) => ({
-      label: `Seed ${result.seed}`,
+    const lengthData: ChartDataPoint[] = validResults.map((result, index) => ({)
+      label: `Seed ${result.seed}`,}
       value: result.output?.length || 0,
-      color: `hsl(${(index * 137.5) % 360}, 70%, 60%)`
+      color: `hsl(${(index * 137.5) % 360}, 70%, 60%)`}
     }));
-
-    const wordCountData: ChartDataPoint[] = validResults.map((result, index) => ({
-      label: `Seed ${result.seed}`,
+    const wordCountData: ChartDataPoint[] = validResults.map((result, index) => ({)
+      label: `Seed ${result.seed}`,}
       value: result.metadata?.wordCount || 0,
-      color: `hsl(${(index * 137.5) % 360}, 70%, 60%)`
+      color: `hsl(${(index * 137.5) % 360}, 70%, 60%)`}
     }));
-
     const contentTypeData: ChartDataPoint[] = varianceAnalysis?.contentTypes ? 
-      Object.entries(varianceAnalysis.contentTypes).map(([type, count], index) => ({
+      Object.entries(varianceAnalysis.contentTypes).map(([type, count], index) => ({)
         label: type.charAt(0).toUpperCase() + type.slice(1),
         value: count,
-        color: `hsl(${(index * 72) % 360}, 60%, 55%)`
+        color: `hsl(${(index * 72) % 360}, 60%, 55%)`}
       })) : [];
-
     const creativityMetrics: ChartDataPoint[] = varianceAnalysis ? [
       { label: 'Uniqueness', value: varianceAnalysis.uniquenessScore, color: '#10b981' },
       { label: 'Creativity', value: varianceAnalysis.creativityScore, color: '#8b5cf6' },
@@ -56,15 +48,13 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
       { label: 'Professional', value: varianceAnalysis.professionalSuitability, color: '#3b82f6' },
       { label: 'Genre Consistency', value: varianceAnalysis.genreConsistency, color: '#f59e0b' }
     ] : [];
-
     return {
       length: lengthData,
       wordCount: wordCountData,
       contentTypes: contentTypeData,
-      creativity: creativityMetrics
+      creativity: creativityMetrics,
     };
   }, [results, varianceAnalysis]);
-
   // Simple bar chart component
   const BarChart: React.FC<{ 
     data: ChartDataPoint[]; 
@@ -73,34 +63,33 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
     showValues?: boolean;
   }> = ({ data, title, maxValue, showValues = true }) => {
     const max = maxValue || Math.max(...data.map(d => d.value));
-    
-    return (
+    return ()
       <div style={{
         background: 'white',
         borderRadius: 8,
         border: '1px solid #e5e7eb',
-        padding: 16
+        padding: 16,
       }}>
         <h4 style={{
           margin: '0 0 12px 0',
           fontSize: 14,
           fontWeight: 600,
-          color: '#374151'
+          color: '#374151',
         }}>
           {title}
         </h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {data.map((item, index) => (
+          {data.map((item, index) => ()
             <div key={index} style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 8
+              gap: 8,
             }}>
               <div style={{
                 minWidth: '100px',
                 fontSize: 12,
                 color: '#6b7280',
-                textAlign: 'right'
+                textAlign: 'right',
               }}>
                 {item.label}
               </div>
@@ -110,16 +99,16 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                 background: '#f3f4f6',
                 borderRadius: 10,
                 overflow: 'hidden',
-                position: 'relative'
+                position: 'relative',
               }}>
                 <div style={{
                   height: '100%',
                   background: item.color,
-                  width: `${(item.value / max) * 100}%`,
+                  width: `${(item.value / max) * 100}%`,}
                   transition: 'width 0.5s ease',
-                  borderRadius: 10
+                  borderRadius: 10,
                 }} />
-                {showValues && (
+                {showValues && ()
                   <div style={{
                     position: 'absolute',
                     right: 8,
@@ -139,27 +128,25 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
       </div>
     );
   };
-
   // Radial progress chart for creativity metrics
   const RadialChart: React.FC<{ data: ChartDataPoint[]; title: string }> = ({ data, title }) => {
     const radius = 60;
     const centerX = 80;
     const centerY = 80;
     const circumference = 2 * Math.PI * radius;
-
-    return (
+    return ()
       <div style={{
         background: 'white',
         borderRadius: 8,
         border: '1px solid #e5e7eb',
         padding: 16,
-        textAlign: 'center'
+        textAlign: 'center',
       }}>
         <h4 style={{
           margin: '0 0 16px 0',
           fontSize: 14,
           fontWeight: 600,
-          color: '#374151'
+          color: '#374151',
         }}>
           {title}
         </h4>
@@ -167,14 +154,14 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
           gap: 16,
-          justifyItems: 'center'
+          justifyItems: 'center',
         }}>
-          {data.map((item, index) => (
+          {data.map((item, index) => ()
             <div key={index} style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: 8
+              gap: 8,
             }}>
               <div style={{ position: 'relative' }}>
                 <svg width="100" height="100" style={{ transform: 'rotate(-90deg)' }}>
@@ -208,7 +195,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                   transform: 'translate(-50%, -50%)',
                   fontSize: 12,
                   fontWeight: 600,
-                  color: '#374151'
+                  color: '#374151',
                 }}>
                   {item.value}%
                 </div>
@@ -218,7 +205,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                 color: '#6b7280',
                 textAlign: 'center',
                 maxWidth: '80px',
-                lineHeight: 1.2
+                lineHeight: 1.2,
               }}>
                 {item.label}
               </div>
@@ -228,7 +215,6 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
       </div>
     );
   };
-
   // Distribution histogram
   const HistogramChart: React.FC<{ 
     data: ChartDataPoint[]; 
@@ -239,31 +225,28 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
     const min = Math.min(...values);
     const max = Math.max(...values);
     const binSize = (max - min) / binCount;
-    
     const bins = Array.from({ length: binCount }, (_, i) => {
       const binStart = min + (i * binSize);
       const binEnd = binStart + binSize;
       const count = values.filter(v => v >= binStart && (i === binCount - 1 ? v <= binEnd : v < binEnd)).length;
-      
       return {
-        label: `${Math.round(binStart)}-${Math.round(binEnd)}`,
+        label: `${Math.round(binStart)}-${Math.round(binEnd)}`,}
         value: count,
-        color: `hsl(${(i * 72) % 360}, 60%, 55%)`
+        color: `hsl(${(i * 72) % 360}, 60%, 55%)`}
       };
     });
-
-    return (
+    return ()
       <div style={{
         background: 'white',
         borderRadius: 8,
         border: '1px solid #e5e7eb',
-        padding: 16
+        padding: 16,
       }}>
         <h4 style={{
           margin: '0 0 12px 0',
           fontSize: 14,
           fontWeight: 600,
-          color: '#374151'
+          color: '#374151',
         }}>
           {title} Distribution
         </h4>
@@ -274,19 +257,19 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
           height: 120,
           padding: '10px 0'
         }}>
-          {bins.map((bin, index) => (
+          {bins.map((bin, index) => ()
             <div key={index} style={{
               flex: 1,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: 4
+              gap: 4,
             }}>
               <div style={{
                 width: '100%',
                 minHeight: '20px',
                 background: bin.color,
-                height: `${(bin.value / Math.max(...bins.map(b => b.value))) * 100}px`,
+                height: `${(bin.value / Math.max(...bins.map(b => b.value))) * 100}px`,}
                 borderRadius: '4px 4px 0 0',
                 display: 'flex',
                 alignItems: 'center',
@@ -304,7 +287,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                 textAlign: 'center',
                 lineHeight: 1,
                 transform: 'rotate(-45deg)',
-                transformOrigin: 'center'
+                transformOrigin: 'center',
               }}>
                 {bin.label}
               </div>
@@ -314,15 +297,14 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
       </div>
     );
   };
-
   if (!varianceAnalysis || results.length < 2) {
-    return (
-      <div className={`variance-visualization ${className}`} style={{
+    return ()
+      <div className={`variance-visualization ${className}`} style={{}
         background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
         borderRadius: 12,
         border: '1px solid #e2e8f0',
         padding: 24,
-        textAlign: 'center'
+        textAlign: 'center',
       }}>
         <div style={{ fontSize: 24, marginBottom: 12 }}>📈</div>
         <div style={{ fontSize: 16, fontWeight: 600, color: '#1e293b', marginBottom: 8 }}>
@@ -334,13 +316,12 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`variance-visualization ${className}`} style={{
+  return ()
+    <div className={`variance-visualization ${className}`} style={{}
       background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       borderRadius: 12,
       border: '1px solid #e2e8f0',
-      overflow: 'hidden'
+      overflow: 'hidden',
     }}>
       {/* Header */}
       <div style={{
@@ -355,19 +336,18 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
           color: '#1e293b',
           display: 'flex',
           alignItems: 'center',
-          gap: 8
+          gap: 8,
         }}>
           📈 Variance Visualization
         </h3>
         <div style={{
           fontSize: 14,
           color: '#64748b',
-          marginTop: 4
+          marginTop: 4,
         }}>
           Interactive charts and distribution analysis
         </div>
       </div>
-
       {/* Chart Navigation */}
       <div style={{
         display: 'flex',
@@ -379,7 +359,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
           { id: 'similarity', label: '🔗 Similarity Matrix', icon: '🔗' },
           { id: 'content', label: '📝 Content Types', icon: '📝' },
           { id: 'creativity', label: '🎨 Creative Metrics', icon: '🎨' }
-        ].map(chart => (
+        ].map(chart => ()
           <button
             key={chart.id}
             onClick={() => setActiveChart(chart.id as any)}
@@ -399,14 +379,13 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
           </button>
         ))}
       </div>
-
       {/* Chart Content */}
       <div style={{ padding: 20 }}>
-        {activeChart === 'length' && (
+        {activeChart === 'length' && ()
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: 16
+            gap: 16,
           }}>
             <BarChart 
               data={chartData.length} 
@@ -425,24 +404,23 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
             />
           </div>
         )}
-
-        {activeChart === 'similarity' && (
+        {activeChart === 'similarity' && ()
           <div style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
-            gap: 16
+            gap: 16,
           }}>
             <div style={{
               background: 'white',
               borderRadius: 8,
               border: '1px solid #e5e7eb',
-              padding: 16
+              padding: 16,
             }}>
               <h4 style={{
                 margin: '0 0 12px 0',
                 fontSize: 14,
                 fontWeight: 600,
-                color: '#374151'
+                color: '#374151',
               }}>
                 Similarity Metrics
               </h4>
@@ -453,7 +431,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                   alignItems: 'center',
                   padding: 8,
                   background: '#f8fafc',
-                  borderRadius: 4
+                  borderRadius: 4,
                 }}>
                   <span style={{ fontSize: 13, color: '#374151' }}>Average Similarity</span>
                   <span style={{ fontSize: 14, fontWeight: 600, color: '#3b82f6' }}>
@@ -466,7 +444,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                   alignItems: 'center',
                   padding: 8,
                   background: '#f8fafc',
-                  borderRadius: 4
+                  borderRadius: 4,
                 }}>
                   <span style={{ fontSize: 13, color: '#374151' }}>Uniqueness Score</span>
                   <span style={{ fontSize: 14, fontWeight: 600, color: '#10b981' }}>
@@ -479,7 +457,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                   alignItems: 'center',
                   padding: 8,
                   background: '#f8fafc',
-                  borderRadius: 4
+                  borderRadius: 4,
                 }}>
                   <span style={{ fontSize: 13, color: '#374151' }}>Tone Variation</span>
                   <span style={{ fontSize: 14, fontWeight: 600, color: '#8b5cf6' }}>
@@ -488,41 +466,39 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                 </div>
               </div>
             </div>
-            
             <div style={{
               background: 'white',
               borderRadius: 8,
               border: '1px solid #e5e7eb',
-              padding: 16
+              padding: 16,
             }}>
               <h4 style={{
                 margin: '0 0 12px 0',
                 fontSize: 14,
                 fontWeight: 600,
-                color: '#374151'
+                color: '#374151',
               }}>
                 Comparison Matrix
               </h4>
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: `repeat(${results.length}, 1fr)`,
+                gridTemplateColumns: `repeat(${results.length}, 1fr)`,}
                 gap: 2,
-                fontSize: 10
+                fontSize: 10,
               }}>
-                {results.map((result1, i) => (
+                {results.map((result1, i) => ()
                   results.map((result2, j) => {
-                    const similarity = i === j ? 1 : (
+                    const similarity = i === j ? 1 : (;)
                       i < j ? Math.random() * 0.6 + 0.2 : // Simulated similarity
                         results.length // Use symmetry from upper triangle
                     );
-                    
-                    return (
+                    return ()
                       <div
                         key={`${i}-${j}`}
                         style={{
                           width: 20,
                           height: 20,
-                          background: `rgba(59, 130, 246, ${similarity})`,
+                          background: `rgba(59, 130, 246, ${similarity})`,}
                           borderRadius: 2,
                           display: 'flex',
                           alignItems: 'center',
@@ -540,21 +516,20 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                 fontSize: 11,
                 color: '#6b7280',
                 marginTop: 8,
-                textAlign: 'center'
+                textAlign: 'center',
               }}>
                 Darker = More Similar
               </div>
             </div>
           </div>
         )}
-
-        {activeChart === 'content' && (
+        {activeChart === 'content' && ()
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: 16
+            gap: 16,
           }}>
-            {chartData.contentTypes.length > 0 && (
+            {chartData.contentTypes.length > 0 && ()
               <BarChart 
                 data={chartData.contentTypes} 
                 title="Content Type Distribution"
@@ -565,13 +540,13 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
               background: 'white',
               borderRadius: 8,
               border: '1px solid #e5e7eb',
-              padding: 16
+              padding: 16,
             }}>
               <h4 style={{
                 margin: '0 0 12px 0',
                 fontSize: 14,
                 fontWeight: 600,
-                color: '#374151'
+                color: '#374151',
               }}>
                 Content Metrics
               </h4>
@@ -582,7 +557,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                   alignItems: 'center',
                   padding: 8,
                   background: '#f8fafc',
-                  borderRadius: 4
+                  borderRadius: 4,
                 }}>
                   <span style={{ fontSize: 13, color: '#374151' }}>Diversity Index</span>
                   <span style={{ fontSize: 14, fontWeight: 600, color: '#06b6d4' }}>
@@ -595,7 +570,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                   alignItems: 'center',
                   padding: 8,
                   background: '#f8fafc',
-                  borderRadius: 4
+                  borderRadius: 4,
                 }}>
                   <span style={{ fontSize: 13, color: '#374151' }}>Total Results</span>
                   <span style={{ fontSize: 14, fontWeight: 600, color: '#374151' }}>
@@ -608,7 +583,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                   alignItems: 'center',
                   padding: 8,
                   background: '#f8fafc',
-                  borderRadius: 4
+                  borderRadius: 4,
                 }}>
                   <span style={{ fontSize: 13, color: '#374151' }}>Valid Results</span>
                   <span style={{ fontSize: 14, fontWeight: 600, color: '#10b981' }}>
@@ -619,8 +594,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
             </div>
           </div>
         )}
-
-        {activeChart === 'creativity' && (
+        {activeChart === 'creativity' && ()
           <div>
             <RadialChart 
               data={chartData.creativity} 

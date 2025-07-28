@@ -26,35 +26,35 @@ interface UseConnectionAnnotationsReturn {
     hasLabel: (edgeId: string) => boolean;
     getVisibleLabelsCount: () => number;
 }
-export declare const useConnectionAnnotations: (
+export declare const useConnectionAnnotations: ()
   { edges,
   onEdgesChange,
   autoOptimizePositions }: UseConnectionAnnotationsProps
 ) => UseConnectionAnnotationsReturn;
 export declare const connectionAnnotationPresets: {
-    dataFlow: {
-        labelStyle: {
+    dataFlow: {,
+        labelStyle: {,
             color: string;
             backgroundColor: string;
             border: string;
         };
     };
-    control: {
-        labelStyle: {
+    control: {,
+        labelStyle: {,
             color: string;
             backgroundColor: string;
             border: string;
         };
     };
-    dependency: {
-        labelStyle: {
+    dependency: {,
+        labelStyle: {,
             color: string;
             backgroundColor: string;
             border: string;
         };
     };
-    error: {
-        labelStyle: {
+    error: {,
+        labelStyle: {,
             color: string;
             backgroundColor: string;
             border: string;
@@ -74,10 +74,10 @@ export declare const labelTemplates: {
     config: string;
     data: string;
 };
-export declare const createPresetConnection: (
+export declare const createPresetConnection: ()
   baseEdge: Edge,
   preset: keyof typeof connectionAnnotationPresets,
-  label: string
+  label: string,
 ) => AnnotatedEdge;
 export {};
 //# sourceMappingURL=useConnectionAnnotations.d.ts.map

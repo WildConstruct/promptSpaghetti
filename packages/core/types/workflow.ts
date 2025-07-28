@@ -39,17 +39,14 @@ export interface WorkflowApproval {
   requested_at: Date;
   due_date?: Date;
   priority: 'low' | 'medium' | 'high' | 'urgent';
-  
   // Approval metadata
   approved_by?: string;
   approved_at?: Date;
   rejection_reason?: string;
   approval_comment?: string;
-  
   // Auto-approval settings
   auto_approve_after?: string;
   auto_approve_conditions: Record<string, any>;
-  
   created_at: Date;
   updated_at: Date;
 }
@@ -86,13 +83,11 @@ export interface WorkflowHistoryEntry {
   new_state_id?: string;
   actor_id: string;
   action_timestamp: Date;
-  
   // Action context
   approval_id?: string;
   transition_id?: string;
   comment?: string;
   metadata: Record<string, any>;
-  
   // Compliance fields
   ip_address?: string;
   user_agent?: string;
@@ -106,23 +101,19 @@ export interface WorkflowSchedule {
   schedule_name: string;
   schedule_type: 'cron' | 'interval' | 'once';
   schedule_expression: string;
-  
   // Execution settings
   action_type: string;
   action_config: Record<string, any>;
   enabled: boolean;
-  
   // Scheduling metadata
   next_run_at?: Date;
   last_run_at?: Date;
   run_count: number;
   max_runs?: number;
-  
   // Failure handling
   retry_count: number;
   max_retries: number;
   retry_delay: string;
-  
   created_by: string;
   created_at: Date;
   updated_at: Date;
@@ -135,12 +126,10 @@ export interface WorkflowExecutionLog {
   status: 'running' | 'completed' | 'failed' | 'cancelled';
   started_at: Date;
   completed_at?: Date;
-  
   // Execution results
   result_data: Record<string, any>;
   error_message?: string;
   execution_time_ms?: number;
-  
   // Retry information
   retry_attempt: number;
   next_retry_at?: Date;
@@ -152,28 +141,24 @@ export interface WorkflowStatistics {
   pending_approvals: number;
   active_locks: number;
   scheduled_executions: number;
-  
   // Resource distribution by state
   resources_by_state: Record<string, number>;
-  
   // Approval statistics
-  approval_stats: {
+  approval_stats: {,
     pending: number;
     approved: number;
     rejected: number;
     cancelled: number;
     avg_approval_time_hours: number;
   };
-  
   // Lock statistics
-  lock_stats: {
+  lock_stats: {,
     total_active: number;
     by_type: Record<string, number>;
     avg_lock_duration_hours: number;
   };
-  
   // Schedule statistics
-  schedule_stats: {
+  schedule_stats: {,
     total_active: number;
     by_type: Record<string, number>;
     successful_executions: number;
@@ -214,7 +199,7 @@ export interface WorkflowConfiguration {
   default_approval_timeout_hours: number;
   max_concurrent_locks_per_resource: number;
   audit_retention_days: number;
-  notification_settings: {
+  notification_settings: {,
     approval_requested: boolean;
     approval_completed: boolean;
     lock_acquired: boolean;
@@ -287,14 +272,12 @@ export interface UseWorkflowReturn {
   statistics: WorkflowStatistics | null;
   loading: boolean;
   error: string | null;
-  
   // Actions
   transitionState: (resourceId: string, toStateId: string, options?: any) => Promise<StateTransitionResult>;
   approveWorkflow: (approvalId: string, comment?: string) => Promise<StateTransitionResult>;
   rejectWorkflow: (approvalId: string, reason: string) => Promise<boolean>;
   acquireLock: (resourceId: string, lockType?: string, options?: any) => Promise<WorkflowLock>;
   releaseLock: (lockId: string) => Promise<boolean>;
-  
   // Utilities
   canTransitionState: (resourceId: string, toStateId: string) => Promise<boolean>;
   isResourceLocked: (resourceId: string, lockType?: string) => Promise<boolean>;
@@ -348,7 +331,7 @@ export const WORKFLOW_ICONS = {
   EyeIcon: 'EyeIcon',
   CheckCircleIcon: 'CheckCircleIcon',
   GlobeAltIcon: 'GlobeAltIcon',
-  ArchiveBoxIcon: 'ArchiveBoxIcon'
+  ArchiveBoxIcon: 'ArchiveBoxIcon',
 } as const;
 
 export const WORKFLOW_COLORS = {
@@ -356,7 +339,7 @@ export const WORKFLOW_COLORS = {
   review: '#F59E0B',
   approved: '#10B981',
   published: '#3B82F6',
-  archived: '#8B5CF6'
+  archived: '#8B5CF6',
 } as const;
 
 export const WORKFLOW_ACTIONS = {
@@ -366,5 +349,5 @@ export const WORKFLOW_ACTIONS = {
   REJECTED: 'rejected',
   LOCK_ACQUIRED: 'lock_acquired',
   LOCK_RELEASED: 'lock_released',
-  SCHEDULE_EXECUTED: 'schedule_executed'
+  SCHEDULE_EXECUTED: 'schedule_executed',
 } as const;

@@ -5,11 +5,9 @@
  * Advanced component for managing individual preview results with locking,
  * regeneration, comparison, and detailed analysis capabilities.
  */
-
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { usePreviewStateStore } from '../../stores/previewStateStore';
 import { usePreviewSeeds } from '../../usePreviewSeeds';
-
 interface IndividualResultManagerProps {
   visible?: boolean;
   onClose?: () => void;
@@ -18,19 +16,16 @@ interface IndividualResultManagerProps {
   enableAnalytics?: boolean;
   maxDisplayResults?: number;
 }
-
 interface ResultAction {
   type: 'lock' | 'unlock' | 'regenerate' | 'delete' | 'compare' | 'analyze' | 'export';
   resultIndex: number;
   data?: unknown;
 }
-
 interface ComparisonMode {
   enabled: boolean;
   selectedResults: number[];
   viewMode: 'side-by-side' | 'overlay' | 'diff';
 }
-
 interface ResultAnalytics {
   resultIndex: number;
   wordCount: number;
@@ -43,7 +38,7 @@ interface ResultAnalytics {
   similarity: number; // Compared to other results
 }
 
-export const IndividualResultManager: React.FC<IndividualResultManagerProps> = ({
+export const IndividualResultManager: React.FC<IndividualResultManagerProps> = ({)
   visible = true,
   onClose,
   className = '',
@@ -62,16 +57,14 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
     unlockResult,
     setRegeneratingResult
   } = usePreviewStateStore();
-
   // Preview seeds hook for regeneration
   const { regenerateResult } = usePreviewSeeds();
-
   // Local state
   const [selectedResults, setSelectedResults] = useState<Set<number>>(new Set());
-  const [comparisonMode, setComparisonMode] = useState<ComparisonMode>({
+  const [comparisonMode, setComparisonMode] = useState<ComparisonMode>({)
     enabled: false,
     selectedResults: [],
-    viewMode: 'side-by-side'
+    viewMode: 'side-by-side',
   });
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [resultAnalytics, setResultAnalytics] = useState<Map<number, ResultAnalytics>>(new Map());
@@ -80,14 +73,12 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
     visible: boolean;
     resultIndex: number;
     note: string;
-  }>({
+  }>({)
     visible: false,
     resultIndex: -1,
-    note: ''
+    note: '',
   });
-
   const menuRef = useRef<HTMLDivElement>(null);
-
   // Calculate analytics for a result
   const calculateAnalytics = useCallback((content: string, index: number): ResultAnalytics => {
     if (!content || typeof content !== 'string') {
@@ -100,49 +91,41 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
         readabilityScore: 0,
         sentiment: 'neutral',
         topics: [],
-        similarity: 0
+        similarity: 0,
       };
     }
-
     const words = content.toLowerCase().match(/\b\w+\b/g) || [];
     const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 0);
     const uniqueWords = new Set(words).size;
-    const averageWordLength = words.length > 0 
+    const averageWordLength = words.length > 0 ;
       ? words.reduce((sum, word) => sum + word.length, 0) / words.length 
       : 0;
-
     // Simple readability score (Flesch-like)
     const avgWordsPerSentence = sentences.length > 0 ? words.length / sentences.length : 0;
-    const readabilityScore = Math.max(0, Math.min(100, 
+    const readabilityScore = Math.max(0, Math.min(100, ;)
       206.835 - (1.015 * avgWordsPerSentence) - (84.6 * averageWordLength)
     ));
-
     // Basic sentiment analysis
     const positiveWords = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'fantastic'];
     const negativeWords = ['bad', 'terrible', 'awful', 'horrible', 'disappointing', 'poor'];
-    
     const positiveCount = words.filter(word => positiveWords.includes(word)).length;
     const negativeCount = words.filter(word => negativeWords.includes(word)).length;
-    
-    const sentiment = positiveCount > negativeCount ? 'positive' : 
+    const sentiment = positiveCount > negativeCount ? 'positive' : ;
                      negativeCount > positiveCount ? 'negative' : 'neutral';
-
     // Extract potential topics (simple approach)
-    const topics = words
+    const topics = words;
       .filter(word => word.length > 4)
       .reduce((acc: Record<string, number>, word) => {
         acc[word] = (acc[word] || 0) + 1;
         return acc;
       }, {});
-    
-    const topTopics = Object.entries(topics)
+    const topTopics = Object.entries(topics);
       .sort(([, a], [, b]) => b - a)
       .slice(0, 3)
       .map(([word]) => word);
-
     // Calculate similarity to other results (simple Jaccard similarity)
     const otherResults = results.filter((_, i) => i !== index && !results[i].error);
-    const similarity = otherResults.length > 0 
+    const similarity = otherResults.length > 0 ;
       ? otherResults.reduce((sum, result) => {
           const otherWords = new Set((result.output || '').toLowerCase().match(/\b\w+\b/g) || []);
           const currentWords = new Set(words);
@@ -151,7 +134,6 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
           return sum + (union.size > 0 ? intersection.size / union.size : 0);
         }, 0) / otherResults.length
       : 0;
-
     return {
       resultIndex: index,
       wordCount: words.length,
@@ -164,7 +146,6 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
       similarity: Math.round(similarity * 100) / 100
     };
   }, [results]);
-
   // Update analytics when results change
   useEffect(() => {
     if (enableAnalytics) {
@@ -177,24 +158,20 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
       setResultAnalytics(newAnalytics);
     }
   }, [results, enableAnalytics, calculateAnalytics]);
-
   // Handle result action
   const handleResultAction = useCallback(async (action: ResultAction) => {
     const { type, resultIndex, data } = action;
-
     switch (type) {
       case 'lock':
-        setLockDialog({
+        setLockDialog({)
           visible: true,
           resultIndex,
-          note: ''
+          note: '',
         });
         break;
-
       case 'unlock':
         unlockResult(resultIndex);
         break;
-
       case 'regenerate':
         if (results[resultIndex] && !results[resultIndex].locked) {
           setRegeneratingResult(resultIndex, true);
@@ -207,19 +184,17 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
           }
         }
         break;
-
       case 'delete':
         // Remove result from selection if selected
-        setSelectedResults(prev => {
+        setSelectedResults(prev => {)
           const newSet = new Set(prev);
           newSet.delete(resultIndex);
           return newSet;
         });
         break;
-
       case 'compare':
         if (enableComparison) {
-          setSelectedResults(prev => {
+          setSelectedResults(prev => {)
             const newSet = new Set(prev);
             if (newSet.has(resultIndex)) {
               newSet.delete(resultIndex);
@@ -230,42 +205,35 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
           });
         }
         break;
-
       case 'export':
         exportResult(resultIndex, data?.format || 'text');
         break;
     }
-
     setActionMenuIndex(null);
   }, [results, unlockResult, setRegeneratingResult, regenerateResult, enableComparison]);
-
   // Export result functionality
   const exportResult = useCallback((index: number, format: 'text' | 'json' | 'csv') => {
     const result = results[index];
     if (!result) return;
-
     const analytics = resultAnalytics.get(index);
     let content = '';
-    let filename = `result_${result.seed}`;
+    let filename = `result_${result.seed}`;}
     let mimeType = 'text/plain';
-
     switch (format) {
       case 'text':
         content = result.output || result.error || '';
         filename += '.txt';
         break;
-
       case 'json':
-        content = JSON.stringify({
+        content = JSON.stringify({)
           ...result,
           analytics: analytics || null
         }, null, 2);
         filename += '.json';
         mimeType = 'application/json';
         break;
-
       case 'csv':
-        const csvData = [
+        const csvData = [;
           ['Field', 'Value'],
           ['Seed', result.seed],
           ['Output', result.output || ''],
@@ -281,7 +249,6 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
         mimeType = 'text/csv';
         break;
     }
-
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -292,14 +259,12 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }, [results, resultAnalytics]);
-
   // Handle lock confirmation
   const handleLockConfirmation = useCallback(() => {
     const { resultIndex, note } = lockDialog;
     lockResult(resultIndex, note.trim() || undefined);
     setLockDialog({ visible: false, resultIndex: -1, note: '' });
   }, [lockDialog, lockResult]);
-
   // Toggle comparison mode
   const toggleComparisonMode = useCallback(() => {
     if (comparisonMode.enabled) {
@@ -309,7 +274,6 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
       setComparisonMode(prev => ({ ...prev, enabled: true }));
     }
   }, [comparisonMode.enabled]);
-
   // Close action menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -317,22 +281,17 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
         setActionMenuIndex(null);
       }
     };
-
     if (actionMenuIndex !== null) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [actionMenuIndex]);
-
   // Get comparison summary
   const comparisonSummary = useMemo(() => {
     if (!comparisonMode.enabled || selectedResults.size < 2) return null;
-
     const selected = Array.from(selectedResults);
     const analytics = selected.map(i => resultAnalytics.get(i)).filter(Boolean) as ResultAnalytics[];
-    
     if (analytics.length < 2) return null;
-
     const avgWordCount = analytics.reduce((sum, a) => sum + a.wordCount, 0) / analytics.length;
     const avgReadability = analytics.reduce((sum, a) => sum + a.readabilityScore, 0) / analytics.length;
     const sentiments = analytics.map(a => a.sentiment);
@@ -340,7 +299,6 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
       acc[sentiment] = (acc[sentiment] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-
     return {
       count: selected.length,
       avgWordCount: Math.round(avgWordCount),
@@ -351,10 +309,8 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
       topics: [...new Set(analytics.flatMap(a => a.topics))]
     };
   }, [comparisonMode.enabled, selectedResults, resultAnalytics]);
-
   if (!visible) return null;
-
-  return (
+  return ()
     <div
       className={`individual-result-manager ${className}`}
       style={{
@@ -378,7 +334,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
           padding: '16px 20px',
           borderBottom: '1px solid #e2e8f0',
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white'
+          color: 'white',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -388,13 +344,12 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
             </h3>
             <div style={{ fontSize: '12px', opacity: 0.9, marginTop: '4px' }}>
               {results.length} results • {lockedResults.length} locked
-              {comparisonMode.enabled && selectedResults.size > 0 && (
+              {comparisonMode.enabled && selectedResults.size > 0 && ()
                 <span> • {selectedResults.size} selected</span>
               )}
             </div>
           </div>
-          
-          {onClose && (
+          {onClose && ()
             <button
               onClick={onClose}
               style={{
@@ -407,7 +362,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}
             >
               ×
@@ -415,17 +370,16 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
           )}
         </div>
       </div>
-
       {/* Controls */}
       <div
         style={{
           padding: '12px 20px',
           borderBottom: '1px solid #e2e8f0',
-          background: '#f8fafc'
+          background: '#f8fafc',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-          {enableComparison && (
+          {enableComparison && ()
             <button
               onClick={toggleComparisonMode}
               style={{
@@ -435,14 +389,13 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                 border: 'none',
                 borderRadius: '6px',
                 fontSize: '12px',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               🔍 Compare ({selectedResults.size})
             </button>
           )}
-          
-          {enableAnalytics && (
+          {enableAnalytics && ()
             <button
               onClick={() => setShowAnalytics(!showAnalytics)}
               style={{
@@ -452,13 +405,12 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                 border: 'none',
                 borderRadius: '6px',
                 fontSize: '12px',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               📊 Analytics
             </button>
           )}
-          
           <button
             onClick={() => setSelectedResults(new Set())}
             disabled={selectedResults.size === 0}
@@ -476,15 +428,14 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
           </button>
         </div>
       </div>
-
       {/* Comparison Summary */}
-      {comparisonMode.enabled && comparisonSummary && (
+      {comparisonMode.enabled && comparisonSummary && ()
         <div
           style={{
             padding: '12px 20px',
             borderBottom: '1px solid #e2e8f0',
             background: '#f0f9ff',
-            fontSize: '12px'
+            fontSize: '12px',
           }}
         >
           <div style={{ fontWeight: '600', marginBottom: '8px' }}>Comparison Summary</div>
@@ -494,14 +445,13 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
             <div><strong>Readability:</strong> {comparisonSummary.avgReadability}</div>
             <div><strong>Sentiment:</strong> {comparisonSummary.dominantSentiment}</div>
           </div>
-          {comparisonSummary.topics.length > 0 && (
+          {comparisonSummary.topics.length > 0 && ()
             <div style={{ marginTop: '8px' }}>
               <strong>Common Topics:</strong> {comparisonSummary.topics.slice(0, 5).join(', ')}
             </div>
           )}
         </div>
       )}
-
       {/* Results List */}
       <div
         style={{
@@ -510,7 +460,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
           padding: '12px 0'
         }}
       >
-        {error && (
+        {error && ()
           <div
             style={{
               margin: '0 20px 12px',
@@ -519,39 +469,36 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
               border: '1px solid #fecaca',
               borderRadius: '8px',
               color: '#dc2626',
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           >
             <strong>Error:</strong> {error}
           </div>
         )}
-
-        {results.length === 0 && !isLoading && (
+        {results.length === 0 && !isLoading && ()
           <div
             style={{
               padding: '40px 20px',
               textAlign: 'center',
-              color: '#9ca3af'
+              color: '#9ca3af',
             }}
           >
             <div style={{ fontSize: '32px', marginBottom: '12px' }}>📋</div>
             <div>No results to manage</div>
           </div>
         )}
-
         {results.slice(0, maxDisplayResults).map((result, index) => {
           const analytics = resultAnalytics.get(index);
           const isSelected = selectedResults.has(index);
           const isRegenerating = regeneratingResults.includes(index);
-
-          return (
+          return ()
             <div
               key={`${result.seed}-${index}`}
               style={{
                 margin: '0 20px 12px',
                 padding: '16px',
                 background: isSelected ? '#f0f9ff' : 'white',
-                border: `2px solid ${isSelected ? '#0ea5e9' : result.locked ? '#f59e0b' : '#e2e8f0'}`,
+                border: `2px solid ${isSelected ? '#0ea5e9' : result.locked ? '#f59e0b' : '#e2e8f0'}`,}
                 borderRadius: '8px',
                 position: 'relative',
                 transition: 'all 0.2s ease'
@@ -560,7 +507,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
               {/* Result Header */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  {comparisonMode.enabled && (
+                  {comparisonMode.enabled && ()
                     <input
                       type="checkbox"
                       checked={isSelected}
@@ -568,7 +515,6 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                       style={{ margin: 0 }}
                     />
                   )}
-                  
                   <span style={{ 
                     background: result.locked ? '#fbbf24' : '#e2e8f0', 
                     padding: '3px 8px', 
@@ -579,26 +525,22 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                   }}>
                     Seed {result.seed}
                   </span>
-                  
-                  {result.executionTimeMs && (
+                  {result.executionTimeMs && ()
                     <span style={{ fontSize: '11px', color: '#6b7280' }}>
                       {result.executionTimeMs}ms
                     </span>
                   )}
-                  
-                  {result.locked && (
-                    <span title={`Locked: ${result.lockedNote || 'No note'}`} style={{ fontSize: '14px' }}>
+                  {result.locked && ()
+                    <span title={`Locked: ${result.lockedNote || 'No note'}`} style={{ fontSize: '14px' }}>}
                       🔒
                     </span>
                   )}
-                  
-                  {isRegenerating && (
+                  {isRegenerating && ()
                     <span style={{ fontSize: '14px', animation: 'spin 1s linear infinite' }}>
                       ⟳
                     </span>
                   )}
                 </div>
-                
                 <button
                   onClick={() => setActionMenuIndex(actionMenuIndex === index ? null : index)}
                   style={{
@@ -608,28 +550,26 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                     cursor: 'pointer',
                     padding: '4px',
                     borderRadius: '4px',
-                    color: '#6b7280'
+                    color: '#6b7280',
                   }}
                 >
                   ⋯
                 </button>
               </div>
-              
               {/* Result Content */}
               <div style={{ fontSize: '14px', lineHeight: '1.4', marginBottom: showAnalytics ? '12px' : '0' }}>
-                {result.error ? (
+                {result.error ? ()
                   <div style={{ color: '#dc2626', fontStyle: 'italic' }}>
                     {result.error}
                   </div>
-                ) : (
+                ) : ()
                   <div style={{ color: '#374151' }}>
                     {result.output || 'No output'}
                   </div>
                 )}
               </div>
-              
               {/* Analytics */}
-              {showAnalytics && analytics && (
+              {showAnalytics && analytics && ()
                 <div
                   style={{
                     padding: '8px',
@@ -639,9 +579,9 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                     border: '1px solid #e2e8f0'
                   }}
                 >
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat()
                     auto-fit,
-                    minmax(80px,
+                    minmax(80px,)
                     1fr
                   ))', gap: '8px' }}>
                     <div><strong>Words:</strong> {analytics.wordCount}</div>
@@ -650,16 +590,15 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                     <div><strong>Sentiment:</strong> {analytics.sentiment}</div>
                     <div><strong>Similarity:</strong> {Math.round(analytics.similarity * 100)}%</div>
                   </div>
-                  {analytics.topics.length > 0 && (
+                  {analytics.topics.length > 0 && ()
                     <div style={{ marginTop: '4px' }}>
                       <strong>Topics:</strong> {analytics.topics.join(', ')}
                     </div>
                   )}
                 </div>
               )}
-              
               {/* Action Menu */}
-              {actionMenuIndex === index && (
+              {actionMenuIndex === index && ()
                 <div
                   ref={menuRef}
                   style={{
@@ -671,17 +610,17 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                     borderRadius: '8px',
                     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                     zIndex: 1001,
-                    minWidth: '160px'
+                    minWidth: '160px',
                   }}
                 >
-                  {!result.locked ? (
+                  {!result.locked ? ()
                     <button
                       onClick={() => handleResultAction({ type: 'lock', resultIndex: index })}
                       style={menuButtonStyle}
                     >
                       🔒 Lock Result
                     </button>
-                  ) : (
+                  ) : ()
                     <button
                       onClick={() => handleResultAction({ type: 'unlock', resultIndex: index })}
                       style={menuButtonStyle}
@@ -689,7 +628,6 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                       🔓 Unlock Result
                     </button>
                   )}
-                  
                   <button
                     onClick={() => handleResultAction({ type: 'regenerate', resultIndex: index })}
                     disabled={result.locked || isRegenerating}
@@ -701,24 +639,20 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                   >
                     ⟳ Regenerate
                   </button>
-                  
                   <div style={{ height: '1px', background: '#e2e8f0', margin: '4px 8px' }} />
-                  
                   <button
                     onClick={() => handleResultAction({ type: 'export', resultIndex: index, data: { format: 'text' } })}
                     style={menuButtonStyle}
                   >
                     📄 Export Text
                   </button>
-                  
                   <button
                     onClick={() => handleResultAction({ type: 'export', resultIndex: index, data: { format: 'json' } })}
                     style={menuButtonStyle}
                   >
                     📋 Export JSON
                   </button>
-                  
-                  {enableAnalytics && analytics && (
+                  {enableAnalytics && analytics && ()
                     <button
                       onClick={() => handleResultAction({ type: 'export', resultIndex: index, data: { format: 'csv' } })}
                       style={menuButtonStyle}
@@ -731,23 +665,21 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
             </div>
           );
         })}
-
-        {results.length > maxDisplayResults && (
+        {results.length > maxDisplayResults && ()
           <div
             style={{
               padding: '12px 20px',
               textAlign: 'center',
               color: '#6b7280',
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           >
             ... and {results.length - maxDisplayResults} more results
           </div>
         )}
       </div>
-
       {/* Lock Dialog */}
-      {lockDialog.visible && (
+      {lockDialog.visible && ()
         <div
           style={{
             position: 'absolute',
@@ -756,7 +688,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 1002
+            zIndex: 1002,
           }}
         >
           <div
@@ -772,7 +704,6 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
             <p style={{ margin: '0 0 12px', fontSize: '14px', color: '#6b7280' }}>
               Add a note to explain why this result is locked:
             </p>
-            
             <textarea
               value={lockDialog.note}
               onChange={(e) => setLockDialog(prev => ({ ...prev, note: e.target.value }))}
@@ -785,10 +716,9 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                 borderRadius: '6px',
                 fontSize: '14px',
                 resize: 'none',
-                marginBottom: '16px'
+                marginBottom: '16px',
               }}
             />
-            
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
               <button
                 onClick={() => setLockDialog({ visible: false, resultIndex: -1, note: '' })}
@@ -798,12 +728,11 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                   color: '#374151',
                   border: 'none',
                   borderRadius: '6px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 Cancel
               </button>
-              
               <button
                 onClick={handleLockConfirmation}
                 style={{
@@ -812,7 +741,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                   color: 'white',
                   border: 'none',
                   borderRadius: '6px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 🔒 Lock Result
@@ -821,7 +750,6 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
           </div>
         </div>
       )}
-      
       {/* CSS Animations */}
       <style>{`
         @keyframes spin {
@@ -844,7 +772,7 @@ const menuButtonStyle: React.CSSProperties = {
   fontSize: '14px',
   color: '#374151',
   ':hover': {
-    background: '#f3f4f6'
+    background: '#f3f4f6',
   }
 };
 

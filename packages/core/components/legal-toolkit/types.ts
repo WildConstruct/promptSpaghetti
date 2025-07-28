@@ -45,7 +45,7 @@ export interface ContractClause {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   standardCompliance: boolean;
   suggestions?: string[];
-  position: {
+  position: {,
     start: number;
     end: number;
   };

@@ -73,7 +73,7 @@ export interface SecurityExemption {
     priority: ExemptionPriority;
     reason: ExemptionReason;
     description: string;
-    requestedBy: {
+    requestedBy: {,
         userId: string;
         userEmail: string;
         role: AdminRole;
@@ -102,10 +102,10 @@ export interface SecurityExemption {
         renewalPeriodDays: number;
         currentRenewals: number;
     };
-    conditions: {
+    conditions: {,
         ipWhitelist?: string[];
         timeRestrictions?: {
-            allowedHours: {
+            allowedHours: {,
                 start: string;
                 end: string;
             }[];
@@ -124,9 +124,9 @@ export interface SecurityExemption {
             requireApproval?: boolean;
         };
     };
-    metadata: {
+    metadata: {,
         businessJustification: string;
-        riskAssessment: {
+        riskAssessment: {,
             level: 'low' | 'medium' | 'high' | 'critical';
             mitigations: string[];
             reviewDate: Date;
@@ -136,10 +136,10 @@ export interface SecurityExemption {
         tags: string[];
     };
     auditTrail: ExemptionAuditEntry[];
-    usage: {
+    usage: {,
         timesUsed: number;
         lastUsed?: Date;
-        usageHistory: Array<{
+        usageHistory: Array<{,
             timestamp: Date;
             context: Record<string, any>;
             source: string;
@@ -150,7 +150,7 @@ export interface ExemptionAuditEntry {
     id: string;
     timestamp: Date;
     action: 'created' | 'approved' | 'denied' | 'revoked' | 'renewed' | 'used' | 'modified' | 'expired';
-    actor: {
+    actor: {,
         userId: string;
         userEmail: string;
         role?: AdminRole;
@@ -223,16 +223,16 @@ export declare class ExemptionManager extends EventEmitter {
     /**
      * Request a new security exemption
      */
-    requestExemption(
+    requestExemption()
       request: ExemptionRequest,
       requestorId: string,
       requestorEmail: string,
-      requestorRole: AdminRole
+      requestorRole: AdminRole,
     ): Promise<string>;
     /**
      * Approve a pending exemption request
      */
-    approveExemption(
+    approveExemption()
       exemptionId: string,
       approverId: string,
       approverEmail: string,
@@ -242,12 +242,12 @@ export declare class ExemptionManager extends EventEmitter {
     /**
      * Deny a pending exemption request
      */
-    denyExemption(
+    denyExemption()
       exemptionId: string,
       approverId: string,
       approverEmail: string,
       approverRole: AdminRole,
-      reason: string
+      reason: string,
     ): Promise<boolean>;
     /**
      * Check if an exemption exists and is active
@@ -260,23 +260,23 @@ export declare class ExemptionManager extends EventEmitter {
     /**
      * Revoke an active exemption
      */
-    revokeExemption(
+    revokeExemption()
       exemptionId: string,
       revokerId: string,
       revokerEmail: string,
       revokerRole: AdminRole,
-      reason: string
+      reason: string,
     ): boolean;
     /**
      * Create emergency exemption with bypass approval
      */
-    createEmergencyExemption(
+    createEmergencyExemption()
       request: ExemptionRequest,
       requestorId: string,
       requestorEmail: string,
       requestorRole: AdminRole,
       emergencyCode: string,
-      justification: string
+      justification: string,
     ): Promise<string>;
     /**
      * Query exemptions
@@ -300,10 +300,10 @@ export declare class ExemptionManager extends EventEmitter {
         byPriority: Record<ExemptionPriority, number>;
         expiringSoon: number;
         emergencyCount: number;
-        usageStats: {
+        usageStats: {,
             totalUsage: number;
             averageUsagePerExemption: number;
-            mostUsedExemptions: Array<{
+            mostUsedExemptions: Array<{,
                 id: string;
                 usage: number;
             }>;

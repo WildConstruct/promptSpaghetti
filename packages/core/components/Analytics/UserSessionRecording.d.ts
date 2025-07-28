@@ -189,11 +189,11 @@ export interface InteractionElement {
 }
 export interface InteractionContext {
     pageUrl: string;
-    viewportSize: {
+    viewportSize: {,
         width: number;
         height: number;
     };
-    scrollPosition: {
+    scrollPosition: {,
         x: number;
         y: number;
     };
@@ -245,11 +245,11 @@ export interface SessionError {
 export interface SessionMetadata {
     userAgent: string;
     platform: string;
-    screenResolution: {
+    screenResolution: {,
         width: number;
         height: number;
     };
-    viewportSize: {
+    viewportSize: {,
         width: number;
         height: number;
     };
@@ -403,10 +403,10 @@ export interface SessionRecordingExportData {
     patterns: BehaviorPattern[];
     heatmaps: HeatmapData[];
     recommendations: SessionRecommendation[];
-    metadata: {
+    metadata: {,
         exportTimestamp: number;
         totalSessions: number;
-        dateRange: {
+        dateRange: {,
             start: number;
             end: number;
         };

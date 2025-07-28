@@ -5,7 +5,6 @@
  * Comprehensive contribution interface with error handling,
  * form validation, and user experience optimization.
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -41,7 +40,7 @@ export interface ContributionFormData {
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   estimatedTime: number; // minutes
   prerequisites: string[];
-  resources: Array<{
+  resources: Array<{,
     type: 'link' | 'file' | 'image' | 'video';
     url: string;
     title: string;
@@ -53,7 +52,7 @@ export interface ContributionItem {
   id: string;
   title: string;
   description: string;
-  author: {
+  author: {,
     id: string;
     name: string;
     avatar?: string;
@@ -90,171 +89,145 @@ export interface ContributionError {
 export class ContributionValidator {
   static validateTitle(title: string): ValidationError[] {
     const errors: ValidationError[] = [];
-    
     if (!title || title.trim().length === 0) {
-      errors.push({
+      errors.push({)
         field: 'title',
         message: 'Title is required',
-        code: 'REQUIRED'
+        code: 'REQUIRED',
       });
     }
-    
     if (title.length > 200) {
-      errors.push({
+      errors.push({)
         field: 'title',
         message: 'Title must be less than 200 characters',
-        code: 'MAX_LENGTH'
+        code: 'MAX_LENGTH',
       });
     }
-    
     // Security: Check for malicious content
     if (/<script|javascript:|data:|eval\(/i.test(title)) {
-      errors.push({
+      errors.push({)
         field: 'title',
         message: 'Title contains potentially dangerous content',
-        code: 'SECURITY_VIOLATION'
+        code: 'SECURITY_VIOLATION',
       });
     }
-    
     return errors;
   }
-  
   static validateDescription(description: string): ValidationError[] {
     const errors: ValidationError[] = [];
-    
     if (!description || description.trim().length === 0) {
-      errors.push({
+      errors.push({)
         field: 'description',
         message: 'Description is required',
-        code: 'REQUIRED'
+        code: 'REQUIRED',
       });
     }
-    
     if (description.length < 50) {
-      errors.push({
+      errors.push({)
         field: 'description',
         message: 'Description must be at least 50 characters',
-        code: 'MIN_LENGTH'
+        code: 'MIN_LENGTH',
       });
     }
-    
     if (description.length > 2000) {
-      errors.push({
+      errors.push({)
         field: 'description',
         message: 'Description must be less than 2000 characters',
-        code: 'MAX_LENGTH'
+        code: 'MAX_LENGTH',
       });
     }
-    
     return errors;
   }
-  
   static validateContent(content: string): ValidationError[] {
     const errors: ValidationError[] = [];
-    
     if (!content || content.trim().length === 0) {
-      errors.push({
+      errors.push({)
         field: 'content',
         message: 'Content is required',
-        code: 'REQUIRED'
+        code: 'REQUIRED',
       });
     }
-    
     if (content.length < 100) {
-      errors.push({
+      errors.push({)
         field: 'content',
         message: 'Content must be at least 100 characters',
-        code: 'MIN_LENGTH'
+        code: 'MIN_LENGTH',
       });
     }
-    
     if (content.length > 50000) {
-      errors.push({
+      errors.push({)
         field: 'content',
         message: 'Content exceeds maximum length (50,000 characters)',
-        code: 'MAX_LENGTH'
+        code: 'MAX_LENGTH',
       });
     }
-    
     // Security checks
     const scriptTags = (content.match(/<script/gi) || []).length;
     if (scriptTags > 0) {
-      errors.push({
+      errors.push({)
         field: 'content',
         message: 'Script tags are not allowed in content',
-        code: 'SECURITY_VIOLATION'
+        code: 'SECURITY_VIOLATION',
       });
     }
-    
     return errors;
   }
-  
   static validateTags(tags: string[]): ValidationError[] {
     const errors: ValidationError[] = [];
-    
     if (tags.length === 0) {
-      errors.push({
+      errors.push({)
         field: 'tags',
         message: 'At least one tag is required',
-        code: 'REQUIRED'
+        code: 'REQUIRED',
       });
     }
-    
     if (tags.length > 10) {
-      errors.push({
+      errors.push({)
         field: 'tags',
         message: 'Maximum 10 tags allowed',
-        code: 'MAX_COUNT'
+        code: 'MAX_COUNT',
       });
     }
-    
     tags.forEach((tag, index) => {
       if (tag.length > 30) {
-        errors.push({
-          field: `tags[${index}]`,
+        errors.push({)
+          field: `tags[${index}]`,}
           message: 'Each tag must be less than 30 characters',
-          code: 'MAX_LENGTH'
+          code: 'MAX_LENGTH',
         });
       }
-      
       if (!/^[a-zA-Z0-9\-_\s]+$/.test(tag)) {
-        errors.push({
-          field: `tags[${index}]`,
+        errors.push({)
+          field: `tags[${index}]`,}
           message: 'Tags can only contain letters, numbers, hyphens, and underscores',
-          code: 'INVALID_FORMAT'
+          code: 'INVALID_FORMAT',
         });
       }
     });
-    
     return errors;
   }
-  
   static validateFormData(formData: ContributionFormData): ValidationError[] {
     const errors: ValidationError[] = [];
-    
     errors.push(...this.validateTitle(formData.title));
     errors.push(...this.validateDescription(formData.description));
     errors.push(...this.validateContent(formData.content));
     errors.push(...this.validateTags(formData.tags));
-    
     // Validate estimated time
     if (formData.estimatedTime <= 0 || formData.estimatedTime > 600) {
-      errors.push({
+      errors.push({)
         field: 'estimatedTime',
         message: 'Estimated time must be between 1 and 600 minutes',
-        code: 'INVALID_RANGE'
+        code: 'INVALID_RANGE',
       });
     }
-    
     // Validate category
     if (!formData.category || formData.category.trim().length === 0) {
-      errors.push({
+      errors.push({)
         field: 'category',
         message: 'Category is required',
-        code: 'REQUIRED'
+        code: 'REQUIRED',
       });
     }
-    
     return errors;
   }
 }
@@ -274,24 +247,19 @@ export class ContributionErrorBoundary extends React.Component<
     super(props);
     this.state = { hasError: false };
   }
-
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
-
   componentDidCatch(error: Error, errorInfo: unknown) {
     this.setState({ errorInfo });
-    
     // Log error for monitoring
     console.error('ContributionErrorBoundary caught an error:', error, errorInfo);
-    
     // Call parent error handler if provided
     this.props.onError?.(error);
   }
-
   render() {
     if (this.state.hasError) {
-      return (
+      return ()
         <Card className="error-boundary">
           <CardContent className="p-6 text-center">
             <AlertTriangle className="h-12 w-12 text-red-600 mx-auto mb-4" />
@@ -312,7 +280,6 @@ export class ContributionErrorBoundary extends React.Component<
         </Card>
       );
     }
-
     return this.props.children;
   }
 }
@@ -326,7 +293,7 @@ export interface ContributionFormProps {
   className?: string;
 }
 
-export const ContributionForm: React.FC<ContributionFormProps> = ({
+export const ContributionForm: React.FC<ContributionFormProps> = ({)
   initialData = {},
   onSubmit,
   onSaveDraft,
@@ -334,7 +301,7 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
   className = ''
 }) => {
   // Form state with comprehensive initialization
-  const [formData, setFormData] = useState<ContributionFormData>({
+  const [formData, setFormData] = useState<ContributionFormData>({)
     title: initialData.title || '',
     description: initialData.description || '',
     content: initialData.content || '',
@@ -346,29 +313,24 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
     resources: initialData.resources || [],
     license: initialData.license || 'cc-by'
   });
-
   // Error state management
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [submitError, setSubmitError] = useState<ContributionError | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDraftSaving, setIsDraftSaving] = useState(false);
-
   // Auto-save draft functionality
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [autoSaveTimer, setAutoSaveTimer] = useState<NodeJS.Timeout | null>(null);
-
   // Validation state
   const validationErrors = useMemo(() => {
     return ContributionValidator.validateFormData(formData);
   }, [formData]);
-
   // Auto-save draft every 30 seconds if there are changes
   useEffect(() => {
     if (onSaveDraft && !isSubmitting && !isDraftSaving) {
       if (autoSaveTimer) {
         clearTimeout(autoSaveTimer);
       }
-
       const timer = setTimeout(async () => {
         try {
           setIsDraftSaving(true);
@@ -380,25 +342,21 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
           setIsDraftSaving(false);
         }
       }, 30000);
-
       setAutoSaveTimer(timer);
     }
-
     return () => {
       if (autoSaveTimer) {
         clearTimeout(autoSaveTimer);
       }
     };
   }, [formData, onSaveDraft, isSubmitting, isDraftSaving]);
-
   // Form update handlers with error handling
   const updateFormData = useCallback((field: keyof ContributionFormData, value: Error) => {
     try {
-      setFormData(prev => ({
+      setFormData(prev => ({)
         ...prev,
         [field]: value
       }));
-      
       // Clear specific field errors when user makes changes
       setErrors(prev => prev.filter(error => error.field !== field));
       setSubmitError(null);
@@ -406,64 +364,52 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
       console.error('Error updating form data:', error);
     }
   }, []);
-
   // Tag management with validation
   const addTag = useCallback((tag: string) => {
     const trimmedTag = tag.trim().toLowerCase();
-    
     if (!trimmedTag) return;
-    
     if (formData.tags.includes(trimmedTag)) {
-      setErrors(prev => [...prev, {
+      setErrors(prev => [...prev, {)
         field: 'tags',
         message: 'Tag already exists',
-        code: 'DUPLICATE'
+        code: 'DUPLICATE',
       }]);
       return;
     }
-    
     if (formData.tags.length >= 10) {
-      setErrors(prev => [...prev, {
+      setErrors(prev => [...prev, {)
         field: 'tags',
         message: 'Maximum 10 tags allowed',
-        code: 'MAX_COUNT'
+        code: 'MAX_COUNT',
       }]);
       return;
     }
-    
     updateFormData('tags', [...formData.tags, trimmedTag]);
   }, [formData.tags, updateFormData]);
-
   const removeTag = useCallback((index: number) => {
     updateFormData('tags', formData.tags.filter((_, i) => i !== index));
   }, [formData.tags, updateFormData]);
-
   // Submit handler with comprehensive error handling
   const handleSubmit = useCallback(async (event: React.FormEvent) => {
     event.preventDefault();
-    
     try {
       setIsSubmitting(true);
       setSubmitError(null);
       setErrors([]);
-
       // Validate form data
       const validationErrors = ContributionValidator.validateFormData(formData);
       if (validationErrors.length > 0) {
         setErrors(validationErrors);
         return;
       }
-
       // Submit to parent component
       const result = await onSubmit(formData);
-      
       if (!result.success && result.error) {
         setSubmitError(result.error);
       }
-      
     } catch (error) {
       console.error('Submit error:', error);
-      setSubmitError({
+      setSubmitError({)
         type: 'unknown',
         message: 'An unexpected error occurred while submitting',
         details: error instanceof Error ? error.message : 'Unknown error'
@@ -472,15 +418,12 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
       setIsSubmitting(false);
     }
   }, [formData, onSubmit]);
-
   // Save draft handler
   const handleSaveDraft = useCallback(async () => {
     if (!onSaveDraft) return;
-    
     try {
       setIsDraftSaving(true);
       const result = await onSaveDraft(formData);
-      
       if (result.success) {
         setLastSaved(new Date());
       } else if (result.error) {
@@ -488,7 +431,7 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
       }
     } catch (error) {
       console.error('Save draft error:', error);
-      setSubmitError({
+      setSubmitError({)
         type: 'unknown',
         message: 'Failed to save draft',
         details: error instanceof Error ? error.message : 'Unknown error'
@@ -497,65 +440,58 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
       setIsDraftSaving(false);
     }
   }, [formData, onSaveDraft]);
-
   // Error display component
-  const ErrorDisplay = ({ error }: { error: ContributionError }) => (
+  const ErrorDisplay = ({ error }: { error: ContributionError }) => ()
     <div className="error-display bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
       <div className="flex items-start space-x-2">
         <XCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
         <div>
           <h4 className="text-red-800 font-medium">{error.message}</h4>
-          {error.details && (
+          {error.details && ()
             <p className="text-red-600 text-sm mt-1">{error.details}</p>
           )}
-          {error.code && (
+          {error.code && ()
             <p className="text-red-500 text-xs mt-1">Error Code: {error.code}</p>
           )}
         </div>
       </div>
     </div>
   );
-
   // Field error display
   const getFieldError = (fieldName: string) => {
     return validationErrors.find(error => error.field === fieldName);
   };
-
   const renderFieldError = (fieldName: string) => {
     const error = getFieldError(fieldName);
     if (!error) return null;
-    
-    return (
+    return ()
       <div className="field-error text-red-600 text-sm mt-1 flex items-center">
         <AlertTriangle className="h-4 w-4 mr-1" />
         {error.message}
       </div>
     );
   };
-
-  return (
+  return ()
     <ContributionErrorBoundary>
-      <form onSubmit={handleSubmit} className={`contribution-form ${className}`}>
+      <form onSubmit={handleSubmit} className={`contribution-form ${className}`}>}
         {/* Global error display */}
         {submitError && <ErrorDisplay error={submitError} />}
-        
         {/* Auto-save indicator */}
         <div className="auto-save-indicator mb-4 text-sm text-gray-600 flex items-center">
-          {isDraftSaving ? (
+          {isDraftSaving ? ()
             <>
               <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
               Saving draft...
             </>
-          ) : lastSaved ? (
+          ) : lastSaved ? ()
             <>
               <CheckCircle className="h-4 w-4 mr-1 text-green-600" />
               Last saved: {lastSaved.toLocaleTimeString()}
             </>
-          ) : (
+          ) : ()
             <Clock className="h-4 w-4 mr-1" />
           )}
         </div>
-
         <div className="form-sections space-y-6">
           {/* Basic Information */}
           <Card>
@@ -582,7 +518,6 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
                   {formData.title.length}/200 characters
                 </div>
               </div>
-
               {/* Description */}
               <div className="form-field">
                 <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
@@ -604,7 +539,6 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
                   {formData.description.length}/2000 characters
                 </div>
               </div>
-
               {/* Category and Difficulty */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="form-field">
@@ -630,7 +564,6 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
                   </select>
                   {renderFieldError('category')}
                 </div>
-
                 <div className="form-field">
                   <label htmlFor="difficulty" className="block text-sm font-medium text-gray-700 mb-1">
                     Difficulty Level
@@ -648,7 +581,6 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
                   </select>
                 </div>
               </div>
-
               {/* Estimated Time */}
               <div className="form-field">
                 <label htmlFor="estimatedTime" className="block text-sm font-medium text-gray-700 mb-1">
@@ -668,7 +600,6 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
               </div>
             </CardContent>
           </Card>
-
           {/* Content */}
           <Card>
             <CardHeader>
@@ -697,7 +628,6 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
               </div>
             </CardContent>
           </Card>
-
           {/* Tags */}
           <Card>
             <CardHeader>
@@ -721,7 +651,7 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
                     className={getFieldError('tags') ? 'border-red-500' : ''}
                   />
                   <div className="tags-display mt-2 flex flex-wrap gap-2">
-                    {formData.tags.map((tag, index) => (
+                    {formData.tags.map((tag, index) => ()
                       <Badge
                         key={index}
                         variant="secondary"
@@ -741,7 +671,6 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
               </div>
             </CardContent>
           </Card>
-
           {/* License */}
           <Card>
             <CardHeader>
@@ -767,7 +696,6 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
             </CardContent>
           </Card>
         </div>
-
         {/* Submit Actions */}
         <div className="form-actions mt-6 flex flex-col sm:flex-row gap-3">
           <Button
@@ -775,32 +703,31 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
             disabled={isSubmitting || isLoading || validationErrors.length > 0}
             className="primary-submit"
           >
-            {isSubmitting ? (
+            {isSubmitting ? ()
               <>
                 <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
                 Submitting...
               </>
-            ) : (
+            ) : ()
               <>
                 <Send className="h-4 w-4 mr-2" />
                 Submit Contribution
               </>
             )}
           </Button>
-
-          {onSaveDraft && (
+          {onSaveDraft && ()
             <Button
               type="button"
               variant="outline"
               onClick={handleSaveDraft}
               disabled={isDraftSaving || isLoading}
             >
-              {isDraftSaving ? (
+              {isDraftSaving ? ()
                 <>
                   <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
                   Saving...
                 </>
-              ) : (
+              ) : ()
                 <>
                   <Save className="h-4 w-4 mr-2" />
                   Save Draft
@@ -809,16 +736,15 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
             </Button>
           )}
         </div>
-
         {/* Validation Summary */}
-        {validationErrors.length > 0 && (
+        {validationErrors.length > 0 && ()
           <div className="validation-summary mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <h4 className="text-yellow-800 font-medium mb-2 flex items-center">
               <AlertTriangle className="h-4 w-4 mr-2" />
               Please fix the following issues:
             </h4>
             <ul className="text-yellow-700 text-sm space-y-1">
-              {validationErrors.map((error, index) => (
+              {validationErrors.map((error, index) => ()
                 <li key={index}>• {error.message}</li>
               ))}
             </ul>
@@ -842,7 +768,7 @@ export interface ContributionListProps {
   className?: string;
 }
 
-export const ContributionList: React.FC<ContributionListProps> = ({
+export const ContributionList: React.FC<ContributionListProps> = ({)
   contributions,
   onView,
   onEdit,
@@ -854,8 +780,7 @@ export const ContributionList: React.FC<ContributionListProps> = ({
   className = ''
 }) => {
   const [loadingActions, setLoadingActions] = useState<Set<string>>(new Set());
-
-  const handleAction = useCallback(async (
+  const handleAction = useCallback(async (;)
     contributionId: string,
     action: () => Promise<void> | void
   ) => {
@@ -865,16 +790,15 @@ export const ContributionList: React.FC<ContributionListProps> = ({
     } catch (error) {
       console.error('Action failed:', error);
     } finally {
-      setLoadingActions(prev => {
+      setLoadingActions(prev => {)
         const newSet = new Set(prev);
         newSet.delete(contributionId);
         return newSet;
       });
     }
   }, []);
-
   if (error) {
-    return (
+    return ()
       <div className="error-state p-6 text-center">
         <XCircle className="h-12 w-12 text-red-600 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -888,18 +812,16 @@ export const ContributionList: React.FC<ContributionListProps> = ({
       </div>
     );
   }
-
   if (isLoading) {
-    return (
+    return ()
       <div className="loading-state p-6 text-center">
         <RefreshCw className="h-8 w-8 animate-spin text-blue-600 mx-auto mb-4" />
         <p className="text-gray-600">Loading contributions...</p>
       </div>
     );
   }
-
   if (contributions.length === 0) {
-    return (
+    return ()
       <div className="empty-state p-6 text-center">
         <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -909,12 +831,11 @@ export const ContributionList: React.FC<ContributionListProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <ContributionErrorBoundary>
-      <div className={`contribution-list ${className}`}>
+      <div className={`contribution-list ${className}`}>}
         <div className="contributions-grid space-y-4">
-          {contributions.map(contribution => (
+          {contributions.map(contribution => ()
             <Card key={contribution.id} className="contribution-card hover:shadow-lg transition-shadow">
               <CardContent className="p-6">
                 <div className="contribution-header flex justify-between items-start mb-4">
@@ -925,7 +846,6 @@ export const ContributionList: React.FC<ContributionListProps> = ({
                     <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                       {contribution.description}
                     </p>
-                    
                     <div className="contribution-meta flex flex-wrap items-center gap-4 text-sm text-gray-500">
                       <div className="author-info flex items-center">
                         <User className="h-4 w-4 mr-1" />
@@ -934,11 +854,9 @@ export const ContributionList: React.FC<ContributionListProps> = ({
                           {contribution.author.reputation} rep
                         </Badge>
                       </div>
-                      
                       <div className="category">
                         <Badge variant="secondary">{contribution.category}</Badge>
                       </div>
-                      
                       <div className="difficulty">
                         <Badge 
                           variant={contribution.difficulty === 'beginner' ? 'default' : 'outline'}
@@ -946,14 +864,12 @@ export const ContributionList: React.FC<ContributionListProps> = ({
                           {contribution.difficulty}
                         </Badge>
                       </div>
-                      
                       <div className="date">
                         <Clock className="h-4 w-4 mr-1" />
                         {contribution.updatedAt.toLocaleDateString()}
                       </div>
                     </div>
                   </div>
-                  
                   <div className="contribution-status">
                     <Badge 
                       variant={contribution.status === 'published' ? 'default' : 'outline'}
@@ -968,42 +884,37 @@ export const ContributionList: React.FC<ContributionListProps> = ({
                     </Badge>
                   </div>
                 </div>
-
                 <div className="contribution-stats flex items-center gap-6 mb-4">
                   <div className="stat-item flex items-center text-sm text-gray-600">
                     <Star className="h-4 w-4 mr-1 text-yellow-500" />
                     <span>{contribution.rating.toFixed(1)}</span>
                     <span className="ml-1">({contribution.reviewCount} reviews)</span>
                   </div>
-                  
                   <div className="stat-item flex items-center text-sm text-gray-600">
                     <ThumbsUp className="h-4 w-4 mr-1" />
                     <span>{contribution.downloadCount} downloads</span>
                   </div>
-                  
                   <div className="stat-item flex items-center text-sm text-gray-600">
                     <MessageSquare className="h-4 w-4 mr-1" />
                     <span>{contribution.comments} comments</span>
                   </div>
                 </div>
-
                 <div className="contribution-tags mb-4">
                   <div className="tags-container flex flex-wrap gap-2">
-                    {contribution.tags.slice(0, 5).map((tag, index) => (
+                    {contribution.tags.slice(0, 5).map((tag, index) => ()
                       <Badge key={index} variant="outline" className="text-xs">
                         {tag}
                       </Badge>
                     ))}
-                    {contribution.tags.length > 5 && (
+                    {contribution.tags.length > 5 && ()
                       <Badge variant="outline" className="text-xs">
                         +{contribution.tags.length - 5} more
                       </Badge>
                     )}
                   </div>
                 </div>
-
                 <div className="contribution-actions flex gap-2">
-                  {onView && (
+                  {onView && ()
                     <Button
                       size="sm"
                       variant="outline"
@@ -1014,8 +925,7 @@ export const ContributionList: React.FC<ContributionListProps> = ({
                       View
                     </Button>
                   )}
-                  
-                  {onEdit && currentUserId === contribution.author.id && (
+                  {onEdit && currentUserId === contribution.author.id && ()
                     <Button
                       size="sm"
                       variant="outline"
@@ -1026,8 +936,7 @@ export const ContributionList: React.FC<ContributionListProps> = ({
                       Edit
                     </Button>
                   )}
-                  
-                  {onDelete && currentUserId === contribution.author.id && (
+                  {onDelete && currentUserId === contribution.author.id && ()
                     <Button
                       size="sm"
                       variant="destructive"
@@ -1038,7 +947,6 @@ export const ContributionList: React.FC<ContributionListProps> = ({
                       Delete
                     </Button>
                   )}
-                  
                   <Button size="sm" variant="outline">
                     <Share2 className="h-4 w-4 mr-1" />
                     Share

@@ -70,7 +70,7 @@ declare const userProgressSchema: z.ZodObject<{
     completedAt: z.ZodOptional<z.ZodDate>;
     expiresAt: z.ZodOptional<z.ZodDate>;
     attempts: z.ZodDefault<z.ZodNumber>;
-    evidence: z.ZodOptional<z.ZodArray<z.ZodObject<{
+    evidence: z.ZodOptional<z.ZodArray<z.ZodObject<{,
         type: z.ZodEnum<["completion", "score", "time", "peer_review", "instructor_approval"]>;
         value: z.ZodString;
         timestamp: z.ZodDate;
@@ -185,7 +185,7 @@ export declare class DependencyResolver {
      * Gets learning path suggestions based on user progress
      */
     generateLearningPath(userId: string, targetGoal: string): {
-        path: Array<{
+        path: Array<{,
             prerequisiteId: string;
             name: string;
             estimatedTime: number;
@@ -228,7 +228,7 @@ export declare class PrerequisiteSystemService {
     }>;
 }
 export declare const schemas: {
-    prerequisite: z.ZodObject<{
+    prerequisite: z.ZodObject<{,
         id: z.ZodString;
         name: z.ZodString;
         description: z.ZodString;
@@ -259,7 +259,7 @@ export declare const schemas: {
         requiredScore?: number | undefined;
         requiredTime?: number | undefined;
     }>;
-    prerequisiteGroup: z.ZodObject<{
+    prerequisiteGroup: z.ZodObject<{,
         id: z.ZodString;
         name: z.ZodString;
         description: z.ZodString;
@@ -284,7 +284,7 @@ export declare const schemas: {
         operator?: "AND" | "OR" | "XOR" | undefined;
         minimumRequired?: number | undefined;
     }>;
-    userProgress: z.ZodObject<{
+    userProgress: z.ZodObject<{,
         userId: z.ZodString;
         prerequisiteId: z.ZodString;
         status: z.ZodEnum<["not_started", "in_progress", "completed", "expired", "failed"]>;
@@ -292,7 +292,7 @@ export declare const schemas: {
         completedAt: z.ZodOptional<z.ZodDate>;
         expiresAt: z.ZodOptional<z.ZodDate>;
         attempts: z.ZodDefault<z.ZodNumber>;
-        evidence: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        evidence: z.ZodOptional<z.ZodArray<z.ZodObject<{,
             type: z.ZodEnum<["completion", "score", "time", "peer_review", "instructor_approval"]>;
             value: z.ZodString;
             timestamp: z.ZodDate;

@@ -40,14 +40,14 @@ export interface NotificationPreferences {
   email_enabled: boolean;
   push_enabled: boolean;
   in_app_enabled: boolean;
-  type_preferences: {
+  type_preferences: {,
     [key in NotificationType]?: {
       in_app?: boolean;
       email?: boolean;
       push?: boolean;
     };
   };
-  quiet_hours: {
+  quiet_hours: {,
     enabled: boolean;
     start: string; // HH:MM format
     end: string;   // HH:MM format
@@ -85,7 +85,7 @@ export interface NotificationStats {
   unread: number;
   by_type: Record<NotificationType, number>;
   by_priority: Record<NotificationPriority, number>;
-  recent_activity: {
+  recent_activity: {,
     today: number;
     this_week: number;
     this_month: number;
@@ -135,14 +135,12 @@ export interface UseNotificationsReturn {
   error: Error | null;
   stats: NotificationStats | null;
   realTimeConnection: RealTimeNotificationConnection | null;
-  
   // Actions
   markAsRead: (id: string) => Promise<void>;
   markAllAsRead: () => Promise<void>;
   deleteNotification: (id: string) => Promise<void>;
   refreshNotifications: () => Promise<void>;
   loadMore: () => Promise<void>;
-  
   // Filters
   setFilter: (filter: NotificationType | 'all') => void;
   setUnreadOnly: (unreadOnly: boolean) => void;

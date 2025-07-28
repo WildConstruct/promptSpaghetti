@@ -1,27 +1,27 @@
 import { Node } from 'reactflow';
 import { AnnotatedEdge } from '../components/Annotations/ConnectionAnnotations';
 export interface SharedGraphFormat {
-    metadata: {
+    metadata: {,
         exportId: string;
         version: string;
         timestamp: string;
         title: string;
         description?: string;
-        author: {
+        author: {,
             id: string;
             name: string;
             email?: string;
         };
-        versionControl: {
+        versionControl: {,
             version: number;
             previousVersion?: string;
             changes: string[];
             tags: string[];
             branch?: string;
         };
-        sharing: {
+        sharing: {,
             permissions: 'private' | 'read_only' | 'collaborative' | 'public';
-            collaborators: Array<{
+            collaborators: Array<{,
                 userId: string;
                 name: string;
                 role: 'viewer' | 'editor' | 'admin';
@@ -31,11 +31,11 @@ export interface SharedGraphFormat {
             expiresAt?: string;
         };
     };
-    graph: {
+    graph: {,
         nodes: Node[];
         edges: AnnotatedEdge[];
-        settings: {
-            canvasPosition: {
+        settings: {,
+            canvasPosition: {,
                 x: number;
                 y: number;
                 zoom: number;
@@ -46,21 +46,21 @@ export interface SharedGraphFormat {
             readonly?: boolean;
         };
     };
-    annotations: {
-        connectionLabels: Array<{
+    annotations: {,
+        connectionLabels: Array<{,
             edgeId: string;
             label: string;
             style?: any;
             position?: any;
             visible: boolean;
         }>;
-        stickyNotes: Array<{
+        stickyNotes: Array<{,
             id: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -72,7 +72,7 @@ export interface SharedGraphFormat {
             updatedAt: string;
             visible: boolean;
         }>;
-        nodeLabels: Array<{
+        nodeLabels: Array<{,
             nodeId: string;
             label?: string;
             description?: string;
@@ -80,10 +80,10 @@ export interface SharedGraphFormat {
             color?: string;
             notes?: string;
         }>;
-        regions: Array<{
+        regions: Array<{,
             id: string;
             name: string;
-            bounds: {
+            bounds: {,
                 x: number;
                 y: number;
                 width: number;
@@ -95,7 +95,7 @@ export interface SharedGraphFormat {
             description?: string;
             collapsed: boolean;
         }>;
-        comments: Array<{
+        comments: Array<{,
             id: string;
             content: string;
             author: string;
@@ -107,7 +107,7 @@ export interface SharedGraphFormat {
             targetType: 'node' | 'edge' | 'region' | 'canvas';
             targetId?: string;
             resolved: boolean;
-            replies: Array<{
+            replies: Array<{,
                 id: string;
                 content: string;
                 author: string;
@@ -115,8 +115,8 @@ export interface SharedGraphFormat {
             }>;
         }>;
     };
-    collaboration: {
-        changeHistory: Array<{
+    collaboration: {,
+        changeHistory: Array<{,
             id: string;
             timestamp: string;
             author: string;
@@ -126,7 +126,7 @@ export interface SharedGraphFormat {
             after?: any;
             description: string;
         }>;
-        conflicts: Array<{
+        conflicts: Array<{,
             id: string;
             timestamp: string;
             type: 'merge' | 'edit' | 'delete';
@@ -139,7 +139,7 @@ export interface SharedGraphFormat {
         lastSync: string;
         syncStatus: 'synced' | 'pending' | 'conflict' | 'offline';
     };
-    compatibility: {
+    compatibility: {,
         minVersion: string;
         features: string[];
         warnings: string[];
@@ -153,11 +153,11 @@ export declare class GraphSharingService {
     /**
      * Export graph with all annotations for sharing
      */
-    exportForSharing(nodes: Node[], edges: AnnotatedEdge[], annotations: any | undefined, metadata: Partial<SharedGraphFormat["metadata"]> | undefined, options: {
+    exportForSharing(nodes: Node[], edges: AnnotatedEdge[], annotations: any | undefined, metadata: Partial<SharedGraphFormat["metadata"]> | undefined, options: {)
         includeHistory?: boolean;
         includeComments?: boolean;
         permissions?: SharedGraphFormat['metadata']['sharing']['permissions'];
-        author: {
+        author: {,
             id: string;
             name: string;
             email?: string;
@@ -166,7 +166,7 @@ export declare class GraphSharingService {
     /**
      * Import shared graph with validation
      */
-    importSharedGraph(sharedGraph: SharedGraphFormat, options?: {
+    importSharedGraph(sharedGraph: SharedGraphFormat, options?: {)
         validateIntegrity?: boolean;
         mergeConflicts?: 'overwrite' | 'merge' | 'ask';
         preserveAnnotations?: boolean;
@@ -187,12 +187,12 @@ export declare class GraphSharingService {
     /**
      * Create a new version of a shared graph
      */
-    createVersion(baseGraph: SharedGraphFormat, changes: {
+    createVersion(baseGraph: SharedGraphFormat, changes: {)
         nodes?: Node[];
         edges?: AnnotatedEdge[];
         annotations?: Partial<SharedGraphFormat['annotations']>;
         changeDescription: string;
-        author: {
+        author: {,
             id: string;
             name: string;
         };
@@ -237,7 +237,7 @@ export declare class GraphSharingService {
     /**
      * Update sharing permissions
      */
-    updateSharingPermissions(
+    updateSharingPermissions()
       exportId: string,
       permissions: SharedGraphFormat['metadata']['sharing']['permissions'],
       collaborators?: SharedGraphFormat['metadata']['sharing']['collaborators']

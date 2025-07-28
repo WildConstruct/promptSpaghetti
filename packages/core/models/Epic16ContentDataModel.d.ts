@@ -79,7 +79,7 @@ export declare const UserProfileSchema: z.ZodObject<{
     helpfulVotes: z.ZodDefault<z.ZodNumber>;
     reputation: z.ZodDefault<z.ZodNumber>;
     badges: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    preferences: z.ZodOptional<z.ZodObject<{
+    preferences: z.ZodOptional<z.ZodObject<{,
         emailNotifications: z.ZodDefault<z.ZodBoolean>;
         marketingEmails: z.ZodDefault<z.ZodBoolean>;
         publicProfile: z.ZodDefault<z.ZodBoolean>;
@@ -179,7 +179,7 @@ export declare const TemplateSchema: z.ZodObject<{
     status: z.ZodNativeEnum<typeof TemplateStatus>;
     featured: z.ZodDefault<z.ZodBoolean>;
     promoted: z.ZodDefault<z.ZodBoolean>;
-    stats: z.ZodObject<{
+    stats: z.ZodObject<{,
         views: z.ZodDefault<z.ZodNumber>;
         downloads: z.ZodDefault<z.ZodNumber>;
         purchases: z.ZodDefault<z.ZodNumber>;
@@ -223,7 +223,7 @@ export declare const TemplateSchema: z.ZodObject<{
     title: string;
     complexity: "advanced" | "intermediate" | "beginner";
     featured: boolean;
-    stats: {
+    stats: {,
         views: number;
         downloads: number;
         likes: number;
@@ -260,7 +260,7 @@ export declare const TemplateSchema: z.ZodObject<{
     tags: string[];
     title: string;
     complexity: "advanced" | "intermediate" | "beginner";
-    stats: {
+    stats: {,
         views?: number | undefined;
         downloads?: number | undefined;
         likes?: number | undefined;
@@ -300,7 +300,7 @@ export declare const TemplateVersionSchema: z.ZodObject<{
     promptYaml: z.ZodOptional<z.ZodString>;
     changelog: z.ZodOptional<z.ZodString>;
     documentation: z.ZodOptional<z.ZodString>;
-    examples: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    examples: z.ZodDefault<z.ZodArray<z.ZodObject<{,
         title: z.ZodString;
         input: z.ZodString;
         expectedOutput: z.ZodString;
@@ -316,7 +316,7 @@ export declare const TemplateVersionSchema: z.ZodObject<{
     hash: z.ZodString;
     tokenPerRunEstimate: z.ZodNumber;
     safetyScore: z.ZodNumber;
-    testResults: z.ZodOptional<z.ZodObject<{
+    testResults: z.ZodOptional<z.ZodObject<{,
         passed: z.ZodNumber;
         failed: z.ZodNumber;
         coverage: z.ZodOptional<z.ZodNumber>;
@@ -333,7 +333,7 @@ export declare const TemplateVersionSchema: z.ZodObject<{
     successRate: z.ZodOptional<z.ZodNumber>;
     isPublic: z.ZodDefault<z.ZodBoolean>;
     releaseNotes: z.ZodOptional<z.ZodString>;
-    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
         name: z.ZodString;
         url: z.ZodString;
         size: z.ZodNumber;
@@ -355,12 +355,12 @@ export declare const TemplateVersionSchema: z.ZodObject<{
     id: string;
     createdAt: Date;
     hash: string;
-    examples: {
+    examples: {,
         input: string;
         title: string;
         expectedOutput: string;
     }[];
-    assets: {
+    assets: {,
         name: string;
         type: string;
         size: number;
@@ -502,7 +502,7 @@ export declare const ReviewSchema: z.ZodObject<{
     rating: z.ZodNumber;
     title: z.ZodOptional<z.ZodString>;
     comment: z.ZodString;
-    aspects: z.ZodOptional<z.ZodObject<{
+    aspects: z.ZodOptional<z.ZodObject<{,
         easeOfUse: z.ZodOptional<z.ZodNumber>;
         documentation: z.ZodOptional<z.ZodNumber>;
         valueForMoney: z.ZodOptional<z.ZodNumber>;
@@ -619,7 +619,7 @@ export declare const ForumPostSchema: z.ZodObject<{
     excerpt: z.ZodOptional<z.ZodString>;
     relatedTemplateIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     relatedPostIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    attachments: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    attachments: z.ZodDefault<z.ZodArray<z.ZodObject<{,
         id: z.ZodString;
         name: z.ZodString;
         url: z.ZodString;
@@ -666,7 +666,7 @@ export declare const ForumPostSchema: z.ZodObject<{
     allowComments: boolean;
     isPinned: boolean;
     replies: number;
-    attachments: {
+    attachments: {,
         id: string;
         name: string;
         size: number;
@@ -743,7 +743,7 @@ export declare const KnowledgeArticleSchema: z.ZodObject<{
     subcategory: z.ZodOptional<z.ZodString>;
     tags: z.ZodArray<z.ZodString, "many">;
     difficulty: z.ZodEnum<["beginner", "intermediate", "advanced"]>;
-    tableOfContents: z.ZodOptional<z.ZodArray<z.ZodObject<{
+    tableOfContents: z.ZodOptional<z.ZodArray<z.ZodObject<{,
         id: z.ZodString;
         title: z.ZodString;
         level: z.ZodNumber;
@@ -852,13 +852,13 @@ export declare const TutorialSchema: z.ZodObject<{
     title: z.ZodString;
     description: z.ZodString;
     shortDescription: z.ZodOptional<z.ZodString>;
-    steps: z.ZodArray<z.ZodObject<{
+    steps: z.ZodArray<z.ZodObject<{,
         id: z.ZodString;
         title: z.ZodString;
         content: z.ZodString;
         order: z.ZodNumber;
         estimatedDuration: z.ZodOptional<z.ZodNumber>;
-        resources: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        resources: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             name: z.ZodString;
             url: z.ZodString;
             type: z.ZodEnum<["video", "article", "template", "download", "external"]>;
@@ -875,7 +875,7 @@ export declare const TutorialSchema: z.ZodObject<{
         id: string;
         content: string;
         title: string;
-        resources: {
+        resources: {,
             name: string;
             type: "external" | "template" | "article" | "video" | "download";
             url: string;
@@ -901,7 +901,7 @@ export declare const TutorialSchema: z.ZodObject<{
     learningOutcomes: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     thumbnailUrl: z.ZodOptional<z.ZodString>;
     videoUrl: z.ZodOptional<z.ZodString>;
-    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
         name: z.ZodString;
         url: z.ZodString;
         description: z.ZodOptional<z.ZodString>;
@@ -934,11 +934,11 @@ export declare const TutorialSchema: z.ZodObject<{
     status: "draft" | "published" | "archived";
     category: string;
     title: string;
-    steps: {
+    steps: {,
         id: string;
         content: string;
         title: string;
-        resources: {
+        resources: {,
             name: string;
             type: "external" | "template" | "article" | "video" | "download";
             url: string;
@@ -948,7 +948,7 @@ export declare const TutorialSchema: z.ZodObject<{
     }[];
     difficulty: "advanced" | "intermediate" | "beginner";
     authorId: string;
-    assets: {
+    assets: {,
         name: string;
         url: string;
         description?: string | undefined;
@@ -976,7 +976,7 @@ export declare const TutorialSchema: z.ZodObject<{
     status: "draft" | "published" | "archived";
     category: string;
     title: string;
-    steps: {
+    steps: {,
         id: string;
         content: string;
         title: string;
@@ -1155,7 +1155,7 @@ export declare const SearchQuerySchema: z.ZodObject<{
     normalizedQuery: z.ZodString;
     filters: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     resultsCount: z.ZodNumber;
-    clickedResults: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    clickedResults: z.ZodDefault<z.ZodArray<z.ZodObject<{,
         contentId: z.ZodString;
         contentType: z.ZodNativeEnum<typeof ContentType>;
         position: z.ZodNumber;
@@ -1184,7 +1184,7 @@ export declare const SearchQuerySchema: z.ZodObject<{
     query: string;
     normalizedQuery: string;
     resultsCount: number;
-    clickedResults: {
+    clickedResults: {,
         position: number;
         contentType: ContentType;
         contentId: string;
@@ -1226,7 +1226,7 @@ export declare const CollectionSchema: z.ZodObject<{
     isPublic: z.ZodDefault<z.ZodBoolean>;
     isFeatured: z.ZodDefault<z.ZodBoolean>;
     allowCollaborators: z.ZodDefault<z.ZodBoolean>;
-    items: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    items: z.ZodDefault<z.ZodArray<z.ZodObject<{,
         contentId: z.ZodString;
         contentType: z.ZodNativeEnum<typeof ContentType>;
         addedAt: z.ZodDate;
@@ -1247,7 +1247,7 @@ export declare const CollectionSchema: z.ZodObject<{
     }>, "many">>;
     category: z.ZodOptional<z.ZodString>;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    collaborators: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    collaborators: z.ZodDefault<z.ZodArray<z.ZodObject<{,
         userId: z.ZodString;
         role: z.ZodEnum<["viewer", "editor", "admin"]>;
         addedAt: z.ZodDate;
@@ -1271,7 +1271,7 @@ export declare const CollectionSchema: z.ZodObject<{
     updatedAt: Date;
     name: string;
     tags: string[];
-    items: {
+    items: {,
         order: number;
         contentType: ContentType;
         contentId: string;
@@ -1281,7 +1281,7 @@ export declare const CollectionSchema: z.ZodObject<{
     isPublic: boolean;
     views: number;
     likes: number;
-    collaborators: {
+    collaborators: {,
         userId: string;
         role: "admin" | "editor" | "viewer";
         addedAt: Date;
@@ -1389,7 +1389,7 @@ export type Epic16ContentModel = {
     Notification: Notification;
 };
 export declare const Epic16ContentSchemas: {
-    UserProfile: z.ZodObject<{
+    UserProfile: z.ZodObject<{,
         id: z.ZodString;
         userId: z.ZodString;
         displayName: z.ZodString;
@@ -1409,7 +1409,7 @@ export declare const Epic16ContentSchemas: {
         helpfulVotes: z.ZodDefault<z.ZodNumber>;
         reputation: z.ZodDefault<z.ZodNumber>;
         badges: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        preferences: z.ZodOptional<z.ZodObject<{
+        preferences: z.ZodOptional<z.ZodObject<{,
             emailNotifications: z.ZodDefault<z.ZodBoolean>;
             marketingEmails: z.ZodDefault<z.ZodBoolean>;
             publicProfile: z.ZodDefault<z.ZodBoolean>;
@@ -1487,7 +1487,7 @@ export declare const Epic16ContentSchemas: {
         reputation?: number | undefined;
         lastActive?: Date | undefined;
     }>;
-    Template: z.ZodObject<{
+    Template: z.ZodObject<{,
         id: z.ZodString;
         ownerId: z.ZodString;
         title: z.ZodString;
@@ -1508,7 +1508,7 @@ export declare const Epic16ContentSchemas: {
         status: z.ZodNativeEnum<typeof TemplateStatus>;
         featured: z.ZodDefault<z.ZodBoolean>;
         promoted: z.ZodDefault<z.ZodBoolean>;
-        stats: z.ZodObject<{
+        stats: z.ZodObject<{,
             views: z.ZodDefault<z.ZodNumber>;
             downloads: z.ZodDefault<z.ZodNumber>;
             purchases: z.ZodDefault<z.ZodNumber>;
@@ -1552,7 +1552,7 @@ export declare const Epic16ContentSchemas: {
         title: string;
         complexity: "advanced" | "intermediate" | "beginner";
         featured: boolean;
-        stats: {
+        stats: {,
             views: number;
             downloads: number;
             likes: number;
@@ -1589,7 +1589,7 @@ export declare const Epic16ContentSchemas: {
         tags: string[];
         title: string;
         complexity: "advanced" | "intermediate" | "beginner";
-        stats: {
+        stats: {,
             views?: number | undefined;
             downloads?: number | undefined;
             likes?: number | undefined;
@@ -1618,7 +1618,7 @@ export declare const Epic16ContentSchemas: {
         seoKeywords?: string[] | undefined;
         versionCount?: number | undefined;
     }>;
-    TemplateVersion: z.ZodObject<{
+    TemplateVersion: z.ZodObject<{,
         id: z.ZodString;
         templateId: z.ZodString;
         versionNumber: z.ZodString;
@@ -1628,7 +1628,7 @@ export declare const Epic16ContentSchemas: {
         promptYaml: z.ZodOptional<z.ZodString>;
         changelog: z.ZodOptional<z.ZodString>;
         documentation: z.ZodOptional<z.ZodString>;
-        examples: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        examples: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             title: z.ZodString;
             input: z.ZodString;
             expectedOutput: z.ZodString;
@@ -1644,7 +1644,7 @@ export declare const Epic16ContentSchemas: {
         hash: z.ZodString;
         tokenPerRunEstimate: z.ZodNumber;
         safetyScore: z.ZodNumber;
-        testResults: z.ZodOptional<z.ZodObject<{
+        testResults: z.ZodOptional<z.ZodObject<{,
             passed: z.ZodNumber;
             failed: z.ZodNumber;
             coverage: z.ZodOptional<z.ZodNumber>;
@@ -1661,7 +1661,7 @@ export declare const Epic16ContentSchemas: {
         successRate: z.ZodOptional<z.ZodNumber>;
         isPublic: z.ZodDefault<z.ZodBoolean>;
         releaseNotes: z.ZodOptional<z.ZodString>;
-        assets: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             name: z.ZodString;
             url: z.ZodString;
             size: z.ZodNumber;
@@ -1683,12 +1683,12 @@ export declare const Epic16ContentSchemas: {
         id: string;
         createdAt: Date;
         hash: string;
-        examples: {
+        examples: {,
             input: string;
             title: string;
             expectedOutput: string;
         }[];
-        assets: {
+        assets: {,
             name: string;
             type: string;
             size: number;
@@ -1750,7 +1750,7 @@ export declare const Epic16ContentSchemas: {
         avgExecutionTime?: number | undefined;
         releaseNotes?: string | undefined;
     }>;
-    Purchase: z.ZodObject<{
+    Purchase: z.ZodObject<{,
         id: z.ZodString;
         buyerId: z.ZodString;
         templateId: z.ZodString;
@@ -1820,7 +1820,7 @@ export declare const Epic16ContentSchemas: {
         satisfactionFeedback?: string | undefined;
         refundedAt?: Date | undefined;
     }>;
-    Review: z.ZodObject<{
+    Review: z.ZodObject<{,
         id: z.ZodString;
         templateId: z.ZodString;
         buyerId: z.ZodString;
@@ -1828,7 +1828,7 @@ export declare const Epic16ContentSchemas: {
         rating: z.ZodNumber;
         title: z.ZodOptional<z.ZodString>;
         comment: z.ZodString;
-        aspects: z.ZodOptional<z.ZodObject<{
+        aspects: z.ZodOptional<z.ZodObject<{,
             easeOfUse: z.ZodOptional<z.ZodNumber>;
             documentation: z.ZodOptional<z.ZodNumber>;
             valueForMoney: z.ZodOptional<z.ZodNumber>;
@@ -1917,7 +1917,7 @@ export declare const Epic16ContentSchemas: {
         moderatedBy?: string | undefined;
         moderatedAt?: Date | undefined;
     }>;
-    ForumPost: z.ZodObject<{
+    ForumPost: z.ZodObject<{,
         id: z.ZodString;
         authorId: z.ZodString;
         type: z.ZodNativeEnum<typeof ForumPostType>;
@@ -1944,7 +1944,7 @@ export declare const Epic16ContentSchemas: {
         excerpt: z.ZodOptional<z.ZodString>;
         relatedTemplateIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         relatedPostIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        attachments: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        attachments: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             id: z.ZodString;
             name: z.ZodString;
             url: z.ZodString;
@@ -1991,7 +1991,7 @@ export declare const Epic16ContentSchemas: {
         allowComments: boolean;
         isPinned: boolean;
         replies: number;
-        attachments: {
+        attachments: {,
             id: string;
             name: string;
             size: number;
@@ -2056,7 +2056,7 @@ export declare const Epic16ContentSchemas: {
         lastReplyAt?: Date | undefined;
         lastReplyBy?: string | undefined;
     }>;
-    KnowledgeArticle: z.ZodObject<{
+    KnowledgeArticle: z.ZodObject<{,
         id: z.ZodString;
         authorId: z.ZodString;
         title: z.ZodString;
@@ -2067,7 +2067,7 @@ export declare const Epic16ContentSchemas: {
         subcategory: z.ZodOptional<z.ZodString>;
         tags: z.ZodArray<z.ZodString, "many">;
         difficulty: z.ZodEnum<["beginner", "intermediate", "advanced"]>;
-        tableOfContents: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        tableOfContents: z.ZodOptional<z.ZodArray<z.ZodObject<{,
             id: z.ZodString;
             title: z.ZodString;
             level: z.ZodNumber;
@@ -2169,19 +2169,19 @@ export declare const Epic16ContentSchemas: {
         relatedArticleIds?: string[] | undefined;
         lastReviewed?: Date | undefined;
     }>;
-    Tutorial: z.ZodObject<{
+    Tutorial: z.ZodObject<{,
         id: z.ZodString;
         authorId: z.ZodString;
         title: z.ZodString;
         description: z.ZodString;
         shortDescription: z.ZodOptional<z.ZodString>;
-        steps: z.ZodArray<z.ZodObject<{
+        steps: z.ZodArray<z.ZodObject<{,
             id: z.ZodString;
             title: z.ZodString;
             content: z.ZodString;
             order: z.ZodNumber;
             estimatedDuration: z.ZodOptional<z.ZodNumber>;
-            resources: z.ZodDefault<z.ZodArray<z.ZodObject<{
+            resources: z.ZodDefault<z.ZodArray<z.ZodObject<{,
                 name: z.ZodString;
                 url: z.ZodString;
                 type: z.ZodEnum<["video", "article", "template", "download", "external"]>;
@@ -2198,7 +2198,7 @@ export declare const Epic16ContentSchemas: {
             id: string;
             content: string;
             title: string;
-            resources: {
+            resources: {,
                 name: string;
                 type: "external" | "template" | "article" | "video" | "download";
                 url: string;
@@ -2224,7 +2224,7 @@ export declare const Epic16ContentSchemas: {
         learningOutcomes: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         thumbnailUrl: z.ZodOptional<z.ZodString>;
         videoUrl: z.ZodOptional<z.ZodString>;
-        assets: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             name: z.ZodString;
             url: z.ZodString;
             description: z.ZodOptional<z.ZodString>;
@@ -2257,11 +2257,11 @@ export declare const Epic16ContentSchemas: {
         status: "draft" | "published" | "archived";
         category: string;
         title: string;
-        steps: {
+        steps: {,
             id: string;
             content: string;
             title: string;
-            resources: {
+            resources: {,
                 name: string;
                 type: "external" | "template" | "article" | "video" | "download";
                 url: string;
@@ -2271,7 +2271,7 @@ export declare const Epic16ContentSchemas: {
         }[];
         difficulty: "advanced" | "intermediate" | "beginner";
         authorId: string;
-        assets: {
+        assets: {,
             name: string;
             url: string;
             description?: string | undefined;
@@ -2299,7 +2299,7 @@ export declare const Epic16ContentSchemas: {
         status: "draft" | "published" | "archived";
         category: string;
         title: string;
-        steps: {
+        steps: {,
             id: string;
             content: string;
             title: string;
@@ -2334,7 +2334,7 @@ export declare const Epic16ContentSchemas: {
         hasCertificate?: boolean | undefined;
         completions?: number | undefined;
     }>;
-    UserAnalytics: z.ZodObject<{
+    UserAnalytics: z.ZodObject<{,
         id: z.ZodString;
         userId: z.ZodString;
         date: z.ZodDate;
@@ -2401,7 +2401,7 @@ export declare const Epic16ContentSchemas: {
         salesGenerated?: number | undefined;
         reviewsReceived?: number | undefined;
     }>;
-    ContentAnalytics: z.ZodObject<{
+    ContentAnalytics: z.ZodObject<{,
         id: z.ZodString;
         contentId: z.ZodString;
         contentType: z.ZodNativeEnum<typeof ContentType>;
@@ -2468,14 +2468,14 @@ export declare const Epic16ContentSchemas: {
         referralSources?: Record<string, number> | undefined;
         searchKeywords?: Record<string, number> | undefined;
     }>;
-    SearchQuery: z.ZodObject<{
+    SearchQuery: z.ZodObject<{,
         id: z.ZodString;
         userId: z.ZodOptional<z.ZodString>;
         query: z.ZodString;
         normalizedQuery: z.ZodString;
         filters: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
         resultsCount: z.ZodNumber;
-        clickedResults: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        clickedResults: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             contentId: z.ZodString;
             contentType: z.ZodNativeEnum<typeof ContentType>;
             position: z.ZodNumber;
@@ -2504,7 +2504,7 @@ export declare const Epic16ContentSchemas: {
         query: string;
         normalizedQuery: string;
         resultsCount: number;
-        clickedResults: {
+        clickedResults: {,
             position: number;
             contentType: ContentType;
             contentId: string;
@@ -2536,7 +2536,7 @@ export declare const Epic16ContentSchemas: {
             clickedAt: Date;
         }[] | undefined;
     }>;
-    Collection: z.ZodObject<{
+    Collection: z.ZodObject<{,
         id: z.ZodString;
         ownerId: z.ZodString;
         name: z.ZodString;
@@ -2545,7 +2545,7 @@ export declare const Epic16ContentSchemas: {
         isPublic: z.ZodDefault<z.ZodBoolean>;
         isFeatured: z.ZodDefault<z.ZodBoolean>;
         allowCollaborators: z.ZodDefault<z.ZodBoolean>;
-        items: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        items: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             contentId: z.ZodString;
             contentType: z.ZodNativeEnum<typeof ContentType>;
             addedAt: z.ZodDate;
@@ -2566,7 +2566,7 @@ export declare const Epic16ContentSchemas: {
         }>, "many">>;
         category: z.ZodOptional<z.ZodString>;
         tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        collaborators: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        collaborators: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             userId: z.ZodString;
             role: z.ZodEnum<["viewer", "editor", "admin"]>;
             addedAt: z.ZodDate;
@@ -2590,7 +2590,7 @@ export declare const Epic16ContentSchemas: {
         updatedAt: Date;
         name: string;
         tags: string[];
-        items: {
+        items: {,
             order: number;
             contentType: ContentType;
             contentId: string;
@@ -2600,7 +2600,7 @@ export declare const Epic16ContentSchemas: {
         isPublic: boolean;
         views: number;
         likes: number;
-        collaborators: {
+        collaborators: {,
             userId: string;
             role: "admin" | "editor" | "viewer";
             addedAt: Date;
@@ -2641,7 +2641,7 @@ export declare const Epic16ContentSchemas: {
         allowCollaborators?: boolean | undefined;
         followers?: number | undefined;
     }>;
-    Notification: z.ZodObject<{
+    Notification: z.ZodObject<{,
         id: z.ZodString;
         userId: z.ZodString;
         type: z.ZodEnum<["template_published", "template_purchased", "template_reviewed", "post_replied", "post_liked", "comment_replied", "follower_added", "collection_shared", "system_announcement", "moderation_action"]>;
@@ -2691,13 +2691,13 @@ export declare const Epic16ContentSchemas: {
         scheduledFor?: Date | undefined;
     }>;
 };
-export declare function validateContentModel<T extends keyof Epic16ContentModel>(
+export declare function validateContentModel<T extends keyof Epic16ContentModel>()
   type: T,
-  data: unknown
+  data: unknown,
 ): Epic16ContentModel[T];
-export declare function isValidContentModel<T extends keyof Epic16ContentModel>(
+export declare function isValidContentModel<T extends keyof Epic16ContentModel>()
   type: T,
-  data: unknown
+  data: unknown,
 ): data is Epic16ContentModel[T];
 export declare const Epic16Relationships: {
     readonly userToTemplates: "one-to-many";

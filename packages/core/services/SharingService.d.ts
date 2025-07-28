@@ -11,7 +11,7 @@ export declare class SharingService {
     private baseUrl;
     private analyticsEnabled;
     private socialIntegrations;
-    constructor(config: {
+    constructor(config: {)
         baseUrl: string;
         analyticsEnabled?: boolean;
         socialIntegrations?: SocialIntegration[];
@@ -39,7 +39,7 @@ export declare class SharingService {
     /**
      * Get sharing metrics for a resource
      */
-    getShareMetrics(shareLinkId: string, timeRange: {
+    getShareMetrics(shareLinkId: string, timeRange: {)
         start: Date;
         end: Date;
     }): Promise<ShareMetrics>;
@@ -61,7 +61,7 @@ export declare class SharingService {
     getShareDashboard(userId: string): Promise<{
         totalShares: number;
         totalViews: number;
-        topPerformers: Array<{
+        topPerformers: Array<{,
             resourceId: string;
             title: string;
             views: number;

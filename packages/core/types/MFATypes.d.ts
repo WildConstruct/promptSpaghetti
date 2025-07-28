@@ -72,7 +72,7 @@ export interface EmailVerification {
     encryptedToken: string;
     expiresAt: Date;
     attempts: number;
-    metadata: {
+    metadata: {,
         ipAddress: string;
         userAgent: string;
         location?: string;
@@ -98,7 +98,7 @@ export interface SMSVerification {
     expiresAt: Date;
     attempts: number;
     dailyCount: number;
-    metadata: {
+    metadata: {,
         ipAddress: string;
         userAgent: string;
         carrierResponse?: string;
@@ -184,7 +184,7 @@ export interface SecurityEvent {
     eventType: 'suspicious_activity' | 'rate_limit_exceeded' | 'brute_force' | 'geo_anomaly';
     severity: 'low' | 'medium' | 'high' | 'critical';
     description: string;
-    metadata: {
+    metadata: {,
         ipAddress?: string;
         userAgent?: string;
         location?: string;
@@ -205,7 +205,7 @@ export interface UserMFAProfile {
         methodType: MFAMethodType;
         timestamp: Date;
     };
-    securityMetrics: {
+    securityMetrics: {,
         totalAttempts: number;
         successfulAttempts: number;
         failedAttempts: number;
@@ -213,7 +213,7 @@ export interface UserMFAProfile {
         accountLocked: boolean;
         lockedUntil?: Date;
     };
-    preferences: {
+    preferences: {,
         defaultMethod: MFAMethodType;
         backupMethodEnabled: boolean;
         securityNotifications: boolean;
@@ -459,7 +459,7 @@ declare const _default: {
     MFAMethodType: typeof MFAMethodType;
     MFAMethodStatus: typeof MFAMethodStatus;
     MFAVerificationResult: typeof MFAVerificationResult;
-    TOTPConfigurationSchema: z.ZodObject<{
+    TOTPConfigurationSchema: z.ZodObject<{,
         id: z.ZodString;
         userId: z.ZodString;
         methodType: z.ZodLiteral<MFAMethodType.TOTP>;
@@ -511,7 +511,7 @@ declare const _default: {
         lastUsedAt?: Date | undefined;
         lockedUntil?: Date | undefined;
     }>;
-    EmailConfigurationSchema: z.ZodObject<{
+    EmailConfigurationSchema: z.ZodObject<{,
         id: z.ZodString;
         userId: z.ZodString;
         methodType: z.ZodLiteral<MFAMethodType.EMAIL>;
@@ -554,7 +554,7 @@ declare const _default: {
         lastUsedAt?: Date | undefined;
         lockedUntil?: Date | undefined;
     }>;
-    SMSConfigurationSchema: z.ZodObject<{
+    SMSConfigurationSchema: z.ZodObject<{,
         id: z.ZodString;
         userId: z.ZodString;
         methodType: z.ZodLiteral<MFAMethodType.SMS>;
@@ -600,7 +600,7 @@ declare const _default: {
         lastUsedAt?: Date | undefined;
         lockedUntil?: Date | undefined;
     }>;
-    MFAVerificationAttemptSchema: z.ZodObject<{
+    MFAVerificationAttemptSchema: z.ZodObject<{,
         id: z.ZodString;
         userId: z.ZodString;
         methodType: z.ZodNativeEnum<typeof MFAMethodType>;
@@ -634,7 +634,7 @@ declare const _default: {
     isTOTPConfiguration: typeof isTOTPConfiguration;
     isEmailConfiguration: typeof isEmailConfiguration;
     isSMSConfiguration: typeof isSMSConfiguration;
-    MFA_DATABASE_TABLES: {
+    MFA_DATABASE_TABLES: {,
         readonly MFA_CONFIGURATIONS: "mfa_configurations";
         readonly MFA_BACKUP_CODES: "mfa_backup_codes";
         readonly MFA_VERIFICATION_ATTEMPTS: "mfa_verification_attempts";
@@ -642,7 +642,7 @@ declare const _default: {
         readonly MFA_RATE_LIMITS: "mfa_rate_limits";
         readonly MFA_SECURITY_EVENTS: "mfa_security_events";
     };
-    MFA_CONSTANTS: {
+    MFA_CONSTANTS: {,
         readonly TOTP: {
             readonly SECRET_LENGTH: 32;
             readonly QR_CODE_EXPIRY: 300;

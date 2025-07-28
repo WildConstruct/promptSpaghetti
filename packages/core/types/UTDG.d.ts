@@ -7,7 +7,7 @@
  */
 export interface Era {
     name: string;
-    period: {
+    period: {,
         start: number;
         end: number;
     };
@@ -21,7 +21,7 @@ export declare export interface UTDGNode {
     type: 'material' | 'texture' | 'pattern' | 'style' | 'garment' | 'accessory' | 'tool' | 'decoration';
     content: string;
     description?: string;
-    metadata: {
+    metadata: {,
         era: Era[];
         authenticity: number;
         source: string;
@@ -33,7 +33,7 @@ export declare export interface UTDGNode {
         ceremonial?: boolean;
         daily_use?: boolean;
     };
-    relationships: {
+    relationships: {,
         compatible: string[];
         incompatible: string[];
         variations: Variation[];
@@ -90,7 +90,7 @@ export interface DataSource {
     type: 'api' | 'database' | 'file' | 'webscrape';
     endpoint?: string;
     authentication?: AuthConfig;
-    caching: {
+    caching: {,
         enabled: boolean;
         ttl: number;
         strategy: 'memory' | 'disk' | 'hybrid';
@@ -101,7 +101,7 @@ export interface DataSource {
         requests_per_minute: number;
         requests_per_hour: number;
     };
-    metadata: {
+    metadata: {,
         description: string;
         coverage_eras: Era[];
         data_types: UTDGNodeType[];
@@ -134,7 +134,7 @@ export interface HistoricalQuery {
 export interface HistoricalQueryResult {
     nodes: UTDGNode[];
     total_count: number;
-    query_metadata: {
+    query_metadata: {,
         query_time: number;
         cache_hit: boolean;
         sources_used: string[];
@@ -142,7 +142,7 @@ export interface HistoricalQueryResult {
 }
 export interface MedievalClothing extends UTDGNode {
     type: 'garment';
-    medieval_specific: {
+    medieval_specific: {,
         garment_type: 'tunic' | 'surcoat' | 'hose' | 'braies' | 'chemise' | 'gown' | 'cloak' | 'hood';
         construction_method: 'sewn' | 'wrapped' | 'pinned' | 'laced';
         fabric_type: 'wool' | 'linen' | 'silk' | 'hemp' | 'cotton' | 'fur' | 'leather';
@@ -154,7 +154,7 @@ export interface MedievalClothing extends UTDGNode {
 export interface UTDGGraph {
     nodes: UTDGNode[];
     constraints: HistoricalConstraint[];
-    metadata: {
+    metadata: {,
         version: string;
         created: string;
         last_modified: string;
@@ -180,7 +180,7 @@ export interface ContentGenerationConfig {
 export interface GeneratedContent {
     nodes: UTDGNode[];
     constraints_applied: HistoricalConstraint[];
-    generation_metadata: {
+    generation_metadata: {,
         config: ContentGenerationConfig;
         generation_time: number;
         accuracy_score: number;

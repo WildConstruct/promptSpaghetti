@@ -36,7 +36,7 @@ export interface Tutorial {
     estimatedTime: number;
     prerequisites?: string[];
     steps: TutorialStep[];
-    completionRewards: {
+    completionRewards: {,
         xp: number;
         badge?: string;
         certificate?: string;

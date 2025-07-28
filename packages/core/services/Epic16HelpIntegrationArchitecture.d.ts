@@ -18,7 +18,7 @@ export interface MarketplaceHelpContext {
     userId: string;
     isFirstVisit: boolean;
     recentActivity: string[];
-    marketplace: {
+    marketplace: {,
         templateCount: number;
         purchaseHistory: number;
         favoriteCategories: string[];

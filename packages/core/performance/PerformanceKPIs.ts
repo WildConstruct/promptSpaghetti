@@ -12,7 +12,7 @@ export interface KPIDefinition {
   target: number;
   warning: number;
   critical: number;
-  measurement: {
+  measurement: {,
     method: string;
     frequency: 'realtime' | 'interval' | 'on-demand';
     source: string;
@@ -36,7 +36,6 @@ export interface KPIThresholds {
   warning: { min: number; max: number };
   critical: { min?: number; max: number };
 }
-
 /**
  * Core Performance KPIs for the Prompt Graph System
  */
@@ -51,13 +50,13 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 1200,
     warning: 1500,
     critical: 2000,
-    measurement: {
+    measurement: {,
       method: 'Web Vitals API / Performance Observer',
       frequency: 'realtime',
       source: 'client-side measurement'
     },
     businessImpact: 'Affects perceived performance and user engagement',
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     id: 'runtime_lcp',
@@ -68,13 +67,13 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 2000,
     warning: 2500,
     critical: 3000,
-    measurement: {
+    measurement: {,
       method: 'Web Vitals API / Performance Observer',
       frequency: 'realtime',
       source: 'client-side measurement'
     },
     businessImpact: 'Indicates when main content is available to users',
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     id: 'runtime_fid',
@@ -85,13 +84,13 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 50,
     warning: 100,
     critical: 200,
-    measurement: {
+    measurement: {,
       method: 'Web Vitals API / Performance Observer',
       frequency: 'realtime',
       source: 'client-side measurement'
     },
     businessImpact: 'Affects user experience and interaction responsiveness',
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     id: 'runtime_cls',
@@ -102,13 +101,13 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 0.05,
     warning: 0.1,
     critical: 0.25,
-    measurement: {
+    measurement: {,
       method: 'Web Vitals API / Performance Observer',
       frequency: 'realtime',
       source: 'client-side measurement'
     },
     businessImpact: 'Affects visual stability and user experience quality',
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'runtime_tti',
@@ -119,15 +118,14 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 2500,
     warning: 3000,
     critical: 4000,
-    measurement: {
+    measurement: {,
       method: 'Lighthouse / Performance monitoring',
       frequency: 'interval',
       source: 'client-side measurement'
     },
     businessImpact: 'Indicates when users can fully interact with the application',
-    priority: 'high'
+    priority: 'high',
   },
-
   // === API PERFORMANCE KPIs ===
   {
     id: 'api_graph_execution',
@@ -138,13 +136,13 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 800,
     warning: 1000,
     critical: 1500,
-    measurement: {
+    measurement: {,
       method: 'Server-side execution timing',
       frequency: 'realtime',
       source: 'server-side measurement'
     },
     businessImpact: 'Core workflow performance affecting user productivity',
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     id: 'api_preview_generation',
@@ -155,13 +153,13 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 400,
     warning: 500,
     critical: 800,
-    measurement: {
+    measurement: {,
       method: 'Server-side execution timing',
       frequency: 'realtime',
       source: 'server-side measurement'
     },
     businessImpact: 'Affects iteration speed and user workflow efficiency',
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'api_validation',
@@ -172,13 +170,13 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 50,
     warning: 100,
     critical: 200,
-    measurement: {
+    measurement: {,
       method: 'Server-side validation timing',
       frequency: 'realtime',
       source: 'server-side measurement'
     },
     businessImpact: 'Affects real-time feedback and editing responsiveness',
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'api_throughput',
@@ -189,15 +187,14 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 100,
     warning: 75,
     critical: 50,
-    measurement: {
+    measurement: {,
       method: 'Server request counting',
       frequency: 'interval',
       source: 'server-side monitoring'
     },
     businessImpact: 'System scalability and concurrent user support',
-    priority: 'high'
+    priority: 'high',
   },
-
   // === BUNDLE SIZE KPIs ===
   {
     id: 'bundle_main_size',
@@ -208,13 +205,13 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 200,
     warning: 250,
     critical: 350,
-    measurement: {
+    measurement: {,
       method: 'Build-time bundle analysis',
       frequency: 'on-demand',
       source: 'build system'
     },
     businessImpact: 'Affects initial load time and user experience',
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'bundle_total_size',
@@ -225,15 +222,14 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 800,
     warning: 1000,
     critical: 1400,
-    measurement: {
+    measurement: {,
       method: 'Build-time bundle analysis',
       frequency: 'on-demand',
       source: 'build system'
     },
     businessImpact: 'Overall application loading performance',
-    priority: 'medium'
+    priority: 'medium',
   },
-
   // === MEMORY KPIs ===
   {
     id: 'memory_peak_usage',
@@ -244,13 +240,13 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 100,
     warning: 150,
     critical: 200,
-    measurement: {
+    measurement: {,
       method: 'Runtime memory monitoring',
       frequency: 'realtime',
       source: 'client-side measurement'
     },
     businessImpact: 'Browser stability and user experience on low-end devices',
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'memory_leak_rate',
@@ -261,15 +257,14 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 2,
     warning: 5,
     critical: 10,
-    measurement: {
+    measurement: {,
       method: 'Memory trend analysis',
       frequency: 'interval',
       source: 'client-side monitoring'
     },
     businessImpact: 'Long-term application stability and performance',
-    priority: 'high'
+    priority: 'high',
   },
-
   // === NETWORK KPIs ===
   {
     id: 'network_transfer_size',
@@ -280,13 +275,13 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 1200,
     warning: 1500,
     critical: 2000,
-    measurement: {
+    measurement: {,
       method: 'Network monitoring',
       frequency: 'realtime',
       source: 'client-side measurement'
     },
     businessImpact: 'Load time on slower connections and mobile devices',
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'network_request_count',
@@ -297,15 +292,14 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 20,
     warning: 25,
     critical: 35,
-    measurement: {
+    measurement: {,
       method: 'Network monitoring',
       frequency: 'realtime',
       source: 'client-side measurement'
     },
     businessImpact: 'Initial load performance and server load',
-    priority: 'medium'
+    priority: 'medium',
   },
-
   // === BUILD PERFORMANCE KPIs ===
   {
     id: 'build_time',
@@ -316,13 +310,13 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 45,
     warning: 60,
     critical: 90,
-    measurement: {
+    measurement: {,
       method: 'Build system timing',
       frequency: 'on-demand',
       source: 'build system'
     },
     businessImpact: 'Developer productivity and deployment speed',
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'build_test_time',
@@ -333,15 +327,14 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 25,
     warning: 30,
     critical: 45,
-    measurement: {
+    measurement: {,
       method: 'Test runner timing',
       frequency: 'on-demand',
       source: 'test system'
     },
     businessImpact: 'Developer productivity and CI/CD pipeline efficiency',
-    priority: 'low'
+    priority: 'low',
   },
-
   // === USER EXPERIENCE KPIs ===
   {
     id: 'ux_graph_creation_time',
@@ -352,13 +345,13 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 30,
     warning: 45,
     critical: 60,
-    measurement: {
+    measurement: {,
       method: 'User flow tracking',
       frequency: 'on-demand',
       source: 'client-side analytics'
     },
     businessImpact: 'User productivity and workflow efficiency',
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'ux_error_rate',
@@ -369,84 +362,78 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     target: 1,
     warning: 3,
     critical: 5,
-    measurement: {
+    measurement: {,
       method: 'Error tracking and analytics',
       frequency: 'realtime',
       source: 'client-side monitoring'
     },
     businessImpact: 'User satisfaction and application reliability',
-    priority: 'critical'
+    priority: 'critical',
   }
 ];
-
 /**
  * KPI threshold definitions for status calculation
  */
 export const kpiThresholds: Record<string, KPIThresholds> = {
   // Runtime KPIs (lower is better)
-  runtime_fcp: {
+  runtime_fcp: {,
     excellent: { min: 0, max: 1000 },
     good: { min: 1000, max: 1200 },
     warning: { min: 1200, max: 1500 },
     critical: { min: 1500, max: Infinity }
   },
-  runtime_lcp: {
+  runtime_lcp: {,
     excellent: { min: 0, max: 1500 },
     good: { min: 1500, max: 2000 },
     warning: { min: 2000, max: 2500 },
     critical: { min: 2500, max: Infinity }
   },
-  runtime_fid: {
+  runtime_fid: {,
     excellent: { min: 0, max: 50 },
     good: { min: 50, max: 100 },
     warning: { min: 100, max: 200 },
     critical: { min: 200, max: Infinity }
   },
-  runtime_cls: {
+  runtime_cls: {,
     excellent: { min: 0, max: 0.05 },
     good: { min: 0.05, max: 0.1 },
     warning: { min: 0.1, max: 0.25 },
     critical: { min: 0.25, max: Infinity }
   },
-
   // API KPIs (lower is better except throughput)
-  api_graph_execution: {
+  api_graph_execution: {,
     excellent: { min: 0, max: 600 },
     good: { min: 600, max: 800 },
     warning: { min: 800, max: 1000 },
     critical: { min: 1000, max: Infinity }
   },
-  api_throughput: {
+  api_throughput: {,
     excellent: { min: 100, max: Infinity },
     good: { min: 75, max: 100 },
     warning: { min: 50, max: 75 },
     critical: { min: 0, max: 50 }
   },
-
   // Memory KPIs (lower is better)
-  memory_peak_usage: {
+  memory_peak_usage: {,
     excellent: { min: 0, max: 80 },
     good: { min: 80, max: 100 },
     warning: { min: 100, max: 150 },
     critical: { min: 150, max: Infinity }
   },
-
   // User Experience KPIs
-  ux_error_rate: {
+  ux_error_rate: {,
     excellent: { min: 0, max: 0.5 },
     good: { min: 0.5, max: 1 },
     warning: { min: 1, max: 3 },
     critical: { min: 3, max: Infinity }
   }
 };
-
 /**
  * Calculate KPI status based on current value and thresholds
  */
 export function calculateKPIStatus(kpiId: string, value: number): 'excellent' | 'good' | 'warning' | 'critical' {
   const thresholds = kpiThresholds[kpiId];
   if (!thresholds) return 'good'; // Default if no thresholds defined
-
   if (value >= thresholds.excellent.min && value <= (thresholds.excellent.max || Infinity)) {
     return 'excellent';
   }
@@ -458,122 +445,104 @@ export function calculateKPIStatus(kpiId: string, value: number): 'excellent' | 
   }
   return 'critical';
 }
-
 /**
  * Calculate KPI trend based on historical values
  */
 export function calculateKPITrend(snapshots: KPISnapshot[]): 'improving' | 'stable' | 'degrading' {
   if (snapshots.length < 3) return 'stable';
-
-  const recent = snapshots.slice(-5); // Last 5 snapshots
+  const recent = snapshots.slice(-5); // Last 5 snapshots;
   const values = recent.map(s => s.value);
-  
   // Calculate linear regression slope
   const n = values.length;
   const sumX = values.reduce((sum, _, i) => sum + i, 0);
   const sumY = values.reduce((sum, val) => sum + val, 0);
   const sumXY = values.reduce((sum, val, i) => sum + i * val, 0);
   const sumXX = values.reduce((sum, _, i) => sum + i * i, 0);
-  
   const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-  
   // Determine trend based on slope and KPI type
   const kpi = corePerformanceKPIs.find(k => k.id === snapshots[0].kpiId);
-  const isLowerBetter = kpi?.category === 'runtime' || kpi?.category === 'api' || 
+  const isLowerBetter = kpi?.category === 'runtime' || kpi?.category === 'api' || ;
                        kpi?.category === 'memory' || kpi?.category === 'network' ||
                        kpi?.id === 'ux_error_rate';
-  
-  const threshold = 0.05; // 5% change threshold
+  const threshold = 0.05; // 5% change threshold;
   if (Math.abs(slope) < threshold) return 'stable';
-  
   if (isLowerBetter) {
     return slope < 0 ? 'improving' : 'degrading';
   } else {
     return slope > 0 ? 'improving' : 'degrading';
   }
 }
-
 /**
  * Generate KPI recommendations based on current status
  */
 export function generateKPIRecommendations(kpiId: string, value: number, status: string): string[] {
   const recommendations: string[] = [];
-  
   if (status === 'critical' || status === 'warning') {
     switch (kpiId) {
     case 'runtime_fcp':
     case 'runtime_lcp':
-      recommendations.push(
+      recommendations.push()
         'Optimize critical rendering path',
         'Minimize render-blocking resources',
         'Enable resource preloading for critical assets',
         'Consider server-side rendering or static generation'
       );
       break;
-        
     case 'runtime_fid':
-      recommendations.push(
+      recommendations.push()
         'Reduce JavaScript execution time during initial load',
         'Break up long-running tasks with setTimeout or scheduler',
         'Use web workers for heavy computations',
         'Implement code splitting to reduce main thread work'
       );
       break;
-        
     case 'api_graph_execution':
-      recommendations.push(
+      recommendations.push()
         'Implement caching for repeated graph operations',
         'Optimize graph traversal algorithms',
         'Consider parallel processing for independent nodes',
         'Add graph complexity limits and validation'
       );
       break;
-        
     case 'memory_peak_usage':
-      recommendations.push(
+      recommendations.push()
         'Implement object pooling for frequently created objects',
         'Add proper cleanup in component unmounting',
         'Use virtualization for large lists',
         'Profile memory usage to identify leaks'
       );
       break;
-        
     case 'bundle_main_size':
     case 'bundle_total_size':
-      recommendations.push(
+      recommendations.push()
         'Enable code splitting for route-based loading',
         'Remove unused dependencies and dead code',
         'Use dynamic imports for non-critical features',
         'Optimize third-party library usage'
       );
       break;
-        
     default:
-      recommendations.push(
+      recommendations.push()
         'Monitor this metric closely for trends',
         'Consider performance optimization strategies',
         'Review related system components'
       );
     }
   }
-  
   return recommendations;
 }
-
 /**
  * Get KPI by ID
  */
 export function getKPIDefinition(kpiId: string): KPIDefinition | undefined {
   return corePerformanceKPIs.find(kpi => kpi.id === kpiId);
 }
-
 /**
  * Get KPIs by category
  */
 export function getKPIsByCategory(category: string): KPIDefinition[] {
   return corePerformanceKPIs.filter(kpi => kpi.category === category);
 }
-
 /**
  * Get high-priority KPIs
  */

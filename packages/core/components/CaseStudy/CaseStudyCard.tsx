@@ -5,7 +5,6 @@
  * Responsive card component for displaying case studies in gallery/list views.
  * Showcases key metrics, templates used, and engagement data.
  */
-
 import React, { useState } from 'react';
 import { CaseStudy, CaseStudyType, IndustryCategory } from '../../models/CaseStudyDataModel';
 
@@ -24,7 +23,7 @@ export interface CaseStudyCardProps {
   className?: string;
 }
 
-export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
+export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
   caseStudy,
   variant = 'standard',
   showMetrics = true,
@@ -41,7 +40,6 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [imageError, setImageError] = useState(false);
-
   // Get type icon and color
   const getTypeDisplay = (type: CaseStudyType) => {
     const typeConfig = {
@@ -55,7 +53,6 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
     };
     return typeConfig[type] || { icon: '📄', color: '#6B7280', label: 'Case Study' };
   };
-
   // Get industry icon
   const getIndustryIcon = (industry: IndustryCategory) => {
     const industryIcons = {
@@ -75,90 +72,79 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
     };
     return industryIcons[industry] || '🏢';
   };
-
   // Calculate ROI display value
   const getROIDisplay = () => {
     if (!caseStudy.roiMetrics.costSavings.amount) return null;
     const amount = caseStudy.roiMetrics.costSavings.amount;
     const currency = caseStudy.roiMetrics.costSavings.currency;
-    
     if (amount >= 1000000) {
-      return `${currency}${(amount / 1000000).toFixed(1)}M`;
+      return `${currency}${(amount / 1000000).toFixed(1)}M`;}
     } else if (amount >= 1000) {
-      return `${currency}${(amount / 1000).toFixed(1)}K`;
+      return `${currency}${(amount / 1000).toFixed(1)}K`;}
     } else {
-      return `${currency}${amount.toFixed(0)}`;
+      return `${currency}${amount.toFixed(0)}`;}
     }
   };
-
   // Handle card click
   const handleCardClick = (e: React.MouseEvent) => {
     e.preventDefault();
     onClick?.(caseStudy);
   };
-
   // Handle bookmark
   const handleBookmark = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsBookmarked(!isBookmarked);
     onBookmark?.(caseStudy.id);
   };
-
   // Handle like
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsLiked(!isLiked);
     onLike?.(caseStudy.id);
   };
-
   // Handle share
   const handleShare = (e: React.MouseEvent) => {
     e.stopPropagation();
     onShare?.(caseStudy);
   };
-
   const typeDisplay = getTypeDisplay(caseStudy.type);
   const roiDisplay = getROIDisplay();
   const industryIcon = getIndustryIcon(caseStudy.industry);
-
-  return (
+  return ()
     <div 
       className={`case-study-card ${variant} ${className}`}
       onClick={handleCardClick}
     >
       {/* Featured Badge */}
-      {caseStudy.status === 'featured' && (
+      {caseStudy.status === 'featured' && ()
         <div className="featured-badge">
           <span className="badge-icon">⭐</span>
           Featured
         </div>
       )}
-
       {/* Featured Image */}
       <div className="card-image">
-        {caseStudy.featuredImage && !imageError ? (
+        {caseStudy.featuredImage && !imageError ? ()
           <img
             src={caseStudy.featuredImage.url}
             alt={caseStudy.featuredImage.altText || caseStudy.title}
             onError={() => setImageError(true)}
           />
-        ) : (
+        ) : ()
           <div className="image-placeholder">
             <span className="placeholder-icon">{typeDisplay.icon}</span>
           </div>
         )}
-        
         {/* Type Badge */}
         <div 
           className="type-badge"
           style={{ backgroundColor: typeDisplay.color }}
         >
           <span className="type-icon">{typeDisplay.icon}</span>
-          {variant !== 'compact' && (
+          {variant !== 'compact' && ()
             <span className="type-label">{typeDisplay.label}</span>
           )}
         </div>
-
         {/* Quick Actions */}
         <div className="quick-actions">
           <button
@@ -168,7 +154,6 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           >
             {isBookmarked ? '💙' : '🤍'}
           </button>
-          
           <button
             className={`action-btn like ${isLiked ? 'active' : ''}`}
             onClick={handleLike}
@@ -176,7 +161,6 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           >
             {isLiked ? '❤️' : '🤍'}
           </button>
-          
           <button
             className="action-btn share"
             onClick={handleShare}
@@ -186,48 +170,43 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           </button>
         </div>
       </div>
-
       {/* Card Content */}
       <div className="card-content">
         {/* Header */}
         <div className="card-header">
           <div className="title-section">
             <h3 className="case-study-title">{caseStudy.title}</h3>
-            {caseStudy.subtitle && variant !== 'compact' && (
+            {caseStudy.subtitle && variant !== 'compact' && ()
               <p className="case-study-subtitle">{caseStudy.subtitle}</p>
             )}
           </div>
-          
           <div className="industry-badge">
             <span className="industry-icon">{industryIcon}</span>
-            {variant === 'featured' && (
+            {variant === 'featured' && ()
               <span className="industry-name">
                 {caseStudy.industry.replace('-', ' ')}
               </span>
             )}
           </div>
         </div>
-
         {/* Summary */}
         <p className="case-study-summary">
           {caseStudy.summary.length > 150 && variant === 'compact' 
-            ? `${caseStudy.summary.substring(0, 150)}...`
+            ? `${caseStudy.summary.substring(0, 150)}...`}
             : caseStudy.summary
           }
         </p>
-
         {/* Metrics Section */}
-        {showMetrics && variant !== 'compact' && (
+        {showMetrics && variant !== 'compact' && ()
           <div className="metrics-section">
-            {roiDisplay && (
+            {roiDisplay && ()
               <div className="metric-item">
                 <span className="metric-icon">💰</span>
                 <span className="metric-label">Saved</span>
                 <span className="metric-value">{roiDisplay}</span>
               </div>
             )}
-            
-            {caseStudy.roiMetrics.timeSaved.hours > 0 && (
+            {caseStudy.roiMetrics.timeSaved.hours > 0 && ()
               <div className="metric-item">
                 <span className="metric-icon">⏰</span>
                 <span className="metric-label">Time</span>
@@ -236,8 +215,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
                 </span>
               </div>
             )}
-            
-            {caseStudy.performanceMetrics.efficiency > 0 && (
+            {caseStudy.performanceMetrics.efficiency > 0 && ()
               <div className="metric-item">
                 <span className="metric-icon">⚡</span>
                 <span className="metric-label">Efficiency</span>
@@ -248,9 +226,8 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
             )}
           </div>
         )}
-
         {/* Templates Used */}
-        {showTemplates && caseStudy.templatesUsed.length > 0 && variant !== 'compact' && (
+        {showTemplates && caseStudy.templatesUsed.length > 0 && variant !== 'compact' && ()
           <div className="templates-section">
             <div className="templates-header">
               <span className="templates-icon">📝</span>
@@ -258,10 +235,9 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
                 {caseStudy.templatesUsed.length} template{caseStudy.templatesUsed.length > 1 ? 's' : ''} used
               </span>
             </div>
-            
-            {variant === 'featured' && (
+            {variant === 'featured' && ()
               <div className="template-list">
-                {caseStudy.templatesUsed.slice(0, 3).map((template, index) => (
+                {caseStudy.templatesUsed.slice(0, 3).map((template, index) => ()
                   <button
                     key={template.templateId}
                     className="template-chip"
@@ -273,7 +249,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
                     {template.templateName}
                   </button>
                 ))}
-                {caseStudy.templatesUsed.length > 3 && (
+                {caseStudy.templatesUsed.length > 3 && ()
                   <span className="template-more">
                     +{caseStudy.templatesUsed.length - 3} more
                   </span>
@@ -282,27 +258,25 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
             )}
           </div>
         )}
-
         {/* Tags */}
-        {caseStudy.tags.length > 0 && variant !== 'compact' && (
+        {caseStudy.tags.length > 0 && variant !== 'compact' && ()
           <div className="tags-section">
-            {caseStudy.tags.slice(0, variant === 'featured' ? 5 : 3).map((tag, index) => (
+            {caseStudy.tags.slice(0, variant === 'featured' ? 5 : 3).map((tag, index) => ()
               <span key={index} className="tag">
                 {tag}
               </span>
             ))}
-            {caseStudy.tags.length > (variant === 'featured' ? 5 : 3) && (
+            {caseStudy.tags.length > (variant === 'featured' ? 5 : 3) && ()
               <span className="tag-more">
                 +{caseStudy.tags.length - (variant === 'featured' ? 5 : 3)}
               </span>
             )}
           </div>
         )}
-
         {/* Footer */}
         <div className="card-footer">
           {/* Author */}
-          {showAuthor && caseStudy.config.showAuthor && (
+          {showAuthor && caseStudy.config.showAuthor && ()
             <div 
               className="author-section"
               onClick={(e) => {
@@ -310,52 +284,48 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
                 onAuthorClick?.(caseStudy.author.userId);
               }}
             >
-              {caseStudy.author.avatar ? (
+              {caseStudy.author.avatar ? ()
                 <img
                   src={caseStudy.author.avatar}
                   alt={caseStudy.author.name}
                   className="author-avatar"
                 />
-              ) : (
+              ) : ()
                 <div className="author-avatar-placeholder">
                   {caseStudy.author.name.charAt(0).toUpperCase()}
                 </div>
               )}
-              
               <div className="author-info">
                 <span className="author-name">
                   {caseStudy.author.name}
-                  {caseStudy.author.verified && (
+                  {caseStudy.author.verified && ()
                     <span className="verified-badge">✓</span>
                   )}
                 </span>
-                {caseStudy.author.title && variant !== 'compact' && (
+                {caseStudy.author.title && variant !== 'compact' && ()
                   <span className="author-title">{caseStudy.author.title}</span>
                 )}
               </div>
             </div>
           )}
-
           {/* Engagement Stats */}
           <div className="engagement-stats">
-            {caseStudy.engagement.views > 0 && (
+            {caseStudy.engagement.views > 0 && ()
               <span className="stat">
                 <span className="stat-icon">👁️</span>
                 {caseStudy.engagement.views > 1000 
-                  ? `${Math.floor(caseStudy.engagement.views / 1000)}k`
+                  ? `${Math.floor(caseStudy.engagement.views / 1000)}k`}
                   : caseStudy.engagement.views
                 }
               </span>
             )}
-            
-            {caseStudy.engagement.likes > 0 && (
+            {caseStudy.engagement.likes > 0 && ()
               <span className="stat">
                 <span className="stat-icon">❤️</span>
                 {caseStudy.engagement.likes}
               </span>
             )}
-            
-            {caseStudy.engagement.helpfulVotes > 0 && variant === 'featured' && (
+            {caseStudy.engagement.helpfulVotes > 0 && variant === 'featured' && ()
               <span className="stat">
                 <span className="stat-icon">👍</span>
                 {caseStudy.engagement.helpfulVotes}
@@ -363,13 +333,11 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
             )}
           </div>
         </div>
-
         {/* Difficulty Badge */}
-        <div className={`difficulty-badge difficulty-${caseStudy.difficulty}`}>
+        <div className={`difficulty-badge difficulty-${caseStudy.difficulty}`}>}
           {caseStudy.difficulty}
         </div>
       </div>
-
       <style>{`
         .case-study-card {
           position: relative;
@@ -381,26 +349,21 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           cursor: pointer;
           border: 1px solid #e0e4e7;
         }
-
         .case-study-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
           border-color: #3b82f6;
         }
-
         .case-study-card.compact {
           max-width: 320px;
         }
-
         .case-study-card.standard {
           max-width: 380px;
         }
-
         .case-study-card.featured {
           max-width: 500px;
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
         }
-
         .featured-badge {
           position: absolute;
           top: 12px;
@@ -416,37 +379,30 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           align-items: center;
           gap: 4px;
         }
-
         .badge-icon {
           font-size: 10px;
         }
-
         .card-image {
           position: relative;
           width: 100%;
           height: 200px;
           overflow: hidden;
         }
-
         .case-study-card.compact .card-image {
           height: 160px;
         }
-
         .case-study-card.featured .card-image {
           height: 240px;
         }
-
         .card-image img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           transition: transform 0.3s ease;
         }
-
         .case-study-card:hover .card-image img {
           transform: scale(1.05);
         }
-
         .image-placeholder {
           width: 100%;
           height: 100%;
@@ -455,12 +411,10 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           align-items: center;
           justify-content: center;
         }
-
         .placeholder-icon {
           font-size: 48px;
           opacity: 0.5;
         }
-
         .type-badge {
           position: absolute;
           top: 12px;
@@ -475,11 +429,9 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           gap: 4px;
           backdrop-filter: blur(4px);
         }
-
         .type-icon {
           font-size: 14px;
         }
-
         .quick-actions {
           position: absolute;
           bottom: 12px;
@@ -489,11 +441,9 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           opacity: 0;
           transition: opacity 0.3s ease;
         }
-
         .case-study-card:hover .quick-actions {
           opacity: 1;
         }
-
         .action-btn {
           background: rgba(255, 255, 255, 0.9);
           border: none;
@@ -508,38 +458,31 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           backdrop-filter: blur(4px);
           font-size: 14px;
         }
-
         .action-btn:hover {
           transform: scale(1.1);
           background: #ffffff;
         }
-
         .action-btn.active {
           background: #3b82f6;
           color: #ffffff;
         }
-
         .card-content {
           padding: 20px;
           position: relative;
         }
-
         .case-study-card.compact .card-content {
           padding: 16px;
         }
-
         .card-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 12px;
         }
-
         .title-section {
           flex: 1;
           margin-right: 12px;
         }
-
         .case-study-title {
           margin: 0 0 4px 0;
           font-size: 18px;
@@ -547,22 +490,18 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           color: #1f2937;
           line-height: 1.3;
         }
-
         .case-study-card.compact .case-study-title {
           font-size: 16px;
         }
-
         .case-study-card.featured .case-study-title {
           font-size: 20px;
         }
-
         .case-study-subtitle {
           margin: 0;
           font-size: 14px;
           color: #6b7280;
           line-height: 1.4;
         }
-
         .industry-badge {
           display: flex;
           align-items: center;
@@ -574,18 +513,15 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           color: #6b7280;
           white-space: nowrap;
         }
-
         .industry-icon {
           font-size: 14px;
         }
-
         .case-study-summary {
           margin: 0 0 16px 0;
           font-size: 14px;
           color: #4b5563;
           line-height: 1.5;
         }
-
         .metrics-section {
           display: flex;
           gap: 16px;
@@ -594,7 +530,6 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           background: #f8fafc;
           border-radius: 8px;
         }
-
         .metric-item {
           display: flex;
           flex-direction: column;
@@ -602,51 +537,42 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           gap: 2px;
           flex: 1;
         }
-
         .metric-icon {
           font-size: 16px;
         }
-
         .metric-label {
           font-size: 11px;
           color: #6b7280;
           text-transform: uppercase;
           letter-spacing: 0.5px;
         }
-
         .metric-value {
           font-size: 14px;
           font-weight: 600;
           color: #1f2937;
         }
-
         .templates-section {
           margin-bottom: 16px;
         }
-
         .templates-header {
           display: flex;
           align-items: center;
           gap: 6px;
           margin-bottom: 8px;
         }
-
         .templates-icon {
           font-size: 14px;
         }
-
         .templates-label {
           font-size: 12px;
           color: #6b7280;
           font-weight: 500;
         }
-
         .template-list {
           display: flex;
           flex-wrap: wrap;
           gap: 6px;
         }
-
         .template-chip {
           background: #e0f2fe;
           color: #0369a1;
@@ -657,25 +583,21 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           cursor: pointer;
           transition: all 0.2s ease;
         }
-
         .template-chip:hover {
           background: #0369a1;
           color: #ffffff;
         }
-
         .template-more {
           font-size: 11px;
           color: #6b7280;
           font-style: italic;
         }
-
         .tags-section {
           display: flex;
           flex-wrap: wrap;
           gap: 6px;
           margin-bottom: 16px;
         }
-
         .tag {
           background: #f3f4f6;
           color: #4b5563;
@@ -684,13 +606,11 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           font-size: 10px;
           font-weight: 500;
         }
-
         .tag-more {
           font-size: 10px;
           color: #9ca3af;
           font-style: italic;
         }
-
         .card-footer {
           display: flex;
           justify-content: space-between;
@@ -699,7 +619,6 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           padding-top: 16px;
           border-top: 1px solid #f3f4f6;
         }
-
         .author-section {
           display: flex;
           align-items: center;
@@ -707,18 +626,15 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           cursor: pointer;
           transition: opacity 0.2s ease;
         }
-
         .author-section:hover {
           opacity: 0.8;
         }
-
         .author-avatar {
           width: 32px;
           height: 32px;
           border-radius: 50%;
           object-fit: cover;
         }
-
         .author-avatar-placeholder {
           width: 32px;
           height: 32px;
@@ -731,12 +647,10 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           font-weight: 600;
           color: #6b7280;
         }
-
         .author-info {
           display: flex;
           flex-direction: column;
         }
-
         .author-name {
           font-size: 12px;
           font-weight: 600;
@@ -745,23 +659,19 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           align-items: center;
           gap: 4px;
         }
-
         .verified-badge {
           color: #10b981;
           font-size: 10px;
         }
-
         .author-title {
           font-size: 10px;
           color: #6b7280;
         }
-
         .engagement-stats {
           display: flex;
           gap: 12px;
           align-items: center;
         }
-
         .stat {
           display: flex;
           align-items: center;
@@ -769,11 +679,9 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           font-size: 11px;
           color: #6b7280;
         }
-
         .stat-icon {
           font-size: 12px;
         }
-
         .difficulty-badge {
           position: absolute;
           bottom: 16px;
@@ -785,92 +693,73 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           text-transform: uppercase;
           letter-spacing: 0.5px;
         }
-
         .difficulty-beginner {
           background: #dcfce7;
           color: #166534;
         }
-
         .difficulty-intermediate {
           background: #fef3c7;
           color: #92400e;
         }
-
         .difficulty-advanced {
           background: #fecaca;
           color: #991b1b;
         }
-
         .difficulty-expert {
           background: #e0e7ff;
           color: #3730a3;
         }
-
         @media (max-width: 768px) {
           .case-study-card {
             max-width: 100%;
           }
-          
           .card-image {
             height: 180px;
           }
-          
           .metrics-section {
             flex-direction: column;
             gap: 8px;
           }
-          
           .metric-item {
             flex-direction: row;
             justify-content: space-between;
           }
-          
           .template-list {
             flex-direction: column;
           }
-          
           .engagement-stats {
             gap: 8px;
           }
-          
           .card-header {
             flex-direction: column;
             align-items: flex-start;
             gap: 8px;
           }
-          
           .title-section {
             margin-right: 0;
           }
-          
           .industry-badge {
             align-self: flex-start;
           }
         }
-        
         @media (max-width: 480px) {
           .case-study-card.compact .card-content,
           .case-study-card.standard .card-content {
             padding: 12px;
           }
-          
           .case-study-title {
             font-size: 14px;
           }
-          
           .case-study-summary {
             font-size: 13px;
           }
-          
           .metrics-section {
             padding: 8px;
           }
-          
           .template-chip {
             font-size: 10px;
             padding: 3px 6px;
           }
-          
           .quick-actions {
             opacity: 1;
             position: static;

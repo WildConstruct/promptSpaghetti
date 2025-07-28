@@ -23,7 +23,7 @@ export declare class ExtensionManifestManager {
     /**
      * Validate manifest with context
      */
-    validateManifest(
+    validateManifest()
       manifest: ExtensionManifest,
       systemVersion?: string,
       platform?: string,
@@ -95,44 +95,44 @@ export declare class ExtensionManifestManager {
 export declare class ExtensionManifestBuilder {
     private manifest;
     constructor();
-    setBasicInfo(info: {
+    setBasicInfo(info: {)
         id: string;
         name: string;
         version: string;
         description: string;
     }): ExtensionManifestBuilder;
-    setAuthor(author: {
+    setAuthor(author: {)
         name: string;
         email?: string;
         url?: string;
     }): ExtensionManifestBuilder;
     setExtensionType(type: 'node' | 'ui' | 'transform' | 'storage'): ExtensionManifestBuilder;
     setMain(main: string): ExtensionManifestBuilder;
-    setDependencies(dependencies: {
+    setDependencies(dependencies: {)
         system?: string;
         extensions?: Record<string, string>;
         npm?: Record<string, string>;
     }): ExtensionManifestBuilder;
     setPermissions(permissions: string[]): ExtensionManifestBuilder;
-    setCapabilities(capabilities: {
+    setCapabilities(capabilities: {)
         provides?: string[];
         requires?: string[];
         optional?: string[];
     }): ExtensionManifestBuilder;
-    setUI(ui: {
+    setUI(ui: {)
         icon?: string;
         category?: string;
         themes?: string[];
         css?: string[];
         components?: Record<string, string>;
     }): ExtensionManifestBuilder;
-    setRuntime(runtime: {
+    setRuntime(runtime: {)
         node_types?: string[];
         transforms?: string[];
         storage_providers?: string[];
         background_tasks?: string[];
     }): ExtensionManifestBuilder;
-    setMetadata(metadata: {
+    setMetadata(metadata: {)
         license?: string;
         repository?: string;
         homepage?: string;
@@ -140,12 +140,12 @@ export declare class ExtensionManifestBuilder {
         keywords?: string[];
         categories?: string[];
     }): ExtensionManifestBuilder;
-    setCompatibility(compatibility: {
+    setCompatibility(compatibility: {)
         min_system_version?: string;
         max_system_version?: string;
         platforms?: string[];
     }): ExtensionManifestBuilder;
-    setSecurity(security: {
+    setSecurity(security: {)
         content_security_policy?: string;
         sandbox?: {
             enabled?: boolean;

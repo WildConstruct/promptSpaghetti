@@ -12,7 +12,6 @@
  * - Emergency unlock capabilities
  * - Compliance reporting
  */
-
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
@@ -73,7 +72,7 @@ export interface AccountLockout {
   unlockTime?: Date;
   failedAttempts: number;
   securityEvents: string[];
-  metadata: {
+  metadata: {,
     ipAddress?: string;
     userAgent?: string;
     geolocation?: string;
@@ -145,7 +144,6 @@ export interface UnlockPolicy {
   auditRequired: boolean;
   notificationRequired: boolean;
 }
-
 /**
  * Comprehensive account lockout management service
  */
@@ -153,17 +151,15 @@ export class AccountLockoutService extends EventEmitter {
   private lockouts: Map<string, AccountLockout> = new Map();
   private unlockPolicies: Map<AdminRole, UnlockPolicy> = new Map();
   private emergencyOverrides: Set<string> = new Set();
-  
   constructor() {
     super();
     this.initializeUnlockPolicies();
     this.startCleanupTimer();
   }
-  
   /**
    * Create a new account lockout
    */
-  public async createLockout(
+  public async createLockout()
     userId: string,
     userEmail: string,
     reason: LockoutReason,
@@ -179,14 +175,14 @@ export class AccountLockoutService extends EventEmitter {
       expiryTime: this.calculateExpiryTime(reason),
       failedAttempts: metadata.riskScore || 0,
       securityEvents: [],
-      metadata: {
+      metadata: {,
         riskScore: 50,
         threatLevel: 'medium',
         ...metadata
       },
       adminActions: [],
       notifications: [],
-      auditTrail: [{
+      auditTrail: [{,
         id: crypto.randomUUID(),
         timestamp: new Date(),
         event: 'Account locked',
@@ -195,39 +191,31 @@ export class AccountLockoutService extends EventEmitter {
         details: { reason, metadata }
       }]
     };
-    
     this.lockouts.set(lockout.id, lockout);
-    
     // Send initial notification
     await this.sendLockoutNotification(lockout);
-    
     // Log security event
     this.logSecurityEvent(lockout, 'account_locked');
-    
     this.emit('accountLocked', lockout);
-    
     return lockout.id;
   }
-  
   /**
    * Administrator unlock capability with comprehensive security
    */
-  public async adminUnlock(
+  public async adminUnlock()
     lockoutId: string,
-    unlockRequest: UnlockRequest
+    unlockRequest: UnlockRequest,
   ): Promise<{ success: boolean; message: string; requiresApproval?: boolean }> {
     const lockout = this.lockouts.get(lockoutId);
     if (!lockout) {
-      throw new Error(`Lockout not found: ${lockoutId}`);
+      throw new Error(`Lockout not found: ${lockoutId}`);}
     }
-    
     if (lockout.status !== LockoutStatus.ACTIVE && lockout.status !== LockoutStatus.PENDING_REVIEW) {
       return {
         success: false,
-        message: `Cannot unlock account with status: ${lockout.status}`
+        message: `Cannot unlock account with status: ${lockout.status}`}
       };
     }
-    
     // Verify admin permissions
     const adminPolicy = this.unlockPolicies.get(unlockRequest.adminId as AdminRole);
     if (!adminPolicy || !adminPolicy.canUnlock) {
@@ -236,24 +224,21 @@ export class AccountLockoutService extends EventEmitter {
         message: 'Insufficient permissions to unlock account'
       };
     }
-    
     // Check if approval is required
     if (adminPolicy.requiresApproval && unlockRequest.urgency !== 'emergency') {
       return await this.requestUnlockApproval(lockout, unlockRequest);
     }
-    
     // Perform the unlock
     return await this.performUnlock(lockout, unlockRequest);
   }
-  
   /**
    * Emergency unlock capability for critical situations
    */
-  public async emergencyUnlock(
+  public async emergencyUnlock()
     lockoutId: string,
     adminId: string,
     emergencyCode: string,
-    justification: string
+    justification: string,
   ): Promise<{ success: boolean; message: string }> {
     // Verify emergency override code
     if (!this.emergencyOverrides.has(emergencyCode)) {
@@ -263,44 +248,37 @@ export class AccountLockoutService extends EventEmitter {
         message: 'Invalid emergency override code'
       };
     }
-    
     const lockout = this.lockouts.get(lockoutId);
     if (!lockout) {
-      throw new Error(`Lockout not found: ${lockoutId}`);
+      throw new Error(`Lockout not found: ${lockoutId}`);}
     }
-    
     const unlockRequest: UnlockRequest = {
       lockoutId,
       adminId,
-      reason: `EMERGENCY UNLOCK: ${justification}`,
+      reason: `EMERGENCY UNLOCK: ${justification}`,}
       method: UnlockMethod.EMERGENCY_UNLOCK,
       urgency: 'emergency',
       justification,
       approvalRequired: false,
       metadata: { emergencyCode }
     };
-    
     // Emergency unlocks bypass normal approval processes
     const result = await this.performUnlock(lockout, unlockRequest);
-    
     // Consume the emergency code
     this.emergencyOverrides.delete(emergencyCode);
-    
     // Alert security team
-    this.emit('emergencyUnlockUsed', {
+    this.emit('emergencyUnlockUsed', {)
       lockout,
       adminId,
       emergencyCode,
       justification
     });
-    
     return result;
   }
-  
   /**
    * Approve pending unlock request
    */
-  public async approveUnlock(
+  public async approveUnlock()
     lockoutId: string,
     adminActionId: string,
     approverId: string,
@@ -309,29 +287,25 @@ export class AccountLockoutService extends EventEmitter {
   ): Promise<{ success: boolean; message: string }> {
     const lockout = this.lockouts.get(lockoutId);
     if (!lockout) {
-      throw new Error(`Lockout not found: ${lockoutId}`);
+      throw new Error(`Lockout not found: ${lockoutId}`);}
     }
-    
     const adminAction = lockout.adminActions.find(a => a.id === adminActionId);
     if (!adminAction) {
-      throw new Error(`Admin action not found: ${adminActionId}`);
+      throw new Error(`Admin action not found: ${adminActionId}`);}
     }
-    
     if (!adminAction.approvalRequired) {
       return {
         success: false,
         message: 'This action does not require approval'
       };
     }
-    
     // Update admin action
     adminAction.approvedBy = approverId;
     adminAction.approvalTime = new Date();
     adminAction.metadata.approved = approved;
     adminAction.metadata.approverComments = comments;
-    
     // Add audit entry
-    lockout.auditTrail.push({
+    lockout.auditTrail.push({)
       id: crypto.randomUUID(),
       timestamp: new Date(),
       event: approved ? 'Unlock approved' : 'Unlock denied',
@@ -339,7 +313,6 @@ export class AccountLockoutService extends EventEmitter {
       actorType: 'admin',
       details: { adminActionId, comments }
     });
-    
     if (approved) {
       // Perform the unlock
       const unlockRequest: UnlockRequest = {
@@ -348,35 +321,30 @@ export class AccountLockoutService extends EventEmitter {
         reason: adminAction.reason,
         method: UnlockMethod.ADMIN_OVERRIDE,
         urgency: 'medium',
-        justification: `Approved by ${approverId}`,
-        approvalRequired: false
+        justification: `Approved by ${approverId}`,}
+        approvalRequired: false,
       };
-      
       return await this.performUnlock(lockout, unlockRequest);
     } else {
       lockout.status = LockoutStatus.ACTIVE;
-      
       // Notify original requestor of denial
-      await this.sendNotification(lockout, {
+      await this.sendNotification(lockout, {)
         type: NotificationType.ADMIN_ACTION_REQUIRED,
         recipient: adminAction.adminEmail,
-        content: `Your unlock request for user ${lockout.userEmail} has been denied. Reason: ${comments || 'No reason provided'}`
+        content: `Your unlock request for user ${lockout.userEmail} has been denied. Reason: ${comments || 'No reason provided'}`}
       });
-      
       return {
         success: true,
         message: 'Unlock request denied'
       };
     }
   }
-  
   /**
    * Get lockout status and details
    */
   public getLockout(lockoutId: string): AccountLockout | null {
     return this.lockouts.get(lockoutId) || null;
   }
-  
   /**
    * Get all lockouts for a user
    */
@@ -385,7 +353,6 @@ export class AccountLockoutService extends EventEmitter {
       .filter(lockout => lockout.userId === userId)
       .sort((a, b) => b.lockoutTime.getTime() - a.lockoutTime.getTime());
   }
-  
   /**
    * Get pending lockouts requiring admin attention
    */
@@ -394,35 +361,29 @@ export class AccountLockoutService extends EventEmitter {
       .filter(lockout => lockout.status === LockoutStatus.PENDING_REVIEW)
       .sort((a, b) => b.lockoutTime.getTime() - a.lockoutTime.getTime());
   }
-  
   /**
    * Check if user is currently locked out
    */
   public isUserLockedOut(userId: string): boolean {
     const userLockouts = this.getUserLockouts(userId);
-    return userLockouts.some(lockout => 
+    return userLockouts.some(lockout => )
       lockout.status === LockoutStatus.ACTIVE && 
       (!lockout.expiryTime || lockout.expiryTime > new Date())
     );
   }
-  
   /**
    * Generate emergency override code
    */
   public generateEmergencyCode(adminId: string, expiryHours: number = 24): string {
     const code = crypto.randomBytes(16).toString('hex').toUpperCase();
     this.emergencyOverrides.add(code);
-    
     // Set expiry
     setTimeout(() => {
       this.emergencyOverrides.delete(code);
     }, expiryHours * 60 * 60 * 1000);
-    
     this.logSecurityEvent(null, 'emergency_code_generated', { adminId, code, expiryHours });
-    
     return code;
   }
-  
   /**
    * Get lockout statistics and reports
    */
@@ -436,13 +397,11 @@ export class AccountLockoutService extends EventEmitter {
     topAffectedUsers: Array<{ userId: string; count: number }>;
   } {
     let lockouts = Array.from(this.lockouts.values());
-    
     if (dateRange) {
-      lockouts = lockouts.filter(l => 
+      lockouts = lockouts.filter(l => )
         l.lockoutTime >= dateRange.start && l.lockoutTime <= dateRange.end
       );
     }
-    
     const lockoutsByReason: Record<LockoutReason, number> = {
       [LockoutReason.EXCESSIVE_FAILED_ATTEMPTS]: 0,
       [LockoutReason.SUSPICIOUS_ACTIVITY]: 0,
@@ -451,21 +410,17 @@ export class AccountLockoutService extends EventEmitter {
       [LockoutReason.SYSTEM_SECURITY_ALERT]: 0,
       [LockoutReason.COMPLIANCE_REQUIREMENT]: 0
     };
-    
     const userCounts: Record<string, number> = {};
     let totalDuration = 0;
     let adminUnlocks = 0;
     let emergencyUnlocks = 0;
-    
-    lockouts.forEach(lockout => {
+    lockouts.forEach(lockout => {)
       lockoutsByReason[lockout.reason]++;
       userCounts[lockout.userId] = (userCounts[lockout.userId] || 0) + 1;
-      
       if (lockout.unlockTime) {
         totalDuration += lockout.unlockTime.getTime() - lockout.lockoutTime.getTime();
       }
-      
-      lockout.adminActions.forEach(action => {
+      lockout.adminActions.forEach(action => {)
         if (action.action === 'unlock') {
           if (action.metadata.emergencyCode) {
             emergencyUnlocks++;
@@ -475,12 +430,10 @@ export class AccountLockoutService extends EventEmitter {
         }
       });
     });
-    
-    const topAffectedUsers = Object.entries(userCounts)
+    const topAffectedUsers = Object.entries(userCounts);
       .sort(([, a], [, b]) => b - a)
       .slice(0, 10)
       .map(([userId, count]) => ({ userId, count }));
-    
     return {
       totalLockouts: lockouts.length,
       activeLockouts: lockouts.filter(l => l.status === LockoutStatus.ACTIVE).length,
@@ -491,17 +444,15 @@ export class AccountLockoutService extends EventEmitter {
       topAffectedUsers
     };
   }
-  
   // Private helper methods
-  
-  private async requestUnlockApproval(
+  private async requestUnlockApproval()
     lockout: AccountLockout,
-    unlockRequest: UnlockRequest
+    unlockRequest: UnlockRequest,
   ): Promise<{ success: boolean; message: string; requiresApproval: boolean }> {
     const adminAction: AdminAction = {
       id: crypto.randomUUID(),
       adminId: unlockRequest.adminId,
-      adminEmail: `admin-${unlockRequest.adminId}@company.com`, // Would be retrieved from admin service
+      adminEmail: `admin-${unlockRequest.adminId}@company.com`, // Would be retrieved from admin service}
       adminRole: AdminRole.SECURITY_ADMIN, // Would be retrieved from admin service
       action: 'unlock',
       reason: unlockRequest.reason,
@@ -511,55 +462,48 @@ export class AccountLockoutService extends EventEmitter {
       approvalRequired: true,
       metadata: unlockRequest.metadata || {}
     };
-    
     lockout.adminActions.push(adminAction);
     lockout.status = LockoutStatus.PENDING_REVIEW;
-    
     // Add audit entry
-    lockout.auditTrail.push({
+    lockout.auditTrail.push({)
       id: crypto.randomUUID(),
       timestamp: new Date(),
       event: 'Unlock approval requested',
       actor: unlockRequest.adminId,
       actorType: 'admin',
-      details: unlockRequest
+      details: unlockRequest,
     });
-    
     // Notify approvers
     const policy = this.unlockPolicies.get(unlockRequest.adminId as AdminRole);
     if (policy?.approverRoles) {
       for (const approverRole of policy.approverRoles) {
-        await this.sendNotification(lockout, {
+        await this.sendNotification(lockout, {)
           type: NotificationType.ADMIN_ACTION_REQUIRED,
-          recipient: `${approverRole}-team@company.com`,
-          content: `Unlock approval required for user ${lockout.userEmail}. Reason: ${unlockRequest.reason}`
+          recipient: `${approverRole}-team@company.com`,}
+          content: `Unlock approval required for user ${lockout.userEmail}. Reason: ${unlockRequest.reason}`}
         });
       }
     }
-    
     this.emit('unlockApprovalRequested', { lockout, unlockRequest, adminAction });
-    
     return {
       success: true,
       message: 'Unlock request submitted for approval',
-      requiresApproval: true
+      requiresApproval: true,
     };
   }
-  
-  private async performUnlock(
+  private async performUnlock()
     lockout: AccountLockout,
-    unlockRequest: UnlockRequest
+    unlockRequest: UnlockRequest,
   ): Promise<{ success: boolean; message: string }> {
     // Update lockout status
     lockout.status = LockoutStatus.UNLOCKED;
     lockout.unlockTime = new Date();
-    
     // Add admin action if not already present
     if (!lockout.adminActions.some(a => a.action === 'unlock' && a.adminId === unlockRequest.adminId)) {
       const adminAction: AdminAction = {
         id: crypto.randomUUID(),
         adminId: unlockRequest.adminId,
-        adminEmail: `admin-${unlockRequest.adminId}@company.com`,
+        adminEmail: `admin-${unlockRequest.adminId}@company.com`,}
         adminRole: AdminRole.SECURITY_ADMIN,
         action: 'unlock',
         reason: unlockRequest.reason,
@@ -569,55 +513,46 @@ export class AccountLockoutService extends EventEmitter {
         approvalRequired: false,
         metadata: unlockRequest.metadata || {}
       };
-      
       lockout.adminActions.push(adminAction);
     }
-    
     // Add audit entry
-    lockout.auditTrail.push({
+    lockout.auditTrail.push({)
       id: crypto.randomUUID(),
       timestamp: new Date(),
       event: 'Account unlocked',
       actor: unlockRequest.adminId,
       actorType: 'admin',
-      details: unlockRequest
+      details: unlockRequest,
     });
-    
     // Send unlock notification to user
-    await this.sendNotification(lockout, {
+    await this.sendNotification(lockout, {)
       type: NotificationType.UNLOCK_NOTIFICATION,
       recipient: lockout.userEmail,
       content: 'Your account has been unlocked by an administrator. You may now log in normally.'
     });
-    
     // Log security event
-    this.logSecurityEvent(lockout, 'account_unlocked', {
+    this.logSecurityEvent(lockout, 'account_unlocked', {)
       adminId: unlockRequest.adminId,
       method: unlockRequest.method,
-      reason: unlockRequest.reason
+      reason: unlockRequest.reason,
     });
-    
     this.emit('accountUnlocked', { lockout, unlockRequest });
-    
     return {
       success: true,
       message: 'Account successfully unlocked'
     };
   }
-  
   private async sendLockoutNotification(lockout: AccountLockout): Promise<void> {
     const content = this.generateLockoutNotificationContent(lockout);
-    
-    await this.sendNotification(lockout, {
+    await this.sendNotification(lockout, {)
       type: NotificationType.LOCKOUT_NOTIFICATION,
       recipient: lockout.userEmail,
       content
     });
   }
-  
-  private async sendNotification(
+  private async sendNotification()
     lockout: AccountLockout,
-    notificationData: Partial<LockoutNotification>
+    notificationData: Partial<LockoutNotification>,
   ): Promise<void> {
     const notification: LockoutNotification = {
       id: crypto.randomUUID(),
@@ -626,26 +561,20 @@ export class AccountLockoutService extends EventEmitter {
       channel: 'email',
       sentAt: new Date(),
       content: notificationData.content || '',
-      status: 'sent'
+      status: 'sent',
     };
-    
     lockout.notifications.push(notification);
-    
     // In production, integrate with actual notification service
-    console.log(`Sending ${notification.type} to ${notification.recipient}`);
-    
+    console.log(`Sending ${notification.type} to ${notification.recipient}`);}
     this.emit('notificationSent', notification);
   }
-  
   private generateLockoutNotificationContent(lockout: AccountLockout): string {
     const reasonText = this.getLockoutReasonText(lockout.reason);
-    const expiryText = lockout.expiryTime 
-      ? `Your account will be automatically unlocked at ${lockout.expiryTime.toLocaleString()}.`
+    const expiryText = lockout.expiryTime ;
+      ? `Your account will be automatically unlocked at ${lockout.expiryTime.toLocaleString()}.`}
       : 'Please contact support to unlock your account.';
-    
-    return `Your account has been temporarily locked due to ${reasonText}. ${expiryText} If you believe this is an error, please contact our support team with reference ID: ${lockout.id}`;
+    return `Your account has been temporarily locked due to ${reasonText}. ${expiryText} If you believe this is an error, please contact our support team with reference ID: ${lockout.id}`;}
   }
-  
   private getLockoutReasonText(reason: LockoutReason): string {
     switch (reason) {
     case LockoutReason.EXCESSIVE_FAILED_ATTEMPTS:
@@ -664,10 +593,8 @@ export class AccountLockoutService extends EventEmitter {
       return 'security concerns';
     }
   }
-  
   private calculateExpiryTime(reason: LockoutReason): Date | undefined {
     const now = new Date();
-    
     switch (reason) {
     case LockoutReason.EXCESSIVE_FAILED_ATTEMPTS:
       return new Date(now.getTime() + 30 * 60 * 1000); // 30 minutes
@@ -685,9 +612,8 @@ export class AccountLockoutService extends EventEmitter {
       return new Date(now.getTime() + 60 * 60 * 1000); // 1 hour default
     }
   }
-  
   private initializeUnlockPolicies(): void {
-    this.unlockPolicies.set(AdminRole.SUPER_ADMIN, {
+    this.unlockPolicies.set(AdminRole.SUPER_ADMIN, {)
       adminRole: AdminRole.SUPER_ADMIN,
       canUnlock: true,
       requiresApproval: false,
@@ -695,10 +621,9 @@ export class AccountLockoutService extends EventEmitter {
       approverRoles: [],
       emergencyUnlock: true,
       auditRequired: true,
-      notificationRequired: true
+      notificationRequired: true,
     });
-    
-    this.unlockPolicies.set(AdminRole.SECURITY_ADMIN, {
+    this.unlockPolicies.set(AdminRole.SECURITY_ADMIN, {)
       adminRole: AdminRole.SECURITY_ADMIN,
       canUnlock: true,
       requiresApproval: true,
@@ -706,10 +631,9 @@ export class AccountLockoutService extends EventEmitter {
       approverRoles: [AdminRole.SUPER_ADMIN],
       emergencyUnlock: true,
       auditRequired: true,
-      notificationRequired: true
+      notificationRequired: true,
     });
-    
-    this.unlockPolicies.set(AdminRole.SYSTEM_ADMIN, {
+    this.unlockPolicies.set(AdminRole.SYSTEM_ADMIN, {)
       adminRole: AdminRole.SYSTEM_ADMIN,
       canUnlock: true,
       requiresApproval: true,
@@ -717,10 +641,9 @@ export class AccountLockoutService extends EventEmitter {
       approverRoles: [AdminRole.SECURITY_ADMIN, AdminRole.SUPER_ADMIN],
       emergencyUnlock: false,
       auditRequired: true,
-      notificationRequired: true
+      notificationRequired: true,
     });
-    
-    this.unlockPolicies.set(AdminRole.HELP_DESK, {
+    this.unlockPolicies.set(AdminRole.HELP_DESK, {)
       adminRole: AdminRole.HELP_DESK,
       canUnlock: true,
       requiresApproval: true,
@@ -728,11 +651,10 @@ export class AccountLockoutService extends EventEmitter {
       approverRoles: [AdminRole.SYSTEM_ADMIN, AdminRole.SECURITY_ADMIN],
       emergencyUnlock: false,
       auditRequired: true,
-      notificationRequired: true
+      notificationRequired: true,
     });
   }
-  
-  private logSecurityEvent(
+  private logSecurityEvent()
     lockout: AccountLockout | null,
     event: string,
     details: Record<string, any> = {}
@@ -744,30 +666,24 @@ export class AccountLockoutService extends EventEmitter {
       userId: lockout?.userId,
       details
     };
-    
     // In production, integrate with security logging system
     console.log('Security Event:', JSON.stringify(logEntry));
-    
     this.emit('securityEvent', logEntry);
   }
-  
   private generateLockoutId(): string {
     const timestamp = Date.now().toString();
     const random = crypto.randomBytes(4).toString('hex').toUpperCase();
-    return `LOCK-${timestamp}-${random}`;
+    return `LOCK-${timestamp}-${random}`;}
   }
-  
   private startCleanupTimer(): void {
     // Clean up expired lockouts every hour
     setInterval(() => {
       const now = new Date();
-      
       for (const [id, lockout] of this.lockouts) {
         if (lockout.expiryTime && lockout.expiryTime < now && lockout.status === LockoutStatus.ACTIVE) {
           lockout.status = LockoutStatus.EXPIRED;
           lockout.unlockTime = now;
-          
-          lockout.auditTrail.push({
+          lockout.auditTrail.push({)
             id: crypto.randomUUID(),
             timestamp: now,
             event: 'Lockout expired automatically',
@@ -775,10 +691,8 @@ export class AccountLockoutService extends EventEmitter {
             actorType: 'system',
             details: {}
           });
-          
           this.emit('lockoutExpired', lockout);
         }
-        
         // Remove very old lockouts (older than 1 year)
         const oneYearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
         if (lockout.lockoutTime < oneYearAgo) {

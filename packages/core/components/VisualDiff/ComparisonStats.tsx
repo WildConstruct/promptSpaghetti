@@ -1,6 +1,5 @@
 // Comparison Stats - Shows statistics about the graph comparison
 // Story 9.3.2 - Visual Diff Tool
-
 import React from 'react';
 import { DetailedComparison } from '../../types/comparison';
 
@@ -9,52 +8,45 @@ export interface ComparisonStatsProps {
   className?: string;
 }
 
-export const ComparisonStats: React.FC<ComparisonStatsProps> = ({
+export const ComparisonStats: React.FC<ComparisonStatsProps> = ({)
   comparison,
   className = ''
 }) => {
   const { changes_summary, similarity_score, comparison_duration_ms } = comparison;
-
   // Calculate total changes
   const totalChanges = changes_summary.total_changes;
   const hasChanges = totalChanges > 0;
-
   // Format similarity as percentage
   const similarityPercentage = Math.round(similarity_score * 100);
-
   // Format duration
   const formatDuration = (ms?: number) => {
     if (!ms) return 'N/A';
-    if (ms < 1000) return `${ms}ms`;
-    return `${(ms / 1000).toFixed(1)}s`;
+    if (ms < 1000) return `${ms}ms`;}
+    return `${(ms / 1000).toFixed(1)}s`;}
   };
-
   // Get similarity color
   const getSimilarityColor = (score: number) => {
     if (score >= 0.8) return 'text-green-600';
     if (score >= 0.5) return 'text-yellow-600';
     return 'text-red-600';
   };
-
-  return (
-    <div className={`bg-gray-50 rounded-lg p-4 ${className}`}>
+  return ()
+    <div className={`bg-gray-50 rounded-lg p-4 ${className}`}>}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {/* Similarity Score */}
         <div className="text-center">
-          <div className={`text-2xl font-bold ${getSimilarityColor(similarity_score)}`}>
+          <div className={`text-2xl font-bold ${getSimilarityColor(similarity_score)}`}>}
             {similarityPercentage}%
           </div>
           <div className="text-sm text-gray-600">Similarity</div>
         </div>
-
         {/* Total Changes */}
         <div className="text-center">
-          <div className={`text-2xl font-bold ${hasChanges ? 'text-orange-600' : 'text-green-600'}`}>
+          <div className={`text-2xl font-bold ${hasChanges ? 'text-orange-600' : 'text-green-600'}`}>}
             {totalChanges}
           </div>
           <div className="text-sm text-gray-600">Total Changes</div>
         </div>
-
         {/* Node Changes */}
         <div className="text-center">
           <div className="text-lg font-semibold text-gray-900">
@@ -69,7 +61,6 @@ export const ComparisonStats: React.FC<ComparisonStatsProps> = ({
             <span className="text-orange-600">~{changes_summary.nodes_modified}</span>
           </div>
         </div>
-
         {/* Edge Changes */}
         <div className="text-center">
           <div className="text-lg font-semibold text-gray-900">
@@ -85,7 +76,6 @@ export const ComparisonStats: React.FC<ComparisonStatsProps> = ({
           </div>
         </div>
       </div>
-
       {/* Additional Stats */}
       <div className="mt-4 pt-4 border-t border-gray-200">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
@@ -93,21 +83,18 @@ export const ComparisonStats: React.FC<ComparisonStatsProps> = ({
             <span className="text-gray-600">Properties Changed:</span>
             <span className="font-medium">{changes_summary.properties_changed}</span>
           </div>
-          
           <div className="flex justify-between">
             <span className="text-gray-600">Comparison Time:</span>
             <span className="font-medium">{formatDuration(comparison_duration_ms)}</span>
           </div>
-
           <div className="flex justify-between">
             <span className="text-gray-600">Algorithm:</span>
             <span className="font-medium capitalize">{comparison.comparison_type}</span>
           </div>
         </div>
       </div>
-
       {/* No Changes Message */}
-      {!hasChanges && (
+      {!hasChanges && ()
         <div className="mt-4 text-center py-2">
           <div className="inline-flex items-center space-x-2 text-green-600">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -117,9 +104,8 @@ export const ComparisonStats: React.FC<ComparisonStatsProps> = ({
           </div>
         </div>
       )}
-
       {/* Confidence Distribution */}
-      {comparison.algorithm_metadata?.confidence_distribution && (
+      {comparison.algorithm_metadata?.confidence_distribution && ()
         <div className="mt-4 pt-4 border-t border-gray-200">
           <div className="text-sm text-gray-600 mb-2">Match Confidence Distribution:</div>
           <div className="flex space-x-4 text-xs">

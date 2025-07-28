@@ -4,16 +4,13 @@
  * Real-time status tracking for verification requests.
  * Shows current status, progress, and next steps for each verification type.
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { IdentityValidationType, ValidationStatus, IdentityValidationRequest } from '../../auth/IdentityValidation';
-
 interface VerificationStatusTrackerProps {
   userId: string;
   onRefresh?: () => void;
   onRequestVerification?: (type: IdentityValidationType) => void;
 }
-
 interface VerificationStatusItem {
   type: IdentityValidationType;
   title: string;
@@ -26,47 +23,46 @@ interface VerificationStatusItem {
   estimatedCompletion?: string;
   priority: 'high' | 'medium' | 'low';
 }
-
 const VERIFICATION_TYPES: Omit<VerificationStatusItem, 'status' | 'requestId' | 'submittedAt' | 'lastUpdated' | 'nextSteps' | 'estimatedCompletion'>[] = [
   {
     type: 'email_verification',
     title: 'Email Verification',
     description: 'Verify your email address for account security',
-    priority: 'high'
+    priority: 'high',
   },
   {
     type: 'phone_verification',
     title: 'Phone Verification',
     description: 'Add phone number for two-factor authentication',
-    priority: 'high'
+    priority: 'high',
   },
   {
     type: 'government_id',
     title: 'Government ID',
     description: 'Upload government-issued identification',
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     type: 'professional_credentials',
     title: 'Professional Credentials',
     description: 'Verify your film industry experience and credentials',
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     type: 'portfolio_verification',
     title: 'Portfolio Verification',
     description: 'Verify your professional portfolio and work samples',
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     type: 'social_media_verification',
     title: 'Social Media Verification',
     description: 'Link your professional social media profiles',
-    priority: 'low'
+    priority: 'low',
   }
 ];
 
-export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps> = ({
+export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps> = ({)
   userId,
   onRefresh,
   onRequestVerification
@@ -74,70 +70,59 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
   const [verificationItems, setVerificationItems] = useState<VerificationStatusItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
-
   // Mock data loading - in real implementation, this would fetch from API
   const loadVerificationStatus = useCallback(async () => {
     setIsLoading(true);
-    
     try {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 500));
-      
       // Mock verification status data
       const mockStatuses: Partial<Record<IdentityValidationType, { status: ValidationStatus; requestId?: string; submittedAt?: Date }>> = {
-        email_verification: { 
+        email_verification: { ,
           status: 'approved', 
           requestId: 'req_email_123',
           submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago
         },
-        phone_verification: { 
+        phone_verification: { ,
           status: 'pending', 
           requestId: 'req_phone_456',
           submittedAt: new Date(Date.now() - 1 * 60 * 60 * 1000) // 1 hour ago
         },
-        government_id: { 
+        government_id: { ,
           status: 'in_review', 
           requestId: 'req_id_789',
           submittedAt: new Date(Date.now() - 6 * 60 * 60 * 1000) // 6 hours ago
         }
       };
-      
-      const items: VerificationStatusItem[] = VERIFICATION_TYPES.map(type => {
+      const items: VerificationStatusItem[] = VERIFICATION_TYPES.map(type => {)
         const mockStatus = mockStatuses[type.type];
         const baseItem: VerificationStatusItem = {
           ...type,
           status: mockStatus?.status || 'not_started',
           requestId: mockStatus?.requestId,
           submittedAt: mockStatus?.submittedAt,
-          lastUpdated: mockStatus?.submittedAt
+          lastUpdated: mockStatus?.submittedAt,
         };
-        
         // Add next steps based on status
         baseItem.nextSteps = generateNextSteps(baseItem.status, type.type);
         baseItem.estimatedCompletion = getEstimatedCompletion(baseItem.status, type.type);
-        
         return baseItem;
       });
-      
       setVerificationItems(items);
       setLastRefresh(new Date());
-      
     } catch (error) {
       console.error('Failed to load verification status:', error);
     } finally {
       setIsLoading(false);
     }
   }, [userId]);
-  
   useEffect(() => {
     loadVerificationStatus();
   }, [loadVerificationStatus]);
-  
   const handleRefresh = useCallback(() => {
     loadVerificationStatus();
     onRefresh?.();
   }, [loadVerificationStatus, onRefresh]);
-  
   const getStatusIcon = useCallback((status: ValidationStatus | 'not_started'): string => {
     switch (status) {
     case 'approved': return '✅';
@@ -150,7 +135,6 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
     default: return '❓';
     }
   }, []);
-  
   const getStatusColor = useCallback((status: ValidationStatus | 'not_started'): string => {
     switch (status) {
     case 'approved': return '#10b981';
@@ -163,7 +147,6 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
     default: return '#6b7280';
     }
   }, []);
-  
   const getStatusText = useCallback((status: ValidationStatus | 'not_started'): string => {
     switch (status) {
     case 'approved': return 'Verified';
@@ -176,7 +159,6 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
     default: return 'Unknown';
     }
   }, []);
-  
   const getPriorityColor = useCallback((priority: 'high' | 'medium' | 'low'): string => {
     switch (priority) {
     case 'high': return '#ef4444';
@@ -185,13 +167,11 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
     default: return '#6b7280';
     }
   }, []);
-  
   const completedCount = verificationItems.filter(item => item.status === 'approved').length;
   const totalCount = verificationItems.length;
   const completionPercentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
-
   if (isLoading) {
-    return (
+    return ()
       <div className="verification-status-tracker loading">
         <div className="loading-spinner">Loading verification status...</div>
         <style>{`
@@ -209,8 +189,7 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="verification-status-tracker">
       {/* Header */}
       <div className="tracker-header">
@@ -224,7 +203,6 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
             🔄 Refresh
           </button>
         </div>
-        
         <div className="progress-summary">
           <div className="progress-bar">
             <div 
@@ -236,15 +214,13 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
             {completedCount} of {totalCount} verifications completed ({completionPercentage}%)
           </div>
         </div>
-        
         <div className="last-updated">
           Last updated: {lastRefresh.toLocaleTimeString()}
         </div>
       </div>
-
       {/* Verification Items */}
       <div className="verification-items">
-        {verificationItems.map((item) => (
+        {verificationItems.map((item) => ()
           <div key={item.type} className="verification-item">
             <div className="item-header">
               <div className="item-title">
@@ -259,58 +235,53 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
                   </span>
                 </div>
               </div>
-              
               <div 
                 className="status-badge"
                 style={{ 
                   color: getStatusColor(item.status),
-                  borderColor: getStatusColor(item.status)
+                  borderColor: getStatusColor(item.status),
                 }}
               >
                 {getStatusText(item.status)}
               </div>
             </div>
-            
             <div className="item-description">
               {item.description}
             </div>
-            
             {/* Status Details */}
-            {item.status !== 'not_started' && (
+            {item.status !== 'not_started' && ()
               <div className="status-details">
-                {item.submittedAt && (
+                {item.submittedAt && ()
                   <div className="detail-item">
                     <strong>Submitted:</strong> {item.submittedAt.toLocaleString()}
                   </div>
                 )}
-                {item.requestId && (
+                {item.requestId && ()
                   <div className="detail-item">
                     <strong>Request ID:</strong> {item.requestId}
                   </div>
                 )}
-                {item.estimatedCompletion && (
+                {item.estimatedCompletion && ()
                   <div className="detail-item">
                     <strong>Est. Completion:</strong> {item.estimatedCompletion}
                   </div>
                 )}
               </div>
             )}
-            
             {/* Next Steps */}
-            {item.nextSteps && item.nextSteps.length > 0 && (
+            {item.nextSteps && item.nextSteps.length > 0 && ()
               <div className="next-steps">
                 <strong>Next Steps:</strong>
                 <ul>
-                  {item.nextSteps.map((step, index) => (
+                  {item.nextSteps.map((step, index) => ()
                     <li key={index}>{step}</li>
                   ))}
                 </ul>
               </div>
             )}
-            
             {/* Action Button */}
             <div className="item-actions">
-              {item.status === 'not_started' && onRequestVerification && (
+              {item.status === 'not_started' && onRequestVerification && ()
                 <button
                   className="btn btn-primary"
                   onClick={() => onRequestVerification(item.type)}
@@ -318,8 +289,7 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
                   Start Verification
                 </button>
               )}
-              
-              {item.status === 'requires_update' && onRequestVerification && (
+              {item.status === 'requires_update' && onRequestVerification && ()
                 <button
                   className="btn btn-warning"
                   onClick={() => onRequestVerification(item.type)}
@@ -327,8 +297,7 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
                   Update Information
                 </button>
               )}
-              
-              {item.status === 'rejected' && onRequestVerification && (
+              {item.status === 'rejected' && onRequestVerification && ()
                 <button
                   className="btn btn-secondary"
                   onClick={() => onRequestVerification(item.type)}
@@ -340,14 +309,12 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
           </div>
         ))}
       </div>
-
       <style>{`
         .verification-status-tracker {
           max-width: 900px;
           margin: 0 auto;
           padding: 24px;
         }
-
         .tracker-header {
           margin-bottom: 32px;
           padding: 24px;
@@ -355,21 +322,18 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
           border-radius: 8px;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
         .header-main {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 20px;
         }
-
         .header-main h2 {
           font-size: 24px;
           font-weight: 600;
           color: #1f2937;
           margin: 0;
         }
-
         .refresh-btn {
           background: #f3f4f6;
           border: none;
@@ -380,15 +344,12 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
           color: #374151;
           transition: background-color 0.2s;
         }
-
         .refresh-btn:hover {
           background: #e5e7eb;
         }
-
         .progress-summary {
           margin-bottom: 12px;
         }
-
         .progress-bar {
           width: 100%;
           height: 8px;
@@ -397,29 +358,24 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
           overflow: hidden;
           margin-bottom: 8px;
         }
-
         .progress-fill {
           height: 100%;
           background: linear-gradient(90deg, #3b82f6, #10b981);
           transition: width 0.3s ease;
         }
-
         .progress-text {
           font-size: 14px;
           color: #6b7280;
           font-weight: 500;
         }
-
         .last-updated {
           font-size: 12px;
           color: #9ca3af;
         }
-
         .verification-items {
           display: grid;
           gap: 20px;
         }
-
         .verification-item {
           background: white;
           border-radius: 8px;
@@ -428,37 +384,31 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
           border-left: 4px solid #e5e7eb;
           transition: transform 0.2s, box-shadow 0.2s;
         }
-
         .verification-item:hover {
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-
         .item-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 12px;
         }
-
         .item-title {
           display: flex;
           align-items: flex-start;
           gap: 12px;
         }
-
         .status-icon {
           font-size: 24px;
           margin-top: 2px;
         }
-
         .title-text h3 {
           font-size: 18px;
           font-weight: 600;
           color: #1f2937;
           margin: 0 0 6px 0;
         }
-
         .priority-badge {
           color: white;
           font-size: 11px;
@@ -467,7 +417,6 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
           font-weight: 500;
           text-transform: uppercase;
         }
-
         .status-badge {
           padding: 6px 12px;
           border: 1px solid;
@@ -477,35 +426,29 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
           text-transform: uppercase;
           background: rgba(255, 255, 255, 0.8);
         }
-
         .item-description {
           color: #6b7280;
           font-size: 14px;
           margin-bottom: 16px;
           line-height: 1.5;
         }
-
         .status-details {
           margin-bottom: 16px;
           padding: 12px;
           background: #f9fafb;
           border-radius: 6px;
         }
-
         .detail-item {
           font-size: 13px;
           color: #374151;
           margin-bottom: 4px;
         }
-
         .detail-item:last-child {
           margin-bottom: 0;
         }
-
         .detail-item strong {
           color: #1f2937;
         }
-
         .next-steps {
           margin-bottom: 20px;
           padding: 12px;
@@ -513,28 +456,23 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
           border-radius: 6px;
           border-left: 4px solid #f59e0b;
         }
-
         .next-steps strong {
           color: #92400e;
           font-size: 14px;
         }
-
         .next-steps ul {
           margin: 8px 0 0 0;
           padding-left: 16px;
         }
-
         .next-steps li {
           color: #78350f;
           font-size: 13px;
           margin-bottom: 4px;
         }
-
         .item-actions {
           display: flex;
           gap: 12px;
         }
-
         .btn {
           padding: 8px 16px;
           border: none;
@@ -544,50 +482,40 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
           cursor: pointer;
           transition: all 0.2s;
         }
-
         .btn-primary {
           background: #3b82f6;
           color: white;
         }
-
         .btn-primary:hover {
           background: #2563eb;
         }
-
         .btn-warning {
           background: #f59e0b;
           color: white;
         }
-
         .btn-warning:hover {
           background: #d97706;
         }
-
         .btn-secondary {
           background: #6b7280;
           color: white;
         }
-
         .btn-secondary:hover {
           background: #4b5563;
         }
-
         @media (max-width: 768px) {
           .verification-status-tracker {
             padding: 16px;
           }
-
           .tracker-header,
           .verification-item {
             padding: 16px;
           }
-
           .item-header {
             flex-direction: column;
             gap: 12px;
             align-items: flex-start;
           }
-
           .status-badge {
             align-self: flex-start;
           }
@@ -601,39 +529,30 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
 function generateNextSteps(status: ValidationStatus | 'not_started', type: IdentityValidationType): string[] {
   switch (status) {
   case 'not_started':
-    return [`Click "Start Verification" to begin ${type.replace('_', ' ')}`];
-    
+    return [`Click "Start Verification" to begin ${type.replace('_', ' ')}`];}
   case 'pending':
     return ['Your submission is being processed', 'You will receive an email when review is complete'];
-    
   case 'in_review':
     return ['Our team is reviewing your submission', 'This typically takes 1-3 business days'];
-    
   case 'requires_update':
     return ['Review the feedback provided', 'Update your information and resubmit'];
-    
   case 'rejected':
     return ['Review the rejection reason', 'Prepare new documentation', 'Resubmit when ready'];
-    
   case 'expired':
     return ['Your verification has expired', 'Submit new documentation to renew'];
-    
   case 'approved':
     return ['Verification complete!', 'Your trust score has been updated'];
-    
   default:
     return [];
   }
 }
-
-function getEstimatedCompletion(
+function getEstimatedCompletion()
   status: ValidationStatus | 'not_started',
-  type: IdentityValidationType
+  type: IdentityValidationType,
 ): string | undefined {
   if (status === 'approved' || status === 'rejected') {
     return undefined;
   }
-  
   const completionTimes: Record<IdentityValidationType, string> = {
     'email_verification': '5 minutes',
     'phone_verification': '10 minutes',
@@ -646,7 +565,6 @@ function getEstimatedCompletion(
     'payment_method_verification': '1-2 business days',
     'basic_profile': 'Immediate'
   };
-  
   return completionTimes[type] || '1-3 business days';
 }
 

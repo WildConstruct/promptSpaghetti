@@ -8,7 +8,6 @@ import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 export interface EnhancedWeightedChoiceEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Enhanced WeightedChoice editor with progressive disclosure
 }
-
 /**
  * Epic 8.4 - Enhanced WeightedChoice Editor with Progressive Disclosure
  * 
@@ -22,26 +21,22 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
   const choices = (nodeData.choices as string[]) || [];
   const weights = (nodeData.weights as number[]) || [];
   const name = (nodeData.name as string) || (nodeData.label as string) || 'WeightedChoice';
-
   const handleChoicesChange = (newChoices: string[]) => {
-    onChange({
+    onChange({)
       choices: newChoices,
       // Ensure weights array matches choices length
       weights: newChoices.map((_, index) => weights[index] || 1)
     });
   };
-
   const handleWeightChange = (index: number, weight: number) => {
     const newWeights = [...weights];
     newWeights[index] = Math.max(0, weight); // Ensure non-negative weights
     onChange({ weights: newWeights });
   };
-
   const handleNameChange = (value: unknown) => {
     onChange({ name: value as string, label: value as string });
   };
-
-  return (
+  return ()
     <div className="enhanced-weighted-choice-editor">
       {/* BASIC LEVEL: Essential fields only */}
       <ProgressiveDisclosureSection
@@ -58,14 +53,13 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
             placeholder="e.g., Character Emotion, Scene Type"
           />
         </div>
-        
         <div style={{ marginBottom: 8 }}>
           <label style={{ 
             display: 'block', 
             fontSize: 12, 
             fontWeight: 500, 
             color: '#e2e8f0',
-            marginBottom: 6 
+            marginBottom: 6 ,
           }}>
             Choices
           </label>
@@ -77,7 +71,6 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
           />
         </div>
       </ProgressiveDisclosureSection>
-
       {/* ADVANCED LEVEL: Power user controls */}
       <ProgressiveDisclosureSection
         title="Weight Controls"
@@ -85,24 +78,23 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
         description="Fine-tune randomization probabilities"
         defaultExpanded={false}
       >
-        {choices.length > 0 && (
+        {choices.length > 0 && ()
           <div style={{ marginBottom: 16 }}>
             <div style={{ 
               fontSize: 12, 
               color: '#a0aec0', 
               marginBottom: 12,
-              fontStyle: 'italic' 
+              fontStyle: 'italic' ,
             }}>
               Adjust the probability of each choice being selected. Higher weights = more likely.
             </div>
-            
-            {choices.map((choice, index) => (
+            {choices.map((choice, index) => ()
               <div key={index} style={{ marginBottom: 8 }}>
                 <div style={{ 
                   display: 'flex', 
                   alignItems: 'center', 
                   gap: 8,
-                  marginBottom: 4
+                  marginBottom: 4,
                 }}>
                   <div style={{ 
                     fontSize: 11, 
@@ -110,7 +102,7 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
                     flex: 1,
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
                   }}>
                     {choice.length > 20 ? `${choice.substring(0, 20)}...` : choice}
                   </div>
@@ -118,7 +110,7 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
                     fontSize: 10, 
                     color: '#a0aec0',
                     minWidth: 40,
-                    textAlign: 'right'
+                    textAlign: 'right',
                   }}>
                     {((weights[index] || 1) / (weights.reduce((sum, w) => sum + (w || 1), 0)) * 100).toFixed(0)}%
                   </div>
@@ -134,7 +126,6 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
             ))}
           </div>
         )}
-
         {/* Advanced randomization controls */}
         <div style={{ 
           padding: 8, 
@@ -146,7 +137,7 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
             fontSize: 11, 
             color: '#90cdf4', 
             fontWeight: 500,
-            marginBottom: 6 
+            marginBottom: 6 ,
           }}>
             ⚙️ Advanced Options
           </div>
@@ -155,7 +146,7 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
             gridTemplateColumns: '1fr 1fr', 
             gap: 8,
             fontSize: 10,
-            color: '#a0aec0' 
+            color: '#a0aec0' ,
           }}>
             <div>Total Weights: {weights.reduce((sum, w) => sum + (w || 1), 0).toFixed(1)}</div>
             <div>Choices: {choices.length}</div>
@@ -164,7 +155,6 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
           </div>
         </div>
       </ProgressiveDisclosureSection>
-
       {/* DEBUG LEVEL: Technical details */}
       <ProgressiveDisclosureSection
         title="Debug Information"
@@ -196,13 +186,12 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
           <div style={{ marginBottom: 6 }}>
             <strong>Validation:</strong> {choices.length > 0 ? '✅ Valid' : '❌ No choices defined'}
           </div>
-          
           {/* Raw node data (collapsed by default) */}
           <details style={{ marginTop: 8 }}>
             <summary style={{ 
               cursor: 'pointer', 
               color: '#a0aec0',
-              fontSize: 9
+              fontSize: 9,
             }}>
               Raw Node Data
             </summary>
@@ -213,7 +202,7 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
               borderRadius: 2,
               fontSize: 8,
               overflow: 'auto',
-              maxHeight: 100
+              maxHeight: 100,
             }}>
               {JSON.stringify(nodeData, null, 2)}
             </pre>

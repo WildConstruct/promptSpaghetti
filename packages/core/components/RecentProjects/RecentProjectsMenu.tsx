@@ -2,18 +2,15 @@
  * Recent Projects Menu Component - Story 6.1 (AC: 4)
  * Displays a dropdown menu of recent projects with metadata
  */
-
 import React, { useState, useRef, useEffect } from 'react';
 import { RecentProjectsManager, RecentProjectEntry } from '../../managers/RecentProjectsManager';
-
 interface RecentProjectsMenuProps {
   onLoadRecentProject: (entry: RecentProjectEntry) => void;
   className?: string;
 }
 
-export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry[]>([]);
+export const [recentProjects, setRecentProjects] = useState<RecentProjectEntry[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
-
   // Load recent projects when component mounts or menu opens
   useEffect(() => {
     if (isOpen) {
@@ -21,7 +18,6 @@ export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry
       setRecentProjects(projects);
     }
   }, [isOpen]);
-
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -29,20 +25,17 @@ export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry
         setIsOpen(false);
       }
     };
-
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [isOpen]);
-
   const handleProjectClick = (entry: RecentProjectEntry) => {
     setIsOpen(false);
     onLoadRecentProject(entry);
     // Update last access date
     RecentProjectsManager.updateLastAccess(entry.name);
   };
-
   const handleClearRecent = () => {
     if (confirm('Clear all recent projects?')) {
       RecentProjectsManager.clearRecentProjects();
@@ -50,7 +43,6 @@ export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry
     }
     setIsOpen(false);
   };
-
   const dropdownButtonStyle: React.CSSProperties = {
     padding: '6px 8px',
     background: '#eee',
@@ -61,9 +53,8 @@ export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry
     cursor: 'pointer',
     fontSize: '12px',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   };
-
   const menuStyle: React.CSSProperties = {
     position: 'absolute',
     top: '100%',
@@ -76,9 +67,8 @@ export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry
     zIndex: 1000,
     minWidth: '300px',
     maxHeight: '400px',
-    overflowY: 'auto'
+    overflowY: 'auto',
   };
-
   const projectItemStyle: React.CSSProperties = {
     padding: '12px 16px',
     borderBottom: '1px solid #eee',
@@ -88,45 +78,39 @@ export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry
     gap: '12px',
     transition: 'background-color 0.2s'
   };
-
   const thumbnailStyle: React.CSSProperties = {
     width: '40px',
     height: '25px',
     background: '#f8f9fa',
     border: '1px solid #dee2e6',
     borderRadius: 3,
-    flexShrink: 0
+    flexShrink: 0,
   };
-
   const projectInfoStyle: React.CSSProperties = {
     flex: 1,
-    minWidth: 0
+    minWidth: 0,
   };
-
   const projectNameStyle: React.CSSProperties = {
     fontWeight: 500,
     color: '#23272f',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    marginBottom: '2px'
+    marginBottom: '2px',
   };
-
   const projectMetaStyle: React.CSSProperties = {
     fontSize: '12px',
     color: '#6c757d',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
   };
-
   const emptyStateStyle: React.CSSProperties = {
     padding: '24px 16px',
     textAlign: 'center',
     color: '#6c757d',
-    fontSize: '14px'
+    fontSize: '14px',
   };
-
   const clearButtonStyle: React.CSSProperties = {
     padding: '8px 16px',
     borderTop: '1px solid #eee',
@@ -137,8 +121,7 @@ export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry
     textAlign: 'center',
     transition: 'background-color 0.2s'
   };
-
-  return (
+  return ()
     <div ref={menuRef} className={className} style={{ position: 'relative' }}>
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -147,18 +130,17 @@ export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry
       >
         ▼
       </button>
-
-      {isOpen && (
+      {isOpen && ()
         <div style={menuStyle}>
-          {recentProjects.length === 0 ? (
+          {recentProjects.length === 0 ? ()
             <div style={emptyStateStyle}>
               No recent projects
             </div>
-          ) : (
+          ) : ()
             <>
               {recentProjects.map((project) => {
                 const displayInfo = RecentProjectsManager.getProjectDisplayInfo(project);
-                return (
+                return ()
                   <div
                     key={project.id}
                     style={projectItemStyle}
@@ -171,7 +153,7 @@ export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry
                     }}
                   >
                     <div style={thumbnailStyle}>
-                      {project.thumbnail ? (
+                      {project.thumbnail ? ()
                         <img
                           src={project.thumbnail}
                           alt={`${project.name} thumbnail`}
@@ -179,10 +161,10 @@ export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry
                             width: '100%',
                             height: '100%',
                             borderRadius: 2,
-                            objectFit: 'cover'
+                            objectFit: 'cover',
                           }}
                         />
-                      ) : (
+                      ) : ()
                         <div
                           style={{
                             width: '100%',
@@ -191,14 +173,13 @@ export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry
                             alignItems: 'center',
                             justifyContent: 'center',
                             fontSize: '10px',
-                            color: '#6c757d'
+                            color: '#6c757d',
                           }}
                         >
                           PSG
                         </div>
                       )}
                     </div>
-                    
                     <div style={projectInfoStyle}>
                       <div style={projectNameStyle} title={displayInfo.name}>
                         {displayInfo.name}
@@ -212,8 +193,7 @@ export   const [recentProjects, setRecentProjects] = useState<RecentProjectEntry
                   </div>
                 );
               })}
-              
-              {recentProjects.length > 0 && (
+              {recentProjects.length > 0 && ()
                 <div
                   style={clearButtonStyle}
                   onClick={handleClearRecent}

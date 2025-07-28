@@ -5,12 +5,10 @@
  * Professional export dialog with format selection, options configuration,
  * and size estimation for individual and batch result exports.
  */
-
 import React, { useState, useMemo } from 'react';
 import { ResultExportService, ExportFormat, ResultExportOptions } from '../services/ResultExportService';
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 import { professionalColors } from '../styles/professional-design-system';
-
 interface ExportOptionsDialogProps {
   open: boolean;
   onClose: () => void;
@@ -21,14 +19,11 @@ interface ExportOptionsDialogProps {
   onExport: (format: ExportFormat, options: ResultExportOptions) => Promise<void>;
   sourceGraph?: unknown;
 }
-
 const exportService = new ResultExportService();
-
   const [isExporting, setIsExporting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
-
   const availableFormats = useMemo(() => {
-    return exportService.getAvailableFormats().filter(format => {
+    return exportService.getAvailableFormats().filter(format => {)
       if (exportType === 'individual') {
         return format.supportsIndividual;
       } else if (exportType === 'batch') {
@@ -37,7 +32,6 @@ const exportService = new ResultExportService();
       return format.supportsBatch; // comparison uses batch support
     });
   }, [exportType]);
-
   const exportResults = useMemo(() => {
     if (exportType === 'individual' && typeof individualIndex === 'number') {
       return [results[individualIndex]].filter(Boolean);
@@ -46,48 +40,39 @@ const exportService = new ResultExportService();
     }
     return results;
   }, [results, exportType, individualIndex, selectedIndices]);
-
   const sizeEstimate = useMemo(() => {
     if (exportResults.length === 0) return null;
     return exportService.estimateExportSize(exportResults, selectedFormat, options);
   }, [exportResults, selectedFormat, options]);
-
   const formatInfo = useMemo(() => {
     return availableFormats.find(f => f.format === selectedFormat);
   }, [availableFormats, selectedFormat]);
-
   const handleFormatChange = (format: ExportFormat) => {
     setSelectedFormat(format);
     setOptions(prev => ({ ...prev, format }));
-    
     // Validate new format
     const errors = exportService.validateExportOptions(format, { ...options, format });
     setValidationErrors(errors);
   };
-
   const handleOptionChange = (path: string, value: Error) => {
-    setOptions(prev => {
+    setOptions(prev => {)
       const newOptions = { ...prev };
       const keys = path.split('.');
       let current: unknown = newOptions;
-      
       for (let i = 0; i < keys.length - 1; i++) {
         if (!current[keys[i]]) current[keys[i]] = {};
         current = current[keys[i]];
       }
-      
       current[keys[keys.length - 1]] = value;
       return newOptions;
     });
   };
-
   const handleExport = async () => {
     const errors = exportService.validateExportOptions(selectedFormat, options);
     if (errors.length > 0) {
       setValidationErrors(errors);
       return;
     }
-
     setIsExporting(true);
     try {
       await onExport(selectedFormat, options);
@@ -99,10 +84,8 @@ const exportService = new ResultExportService();
       setIsExporting(false);
     }
   };
-
   if (!open) return null;
-
-  return (
+  return ()
     <div style={{
       position: 'fixed',
       top: 0,
@@ -113,7 +96,7 @@ const exportService = new ResultExportService();
       zIndex: 2000,
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
     }}>
       <div style={{
         background: professionalColors.background.elevated,
@@ -124,7 +107,7 @@ const exportService = new ResultExportService();
         maxHeight: '90vh',
         overflow: 'auto',
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)',
-        color: professionalColors.text.primary
+        color: professionalColors.text.primary,
       }}>
         {/* Header */}
         <div style={{
@@ -133,7 +116,7 @@ const exportService = new ResultExportService();
           alignItems: 'center',
           marginBottom: 20,
           paddingBottom: 16,
-          borderBottom: `1px solid ${professionalColors.border.subtle}`
+          borderBottom: `1px solid ${professionalColors.border.subtle}`}
         }}>
           <h2 style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>
             Export Options
@@ -143,25 +126,24 @@ const exportService = new ResultExportService();
             alignItems: 'center',
             gap: 12,
             fontSize: 12,
-            color: professionalColors.text.secondary
+            color: professionalColors.text.secondary,
           }}>
-            <span>📊 {exportType === 'individual' ? '1 result' : `${exportResults.length} results`}</span>
-            {sizeEstimate && (
+            <span>📊 {exportType === 'individual' ? '1 result' : `${exportResults.length} results`}</span>}
+            {sizeEstimate && ()
               <span>💾 ~{sizeEstimate.estimatedSize}{sizeEstimate.unit}</span>
             )}
           </div>
         </div>
-
         {/* Validation Errors */}
-        {validationErrors.length > 0 && (
+        {validationErrors.length > 0 && ()
           <div style={{
             background: '#fef2f2',
             border: '1px solid #fecaca',
             borderRadius: 6,
             padding: 12,
-            marginBottom: 16
+            marginBottom: 16,
           }}>
-            {validationErrors.map((error, index) => (
+            {validationErrors.map((error, index) => ()
               <div key={index} style={{ 
                 color: '#dc2626', 
                 fontSize: 12,
@@ -172,9 +154,8 @@ const exportService = new ResultExportService();
             ))}
           </div>
         )}
-
         {/* Size Warning */}
-        {sizeEstimate?.warning && (
+        {sizeEstimate?.warning && ()
           <div style={{
             background: '#fffbeb',
             border: '1px solid #fed7aa',
@@ -182,12 +163,11 @@ const exportService = new ResultExportService();
             padding: 12,
             marginBottom: 16,
             color: '#92400e',
-            fontSize: 12
+            fontSize: 12,
           }}>
             ⚡ {sizeEstimate.warning}
           </div>
         )}
-
         {/* Format Selection */}
         <div style={{ marginBottom: 20 }}>
           <label style={{
@@ -195,17 +175,16 @@ const exportService = new ResultExportService();
             marginBottom: 8,
             fontSize: 14,
             fontWeight: 500,
-            color: professionalColors.text.primary
+            color: professionalColors.text.primary,
           }}>
             Export Format
           </label>
-          
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 8
+            gap: 8,
           }}>
-            {availableFormats.map(format => (
+            {availableFormats.map(format => ()
               <div
                 key={format.format}
                 onClick={() => handleFormatChange(format.format)}
@@ -224,26 +203,26 @@ const exportService = new ResultExportService();
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'flex-start',
-                  marginBottom: 4
+                  marginBottom: 4,
                 }}>
                   <div style={{ fontSize: 14, fontWeight: 500 }}>{format.name}</div>
                   <div style={{
                     fontSize: 10,
                     padding: '2px 6px',
                     borderRadius: 4,
-                    background: {
+                    background: {,
                       text: '#e5e7eb',
                       data: '#dbeafe',
                       film: '#fef3c7',
                       vfx: '#f3e8ff',
-                      analysis: '#ecfdf5'
+                      analysis: '#ecfdf5',
                     }[format.category],
-                    color: {
+                    color: {,
                       text: '#374151',
                       data: '#1e40af',
                       film: '#92400e',
                       vfx: '#7c3aed',
-                      analysis: '#065f46'
+                      analysis: '#065f46',
                     }[format.category]
                   }}>
                     {format.category.toUpperCase()}
@@ -252,7 +231,7 @@ const exportService = new ResultExportService();
                 <div style={{
                   fontSize: 11,
                   color: professionalColors.text.secondary,
-                  lineHeight: 1.4
+                  lineHeight: 1.4,
                 }}>
                   {format.description}
                 </div>
@@ -260,30 +239,28 @@ const exportService = new ResultExportService();
             ))}
           </div>
         </div>
-
         {/* Format-specific Options */}
-        {formatInfo && (
+        {formatInfo && ()
           <div style={{
             background: '#f8fafc',
             border: '1px solid #e2e8f0',
             borderRadius: 6,
             padding: 16,
-            marginBottom: 20
+            marginBottom: 20,
           }}>
             <h3 style={{
               margin: '0 0 12px 0',
               fontSize: 14,
-              fontWeight: 500
+              fontWeight: 500,
             }}>
               {formatInfo.name} Options
             </h3>
-
             {/* Basic Options */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
               gap: 12,
-              marginBottom: 16
+              marginBottom: 16,
             }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
                 <input
@@ -293,7 +270,6 @@ const exportService = new ResultExportService();
                 />
                 Include Metadata
               </label>
-              
               <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
                 <input
                   type="checkbox"
@@ -302,7 +278,6 @@ const exportService = new ResultExportService();
                 />
                 Include Execution Paths
               </label>
-              
               <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
                 <input
                   type="checkbox"
@@ -312,9 +287,8 @@ const exportService = new ResultExportService();
                 Include Debug Info
               </label>
             </div>
-
             {/* Film Options */}
-            {formatInfo.category === 'film' && (
+            {formatInfo.category === 'film' && ()
               <div style={{ marginBottom: 16 }}>
                 <h4 style={{ margin: '0 0 8px 0', fontSize: 12, fontWeight: 500 }}>Film Industry Options</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -353,9 +327,8 @@ const exportService = new ResultExportService();
                 </div>
               </div>
             )}
-
             {/* VFX Options */}
-            {formatInfo.category === 'vfx' && (
+            {formatInfo.category === 'vfx' && ()
               <div style={{ marginBottom: 16 }}>
                 <h4 style={{ margin: '0 0 8px 0', fontSize: 12, fontWeight: 500 }}>VFX Pipeline Options</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -394,9 +367,8 @@ const exportService = new ResultExportService();
                 </div>
               </div>
             )}
-
             {/* Analysis Options */}
-            {formatInfo.category === 'analysis' && (
+            {formatInfo.category === 'analysis' && ()
               <div>
                 <h4 style={{ margin: '0 0 8px 0', fontSize: 12, fontWeight: 500 }}>Analysis Options</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -437,27 +409,25 @@ const exportService = new ResultExportService();
             )}
           </div>
         )}
-
         {/* Actions */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           paddingTop: 16,
-          borderTop: `1px solid ${professionalColors.border.subtle}`
+          borderTop: `1px solid ${professionalColors.border.subtle}`}
         }}>
           <div style={{
             fontSize: 11,
-            color: professionalColors.text.secondary
+            color: professionalColors.text.secondary,
           }}>
             {exportType === 'individual' 
-              ? `Exporting result ${(individualIndex || 0) + 1} of ${results.length}`
+              ? `Exporting result ${(individualIndex || 0) + 1} of ${results.length}`}
               : exportType === 'batch'
-              ? `Exporting ${selectedIndices.length} selected results`
-              : `Exporting all ${results.length} results for comparison`
+              ? `Exporting ${selectedIndices.length} selected results`}
+              : `Exporting all ${results.length} results for comparison`}
             }
           </div>
-
           <div style={{ display: 'flex', gap: 12 }}>
             <button
               onClick={onClose}
@@ -469,12 +439,11 @@ const exportService = new ResultExportService();
                 borderRadius: 4,
                 cursor: isExporting ? 'not-allowed' : 'pointer',
                 fontSize: 12,
-                color: professionalColors.text.secondary
+                color: professionalColors.text.secondary,
               }}
             >
               Cancel
             </button>
-            
             <button
               onClick={handleExport}
               disabled={isExporting || validationErrors.length > 0}
@@ -489,10 +458,10 @@ const exportService = new ResultExportService();
                 fontWeight: 500,
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8
+                gap: 8,
               }}
             >
-              {isExporting ? (
+              {isExporting ? ()
                 <>
                   <div style={{
                     width: 12,
@@ -504,7 +473,7 @@ const exportService = new ResultExportService();
                   }} />
                   Exporting...
                 </>
-              ) : (
+              ) : ()
                 <>
                   💾 Export {formatInfo?.name}
                 </>
@@ -513,7 +482,6 @@ const exportService = new ResultExportService();
           </div>
         </div>
       </div>
-
       {/* CSS Animation */}
       <style>{`
         @keyframes spin {

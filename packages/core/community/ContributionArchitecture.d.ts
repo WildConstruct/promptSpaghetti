@@ -18,7 +18,7 @@ export interface ContributionSubmission {
     type: ContributionType;
     category: ContributionCategory;
     content: CommunityContent;
-    submission: {
+    submission: {,
         submitted_by: string;
         submitted_at: string;
         submission_notes?: string;
@@ -128,7 +128,7 @@ export interface ContributionContributor {
     contribution_percentage: number;
     attribution_visible: boolean;
     contact_allowed: boolean;
-    profile: {
+    profile: {,
         bio?: string;
         expertise_areas: string[];
         website?: string;
@@ -144,7 +144,7 @@ export interface ContributionAttribution {
     primary_author: string;
     co_authors: string[];
     acknowledgments: string[];
-    display_preferences: {
+    display_preferences: {,
         show_contributors: boolean;
         contributor_order: 'contribution' | 'alphabetical' | 'chronological';
         show_roles: boolean;
@@ -166,7 +166,7 @@ export interface ContributionEngagement {
     accuracy_rating: number;
     clarity_rating: number;
     usefulness_rating: number;
-    community_votes: {
+    community_votes: {,
         upvotes: number;
         downvotes: number;
         expert_endorsements: number;
@@ -174,7 +174,7 @@ export interface ContributionEngagement {
     completion_rate: number;
     success_rate: number;
     time_to_complete: number;
-    feedback_summary: {
+    feedback_summary: {,
         positive_feedback: string[];
         improvement_suggestions: string[];
         error_reports: string[];
@@ -184,13 +184,13 @@ export interface ContributionEngagement {
 export interface PublishingConfiguration {
     visibility: 'public' | 'community' | 'restricted' | 'private';
     access_level: 'free' | 'premium' | 'subscriber_only' | 'invitation_only';
-    seo: {
+    seo: {,
         slug: string;
         meta_title: string;
         meta_description: string;
         keywords: string[];
         canonical_url?: string;
-        open_graph: {
+        open_graph: {,
             title: string;
             description: string;
             image?: string;
@@ -201,14 +201,14 @@ export interface PublishingConfiguration {
     tags: string[];
     difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
     estimated_reading_time: number;
-    distribution: {
+    distribution: {,
         include_in_search: boolean;
         include_in_recommendations: boolean;
         allow_syndication: boolean;
         allow_translations: boolean;
         allow_derivatives: boolean;
     };
-    notifications: {
+    notifications: {,
         notify_followers: boolean;
         send_newsletter: boolean;
         post_to_social: boolean;
@@ -218,14 +218,14 @@ export interface PublishingConfiguration {
 export interface MonetizationConfiguration {
     monetization_enabled: boolean;
     pricing_model: 'free' | 'one_time' | 'subscription' | 'donation' | 'sponsored';
-    pricing: {
+    pricing: {,
         base_price?: number;
         currency?: string;
         discount_percentage?: number;
         promotional_price?: number;
         promotion_end_date?: string;
     };
-    revenue_sharing: {
+    revenue_sharing: {,
         contributor_percentage: number;
         platform_percentage: number;
         charity_percentage?: number;
@@ -256,27 +256,27 @@ export interface ReviewFeedbackEntry {
     private_notes?: string;
 }
 export interface DetailedFeedback {
-    content_quality: {
+    content_quality: {,
         accuracy: number;
         clarity: number;
         completeness: number;
         usefulness: number;
         originality: number;
     };
-    technical_quality: {
+    technical_quality: {,
         formatting: number;
         code_quality?: number;
         accessibility: number;
         seo_optimization: number;
     };
     feedback_areas: FeedbackArea[];
-    suggestions: {
+    suggestions: {,
         high_priority: string[];
         medium_priority: string[];
         low_priority: string[];
         nice_to_have: string[];
     };
-    issues_found: {
+    issues_found: {,
         factual_errors: string[];
         grammar_issues: string[];
         formatting_problems: string[];
@@ -298,20 +298,20 @@ export interface NotificationConfiguration {
     notify_reviewers: boolean;
     notify_followers: boolean;
     notify_administrators: boolean;
-    channels: {
+    channels: {,
         email: boolean;
         in_app: boolean;
         push_notification: boolean;
         slack?: boolean;
         discord?: boolean;
     };
-    timing: {
+    timing: {,
         immediate: boolean;
         daily_digest: boolean;
         weekly_summary: boolean;
         milestone_only: boolean;
     };
-    notification_types: {
+    notification_types: {,
         status_changes: boolean;
         review_feedback: boolean;
         publication: boolean;
@@ -374,14 +374,14 @@ export interface ContributionSystemMetrics {
     submissions_by_type: Record<ContributionType, number>;
     submissions_by_category: Record<ContributionCategory, number>;
     average_review_time: number;
-    workflow_bottlenecks: Array<{
+    workflow_bottlenecks: Array<{,
         stage: WorkflowStage;
         average_duration: number;
         backlog_count: number;
     }>;
     average_quality_score: number;
     quality_distribution: Record<string, number>;
-    common_quality_issues: Array<{
+    common_quality_issues: Array<{,
         issue_type: string;
         frequency: number;
         impact: string;
@@ -389,13 +389,13 @@ export interface ContributionSystemMetrics {
     publication_rate: number;
     featured_content_rate: number;
     content_longevity: number;
-    community_participation: {
+    community_participation: {,
         active_contributors: number;
         active_reviewers: number;
         community_feedback_volume: number;
         collaboration_rate: number;
     };
-    processing_efficiency: {
+    processing_efficiency: {,
         automated_approval_rate: number;
         quality_gate_pass_rate: number;
         escalation_rate: number;

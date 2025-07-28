@@ -1,6 +1,5 @@
 // Epic 9.4.4 - Audit Trail Viewer Component
 // UI component for viewing and filtering audit trail records
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   ClipboardDocumentListIcon,
@@ -19,13 +18,11 @@ import {
   LockOpenIcon
 } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
-
 interface AuditTrailViewerProps {
   workspaceId: string;
   resourceId?: string;
   onClose?: () => void;
 }
-
 interface AuditFilters {
   action_type?: string;
   actor_id?: string;
@@ -35,7 +32,7 @@ interface AuditFilters {
   search_term?: string;
 }
 
-export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
+export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({)
   workspaceId,
   resourceId,
   onClose
@@ -47,78 +44,64 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
     fetchAuditHistory,
     exportAuditHistory
   } = useWorkflowStore();
-
-  const [filters, setFilters] = useState<AuditFilters>({
-    resource_id: resourceId
+  const [filters, setFilters] = useState<AuditFilters>({)
+    resource_id: resourceId,
   });
   const [showFilters, setShowFilters] = useState(false);
   const [_____selectedEntries, _____setSelectedEntries] = useState<Set<string>>(new Set());
   const [showExportDialog, setShowExportDialog] = useState(false);
-
   // Load audit history
   useEffect(() => {
     fetchAuditHistory(workspaceId, filters);
   }, [workspaceId, filters, fetchAuditHistory]);
-
   // Filter audit entries
   const filteredEntries = useMemo(() => {
     let entries = auditHistory;
-
     if (filters.action_type) {
       entries = entries.filter(entry => entry.action_type === filters.action_type);
     }
-
     if (filters.actor_id) {
       entries = entries.filter(entry => entry.actor_id === filters.actor_id);
     }
-
     if (filters.resource_id) {
       entries = entries.filter(entry => entry.resource_id === filters.resource_id);
     }
-
     if (filters.start_date) {
-      entries = entries.filter(entry => 
+      entries = entries.filter(entry => )
         new Date(entry.action_timestamp) >= filters.start_date!
       );
     }
-
     if (filters.end_date) {
-      entries = entries.filter(entry => 
+      entries = entries.filter(entry => )
         new Date(entry.action_timestamp) <= filters.end_date!
       );
     }
-
     if (filters.search_term) {
       const searchLower = filters.search_term.toLowerCase();
-      entries = entries.filter(entry => 
+      entries = entries.filter(entry => )
         entry.action_type.toLowerCase().includes(searchLower) ||
         entry.actor_id.toLowerCase().includes(searchLower) ||
         entry.comment?.toLowerCase().includes(searchLower) ||
         JSON.stringify(entry.metadata).toLowerCase().includes(searchLower)
       );
     }
-
     return entries.sort((a, b) => 
       new Date(b.action_timestamp).getTime() - new Date(a.action_timestamp).getTime()
     );
   }, [auditHistory, filters]);
-
   // Get unique action types and actors for filter options
-  const actionTypes = useMemo(() => 
+  const actionTypes = useMemo(() => ;
     Array.from(new Set(auditHistory.map(entry => entry.action_type))).sort()
   , [auditHistory]);
-
-  const actors = useMemo(() => 
+  const actors = useMemo(() => ;
     Array.from(new Set(auditHistory.map(entry => entry.actor_id))).sort()
   , [auditHistory]);
-
   const handleFilterChange = (key: keyof AuditFilters, value: Error) => {
-    setFilters(prev => ({
+    setFilters(prev => ({)
       ...prev,
       [key]: value
     }));
   };
-
   const handleExport = async (format: 'csv' | 'json' | 'pdf') => {
     try {
       await exportAuditHistory(workspaceId, filters, format);
@@ -127,11 +110,9 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
       console.error('Failed to export audit history:', error);
     }
   };
-
   const formatTimestamp = (timestamp: Date) => {
     return new Date(timestamp).toLocaleString();
   };
-
   const getActionTypeIcon = (actionType: string) => {
     switch (actionType) {
     case 'state_change':
@@ -150,7 +131,6 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
       return <ClipboardDocumentListIcon className="h-4 w-4 text-gray-600" />;
     }
   };
-
   const getActionTypeColor = (actionType: string) => {
     switch (actionType) {
     case 'state_change': return 'bg-blue-50 text-blue-800';
@@ -162,17 +142,15 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
     default: return 'bg-gray-50 text-gray-800';
     }
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="flex items-center">
           <XCircleIcon className="h-5 w-5 text-red-600 mr-2" />
@@ -181,8 +159,7 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
@@ -203,7 +180,7 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
             >
               <FunnelIcon className="h-4 w-4" />
               <span>Filters</span>
-              <ChevronDownIcon className={`h-3 w-3 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+              <ChevronDownIcon className={`h-3 w-3 transition-transform ${showFilters ? 'rotate-180' : ''}`} />}
             </button>
             <button
               onClick={() => setShowExportDialog(true)}
@@ -212,7 +189,7 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
               <ArrowDownTrayIcon className="h-4 w-4" />
               <span>Export</span>
             </button>
-            {onClose && (
+            {onClose && ()
               <button
                 onClick={onClose}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -223,9 +200,8 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
           </div>
         </div>
       </div>
-
       {/* Filters */}
-      {showFilters && (
+      {showFilters && ()
         <div className="border-b border-gray-200 p-4 bg-gray-50">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -238,14 +214,13 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">All Actions</option>
-                {actionTypes.map(type => (
+                {actionTypes.map(type => ()
                   <option key={type} value={type}>
                     {type.replace('_', ' ').toUpperCase()}
                   </option>
                 ))}
               </select>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Actor
@@ -256,14 +231,13 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">All Actors</option>
-                {actors.map(actor => (
+                {actors.map(actor => ()
                   <option key={actor} value={actor}>
                     {actor}
                   </option>
                 ))}
               </select>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Search
@@ -279,7 +253,6 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
                 />
               </div>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Start Date
@@ -291,7 +264,6 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 End Date
@@ -306,16 +278,15 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
           </div>
         </div>
       )}
-
       {/* Audit entries */}
       <div className="divide-y divide-gray-200 max-h-96 overflow-y-auto">
-        {filteredEntries.length === 0 ? (
+        {filteredEntries.length === 0 ? ()
           <div className="p-8 text-center text-gray-500">
             <ClipboardDocumentListIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
             <p>No audit entries found matching your criteria.</p>
           </div>
-        ) : (
-          filteredEntries.map((entry) => (
+        ) : ()
+          filteredEntries.map((entry) => ()
             <div key={entry.id} className="p-4 hover:bg-gray-50 transition-colors">
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0 mt-1">
@@ -323,7 +294,7 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getActionTypeColor(entry.action_type)}`}>
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getActionTypeColor(entry.action_type)}`}>}
                       {entry.action_type.replace('_', ' ').toUpperCase()}
                     </span>
                     <span className="text-sm text-gray-500">
@@ -339,12 +310,12 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
                       <span>Resource: {entry.resource_id}</span>
                     </div>
                   </div>
-                  {entry.comment && (
+                  {entry.comment && ()
                     <p className="mt-2 text-sm text-gray-700">
                       {entry.comment}
                     </p>
                   )}
-                  {entry.metadata && Object.keys(entry.metadata).length > 0 && (
+                  {entry.metadata && Object.keys(entry.metadata).length > 0 && ()
                     <div className="mt-2 text-xs text-gray-500">
                       <details className="cursor-pointer">
                         <summary className="hover:text-gray-700">
@@ -362,9 +333,8 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
           ))
         )}
       </div>
-
       {/* Export dialog */}
-      {showExportDialog && (
+      {showExportDialog && ()
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h3 className="text-lg font-semibold mb-4">Export Audit History</h3>

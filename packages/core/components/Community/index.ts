@@ -68,12 +68,10 @@ export interface CommunityComponentEvents {
   'version:created': { version: ContentVersion; contentId: string };
   'version:published': { version: ContentVersion; contentId: string };
   'version:reviewed': { version: ContentVersion; feedback: ReviewFeedback };
-  
   // Quality assessment events
   'quality:assessed': { metrics: CommunityContentQualityMetrics; contentId: string };
   'quality:improved': { oldScore: number; newScore: number; contentId: string };
   'quality:flagged': { flag: QualityFlag; contentId: string };
-  
   // Workflow events
   'workflow:updated': { workflow: QualityAssessmentWorkflow; contentId: string };
   'workflow:escalated': { workflow: QualityAssessmentWorkflow; reason: string };
@@ -81,41 +79,33 @@ export interface CommunityComponentEvents {
 }
 
 // Utility functions for common operations
-export     const bParts = b.split('.').map(Number);
-    
+export const bParts = b.split('.').map(Number);
     for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
       const aVal = aParts[i] || 0;
       const bVal = bParts[i] || 0;
-      
       if (aVal !== bVal) {
         return aVal - bVal;
       }
     }
-    
     return 0;
   },
-  
   // Quality score calculation
   calculateOverallScore: (dimensions: Record<string, number>): number => {
     const weights = {
       editorial: 0.3,
       technical: 0.25,
       engagement: 0.25,
-      community: 0.2
+      community: 0.2,
     };
-    
     let totalScore = 0;
     let totalWeight = 0;
-    
     Object.entries(dimensions).forEach(([dimension, score]) => {
       const weight = weights[dimension as keyof typeof weights] || 0.1;
       totalScore += score * weight;
       totalWeight += weight;
     });
-    
     return totalWeight > 0 ? totalScore / totalWeight : 0;
   },
-  
   // Grade calculation
   calculateGrade: (score: number): 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F' => {
     if (score >= 95) return 'A+';
@@ -127,12 +117,11 @@ export     const bParts = b.split('.').map(Number);
     if (score >= 60) return 'D';
     return 'F';
   },
-  
   // Workflow stage validation
-  validateWorkflowTransition: (
+  validateWorkflowTransition: (),
     currentStage: WorkflowStage,
     targetStage: WorkflowStage,
-    userRole: ContentVersionControlMode
+    userRole: ContentVersionControlMode,
   ): boolean => {
     const allowedTransitions: Record<WorkflowStage, WorkflowStage[]> = {
       'automated_analysis': ['editorial_review'],
@@ -141,14 +130,12 @@ export     const bParts = b.split('.').map(Number);
       'final_approval': ['published'],
       'published': []
     };
-    
     const rolePermissions: Record<ContentVersionControlMode, WorkflowStage[]> = {
       'author': ['automated_analysis'],
       'editor': ['automated_analysis', 'editorial_review'],
       'reviewer': ['editorial_review', 'specialist_review'],
       'admin': ['automated_analysis', 'editorial_review', 'specialist_review', 'final_approval', 'published']
     };
-    
     return allowedTransitions[currentStage]?.includes(targetStage) && 
            rolePermissions[userRole]?.includes(targetStage);
   }

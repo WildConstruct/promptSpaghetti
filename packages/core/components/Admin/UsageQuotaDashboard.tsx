@@ -8,7 +8,6 @@
  * Task: E17-1753114397228-B591AA - Create usage quotas
  * Epic: 17 - Backstage Admin Controls
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   BarChart3,
@@ -50,7 +49,6 @@ import {
   QuotaAdminOperation
 } from '../../types/UsageQuotaTypes';
 import { ActionSeverity } from '../../types/EnforcementTypes';
-
 interface UsageQuotaDashboardProps {
   onQuotaCreate?: (quota: Omit<UsageQuota, 'quotaId' | 'createdAt' | 'updatedAt'>) => Promise<void>;
   onQuotaUpdate?: (quotaId: string, updates: Partial<UsageQuota>) => Promise<void>;
@@ -59,7 +57,6 @@ interface UsageQuotaDashboardProps {
   onQuotaOverride?: (quotaId: string, userId: string, overrideAmount: number, duration: number) => Promise<void>;
   className?: string;
 }
-
 interface DashboardState {
   quotas: UsageQuota[];
   violations: QuotaViolation[];
@@ -68,7 +65,6 @@ interface DashboardState {
   operations: QuotaAdminOperation[];
   systemMetrics: SystemQuotaMetrics;
 }
-
 interface SystemQuotaMetrics {
   totalQuotas: number;
   activeQuotas: number;
@@ -78,7 +74,6 @@ interface SystemQuotaMetrics {
   topViolatedQuotas: QuotaViolationSummary[];
   recentActivity: QuotaActivityItem[];
 }
-
 interface QuotaViolationSummary {
   quotaId: string;
   quotaName: string;
@@ -86,7 +81,6 @@ interface QuotaViolationSummary {
   lastViolation: Date;
   severity: ActionSeverity;
 }
-
 interface QuotaActivityItem {
   timestamp: Date;
   type: 'quota_created' | 'violation_occurred' | 'quota_updated' | 'violation_resolved';
@@ -96,7 +90,7 @@ interface QuotaActivityItem {
   severity: ActionSeverity;
 }
 
-export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
+export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
   onQuotaCreate,
   onQuotaUpdate,
   onQuotaDelete,
@@ -109,30 +103,26 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
   const [selectedTab, setSelectedTab] = useState<'overview' | 'quotas' | 'violations' | 'analytics' | 'templates' | 'operations'>('overview');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [_____filters, _____setFilters] = useState({
+  const [_____filters, _____setFilters] = useState({)
     quotaType: [] as QuotaType[],
     status: [] as ('active' | 'disabled')[],
     severity: [] as ActionSeverity[],
     timeRange: '24h' as '1h' | '24h' | '7d' | '30d'
   });
-
   // Selected items for bulk operations
   const [selectedQuotas, setSelectedQuotas] = useState<string[]>([]);
   const [selectedViolations, setSelectedViolations] = useState<string[]>([]);
-
   // Modal states
   const [_____showCreateQuotaModal, setShowCreateQuotaModal] = useState(false);
   const [_____showTemplateModal, _____setShowTemplateModal] = useState(false);
   const [_____editingQuota, setEditingQuota] = useState<UsageQuota | null>(null);
-
   // Load dashboard data
   const loadDashboardData = useCallback(async () => {
     try {
       setLoading(true);
-      
       // Simulate API calls - would be replaced with actual service calls
       const mockDashboardState: DashboardState = {
-        quotas: [
+        quotas: [,
           {
             quotaId: 'quota-api-requests',
             quotaName: 'API Requests - Free Tier',
@@ -151,7 +141,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
             createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
             updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
             createdBy: 'admin-user-1',
-            configuration: {
+            configuration: {,
               warningThresholds: [75, 90, 95],
               emergencyMultiplier: 1.5,
               integrateWithRateLimit: true,
@@ -162,9 +152,9 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
               alertsEnabled: true,
               cachingEnabled: true,
               batchProcessing: false,
-              asyncEnforcement: false
+              asyncEnforcement: false,
             },
-            metadata: {
+            metadata: {,
               description: 'Daily API request limit for free tier users',
               category: 'resource_management',
               businessJustification: 'Prevent abuse and manage infrastructure costs',
@@ -176,7 +166,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
               lastViolation: new Date(Date.now() - 2 * 60 * 60 * 1000),
               impactOnRevenue: 'low',
               userSatisfactionImpact: 'medium',
-              operationalCost: 'low'
+              operationalCost: 'low',
             }
           },
           {
@@ -197,7 +187,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
             createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
             updatedAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
             createdBy: 'admin-user-2',
-            configuration: {
+            configuration: {,
               warningThresholds: [80, 90, 95],
               emergencyMultiplier: 2.0,
               integrateWithRateLimit: false,
@@ -208,9 +198,9 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
               alertsEnabled: true,
               cachingEnabled: true,
               batchProcessing: true,
-              asyncEnforcement: true
+              asyncEnforcement: true,
             },
-            metadata: {
+            metadata: {,
               description: 'Daily graph execution limit for pro tier users',
               category: 'business_logic',
               businessJustification: 'Tier-based service differentiation',
@@ -221,11 +211,11 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
               violationRate: 2.1,
               impactOnRevenue: 'medium',
               userSatisfactionImpact: 'high',
-              operationalCost: 'medium'
+              operationalCost: 'medium',
             }
           }
         ],
-        violations: [
+        violations: [,
           {
             violationId: 'violation-001',
             quotaId: 'quota-api-requests',
@@ -235,15 +225,15 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
             quotaLimit: 1000,
             actualUsage: 1150,
             severity: 'medium',
-            impactAssessment: {
+            impactAssessment: {,
               businessImpact: 'low',
               technicalImpact: 'low',
               userImpact: 'medium',
               securityRisk: 'low',
-              complianceRisk: 'none'
+              complianceRisk: 'none',
             },
             enforcementAction: 'hard_block',
-            enforcementDetails: {
+            enforcementDetails: {,
               actionTaken: 'hard_block',
               timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
               reason: 'API request quota exceeded',
@@ -251,10 +241,10 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
               additionalData: {}
             },
             status: 'active',
-            appealSubmitted: false
+            appealSubmitted: false,
           }
         ],
-        analytics: [
+        analytics: [,
           {
             period: { type: 'day', value: 7, timezone: 'UTC' },
             periodStart: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
@@ -270,29 +260,29 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
             trendSignificance: 0.82,
             seasonalPatterns: [],
             topUsers: [],
-            usageDistribution: {
+            usageDistribution: {,
               percentiles: { 50: 500, 75: 750, 90: 900, 95: 950, 99: 990 },
               buckets: [],
-              outliers: []
+              outliers: [],
             },
             averageResponseTime: 120,
             systemLoad: 68,
-            resourceUtilization: {
+            resourceUtilization: {,
               cpu: 45,
               memory: 62,
               disk: 34,
               network: 23,
-              database: 78
+              database: 78,
             }
           }
         ],
-        templates: [
+        templates: [,
           {
             templateId: 'template-free-tier',
             templateName: 'Free Tier Default',
             description: 'Default quotas for free tier users',
             category: 'free_tier',
-            quotaDefinitions: [
+            quotaDefinitions: [,
               {
                 quotaType: 'api_requests',
                 resourceIdentifier: '*',
@@ -301,17 +291,17 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
                 limitUnit: 'requests',
                 enforcementAction: 'hard_block',
                 variableFields: ['limitValue'],
-                conditionalRules: []
+                conditionalRules: [],
               }
             ],
             createdBy: 'system',
             createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
             usageCount: 847,
             validationRules: [],
-            enabled: true
+            enabled: true,
           }
         ],
-        operations: [
+        operations: [,
           {
             operationId: 'op-001',
             operationType: 'update_quota',
@@ -323,7 +313,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
             parameters: { limitValue: 1200 },
             requiresApproval: false,
             status: 'completed',
-            result: {
+            result: {,
               success: true,
               affectedRecords: 1,
               warnings: [],
@@ -331,34 +321,33 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
             }
           }
         ],
-        systemMetrics: {
+        systemMetrics: {,
           totalQuotas: 15,
           activeQuotas: 13,
           totalViolations: 45,
           activeViolations: 8,
           utilizationRate: 68.5,
-          topViolatedQuotas: [
+          topViolatedQuotas: [,
             {
               quotaId: 'quota-api-requests',
               quotaName: 'API Requests - Free Tier',
               violationCount: 23,
               lastViolation: new Date(Date.now() - 2 * 60 * 60 * 1000),
-              severity: 'medium'
+              severity: 'medium',
             }
           ],
-          recentActivity: [
+          recentActivity: [,
             {
               timestamp: new Date(Date.now() - 15 * 60 * 1000),
               type: 'violation_occurred',
               description: 'API request quota exceeded by user-12345',
               userId: 'user-12345',
               quotaId: 'quota-api-requests',
-              severity: 'medium'
+              severity: 'medium',
             }
           ]
         }
       };
-
       setDashboardState(mockDashboardState);
     } catch (error) {
       console.error('Failed to load quota dashboard data:', error);
@@ -366,21 +355,17 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
       setLoading(false);
     }
   }, []);
-
   const refreshDashboard = useCallback(async () => {
     setRefreshing(true);
     await loadDashboardData();
     setRefreshing(false);
   }, [loadDashboardData]);
-
   useEffect(() => {
     loadDashboardData();
-    
     // Set up auto-refresh
-    const interval = setInterval(refreshDashboard, 30000); // 30 seconds
+    const interval = setInterval(refreshDashboard, 30000); // 30 seconds;
     return () => clearInterval(interval);
   }, [loadDashboardData, refreshDashboard]);
-
   // Event handlers
   const _____handleQuotaCreate = async (quota: Omit<UsageQuota, 'quotaId' | 'createdAt' | 'updatedAt'>) => {
     if (onQuotaCreate) {
@@ -388,21 +373,18 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
       await refreshDashboard();
     }
   };
-
   const handleQuotaUpdate = async (quotaId: string, updates: Partial<UsageQuota>) => {
     if (onQuotaUpdate) {
       await onQuotaUpdate(quotaId, updates);
       await refreshDashboard();
     }
   };
-
   const handleQuotaToggle = async (quotaId: string, enabled: boolean) => {
     await handleQuotaUpdate(quotaId, { enabled });
   };
-
   if (loading) {
-    return (
-      <div className={`usage-quota-dashboard loading ${className}`}>
+    return ()
+      <div className={`usage-quota-dashboard loading ${className}`}>}
         <div className="loading-spinner">
           <RefreshCw className="animate-spin" size={24} />
           <span>Loading quota management dashboard...</span>
@@ -410,10 +392,9 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
       </div>
     );
   }
-
   if (!dashboardState) {
-    return (
-      <div className={`usage-quota-dashboard error ${className}`}>
+    return ()
+      <div className={`usage-quota-dashboard error ${className}`}>}
         <div className="error-message">
           <AlertCircle size={24} />
           <span>Failed to load quota dashboard</span>
@@ -422,9 +403,8 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`usage-quota-dashboard ${className}`}>
+  return ()
+    <div className={`usage-quota-dashboard ${className}`}>}
       {/* Dashboard Header */}
       <div className="dashboard-header">
         <div className="header-content">
@@ -465,7 +445,6 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
             </button>
           </div>
         </div>
-        
         {/* Tab Navigation */}
         <div className="tab-navigation">
           <button
@@ -512,10 +491,9 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
           </button>
         </div>
       </div>
-
       {/* Dashboard Content */}
       <div className="dashboard-content">
-        {selectedTab === 'overview' && (
+        {selectedTab === 'overview' && ()
           <OverviewTab
             systemMetrics={dashboardState.systemMetrics}
             quotas={dashboardState.quotas}
@@ -523,8 +501,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
             analytics={dashboardState.analytics[0]}
           />
         )}
-
-        {selectedTab === 'quotas' && (
+        {selectedTab === 'quotas' && ()
           <QuotasTab
             quotas={dashboardState.quotas}
             selectedQuotas={selectedQuotas}
@@ -534,8 +511,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
             onQuotaDelete={onQuotaDelete}
           />
         )}
-
-        {selectedTab === 'violations' && (
+        {selectedTab === 'violations' && ()
           <ViolationsTab
             violations={dashboardState.violations}
             quotas={dashboardState.quotas}
@@ -544,22 +520,19 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
             onViolationResolve={onViolationResolve}
           />
         )}
-
-        {selectedTab === 'analytics' && (
+        {selectedTab === 'analytics' && ()
           <AnalyticsTab
             analytics={dashboardState.analytics}
             systemMetrics={dashboardState.systemMetrics}
           />
         )}
-
-        {selectedTab === 'templates' && (
+        {selectedTab === 'templates' && ()
           <TemplatesTab
             templates={dashboardState.templates}
             onTemplateApply={(templateId, targets) => console.log('Apply template', templateId, targets)}
           />
         )}
-
-        {selectedTab === 'operations' && (
+        {selectedTab === 'operations' && ()
           <OperationsTab
             operations={dashboardState.operations}
           />
@@ -576,7 +549,7 @@ const OverviewTab: React.FC<{
   violations: QuotaViolation[];
   analytics: UsageAnalytics;
 }> = ({ systemMetrics, quotas, violations, analytics }) => {
-  return (
+  return ()
     <div className="overview-tab">
       {/* System Health Cards */}
       <div className="metrics-overview">
@@ -590,7 +563,6 @@ const OverviewTab: React.FC<{
             {systemMetrics.activeQuotas} active, {systemMetrics.totalQuotas - systemMetrics.activeQuotas} disabled
           </div>
         </div>
-
         <div className="metric-card">
           <div className="metric-header">
             <AlertTriangle size={20} />
@@ -601,7 +573,6 @@ const OverviewTab: React.FC<{
             {systemMetrics.activeViolations} active violations
           </div>
         </div>
-
         <div className="metric-card">
           <div className="metric-header">
             <BarChart3 size={20} />
@@ -612,7 +583,6 @@ const OverviewTab: React.FC<{
             Average across all quotas
           </div>
         </div>
-
         <div className="metric-card">
           <div className="metric-header">
             <TrendingUp size={20} />
@@ -628,7 +598,6 @@ const OverviewTab: React.FC<{
           </div>
         </div>
       </div>
-
       {/* Top Violated Quotas */}
       <div className="top-violations-section">
         <h2>
@@ -636,11 +605,11 @@ const OverviewTab: React.FC<{
           Top Violated Quotas
         </h2>
         <div className="violations-list">
-          {systemMetrics.topViolatedQuotas.map(quota => (
+          {systemMetrics.topViolatedQuotas.map(quota => ()
             <div key={quota.quotaId} className="violation-item">
               <div className="violation-info">
                 <span className="quota-name">{quota.quotaName}</span>
-                <span className={`severity-badge ${quota.severity}`}>
+                <span className={`severity-badge ${quota.severity}`}>}
                   {quota.severity.toUpperCase()}
                 </span>
               </div>
@@ -654,7 +623,6 @@ const OverviewTab: React.FC<{
           ))}
         </div>
       </div>
-
       {/* Recent Activity */}
       <div className="recent-activity-section">
         <h2>
@@ -662,7 +630,7 @@ const OverviewTab: React.FC<{
           Recent Activity
         </h2>
         <div className="activity-list">
-          {systemMetrics.recentActivity.map((activity, index) => (
+          {systemMetrics.recentActivity.map((activity, index) => ()
             <div key={index} className="activity-item">
               <div className="activity-icon">
                 {activity.type === 'violation_occurred' ? <AlertCircle size={16} /> :
@@ -676,7 +644,7 @@ const OverviewTab: React.FC<{
                   {Math.floor((Date.now() - activity.timestamp.getTime()) / 60000)}m ago
                 </div>
               </div>
-              <div className={`activity-severity ${activity.severity}`}>
+              <div className={`activity-severity ${activity.severity}`}>}
                 {activity.severity}
               </div>
             </div>
@@ -691,10 +659,10 @@ const OverviewTab: React.FC<{
 // QuotasTab, ViolationsTab, AnalyticsTab, TemplatesTab, OperationsTab
 
 // Placeholder implementations
-const QuotasTab: React.FC<unknown> = ({ quotas, onQuotaToggle }) => (
+const QuotasTab: React.FC<unknown> = ({ quotas, onQuotaToggle }) => ()
   <div className="quotas-tab">
     <h2>Quotas Management</h2>
-    {quotas.map((quota: UsageQuota) => (
+    {quotas.map((quota: UsageQuota) => ()
       <div key={quota.quotaId} className="quota-card">
         <div className="quota-header">
           <span className="quota-name">{quota.quotaName}</span>
@@ -714,15 +682,14 @@ const QuotasTab: React.FC<unknown> = ({ quotas, onQuotaToggle }) => (
     ))}
   </div>
 );
-
-const ViolationsTab: React.FC<unknown> = ({ violations }) => (
+const ViolationsTab: React.FC<unknown> = ({ violations }) => ()
   <div className="violations-tab">
     <h2>Violations Management</h2>
-    {violations.map((violation: QuotaViolation) => (
+    {violations.map((violation: QuotaViolation) => ()
       <div key={violation.violationId} className="violation-card">
         <div className="violation-header">
           <span className="violation-id">{violation.violationId}</span>
-          <span className={`severity-badge ${violation.severity}`}>
+          <span className={`severity-badge ${violation.severity}`}>}
             {violation.severity}
           </span>
         </div>
@@ -735,8 +702,7 @@ const ViolationsTab: React.FC<unknown> = ({ violations }) => (
     ))}
   </div>
 );
-
-const AnalyticsTab: React.FC<unknown> = ({ analytics, _____systemMetrics }) => (
+const AnalyticsTab: React.FC<unknown> = ({ analytics, _____systemMetrics }) => ()
   <div className="analytics-tab">
     <h2>Usage Analytics</h2>
     <div className="analytics-content">
@@ -757,11 +723,10 @@ const AnalyticsTab: React.FC<unknown> = ({ analytics, _____systemMetrics }) => (
     </div>
   </div>
 );
-
-const TemplatesTab: React.FC<unknown> = ({ templates }) => (
+const TemplatesTab: React.FC<unknown> = ({ templates }) => ()
   <div className="templates-tab">
     <h2>Quota Templates</h2>
-    {templates.map((template: QuotaTemplate) => (
+    {templates.map((template: QuotaTemplate) => ()
       <div key={template.templateId} className="template-card">
         <div className="template-header">
           <span className="template-name">{template.templateName}</span>
@@ -775,15 +740,14 @@ const TemplatesTab: React.FC<unknown> = ({ templates }) => (
     ))}
   </div>
 );
-
-const OperationsTab: React.FC<unknown> = ({ operations }) => (
+const OperationsTab: React.FC<unknown> = ({ operations }) => ()
   <div className="operations-tab">
     <h2>Admin Operations</h2>
-    {operations.map((operation: QuotaAdminOperation) => (
+    {operations.map((operation: QuotaAdminOperation) => ()
       <div key={operation.operationId} className="operation-card">
         <div className="operation-header">
           <span className="operation-type">{operation.operationType}</span>
-          <span className={`status-badge ${operation.status}`}>
+          <span className={`status-badge ${operation.status}`}>}
             {operation.status}
           </span>
         </div>

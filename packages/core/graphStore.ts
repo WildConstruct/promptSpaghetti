@@ -35,17 +35,14 @@ import {
 export interface GraphState {
   nodes: Node[];
   edges: Edge[];
-  
   // Collaboration features (Epic 8.7)
   stickyNotes: StickyNote[];
   annotations: GraphAnnotations;
-  
   // Project state
   currentProject: ProjectMetadata | null;
   projectSettings: ProjectSettings;
   hasUnsavedChanges: boolean;
   isAutoSaveEnabled: boolean;
-  
   // Graph operations
   setNodes: (nodes: Node[]) => void;
   setEdges: (edges: Edge[]) => void;
@@ -58,27 +55,23 @@ export interface GraphState {
   reorderVariations: (nodeId: string, fromIndex: number, toIndex: number) => void;
   duplicateNode: (nodeId: string) => void;
   deleteNode: (nodeId: string) => void;
-  
   // Sticky notes operations (Epic 8.7)
   setStickyNotes: (notes: StickyNote[]) => void;
   addStickyNote: (note: StickyNote) => void;
   updateStickyNote: (noteId: string, updates: Partial<StickyNote>) => void;
   deleteStickyNote: (noteId: string) => void;
-  
   // Node labels operations (Epic 8.7 Task 2)
   setNodeLabelConfigs: (configs: Record<string, NodeLabelConfig>) => void;
   addNodeLabelConfig: (config: NodeLabelConfig) => void;
   updateNodeLabelConfig: (labelId: string, updates: Partial<NodeLabelConfig>) => void;
   deleteNodeLabelConfig: (labelId: string) => void;
   setLabelPreferences: (preferences: Partial<NodeLabelPreferences>) => void;
-  
   // Region groups operations (Epic 8.7 Task 3)
   setRegionGroups: (groups: RegionGroup[]) => void;
   addRegionGroup: (group: RegionGroup) => void;
   updateRegionGroup: (groupId: string, updates: Partial<RegionGroup>) => void;
   deleteRegionGroup: (groupId: string) => void;
   setRegionGroupPreferences: (preferences: Partial<RegionGroupPreferences>) => void;
-  
   // Connection annotations operations (Epic 8.7 Task 4)
   setConnectionLabels: (labels: ConnectionLabel[]) => void;
   addConnectionLabel: (label: ConnectionLabel) => void;
@@ -90,54 +83,49 @@ export interface GraphState {
   removeConnectionAnnotation: (annotationId: string) => void;
   setConnectionAnnotationPreferences: (preferences: Partial<ConnectionAnnotationPreferences>) => void;
   connectionAnnotationPreferences?: ConnectionAnnotationPreferences;
-  
   // Project operations (file-based)
   saveProject: (options: SaveProjectOptions) => Promise<{ success: boolean; error?: string }>;
   loadProject: () => Promise<{ success: boolean; error?: string }>;
-  
   // Project operations (server-based)
   saveProjectToServer: (options: SaveProjectOptions & { userId?: number }) => Promise<{ success: boolean; error?: string; projectId?: string }>;
   loadProjectFromServer: (projectId: string, userId?: number) => Promise<{ success: boolean; error?: string }>;
-  updateProjectOnServer: (
+  updateProjectOnServer: (),
     projectId: string,
     options: SaveProjectOptions & { userId?: number }
   ) => Promise<{ success: boolean; error?: string }>;
   deleteProjectFromServer: (projectId: string, userId?: number) => Promise<{ success: boolean; error?: string }>;
-  listUserProjects: (
+  listUserProjects: (),
     userId?: number,
     query?: Record<string,
     unknown>
   ) => Promise<{ success: boolean; projects?: ProjectMetadata[]; error?: string }>;
-  
   // Common project operations
   newProject: () => void;
   setCurrentProject: (metadata: ProjectMetadata) => void;
   updateProjectSettings: (settings: Partial<ProjectSettings>) => void;
   markProjectSaved: () => void;
   markProjectModified: () => void;
-  
   // Graph state operations
   getGraphData: () => { nodes: Node[]; edges: Edge[] };
   loadGraphData: (nodes: Node[], edges: Edge[]) => void;
-  
   // Template operations
-  saveAsTemplate: (
+  saveAsTemplate: (),
     templateData: TemplateSaveData,
-    author: string
+    author: string,
   ) => Promise<{ success: boolean; error?: string; template?: Template }>;
-  applyTemplate: (
+  applyTemplate: (),
     templateId: string,
-    options: TemplateInstantiationOptions
+    options: TemplateInstantiationOptions,
   ) => Promise<{ success: boolean; error?: string }>;
   getTemplateCompatibleData: () => GraphData;
 }
 
-export const useGraphStore = create<GraphState>((set, get) => ({
+export const useGraphStore = create<GraphState>((set, get) => ({)
   // Initial state
   nodes: [],
   edges: [],
   stickyNotes: [],
-  annotations: {
+  annotations: {,
     stickyNotes: [],
     nodeLabelConfigs: {},
     labelPreferences: DEFAULT_NODE_LABEL_PREFERENCES,
@@ -146,199 +134,182 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     connectionLabels: [],
     connectionAnnotations: [],
     connectionAnnotationPreferences: DEFAULT_CONNECTION_ANNOTATION_PREFERENCES,
-    metadata: {
+    metadata: {,
       author: 'system',
       created: new Date().toISOString(),
       modified: new Date().toISOString(),
-      version: '1.0.0'
+      version: '1.0.0',
     }
   },
   currentProject: null,
-  projectSettings: {
+  projectSettings: {,
     autoSave: true,
     autoSaveInterval: 30000,
     backupCount: 5,
     compressionEnabled: true,
-    encryptionEnabled: false
+    encryptionEnabled: false,
   },
   hasUnsavedChanges: false,
   isAutoSaveEnabled: true,
-
   // Graph operations
   setNodes: (nodes: Node[]) => set({ nodes, hasUnsavedChanges: true }),
   setEdges: (edges: Edge[]) => set({ edges, hasUnsavedChanges: true }),
-  addNode: (node: Node) => set((state) => ({ 
+  addNode: (node: Node) => set((state) => ({ )
     nodes: [...state.nodes, node], 
-    hasUnsavedChanges: true 
+    hasUnsavedChanges: true ,
   })),
-  addEdge: (edge: Edge) => set((state) => ({ 
+  addEdge: (edge: Edge) => set((state) => ({ )
     edges: [...state.edges, edge], 
-    hasUnsavedChanges: true 
+    hasUnsavedChanges: true ,
   })),
   updateNode: (nodeId: string, partial: Record<string, unknown>) => 
-    set((state) => ({
+    set((state) => ({)
       nodes: state.nodes.map((node) =>
         node.id === nodeId ? mergeNodeData(node, partial as Partial<NodeData>) : node
       ),
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-  
   addVariation: (nodeId: string, variation: string) =>
-    set((state) => ({
+    set((state) => ({)
       nodes: addVariationToNode(state.nodes, nodeId, variation),
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-    
   removeVariation: (nodeId: string, variationIndex: number) =>
-    set((state) => ({
+    set((state) => ({)
       nodes: removeVariationFromNode(state.nodes, nodeId, variationIndex),
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-    
   updateVariation: (nodeId: string, variationIndex: number, newValue: string) =>
-    set((state) => ({
+    set((state) => ({)
       nodes: updateVariationInNode(state.nodes, nodeId, variationIndex, newValue),
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-    
   reorderVariations: (nodeId: string, fromIndex: number, toIndex: number) =>
-    set((state) => ({
+    set((state) => ({)
       nodes: reorderVariationsInNode(state.nodes, nodeId, fromIndex, toIndex),
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   duplicateNode: (nodeId: string) =>
     set((state) => {
       const nodeToClone = state.nodes.find((n) => n.id === nodeId);
       if (!nodeToClone) return state;
-      
       const newNode = {
         ...nodeToClone,
-        id: `${nodeToClone.id}-copy-${Date.now()}`,
-        position: {
+        id: `${nodeToClone.id}-copy-${Date.now()}`,}
+        position: {,
           x: nodeToClone.position.x + 100,
           y: nodeToClone.position.y + 100
         },
-        data: {
+        data: {,
           ...nodeToClone.data,
-          label: `${nodeToClone.data.label} (Copy)`
+          label: `${nodeToClone.data.label} (Copy)`}
         }
       };
-      
       return { nodes: [...state.nodes, newNode], hasUnsavedChanges: true };
     }),
-  
       deleteNode: (nodeId: string) =>
-    set((state) => ({
+    set((state) => ({)
       nodes: state.nodes.filter((n) => n.id !== nodeId),
       edges: state.edges.filter((e) => e.source !== nodeId && e.target !== nodeId),
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-  
   // Sticky notes operations (Epic 8.7)
   setStickyNotes: (notes: StickyNote[]) =>
-    set((state) => ({
+    set((state) => ({)
       stickyNotes: notes,
-      annotations: {
+      annotations: {,
         ...state.annotations,
         stickyNotes: notes,
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-    
   addStickyNote: (note: StickyNote) =>
-    set((state) => ({
+    set((state) => ({)
       stickyNotes: [...state.stickyNotes, note],
-      annotations: {
+      annotations: {,
         ...state.annotations,
         stickyNotes: [...state.annotations.stickyNotes, note],
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-    
   updateStickyNote: (noteId: string, updates: Partial<StickyNote>) =>
     set((state) => {
-      const updatedNotes = state.stickyNotes.map(note =>
+      const updatedNotes = state.stickyNotes.map(note =>;)
         note.id === noteId ? { ...note, ...updates } : note
       );
       return {
         stickyNotes: updatedNotes,
-        annotations: {
+        annotations: {,
           ...state.annotations,
           stickyNotes: updatedNotes,
-          metadata: {
+          metadata: {,
             ...state.annotations.metadata,
             modified: new Date().toISOString()
           }
         },
-        hasUnsavedChanges: true
+        hasUnsavedChanges: true,
       };
     }),
-    
   deleteStickyNote: (noteId: string) =>
     set((state) => {
       const filteredNotes = state.stickyNotes.filter(note => note.id !== noteId);
       return {
         stickyNotes: filteredNotes,
-        annotations: {
+        annotations: {,
           ...state.annotations,
           stickyNotes: filteredNotes,
-          metadata: {
+          metadata: {,
             ...state.annotations.metadata,
             modified: new Date().toISOString()
           }
         },
-        hasUnsavedChanges: true
+        hasUnsavedChanges: true,
       };
     }),
-  
   // Node labels operations (Epic 8.7 Task 2)
   setNodeLabelConfigs: (configs: Record<string, any>) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
         nodeLabelConfigs: configs,
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   addNodeLabelConfig: (config: NodeLabelConfig) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
-        nodeLabelConfigs: {
+        nodeLabelConfigs: {,
           ...state.annotations.nodeLabelConfigs,
           [config.id]: config
         },
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   updateNodeLabelConfig: (labelId: string, updates: Partial<NodeLabelConfig>) =>
     set((state) => {
       const existingConfig = state.annotations.nodeLabelConfigs[labelId];
       if (!existingConfig) return state;
-
       return {
-        annotations: {
+        annotations: {,
           ...state.annotations,
-          nodeLabelConfigs: {
+          nodeLabelConfigs: {,
             ...state.annotations.nodeLabelConfigs,
             [labelId]: {
               ...existingConfig,
@@ -346,276 +317,257 @@ export const useGraphStore = create<GraphState>((set, get) => ({
               timestamp: new Date().toISOString()
             }
           },
-          metadata: {
+          metadata: {,
             ...state.annotations.metadata,
             modified: new Date().toISOString()
           }
         },
-        hasUnsavedChanges: true
+        hasUnsavedChanges: true,
       };
     }),
-
   deleteNodeLabelConfig: (labelId: string) =>
     set((state) => {
       const { [labelId]: deleted, ...remainingConfigs } = state.annotations.nodeLabelConfigs;
       return {
-        annotations: {
+        annotations: {,
           ...state.annotations,
           nodeLabelConfigs: remainingConfigs,
-          metadata: {
+          metadata: {,
             ...state.annotations.metadata,
             modified: new Date().toISOString()
           }
         },
-        hasUnsavedChanges: true
+        hasUnsavedChanges: true,
       };
     }),
-
   setLabelPreferences: (preferences: NodeLabelPreferences) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
-        labelPreferences: {
+        labelPreferences: {,
           ...state.annotations.labelPreferences,
           ...preferences
         },
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-  
   // Region groups operations (Epic 8.7 Task 3)
   setRegionGroups: (groups: RegionGroup[]) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
         regionGroups: groups,
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   addRegionGroup: (group: RegionGroup) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
         regionGroups: [...state.annotations.regionGroups, group],
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   updateRegionGroup: (groupId, updates) =>
     set((state) => {
       const existingGroup = state.annotations.regionGroups.find(g => g.id === groupId);
       if (!existingGroup) return state;
-
       return {
-        annotations: {
+        annotations: {,
           ...state.annotations,
-          regionGroups: state.annotations.regionGroups.map(group =>
+          regionGroups: state.annotations.regionGroups.map(group =>)
             group.id === groupId 
               ? { ...group, ...updates, lastModified: new Date().toISOString() }
               : group
           ),
-          metadata: {
+          metadata: {,
             ...state.annotations.metadata,
             modified: new Date().toISOString()
           }
         },
-        hasUnsavedChanges: true
+        hasUnsavedChanges: true,
       };
     }),
-
   deleteRegionGroup: (groupId: string) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
         regionGroups: state.annotations.regionGroups.filter(group => group.id !== groupId),
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   setRegionGroupPreferences: (preferences: RegionGroupPreferences) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
-        regionGroupPreferences: {
+        regionGroupPreferences: {,
           ...state.annotations.regionGroupPreferences,
           ...preferences
         },
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   // Connection annotations operations (Epic 8.7 Task 4)
   setConnectionLabels: (labels: ConnectionLabel[]) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
         connectionLabels: labels,
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   addConnectionLabel: (label) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
         connectionLabels: [...(state.annotations.connectionLabels || []), label],
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   updateConnectionLabel: (labelId, updates) =>
     set((state) => {
-      const updatedLabels = (state.annotations.connectionLabels || []).map(label =>
+      const updatedLabels = (state.annotations.connectionLabels || []).map(label =>;)
         label.id === labelId ? { ...label, ...updates } : label
       );
       return {
-        annotations: {
+        annotations: {,
           ...state.annotations,
           connectionLabels: updatedLabels,
-          metadata: {
+          metadata: {,
             ...state.annotations.metadata,
             modified: new Date().toISOString()
           }
         },
-        hasUnsavedChanges: true
+        hasUnsavedChanges: true,
       };
     }),
-
   removeConnectionLabel: (labelId) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
-        connectionLabels: (state.annotations.connectionLabels || []).filter(
+        connectionLabels: (state.annotations.connectionLabels || []).filter()
           label => label.id !== labelId
         ),
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   setConnectionAnnotations: (annotations) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
         connectionAnnotations: annotations,
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   addConnectionAnnotation: (annotation) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
         connectionAnnotations: [...(state.annotations.connectionAnnotations || []), annotation],
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   updateConnectionAnnotation: (annotationId: string, updates: Partial<ConnectionAnnotation>) =>
     set((state) => {
-      const updatedAnnotations = (state.annotations.connectionAnnotations || []).map(annotation =>
+      const updatedAnnotations = (state.annotations.connectionAnnotations || []).map(annotation =>;)
         annotation.id === annotationId ? { ...annotation, ...updates } : annotation
       );
       return {
-        annotations: {
+        annotations: {,
           ...state.annotations,
           connectionAnnotations: updatedAnnotations,
-          metadata: {
+          metadata: {,
             ...state.annotations.metadata,
             modified: new Date().toISOString()
           }
         },
-        hasUnsavedChanges: true
+        hasUnsavedChanges: true,
       };
     }),
-
   removeConnectionAnnotation: (annotationId: string) =>
-    set((state) => ({
-      annotations: {
+    set((state) => ({)
+      annotations: {,
         ...state.annotations,
-        connectionAnnotations: (state.annotations.connectionAnnotations || []).filter(
+        connectionAnnotations: (state.annotations.connectionAnnotations || []).filter()
           annotation => annotation.id !== annotationId
         ),
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-
   setConnectionAnnotationPreferences: (preferences: ConnectionAnnotationPreferences) =>
-    set((state) => ({
-      connectionAnnotationPreferences: {
+    set((state) => ({)
+      connectionAnnotationPreferences: {,
         ...state.connectionAnnotationPreferences,
         ...preferences
       },
-      annotations: {
+      annotations: {,
         ...state.annotations,
-        connectionAnnotationPreferences: {
+        connectionAnnotationPreferences: {,
           ...state.annotations.connectionAnnotationPreferences,
           ...preferences
         },
-        metadata: {
+        metadata: {,
           ...state.annotations.metadata,
           modified: new Date().toISOString()
         }
       },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     })),
-  
   // Project operations
   saveProject: async (options: SaveProjectOptions) => {
     const state = get();
     try {
-      const result = await ProjectManager.saveProjectToDevice(
+      const result = await ProjectManager.saveProjectToDevice(;)
         { nodes: state.nodes, edges: state.edges },
         options,
         state.projectSettings
       );
-      
       if (result.success) {
-        set({ 
+        set({ )
           hasUnsavedChanges: false,
           currentProject: result.fileName ? {
             name: options.name,
@@ -625,11 +577,10 @@ export const useGraphStore = create<GraphState>((set, get) => ({
             lastModified: new Date().toISOString(),
             author: options.author,
             tags: options.tags || [],
-            fileFormatVersion: '1.0.0'
+            fileFormatVersion: '1.0.0',
           } : state.currentProject
         });
       }
-      
       return result;
     } catch (error) {
       return {
@@ -638,23 +589,19 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       };
     }
   },
-  
   loadProject: async () => {
     try {
       const result = await ProjectManager.loadProjectFromDevice();
-      
       if (result.success && result.data) {
-        set({
+        set({)
           nodes: result.data.graph.nodes,
           edges: result.data.graph.edges,
           currentProject: result.data.metadata,
           projectSettings: { ...get().projectSettings, ...result.data.settings },
-          hasUnsavedChanges: false
+          hasUnsavedChanges: false,
         });
-        
         return { success: true, warnings: result.warnings };
       }
-      
       return result;
     } catch (error) {
       return {
@@ -663,59 +610,50 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       };
     }
   },
-  
   newProject: () => {
-    set({
+    set({)
       nodes: [],
       edges: [],
       currentProject: null,
-      hasUnsavedChanges: false
+      hasUnsavedChanges: false,
     });
   },
-  
   setCurrentProject: (metadata: ProjectMetadata) => {
     set({ currentProject: metadata });
   },
-  
   updateProjectSettings: (settings: Partial<ProjectSettings>) => {
-    set((state) => ({
+    set((state) => ({)
       projectSettings: { ...state.projectSettings, ...settings },
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     }));
   },
-  
   markProjectSaved: () => {
     set({ hasUnsavedChanges: false });
   },
-  
   markProjectModified: () => {
     set({ hasUnsavedChanges: true });
   },
-  
   getGraphData: () => {
     const state = get();
     return { nodes: state.nodes, edges: state.edges };
   },
-  
   loadGraphData: (nodes: Node[], edges: Edge[]) => {
     set({ nodes, edges, hasUnsavedChanges: false });
   },
-
   // Server-based project operations
   saveProjectToServer: async (options: SaveProjectOptions & { userId?: number }) => {
     const state = get();
     try {
-      const result = await ServerProjectManager.saveProjectToServer(
+      const result = await ServerProjectManager.saveProjectToServer(;)
         { nodes: state.nodes, edges: state.edges },
         options,
         state.projectSettings,
         options.userId
       );
-      
       if (result.success) {
-        set({ 
+        set({ )
           hasUnsavedChanges: false,
-          currentProject: {
+          currentProject: {,
             name: options.name,
             description: options.description,
             version: '1.0.0',
@@ -723,15 +661,14 @@ export const useGraphStore = create<GraphState>((set, get) => ({
             lastModified: new Date().toISOString(),
             author: options.author,
             tags: options.tags || [],
-            fileFormatVersion: '1.0.0'
+            fileFormatVersion: '1.0.0',
           }
         });
       }
-      
       return {
         success: result.success,
         error: result.error,
-        projectId: result.projectId
+        projectId: result.projectId,
       };
     } catch (error) {
       return {
@@ -740,23 +677,19 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       };
     }
   },
-
   loadProjectFromServer: async (projectId: string, userId?: number) => {
     try {
       const result = await ServerProjectManager.loadProjectFromServer(projectId, userId);
-      
       if (result.success && result.data) {
-        set({
+        set({)
           nodes: result.data.graph.nodes,
           edges: result.data.graph.edges,
           currentProject: result.data.metadata,
           projectSettings: { ...get().projectSettings, ...result.data.settings },
-          hasUnsavedChanges: false
+          hasUnsavedChanges: false,
         });
-        
         return { success: true, warnings: result.warnings };
       }
-      
       return result;
     } catch (error) {
       return {
@@ -765,22 +698,20 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       };
     }
   },
-
   updateProjectOnServer: async (projectId: string, options: SaveProjectOptions & { userId?: number }) => {
     const state = get();
     try {
-      const result = await ServerProjectManager.updateProjectOnServer(
+      const result = await ServerProjectManager.updateProjectOnServer(;)
         projectId,
         { nodes: state.nodes, edges: state.edges },
         options,
         state.projectSettings,
         options.userId
       );
-      
       if (result.success) {
-        set({ 
+        set({ )
           hasUnsavedChanges: false,
-          currentProject: {
+          currentProject: {,
             ...state.currentProject,
             name: options.name,
             description: options.description,
@@ -790,7 +721,6 @@ export const useGraphStore = create<GraphState>((set, get) => ({
           }
         });
       }
-      
       return result;
     } catch (error) {
       return {
@@ -799,13 +729,12 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       };
     }
   },
-
   deleteProjectFromServer: async (projectId: string, userId?: number) => {
     try {
       const result = await ServerProjectManager.deleteProjectFromServer(projectId, userId);
       return {
         success: result.success,
-        error: result.error
+        error: result.error,
       };
     } catch (error) {
       return {
@@ -814,24 +743,21 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       };
     }
   },
-
   listUserProjects: async (userId?: number, query?: Record<string, unknown>) => {
     try {
-      const result = await ServerProjectManager.getUserProjects({
+      const result = await ServerProjectManager.getUserProjects({)
         userId,
         ...query
       });
-      
       if ('error' in result) {
         return {
           success: false,
-          error: result.error
+          error: result.error,
         };
       }
-      
       return {
         success: true,
-        projects: result.projects
+        projects: result.projects,
       };
     } catch (error) {
       return {
@@ -840,18 +766,16 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       };
     }
   },
-
   // Template operations implementation
   saveAsTemplate: async (templateData: TemplateSaveData, author: string) => {
     const state = get();
     try {
-      const template = await templateService.createFromGraph(
+      const template = await templateService.createFromGraph(;)
         state.nodes,
         state.edges,
         templateData,
         author
       );
-      
       return {
         success: true,
         template
@@ -863,28 +787,25 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       };
     }
   },
-
   applyTemplate: async (templateId: string, options: TemplateInstantiationOptions) => {
     try {
       const graphData = await templateService.instantiateTemplate(templateId, options);
-      
       if (options.mergeWithCurrent) {
         // Merge with current graph
         const state = get();
-        set({
+        set({)
           nodes: [...state.nodes, ...graphData.nodes],
           edges: [...state.edges, ...graphData.edges],
-          hasUnsavedChanges: true
+          hasUnsavedChanges: true,
         });
       } else {
         // Replace current graph
-        set({
+        set({)
           nodes: graphData.nodes,
           edges: graphData.edges,
-          hasUnsavedChanges: true
+          hasUnsavedChanges: true,
         });
       }
-      
       return { success: true };
     } catch (error) {
       return {
@@ -893,26 +814,25 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       };
     }
   },
-
   getTemplateCompatibleData: () => {
     const state = get();
     return {
       nodes: state.nodes,
       edges: state.edges,
-      annotations: {
+      annotations: {,
         stickyNotes: [], // Will be populated when sticky notes system is implemented
-        nodeLabels: Object.fromEntries(
+        nodeLabels: Object.fromEntries(),
           state.nodes.map(node => [node.id, node.data?.label || node.id])
         ),
         regionGroups: [], // Will be populated when region groups system is implemented
-        connectionLabels: Object.fromEntries(
+        connectionLabels: Object.fromEntries(),
           state.edges.filter(edge => edge.label).map(edge => [edge.id, edge.label!])
         ),
-        metadata: {
+        metadata: {,
           author: 'system',
           created: new Date().toISOString(),
           modified: new Date().toISOString(),
-          version: '1.0.0'
+          version: '1.0.0',
         }
       }
     };

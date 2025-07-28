@@ -4,7 +4,6 @@
  * 
  * Provides sorting, filtering, pagination, and selection
  */
-
 import React, { useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown, Search, Filter, Download, Eye, MoreHorizontal } from 'lucide-react';
 import './DataTable.css';
@@ -34,7 +33,6 @@ export interface DataTableProps<T = any> {
   // Core data
   data: T[];
   columns: TableColumn<T>[];
-  
   // Pagination
   pagination?: {
     pageSize?: number;
@@ -42,7 +40,6 @@ export interface DataTableProps<T = any> {
     showQuickJumper?: boolean;
     showTotal?: boolean;
   } | false;
-  
   // Selection
   rowSelection?: {
     type?: 'checkbox' | 'radio';
@@ -50,45 +47,36 @@ export interface DataTableProps<T = any> {
     onChange?: (selectedRowKeys: React.Key[], selectedRows: T[]) => void;
     getCheckboxProps?: (record: T) => { disabled?: boolean };
   };
-  
   // Actions
   actions?: TableAction<T>[];
-  
   // Styling and behavior
   size?: 'small' | 'medium' | 'large';
   bordered?: boolean;
   striped?: boolean;
   hoverable?: boolean;
   loading?: boolean;
-  
   // Row properties
   rowKey?: keyof T | ((record: T) => React.Key);
   rowClassName?: (record: T, index: number) => string;
   onRowClick?: (record: T, index: number) => void;
-  
   // Filtering and search
   searchable?: boolean;
   searchPlaceholder?: string;
   globalFilter?: boolean;
-  
   // Export
   exportable?: boolean;
   exportFileName?: string;
-  
   // Empty state
   emptyText?: string;
-  
   className?: string;
 }
-
 type SortDirection = 'asc' | 'desc' | null;
-
 interface SortConfig {
   key: string;
   direction: SortDirection;
 }
 
-export const DataTable = <T extends Record<string, any>>({
+export const DataTable = <T extends Record<string, any>>({)
   data,
   columns,
   pagination = { pageSize: 10 },
@@ -116,7 +104,6 @@ export const DataTable = <T extends Record<string, any>>({
   const [searchTerm, setSearchTerm] = useState('');
   const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
   const [selectedRows, setSelectedRows] = useState<React.Key[]>(rowSelection?.selectedRowKeys || []);
-
   // Get row key
   const getRowKey = (record: T, index: number): React.Key => {
     if (typeof rowKey === 'function') {
@@ -124,45 +111,38 @@ export const DataTable = <T extends Record<string, any>>({
     }
     return record[rowKey] || index;
   };
-
   // Filter data based on search and column filters
   const filteredData = useMemo(() => {
     let filtered = [...data];
-
     // Global search
     if (searchTerm && globalFilter) {
-      filtered = filtered.filter(record =>
-        Object.values(record).some(value =>
+      filtered = filtered.filter(record =>)
+        Object.values(record).some(value =>)
           String(value).toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
     }
-
     // Column filters
     Object.entries(columnFilters).forEach(([columnKey, filterValue]) => {
       if (filterValue) {
-        filtered = filtered.filter(record => {
+        filtered = filtered.filter(record => {)
           const column = columns.find(col => col.key === columnKey);
           const value = column?.dataIndex ? record[column.dataIndex] : record[columnKey];
           return String(value).toLowerCase().includes(filterValue.toLowerCase());
         });
       }
     });
-
     return filtered;
   }, [data, searchTerm, columnFilters, globalFilter, columns]);
-
   // Sort data
   const sortedData = useMemo(() => {
     if (!sortConfig.key || !sortConfig.direction) {
       return filteredData;
     }
-
     return [...filteredData].sort((a, b) => {
       const column = columns.find(col => col.key === sortConfig.key);
       const aValue = column?.dataIndex ? a[column.dataIndex] : a[sortConfig.key];
       const bValue = column?.dataIndex ? b[column.dataIndex] : b[sortConfig.key];
-
       if (aValue < bValue) {
         return sortConfig.direction === 'asc' ? -1 : 1;
       }
@@ -172,27 +152,22 @@ export const DataTable = <T extends Record<string, any>>({
       return 0;
     });
   }, [filteredData, sortConfig, columns]);
-
   // Paginate data
   const paginatedData = useMemo(() => {
     if (!pagination) return sortedData;
-    
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     return sortedData.slice(startIndex, endIndex);
   }, [sortedData, currentPage, pageSize, pagination]);
-
   // Pagination info
   const totalPages = pagination ? Math.ceil(sortedData.length / pageSize) : 1;
   const startItem = pagination ? (currentPage - 1) * pageSize + 1 : 1;
   const endItem = pagination ? Math.min(currentPage * pageSize, sortedData.length) : sortedData.length;
-
   // Handle sorting
   const handleSort = (columnKey: string) => {
     const column = columns.find(col => col.key === columnKey);
     if (!column?.sortable) return;
-
-    setSortConfig(current => {
+    setSortConfig(current => {)
       if (current.key === columnKey) {
         if (current.direction === 'asc') {
           return { key: columnKey, direction: 'desc' };
@@ -203,72 +178,60 @@ export const DataTable = <T extends Record<string, any>>({
       return { key: columnKey, direction: 'asc' };
     });
   };
-
   // Handle row selection
   const handleRowSelection = (recordKey: React.Key, checked: boolean) => {
     if (!rowSelection) return;
-
-    const newSelectedRows = checked
+    const newSelectedRows = checked;
       ? [...selectedRows, recordKey]
       : selectedRows.filter(key => key !== recordKey);
-
     setSelectedRows(newSelectedRows);
-    
     if (rowSelection.onChange) {
-      const selectedRecords = data.filter(record => 
+      const selectedRecords = data.filter(record => ;)
         newSelectedRows.includes(getRowKey(record, data.indexOf(record)))
       );
       rowSelection.onChange(newSelectedRows, selectedRecords);
     }
   };
-
   // Handle select all
   const handleSelectAll = (checked: boolean) => {
     if (!rowSelection) return;
-
     const allKeys = paginatedData.map((record, index) => getRowKey(record, index));
     const newSelectedRows = checked ? allKeys : [];
-
     setSelectedRows(newSelectedRows);
-    
     if (rowSelection.onChange) {
       const selectedRecords = checked ? paginatedData : [];
       rowSelection.onChange(newSelectedRows, selectedRecords);
     }
   };
-
   // Export data
   const handleExport = () => {
-    const csvContent = [
+    const csvContent = [;
       columns.map(col => col.title).join(','),
-      ...sortedData.map(record =>
-        columns.map(col => {
+      ...sortedData.map(record =>)
+        columns.map(col => {)
           const value = col.dataIndex ? record[col.dataIndex] : record[col.key];
-          return `"${String(value).replace(/"/g, '""')}"`;
+          return `"${String(value).replace(/"/g, '""')}"`;}
         }).join(',')
       )
     ].join('\n');
-
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${exportFileName}.csv`;
+    link.download = `${exportFileName}.csv`;}
     link.click();
     URL.revokeObjectURL(url);
   };
-
-  const isAllSelected = paginatedData.length > 0 && 
+  const isAllSelected = paginatedData.length > 0 && ;
     paginatedData.every(record => selectedRows.includes(getRowKey(record, data.indexOf(record))));
   const isIndeterminate = selectedRows.length > 0 && !isAllSelected;
-
-  return (
-    <div className={`data-table data-table-${size} ${className}`}>
+  return ()
+    <div className={`data-table data-table-${size} ${className}`}>}
       {/* Toolbar */}
-      {(searchable || exportable) && (
+      {(searchable || exportable) && ()
         <div className="table-toolbar">
           <div className="toolbar-left">
-            {searchable && (
+            {searchable && ()
               <div className="search-input">
                 <Search size={16} className="search-icon" />
                 <input
@@ -280,9 +243,8 @@ export const DataTable = <T extends Record<string, any>>({
               </div>
             )}
           </div>
-          
           <div className="toolbar-right">
-            {exportable && (
+            {exportable && ()
               <button 
                 className="export-button"
                 onClick={handleExport}
@@ -295,15 +257,14 @@ export const DataTable = <T extends Record<string, any>>({
           </div>
         </div>
       )}
-
       {/* Table */}
-      <div className={`table-container ${bordered ? 'bordered' : ''}`}>
-        <table className={`table ${striped ? 'striped' : ''} ${hoverable ? 'hoverable' : ''}`}>
+      <div className={`table-container ${bordered ? 'bordered' : ''}`}>}
+        <table className={`table ${striped ? 'striped' : ''} ${hoverable ? 'hoverable' : ''}`}>}
           <thead>
             <tr>
-              {rowSelection && (
+              {rowSelection && ()
                 <th className="selection-column">
-                  {rowSelection.type === 'checkbox' && (
+                  {rowSelection.type === 'checkbox' && ()
                     <input
                       type="checkbox"
                       checked={isAllSelected}
@@ -315,8 +276,7 @@ export const DataTable = <T extends Record<string, any>>({
                   )}
                 </th>
               )}
-              
-              {columns.map(column => (
+              {columns.map(column => ()
                 <th
                   key={column.key}
                   className={`${column.className || ''} ${column.align ? `text-${column.align}` : ''}`}
@@ -324,8 +284,7 @@ export const DataTable = <T extends Record<string, any>>({
                 >
                   <div className="column-header">
                     <span className="column-title">{column.title}</span>
-                    
-                    {column.sortable && (
+                    {column.sortable && ()
                       <button
                         className="sort-button"
                         onClick={() => handleSort(column.key)}
@@ -340,15 +299,14 @@ export const DataTable = <T extends Record<string, any>>({
                         />
                       </button>
                     )}
-                    
-                    {column.filterable && (
+                    {column.filterable && ()
                       <div className="filter-input">
                         <Filter size={14} />
                         <input
                           type="text"
                           placeholder="Filter..."
                           value={columnFilters[column.key] || ''}
-                          onChange={(e) => setColumnFilters(prev => ({
+                          onChange={(e) => setColumnFilters(prev => ({)
                             ...prev,
                             [column.key]: e.target.value
                           }))}
@@ -359,15 +317,13 @@ export const DataTable = <T extends Record<string, any>>({
                   </div>
                 </th>
               ))}
-              
-              {actions && actions.length > 0 && (
+              {actions && actions.length > 0 && ()
                 <th className="actions-column">Actions</th>
               )}
             </tr>
           </thead>
-          
           <tbody>
-            {loading ? (
+            {loading ? ()
               <tr>
                 <td colSpan={columns.length + (rowSelection ? 1 : 0) + (actions ? 1 : 0)}>
                   <div className="loading-state">
@@ -376,18 +332,17 @@ export const DataTable = <T extends Record<string, any>>({
                   </div>
                 </td>
               </tr>
-            ) : paginatedData.length === 0 ? (
+            ) : paginatedData.length === 0 ? ()
               <tr>
                 <td colSpan={columns.length + (rowSelection ? 1 : 0) + (actions ? 1 : 0)}>
                   <div className="empty-state">{emptyText}</div>
                 </td>
               </tr>
-            ) : (
+            ) : ()
               paginatedData.map((record, index) => {
                 const recordKey = getRowKey(record, index);
                 const isSelected = selectedRows.includes(recordKey);
-                
-                return (
+                return ()
                   <tr
                     key={recordKey}
                     className={`
@@ -396,7 +351,7 @@ export const DataTable = <T extends Record<string, any>>({
                     `}
                     onClick={() => onRowClick?.(record, index)}
                   >
-                    {rowSelection && (
+                    {rowSelection && ()
                       <td className="selection-column">
                         <input
                           type={rowSelection.type || 'checkbox'}
@@ -407,12 +362,10 @@ export const DataTable = <T extends Record<string, any>>({
                         />
                       </td>
                     )}
-                    
-                    {columns.map(column => {
+                    {columns.map(column => {)
                       const value = column.dataIndex ? record[column.dataIndex] : record[column.key];
                       const cellContent = column.render ? column.render(value, record, index) : value;
-                      
-                      return (
+                      return ()
                         <td
                           key={column.key}
                           className={`${column.className || ''} ${column.align ? `text-${column.align}` : ''}`}
@@ -421,15 +374,13 @@ export const DataTable = <T extends Record<string, any>>({
                         </td>
                       );
                     })}
-                    
-                    {actions && actions.length > 0 && (
+                    {actions && actions.length > 0 && ()
                       <td className="actions-column">
                         <div className="row-actions">
-                          {actions.map(action => {
+                          {actions.map(action => {)
                             const Icon = action.icon;
                             const isDisabled = action.disabled?.(record);
-                            
-                            return (
+                            return ()
                               <button
                                 key={action.key}
                                 className={`action-button ${action.variant || 'default'}`}
@@ -454,18 +405,16 @@ export const DataTable = <T extends Record<string, any>>({
           </tbody>
         </table>
       </div>
-
       {/* Pagination */}
-      {pagination && totalPages > 1 && (
+      {pagination && totalPages > 1 && ()
         <div className="table-pagination">
           <div className="pagination-info">
-            {pagination.showTotal && (
+            {pagination.showTotal && ()
               <span>
                 Showing {startItem}-{endItem} of {sortedData.length} items
               </span>
             )}
           </div>
-          
           <div className="pagination-controls">
             <button
               className="page-button"
@@ -474,7 +423,6 @@ export const DataTable = <T extends Record<string, any>>({
             >
               First
             </button>
-            
             <button
               className="page-button"
               onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
@@ -482,16 +430,15 @@ export const DataTable = <T extends Record<string, any>>({
             >
               Previous
             </button>
-            
             {Array.from({ length: totalPages }, (_, i) => i + 1)
-              .filter(page => 
+              .filter(page => )
                 page === 1 || 
                 page === totalPages || 
                 Math.abs(page - currentPage) <= 2
               )
-              .map((page, index, visiblePages) => (
+              .map((page, index, visiblePages) => ()
                 <React.Fragment key={page}>
-                  {index > 0 && visiblePages[index - 1] < page - 1 && (
+                  {index > 0 && visiblePages[index - 1] < page - 1 && ()
                     <span className="pagination-ellipsis">...</span>
                   )}
                   <button
@@ -502,7 +449,6 @@ export const DataTable = <T extends Record<string, any>>({
                   </button>
                 </React.Fragment>
               ))}
-            
             <button
               className="page-button"
               onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
@@ -510,7 +456,6 @@ export const DataTable = <T extends Record<string, any>>({
             >
               Next
             </button>
-            
             <button
               className="page-button"
               onClick={() => setCurrentPage(totalPages)}
@@ -519,8 +464,7 @@ export const DataTable = <T extends Record<string, any>>({
               Last
             </button>
           </div>
-          
-          {pagination.showSizeChanger && (
+          {pagination.showSizeChanger && ()
             <div className="page-size-selector">
               <select
                 value={pageSize}
@@ -529,7 +473,7 @@ export const DataTable = <T extends Record<string, any>>({
                   setCurrentPage(1);
                 }}
               >
-                {[10, 20, 50, 100].map(size => (
+                {[10, 20, 50, 100].map(size => ()
                   <option key={size} value={size}>
                     {size} per page
                   </option>

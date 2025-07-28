@@ -15,27 +15,27 @@ export declare class ExtensionUpgradeAdvisor {
     /**
      * Get upgrade recommendations for an extension
      */
-    getUpgradeRecommendations(
+    getUpgradeRecommendations()
       currentExtension: ExtensionManifest,
       availableVersions: string[],
-      context: UpgradeContext
+      context: UpgradeContext,
     ): UpgradeRecommendation;
     /**
      * Analyze upgrade path for specific target version
      */
-    analyzeUpgradePath(
+    analyzeUpgradePath()
       currentExtension: ExtensionManifest,
       targetVersion: string,
       availableVersions: string[],
-      context: UpgradeContext
+      context: UpgradeContext,
     ): UpgradeAnalysis;
     /**
      * Generate migration plan for upgrade
      */
-    generateMigrationPlan(
+    generateMigrationPlan()
       currentExtension: ExtensionManifest,
       targetVersion: string,
-      context: UpgradeContext
+      context: UpgradeContext,
     ): MigrationPlan;
     /**
      * Check for breaking changes between versions
@@ -44,10 +44,10 @@ export declare class ExtensionUpgradeAdvisor {
     /**
      * Validate upgrade compatibility
      */
-    validateUpgradeCompatibility(
+    validateUpgradeCompatibility()
       currentExtension: ExtensionManifest,
       targetExtension: ExtensionManifest,
-      context: UpgradeContext
+      context: UpgradeContext,
     ): UpgradeCompatibilityResult;
     /**
      * Determine upgrade strategy based on context
@@ -207,7 +207,7 @@ interface EffortEstimate {
     complexity: 'simple' | 'moderate' | 'complex';
 }
 interface UpgradeTimeline {
-    phases: Array<{
+    phases: Array<{,
         name: string;
         duration: string;
         tasks: MigrationTask[];

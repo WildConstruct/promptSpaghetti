@@ -42,7 +42,7 @@ export declare class ActivityTrackingService {
     private subscribers;
     constructor(config: ActivityServiceConfig);
     trackActivity(activity: Partial<BaseActivity>): Promise<Activity>;
-    trackUserAction(params: {
+    trackUserAction(params: {)
         userId: string;
         userEmail?: string;
         action: string;
@@ -53,7 +53,7 @@ export declare class ActivityTrackingService {
         metadata?: Record<string, any>;
         severity?: ActivitySeverity;
     }): Promise<Activity>;
-    trackSystemEvent(params: {
+    trackSystemEvent(params: {)
         source: string;
         action: string;
         description: string;
@@ -62,7 +62,7 @@ export declare class ActivityTrackingService {
         systemMetrics?: any;
         metadata?: Record<string, any>;
     }): Promise<Activity>;
-    trackAdminAction(params: {
+    trackAdminAction(params: {)
         adminUserId: string;
         adminLevel: 'super_admin' | 'admin' | 'moderator' | 'support';
         action: string;
@@ -73,7 +73,7 @@ export declare class ActivityTrackingService {
         metadata?: Record<string, any>;
         severity?: ActivitySeverity;
     }): Promise<Activity>;
-    trackSecurityEvent(params: {
+    trackSecurityEvent(params: {)
         threatType: string;
         threatLevel: 'low' | 'medium' | 'high' | 'critical';
         source: string;
@@ -85,7 +85,7 @@ export declare class ActivityTrackingService {
         forensicData?: any;
         metadata?: Record<string, any>;
     }): Promise<Activity>;
-    trackApiCall(params: {
+    trackApiCall(params: {)
         method: string;
         endpoint: string;
         statusCode: number;
@@ -95,7 +95,7 @@ export declare class ActivityTrackingService {
         responseSize?: number;
         metadata?: Record<string, any>;
     }): Promise<Activity>;
-    trackPerformanceEvent(params: {
+    trackPerformanceEvent(params: {)
         source: string;
         metrics: Record<string, number>;
         thresholdViolations?: string[];

@@ -5,12 +5,10 @@
  * Advanced preview panel with real-time synchronization, performance monitoring,
  * and intelligent caching for responsive graph preview updates.
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useGraphStore } from '../../graphStore';
 import { usePreviewStateStore } from '../../stores/previewStateStore';
 import { usePreviewSync } from '../../hooks/usePreviewSync';
-
 interface RealTimePreviewPanelProps {
   visible?: boolean;
   onClose?: () => void;
@@ -18,7 +16,6 @@ interface RealTimePreviewPanelProps {
   enablePerformanceMonitoring?: boolean;
   maxResults?: number;
 }
-
 interface PreviewResult {
   seed: number;
   output?: string;
@@ -28,7 +25,7 @@ interface PreviewResult {
   lockedNote?: string;
 }
 
-export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
+export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
   visible = true,
   onClose,
   className = '',
@@ -50,7 +47,6 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
     setAutoRefresh,
     resetState
   } = usePreviewStateStore();
-
   // Sync hook for real-time updates
   const {
     isEnabled: isSyncEnabled,
@@ -61,35 +57,30 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
     forceSyncNow,
     getChangeAnalysis,
     performanceMetrics
-  } = usePreviewSync({
+  } = usePreviewSync({)
     enabled: isRealTimeEnabled,
     debounceMs: 1000,
     significanceThreshold: 0.2,
-    enablePerformanceTracking: enablePerformanceMonitoring
+    enablePerformanceTracking: enablePerformanceMonitoring,
   });
-
   // Local state
   const [showPerformanceDetails, setShowPerformanceDetails] = useState(false);
   const [selectedResult, setSelectedResult] = useState<number | null>(null);
   const [lockNote, setLockNote] = useState('');
   const [showLockDialog, setShowLockDialog] = useState(false);
-
   // Format timestamp for display
   const formatTime = useCallback((timestamp: number | null) => {
     if (!timestamp) return 'Never';
     return new Date(timestamp).toLocaleTimeString();
   }, []);
-
   // Handle result selection
   const handleResultClick = useCallback((index: number) => {
     setSelectedResult(selectedResult === index ? null : index);
   }, [selectedResult]);
-
   // Handle lock/unlock result
   const handleToggleLock = useCallback((index: number) => {
     const result = results[index];
     if (!result) return;
-
     if (result.locked) {
       unlockResult(index);
     } else {
@@ -97,7 +88,6 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
       setShowLockDialog(true);
     }
   }, [results, unlockResult]);
-
   // Handle lock confirmation
   const handleConfirmLock = useCallback(() => {
     if (selectedResult !== null) {
@@ -107,7 +97,6 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
       setSelectedResult(null);
     }
   }, [selectedResult, lockNote, lockResult]);
-
   // Get sync status display
   const syncStatusDisplay = useMemo(() => {
     if (!isSyncEnabled) return { text: 'Disabled', color: '#9ca3af' };
@@ -115,32 +104,26 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
     if (syncCount > 0) return { text: 'Active', color: '#10b981' };
     return { text: 'Ready', color: '#3b82f6' };
   }, [isSyncEnabled, isSyncing, syncCount]);
-
   // Get change analysis display
   const changeAnalysis = useMemo(() => {
     const analysis = getChangeAnalysis();
     if (!analysis) return null;
-    
     return {
       type: analysis.changeType,
       significance: Math.round(analysis.significance * 100),
       affectedCount: analysis.affectedNodes.length + analysis.affectedEdges.length
     };
   }, [getChangeAnalysis]);
-
   // Handle manual refresh
   const handleManualRefresh = useCallback(async () => {
     await forceSyncNow();
   }, [forceSyncNow]);
-
   // Clear all results
   const handleClearResults = useCallback(() => {
     resetState();
   }, [resetState]);
-
   if (!visible) return null;
-
-  return (
+  return ()
     <div
       className={`real-time-preview-panel ${className}`}
       style={{
@@ -164,7 +147,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
           padding: '16px 20px',
           borderBottom: '1px solid #e2e8f0',
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white'
+          color: 'white',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -176,8 +159,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
               Status: <span style={{ color: syncStatusDisplay.color }}>●</span> {syncStatusDisplay.text}
             </div>
           </div>
-          
-          {onClose && (
+          {onClose && ()
             <button
               onClick={onClose}
               style={{
@@ -190,7 +172,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}
             >
               ×
@@ -198,13 +180,12 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
           )}
         </div>
       </div>
-
       {/* Controls */}
       <div
         style={{
           padding: '12px 20px',
           borderBottom: '1px solid #e2e8f0',
-          background: '#f8fafc'
+          background: '#f8fafc',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
@@ -217,7 +198,6 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
             />
             Real-time sync
           </label>
-          
           <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px' }}>
             <input
               type="checkbox"
@@ -228,7 +208,6 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
             Auto-refresh
           </label>
         </div>
-        
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
             onClick={handleManualRefresh}
@@ -245,7 +224,6 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
           >
             {isSyncing ? 'Syncing...' : '🔄 Refresh'}
           </button>
-          
           <button
             onClick={handleClearResults}
             style={{
@@ -255,13 +233,12 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
               border: 'none',
               borderRadius: '6px',
               fontSize: '12px',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             🗑️ Clear
           </button>
-          
-          {enablePerformanceMonitoring && (
+          {enablePerformanceMonitoring && ()
             <button
               onClick={() => setShowPerformanceDetails(!showPerformanceDetails)}
               style={{
@@ -271,7 +248,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
                 border: 'none',
                 borderRadius: '6px',
                 fontSize: '12px',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               📊 Stats
@@ -279,15 +256,14 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
           )}
         </div>
       </div>
-
       {/* Performance Stats */}
-      {showPerformanceDetails && (
+      {showPerformanceDetails && ()
         <div
           style={{
             padding: '12px 20px',
             borderBottom: '1px solid #e2e8f0',
             background: '#fafafa',
-            fontSize: '12px'
+            fontSize: '12px',
           }}
         >
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -306,23 +282,21 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
             <div>
               <strong>Cache Hit:</strong> {Math.round(performanceMetrics.cacheHitRate * 100)}%
             </div>
-            {performanceStats && (
+            {performanceStats && ()
               <div>
                 <strong>Exec Time:</strong> {performanceStats.averageTime}ms
               </div>
             )}
           </div>
-          
-          {changeAnalysis && (
+          {changeAnalysis && ()
             <div style={{ marginTop: '8px', padding: '8px', background: 'white', borderRadius: '4px' }}>
               <strong>Last Change:</strong> {changeAnalysis.type} 
-              ({changeAnalysis.significance}% significance, 
+              ({changeAnalysis.significance}% significance, )
               {changeAnalysis.affectedCount} items affected)
             </div>
           )}
         </div>
       )}
-
       {/* Results */}
       <div
         style={{
@@ -331,7 +305,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
           padding: '12px 0'
         }}
       >
-        {error && (
+        {error && ()
           <div
             style={{
               margin: '0 20px 12px',
@@ -340,32 +314,30 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
               border: '1px solid #fecaca',
               borderRadius: '8px',
               color: '#dc2626',
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           >
             <strong>Error:</strong> {error}
           </div>
         )}
-
-        {isLoading && (
+        {isLoading && ()
           <div
             style={{
               padding: '20px',
               textAlign: 'center',
-              color: '#6b7280'
+              color: '#6b7280',
             }}
           >
             <div style={{ fontSize: '24px', marginBottom: '8px' }}>⏳</div>
             <div>Generating previews...</div>
           </div>
         )}
-
-        {results.length === 0 && !isLoading && !error && (
+        {results.length === 0 && !isLoading && !error && ()
           <div
             style={{
               padding: '40px 20px',
               textAlign: 'center',
-              color: '#9ca3af'
+              color: '#9ca3af',
             }}
           >
             <div style={{ fontSize: '32px', marginBottom: '12px' }}>🎯</div>
@@ -375,15 +347,14 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
             </div>
           </div>
         )}
-
-        {results.slice(0, maxResults).map((result, index) => (
+        {results.slice(0, maxResults).map((result, index) => ()
           <div
             key={`${result.seed}-${index}`}
             style={{
               margin: '0 20px 8px',
               padding: '12px',
               background: selectedResult === index ? '#f0f9ff' : 'white',
-              border: `1px solid ${selectedResult === index ? '#0ea5e9' : '#e2e8f0'}`,
+              border: `1px solid ${selectedResult === index ? '#0ea5e9' : '#e2e8f0'}`,}
               borderRadius: '8px',
               cursor: 'pointer',
               transition: 'all 0.2s ease'
@@ -397,25 +368,22 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
                   padding: '2px 6px', 
                   borderRadius: '4px', 
                   fontSize: '11px',
-                  fontWeight: '600'
+                  fontWeight: '600',
                 }}>
                   Seed {result.seed}
                 </span>
-                
-                {result.executionTimeMs && (
+                {result.executionTimeMs && ()
                   <span style={{ fontSize: '11px', color: '#6b7280' }}>
                     {result.executionTimeMs}ms
                   </span>
                 )}
               </div>
-              
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                {result.locked && (
-                  <span title={`Locked: ${result.lockedNote || 'No note'}`} style={{ fontSize: '14px' }}>
+                {result.locked && ()
+                  <span title={`Locked: ${result.lockedNote || 'No note'}`} style={{ fontSize: '14px' }}>}
                     🔒
                   </span>
                 )}
-                
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -427,7 +395,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
                     fontSize: '14px',
                     cursor: 'pointer',
                     opacity: 0.7,
-                    padding: '2px'
+                    padding: '2px',
                   }}
                   title={result.locked ? 'Unlock result' : 'Lock result'}
                 >
@@ -435,13 +403,12 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
                 </button>
               </div>
             </div>
-            
             <div style={{ fontSize: '14px', lineHeight: '1.4' }}>
-              {result.error ? (
+              {result.error ? ()
                 <div style={{ color: '#dc2626', fontStyle: 'italic' }}>
                   {result.error}
                 </div>
-              ) : (
+              ) : ()
                 <div style={{ color: '#374151' }}>
                   {result.output || 'No output'}
                 </div>
@@ -449,23 +416,21 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
             </div>
           </div>
         ))}
-
-        {results.length > maxResults && (
+        {results.length > maxResults && ()
           <div
             style={{
               padding: '12px 20px',
               textAlign: 'center',
               color: '#6b7280',
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           >
             ... and {results.length - maxResults} more results
           </div>
         )}
       </div>
-
       {/* Lock Dialog */}
-      {showLockDialog && (
+      {showLockDialog && ()
         <div
           style={{
             position: 'absolute',
@@ -474,7 +439,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 1001
+            zIndex: 1001,
           }}
         >
           <div
@@ -490,7 +455,6 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
             <p style={{ margin: '0 0 12px', fontSize: '14px', color: '#6b7280' }}>
               Add an optional note for this locked result:
             </p>
-            
             <textarea
               value={lockNote}
               onChange={(e) => setLockNote(e.target.value)}
@@ -503,10 +467,9 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
                 borderRadius: '6px',
                 fontSize: '14px',
                 resize: 'none',
-                marginBottom: '12px'
+                marginBottom: '12px',
               }}
             />
-            
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
               <button
                 onClick={() => {
@@ -520,12 +483,11 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
                   color: '#374151',
                   border: 'none',
                   borderRadius: '6px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 Cancel
               </button>
-              
               <button
                 onClick={handleConfirmLock}
                 style={{
@@ -534,7 +496,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({
                   color: 'white',
                   border: 'none',
                   borderRadius: '6px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 Lock Result

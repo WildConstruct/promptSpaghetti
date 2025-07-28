@@ -15,7 +15,7 @@ export interface PerformanceTarget {
     critical: number;
     reasoning: string;
     source: 'user-requirement' | 'industry-standard' | 'business-objective' | 'technical-constraint';
-    businessImpact: {
+    businessImpact: {,
         userExperience: 'high' | 'medium' | 'low';
         businessValue: 'high' | 'medium' | 'low';
         technicalRisk: 'high' | 'medium' | 'low';
@@ -50,14 +50,14 @@ export declare function getTargetsForUserSegment(segment: PerformanceTargetConfi
 /**
  * Validate if current performance meets targets
  */
-export declare function validatePerformanceTargets(
+export declare function validatePerformanceTargets()
   currentMetrics: Record<string,
   number>,
-  config: PerformanceTargetConfig
+  config: PerformanceTargetConfig,
 ): {
     passed: boolean;
     score: number;
-    violations: Array<{
+    violations: Array<{,
         kpiId: string;
         current: number;
         target: number;

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { User, Crown, Shield } from 'lucide-react';
-
 interface MentionUser {
   id: string;
   name: string;
@@ -9,7 +8,6 @@ interface MentionUser {
   role?: 'owner' | 'admin' | 'editor' | 'viewer';
   online?: boolean;
 }
-
 interface CommentMentionsProps {
   workspaceId: string;
   query: string;
@@ -17,8 +15,7 @@ interface CommentMentionsProps {
   onClose: () => void;
   maxResults?: number;
 }
-
-const CommentMentions: React.FC<CommentMentionsProps> = ({ 
+const CommentMentions: React.FC<CommentMentionsProps> = ({ )
   workspaceId, 
   query, 
   onSelect, 
@@ -28,23 +25,19 @@ const CommentMentions: React.FC<CommentMentionsProps> = ({
   const [users, setUsers] = useState<MentionUser[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-
   // Fetch users matching the query
   const fetchUsers = useCallback(async (searchQuery: string) => {
     if (!searchQuery.trim()) {
       setUsers([]);
       return;
     }
-
     setLoading(true);
     try {
-      const params = new URLSearchParams({
+      const params = new URLSearchParams({)
         q: searchQuery,
-        limit: maxResults.toString()
+        limit: maxResults.toString(),
       });
-
-      const response = await fetch(`/api/workspaces/${workspaceId}/members/search?${params}`);
-      
+      const response = await fetch(`/api/workspaces/${workspaceId}/members/search?${params}`);}
       if (response.ok) {
         const data = await response.json();
         setUsers(data.users || []);
@@ -57,21 +50,17 @@ const CommentMentions: React.FC<CommentMentionsProps> = ({
       setLoading(false);
     }
   }, [workspaceId, maxResults]);
-
   // Debounce search queries
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       fetchUsers(query);
     }, 200);
-
     return () => clearTimeout(timeoutId);
   }, [query, fetchUsers]);
-
   // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (users.length === 0) return;
-
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
@@ -93,11 +82,9 @@ const CommentMentions: React.FC<CommentMentionsProps> = ({
           break;
       }
     };
-
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [users, selectedIndex, onSelect, onClose]);
-
   const getRoleIcon = (role?: string) => {
     switch (role) {
       case 'owner':
@@ -108,7 +95,6 @@ const CommentMentions: React.FC<CommentMentionsProps> = ({
         return <User className="w-3 h-3 text-gray-400" />;
     }
   };
-
   const getRoleColor = (role?: string) => {
     switch (role) {
       case 'owner':
@@ -123,9 +109,8 @@ const CommentMentions: React.FC<CommentMentionsProps> = ({
         return 'text-gray-600';
     }
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="bg-white border border-gray-200 rounded-md shadow-lg p-3">
         <div className="flex items-center space-x-2 text-sm text-gray-500">
           <div className="w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
@@ -134,9 +119,8 @@ const CommentMentions: React.FC<CommentMentionsProps> = ({
       </div>
     );
   }
-
   if (users.length === 0) {
-    return (
+    return ()
       <div className="bg-white border border-gray-200 rounded-md shadow-lg p-3">
         <div className="text-sm text-gray-500">
           {query.trim() ? `No users found matching "${query}"` : 'Start typing to search users...'}
@@ -144,10 +128,9 @@ const CommentMentions: React.FC<CommentMentionsProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="bg-white border border-gray-200 rounded-md shadow-lg max-h-64 overflow-y-auto">
-      {users.map((user, index) => (
+      {users.map((user, index) => ()
         <button
           key={user.id}
           onClick={() => onSelect(user.id, user.name)}
@@ -157,50 +140,44 @@ const CommentMentions: React.FC<CommentMentionsProps> = ({
         >
           {/* Avatar */}
           <div className="relative flex-shrink-0">
-            {user.avatar_url ? (
+            {user.avatar_url ? ()
               <img
                 src={user.avatar_url}
                 alt={user.name}
                 className="w-8 h-8 rounded-full"
               />
-            ) : (
+            ) : ()
               <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
                 {user.name.charAt(0).toUpperCase()}
               </div>
             )}
-            
             {/* Online indicator */}
-            {user.online && (
+            {user.online && ()
               <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 border-2 border-white rounded-full" />
             )}
           </div>
-
           {/* User info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2">
               <span className="text-sm font-medium text-gray-900 truncate">
                 {user.name}
               </span>
-              
               {getRoleIcon(user.role)}
             </div>
-            
-            {user.email && (
+            {user.email && ()
               <div className="text-xs text-gray-500 truncate">
                 {user.email}
               </div>
             )}
           </div>
-
           {/* Role badge */}
-          {user.role && (
-            <div className={`text-xs font-medium capitalize ${getRoleColor(user.role)}`}>
+          {user.role && ()
+            <div className={`text-xs font-medium capitalize ${getRoleColor(user.role)}`}>}
               {user.role}
             </div>
           )}
         </button>
       ))}
-
       {/* Footer */}
       <div className="p-2 border-t border-gray-100 bg-gray-50 text-xs text-gray-500">
         <div className="flex items-center justify-between">

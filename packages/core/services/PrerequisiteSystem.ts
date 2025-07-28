@@ -5,11 +5,10 @@
  * Comprehensive prerequisite management with dependency resolution,
  * security validation, and learning path enforcement.
  */
-
 import { z } from 'zod';
 
 // Security: Input validation schemas
-const prerequisiteSchema = z.object({
+const prerequisiteSchema = z.object({)
   id: z.string().uuid(),
   name: z.string().min(1).max(100).regex(/^[a-zA-Z0-9\s\-_.,()]+$/, 'Invalid characters in name'),
   description: z.string().min(10).max(500),
@@ -18,10 +17,9 @@ const prerequisiteSchema = z.object({
   requiredTime: z.number().min(0).optional(), // minutes
   validityPeriod: z.number().min(0).optional(), // days
   category: z.string().min(1).max(50),
-  isActive: z.boolean().default(true)
+  isActive: z.boolean().default(true),
 });
-
-const prerequisiteGroupSchema = z.object({
+const prerequisiteGroupSchema = z.object({)
   id: z.string().uuid(),
   name: z.string().min(1).max(100),
   description: z.string().min(10).max(500),
@@ -30,8 +28,7 @@ const prerequisiteGroupSchema = z.object({
   minimumRequired: z.number().min(1).optional(), // for OR operations
   weight: z.number().min(0).max(100).default(100) // importance weight
 });
-
-const userProgressSchema = z.object({
+const userProgressSchema = z.object({)
   userId: z.string().uuid(),
   prerequisiteId: z.string().uuid(),
   status: z.enum(['not_started', 'in_progress', 'completed', 'expired', 'failed']),
@@ -39,11 +36,11 @@ const userProgressSchema = z.object({
   completedAt: z.date().optional(),
   expiresAt: z.date().optional(),
   attempts: z.number().min(0).default(0),
-  evidence: z.array(z.object({
+  evidence: z.array(z.object({),
     type: z.enum(['completion', 'score', 'time', 'peer_review', 'instructor_approval']),
     value: z.string().max(1000),
     timestamp: z.date(),
-    verifiedBy: z.string().uuid().optional()
+    verifiedBy: z.string().uuid().optional(),
   })).optional()
 });
 
@@ -59,28 +56,23 @@ export class PrerequisiteSecurity {
    */
   static validatePrerequisiteInput(input: string): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
-    
     // Check for injection attempts
     if (/<script|javascript:|data:|eval\(|function\(/i.test(input)) {
       errors.push('Potentially dangerous script content detected');
     }
-    
     // Check for SQL injection patterns
     if (/union\s+select|drop\s+table|delete\s+from|insert\s+into/i.test(input)) {
       errors.push('Potentially dangerous SQL patterns detected');
     }
-    
     // Check for path traversal
     if (/\.\.[\/\\]|\.\.%2f|\.\.%5c/i.test(input)) {
       errors.push('Path traversal attempt detected');
     }
-    
     return {
       isValid: errors.length === 0,
       errors
     };
   }
-  
   /**
    * Sanitizes user input to prevent XSS
    */
@@ -93,7 +85,6 @@ export class PrerequisiteSecurity {
       .replace(/\//g, '&#x2F;')
       .trim();
   }
-  
   /**
    * Validates user permissions for prerequisite operations
    */
@@ -103,7 +94,6 @@ export class PrerequisiteSecurity {
     if (!userId || userId.length < 10) {
       return false;
     }
-    
     const allowedActions = ['view', 'create', 'update', 'delete', 'assign', 'complete'];
     return allowedActions.includes(action);
   }
@@ -114,7 +104,6 @@ export class DependencyResolver {
   private prerequisites: Map<string, Prerequisite> = new Map();
   private groups: Map<string, PrerequisiteGroup> = new Map();
   private userProgress: Map<string, UserProgress[]> = new Map();
-  
   /**
    * Adds prerequisite to the system with validation
    */
@@ -124,20 +113,17 @@ export class DependencyResolver {
     if (!securityCheck.isValid) {
       return { success: false, errors: securityCheck.errors };
     }
-    
     // Schema validation
     const validation = prerequisiteSchema.safeParse(prerequisite);
     if (!validation.success) {
       return {
         success: false,
-        errors: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+        errors: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`)}
       };
     }
-    
     this.prerequisites.set(prerequisite.id, prerequisite);
     return { success: true };
   }
-  
   /**
    * Adds prerequisite group with dependency validation
    */
@@ -147,22 +133,19 @@ export class DependencyResolver {
     if (!validation.success) {
       return {
         success: false,
-        errors: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+        errors: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`)}
       };
     }
-    
     // Validate prerequisite references exist
-    const missingPrerequisites = group.prerequisites.filter(
+    const missingPrerequisites = group.prerequisites.filter(;)
       prereqId => !this.prerequisites.has(prereqId)
     );
-    
     if (missingPrerequisites.length > 0) {
       return {
         success: false,
-        errors: [`Missing prerequisites: ${missingPrerequisites.join(', ')}`]
+        errors: [`Missing prerequisites: ${missingPrerequisites.join(', ')}`]}
       };
     }
-    
     // Check for circular dependencies
     if (this.hasCircularDependency(group)) {
       return {
@@ -170,11 +153,9 @@ export class DependencyResolver {
         errors: ['Circular dependency detected']
       };
     }
-    
     this.groups.set(group.id, group);
     return { success: true };
   }
-  
   /**
    * Resolves prerequisites for a user with comprehensive checking
    */
@@ -188,16 +169,13 @@ export class DependencyResolver {
     const missingPrerequisites: string[] = [];
     const satisfiedPrerequisites: string[] = [];
     const recommendations: string[] = [];
-    
     for (const prereqId of targetPrerequisites) {
       const prerequisite = this.prerequisites.get(prereqId);
       if (!prerequisite) {
         missingPrerequisites.push(prereqId);
         continue;
       }
-      
       const userPrereqProgress = userProgressData.find(p => p.prerequisiteId === prereqId);
-      
       if (this.isPrerequisiteSatisfied(prerequisite, userPrereqProgress)) {
         satisfiedPrerequisites.push(prereqId);
       } else {
@@ -205,7 +183,6 @@ export class DependencyResolver {
         recommendations.push(this.generateRecommendation(prerequisite, userPrereqProgress));
       }
     }
-    
     return {
       canProceed: missingPrerequisites.length === 0,
       missingPrerequisites,
@@ -213,7 +190,6 @@ export class DependencyResolver {
       recommendations
     };
   }
-  
   /**
    * Checks if a prerequisite is satisfied for a user
    */
@@ -221,72 +197,60 @@ export class DependencyResolver {
     if (!userProgress) {
       return false;
     }
-    
     // Check basic completion status
     if (userProgress.status !== 'completed') {
       return false;
     }
-    
     // Check required score
-    if (prerequisite.requiredScore && 
+    if (prerequisite.requiredScore && )
         (!userProgress.score || userProgress.score < prerequisite.requiredScore)) {
       return false;
     }
-    
     // Check validity period
     if (prerequisite.validityPeriod && userProgress.completedAt) {
       const expirationDate = new Date(userProgress.completedAt);
       expirationDate.setDate(expirationDate.getDate() + prerequisite.validityPeriod);
-      
       if (new Date() > expirationDate) {
         return false;
       }
     }
-    
     return true;
   }
-  
   /**
    * Generates learning recommendations based on missing prerequisites
    */
   private generateRecommendation(prerequisite: Prerequisite, userProgress?: UserProgress): string {
     if (!userProgress) {
-      return `Start working on: ${prerequisite.name}`;
+      return `Start working on: ${prerequisite.name}`;}
     }
-    
     switch (userProgress.status) {
     case 'not_started':
-      return `Begin prerequisite: ${prerequisite.name}`;
+      return `Begin prerequisite: ${prerequisite.name}`;}
     case 'in_progress':
-      return `Continue working on: ${prerequisite.name}`;
+      return `Continue working on: ${prerequisite.name}`;}
     case 'failed':
-      return `Retry prerequisite: ${prerequisite.name} (${userProgress.attempts} attempts)`;
+      return `Retry prerequisite: ${prerequisite.name} (${userProgress.attempts} attempts)`;}
     case 'expired':
-      return `Renew expired prerequisite: ${prerequisite.name}`;
+      return `Renew expired prerequisite: ${prerequisite.name}`;}
     default:
-      return `Complete prerequisite: ${prerequisite.name}`;
+      return `Complete prerequisite: ${prerequisite.name}`;}
     }
   }
-  
   /**
    * Detects circular dependencies in prerequisite groups
    */
   private hasCircularDependency(newGroup: PrerequisiteGroup): boolean {
     const visited = new Set<string>();
     const recursionStack = new Set<string>();
-    
     const hasCycle = (groupId: string): boolean => {
       if (recursionStack.has(groupId)) {
         return true;
       }
-      
       if (visited.has(groupId)) {
         return false;
       }
-      
       visited.add(groupId);
       recursionStack.add(groupId);
-      
       const group = groupId === newGroup.id ? newGroup : this.groups.get(groupId);
       if (group) {
         for (const prereqId of group.prerequisites) {
@@ -296,14 +260,11 @@ export class DependencyResolver {
           }
         }
       }
-      
       recursionStack.delete(groupId);
       return false;
     };
-    
     return hasCycle(newGroup.id);
   }
-  
   /**
    * Updates user progress with security validation
    */
@@ -315,16 +276,13 @@ export class DependencyResolver {
     if (!PrerequisiteSecurity.validateUserPermissions(userId, 'update', prerequisiteId)) {
       return { success: false, errors: ['Insufficient permissions'] };
     }
-    
     // Validate prerequisite exists
     if (!this.prerequisites.has(prerequisiteId)) {
       return { success: false, errors: ['Prerequisite not found'] };
     }
-    
     // Get existing progress
     const userProgressData = this.userProgress.get(userId) || [];
     const existingProgressIndex = userProgressData.findIndex(p => p.prerequisiteId === prerequisiteId);
-    
     // Create or update progress
     const updatedProgress: UserProgress = {
       userId,
@@ -333,27 +291,23 @@ export class DependencyResolver {
       attempts: 0,
       ...progress
     };
-    
     // Validate updated progress
     const validation = userProgressSchema.safeParse(updatedProgress);
     if (!validation.success) {
       return {
         success: false,
-        errors: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+        errors: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`)}
       };
     }
-    
     // Update progress data
     if (existingProgressIndex >= 0) {
       userProgressData[existingProgressIndex] = updatedProgress;
     } else {
       userProgressData.push(updatedProgress);
     }
-    
     this.userProgress.set(userId, userProgressData);
     return { success: true };
   }
-  
   /**
    * Gets learning path suggestions based on user progress
    */
@@ -362,20 +316,18 @@ export class DependencyResolver {
     totalEstimatedTime: number;
   } {
     const userProgressData = this.userProgress.get(userId) || [];
-    const completedPrerequisites = new Set(
+    const completedPrerequisites = new Set(;)
       userProgressData
         .filter(p => p.status === 'completed')
         .map(p => p.prerequisiteId)
     );
-    
     // TODO: Implement advanced path-finding algorithm
     // For now, return basic recommendations
     const path: Array<{ prerequisiteId: string; name: string; estimatedTime: number }> = [];
     let totalTime = 0;
-    
     for (const [prereqId, prerequisite] of this.prerequisites) {
       if (!completedPrerequisites.has(prereqId)) {
-        path.push({
+        path.push({)
           prerequisiteId: prereqId,
           name: prerequisite.name,
           estimatedTime: prerequisite.requiredTime || 60
@@ -383,10 +335,9 @@ export class DependencyResolver {
         totalTime += prerequisite.requiredTime || 60;
       }
     }
-    
     return {
       path: path.slice(0, 10), // Limit to top 10 recommendations
-      totalEstimatedTime: totalTime
+      totalEstimatedTime: totalTime,
     };
   }
 }
@@ -394,11 +345,9 @@ export class DependencyResolver {
 // Main service class
 export class PrerequisiteSystemService {
   private resolver: DependencyResolver;
-  
   constructor() {
     this.resolver = new DependencyResolver();
   }
-  
   /**
    * Creates a new prerequisite with comprehensive validation
    */
@@ -412,20 +361,16 @@ export class PrerequisiteSystemService {
       if (!PrerequisiteSecurity.validateUserPermissions(userId, 'create')) {
         return { success: false, errors: ['Insufficient permissions'] };
       }
-      
       // Add to resolver
       const result = this.resolver.addPrerequisite(prerequisiteData);
-      
       if (result.success) {
         // TODO: Persist to database
         return {
           success: true,
-          prerequisiteId: prerequisiteData.id
+          prerequisiteId: prerequisiteData.id,
         };
       }
-      
       return result;
-      
     } catch (error) {
       return {
         success: false,
@@ -433,7 +378,6 @@ export class PrerequisiteSystemService {
       };
     }
   }
-  
   /**
    * Evaluates prerequisites for a learning objective
    */
@@ -451,15 +395,12 @@ export class PrerequisiteSystemService {
           recommendations: ['Access denied']
         };
       }
-      
       const evaluation = this.resolver.resolvePrerequisitesForUser(userId, targetPrerequisites);
-      
       return {
         canProceed: evaluation.canProceed,
         evaluation,
-        recommendations: evaluation.recommendations
+        recommendations: evaluation.recommendations,
       };
-      
     } catch (error) {
       return {
         canProceed: false,
@@ -468,7 +409,6 @@ export class PrerequisiteSystemService {
       };
     }
   }
-  
   /**
    * Updates user progress with validation
    */
@@ -485,7 +425,6 @@ export class PrerequisiteSystemService {
       };
     }
   }
-  
   /**
    * Generates personalized learning recommendations
    */
@@ -495,16 +434,14 @@ export class PrerequisiteSystemService {
   }> {
     try {
       const pathData = this.resolver.generateLearningPath(userId, targetGoal);
-      
       return {
         learningPath: pathData.path,
-        estimatedTime: pathData.totalEstimatedTime
+        estimatedTime: pathData.totalEstimatedTime,
       };
-      
     } catch (error) {
       return {
         learningPath: [],
-        estimatedTime: 0
+        estimatedTime: 0,
       };
     }
   }
@@ -514,7 +451,7 @@ export class PrerequisiteSystemService {
 export const schemas = {
   prerequisite: prerequisiteSchema,
   prerequisiteGroup: prerequisiteGroupSchema,
-  userProgress: userProgressSchema
+  userProgress: userProgressSchema,
 };
 
 export default PrerequisiteSystemService;

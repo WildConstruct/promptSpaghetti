@@ -28,7 +28,7 @@ export interface RestorePreview {
     restore_id: string;
     snapshot_id: string;
     conflicts: RestoreConflict[];
-    changes_summary: {
+    changes_summary: {,
         nodes_to_add: number;
         nodes_to_remove: number;
         nodes_to_modify: number;
@@ -40,7 +40,7 @@ export interface RestorePreview {
     estimated_duration: number;
     risk_level: 'low' | 'medium' | 'high' | 'critical';
     backup_required: boolean;
-    collaborator_impact: {
+    collaborator_impact: {,
         active_users: string[];
         potential_conflicts: string[];
         recommended_actions: string[];
@@ -52,7 +52,7 @@ export interface RestoreResult {
     backup_snapshot_id?: string;
     conflicts_resolved: number;
     conflicts_remaining: number;
-    changes_applied: {
+    changes_applied: {,
         nodes_added: number;
         nodes_removed: number;
         nodes_modified: number;
@@ -85,7 +85,7 @@ export declare class VersionRestoreManager {
     private restoreHistory;
     constructor(apiClient: any, projectId: string, userId: string, versionHistoryManager: any);
     createRestorePreview(snapshotId: string, currentGraphData: any, options?: RestoreOptions): Promise<RestorePreview>;
-    executeRestore(
+    executeRestore()
       snapshotId: string,
       options?: RestoreOptions,
       conflictResolutions?: Record<string,

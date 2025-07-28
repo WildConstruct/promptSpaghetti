@@ -4,7 +4,6 @@
  * 
  * Real-time pricing analytics and optimization dashboard for Wild Construct integration
  */
-
 import { EventEmitter } from 'events';
 import { PricingOptimizer, PricingAnalytics, PricingModel } from './PricingOptimizer';
 
@@ -13,7 +12,7 @@ export interface DashboardConfig {
   showPredictiveAnalytics: boolean;
   enableRealTimeUpdates: boolean;
   maxHistoryDays: number;
-  alertThresholds: {
+  alertThresholds: {,
     revenueDeclinePercent: number;
     demandDropPercent: number;
     competitiveThreatScore: number;
@@ -27,31 +26,26 @@ export interface DashboardMetrics {
   revenueGrowthRate: number;
   averageOrderValue: number;
   revenuePerModel: Record<string, number>;
-  
   // Performance metrics
   totalCalculations: number;
   averageResponseTime: number;
   successRate: number;
-  
   // AI optimization metrics
   aiOptimizationImpact: number;
   priceOptimalityScore: number;
   demandPredictionAccuracy: number;
-  
   // Film industry specific metrics
   studioTierBreakdown: Record<string, number>;
   productionTypeDistribution: Record<string, number>;
-  seasonalTrends: Array<{
+  seasonalTrends: Array<{,
     period: string;
     revenue: number;
     growth: number;
   }>;
-  
   // Competitive intelligence
   marketPosition: 'leader' | 'challenger' | 'follower';
   competitiveAdvantage: number;
   pricePositioning: 'premium' | 'competitive' | 'value';
-  
   updatedAt: number;
 }
 
@@ -78,7 +72,7 @@ export interface PricingInsight {
   confidence: number;
   impact: 'low' | 'medium' | 'high';
   actionItems: string[];
-  dataPoints: Array<{
+  dataPoints: Array<{,
     metric: string;
     current: number;
     previous: number;
@@ -90,18 +84,17 @@ export interface PricingInsight {
 export interface RevenueProjection {
   period: '1_month' | '3_months' | '6_months' | '1_year';
   projectedRevenue: number;
-  confidenceInterval: {
+  confidenceInterval: {,
     lower: number;
     upper: number;
   };
   assumptions: string[];
-  keyFactors: Array<{
+  keyFactors: Array<{,
     factor: string;
     impact: number;
     confidence: number;
   }>;
 }
-
 /**
  * Real-time pricing dashboard for monitoring and optimization
  */
@@ -112,48 +105,40 @@ export class PricingDashboard extends EventEmitter {
   private alerts: Map<string, PricingAlert> = new Map();
   private insights: Map<string, PricingInsight> = new Map();
   private updateInterval?: NodeJS.Timeout;
-  
   // Historical data storage
   private revenueHistory: Array<{ timestamp: number; value: number }> = [];
   private demandHistory: Array<{ timestamp: number; value: number }> = [];
   private competitiveHistory: Array<{ timestamp: number; score: number }> = [];
-
   constructor(optimizer: PricingOptimizer, config: Partial<DashboardConfig> = {}) {
     super();
-    
     this.optimizer = optimizer;
     this.config = {
       refreshIntervalMs: 30000, // 30 seconds
       showPredictiveAnalytics: true,
       enableRealTimeUpdates: true,
       maxHistoryDays: 90,
-      alertThresholds: {
+      alertThresholds: {,
         revenueDeclinePercent: 10,
         demandDropPercent: 15,
-        competitiveThreatScore: 0.7
+        competitiveThreatScore: 0.7,
       },
       filmIndustryFocus: true,
       ...config
     };
-    
     this.metrics = this.initializeEmptyMetrics();
-    
     // Set up real-time updates
     if (this.config.enableRealTimeUpdates) {
       this.setupRealTimeUpdates();
     }
-    
     // Start periodic refresh
     this.startPeriodicRefresh();
   }
-
   /**
    * Get current dashboard metrics
    */
   getMetrics(): DashboardMetrics {
     return { ...this.metrics };
   }
-
   /**
    * Get active alerts
    */
@@ -161,7 +146,6 @@ export class PricingDashboard extends EventEmitter {
     const alerts = Array.from(this.alerts.values());
     return severity ? alerts.filter(a => a.severity === severity) : alerts;
   }
-
   /**
    * Get insights
    */
@@ -169,7 +153,6 @@ export class PricingDashboard extends EventEmitter {
     const insights = Array.from(this.insights.values());
     return category ? insights.filter(i => i.category === category) : insights;
   }
-
   /**
    * Acknowledge an alert
    */
@@ -182,22 +165,17 @@ export class PricingDashboard extends EventEmitter {
     }
     return false;
   }
-
   /**
    * Generate revenue projections
    */
   async generateRevenueProjections(): Promise<Record<RevenueProjection['period'], RevenueProjection>> {
     const projections: Record<RevenueProjection['period'], RevenueProjection> = {} as any;
-    
     const periods: RevenueProjection['period'][] = ['1_month', '3_months', '6_months', '1_year'];
-    
     for (const period of periods) {
       projections[period] = await this.calculateRevenueProjection(period);
     }
-    
     return projections;
   }
-
   /**
    * Get competitive analysis dashboard data
    */
@@ -210,25 +188,21 @@ export class PricingDashboard extends EventEmitter {
   }> {
     // Aggregate competitive analysis from all models
     const models = this.getAllModels();
-    const competitiveAnalyses = await Promise.all(
+    const competitiveAnalyses = await Promise.all(;)
       models.map(model => this.optimizer.getCompetitiveAnalysis(model.id))
     );
-    
-    const avgAdvantage = competitiveAnalyses.reduce((sum, analysis) => 
+    const avgAdvantage = competitiveAnalyses.reduce((sum, analysis) => ;
       sum + (analysis.marketShare * 100), 0) / competitiveAnalyses.length;
-    
-    const marketGaps = [
+    const marketGaps = [;
       'AI-powered script analysis',
       'Real-time collaboration features',
       'Industry-specific templates'
     ];
-    
-    const pricingRecommendations = [
+    const pricingRecommendations = [;
       'Consider premium tier for blockbuster productions',
       'Introduce volume discounts for studio clients',
       'Seasonal pricing for festival submissions'
     ];
-    
     return {
       currentPosition: this.metrics.marketPosition,
       competitiveAdvantage: avgAdvantage,
@@ -237,7 +211,6 @@ export class PricingDashboard extends EventEmitter {
       threatLevel: avgAdvantage > 70 ? 'low' : avgAdvantage > 40 ? 'medium' : 'high'
     };
   }
-
   /**
    * Get film industry specific dashboard data
    */
@@ -248,25 +221,22 @@ export class PricingDashboard extends EventEmitter {
     contentTypeAnalysis: Array<{ type: string; demand: number; pricing: number }>;
     } {
     return {
-      studioSegments: Object.entries(this.metrics.studioTierBreakdown).map(([segment, revenue]) => ({
+      studioSegments: Object.entries(this.metrics.studioTierBreakdown).map(([segment, revenue]) => ({)
         segment,
         revenue,
         growth: Math.random() * 20 - 5 // Simplified growth calculation
       })),
-      
-      productionTrends: Object.entries(this.metrics.productionTypeDistribution).map(([type, volume]) => ({
+      productionTrends: Object.entries(this.metrics.productionTypeDistribution).map(([type, volume]) => ({)
         type,
         volume,
         avgPrice: 500 + Math.random() * 1000 // Simplified pricing
       })),
-      
-      seasonalPerformance: this.metrics.seasonalTrends.map(trend => ({
+      seasonalPerformance: this.metrics.seasonalTrends.map(trend => ({)
         season: trend.period,
         multiplier: 1 + trend.growth / 100,
-        revenue: trend.revenue
+        revenue: trend.revenue,
       })),
-      
-      contentTypeAnalysis: [
+      contentTypeAnalysis: [,
         { type: 'Script Generation', demand: 85, pricing: 120 },
         { type: 'Storyboard Creation', demand: 70, pricing: 180 },
         { type: 'Concept Art', demand: 90, pricing: 250 },
@@ -274,7 +244,6 @@ export class PricingDashboard extends EventEmitter {
       ]
     };
   }
-
   /**
    * Export dashboard data
    */
@@ -283,26 +252,23 @@ export class PricingDashboard extends EventEmitter {
       metrics: this.metrics,
       alerts: Array.from(this.alerts.values()),
       insights: Array.from(this.insights.values()),
-      exportedAt: Date.now()
+      exportedAt: Date.now(),
     };
-    
     if (format === 'json') {
       return JSON.stringify(data, null, 2);
     } else {
       // Simple CSV export for metrics only
-      const csvRows = [
+      const csvRows = [;
         'Metric,Value,Updated',
-        `Total Revenue,${this.metrics.totalRevenue},${new Date(this.metrics.updatedAt).toISOString()}`,
-        `Revenue Growth Rate,${this.metrics.revenueGrowthRate}%,${new Date(this.metrics.updatedAt).toISOString()}`,
-        `Average Order Value,${this.metrics.averageOrderValue},${new Date(this.metrics.updatedAt).toISOString()}`,
-        `Total Calculations,${this.metrics.totalCalculations},${new Date(this.metrics.updatedAt).toISOString()}`,
-        `AI Optimization Impact,${this.metrics.aiOptimizationImpact}%,${new Date(this.metrics.updatedAt).toISOString()}`
+        `Total Revenue,${this.metrics.totalRevenue},${new Date(this.metrics.updatedAt).toISOString()}`,}
+        `Revenue Growth Rate,${this.metrics.revenueGrowthRate}%,${new Date(this.metrics.updatedAt).toISOString()}`,}
+        `Average Order Value,${this.metrics.averageOrderValue},${new Date(this.metrics.updatedAt).toISOString()}`,}
+        `Total Calculations,${this.metrics.totalCalculations},${new Date(this.metrics.updatedAt).toISOString()}`,}
+        `AI Optimization Impact,${this.metrics.aiOptimizationImpact}%,${new Date(this.metrics.updatedAt).toISOString()}`}
       ];
-      
       return csvRows.join('\n');
     }
   }
-
   /**
    * Shutdown dashboard
    */
@@ -310,12 +276,9 @@ export class PricingDashboard extends EventEmitter {
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
     }
-    
     this.emit('dashboard_shutdown');
   }
-
   // Private helper methods
-
   private initializeEmptyMetrics(): DashboardMetrics {
     return {
       totalRevenue: 0,
@@ -334,38 +297,32 @@ export class PricingDashboard extends EventEmitter {
       marketPosition: 'challenger',
       competitiveAdvantage: 65,
       pricePositioning: 'competitive',
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     };
   }
-
   private setupRealTimeUpdates(): void {
     // Listen to optimizer events for real-time updates
     this.optimizer.on('pricing_calculated', (data) => {
       this.updateMetricsFromPricingEvent(data);
     });
-
     this.optimizer.on('optimization_applied', (data) => {
       this.updateOptimizationMetrics(data);
     });
-
     this.optimizer.on('model_added', () => {
       this.refreshMetrics();
     });
   }
-
   private startPeriodicRefresh(): void {
     this.updateInterval = setInterval(() => {
       this.refreshMetrics();
     }, this.config.refreshIntervalMs);
   }
-
   private async refreshMetrics(): Promise<void> {
     try {
       const models = this.getAllModels();
       let totalRevenue = 0;
       let totalCalculations = 0;
       const revenuePerModel: Record<string, number> = {};
-      
       for (const model of models) {
         const analytics = this.optimizer.getAnalytics(model.id);
         if (analytics) {
@@ -374,11 +331,9 @@ export class PricingDashboard extends EventEmitter {
           revenuePerModel[model.id] = analytics.totalRevenue;
         }
       }
-
       // Calculate derived metrics
       const averageOrderValue = totalCalculations > 0 ? totalRevenue / totalCalculations : 0;
       const revenueGrowthRate = this.calculateRevenueGrowthRate();
-      
       // Update metrics
       this.metrics = {
         ...this.metrics,
@@ -387,82 +342,68 @@ export class PricingDashboard extends EventEmitter {
         averageOrderValue,
         revenueGrowthRate,
         revenuePerModel,
-        updatedAt: Date.now()
+        updatedAt: Date.now(),
       };
-      
       // Generate new insights and alerts
       await this.generateInsights();
       this.checkAlerts();
-      
       this.emit('metrics_updated', this.metrics);
     } catch (error) {
-      this.emit('metrics_update_error', {
+      this.emit('metrics_update_error', {)
         error: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   }
-
   private updateMetricsFromPricingEvent(data: any): void {
     // Real-time update from pricing calculation
     this.metrics.totalRevenue += data.totalPrice;
     this.metrics.totalCalculations += 1;
     this.metrics.averageOrderValue = this.metrics.totalRevenue / this.metrics.totalCalculations;
-    
     if (!this.metrics.revenuePerModel[data.modelId]) {
       this.metrics.revenuePerModel[data.modelId] = 0;
     }
     this.metrics.revenuePerModel[data.modelId] += data.totalPrice;
-    
     this.metrics.updatedAt = Date.now();
-    
     // Track for historical analysis
     this.addToRevenueHistory(data.totalPrice);
   }
-
   private updateOptimizationMetrics(data: any): void {
     // Update AI optimization impact
     this.metrics.aiOptimizationImpact = (this.metrics.aiOptimizationImpact + data.impact) / 2;
     this.metrics.updatedAt = Date.now();
   }
-
   private calculateRevenueGrowthRate(): number {
     if (this.revenueHistory.length < 2) return 0;
-    
     const currentWeek = this.revenueHistory.slice(-7).reduce((sum, entry) => sum + entry.value, 0);
     const previousWeek = this.revenueHistory.slice(-14, -7).reduce((sum, entry) => sum + entry.value, 0);
-    
     if (previousWeek === 0) return 0;
     return ((currentWeek - previousWeek) / previousWeek) * 100;
   }
-
   private addToRevenueHistory(revenue: number): void {
     const now = Date.now();
     this.revenueHistory.push({ timestamp: now, value: revenue });
-    
     // Clean up old data beyond maxHistoryDays
     const cutoff = now - (this.config.maxHistoryDays * 24 * 60 * 60 * 1000);
     this.revenueHistory = this.revenueHistory.filter(entry => entry.timestamp > cutoff);
   }
-
   private async generateInsights(): Promise<void> {
     const insights: PricingInsight[] = [];
-    
     // Revenue trend insight
     if (this.metrics.revenueGrowthRate > 20) {
-      insights.push({
-        id: `insight-${Date.now()}-growth`,
+      insights.push({)
+        id: `insight-${Date.now()}-growth`,}
         type: 'opportunity',
         category: 'revenue',
         title: 'Strong Revenue Growth',
-        description: `Revenue is growing at ${this.metrics.revenueGrowthRate.toFixed(1)}% rate`,
+        description: `Revenue is growing at ${this.metrics.revenueGrowthRate.toFixed(1)}% rate`,}
         confidence: 0.9,
         impact: 'high',
-        actionItems: [
+        actionItems: [,
           'Consider scaling successful pricing models',
           'Increase marketing investment',
           'Expand to new market segments'
         ],
-        dataPoints: [
+        dataPoints: [,
           {
             metric: 'Revenue Growth Rate',
             current: this.metrics.revenueGrowthRate,
@@ -470,26 +411,25 @@ export class PricingDashboard extends EventEmitter {
             change: this.metrics.revenueGrowthRate - 5
           }
         ],
-        createdAt: Date.now()
+        createdAt: Date.now(),
       });
     }
-    
     // AI optimization insight
     if (this.metrics.aiOptimizationImpact > 15) {
-      insights.push({
-        id: `insight-${Date.now()}-ai`,
+      insights.push({)
+        id: `insight-${Date.now()}-ai`,}
         type: 'optimization',
         category: 'revenue',
         title: 'AI Optimization Driving Results',
-        description: `AI optimization is contributing ${this.metrics.aiOptimizationImpact.toFixed(1)}% improvement`,
+        description: `AI optimization is contributing ${this.metrics.aiOptimizationImpact.toFixed(1)}% improvement`,}
         confidence: 0.85,
         impact: 'high',
-        actionItems: [
+        actionItems: [,
           'Expand AI optimization to more models',
           'Increase prediction frequency',
           'Fine-tune optimization algorithms'
         ],
-        dataPoints: [
+        dataPoints: [,
           {
             metric: 'AI Optimization Impact',
             current: this.metrics.aiOptimizationImpact,
@@ -497,71 +437,63 @@ export class PricingDashboard extends EventEmitter {
             change: this.metrics.aiOptimizationImpact - 5
           }
         ],
-        createdAt: Date.now()
+        createdAt: Date.now(),
       });
     }
-    
     // Update insights map
-    insights.forEach(insight => {
+    insights.forEach(insight => {)
       this.insights.set(insight.id, insight);
     });
-    
     // Clean up old insights (keep only last 50)
     if (this.insights.size > 50) {
-      const sortedInsights = Array.from(this.insights.values())
+      const sortedInsights = Array.from(this.insights.values());
         .sort((a, b) => b.createdAt - a.createdAt);
-      
       this.insights.clear();
-      sortedInsights.slice(0, 50).forEach(insight => {
+      sortedInsights.slice(0, 50).forEach(insight => {)
         this.insights.set(insight.id, insight);
       });
     }
   }
-
   private checkAlerts(): void {
     // Revenue decline alert
     if (this.metrics.revenueGrowthRate < -this.config.alertThresholds.revenueDeclinePercent) {
       const alertId = 'alert-revenue-decline';
       if (!this.alerts.has(alertId)) {
-        this.alerts.set(alertId, {
+        this.alerts.set(alertId, {)
           id: alertId,
           type: 'revenue_decline',
           severity: 'high',
           title: 'Revenue Decline Detected',
-          description: `Revenue is declining at ${Math.abs(this.metrics.revenueGrowthRate).toFixed(1)}% rate`,
+          description: `Revenue is declining at ${Math.abs(this.metrics.revenueGrowthRate).toFixed(1)}% rate`,}
           value: this.metrics.revenueGrowthRate,
           threshold: -this.config.alertThresholds.revenueDeclinePercent,
           recommendation: 'Review pricing strategy and market conditions',
           createdAt: Date.now(),
-          acknowledged: false
+          acknowledged: false,
         });
-        
         this.emit('alert_created', this.alerts.get(alertId));
       }
     }
-    
     // Competitive threat alert
     if (this.metrics.competitiveAdvantage < this.config.alertThresholds.competitiveThreatScore * 100) {
       const alertId = 'alert-competitive-threat';
       if (!this.alerts.has(alertId)) {
-        this.alerts.set(alertId, {
+        this.alerts.set(alertId, {)
           id: alertId,
           type: 'competitive_threat',
           severity: 'medium',
           title: 'Competitive Position Weakening',
-          description: `Competitive advantage score has dropped to ${this.metrics.competitiveAdvantage}`,
+          description: `Competitive advantage score has dropped to ${this.metrics.competitiveAdvantage}`,}
           value: this.metrics.competitiveAdvantage,
           threshold: this.config.alertThresholds.competitiveThreatScore * 100,
           recommendation: 'Analyze competitor pricing and differentiation strategies',
           createdAt: Date.now(),
-          acknowledged: false
+          acknowledged: false,
         });
-        
         this.emit('alert_created', this.alerts.get(alertId));
       }
     }
   }
-
   private async calculateRevenueProjection(period: RevenueProjection['period']): Promise<RevenueProjection> {
     const periodDays = {
       '1_month': 30,
@@ -569,38 +501,35 @@ export class PricingDashboard extends EventEmitter {
       '6_months': 180,
       '1_year': 365
     }[period];
-    
-    const currentMonthlyRevenue = this.metrics.totalRevenue / 30; // Simplified calculation
+    const currentMonthlyRevenue = this.metrics.totalRevenue / 30; // Simplified calculation;
     const growthRate = this.metrics.revenueGrowthRate / 100;
     const projectedRevenue = currentMonthlyRevenue * periodDays * (1 + growthRate);
-    
     return {
       period,
       projectedRevenue,
-      confidenceInterval: {
+      confidenceInterval: {,
         lower: projectedRevenue * 0.85,
         upper: projectedRevenue * 1.15
       },
-      assumptions: [
+      assumptions: [,
         'Current growth rate continues',
         'No major market disruptions',
         'Competitive position remains stable'
       ],
-      keyFactors: [
+      keyFactors: [,
         {
           factor: 'Revenue Growth Rate',
           impact: growthRate,
-          confidence: 0.8
+          confidence: 0.8,
         },
         {
           factor: 'Market Seasonality',
           impact: 0.1,
-          confidence: 0.7
+          confidence: 0.7,
         }
       ]
     };
   }
-
   private getAllModels(): PricingModel[] {
     // This would need to be implemented to access models from the optimizer
     // For now, return empty array as this is a simplified implementation

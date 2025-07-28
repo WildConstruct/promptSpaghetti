@@ -31,25 +31,25 @@ import { DashboardTheme } from './SecurityDashboardFramework';
 export interface ExecutiveMetrics {
     securityScore: number;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
-    incidentCount: {
+    incidentCount: {,
         total: number;
         resolved: number;
         open: number;
         critical: number;
     };
     complianceScore: number;
-    financialImpact: {
+    financialImpact: {,
         prevented: number;
         incurred: number;
         savings: number;
         roi: number;
     };
-    trends: {
+    trends: {,
         securityTrend: 'improving' | 'stable' | 'declining';
         threatTrend: 'increasing' | 'stable' | 'decreasing';
         complianceTrend: 'improving' | 'stable' | 'declining';
     };
-    benchmarks: {
+    benchmarks: {,
         industryRanking: number;
         peerComparison: 'above' | 'average' | 'below';
         maturityLevel: 'initial' | 'managed' | 'defined' | 'quantitative' | 'optimizing';

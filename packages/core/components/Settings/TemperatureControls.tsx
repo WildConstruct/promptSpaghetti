@@ -1,6 +1,5 @@
 // packages/core/components/Settings/TemperatureControls.tsx
 // Temperature settings controls for Epic 7.3 Advanced Settings Modal
-
 import React, { useCallback } from 'react';
 import { TemperatureSettings } from '../../settings/types';
 import { FiThermometer, FiEye, FiEyeOff } from 'react-icons/fi';
@@ -9,19 +8,19 @@ import { uiColors } from '../../styles/professional-design-system';
 // Enhanced color palette for better UI consistency
 const uiColors = {
   ...uiColors,
-  accent: {
+  accent: {,
     ...uiColors.accent,
     primary: uiColors.accent.orange,
-    secondary: uiColors.accent.blue
+    secondary: uiColors.accent.blue,
   },
-  ui: {
+  ui: {,
     ...uiColors.ui,
     selected: '#353535',
-    disabled: '#6b7280'
+    disabled: '#6b7280',
   },
-  text: {
+  text: {,
     ...uiColors.text,
-    disabled: '#6b7280'
+    disabled: '#6b7280',
   }
 };
 
@@ -29,49 +28,43 @@ export interface TemperatureControlsProps {
   settings: TemperatureSettings;
   onChange: (settings: TemperatureSettings) => void;
 }
-
 /**
  * Temperature Settings Controls Component
  * Manages randomness/creativity level for execution
  */
-export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
+export const TemperatureControls: React.FC<TemperatureControlsProps> = ({)
   settings,
   onChange
 }) => {
-
   // Handle enable/disable
   const handleEnabledChange = useCallback((enabled: boolean) => {
-    onChange({
+    onChange({)
       ...settings,
       enabled
     });
   }, [settings, onChange]);
-
   // Handle temperature value change
   const handleValueChange = useCallback((value: number) => {
-    onChange({
+    onChange({)
       ...settings,
       value: Math.max(0.1, Math.min(2.0, value))
     });
   }, [settings, onChange]);
-
   // Handle preset selection
   const handlePresetSelect = useCallback((presetValue: number) => {
-    onChange({
+    onChange({)
       ...settings,
       value: presetValue,
-      enabled: true
+      enabled: true,
     });
   }, [settings, onChange]);
-
   // Handle indicator toggle
   const handleShowIndicatorChange = useCallback((showIndicator: boolean) => {
-    onChange({
+    onChange({)
       ...settings,
       showIndicator
     });
   }, [settings, onChange]);
-
   // Get temperature description
   const getTemperatureDescription = (temp: number): string => {
     if (temp < 0.5) return 'Very Conservative - Highly predictable results';
@@ -80,7 +73,6 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
     if (temp < 1.5) return 'Creative - More varied results';
     return 'Very Creative - Highly varied results';
   };
-
   // Get temperature color
   const getTemperatureColor = (temp: number): string => {
     if (temp < 0.5) return '#3b82f6'; // Blue
@@ -89,27 +81,25 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
     if (temp < 1.5) return '#f97316'; // Orange
     return '#ef4444'; // Red
   };
-
-  return (
+  return ()
     <div style={{ marginBottom: '24px' }}>
       {/* Section Header */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        marginBottom: '16px'
+        marginBottom: '16px',
       }}>
         <FiThermometer size={18} color={uiColors.accent.primary} />
         <h3 style={{
           margin: 0,
           fontSize: '16px',
           fontWeight: 600,
-          color: uiColors.text.primary
+          color: uiColors.text.primary,
         }}>
           Temperature Settings
         </h3>
       </div>
-
       {/* Enable Temperature Control */}
       <div style={{
         display: 'flex',
@@ -119,7 +109,7 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
         padding: '12px',
         backgroundColor: uiColors.ui.hover,
         borderRadius: '8px',
-        border: `1px solid ${uiColors.ui.border}`
+        border: `1px solid ${uiColors.ui.border}`}
       }}>
         <label style={{
           display: 'flex',
@@ -127,7 +117,7 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
           gap: '8px',
           cursor: 'pointer',
           fontSize: '14px',
-          fontWeight: 500
+          fontWeight: 500,
         }}>
           <input
             type="checkbox"
@@ -139,18 +129,17 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
             Enable Temperature Control
           </span>
         </label>
-        
         <div style={{
           fontSize: '12px',
           color: uiColors.text.secondary,
-          marginLeft: 'auto'
+          marginLeft: 'auto',
         }}>
-          {settings.enabled ? (
+          {settings.enabled ? ()
             <span style={{ color: getTemperatureColor(settings.value) }}>
               <FiEye size={12} style={{ marginRight: '4px' }} />
               {settings.value.toFixed(1)}
             </span>
-          ) : (
+          ) : ()
             <span>
               <FiEyeOff size={12} style={{ marginRight: '4px' }} />
               Default
@@ -158,9 +147,8 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
           )}
         </div>
       </div>
-
       {/* Temperature Configuration (when enabled) */}
-      {settings.enabled && (
+      {settings.enabled && ()
         <div style={{ marginLeft: '20px' }}>
           {/* Temperature Slider */}
           <div style={{ marginBottom: '16px' }}>
@@ -169,11 +157,10 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
               fontSize: '13px',
               fontWeight: 500,
               color: uiColors.text.primary,
-              marginBottom: '6px'
+              marginBottom: '6px',
             }}>
               Temperature Value: {settings.value.toFixed(2)}
             </label>
-            
             <div style={{ position: 'relative' }}>
               <input
                 type="range"
@@ -186,7 +173,7 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
                   width: '100%',
                   height: '6px',
                   borderRadius: '3px',
-                  background: `linear-gradient(to right, 
+                  background: `linear-gradient(to right, )
                     #3b82f6 0%, 
                     #10b981 25%, 
                     #f59e0b 50%, 
@@ -194,17 +181,16 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
                     #ef4444 100%)`,
                   outline: 'none',
                   cursor: 'pointer',
-                  accentColor: getTemperatureColor(settings.value)
+                  accentColor: getTemperatureColor(settings.value),
                 }}
               />
-              
               {/* Temperature scale markers */}
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 marginTop: '4px',
                 fontSize: '10px',
-                color: uiColors.text.secondary
+                color: uiColors.text.secondary,
               }}>
                 <span>0.1</span>
                 <span>0.5</span>
@@ -213,17 +199,15 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
                 <span>2.0</span>
               </div>
             </div>
-            
             <div style={{
               fontSize: '11px',
               color: getTemperatureColor(settings.value),
               marginTop: '6px',
-              fontWeight: 500
+              fontWeight: 500,
             }}>
               {getTemperatureDescription(settings.value)}
             </div>
           </div>
-
           {/* Temperature Presets */}
           <div style={{ marginBottom: '16px' }}>
             <label style={{
@@ -231,17 +215,16 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
               fontSize: '13px',
               fontWeight: 500,
               color: uiColors.text.primary,
-              marginBottom: '8px'
+              marginBottom: '8px',
             }}>
               Quick Presets
             </label>
-            
             <div style={{
               display: 'flex',
               gap: '8px',
-              flexWrap: 'wrap'
+              flexWrap: 'wrap',
             }}>
-              {settings.presets.map((preset, index) => (
+              {settings.presets.map((preset, index) => ()
                 <button
                   key={index}
                   onClick={() => handlePresetSelect(preset.value)}
@@ -254,12 +237,12 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
                       ? getTemperatureColor(preset.value) + '20'
                       : uiColors.ui.hover,
                     border: Math.abs(settings.value - preset.value) < 0.01
-                      ? `1px solid ${getTemperatureColor(preset.value)}`
-                      : `1px solid ${uiColors.ui.border}`,
+                      ? `1px solid ${getTemperatureColor(preset.value)}`}
+                      : `1px solid ${uiColors.ui.border}`,}
                     borderRadius: '6px',
                     cursor: 'pointer',
                     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                    minWidth: '80px'
+                    minWidth: '80px',
                   }}
                   title={preset.description}
                   onMouseEnter={(e) => {
@@ -279,7 +262,7 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
                     color: Math.abs(settings.value - preset.value) < 0.01
                       ? getTemperatureColor(preset.value)
                       : uiColors.text.primary,
-                    marginBottom: '2px'
+                    marginBottom: '2px',
                   }}>
                     {preset.name}
                   </div>
@@ -295,7 +278,6 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
               ))}
             </div>
           </div>
-
           {/* Show Indicator Option */}
           <div style={{ marginBottom: '16px' }}>
             <label style={{
@@ -303,7 +285,7 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
               alignItems: 'center',
               gap: '8px',
               cursor: 'pointer',
-              fontSize: '13px'
+              fontSize: '13px',
             }}>
               <input
                 type="checkbox"
@@ -319,7 +301,7 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({
               fontSize: '11px',
               color: uiColors.text.secondary,
               marginTop: '2px',
-              marginLeft: '24px'
+              marginLeft: '24px',
             }}>
               Displays temperature level in preview results
             </div>

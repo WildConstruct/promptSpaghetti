@@ -9,7 +9,7 @@ import { UTDGNode, MedievalClothing, Era, SocialClass } from '../types/UTDG';
  * Medieval-specific content types and constants
  */
 export declare const MEDIEVAL_PERIODS: {
-    EARLY_MEDIEVAL: {
+    EARLY_MEDIEVAL: {,
         readonly name: "Early Medieval";
         readonly period: {
             readonly start: 476;
@@ -19,7 +19,7 @@ export declare const MEDIEVAL_PERIODS: {
         readonly accuracy: "high";
         readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism";
     };
-    HIGH_MEDIEVAL: {
+    HIGH_MEDIEVAL: {,
         readonly name: "High Medieval";
         readonly period: {
             readonly start: 1000;
@@ -29,7 +29,7 @@ export declare const MEDIEVAL_PERIODS: {
         readonly accuracy: "high";
         readonly description: "High medieval period of cathedral building, crusades, and scholasticism";
     };
-    LATE_MEDIEVAL: {
+    LATE_MEDIEVAL: {,
         readonly name: "Late Medieval";
         readonly period: {
             readonly start: 1300;
@@ -53,7 +53,7 @@ export declare class MedievalDemoDatabase {
     /**
      * Get clothing items by criteria
      */
-    getClothing(criteria?: {
+    getClothing(criteria?: {)
         era?: Era;
         social_class?: SocialClass;
         gender?: 'male' | 'female' | 'unisex';
@@ -63,7 +63,7 @@ export declare class MedievalDemoDatabase {
     /**
      * Get materials by criteria
      */
-    getMaterials(criteria?: {
+    getMaterials(criteria?: {)
         era?: Era;
         fabric_type?: string;
         availability?: 'common' | 'expensive' | 'rare';
@@ -71,7 +71,7 @@ export declare class MedievalDemoDatabase {
     /**
      * Get accessories by criteria
      */
-    getAccessories(criteria?: {
+    getAccessories(criteria?: {)
         era?: Era;
         social_class?: SocialClass;
         type?: string;
@@ -79,7 +79,7 @@ export declare class MedievalDemoDatabase {
     /**
      * Generate a complete medieval outfit
      */
-    generateOutfit(criteria: {
+    generateOutfit(criteria: {)
         era: Era;
         social_class: SocialClass;
         gender: 'male' | 'female';
@@ -118,12 +118,12 @@ export declare class MedievalDemoDatabase {
 /**
  * Medieval historical constraints specific to the demo
  */
-export declare const MEDIEVAL_DEMO_CONSTRAINTS: ({
+export declare const MEDIEVAL_DEMO_CONSTRAINTS: ({)
     id: string;
     rule: string;
-    eras: {
+    eras: {,
         name: string;
-        period: {
+        period: {,
             start: number;
             end: number;
         };
@@ -137,9 +137,9 @@ export declare const MEDIEVAL_DEMO_CONSTRAINTS: ({
 } | {
     id: string;
     rule: string;
-    eras: {
+    eras: {,
         name: string;
-        period: {
+        period: {,
             start: number;
             end: number;
         };
@@ -153,9 +153,9 @@ export declare const MEDIEVAL_DEMO_CONSTRAINTS: ({
 } | {
     id: string;
     rule: string;
-    eras: {
+    eras: {,
         name: string;
-        period: {
+        period: {,
             start: number;
             end: number;
         };

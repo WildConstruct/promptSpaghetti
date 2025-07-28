@@ -9,19 +9,19 @@ export interface NetworkResilienceConfig {
     connectionState: Partial<ConnectionStateConfig>;
     reconnection: Partial<ReconnectionConfig>;
     recovery: Partial<RecoveryConfig>;
-    notifications: {
+    notifications: {,
         enabled: boolean;
         showOfflineIndicator: boolean;
         showConnectionQuality: boolean;
         notifyOnReconnect: boolean;
         notifyOnSyncComplete: boolean;
     };
-    persistence: {
+    persistence: {,
         enabled: boolean;
         storageKey: string;
         maxStorageSize: number;
     };
-    performance: {
+    performance: {,
         enableMetrics: boolean;
         metricsInterval: number;
         enableProfiling: boolean;

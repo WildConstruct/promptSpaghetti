@@ -20,7 +20,7 @@ import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAna
 export interface FunnelOptimizationEngineProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
-    timeRange: {
+    timeRange: {,
         start: number;
         end: number;
     };

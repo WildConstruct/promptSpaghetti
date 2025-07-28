@@ -1,7 +1,6 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.2 - LLM Agent Script Development
 // OpenAI agent script with JSON mode integration and error correction
-
 import { validateFormat } from '../../serialization/validator';
 
 export interface OpenAIAgentConfig {
@@ -32,7 +31,7 @@ export interface GenerationResult {
   errors?: string[];
   warnings?: string[];
   attempts: number;
-  metadata: {
+  metadata: {,
     model: string;
     temperature: number;
     tokenCount: number;
@@ -43,12 +42,10 @@ export interface GenerationResult {
 export class OpenAIGraphAgent {
   private config: OpenAIAgentConfig;
   private baseSystemPrompt: string;
-
   constructor(config: OpenAIAgentConfig) {
     this.config = config;
     this.baseSystemPrompt = this.buildSystemPrompt();
   }
-
   /**
    * Generate a graph based on the request parameters
    */
@@ -56,28 +53,23 @@ export class OpenAIGraphAgent {
     const startTime = Date.now();
     let attempts = 0;
     let currentTemperature = this.config.temperature;
-    
     while (attempts < this.config.maxRetries) {
       attempts++;
-      
       try {
         const userPrompt = this.buildUserPrompt(request);
         const response = await this.callOpenAI(userPrompt, currentTemperature);
-        
         if (response.success && response.content) {
           // Extract graph content from response
           const graphContent = this.extractGraphContent(response.content);
-          
           // Validate the generated graph
           const validation = validateFormat(graphContent);
-          
           if (validation.isValid) {
             return {
               success: true,
               graph: graphContent,
               warnings: validation.warnings.map(w => w.message),
               attempts,
-              metadata: {
+              metadata: {,
                 model: this.config.model,
                 temperature: currentTemperature,
                 tokenCount: response.tokenCount || 0,
@@ -86,14 +78,13 @@ export class OpenAIGraphAgent {
             };
           } else {
             // Validation failed - try again with corrections
-            console.log(`Attempt ${attempts} failed validation:`, validation.errors);
-            
+            console.log(`Attempt ${attempts} failed validation:`, validation.errors);}
             if (attempts === this.config.maxRetries) {
               return {
                 success: false,
                 errors: validation.errors.map(e => e.message),
                 attempts,
-                metadata: {
+                metadata: {,
                   model: this.config.model,
                   temperature: currentTemperature,
                   tokenCount: response.tokenCount || 0,
@@ -101,26 +92,23 @@ export class OpenAIGraphAgent {
                 }
               };
             }
-            
             // Reduce temperature for next attempt
             currentTemperature = Math.max(0.1, currentTemperature - this.config.retryTemperatureReduction);
           }
         } else {
-          console.log(`Attempt ${attempts} failed:`, response.error);
+          console.log(`Attempt ${attempts} failed:`, response.error);}
         }
       } catch (error) {
-        console.error(`Attempt ${attempts} error:`, error);
+        console.error(`Attempt ${attempts} error:`, error);}
       }
-      
       // Reduce temperature for retry
       currentTemperature = Math.max(0.1, currentTemperature - this.config.retryTemperatureReduction);
     }
-
     return {
       success: false,
       errors: ['Maximum retry attempts exceeded'],
       attempts,
-      metadata: {
+      metadata: {,
         model: this.config.model,
         temperature: currentTemperature,
         tokenCount: 0,
@@ -128,90 +116,74 @@ export class OpenAIGraphAgent {
       }
     };
   }
-
   /**
    * Build the system prompt for OpenAI
    */
   private buildSystemPrompt(): string {
     return `You are an expert Prompt Spaghetti graph generator. You create valid, creative graphs in a specific YAML-like format.
-
 ## FORMAT SPECIFICATION
-
 Output must follow this exact format:
-
 \`\`\`
-version: 1.0.0
+version: 1.0.0,
 metadata:
   name: "Graph Name"
   description: "Brief description"
-  author: "llm-agent"
-  created: "${new Date().toISOString()}"
-
+  author: "llm-agent",
+  created: "${new Date().toISOString()}"}
 ---NODES---
 node_id:
-  type: NodeType
+  type: NodeType,
   props:
-    key: value
+    key: value,
   inputs: [input1, input2]
-
 ---EDGES---
 source -> target
-
 ---END---
 \`\`\`
-
 ## AVAILABLE NODE TYPES
-
 ### Basic Nodes:
 - **WeightedChoice**: Random selection with weights
   \`\`\`yaml
   choice_node:
-    type: WeightedChoice
+    type: WeightedChoice,
     props:
       choices:
         - value: "Option A"
-          weight: 0.6
+          weight: 0.6,
         - value: "Option B"
-          weight: 0.4
+          weight: 0.4,
   \`\`\`
-
 - **Concat**: Combines multiple inputs
   \`\`\`yaml
   concat_node:
-    type: Concat
+    type: Concat,
     inputs: [input1, input2]
   \`\`\`
-
 - **Output**: Final result node
   \`\`\`yaml
   output_node:
-    type: Output
-    inputs: [final_input]
+    type: Output,
+    inputs: [final_input],
   \`\`\`
-
 - **SetVariable/GetVariable**: Variable management
   \`\`\`yaml
   set_var:
-    type: SetVariable
+    type: SetVariable,
     props:
-      key: "user_name"
-      value: "Claude"
-  
+      key: "user_name",
+      value: "Claude",
   get_var:
-    type: GetVariable
+    type: GetVariable,
     props:
-      key: "user_name"
+      key: "user_name",
   \`\`\`
-
 ### Advanced Nodes:
 - **WeightedAdvanced**: Complex weight distributions
 - **Conditional**: Logic branching with expressions
 - **Sequential**: Ordered sequences with patterns
 - **Markov**: State transition chains
 - **PythonTransform**: Code execution
-
 ## CRITICAL RULES
-
 1. ✅ ALL node IDs must be unique and descriptive
 2. ✅ ALL referenced nodes must exist
 3. ✅ NO circular dependencies allowed
@@ -221,9 +193,7 @@ source -> target
 7. ✅ Include required properties for each node type
 8. ✅ Start with version header
 9. ✅ End with ---END--- marker
-
 ## VALIDATION
-
 Before outputting, mentally check:
 - Format follows specification exactly
 - All nodes have unique IDs
@@ -231,10 +201,8 @@ Before outputting, mentally check:
 - No cycles exist
 - Required properties present
 - Proper YAML syntax
-
 Generate creative, functional graphs that solve real problems.`;
   }
-
   /**
    * Build user prompt based on request
    */
@@ -244,33 +212,24 @@ Generate creative, functional graphs that solve real problems.`;
       moderate: '8-20 nodes, some branching, multiple features',
       complex: '20-50 nodes, advanced logic, sophisticated workflows'
     };
-
-    const nodeTypeGuide = request.nodeTypes.length > 0 
-      ? `Focus on these node types: ${request.nodeTypes.join(', ')}`
+    const nodeTypeGuide = request.nodeTypes.length > 0 ;
+      ? `Focus on these node types: ${request.nodeTypes.join(', ')}`}
       : 'Use appropriate node types for the task';
-
-    const requirements = request.specificRequirements?.length 
-      ? `\nSpecial requirements:\n${request.specificRequirements.map(r => `- ${r}`).join('\n')}`
+    const requirements = request.specificRequirements?.length ;
+      ? `\nSpecial requirements:\n${request.specificRequirements.map(r => `- ${r}`).join('\n')}`}
       : '';
-
-    const focus = request.focusAreas?.length
-      ? `\nFocus areas: ${request.focusAreas.join(', ')}`
+    const focus = request.focusAreas?.length;
+      ? `\nFocus areas: ${request.focusAreas.join(', ')}`}
       : '';
-
     return `Generate a ${request.complexity} Prompt Spaghetti graph for: ${request.purpose}
-
 Complexity: ${complexityGuide[request.complexity]}
-Target nodes: ~${request.nodeCount} nodes
+Target nodes: ~${request.nodeCount} nodes}
 ${nodeTypeGuide}${requirements}${focus}
-
-Style: ${request.style || 'balanced'} approach
+Style: ${request.style || 'balanced'} approach}
 ${request.domain ? `Domain: ${request.domain}` : ''}
-
 Create a complete, valid graph that follows the format specification exactly. Be creative but ensure functionality.
-
 OUTPUT THE COMPLETE GRAPH:`;
   }
-
   /**
    * Call OpenAI API with error handling
    */
@@ -293,10 +252,8 @@ OUTPUT THE COMPLETE GRAPH:`;
       //   response_format: this.config.useJsonMode ? { type: 'json_object' } : undefined,
       //   seed: this.config.seed
       // });
-
       // Mock response for development
       const mockResponse = this.generateMockResponse(userPrompt);
-      
       return {
         success: true,
         content: mockResponse,
@@ -309,7 +266,6 @@ OUTPUT THE COMPLETE GRAPH:`;
       };
     }
   }
-
   /**
    * Extract graph content from response
    */
@@ -319,17 +275,14 @@ OUTPUT THE COMPLETE GRAPH:`;
     if (codeBlockMatch) {
       return codeBlockMatch[1].trim();
     }
-
     // Look for version: line to start of ---END---
     const graphMatch = response.match(/version:\s*[\d.]+[\s\S]*?---END---/);
     if (graphMatch) {
       return graphMatch[0].trim();
     }
-
     // Return as-is if no code blocks found
     return response.trim();
   }
-
   /**
    * Generate mock response for development/testing
    */
@@ -338,43 +291,36 @@ OUTPUT THE COMPLETE GRAPH:`;
 metadata:
   name: "Sample Generated Graph"
   description: "Mock response for development"
-  author: "llm-agent"
-  created: "${new Date().toISOString()}"
-
+  author: "llm-agent",
+  created: "${new Date().toISOString()}"}
 ---NODES---
 greeting_choice:
-  type: WeightedChoice
+  type: WeightedChoice,
   props:
     choices:
       - value: "Hello"
-        weight: 0.5
+        weight: 0.5,
       - value: "Hi there"
-        weight: 0.3
+        weight: 0.3,
       - value: "Greetings"
-        weight: 0.2
-
+        weight: 0.2,
 user_name:
-  type: GetVariable
+  type: GetVariable,
   props:
-    key: "user_name"
-
+    key: "user_name",
 greeting_text:
-  type: Concat
+  type: Concat,
   inputs: [greeting_choice, user_name]
-
 final_output:
-  type: Output
-  inputs: [greeting_text]
-
+  type: Output,
+  inputs: [greeting_text],
 ---EDGES---
 greeting_choice -> greeting_text
 user_name -> greeting_text
 greeting_text -> final_output
-
 ---END---`;
   }
 }
-
 /**
  * Default configuration for OpenAI agent
  */
@@ -385,13 +331,12 @@ export const defaultOpenAIConfig: OpenAIAgentConfig = {
   maxTokens: 2000,
   useJsonMode: false, // Set to true when using supported models
   maxRetries: 3,
-  retryTemperatureReduction: 0.2
+  retryTemperatureReduction: 0.2,
 };
-
 /**
  * Utility function to create and use OpenAI agent
  */
-export async function generateGraphWithOpenAI(
+export async function generateGraphWithOpenAI()
   request: GraphGenerationRequest,
   config: Partial<OpenAIAgentConfig> = {}
 ): Promise<GenerationResult> {

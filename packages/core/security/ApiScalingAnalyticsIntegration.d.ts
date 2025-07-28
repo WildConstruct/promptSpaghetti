@@ -19,31 +19,31 @@ export interface ScalingAnalyticsConfig {
     alertingConfig: ScalingAlertingConfig;
 }
 export interface ScalingThresholds {
-    cpuUtilizationPercent: {
+    cpuUtilizationPercent: {,
         scaleUp: number;
         scaleDown: number;
     };
-    memoryUtilizationPercent: {
+    memoryUtilizationPercent: {,
         scaleUp: number;
         scaleDown: number;
     };
-    responseTimeMs: {
+    responseTimeMs: {,
         scaleUp: number;
         scaleDown: number;
     };
-    throughputRps: {
+    throughputRps: {,
         scaleUp: number;
         scaleDown: number;
     };
-    errorRatePercent: {
+    errorRatePercent: {,
         scaleUp: number;
         scaleDown: number;
     };
-    queueDepth: {
+    queueDepth: {,
         scaleUp: number;
         scaleDown: number;
     };
-    connectionCount: {
+    connectionCount: {,
         scaleUp: number;
         scaleDown: number;
     };
@@ -766,7 +766,7 @@ interface ScalingForecast {
     timestamp: Date;
     expectedLoad: number;
     confidence: number;
-    factors: {
+    factors: {,
         seasonal: number;
         trend: number;
         events: string[];

@@ -3,7 +3,6 @@
  * Task: T-1752989143997-705 - Create code generation and validation system
  * Epic 19: Authentication Enhancement & Security Hardening
  */
-
 import crypto from 'crypto';
 import { z } from 'zod';
 
@@ -51,7 +50,7 @@ export interface GeneratedCode {
   type: CodeType;
   format: CodeFormat;
   expiresAt?: Date;
-  metadata: {
+  metadata: {,
     generatedAt: Date;
     userId?: string;
     ipAddress?: string;
@@ -81,7 +80,6 @@ export interface CodeValidationOptions {
 // ========================================
 // Character Sets and Patterns
 // ========================================
-
 const CHARACTER_SETS = {
   [CodeFormat.NUMERIC]: '0123456789',
   [CodeFormat.ALPHA]: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -89,9 +87,7 @@ const CHARACTER_SETS = {
   [CodeFormat.BASE32]: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
   [CodeFormat.HEX]: '0123456789ABCDEF'
 };
-
 const SIMILAR_CHARACTERS = ['0', 'O', 'I', 'l', '1'];
-
 const CODE_PATTERNS = {
   [CodeFormat.NUMERIC]: /^\d+$/,
   [CodeFormat.ALPHA]: /^[A-Z]+$/,
@@ -104,38 +100,35 @@ const CODE_PATTERNS = {
 // ========================================
 // Validation Schemas
 // ========================================
-
-const CodeGenerationSchema = z.object({
+const CodeGenerationSchema = z.object({)
   type: z.nativeEnum(CodeType),
   format: z.nativeEnum(CodeFormat),
   length: z.number().min(4).max(64),
   expiryMinutes: z.number().min(1).max(43200).optional(), // Max 30 days
-  userContext: z.object({
+  userContext: z.object({),
     userId: z.string().uuid(),
     ipAddress: z.string().ip(),
-    userAgent: z.string().min(1)
+    userAgent: z.string().min(1),
   }).optional(),
   customCharset: z.string().min(2).optional(),
   excludeSimilar: z.boolean().optional(),
-  enforceComplexity: z.boolean().optional()
+  enforceComplexity: z.boolean().optional(),
 });
-
-const CodeValidationSchema = z.object({
+const CodeValidationSchema = z.object({)
   code: z.string().min(1),
   hashedCode: z.string().min(1),
   salt: z.string().min(1),
-  options: z.object({
+  options: z.object({),
     allowExpired: z.boolean().optional(),
     constantTimeValidation: z.boolean().optional(),
     rateLimitingEnabled: z.boolean().optional(),
-    maxAttempts: z.number().min(1).max(10).optional()
+    maxAttempts: z.number().min(1).max(10).optional(),
   }).optional()
 });
 
 // ========================================
 // Entropy Calculator
 // ========================================
-
 class EntropyCalculator {
   /**
    * Calculate the entropy of a generated code
@@ -143,12 +136,10 @@ class EntropyCalculator {
   static calculateEntropy(code: string, charset: string): number {
     const charsetSize = charset.length;
     const codeLength = code.length;
-    
     // Shannon entropy: H = L * log2(N)
     // Where L = length, N = charset size
     return codeLength * Math.log2(charsetSize);
   }
-
   /**
    * Calculate the theoretical time to crack a code
    */
@@ -160,10 +151,8 @@ class EntropyCalculator {
     const possibleCombinations = Math.pow(2, entropy);
     const averageAttempts = possibleCombinations / 2;
     const worstCaseAttempts = possibleCombinations;
-
     const averageSeconds = averageAttempts / attemptsPerSecond;
     const worstCaseSeconds = worstCaseAttempts / attemptsPerSecond;
-
     // Convert to appropriate time unit
     if (averageSeconds < 60) {
       return { averageTime: averageSeconds, worstCase: worstCaseSeconds, unit: 'seconds' };
@@ -177,7 +166,6 @@ class EntropyCalculator {
       return { averageTime: averageSeconds / 31536000, worstCase: worstCaseSeconds / 31536000, unit: 'years' };
     }
   }
-
   /**
    * Validate minimum entropy requirements
    */
@@ -190,7 +178,6 @@ class EntropyCalculator {
       [CodeType.RECOVERY_TOKEN]: 128,     // ~32 bytes
       [CodeType.API_TOKEN]: 256           // ~64 bytes
     };
-
     return entropy >= requirements[codeType];
   }
 }
@@ -198,16 +185,13 @@ class EntropyCalculator {
 // ========================================
 // Rate Limiting Service
 // ========================================
-
 interface RateLimitState {
   attempts: number;
   windowStart: Date;
   lastAttempt: Date;
 }
-
 class RateLimitService {
   private limitStates: Map<string, RateLimitState> = new Map();
-  
   private readonly limits = {
     [CodeType.EMAIL_VERIFICATION]: { maxAttempts: 5, windowMinutes: 15 },
     [CodeType.SMS_VERIFICATION]: { maxAttempts: 3, windowMinutes: 15 },
@@ -216,56 +200,47 @@ class RateLimitService {
     [CodeType.RECOVERY_TOKEN]: { maxAttempts: 3, windowMinutes: 60 },
     [CodeType.API_TOKEN]: { maxAttempts: 10, windowMinutes: 60 }
   };
-
   checkRateLimit(key: string, codeType: CodeType): { allowed: boolean; remainingAttempts: number } {
     const limit = this.limits[codeType];
     const state = this.limitStates.get(key);
     const now = new Date();
-
     if (!state) {
       // First attempt
-      this.limitStates.set(key, {
+      this.limitStates.set(key, {)
         attempts: 1,
         windowStart: now,
-        lastAttempt: now
+        lastAttempt: now,
       });
       return { allowed: true, remainingAttempts: limit.maxAttempts - 1 };
     }
-
     // Check if window has expired
     const windowAge = now.getTime() - state.windowStart.getTime();
     const windowDuration = limit.windowMinutes * 60 * 1000;
-
     if (windowAge > windowDuration) {
       // Reset window
-      this.limitStates.set(key, {
+      this.limitStates.set(key, {)
         attempts: 1,
         windowStart: now,
-        lastAttempt: now
+        lastAttempt: now,
       });
       return { allowed: true, remainingAttempts: limit.maxAttempts - 1 };
     }
-
     // Check attempts within window
     if (state.attempts >= limit.maxAttempts) {
       return { allowed: false, remainingAttempts: 0 };
     }
-
     // Increment attempts
     state.attempts++;
     state.lastAttempt = now;
     this.limitStates.set(key, state);
-
     return { 
       allowed: true, 
       remainingAttempts: limit.maxAttempts - state.attempts 
     };
   }
-
   resetRateLimit(key: string): void {
     this.limitStates.delete(key);
   }
-
   getRateLimitInfo(key: string, codeType: CodeType): {
     currentAttempts: number;
     maxAttempts: number;
@@ -274,20 +249,17 @@ class RateLimitService {
   } {
     const limit = this.limits[codeType];
     const state = this.limitStates.get(key);
-
     if (!state) {
       return {
         currentAttempts: 0,
         maxAttempts: limit.maxAttempts,
-        windowMinutes: limit.windowMinutes
+        windowMinutes: limit.windowMinutes,
       };
     }
-
     const now = new Date();
     const windowAge = now.getTime() - state.windowStart.getTime();
     const windowDuration = limit.windowMinutes * 60 * 1000;
     const timeUntilReset = Math.max(0, windowDuration - windowAge);
-
     return {
       currentAttempts: state.attempts,
       maxAttempts: limit.maxAttempts,
@@ -305,39 +277,31 @@ export class CodeGenerationService {
   private rateLimitService: RateLimitService;
   private hashingAlgorithm: string = 'sha256';
   private saltLength: number = 32;
-
   constructor() {
     this.rateLimitService = new RateLimitService();
   }
-
   /**
    * Generate a secure code based on specified options
    */
   async generateCode(options: CodeGenerationOptions): Promise<GeneratedCode> {
     // Validate input
     const validatedOptions = CodeGenerationSchema.parse(options);
-    
     // Generate the actual code
     const code = this.generateSecureCode(validatedOptions);
-    
     // Calculate entropy
     const charset = this.getCharset(validatedOptions);
     const entropy = EntropyCalculator.calculateEntropy(code, charset);
-    
     // Validate entropy meets requirements
     if (!EntropyCalculator.validateEntropyRequirements(entropy, validatedOptions.type)) {
-      throw new Error(`Generated code does not meet entropy requirements for ${validatedOptions.type}`);
+      throw new Error(`Generated code does not meet entropy requirements for ${validatedOptions.type}`);}
     }
-
     // Generate salt and hash
     const salt = crypto.randomBytes(this.saltLength).toString('hex');
     const hashedCode = this.hashCode(code, salt);
-
     // Calculate expiry
-    const expiresAt = validatedOptions.expiryMinutes 
+    const expiresAt = validatedOptions.expiryMinutes ;
       ? new Date(Date.now() + validatedOptions.expiryMinutes * 60 * 1000)
       : undefined;
-
     return {
       code,
       hashedCode,
@@ -345,20 +309,19 @@ export class CodeGenerationService {
       type: validatedOptions.type,
       format: validatedOptions.format,
       expiresAt,
-      metadata: {
+      metadata: {,
         generatedAt: new Date(),
         userId: validatedOptions.userContext?.userId,
         ipAddress: validatedOptions.userContext?.ipAddress,
         entropy,
-        algorithm: this.hashingAlgorithm
+        algorithm: this.hashingAlgorithm,
       }
     };
   }
-
   /**
    * Validate a code against stored hash
    */
-  async validateCode(
+  async validateCode()
     inputCode: string,
     storedData: GeneratedCode,
     options: CodeValidationOptions = {}
@@ -371,27 +334,24 @@ export class CodeGenerationService {
       maxAttempts: 5,
       ...options
     };
-
     try {
       // Validate input format
-      const validationInput = CodeValidationSchema.parse({
+      const validationInput = CodeValidationSchema.parse({)
         code: inputCode,
         hashedCode: storedData.hashedCode,
         salt: storedData.salt,
-        options: defaultOptions
+        options: defaultOptions,
       });
-
       // Check rate limiting
       if (defaultOptions.rateLimitingEnabled && storedData.metadata.userId) {
-        const rateLimitKey = `${storedData.metadata.userId}:${storedData.type}`;
+        const rateLimitKey = `${storedData.metadata.userId}:${storedData.type}`;}
         const rateLimit = this.rateLimitService.checkRateLimit(rateLimitKey, storedData.type);
-        
         if (!rateLimit.allowed) {
           return {
             valid: false,
             reason: 'rate_limited',
             remainingAttempts: rateLimit.remainingAttempts,
-            metadata: {
+            metadata: {,
               validatedAt: new Date(),
               timingAttackSafe: false,
               processingTimeMs: Date.now() - startTime
@@ -399,65 +359,58 @@ export class CodeGenerationService {
           };
         }
       }
-
       // Check expiry
       if (!defaultOptions.allowExpired && storedData.expiresAt && storedData.expiresAt < new Date()) {
         return {
           valid: false,
           reason: 'expired',
-          metadata: {
+          metadata: {,
             validatedAt: new Date(),
             timingAttackSafe: defaultOptions.constantTimeValidation,
             processingTimeMs: Date.now() - startTime
           }
         };
       }
-
       // Validate format
       if (!this.validateCodeFormat(inputCode, storedData.format)) {
         return {
           valid: false,
           reason: 'format_mismatch',
-          metadata: {
+          metadata: {,
             validatedAt: new Date(),
             timingAttackSafe: defaultOptions.constantTimeValidation,
             processingTimeMs: Date.now() - startTime
           }
         };
       }
-
       // Hash input code and compare
       const inputHash = this.hashCode(inputCode, storedData.salt);
-      const isValid = defaultOptions.constantTimeValidation 
+      const isValid = defaultOptions.constantTimeValidation ;
         ? this.constantTimeCompare(inputHash, storedData.hashedCode)
         : inputHash === storedData.hashedCode;
-
       // Calculate processing time for timing attack protection
       const processingTime = Date.now() - startTime;
-      
       // Ensure minimum processing time for constant-time validation
       if (defaultOptions.constantTimeValidation) {
-        const minProcessingTime = 10; // 10ms minimum
+        const minProcessingTime = 10; // 10ms minimum;
         if (processingTime < minProcessingTime) {
           await new Promise(resolve => setTimeout(resolve, minProcessingTime - processingTime));
         }
       }
-
       return {
         valid: isValid,
         reason: isValid ? undefined : 'invalid',
-        metadata: {
+        metadata: {,
           validatedAt: new Date(),
           timingAttackSafe: defaultOptions.constantTimeValidation,
           processingTimeMs: Date.now() - startTime
         }
       };
-
     } catch (error) {
       return {
         valid: false,
         reason: 'invalid',
-        metadata: {
+        metadata: {,
           validatedAt: new Date(),
           timingAttackSafe: false,
           processingTimeMs: Date.now() - startTime
@@ -465,7 +418,6 @@ export class CodeGenerationService {
       };
     }
   }
-
   /**
    * Generate TOTP secret with proper formatting
    */
@@ -482,9 +434,7 @@ export class CodeGenerationService {
       length: 32,
       userContext: { userId, ipAddress: '0.0.0.0', userAgent: 'totp-generation' }
     };
-
     const secretData = await this.generateCode(secretOptions);
-    
     // Generate backup codes
     const backupCodes: string[] = [];
     for (let i = 0; i < 10; i++) {
@@ -492,23 +442,19 @@ export class CodeGenerationService {
         type: CodeType.BACKUP_CODE,
         format: CodeFormat.ALPHANUMERIC,
         length: 8,
-        excludeSimilar: true
+        excludeSimilar: true,
       };
-      
       const backupData = await this.generateCode(backupOptions);
       // Format as XXXX-XXXX
-      const formatted = `${backupData.code.slice(0, 4)}-${backupData.code.slice(4, 8)}`;
+      const formatted = `${backupData.code.slice(0, 4)}-${backupData.code.slice(4, 8)}`;}
       backupCodes.push(formatted);
     }
-
     // Format for manual entry (space-separated groups of 4)
     const manualEntryKey = secretData.code.match(/.{1,4}/g)?.join(' ') || secretData.code;
-
     // Create QR code data URL format
     const issuer = 'PromptScape';
-    const accountName = userId; // Could be email or username
-    const qrCodeData = `otpauth://totp/${encodeURIComponent(issuer)}:${encodeURIComponent(accountName)}?secret=${secretData.code}&issuer=${encodeURIComponent(issuer)}&algorithm=SHA1&digits=6&period=30`;
-
+    const accountName = userId; // Could be email or username;
+    const qrCodeData = `otpauth://totp/${encodeURIComponent(issuer)}:${encodeURIComponent(accountName)}?secret=${secretData.code}&issuer=${encodeURIComponent(issuer)}&algorithm=SHA1&digits=6&period=30`;}
     return {
       secret: secretData.code,
       qrCodeData,
@@ -516,12 +462,11 @@ export class CodeGenerationService {
       backupCodes
     };
   }
-
   /**
    * Generate recovery token for account recovery
    */
   async generateRecoveryToken(userId: string): Promise<GeneratedCode> {
-    return this.generateCode({
+    return this.generateCode({)
       type: CodeType.RECOVERY_TOKEN,
       format: CodeFormat.HEX,
       length: 64, // 32 bytes
@@ -529,12 +474,11 @@ export class CodeGenerationService {
       userContext: { userId, ipAddress: '0.0.0.0', userAgent: 'recovery-generation' }
     });
   }
-
   /**
    * Generate API token
    */
   async generateAPIToken(userId: string, expiryDays?: number): Promise<GeneratedCode> {
-    return this.generateCode({
+    return this.generateCode({)
       type: CodeType.API_TOKEN,
       format: CodeFormat.HEX,
       length: 64, // 32 bytes
@@ -542,72 +486,57 @@ export class CodeGenerationService {
       userContext: { userId, ipAddress: '0.0.0.0', userAgent: 'api-token-generation' }
     });
   }
-
   /**
    * Get rate limit information for a user and code type
    */
   getRateLimitInfo(userId: string, codeType: CodeType) {
-    const key = `${userId}:${codeType}`;
+    const key = `${userId}:${codeType}`;}
     return this.rateLimitService.getRateLimitInfo(key, codeType);
   }
-
   /**
    * Reset rate limit for a user and code type
    */
   resetRateLimit(userId: string, codeType: CodeType): void {
-    const key = `${userId}:${codeType}`;
+    const key = `${userId}:${codeType}`;}
     this.rateLimitService.resetRateLimit(key);
   }
-
   // ========================================
   // Private Helper Methods
   // ========================================
-
   private generateSecureCode(options: CodeGenerationOptions): string {
     if (options.format === CodeFormat.UUID) {
       return crypto.randomUUID();
     }
-
     const charset = this.getCharset(options);
     const codeArray: string[] = [];
-
     // Use cryptographically secure random number generation
     for (let i = 0; i < options.length; i++) {
       const randomIndex = crypto.randomInt(0, charset.length);
       codeArray.push(charset[randomIndex]);
     }
-
     let code = codeArray.join('');
-
     // Apply complexity requirements for certain code types
     if (options.enforceComplexity) {
       code = this.enforceComplexity(code, charset);
     }
-
     return code;
   }
-
   private getCharset(options: CodeGenerationOptions): string {
     if (options.customCharset) {
       return options.customCharset;
     }
-
     let charset = CHARACTER_SETS[options.format];
-    
     if (options.excludeSimilar) {
       for (const char of SIMILAR_CHARACTERS) {
         charset = charset.replace(new RegExp(char, 'g'), '');
       }
     }
-
     return charset;
   }
-
   private enforceComplexity(code: string, charset: string): string {
     // Ensure at least one character from each category if applicable
     const hasNumbers = /\d/.test(charset);
     const hasLetters = /[A-Z]/.test(charset);
-
     if (hasNumbers && hasLetters) {
       if (!/\d/.test(code)) {
         // Replace random position with number
@@ -616,7 +545,6 @@ export class CodeGenerationService {
         const randomNumber = numbers[crypto.randomInt(0, numbers.length)];
         code = code.substring(0, randomPos) + randomNumber + code.substring(randomPos + 1);
       }
-
       if (!/[A-Z]/.test(code)) {
         // Replace random position with letter
         const letters = charset.match(/[A-Z]/g) || [];
@@ -625,29 +553,23 @@ export class CodeGenerationService {
         code = code.substring(0, randomPos) + randomLetter + code.substring(randomPos + 1);
       }
     }
-
     return code;
   }
-
   private hashCode(code: string, salt: string): string {
     return crypto.createHash(this.hashingAlgorithm)
       .update(code + salt)
       .digest('hex');
   }
-
   private constantTimeCompare(a: string, b: string): boolean {
     if (a.length !== b.length) {
       return false;
     }
-
     let result = 0;
     for (let i = 0; i < a.length; i++) {
       result |= a.charCodeAt(i) ^ b.charCodeAt(i);
     }
-
     return result === 0;
   }
-
   private validateCodeFormat(code: string, format: CodeFormat): boolean {
     const pattern = CODE_PATTERNS[format];
     return pattern ? pattern.test(code) : true;
@@ -665,7 +587,7 @@ export class CodeGenerationUtils {
   static analyzeCodeStrength(generatedCode: GeneratedCode): {
     entropy: number;
     strength: 'weak' | 'moderate' | 'strong' | 'very_strong';
-    crackTime: {
+    crackTime: {,
       averageTime: number;
       worstCase: number;
       unit: string;
@@ -674,13 +596,11 @@ export class CodeGenerationUtils {
   } {
     const entropy = generatedCode.metadata.entropy;
     const crackTime = EntropyCalculator.calculateCrackTime(entropy);
-    
     let strength: 'weak' | 'moderate' | 'strong' | 'very_strong';
     if (entropy < 30) strength = 'weak';
     else if (entropy < 50) strength = 'moderate';
     else if (entropy < 80) strength = 'strong';
     else strength = 'very_strong';
-
     const recommendations: string[] = [];
     if (entropy < 40) {
       recommendations.push('Consider increasing code length');
@@ -691,7 +611,6 @@ export class CodeGenerationUtils {
     if (!generatedCode.expiresAt) {
       recommendations.push('Consider adding expiration time');
     }
-
     return {
       entropy,
       strength,
@@ -699,14 +618,12 @@ export class CodeGenerationUtils {
       recommendations
     };
   }
-
   /**
    * Generate a secure random seed for testing
    */
   static generateTestSeed(): string {
     return crypto.randomBytes(32).toString('hex');
   }
-
   /**
    * Format code for user display
    */
@@ -715,19 +632,16 @@ export class CodeGenerationUtils {
     case CodeFormat.NUMERIC:
       // Format as XXX XXX for 6-digit codes
       if (code.length === 6) {
-        return `${code.slice(0, 3)} ${code.slice(3)}`;
+        return `${code.slice(0, 3)} ${code.slice(3)}`;}
       }
       return code;
-      
     case CodeFormat.ALPHANUMERIC:
     case CodeFormat.BASE32:
       // Format in groups of 4
       return code.match(/.{1,4}/g)?.join(' ') || code;
-      
     case CodeFormat.HEX:
       // Format in groups of 8
       return code.match(/.{1,8}/g)?.join(' ') || code;
-      
     default:
       return code;
     }

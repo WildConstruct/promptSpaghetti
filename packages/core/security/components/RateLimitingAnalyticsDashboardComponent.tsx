@@ -6,7 +6,6 @@
  * Advanced React component providing comprehensive security analytics dashboard
  * with real-time monitoring, predictive insights, and actionable intelligence.
  */
-
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   RateLimitingAnalyticsDashboard,
@@ -19,7 +18,6 @@ import { ThreatLevel } from '../RateLimitingService';
 // ========================================
 // Component Props and Types
 // ========================================
-
 interface RateLimitingAnalyticsDashboardProps {
   analyticsDashboard: RateLimitingAnalyticsDashboard;
   className?: string;
@@ -28,7 +26,6 @@ interface RateLimitingAnalyticsDashboardProps {
   enableRealTimeUpdates?: boolean;
   showAdvancedFeatures?: boolean;
 }
-
 interface MetricCard {
   id: string;
   title: string;
@@ -39,12 +36,11 @@ interface MetricCard {
   status: 'good' | 'warning' | 'critical';
   description: string;
 }
-
 interface AlertSummary {
   total: number;
   byType: Record<string, number>;
   bySeverity: Record<string, number>;
-  recent: Array<{
+  recent: Array<{,
     id: string;
     type: string;
     severity: string;
@@ -57,7 +53,7 @@ interface AlertSummary {
 // Main Dashboard Component
 // ========================================
 
-export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnalyticsDashboardProps> = ({
+export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnalyticsDashboardProps> = ({)
   analyticsDashboard,
   className = '',
   theme = 'light',
@@ -74,31 +70,24 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [error, setError] = useState<string | null>(null);
-
   // Refs for cleanup
   const updateTimerRef = useRef<NodeJS.Timeout | null>(null);
   const mountedRef = useRef<boolean>(true);
-
   // ========================================
   // Data Loading and Updates
   // ========================================
-
   const loadAnalyticsData = useCallback(async () => {
     if (!mountedRef.current) return;
-
     try {
       setIsLoading(true);
       setError(null);
-
       const summary = analyticsDashboard.getAnalyticsSummary();
-      
       if (mountedRef.current) {
         setSecurityAnalytics(summary.securityAnalytics);
         setPredictiveInsights(summary.predictiveInsights);
         setDashboardVisualization(summary.dashboardVisualization);
         setLastUpdate(new Date());
       }
-
     } catch (err) {
       if (mountedRef.current) {
         const errorMessage = err instanceof Error ? err.message : 'Failed to load analytics data';
@@ -110,22 +99,18 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       }
     }
   }, [analyticsDashboard]);
-
   // Set up real-time updates
   useEffect(() => {
     loadAnalyticsData();
-
     if (enableRealTimeUpdates) {
       updateTimerRef.current = setInterval(loadAnalyticsData, refreshInterval * 1000);
     }
-
     return () => {
       if (updateTimerRef.current) {
         clearInterval(updateTimerRef.current);
       }
     };
   }, [loadAnalyticsData, enableRealTimeUpdates, refreshInterval]);
-
   // Listen for analytics events
   useEffect(() => {
     const handleAnalyticsProcessed = () => {
@@ -133,24 +118,20 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
         loadAnalyticsData();
       }
     };
-
     const handleAnalyticsError = (errorData: { error: any }) => {
       if (mountedRef.current) {
-        const errorMessage = errorData.error instanceof Error ? 
+        const errorMessage = errorData.error instanceof Error ? ;
           errorData.error.message : 'Analytics processing error';
         setError(errorMessage);
       }
     };
-
     analyticsDashboard.on('analyticsProcessed', handleAnalyticsProcessed);
     analyticsDashboard.on('analyticsError', handleAnalyticsError);
-
     return () => {
       analyticsDashboard.off('analyticsProcessed', handleAnalyticsProcessed);
       analyticsDashboard.off('analyticsError', handleAnalyticsError);
     };
   }, [analyticsDashboard, loadAnalyticsData]);
-
   // Cleanup on unmount
   useEffect(() => {
     mountedRef.current = true;
@@ -158,18 +139,14 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       mountedRef.current = false;
     };
   }, []);
-
   // ========================================
   // Data Processing and Calculations
   // ========================================
-
   const metricCards = useMemo((): MetricCard[] => {
     if (!securityAnalytics) return [];
-
     const cards: MetricCard[] = [];
-
     // System Health Card
-    cards.push({
+    cards.push({)
       id: 'system-health',
       title: 'System Health',
       value: securityAnalytics.performanceAnalytics.systemHealth.overallScore,
@@ -180,7 +157,6 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
              securityAnalytics.performanceAnalytics.systemHealth.overallScore > 75 ? 'warning' : 'critical',
       description: 'Overall system health and performance score'
     });
-
     // Threat Level Card
     const threatLevelMap = {
       [ThreatLevel.LOW]: { value: 1, color: 'good' },
@@ -188,9 +164,8 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       [ThreatLevel.HIGH]: { value: 3, color: 'critical' },
       [ThreatLevel.CRITICAL]: { value: 4, color: 'critical' }
     };
-
     const currentThreat = threatLevelMap[securityAnalytics.threatAnalysis.currentThreatLevel];
-    cards.push({
+    cards.push({)
       id: 'threat-level',
       title: 'Threat Level',
       value: securityAnalytics.threatAnalysis.currentThreatLevel.toUpperCase(),
@@ -199,9 +174,8 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       status: currentThreat.color as 'good' | 'warning' | 'critical',
       description: 'Current system threat assessment level'
     });
-
     // Capacity Utilization Card
-    cards.push({
+    cards.push({)
       id: 'capacity',
       title: 'Capacity',
       value: securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity,
@@ -212,9 +186,8 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
              securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity > 70 ? 'warning' : 'good',
       description: 'Current system capacity utilization'
     });
-
     // Revenue Impact Card
-    cards.push({
+    cards.push({)
       id: 'revenue-impact',
       title: 'Security ROI',
       value: securityAnalytics.businessIntelligence.revenueImpact.securityROI.toFixed(0),
@@ -224,9 +197,8 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       status: securityAnalytics.businessIntelligence.revenueImpact.securityROI > 200 ? 'good' : 'warning',
       description: 'Return on investment from security measures'
     });
-
     // Attack Patterns Card
-    cards.push({
+    cards.push({)
       id: 'attack-patterns',
       title: 'Active Threats',
       value: securityAnalytics.threatAnalysis.attackPatterns.length,
@@ -236,9 +208,8 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
              securityAnalytics.threatAnalysis.attackPatterns.length > 1 ? 'warning' : 'good',
       description: 'Number of detected attack patterns'
     });
-
     // Response Time SLA Card
-    cards.push({
+    cards.push({)
       id: 'response-sla',
       title: 'Response SLA',
       value: securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance,
@@ -249,40 +220,34 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
              securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance > 85 ? 'warning' : 'critical',
       description: 'Response time SLA compliance percentage'
     });
-
     return cards;
   }, [securityAnalytics]);
-
   const alertSummary = useMemo((): AlertSummary => {
     if (!dashboardVisualization) {
       return {
         total: 0,
         byType: {},
         bySeverity: {},
-        recent: []
+        recent: [],
       };
     }
-
     const alerts = dashboardVisualization.alertPanels;
     const byType: Record<string, number> = {};
     const bySeverity: Record<string, number> = {};
-
-    alerts.forEach(alert => {
+    alerts.forEach(alert => {)
       byType[alert.alertType] = (byType[alert.alertType] || 0) + 1;
       bySeverity[alert.severity] = (bySeverity[alert.severity] || 0) + 1;
     });
-
-    const recent = alerts
+    const recent = alerts;
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
       .slice(0, 5)
-      .map(alert => ({
+      .map(alert => ({)
         id: alert.panelId,
         type: alert.alertType,
         severity: alert.severity,
         message: alert.message,
-        timestamp: alert.timestamp
+        timestamp: alert.timestamp,
       }));
-
     return {
       total: alerts.length,
       byType,
@@ -290,51 +255,44 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       recent
     };
   }, [dashboardVisualization]);
-
   // ========================================
   // Event Handlers
   // ========================================
-
   const handleTimeRangeChange = (range: string) => {
     setSelectedTimeRange(range);
     loadAnalyticsData();
   };
-
   const handleViewChange = (view: typeof selectedView) => {
     setSelectedView(view);
   };
-
   const handleRefresh = () => {
     loadAnalyticsData();
   };
-
   const handleExportData = async (format: 'json' | 'csv' | 'pdf') => {
     try {
       const summary = analyticsDashboard.getAnalyticsSummary();
       let exportData: string;
       let mimeType: string;
       let filename: string;
-
       switch (format) {
         case 'json':
           exportData = JSON.stringify(summary, null, 2);
           mimeType = 'application/json';
-          filename = `analytics-report-${new Date().toISOString().split('T')[0]}.json`;
+          filename = `analytics-report-${new Date().toISOString().split('T')[0]}.json`;}
           break;
         case 'csv':
           exportData = convertToCSV(summary);
           mimeType = 'text/csv';
-          filename = `analytics-report-${new Date().toISOString().split('T')[0]}.csv`;
+          filename = `analytics-report-${new Date().toISOString().split('T')[0]}.csv`;}
           break;
         case 'pdf':
           exportData = generatePDFContent(summary);
           mimeType = 'application/pdf';
-          filename = `analytics-report-${new Date().toISOString().split('T')[0]}.pdf`;
+          filename = `analytics-report-${new Date().toISOString().split('T')[0]}.pdf`;}
           break;
         default:
           throw new Error('Unsupported format');
       }
-
       const blob = new Blob([exportData], { type: mimeType });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -344,18 +302,15 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-
     } catch (error) {
       console.error('Export failed:', error);
       setError('Failed to export data');
     }
   };
-
   // ========================================
   // Render Helpers
   // ========================================
-
-  const renderMetricCard = (metric: MetricCard) => (
+  const renderMetricCard = (metric: MetricCard) => (;)
     <div
       key={metric.id}
       className={`
@@ -377,7 +332,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
             }`}>
               {metric.value}
             </p>
-            {metric.unit && (
+            {metric.unit && ()
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {metric.unit}
               </span>
@@ -387,7 +342,6 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
             {metric.description}
           </p>
         </div>
-        
         <div className="flex flex-col items-end space-y-2">
           <div className={`
             inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
@@ -400,7 +354,6 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
             {metric.trend === 'stable' && '→'}
             {Math.abs(metric.trendValue)}%
           </div>
-          
           <div className={`
             w-3 h-3 rounded-full
             ${metric.status === 'good' ? 'bg-green-500' : ''}
@@ -411,22 +364,20 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       </div>
     </div>
   );
-
-  const renderAlertPanel = () => (
+  const renderAlertPanel = () => (;)
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
       <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
         <h3 className="text-lg font-medium text-gray-900 dark:text-white">
           Active Alerts ({alertSummary.total})
         </h3>
       </div>
-      
       <div className="p-6">
-        {alertSummary.total === 0 ? (
+        {alertSummary.total === 0 ? ()
           <div className="text-center py-8">
             <div className="text-4xl mb-2">✅</div>
             <p className="text-gray-500 dark:text-gray-400">No active alerts</p>
           </div>
-        ) : (
+        ) : ()
           <div className="space-y-4">
             {/* Alert Summary */}
             <div className="grid grid-cols-2 gap-4">
@@ -434,7 +385,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
                 <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   By Type
                 </h4>
-                {Object.entries(alertSummary.byType).map(([type, count]) => (
+                {Object.entries(alertSummary.byType).map(([type, count]) => ()
                   <div key={type} className="flex justify-between text-sm">
                     <span className="text-gray-600 dark:text-gray-400 capitalize">
                       {type.replace('_', ' ')}:
@@ -443,12 +394,11 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
                   </div>
                 ))}
               </div>
-              
               <div>
                 <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   By Severity
                 </h4>
-                {Object.entries(alertSummary.bySeverity).map(([severity, count]) => (
+                {Object.entries(alertSummary.bySeverity).map(([severity, count]) => ()
                   <div key={severity} className="flex justify-between text-sm">
                     <span className={`capitalize ${
                       severity === 'critical' ? 'text-red-600 dark:text-red-400' :
@@ -463,14 +413,13 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
                 ))}
               </div>
             </div>
-
             {/* Recent Alerts */}
             <div>
               <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Recent Alerts
               </h4>
               <div className="space-y-2">
-                {alertSummary.recent.map((alert) => (
+                {alertSummary.recent.map((alert) => ()
                   <div
                     key={alert.id}
                     className={`
@@ -500,11 +449,9 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       </div>
     </div>
   );
-
   const renderThreatAnalysis = () => {
     if (!securityAnalytics) return null;
-
-    return (
+    return ()
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Attack Patterns */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
@@ -514,11 +461,11 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
             </h3>
           </div>
           <div className="p-6">
-            {securityAnalytics.threatAnalysis.attackPatterns.length === 0 ? (
+            {securityAnalytics.threatAnalysis.attackPatterns.length === 0 ? ()
               <p className="text-gray-500 dark:text-gray-400">No attack patterns detected</p>
-            ) : (
+            ) : ()
               <div className="space-y-4">
-                {securityAnalytics.threatAnalysis.attackPatterns.map((pattern) => (
+                {securityAnalytics.threatAnalysis.attackPatterns.map((pattern) => ()
                   <div
                     key={pattern.patternId}
                     className={`
@@ -543,19 +490,17 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
                         {pattern.severity}
                       </span>
                     </div>
-                    
                     <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
                       <div>Frequency: {pattern.frequency} occurrences</div>
                       <div>Affected: {pattern.affectedEndpoints.join(', ')}</div>
                       <div>Source IPs: {pattern.sourceIPs.join(', ')}</div>
                     </div>
-                    
                     <div className="mt-3">
                       <p className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Countermeasures:
                       </p>
                       <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
-                        {pattern.countermeasures.map((measure, index) => (
+                        {pattern.countermeasures.map((measure, index) => ()
                           <li key={index}>• {measure}</li>
                         ))}
                       </ul>
@@ -566,7 +511,6 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
             )}
           </div>
         </div>
-
         {/* Geographic Threats */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
@@ -576,7 +520,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
           </div>
           <div className="p-6">
             <div className="space-y-4">
-              {securityAnalytics.threatAnalysis.geographicThreats.map((threat, index) => (
+              {securityAnalytics.threatAnalysis.geographicThreats.map((threat, index) => ()
                 <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                   <div>
                     <p className="font-medium text-gray-900 dark:text-white">
@@ -603,11 +547,9 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       </div>
     );
   };
-
   const renderPredictiveInsights = () => {
     if (!predictiveInsights || !showAdvancedFeatures) return null;
-
-    return (
+    return ()
       <div className="space-y-6">
         {/* Threat Predictions */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
@@ -617,11 +559,11 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
             </h3>
           </div>
           <div className="p-6">
-            {predictiveInsights.threatPredictions.length === 0 ? (
+            {predictiveInsights.threatPredictions.length === 0 ? ()
               <p className="text-gray-500 dark:text-gray-400">No threat predictions available</p>
-            ) : (
+            ) : ()
               <div className="space-y-4">
-                {predictiveInsights.threatPredictions.map((prediction) => (
+                {predictiveInsights.threatPredictions.map((prediction) => ()
                   <div
                     key={prediction.predictionId}
                     className={`
@@ -651,17 +593,15 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
                         </span>
                       </div>
                     </div>
-                    
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                       Expected {prediction.timeframe} • Model confidence: {prediction.modelConfidence}%
                     </p>
-                    
                     <div>
                       <p className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Recommended Actions:
                       </p>
                       <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
-                        {prediction.recommendedActions.map((action, index) => (
+                        {prediction.recommendedActions.map((action, index) => ()
                           <li key={index}>• {action}</li>
                         ))}
                       </ul>
@@ -672,7 +612,6 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
             )}
           </div>
         </div>
-
         {/* Capacity Forecasts */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
@@ -682,7 +621,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {predictiveInsights.capacityForecasts.map((forecast) => (
+              {predictiveInsights.capacityForecasts.map((forecast) => ()
                 <div
                   key={forecast.forecastId}
                   className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
@@ -695,13 +634,11 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
                       {forecast.confidence}% confidence
                     </span>
                   </div>
-                  
                   <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
                     <div>Current: {forecast.currentValue.toFixed(1)}</div>
                     <div>Predicted: {forecast.predictedValue.toFixed(1)}</div>
                     <div>Horizon: {forecast.forecastHorizon} hours</div>
                   </div>
-                  
                   <div className="mt-3 p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-xs text-blue-700 dark:text-blue-300">
                     {forecast.scalingRecommendation}
                   </div>
@@ -713,8 +650,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       </div>
     );
   };
-
-  const renderControls = () => (
+  const renderControls = () => (;)
     <div className="flex items-center justify-between mb-6">
       <div className="flex items-center space-x-4">
         {/* View Selector */}
@@ -729,7 +665,6 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
           <option value="business">Business</option>
           {showAdvancedFeatures && <option value="predictive">Predictive</option>}
         </select>
-
         {/* Time Range Selector */}
         <select
           value={selectedTimeRange}
@@ -741,7 +676,6 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
           <option value="24h">Last 24 Hours</option>
           <option value="7d">Last 7 Days</option>
         </select>
-
         {/* Refresh Button */}
         <button
           onClick={handleRefresh}
@@ -751,7 +685,6 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
           <span>Refresh</span>
         </button>
       </div>
-
       <div className="flex items-center space-x-2">
         {/* Export Options */}
         <div className="flex items-center space-x-2">
@@ -768,11 +701,10 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
             Export CSV
           </button>
         </div>
-
         {/* Status Indicator */}
         <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center space-x-2">
           <span>Last updated: {lastUpdate.toLocaleTimeString()}</span>
-          {enableRealTimeUpdates && (
+          {enableRealTimeUpdates && ()
             <div className="flex items-center">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-1"></div>
               <span>Live</span>
@@ -782,14 +714,12 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       </div>
     </div>
   );
-
   // ========================================
   // Main Render
   // ========================================
-
   if (error) {
-    return (
-      <div className={`p-8 ${className}`}>
+    return ()
+      <div className={`p-8 ${className}`}>}
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
           <h2 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
             Analytics Dashboard Error
@@ -805,10 +735,9 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       </div>
     );
   }
-
   if (isLoading && !securityAnalytics) {
-    return (
-      <div className={`p-8 ${className}`}>
+    return ()
+      <div className={`p-8 ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -818,9 +747,8 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       </div>
     );
   }
-
-  return (
-    <div className={`p-6 ${className} ${theme === 'dark' ? 'dark' : ''}`}>
+  return ()
+    <div className={`p-6 ${className} ${theme === 'dark' ? 'dark' : ''}`}>}
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
@@ -831,18 +759,15 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
             Comprehensive security intelligence and predictive analytics platform
           </p>
         </div>
-
         {/* Controls */}
         {renderControls()}
-
         {/* Main Content */}
-        {selectedView === 'overview' && (
+        {selectedView === 'overview' && ()
           <div className="space-y-6">
             {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
               {metricCards.map(renderMetricCard)}
             </div>
-
             {/* Alerts and Threat Analysis */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-1">
@@ -854,12 +779,10 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
             </div>
           </div>
         )}
-
         {selectedView === 'security' && renderThreatAnalysis()}
         {selectedView === 'predictive' && renderPredictiveInsights()}
-
         {/* Other views would be implemented here */}
-        {selectedView === 'performance' && (
+        {selectedView === 'performance' && ()
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="text-center py-12">
               <div className="text-4xl mb-4">⚡</div>
@@ -872,8 +795,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
             </div>
           </div>
         )}
-
-        {selectedView === 'business' && (
+        {selectedView === 'business' && ()
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="text-center py-12">
               <div className="text-4xl mb-4">💼</div>
@@ -894,22 +816,19 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
 // ========================================
 // Utility Functions
 // ========================================
-
 function convertToCSV(data: any): string {
   // Simple CSV conversion - in production, this would be more sophisticated
   const headers = ['Metric', 'Value', 'Status', 'Timestamp'];
-  const rows = [
+  const rows = [;
     ['System Health', data.securityAnalytics?.performanceAnalytics?.systemHealth?.overallScore || 0, 'Active', new Date().toISOString()],
     ['Threat Level', data.securityAnalytics?.threatAnalysis?.currentThreatLevel || 'LOW', 'Active', new Date().toISOString()],
     ['Active Threats', data.securityAnalytics?.threatAnalysis?.attackPatterns?.length || 0, 'Active', new Date().toISOString()]
   ];
-
   return [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
 }
-
 function generatePDFContent(data: any): string {
   // Simple PDF content generation - in production, this would use a proper PDF library
-  return `Analytics Report Generated: ${new Date().toISOString()}\n\nSystem Health: ${data.securityAnalytics?.performanceAnalytics?.systemHealth?.overallScore || 0}%\nThreat Level: ${data.securityAnalytics?.threatAnalysis?.currentThreatLevel || 'LOW'}\nActive Threats: ${data.securityAnalytics?.threatAnalysis?.attackPatterns?.length || 0}`;
+  return `Analytics Report Generated: ${new Date().toISOString()}\n\nSystem Health: ${data.securityAnalytics?.performanceAnalytics?.systemHealth?.overallScore || 0}%\nThreat Level: ${data.securityAnalytics?.threatAnalysis?.currentThreatLevel || 'LOW'}\nActive Threats: ${data.securityAnalytics?.threatAnalysis?.attackPatterns?.length || 0}`;}
 }
 
 export default RateLimitingAnalyticsDashboardComponent;

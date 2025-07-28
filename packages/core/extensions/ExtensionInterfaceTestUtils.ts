@@ -2,7 +2,6 @@
  * Extension Interface Test Utilities - Epic 8.4 Story 8.4.2
  * Testing utilities for extension interface validation and compliance
  */
-
 import { 
   BaseExtension, 
   ExtensionContext, 
@@ -20,16 +19,13 @@ import { extensionDevelopmentKit } from './ExtensionDevelopmentTools';
 export class ExtensionInterfaceTestSuite {
   private static instance: ExtensionInterfaceTestSuite;
   private testResults: Map<string, TestSuiteResult> = new Map();
-
   private constructor() {}
-
   public static getInstance(): ExtensionInterfaceTestSuite {
     if (!ExtensionInterfaceTestSuite.instance) {
       ExtensionInterfaceTestSuite.instance = new ExtensionInterfaceTestSuite();
     }
     return ExtensionInterfaceTestSuite.instance;
   }
-
   /**
    * Run comprehensive interface tests for an extension
    */
@@ -40,11 +36,10 @@ export class ExtensionInterfaceTestSuite {
       version: extension.version,
       timestamp: new Date(),
       overallPassed: true,
-      tests: []
+      tests: [],
     };
-
     // Run all test categories
-    const testCategories = [
+    const testCategories = [;
       { name: 'Base Interface Tests', tests: this.runBaseInterfaceTests(extension) },
       { name: 'Lifecycle Tests', tests: this.runLifecycleTests(extension) },
       { name: 'Configuration Tests', tests: this.runConfigurationTests(extension) },
@@ -53,42 +48,34 @@ export class ExtensionInterfaceTestSuite {
       { name: 'Performance Tests', tests: this.runPerformanceTests(extension) },
       { name: 'Security Tests', tests: this.runSecurityTests(extension) }
     ];
-
     for (const category of testCategories) {
       const categoryResults = await category.tests;
-      testSuite.tests.push({
+      testSuite.tests.push({)
         category: category.name,
-        results: categoryResults
+        results: categoryResults,
       });
-
       // Update overall status
       if (categoryResults.some(test => !test.passed)) {
         testSuite.overallPassed = false;
       }
     }
-
     // Cache results
     this.testResults.set(extension.id, testSuite);
-    
     return testSuite;
   }
-
   /**
    * Run base interface compliance tests
    */
   private async runBaseInterfaceTests(extension: BaseExtension): Promise<TestResult[]> {
     const tests: TestResult[] = [];
-
     // Test 1: Required properties
     tests.push(this.runTest('Required Properties', () => {
       const requiredProps = ['id', 'name', 'version', 'description', 'author', 'dependencies', 'permissions'];
       const missingProps = requiredProps.filter(prop => !extension.hasOwnProperty(prop));
-      
       if (missingProps.length > 0) {
-        throw new Error(`Missing required properties: ${missingProps.join(', ')}`);
+        throw new Error(`Missing required properties: ${missingProps.join(', ')}`);}
       }
     }));
-
     // Test 2: Property types
     tests.push(this.runTest('Property Types', () => {
       if (typeof extension.id !== 'string') throw new Error('id must be string');
@@ -99,17 +86,14 @@ export class ExtensionInterfaceTestSuite {
       if (!Array.isArray(extension.dependencies)) throw new Error('dependencies must be array');
       if (!Array.isArray(extension.permissions)) throw new Error('permissions must be array');
     }));
-
     // Test 3: Required methods
     tests.push(this.runTest('Required Methods', () => {
       const requiredMethods = ['initialize', 'activate', 'deactivate', 'dispose', 'getConfiguration', 'setConfiguration', 'isHealthy', 'getHealthStatus'];
       const missingMethods = requiredMethods.filter(method => typeof extension[method] !== 'function');
-      
       if (missingMethods.length > 0) {
-        throw new Error(`Missing required methods: ${missingMethods.join(', ')}`);
+        throw new Error(`Missing required methods: ${missingMethods.join(', ')}`);}
       }
     }));
-
     // Test 4: Method signatures
     tests.push(this.runTest('Method Signatures', () => {
       const methodSignatures = {
@@ -122,19 +106,16 @@ export class ExtensionInterfaceTestSuite {
         isHealthy: { parameterCount: 0, async: false },
         getHealthStatus: { parameterCount: 0, async: false }
       };
-
       for (const [methodName, signature] of Object.entries(methodSignatures)) {
         const method = extension[methodName];
         if (method.length !== signature.parameterCount) {
-          throw new Error(`${methodName} should have ${signature.parameterCount} parameters`);
+          throw new Error(`${methodName} should have ${signature.parameterCount} parameters`);}
         }
-        
         if (signature.async && !this.isAsyncFunction(method)) {
-          throw new Error(`${methodName} should be async`);
+          throw new Error(`${methodName} should be async`);}
         }
       }
     }));
-
     // Test 5: Version format
     tests.push(this.runTest('Version Format', () => {
       const semverRegex = /^\d+\.\d+\.\d+$/;
@@ -142,157 +123,126 @@ export class ExtensionInterfaceTestSuite {
         throw new Error('Version must follow semantic versioning (x.y.z)');
       }
     }));
-
     return tests;
   }
-
   /**
    * Run lifecycle tests
    */
   private async runLifecycleTests(extension: BaseExtension): Promise<TestResult[]> {
     const tests: TestResult[] = [];
-
     // Test 1: Initialization
     tests.push(await this.runAsyncTest('Initialization', async () => {
       await extension.initialize();
     }));
-
     // Test 2: Activation
     tests.push(await this.runAsyncTest('Activation', async () => {
       await extension.activate();
     }));
-
     // Test 3: Health check after activation
     tests.push(this.runTest('Health Check After Activation', () => {
       const isHealthy = extension.isHealthy();
       if (typeof isHealthy !== 'boolean') {
         throw new Error('isHealthy() must return boolean');
       }
-      
       const healthStatus = extension.getHealthStatus();
       if (!healthStatus || typeof healthStatus !== 'object') {
         throw new Error('getHealthStatus() must return object');
       }
     }));
-
     // Test 4: Deactivation
     tests.push(await this.runAsyncTest('Deactivation', async () => {
       await extension.deactivate();
     }));
-
     // Test 5: Disposal
     tests.push(await this.runAsyncTest('Disposal', async () => {
       await extension.dispose();
     }));
-
     return tests;
   }
-
   /**
    * Run configuration tests
    */
   private async runConfigurationTests(extension: BaseExtension): Promise<TestResult[]> {
     const tests: TestResult[] = [];
-
     // Test 1: Get configuration
     tests.push(this.runTest('Get Configuration', () => {
       const config = extension.getConfiguration();
       // Config can be any type, but should not throw
     }));
-
     // Test 2: Set configuration
     tests.push(this.runTest('Set Configuration', () => {
       const originalConfig = extension.getConfiguration();
       const testConfig = { test: true };
-      
       extension.setConfiguration(testConfig);
       const newConfig = extension.getConfiguration();
-      
       // Restore original config
       extension.setConfiguration(originalConfig);
-      
       if (JSON.stringify(newConfig) !== JSON.stringify(testConfig)) {
         throw new Error('Configuration was not set correctly');
       }
     }));
-
     // Test 3: Configuration persistence
     tests.push(this.runTest('Configuration Persistence', () => {
       const testConfig = { persistent: true, value: 42 };
       extension.setConfiguration(testConfig);
-      
       const retrievedConfig = extension.getConfiguration();
       if (JSON.stringify(retrievedConfig) !== JSON.stringify(testConfig)) {
         throw new Error('Configuration was not persisted correctly');
       }
     }));
-
     return tests;
   }
-
   /**
    * Run health check tests
    */
   private async runHealthCheckTests(extension: BaseExtension): Promise<TestResult[]> {
     const tests: TestResult[] = [];
-
     // Test 1: Health status structure
     tests.push(this.runTest('Health Status Structure', () => {
       const healthStatus = extension.getHealthStatus();
-      
       if (!healthStatus.hasOwnProperty('status')) {
         throw new Error('Health status must have status property');
       }
-      
       if (!healthStatus.hasOwnProperty('lastChecked')) {
         throw new Error('Health status must have lastChecked property');
       }
-      
       if (!(healthStatus.lastChecked instanceof Date)) {
         throw new Error('lastChecked must be Date object');
       }
     }));
-
     // Test 2: Health status values
     tests.push(this.runTest('Health Status Values', () => {
       const healthStatus = extension.getHealthStatus();
       const validStatuses = ['healthy', 'warning', 'error', 'unknown'];
-      
       if (!validStatuses.includes(healthStatus.status)) {
-        throw new Error(`Invalid health status: ${healthStatus.status}`);
+        throw new Error(`Invalid health status: ${healthStatus.status}`);}
       }
     }));
-
     // Test 3: Health check consistency
     tests.push(this.runTest('Health Check Consistency', () => {
       const isHealthy = extension.isHealthy();
       const healthStatus = extension.getHealthStatus();
-      
       if (isHealthy && healthStatus.status !== 'healthy') {
         throw new Error('isHealthy() and getHealthStatus() are inconsistent');
       }
     }));
-
     return tests;
   }
-
   /**
    * Run type-specific tests
    */
   private async runTypeSpecificTests(extension: BaseExtension): Promise<TestResult[]> {
     const tests: TestResult[] = [];
     const extensionType = (extension as any).extensionType;
-
     if (!extensionType) {
-      tests.push({
+      tests.push({)
         name: 'Extension Type',
         passed: false,
         error: 'Extension type not specified',
-        duration: 0
+        duration: 0,
       });
       return tests;
     }
-
     // Test based on extension type
     switch (extensionType) {
     case 'node':
@@ -308,33 +258,28 @@ export class ExtensionInterfaceTestSuite {
       tests.push(...await this.runStorageExtensionTests(extension as StorageExtension));
       break;
     default:
-      tests.push({
+      tests.push({)
         name: 'Unknown Extension Type',
         passed: false,
-        error: `Unknown extension type: ${extensionType}`,
-        duration: 0
+        error: `Unknown extension type: ${extensionType}`,}
+        duration: 0,
       });
     }
-
     return tests;
   }
-
   /**
    * Run node extension tests
    */
   private async runNodeExtensionTests(extension: NodeExtension): Promise<TestResult[]> {
     const tests: TestResult[] = [];
-
     // Test node-specific methods
     tests.push(this.runTest('Node Methods', () => {
       const requiredMethods = ['getNodeDefinitions', 'createNodeInstance', 'validateNodeConfig', 'getNodeSchema', 'supportsAdvancedNodes'];
       const missingMethods = requiredMethods.filter(method => typeof extension[method] !== 'function');
-      
       if (missingMethods.length > 0) {
-        throw new Error(`Missing node methods: ${missingMethods.join(', ')}`);
+        throw new Error(`Missing node methods: ${missingMethods.join(', ')}`);}
       }
     }));
-
     // Test node definitions
     tests.push(this.runTest('Node Definitions', () => {
       const definitions = extension.getNodeDefinitions();
@@ -342,7 +287,6 @@ export class ExtensionInterfaceTestSuite {
         throw new Error('getNodeDefinitions() must return array');
       }
     }));
-
     // Test advanced node support
     tests.push(this.runTest('Advanced Node Support', () => {
       const supportsAdvanced = extension.supportsAdvancedNodes();
@@ -350,26 +294,21 @@ export class ExtensionInterfaceTestSuite {
         throw new Error('supportsAdvancedNodes() must return boolean');
       }
     }));
-
     return tests;
   }
-
   /**
    * Run UI extension tests
    */
   private async runUIExtensionTests(extension: UIExtension): Promise<TestResult[]> {
     const tests: TestResult[] = [];
-
     // Test UI-specific methods
     tests.push(this.runTest('UI Methods', () => {
       const requiredMethods = ['getComponentDefinitions', 'createComponentInstance', 'getThemeContributions', 'getCommandContributions', 'getMenuContributions', 'getKeybindingContributions'];
       const missingMethods = requiredMethods.filter(method => typeof extension[method] !== 'function');
-      
       if (missingMethods.length > 0) {
-        throw new Error(`Missing UI methods: ${missingMethods.join(', ')}`);
+        throw new Error(`Missing UI methods: ${missingMethods.join(', ')}`);}
       }
     }));
-
     // Test component definitions
     tests.push(this.runTest('Component Definitions', () => {
       const definitions = extension.getComponentDefinitions();
@@ -377,26 +316,21 @@ export class ExtensionInterfaceTestSuite {
         throw new Error('getComponentDefinitions() must return array');
       }
     }));
-
     return tests;
   }
-
   /**
    * Run transform extension tests
    */
   private async runTransformExtensionTests(extension: TransformExtension): Promise<TestResult[]> {
     const tests: TestResult[] = [];
-
     // Test transform-specific methods
     tests.push(this.runTest('Transform Methods', () => {
       const requiredMethods = ['getTransformDefinitions', 'createTransformInstance', 'validateTransformConfig', 'getTransformSchema', 'supportsPipeline'];
       const missingMethods = requiredMethods.filter(method => typeof extension[method] !== 'function');
-      
       if (missingMethods.length > 0) {
-        throw new Error(`Missing transform methods: ${missingMethods.join(', ')}`);
+        throw new Error(`Missing transform methods: ${missingMethods.join(', ')}`);}
       }
     }));
-
     // Test transform definitions
     tests.push(this.runTest('Transform Definitions', () => {
       const definitions = extension.getTransformDefinitions();
@@ -404,7 +338,6 @@ export class ExtensionInterfaceTestSuite {
         throw new Error('getTransformDefinitions() must return array');
       }
     }));
-
     // Test pipeline support
     tests.push(this.runTest('Pipeline Support', () => {
       const supportsPipeline = extension.supportsPipeline();
@@ -412,26 +345,21 @@ export class ExtensionInterfaceTestSuite {
         throw new Error('supportsPipeline() must return boolean');
       }
     }));
-
     return tests;
   }
-
   /**
    * Run storage extension tests
    */
   private async runStorageExtensionTests(extension: StorageExtension): Promise<TestResult[]> {
     const tests: TestResult[] = [];
-
     // Test storage-specific methods
     tests.push(this.runTest('Storage Methods', () => {
       const requiredMethods = ['getStorageProviders', 'createStorageProvider', 'validateStorageConfig', 'getStorageSchema', 'supportsMigration'];
       const missingMethods = requiredMethods.filter(method => typeof extension[method] !== 'function');
-      
       if (missingMethods.length > 0) {
-        throw new Error(`Missing storage methods: ${missingMethods.join(', ')}`);
+        throw new Error(`Missing storage methods: ${missingMethods.join(', ')}`);}
       }
     }));
-
     // Test storage providers
     tests.push(this.runTest('Storage Providers', () => {
       const providers = extension.getStorageProviders();
@@ -439,7 +367,6 @@ export class ExtensionInterfaceTestSuite {
         throw new Error('getStorageProviders() must return array');
       }
     }));
-
     // Test migration support
     tests.push(this.runTest('Migration Support', () => {
       const supportsMigration = extension.supportsMigration();
@@ -447,92 +374,74 @@ export class ExtensionInterfaceTestSuite {
         throw new Error('supportsMigration() must return boolean');
       }
     }));
-
     return tests;
   }
-
   /**
    * Run performance tests
    */
   private async runPerformanceTests(extension: BaseExtension): Promise<TestResult[]> {
     const tests: TestResult[] = [];
-
     // Test initialization performance
     tests.push(await this.runAsyncTest('Initialization Performance', async () => {
       const start = performance.now();
       await extension.initialize();
       const duration = performance.now() - start;
-      
       if (duration > 5000) { // 5 seconds
-        throw new Error(`Initialization took too long: ${duration}ms`);
+        throw new Error(`Initialization took too long: ${duration}ms`);}
       }
     }));
-
     // Test activation performance
     tests.push(await this.runAsyncTest('Activation Performance', async () => {
       const start = performance.now();
       await extension.activate();
       const duration = performance.now() - start;
-      
       if (duration > 3000) { // 3 seconds
-        throw new Error(`Activation took too long: ${duration}ms`);
+        throw new Error(`Activation took too long: ${duration}ms`);}
       }
     }));
-
     // Test health check performance
     tests.push(this.runTest('Health Check Performance', () => {
       const start = performance.now();
       extension.isHealthy();
       extension.getHealthStatus();
       const duration = performance.now() - start;
-      
       if (duration > 1000) { // 1 second
-        throw new Error(`Health check took too long: ${duration}ms`);
+        throw new Error(`Health check took too long: ${duration}ms`);}
       }
     }));
-
     return tests;
   }
-
   /**
    * Run security tests
    */
   private async runSecurityTests(extension: BaseExtension): Promise<TestResult[]> {
     const tests: TestResult[] = [];
-
     // Test for dangerous permissions
     tests.push(this.runTest('Dangerous Permissions', () => {
       const dangerousPermissions = ['eval', 'file-system-write', 'network-unrestricted', 'process-spawn'];
       const extensionPermissions = extension.permissions || [];
-      
       const dangerous = extensionPermissions.filter(perm => dangerousPermissions.includes(perm));
       if (dangerous.length > 0) {
-        throw new Error(`Dangerous permissions detected: ${dangerous.join(', ')}`);
+        throw new Error(`Dangerous permissions detected: ${dangerous.join(', ')}`);}
       }
     }));
-
     // Test for code injection vulnerabilities
     tests.push(this.runTest('Code Injection Protection', () => {
       const config = extension.getConfiguration();
       const configString = JSON.stringify(config);
-      
-      const dangerousPatterns = ['eval(', 'Function(', 'setTimeout(', 'setInterval('];
+      const dangerousPatterns = ['eval(', 'Function(', 'setTimeout(', 'setInterval('];)
       const found = dangerousPatterns.find(pattern => configString.includes(pattern));
-      
       if (found) {
-        throw new Error(`Potentially dangerous code pattern found: ${found}`);
+        throw new Error(`Potentially dangerous code pattern found: ${found}`);}
       }
     }));
-
     return tests;
   }
-
   /**
    * Helper method to run synchronous tests
    */
   private runTest(name: string, testFn: () => void): TestResult {
     const start = performance.now();
-    
     try {
       testFn();
       return {
@@ -550,13 +459,11 @@ export class ExtensionInterfaceTestSuite {
       };
     }
   }
-
   /**
    * Helper method to run asynchronous tests
    */
   private async runAsyncTest(name: string, testFn: () => Promise<void>): Promise<TestResult> {
     const start = performance.now();
-    
     try {
       await testFn();
       return {
@@ -574,54 +481,44 @@ export class ExtensionInterfaceTestSuite {
       };
     }
   }
-
   /**
    * Get cached test results
    */
   public getTestResults(extensionId: string): TestSuiteResult | undefined {
     return this.testResults.get(extensionId);
   }
-
   /**
    * Clear test results cache
    */
   public clearTestResults(): void {
     this.testResults.clear();
   }
-
   /**
    * Generate test report
    */
   public generateTestReport(extensionId: string): string {
     const results = this.testResults.get(extensionId);
     if (!results) {
-      return `No test results found for extension: ${extensionId}`;
+      return `No test results found for extension: ${extensionId}`;}
     }
-
     let report = '\n# Extension Interface Test Report\n\n';
-    report += `**Extension**: ${results.extensionName} (${results.extensionId})\n`;
-    report += `**Version**: ${results.version}\n`;
-    report += `**Timestamp**: ${results.timestamp.toISOString()}\n`;
-    report += `**Overall Status**: ${results.overallPassed ? '✅ PASSED' : '❌ FAILED'}\n\n`;
-
+    report += `**Extension**: ${results.extensionName} (${results.extensionId})\n`;}
+    report += `**Version**: ${results.version}\n`;}
+    report += `**Timestamp**: ${results.timestamp.toISOString()}\n`;}
+    report += `**Overall Status**: ${results.overallPassed ? '✅ PASSED' : '❌ FAILED'}\n\n`;}
     for (const category of results.tests) {
-      report += `## ${category.category}\n\n`;
-      
+      report += `## ${category.category}\n\n`;}
       for (const test of category.results) {
         const status = test.passed ? '✅' : '❌';
-        report += `${status} **${test.name}** (${test.duration.toFixed(2)}ms)\n`;
-        
+        report += `${status} **${test.name}** (${test.duration.toFixed(2)}ms)\n`;}
         if (test.error) {
-          report += `   Error: ${test.error}\n`;
+          report += `   Error: ${test.error}\n`;}
         }
-        
         report += '\n';
       }
     }
-
     return report;
   }
-
   private isAsyncFunction(fn: Function): boolean {
     return fn.constructor.name === 'AsyncFunction';
   }
@@ -636,12 +533,10 @@ interface TestSuiteResult {
   overallPassed: boolean;
   tests: TestCategoryResult[];
 }
-
 interface TestCategoryResult {
   category: string;
   results: TestResult[];
 }
-
 interface TestResult {
   name: string;
   passed: boolean;
@@ -655,14 +550,13 @@ export class ExtensionInterfaceMockFactory {
    * Create mock extension for testing
    */
   public static createMockExtension(type: 'node' | 'ui' | 'transform' | 'storage' = 'node'): BaseExtension {
-    const baseExtension = extensionDevelopmentKit.createTestExtension({
-      id: `mock-${type}-extension`,
-      name: `Mock ${type.charAt(0).toUpperCase() + type.slice(1)} Extension`,
+    const baseExtension = extensionDevelopmentKit.createTestExtension({)
+      id: `mock-${type}-extension`,}
+      name: `Mock ${type.charAt(0).toUpperCase() + type.slice(1)} Extension`,}
       version: '1.0.0',
-      description: `A mock ${type} extension for testing`,
+      description: `A mock ${type} extension for testing`,}
       author: 'Test Author'
     });
-
     // Add type-specific methods
     switch (type) {
     case 'node':
@@ -673,7 +567,6 @@ export class ExtensionInterfaceMockFactory {
       (baseExtension as any).getNodeSchema = () => ({ type: 'object' });
       (baseExtension as any).supportsAdvancedNodes = () => false;
       break;
-        
     case 'ui':
       (baseExtension as any).extensionType = 'ui';
       (baseExtension as any).getComponentDefinitions = () => [];
@@ -683,7 +576,6 @@ export class ExtensionInterfaceMockFactory {
       (baseExtension as any).getMenuContributions = () => [];
       (baseExtension as any).getKeybindingContributions = () => [];
       break;
-        
     case 'transform':
       (baseExtension as any).extensionType = 'transform';
       (baseExtension as any).getTransformDefinitions = () => [];
@@ -692,7 +584,6 @@ export class ExtensionInterfaceMockFactory {
       (baseExtension as any).getTransformSchema = () => ({ type: 'object' });
       (baseExtension as any).supportsPipeline = () => false;
       break;
-        
     case 'storage':
       (baseExtension as any).extensionType = 'storage';
       (baseExtension as any).getStorageProviders = () => [];
@@ -702,10 +593,8 @@ export class ExtensionInterfaceMockFactory {
       (baseExtension as any).supportsMigration = () => false;
       break;
     }
-
     return baseExtension;
   }
-
   /**
    * Create invalid extension for testing validation
    */
@@ -713,14 +602,12 @@ export class ExtensionInterfaceMockFactory {
     const extension: any = {
       id: 'invalid-extension',
       name: 'Invalid Extension',
-      version: '1.0.0'
+      version: '1.0.0',
     };
-
     // Remove specified fields
     for (const field of missingFields) {
       delete extension[field];
     }
-
     return extension;
   }
 }

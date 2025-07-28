@@ -1,6 +1,5 @@
 // Epic 9.4.6 - Scheduled Execution Manager Component
 // UI component for managing scheduled workflow executions
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   ClockIcon,
@@ -19,7 +18,6 @@ import {
   ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
-
 interface ScheduledExecution {
   id: string;
   workspace_id: string;
@@ -40,7 +38,6 @@ interface ScheduledExecution {
   created_at: Date;
   updated_at: Date;
 }
-
 interface ExecutionLog {
   id: string;
   schedule_id: string;
@@ -54,16 +51,14 @@ interface ExecutionLog {
   retry_attempt: number;
   next_retry_at?: Date;
 }
-
 interface ScheduledExecutionManagerProps {
   workspaceId: string;
   resourceId?: string;
   onClose?: () => void;
 }
-
 type TabType = 'schedules' | 'executions' | 'logs';
 
-export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps> = ({
+export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps> = ({)
   workspaceId,
   resourceId,
   onClose
@@ -77,13 +72,11 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
   const [selectedSchedule, setSelectedSchedule] = useState<ScheduledExecution | null>(null);
   const [expandedLogs, setExpandedLogs] = useState<Set<string>>(new Set());
-
   // Load schedules and execution logs
   useEffect(() => {
     loadSchedules();
     loadExecutionLogs();
   }, [workspaceId]);
-
   const loadSchedules = async () => {
     setLoading(true);
     try {
@@ -97,7 +90,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           schedule_type: 'cron',
           schedule_expression: '0 9 * * *', // 9 AM daily
           action_type: 'state_transition',
-          action_config: {
+          action_config: {,
             to_state_id: 'review-state',
             comment: 'Automated daily review trigger'
           },
@@ -120,10 +113,10 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           schedule_type: 'cron',
           schedule_expression: '0 0 * * 0', // Sunday midnight
           action_type: 'custom',
-          action_config: {
+          action_config: {,
             action: 'generate_report',
             report_type: 'weekly_summary',
-            email_recipients: ['admin@example.com']
+            email_recipients: ['admin@example.com'],
           },
           enabled: true,
           next_run_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Next Sunday
@@ -144,10 +137,10 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           schedule_type: 'once',
           schedule_expression: '2024-01-25T15:00:00Z',
           action_type: 'custom',
-          action_config: {
+          action_config: {,
             action: 'migrate_data',
             source: 'old_system',
-            target: 'new_system'
+            target: 'new_system',
           },
           enabled: false,
           next_run_at: new Date('2024-01-25T15:00:00Z'),
@@ -168,7 +161,6 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       setLoading(false);
     }
   };
-
   const loadExecutionLogs = async () => {
     try {
       // Mock API call - replace with actual API
@@ -180,13 +172,13 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           status: 'completed',
           started_at: new Date(Date.now() - 24 * 60 * 60 * 1000),
           completed_at: new Date(Date.now() - 24 * 60 * 60 * 1000 + 5000),
-          result_data: {
+          result_data: {,
             state_changed: true,
             new_state: 'review',
-            affected_resources: 1
+            affected_resources: 1,
           },
           execution_time_ms: 5000,
-          retry_attempt: 0
+          retry_attempt: 0,
         },
         {
           id: '2',
@@ -208,7 +200,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           status: 'running',
           started_at: new Date(Date.now() - 2 * 60 * 1000),
           result_data: {},
-          retry_attempt: 0
+          retry_attempt: 0,
         }
       ];
       setExecutionLogs(mockLogs);
@@ -216,7 +208,6 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       setError('Failed to load execution logs');
     }
   };
-
   const handleCreateSchedule = async (scheduleData: Partial<ScheduledExecution>) => {
     try {
       // Mock API call - replace with actual API
@@ -244,7 +235,6 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       setError('Failed to create schedule');
     }
   };
-
   const handleDeleteSchedule = async (scheduleId: string) => {
     try {
       // Mock API call - replace with actual API
@@ -254,11 +244,10 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       setError('Failed to delete schedule');
     }
   };
-
   const handleToggleSchedule = async (scheduleId: string) => {
     try {
       // Mock API call - replace with actual API
-      setSchedules(prev => prev.map(schedule => 
+      setSchedules(prev => prev.map(schedule => )
         schedule.id === scheduleId 
           ? { ...schedule, enabled: !schedule.enabled }
           : schedule
@@ -267,24 +256,22 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       setError('Failed to toggle schedule');
     }
   };
-
   const handleRunNow = async (scheduleId: string) => {
     try {
       // Mock API call - replace with actual API
       const newLog: ExecutionLog = {
         id: Date.now().toString(),
         schedule_id: scheduleId,
-        execution_id: `exec-${Date.now()}`,
+        execution_id: `exec-${Date.now()}`,}
         status: 'running',
         started_at: new Date(),
         result_data: {},
-        retry_attempt: 0
+        retry_attempt: 0,
       };
       setExecutionLogs(prev => [newLog, ...prev]);
-      
       // Simulate completion after 3 seconds
       setTimeout(() => {
-        setExecutionLogs(prev => prev.map(log => 
+        setExecutionLogs(prev => prev.map(log => )
           log.id === newLog.id 
             ? { 
               ...log, 
@@ -300,7 +287,6 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       setError('Failed to run schedule');
     }
   };
-
   const formatCronExpression = (expression: string) => {
     // Basic cron expression formatting
     const parts = expression.split(' ');
@@ -318,20 +304,18 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
     }
     return expression;
   };
-
   const formatScheduleExpression = (schedule: ScheduledExecution) => {
     switch (schedule.schedule_type) {
     case 'cron':
       return formatCronExpression(schedule.schedule_expression);
     case 'interval':
-      return `Every ${schedule.schedule_expression}`;
+      return `Every ${schedule.schedule_expression}`;}
     case 'once':
-      return `Once at ${new Date(schedule.schedule_expression).toLocaleString()}`;
+      return `Once at ${new Date(schedule.schedule_expression).toLocaleString()}`;}
     default:
       return schedule.schedule_expression;
     }
   };
-
   const getStatusColor = (status: string) => {
     switch (status) {
     case 'running': return 'bg-blue-100 text-blue-800';
@@ -341,7 +325,6 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   const ___getStatusIcon = (status: string) => {
     switch (status) {
     case 'running': return <PlayIcon className="h-4 w-4 text-blue-600" />;
@@ -351,9 +334,8 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
     default: return <ClockIcon className="h-4 w-4 text-gray-600" />;
     }
   };
-
   const toggleLogExpansion = (logId: string) => {
-    setExpandedLogs(prev => {
+    setExpandedLogs(prev => {)
       const newSet = new Set(prev);
       if (newSet.has(logId)) {
         newSet.delete(logId);
@@ -363,8 +345,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       return newSet;
     });
   };
-
-  const renderSchedulesTab = () => (
+  const renderSchedulesTab = () => (;)
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Scheduled Executions</h3>
@@ -376,9 +357,8 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           <span>Create Schedule</span>
         </button>
       </div>
-
       <div className="space-y-3">
-        {schedules.map(schedule => (
+        {schedules.map(schedule => ()
           <div key={schedule.id} className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div className="flex-1">
@@ -406,7 +386,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
                   </div>
                 </div>
                 <div className="mt-2 flex items-center space-x-6 text-sm text-gray-500">
-                  <span>Runs: {schedule.run_count}{schedule.max_runs ? `/${schedule.max_runs}` : ''}</span>
+                  <span>Runs: {schedule.run_count}{schedule.max_runs ? `/${schedule.max_runs}` : ''}</span>}
                   <span>Next: {schedule.next_run_at?.toLocaleString() || 'N/A'}</span>
                   <span>Last: {schedule.last_run_at?.toLocaleString() || 'Never'}</span>
                 </div>
@@ -442,8 +422,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           </div>
         ))}
       </div>
-
-      {schedules.length === 0 && (
+      {schedules.length === 0 && ()
         <div className="text-center py-8 text-gray-500">
           <ClockIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
           <p>No scheduled executions found. Create your first schedule to get started.</p>
@@ -451,18 +430,16 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       )}
     </div>
   );
-
-  const renderExecutionLogsTab = () => (
+  const renderExecutionLogsTab = () => (;)
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Execution Logs</h3>
-      
       <div className="space-y-3">
-        {executionLogs.map(log => (
+        {executionLogs.map(log => ()
           <div key={log.id} className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-3">
-                  <span className={`px-2 py-1 text-xs rounded-full font-medium ${getStatusColor(log.status)}`}>
+                  <span className={`px-2 py-1 text-xs rounded-full font-medium ${getStatusColor(log.status)}`}>}
                     {log.status.toUpperCase()}
                   </span>
                   <span className="text-sm text-gray-600">
@@ -474,17 +451,17 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
                 </div>
                 <div className="mt-2 flex items-center space-x-4 text-sm text-gray-600">
                   <span>Started: {log.started_at.toLocaleString()}</span>
-                  {log.completed_at && (
+                  {log.completed_at && ()
                     <span>Completed: {log.completed_at.toLocaleString()}</span>
                   )}
-                  {log.execution_time_ms && (
+                  {log.execution_time_ms && ()
                     <span>Duration: {(log.execution_time_ms / 1000).toFixed(2)}s</span>
                   )}
-                  {log.retry_attempt > 0 && (
+                  {log.retry_attempt > 0 && ()
                     <span>Retry: {log.retry_attempt}</span>
                   )}
                 </div>
-                {log.error_message && (
+                {log.error_message && ()
                   <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-800">
                     {log.error_message}
                   </div>
@@ -495,20 +472,19 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
                   onClick={() => toggleLogExpansion(log.id)}
                   className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-md transition-colors"
                 >
-                  {expandedLogs.has(log.id) ? (
+                  {expandedLogs.has(log.id) ? ()
                     <ChevronDownIcon className="h-4 w-4" />
-                  ) : (
+                  ) : ()
                     <ChevronRightIcon className="h-4 w-4" />
                   )}
                 </button>
               </div>
             </div>
-            
-            {expandedLogs.has(log.id) && (
+            {expandedLogs.has(log.id) && ()
               <div className="mt-4 border-t border-gray-200 pt-4">
                 <h5 className="font-medium text-sm mb-2">Execution Details</h5>
                 <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
-                  {JSON.stringify({
+                  {JSON.stringify({)
                     execution_id: log.execution_id,
                     schedule_id: log.schedule_id,
                     status: log.status,
@@ -517,7 +493,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
                     execution_time_ms: log.execution_time_ms,
                     retry_attempt: log.retry_attempt,
                     result_data: log.result_data,
-                    error_message: log.error_message
+                    error_message: log.error_message,
                   }, null, 2)}
                 </pre>
               </div>
@@ -525,8 +501,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           </div>
         ))}
       </div>
-
-      {executionLogs.length === 0 && (
+      {executionLogs.length === 0 && ()
         <div className="text-center py-8 text-gray-500">
           <ClockIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
           <p>No execution logs found.</p>
@@ -534,21 +509,18 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       )}
     </div>
   );
-
   const renderStatisticsTab = () => {
     const totalExecutions = executionLogs.length;
     const completedExecutions = executionLogs.filter(log => log.status === 'completed').length;
     const ___failedExecutions = executionLogs.filter(log => log.status === 'failed').length;
     const successRate = totalExecutions > 0 ? ((completedExecutions / totalExecutions) * 100).toFixed(1) : '0';
-    const avgExecutionTime = executionLogs
+    const avgExecutionTime = executionLogs;
       .filter(log => log.execution_time_ms)
       .reduce((sum, log) => sum + (log.execution_time_ms || 0), 0) / 
       executionLogs.filter(log => log.execution_time_ms).length || 0;
-
-    return (
+    return ()
       <div className="space-y-6">
         <h3 className="text-lg font-semibold">Execution Statistics</h3>
-        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center">
@@ -561,7 +533,6 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
               </div>
             </div>
           </div>
-
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -573,7 +544,6 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
               </div>
             </div>
           </div>
-
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -585,7 +555,6 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
               </div>
             </div>
           </div>
-
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -600,11 +569,10 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
             </div>
           </div>
         </div>
-
         <div className="bg-white border border-gray-200 rounded-lg p-4">
           <h4 className="font-medium mb-4">Schedule Status</h4>
           <div className="space-y-2">
-            {schedules.map(schedule => (
+            {schedules.map(schedule => ()
               <div key={schedule.id} className="flex items-center justify-between py-2 border-b border-gray-100">
                 <div className="flex items-center space-x-3">
                   <span className="font-medium">{schedule.schedule_name}</span>
@@ -626,14 +594,12 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       </div>
     );
   };
-
-  const tabs = [
+  const tabs = [;
     { id: 'schedules', label: 'Schedules', icon: ClockIcon },
     { id: 'logs', label: 'Execution Logs', icon: EyeIcon },
     { id: 'statistics', label: 'Statistics', icon: CogIcon }
   ];
-
-  return (
+  return ()
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
@@ -647,7 +613,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
               </p>
             </div>
           </div>
-          {onClose && (
+          {onClose && ()
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -657,11 +623,10 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           )}
         </div>
       </div>
-
       {/* Tab navigation */}
       <div className="border-b border-gray-200">
         <nav className="flex space-x-8 px-4">
-          {tabs.map(tab => (
+          {tabs.map(tab => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as TabType)}
@@ -677,10 +642,9 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           ))}
         </nav>
       </div>
-
       {/* Tab content */}
       <div className="p-4">
-        {error && (
+        {error && ()
           <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
             <div className="flex items-center">
               <ExclamationTriangleIcon className="h-5 w-5 text-red-600 mr-2" />
@@ -688,12 +652,11 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
             </div>
           </div>
         )}
-
-        {loading ? (
+        {loading ? ()
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
-        ) : (
+        ) : ()
           <>
             {activeTab === 'schedules' && renderSchedulesTab()}
             {activeTab === 'logs' && renderExecutionLogsTab()}
@@ -701,17 +664,15 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           </>
         )}
       </div>
-
       {/* Create Schedule Modal */}
-      {showCreateSchedule && (
+      {showCreateSchedule && ()
         <CreateScheduleModal
           onClose={() => setShowCreateSchedule(false)}
           onSubmit={handleCreateSchedule}
         />
       )}
-
       {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
+      {showDeleteConfirm && ()
         <DeleteScheduleModal
           onClose={() => setShowDeleteConfirm(null)}
           onConfirm={() => handleDeleteSchedule(showDeleteConfirm)}
@@ -726,7 +687,7 @@ const CreateScheduleModal: React.FC<{
   onClose: () => void;
   onSubmit: (data: Partial<ScheduledExecution>) => void;
 }> = ({ onClose, onSubmit }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({)
     schedule_name: '',
     schedule_type: 'cron' as 'cron' | 'interval' | 'once',
     schedule_expression: '0 9 * * *', // 9 AM daily
@@ -734,15 +695,13 @@ const CreateScheduleModal: React.FC<{
     action_config: {},
     enabled: true,
     max_runs: undefined as number | undefined,
-    max_retries: 3
+    max_retries: 3,
   });
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
   };
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
         <h3 className="text-lg font-semibold mb-4">Create Schedule</h3>
@@ -759,7 +718,6 @@ const CreateScheduleModal: React.FC<{
               required
             />
           </div>
-          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Schedule Type
@@ -774,7 +732,6 @@ const CreateScheduleModal: React.FC<{
               <option value="once">One Time</option>
             </select>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Schedule Expression
@@ -795,7 +752,6 @@ const CreateScheduleModal: React.FC<{
               {formData.schedule_type === 'once' && 'ISO 8601 datetime format'}
             </p>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Action Type
@@ -810,7 +766,6 @@ const CreateScheduleModal: React.FC<{
               <option value="custom">Custom Action</option>
             </select>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Max Runs (optional)
@@ -823,7 +778,6 @@ const CreateScheduleModal: React.FC<{
               min="1"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Max Retries
@@ -838,7 +792,6 @@ const CreateScheduleModal: React.FC<{
               required
             />
           </div>
-
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -851,7 +804,6 @@ const CreateScheduleModal: React.FC<{
               Enable schedule immediately
             </label>
           </div>
-
           <div className="flex justify-end space-x-2">
             <button
               type="button"
@@ -872,12 +824,11 @@ const CreateScheduleModal: React.FC<{
     </div>
   );
 };
-
 const DeleteScheduleModal: React.FC<{
   onClose: () => void;
   onConfirm: () => void;
 }> = ({ onClose, onConfirm }) => {
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Delete Schedule</h3>

@@ -1,16 +1,14 @@
 // Epic 9.4.3 - Lock Queue Visualization Component
 // Visualization for lock queue management
-
 import React from 'react';
 import { Clock, User, X } from 'lucide-react';
 import { LockQueue } from '../types/locking';
-
 interface LockQueueVisualizationProps {
   queue: LockQueue[];
   onRemoveFromQueue: (queueId: string) => void;
 }
 
-export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({
+export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({)
   queue,
   onRemoveFromQueue
 }) => {
@@ -21,14 +19,12 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({
     acc[item.resource_id].push(item);
     return acc;
   }, {} as Record<string, LockQueue[]>);
-
   const formatWaitTime = (minutes: number) => {
-    if (minutes < 60) return `${minutes}m`;
+    if (minutes < 60) return `${minutes}m`;}
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    return `${hours}h ${remainingMinutes}m`;
+    return `${hours}h ${remainingMinutes}m`;}
   };
-
   const getPriorityColor = (priority: number) => {
     switch (priority) {
     case 1: return 'bg-red-100 text-red-800 border-red-200';
@@ -38,7 +34,6 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({
     default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-
   const getPriorityLabel = (priority: number) => {
     switch (priority) {
     case 1: return 'Critical';
@@ -48,9 +43,8 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({
     default: return 'Normal';
     }
   };
-
   if (queue.length === 0) {
-    return (
+    return ()
       <div className="text-center py-8">
         <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No Queue Items</h3>
@@ -60,10 +54,9 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="space-y-6">
-      {Object.entries(groupedQueue).map(([resourceId, items]) => (
+      {Object.entries(groupedQueue).map(([resourceId, items]) => ()
         <div key={resourceId} className="bg-white border border-gray-200 rounded-lg p-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
@@ -75,11 +68,10 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({
               </span>
             </div>
           </div>
-
           <div className="space-y-2">
             {items
               .sort((a, b) => a.priority - b.priority || new Date(a.queued_at).getTime() - new Date(b.queued_at).getTime())
-              .map((item, index) => (
+              .map((item, index) => ()
                 <div
                   key={item.id}
                   className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200"
@@ -103,11 +95,10 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({
                         {item.lock_type.replace('_', ' ')}
                       </span>
                     </div>
-                    <div className={`px-2 py-1 text-xs rounded-full border ${getPriorityColor(item.priority)}`}>
+                    <div className={`px-2 py-1 text-xs rounded-full border ${getPriorityColor(item.priority)}`}>}
                       {getPriorityLabel(item.priority)}
                     </div>
                   </div>
-
                   <div className="flex items-center space-x-4">
                     <div className="text-right">
                       <div className="flex items-center space-x-1 text-sm text-gray-500">
@@ -123,7 +114,6 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({
                         Queued: {new Date(item.queued_at).toLocaleString()}
                       </div>
                     </div>
-
                     <button
                       onClick={() => onRemoveFromQueue(item.id)}
                       className="p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
@@ -135,14 +125,13 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({
                 </div>
               ))}
           </div>
-
           {/* Queue Statistics */}
           <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="grid grid-cols-3 gap-4 text-sm">
               <div className="text-center">
                 <div className="text-gray-500">Total Wait Time</div>
                 <div className="font-medium text-gray-900">
-                  {formatWaitTime(
+                  {formatWaitTime()
                     items.reduce((sum, item) => sum + (item.estimated_wait_time || 0), 0)
                   )}
                 </div>
@@ -150,8 +139,8 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({
               <div className="text-center">
                 <div className="text-gray-500">Avg Wait Time</div>
                 <div className="font-medium text-gray-900">
-                  {formatWaitTime(
-                    Math.round(
+                  {formatWaitTime()
+                    Math.round()
                       items.reduce((sum, item) => sum + (item.estimated_wait_time || 0), 0) / items.length
                     )
                   )}

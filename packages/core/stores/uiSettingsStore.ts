@@ -19,27 +19,22 @@ export interface UISettings {
   debugMode: boolean;           // Shows technical fields when true
   professionalUI: boolean;      // Uses professional color scheme and typography
   showTechnicalDetails: boolean; // Shows IDs, internal configs, etc.
-  
   // Progressive Disclosure Settings
   complexityLevel: 'basic' | 'advanced' | 'expert';  // Global default
   globalDisclosureLevel: 'basic' | 'advanced' | 'debug'; // New: Global disclosure preference
   hideAdvancedFeatures: boolean;
-  
   // Per-Node Preferences
   nodePreferences: Record<string, NodePreferences>; // nodeId -> preferences
   nodeTypePreferences: Record<string, NodeTypePreferences>; // nodeType -> preferences
   preferenceInheritance: 'global' | 'nodeType' | 'individual'; // Preference precedence
-  
   // Visual Settings
   theme: 'light' | 'dark' | 'cinema4d';
   compactMode: boolean;
   showNodeIcons: boolean;
-  
   // Demo Settings
   demoMode: boolean;           // Optimizes for presentation/demo
   hideAllTechnicalUI: boolean; // Forces all technical UI hidden
 }
-
 interface UISettingsState extends UISettings {
   // Actions
   setDebugMode: (enabled: boolean) => void;
@@ -49,7 +44,6 @@ interface UISettingsState extends UISettings {
   setGlobalDisclosureLevel: (level: 'basic' | 'advanced' | 'debug') => void;
   setTheme: (theme: 'light' | 'dark' | 'cinema4d') => void;
   setDemoMode: (enabled: boolean) => void;
-  
   // Per-Node Preference Actions
   setNodeDisclosureLevel: (nodeId: string, level: 'basic' | 'advanced' | 'debug') => void;
   setNodeUseGlobalDefault: (nodeId: string, useGlobal: boolean) => void;
@@ -57,20 +51,17 @@ interface UISettingsState extends UISettings {
   setNodeTypeCollapsedSections: (nodeType: string, sections: string[]) => void;
   setPreferenceInheritance: (inheritance: 'global' | 'nodeType' | 'individual') => void;
   clearNodePreferences: (nodeId?: string) => void; // Clear specific node or all nodes
-  
   // Computed getters
   shouldShowTechnicalFields: () => boolean;
   shouldShowAdvancedFeatures: () => boolean;
   getEffectiveTheme: () => 'light' | 'dark' | 'cinema4d';
   getNodeDisclosureLevel: (nodeId: string, nodeType?: string) => 'basic' | 'advanced' | 'debug';
   getEffectiveNodePreferences: (nodeId: string, nodeType?: string) => NodePreferences;
-  
   // Presets
   applyFilmmakerPreset: () => void;
   applyDeveloperPreset: () => void;
   applyDemoPreset: () => void;
 }
-
 const DEFAULT_SETTINGS: UISettings = {
   debugMode: false,
   professionalUI: true,
@@ -88,11 +79,10 @@ const DEFAULT_SETTINGS: UISettings = {
   hideAllTechnicalUI: false,
 };
 
-export const useUISettingsStore = create<UISettingsState>()(
-  persist(
-    (set, get) => ({
+export const useUISettingsStore = create<UISettingsState>()()
+  persist()
+    (set, get) => ({)
       ...DEFAULT_SETTINGS,
-
       // Actions
       setDebugMode: (enabled: boolean) => set({ debugMode: enabled }),
       setProfessionalUI: (enabled: boolean) => set({ professionalUI: enabled }),
@@ -101,38 +91,35 @@ export const useUISettingsStore = create<UISettingsState>()(
       setGlobalDisclosureLevel: (level: 'basic' | 'advanced' | 'debug') => set({ globalDisclosureLevel: level }),
       setTheme: (theme: 'light' | 'dark' | 'cinema4d') => set({ theme }),
       setDemoMode: (enabled: boolean) => set({ demoMode: enabled }),
-
       // Per-Node Preference Actions
       setNodeDisclosureLevel: (nodeId: string, level: 'basic' | 'advanced' | 'debug') => {
-        set((state) => ({
-          nodePreferences: {
+        set((state) => ({)
+          nodePreferences: {,
             ...state.nodePreferences,
             [nodeId]: {
               disclosureLevel: level,
               useGlobalDefault: false,
-              lastModified: Date.now()
+              lastModified: Date.now(),
             }
           }
         }));
       },
-      
       setNodeUseGlobalDefault: (nodeId: string, useGlobal: boolean) => {
-        set((state) => ({
-          nodePreferences: {
+        set((state) => ({)
+          nodePreferences: {,
             ...state.nodePreferences,
             [nodeId]: {
               ...state.nodePreferences[nodeId],
               disclosureLevel: state.nodePreferences[nodeId]?.disclosureLevel || state.globalDisclosureLevel,
               useGlobalDefault: useGlobal,
-              lastModified: Date.now()
+              lastModified: Date.now(),
             }
           }
         }));
       },
-      
       setNodeTypeDisclosureLevel: (nodeType: string, level: 'basic' | 'advanced' | 'debug') => {
-        set((state) => ({
-          nodeTypePreferences: {
+        set((state) => ({)
+          nodeTypePreferences: {,
             ...state.nodeTypePreferences,
             [nodeType]: {
               ...state.nodeTypePreferences[nodeType],
@@ -142,24 +129,21 @@ export const useUISettingsStore = create<UISettingsState>()(
           }
         }));
       },
-      
       setNodeTypeCollapsedSections: (nodeType: string, sections: string[]) => {
-        set((state) => ({
-          nodeTypePreferences: {
+        set((state) => ({)
+          nodeTypePreferences: {,
             ...state.nodeTypePreferences,
             [nodeType]: {
               ...state.nodeTypePreferences[nodeType],
               disclosureLevel: state.nodeTypePreferences[nodeType]?.disclosureLevel || state.globalDisclosureLevel,
-              collapsedSections: sections
+              collapsedSections: sections,
             }
           }
         }));
       },
-      
       setPreferenceInheritance: (inheritance: 'global' | 'nodeType' | 'individual') => {
         set({ preferenceInheritance: inheritance });
       },
-      
       clearNodePreferences: (nodeId?: string) => {
         if (nodeId) {
           set((state) => {
@@ -170,21 +154,18 @@ export const useUISettingsStore = create<UISettingsState>()(
           set({ nodePreferences: {} });
         }
       },
-
       // Computed getters
       shouldShowTechnicalFields: () => {
         const state = get();
         if (state.hideAllTechnicalUI || state.demoMode) return false;
         return state.debugMode || state.showTechnicalDetails;
       },
-
       shouldShowAdvancedFeatures: () => {
         const state = get();
         if (state.hideAllTechnicalUI || state.demoMode) return false;
         if (state.hideAdvancedFeatures) return false;
         return state.complexityLevel !== 'basic';
       },
-
       getEffectiveTheme: () => {
         const state = get();
         if (state.professionalUI && state.theme === 'dark') {
@@ -192,11 +173,9 @@ export const useUISettingsStore = create<UISettingsState>()(
         }
         return state.theme;
       },
-
       // Get effective disclosure level for a specific node
       getNodeDisclosureLevel: (nodeId: string, nodeType?: string) => {
         const state = get();
-        
         // Individual node preference takes highest priority
         if (state.preferenceInheritance === 'individual' || state.preferenceInheritance === 'global') {
           const nodePrefs = state.nodePreferences[nodeId];
@@ -204,7 +183,6 @@ export const useUISettingsStore = create<UISettingsState>()(
             return nodePrefs.disclosureLevel;
           }
         }
-        
         // Node type preference is second priority
         if (state.preferenceInheritance === 'nodeType' && nodeType) {
           const typePrefs = state.nodeTypePreferences[nodeType];
@@ -212,25 +190,21 @@ export const useUISettingsStore = create<UISettingsState>()(
             return typePrefs.disclosureLevel;
           }
         }
-        
         // Fall back to global default
         return state.globalDisclosureLevel;
       },
-
       // Get effective node preferences with inheritance resolution
       getEffectiveNodePreferences: (nodeId: string, nodeType?: string) => {
         const state = get();
         const disclosureLevel = get().getNodeDisclosureLevel(nodeId, nodeType);
-        
         return {
           disclosureLevel,
           useGlobalDefault: state.nodePreferences[nodeId]?.useGlobalDefault ?? true,
           lastModified: state.nodePreferences[nodeId]?.lastModified ?? Date.now()
         };
       },
-
       // Presets
-      applyFilmmakerPreset: () => set({
+      applyFilmmakerPreset: () => set({)
         professionalUI: true,
         debugMode: false,
         showTechnicalDetails: false,
@@ -246,8 +220,7 @@ export const useUISettingsStore = create<UISettingsState>()(
         demoMode: false,
         hideAllTechnicalUI: true,
       }),
-
-      applyDeveloperPreset: () => set({
+      applyDeveloperPreset: () => set({)
         professionalUI: false,
         debugMode: true,
         showTechnicalDetails: true,
@@ -263,8 +236,7 @@ export const useUISettingsStore = create<UISettingsState>()(
         demoMode: false,
         hideAllTechnicalUI: false,
       }),
-
-      applyDemoPreset: () => set({
+      applyDemoPreset: () => set({)
         professionalUI: true,
         debugMode: false,
         showTechnicalDetails: false,
@@ -293,7 +265,7 @@ export const useUISettingsStore = create<UISettingsState>()(
                                    persistedState.complexityLevel === 'advanced' ? 'advanced' : 'basic',
             nodePreferences: {},
             nodeTypePreferences: {},
-            preferenceInheritance: 'global'
+            preferenceInheritance: 'global',
           };
         }
         return persistedState;
@@ -309,12 +281,10 @@ export const shouldShowField = (fieldName: string, fieldType?: string, store?: R
   if (technicalFields.some(tech => fieldName.toLowerCase().includes(tech.toLowerCase()))) {
     return store?.shouldShowTechnicalFields() ?? false;
   }
-  
   // Hide advanced fields based on complexity level
   if (fieldType === 'advanced') {
     return store?.shouldShowAdvancedFeatures() ?? true;
   }
-  
   // Always show basic fields
   return true;
 };
@@ -323,16 +293,12 @@ export const shouldShowField = (fieldName: string, fieldType?: string, store?: R
 export const classifyField = (fieldName: string, fieldType?: string): 'basic' | 'advanced' | 'technical' => {
   const technicalPatterns = ['debug', 'trace', 'performance', 'meta', 'internal'];
   const advancedPatterns = ['weight', 'seed', 'transform', 'validate', 'optimization'];
-  
   const lowerName = fieldName.toLowerCase();
-  
   if (technicalPatterns.some(pattern => lowerName.includes(pattern))) {
     return 'technical';
   }
-  
   if (advancedPatterns.some(pattern => lowerName.includes(pattern))) {
     return 'advanced';
   }
-  
   return 'basic';
 };

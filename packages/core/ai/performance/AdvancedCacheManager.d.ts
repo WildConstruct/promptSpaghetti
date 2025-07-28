@@ -12,7 +12,7 @@ export interface CacheConfig {
     compressionEnabled: boolean;
     persistToDisk: boolean;
     diskCachePath?: string;
-    metrics: {
+    metrics: {,
         enabled: boolean;
         reportingInterval: number;
     };
@@ -27,7 +27,7 @@ export interface CacheItem<T = any> {
     ttl: number;
     priority: number;
     compressed: boolean;
-    metadata: {
+    metadata: {,
         modelType: string;
         inputHash: string;
         responseTime: number;
@@ -84,7 +84,7 @@ export declare class AdvancedCacheManager {
     private compressionWorker?;
     constructor(config: CacheConfig);
     get<T>(key: string): Promise<T | null>;
-    set<T>(key: string, value: T, options?: {
+    set<T>(key: string, value: T, options?: {)
         ttl?: number;
         priority?: number;
         metadata?: Partial<CacheItem['metadata']>;
@@ -100,12 +100,12 @@ export declare class AdvancedCacheManager {
         optimizationTime: number;
     }>;
     analyzeHitPatterns(): {
-        topKeys: Array<{
+        topKeys: Array<{,
             key: string;
             hitRate: number;
             accessCount: number;
         }>;
-        lowPerformanceKeys: Array<{
+        lowPerformanceKeys: Array<{,
             key: string;
             performance: number;
         }>;

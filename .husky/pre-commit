@@ -1,6 +1,17 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# Check for malformed files first
+echo "🔍 Checking for malformed transpiled files..."
+if node scripts/validate-build.js > /dev/null 2>&1; then
+  echo "✅ Build validation passed"
+else
+  echo "❌ Build validation failed"
+  echo "Run 'node scripts/validate-build.js' for details"
+  echo "You can clean malformed files with: node scripts/clean-malformed-files.js"
+  exit 1
+fi
+
 # Auto-fix TypeScript issues before linting
 if [ -f "scripts/auto-fix-typescript-issues.js" ]; then
   echo "🔧 Auto-fixing TypeScript issues..."

@@ -16,7 +16,7 @@ export interface SmoothInspectorPanelProps {
     minWidth?: number;
     maxWidth?: number;
 }
-export declare const SmoothInspectorPanel: ({ node, schema, onChange, onClose, onGlobalPreviewRequest, initialWidth, minWidth, maxWidth }: {
+export declare const SmoothInspectorPanel: ({ node, schema, onChange, onClose, onGlobalPreviewRequest, initialWidth, minWidth, maxWidth }: {)
     node: any;
     schema: any;
     onChange: any;

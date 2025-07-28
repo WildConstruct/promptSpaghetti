@@ -12,7 +12,7 @@ export interface UserAvatarProps {
 }
 export declare const UserAvatar: React.FC<UserAvatarProps>;
 export interface UserAvatarListProps {
-    users: Array<{
+    users: Array<{,
         userId: string;
         userName?: string;
         userAvatar?: string;

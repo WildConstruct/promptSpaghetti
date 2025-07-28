@@ -94,26 +94,26 @@ export interface CommentModerationStats {
     flaggedComments: number;
     escalatedComments: number;
     avgProcessingTimeMinutes: number;
-    moderatorWorkload: Array<{
+    moderatorWorkload: Array<{,
         moderatorId: string;
         assignedComments: number;
         completedToday: number;
         avgTimeMinutes: number;
         accuracy: number;
     }>;
-    toxicityDistribution: {
+    toxicityDistribution: {,
         low: number;
         medium: number;
         high: number;
         critical: number;
     };
-    qualityDistribution: {
+    qualityDistribution: {,
         excellent: number;
         good: number;
         fair: number;
         poor: number;
     };
-    recentTrends: {
+    recentTrends: {,
         volumeChange24h: number;
         toxicityChange24h: number;
         qualityChange24h: number;
@@ -134,7 +134,7 @@ export interface BulkModerationResult {
     successful: number;
     failed: number;
     results: CommentModerationResult[];
-    errors: Array<{
+    errors: Array<{,
         commentId: string;
         error: string;
     }>;
@@ -175,7 +175,7 @@ export declare class CommentModerationService {
     /**
      * Get comprehensive moderation statistics
      */
-    getModerationStats(timeRange?: {
+    getModerationStats(timeRange?: {)
         start: Date;
         end: Date;
     }): Promise<CommentModerationStats>;
@@ -190,7 +190,7 @@ export declare class CommentModerationService {
     /**
      * Auto-moderate comments based on ML analysis
      */
-    autoModerateComments(resourceId: string, resourceType: CommentableResourceType, options?: {
+    autoModerateComments(resourceId: string, resourceType: CommentableResourceType, options?: {)
         toxicityThreshold?: number;
         qualityThreshold?: number;
         spamThreshold?: number;

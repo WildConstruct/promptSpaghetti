@@ -110,7 +110,6 @@ export type {
 export * from './performance';
 
 // Utility functions and helpers
-
 interface HTTPRequestMapping {
   inputPath: string;
   outputPath: string;
@@ -120,7 +119,7 @@ interface HTTPRequestMapping {
 
 export function registerAndCreateModel(factory: any, registration: any, id: string, endpoint: string, apiKey: string) {
   factory.registerModel(registration);
-  return factory.createModel({
+  return factory.createModel({)
     id,
     type: 'text' as any,
     provider: 'custom' as any,

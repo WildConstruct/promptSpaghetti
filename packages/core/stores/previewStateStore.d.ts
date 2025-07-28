@@ -28,7 +28,7 @@ export interface PreviewResult {
     lockedNote?: string;
     debugInfo?: {
         nodeExecutionOrder: string[];
-        randomChoices: Array<{
+        randomChoices: Array<{,
             nodeId: string;
             choice: unknown;
         }>;
@@ -43,7 +43,7 @@ export interface PreviewCache {
     graphHash: string;
     timestamp: number;
     results: PreviewResult[];
-    performanceStats: {
+    performanceStats: {,
         totalTime: number;
         averageTime: number;
     } | null;
@@ -61,7 +61,7 @@ export interface PreviewStateStore {
     error: string | null;
     results: PreviewResult[];
     aggregateError: string | null;
-    performanceStats: {
+    performanceStats: {,
         totalTime: number;
         averageTime: number;
     } | null;
@@ -84,7 +84,7 @@ export interface PreviewStateStore {
     setError: (error: string | null) => void;
     setResults: (results: PreviewResult[]) => void;
     setAggregateError: (error: string | null) => void;
-    setPerformanceStats: (stats: {
+    setPerformanceStats: (stats: {)
         totalTime: number;
         averageTime: number;
     } | null) => void;
@@ -92,7 +92,7 @@ export interface PreviewStateStore {
     enableRealTimeSync: (enabled: boolean) => void;
     setSyncInterval: (interval: number) => void;
     getCachedResults: (graphHash: string) => PreviewCache | null;
-    setCachedResults: (graphHash: string, results: PreviewResult[], stats: {
+    setCachedResults: (graphHash: string, results: PreviewResult[], stats: {)
         totalTime: number;
         averageTime: number;
     }) => void;
@@ -116,7 +116,7 @@ export interface PreviewStateStore {
     restoreFromSnapshot: (snapshot: Record<string, unknown>) => void;
 }
 export declare }, "subscribe"> & {
-    subscribe: {
+    subscribe: {,
         (listener: (selectedState: PreviewStateStore, previousSelectedState: PreviewStateStore) => void): () => void;
         <U>(selector: (state: PreviewStateStore) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
             equalityFn?: ((a: U, b: U) => boolean) | undefined;

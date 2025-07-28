@@ -13,7 +13,7 @@ export declare class WildConstructVFXExporter implements VFXExporter {
     /**
      * Export graph to VFX-ready format
      */
-    exportGraph(graph: {
+    exportGraph(graph: {)
         nodes: Node[];
         edges: Edge[];
     }, executionResults?: {
@@ -89,7 +89,7 @@ export declare class WildConstructVFXExporter implements VFXExporter {
     /**
      * Reproduce execution from VFX export data
      */
-    reproduceFromExport(exportData: VFXExportFormat, graph?: {
+    reproduceFromExport(exportData: VFXExportFormat, graph?: {)
         nodes: Node[];
         edges: Edge[];
     }): Promise<{

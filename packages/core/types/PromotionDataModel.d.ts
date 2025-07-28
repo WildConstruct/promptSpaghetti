@@ -99,7 +99,7 @@ export declare enum ContentSelectionMethod {
 export interface PromotionContent {
     contentId: string;
     templateId: string;
-    contentInfo: {
+    contentInfo: {,
         title: string;
         description: string;
         creatorId: string;
@@ -108,7 +108,7 @@ export interface PromotionContent {
         thumbnailUrl?: string;
         previewUrl?: string;
     };
-    promotionConfig: {
+    promotionConfig: {,
         priority: number;
         weight?: number;
         customMessage?: string;
@@ -197,7 +197,7 @@ export declare enum ContentPromotionStatus {
     EXCLUDED = "excluded"
 }
 export interface ContentSelectionCriteria {
-    templateCriteria: {
+    templateCriteria: {,
         categories?: string[];
         excludeCategories?: string[];
         tags?: string[];
@@ -211,7 +211,7 @@ export interface ContentSelectionCriteria {
             max: number;
         };
     };
-    performanceCriteria: {
+    performanceCriteria: {,
         minRating?: number;
         minPurchases?: number;
         minRevenue?: number;
@@ -222,7 +222,7 @@ export interface ContentSelectionCriteria {
             max?: number;
         };
     };
-    qualityCriteria: {
+    qualityCriteria: {,
         hasPreview?: boolean;
         hasDocumentation?: boolean;
         isVerified?: boolean;
@@ -232,20 +232,20 @@ export interface ContentSelectionCriteria {
             max?: number;
         };
     };
-    freshnessCriteria: {
+    freshnessCriteria: {,
         preferNew?: boolean;
         newThresholdDays?: number;
         updateRecency?: number;
         trendingWeight?: number;
         seasonalRelevance?: string[];
     };
-    diversityCriteria: {
+    diversityCriteria: {,
         maxPerCreator?: number;
         maxPerCategory?: number;
         ensureVariety?: boolean;
         balancePopularAndNiche?: number;
     };
-    exclusionRules: {
+    exclusionRules: {,
         recentlyPromoted?: number;
         currentlyPromoted?: boolean;
         userPurchaseHistory?: boolean;
@@ -304,13 +304,13 @@ export interface RecurrenceConfig {
 export interface DynamicSchedulingRule {
     ruleId: string;
     name: string;
-    condition: {
+    condition: {,
         metric: string;
         threshold: number;
         operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
         timeWindow: number;
     };
-    action: {
+    action: {,
         type: 'extend' | 'pause' | 'rotate' | 'boost' | 'end';
         parameters: Record<string, any>;
     };
@@ -359,7 +359,7 @@ export interface RotationFrequency {
 export interface RotationTrigger {
     triggerId: string;
     type: 'time' | 'performance' | 'user_activity' | 'external_event' | 'manual';
-    condition: {
+    condition: {,
         metric?: string;
         threshold?: number;
         operator?: 'gt' | 'lt' | 'eq';
@@ -398,7 +398,7 @@ export interface QualityCheck {
     retryCount: number;
 }
 export interface PromotionTargeting extends PlacementTargetingRules {
-    userTargeting: {
+    userTargeting: {,
         segments: string[];
         excludeSegments?: string[];
         lifeCycleStage?: UserLifeCycleStage[];
@@ -406,7 +406,7 @@ export interface PromotionTargeting extends PlacementTargetingRules {
         engagementLevels?: UserEngagementLevel[];
         purchaseHistory?: PurchaseHistoryTargeting;
     };
-    contextualTargeting: {
+    contextualTargeting: {,
         currentPage?: string[];
         referrerSource?: string[];
         searchQuery?: string[];
@@ -414,14 +414,14 @@ export interface PromotionTargeting extends PlacementTargetingRules {
         sessionStage?: SessionStage[];
         deviceCapabilities?: DeviceCapability[];
     };
-    behavioralTargeting: {
+    behavioralTargeting: {,
         browsingPatterns: BrowsingPattern[];
         interactionHistory: InteractionPattern[];
         purchasePatterns: PurchasePattern[];
         contentPreferences: ContentPreference[];
         temporalPatterns: TemporalPattern[];
     };
-    performanceTargeting: {
+    performanceTargeting: {,
         highValueUsers?: boolean;
         likelyConverters?: boolean;
         activeEngagers?: boolean;
@@ -514,7 +514,7 @@ export interface PurchasePattern {
     frequency: 'impulse' | 'regular' | 'seasonal' | 'occasional';
     timing: 'morning' | 'afternoon' | 'evening' | 'weekend' | 'weekday';
     categories: string[];
-    priceRange: {
+    priceRange: {,
         min: number;
         max: number;
     };
@@ -728,7 +728,7 @@ export interface ABTestResult {
     metric: string;
     value: number;
     sampleSize: number;
-    confidenceInterval: {
+    confidenceInterval: {,
         lower: number;
         upper: number;
     };

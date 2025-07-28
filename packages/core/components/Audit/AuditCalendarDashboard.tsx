@@ -4,7 +4,6 @@
  * Interactive calendar interface for managing audit schedules, viewing upcoming activities,
  * and monitoring compliance deadlines in PromptScape.
  */
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
   Card, 
@@ -57,11 +56,9 @@ import {
   CalendarViewConfig,
   auditCalendarSystem
 } from '../audit/AuditCalendarSystem';
-
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
-
 interface CalendarState {
   schedules: AuditSchedule[];
   currentView: 'month' | 'week' | 'day' | 'agenda';
@@ -74,7 +71,6 @@ interface CalendarState {
   overdueSchedules: AuditSchedule[];
   calendarEvents: unknown[];
 }
-
 interface FilterState {
   activityTypes: AuditActivityType[];
   priorities: SchedulePriority[];
@@ -84,12 +80,11 @@ interface FilterState {
   showCompleted: boolean;
   showCancelled: boolean;
 }
-
 /**
  * Main Audit Calendar Dashboard Component
  */
 export const AuditCalendarDashboard: React.FC = () => {
-  const [calendarState, setCalendarState] = useState<CalendarState>({
+  const [calendarState, setCalendarState] = useState<CalendarState>({)
     schedules: [],
     currentView: 'month',
     selectedDate: moment(),
@@ -99,80 +94,69 @@ export const AuditCalendarDashboard: React.FC = () => {
     showEditModal: false,
     upcomingDeadlines: [],
     overdueSchedules: [],
-    calendarEvents: []
+    calendarEvents: [],
   });
-
-  const [filters, setFilters] = useState<FilterState>({
+  const [filters, setFilters] = useState<FilterState>({)
     activityTypes: [],
     priorities: [],
     statuses: [],
     assignees: [],
     dateRange: [undefined, undefined],
     showCompleted: true,
-    showCancelled: false
+    showCancelled: false,
   });
-
   const [activeTab, setActiveTab] = useState('calendar');
   const [drawerVisible, setDrawerVisible] = useState(false);
-
   // Load calendar data
   useEffect(() => {
     loadCalendarData();
   }, [calendarState.selectedDate, filters, calendarState.currentView]);
-
   // Load schedule monitoring data
   useEffect(() => {
     loadMonitoringData();
-    const interval = setInterval(loadMonitoringData, 60000); // Every minute
+    const interval = setInterval(loadMonitoringData, 60000); // Every minute;
     return () => clearInterval(interval);
   }, []);
-
   const loadCalendarData = async () => {
     setCalendarState(prev => ({ ...prev, loading: true }));
-    
     try {
       // Calculate date range for current view
       const { startDate, endDate } = getViewDateRange(calendarState.currentView, calendarState.selectedDate);
-      
       // Generate calendar view configuration
       const viewConfig: CalendarViewConfig = {
         view_type: calendarState.currentView === 'agenda' ? 'month' : calendarState.currentView,
         start_date: startDate.toDate(),
         end_date: endDate.toDate(),
-        filters: {
+        filters: {,
           activity_types: filters.activityTypes.length > 0 ? filters.activityTypes : undefined,
           priorities: filters.priorities.length > 0 ? filters.priorities : undefined,
           statuses: filters.statuses.length > 0 ? filters.statuses : undefined,
           assignees: filters.assignees.length > 0 ? filters.assignees : undefined
         },
-        display_options: {
+        display_options: {,
           show_completed: filters.showCompleted,
           show_cancelled: filters.showCancelled,
-          color_by: 'priority'
+          color_by: 'priority',
         }
       };
-      
       // Generate calendar view
       const calendarData = auditCalendarSystem.generateCalendarView(viewConfig);
-      
-      setCalendarState(prev => ({
+      setCalendarState(prev => ({)
         ...prev,
         calendarEvents: calendarData.events,
-        loading: false
+        loading: false,
       }));
     } catch (error) {
       console.error('Failed to load calendar data:', error);
       setCalendarState(prev => ({ ...prev, loading: false }));
     }
   };
-
   const loadMonitoringData = () => {
     try {
       const _monitoring = auditCalendarSystem.processScheduleMonitoring();
       const upcomingDeadlines = auditCalendarSystem.getUpcomingDeadlines(7);
       const overdueSchedules = auditCalendarSystem.getOverdueSchedules();
-      
-      setCalendarState(prev => ({
+      setCalendarState(prev => ({)
         ...prev,
         upcomingDeadlines,
         overdueSchedules
@@ -181,16 +165,14 @@ export const AuditCalendarDashboard: React.FC = () => {
       console.error('Failed to load monitoring data:', error);
     }
   };
-
   // Calendar event renderer
   const dateCellRender = (value: Moment) => {
-    const dayEvents = calendarState.calendarEvents.filter(event =>
+    const dayEvents = calendarState.calendarEvents.filter(event =>;)
       moment(event.start).isSame(value, 'day')
     );
-
-    return (
+    return ()
       <ul className="events" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-        {dayEvents.slice(0, 3).map(event => (
+        {dayEvents.slice(0, 3).map(event => ()
           <li key={event.id} style={{ marginBottom: 2 }}>
             <Badge 
               status={getEventBadgeStatus(event.priority, event.status)} 
@@ -210,33 +192,29 @@ export const AuditCalendarDashboard: React.FC = () => {
             />
           </li>
         ))}
-        {dayEvents.length > 3 && (
+        {dayEvents.length > 3 && ()
           <li>
-            <Badge status="default" text={`+${dayEvents.length - 3} more`} />
+            <Badge status="default" text={`+${dayEvents.length - 3} more`} />}
           </li>
         )}
       </ul>
     );
   };
-
   const monthCellRender = (_value: Moment) => {
     // Month view cell rendering if needed
     return null;
   };
-
   const handleEventClick = (event: unknown) => {
     // Find the full schedule data
-    const schedule = auditCalendarSystem.querySchedules({
+    const schedule = auditCalendarSystem.querySchedules({)
       page: 1,
-      limit: 1
+      limit: 1,
     }).schedules.find(s => s.id === event.id);
-    
     if (schedule) {
       setCalendarState(prev => ({ ...prev, selectedSchedule: schedule }));
       setDrawerVisible(true);
     }
   };
-
   const handleCreateSchedule = (values: unknown) => {
     try {
       const scheduleData = {
@@ -257,20 +235,16 @@ export const AuditCalendarDashboard: React.FC = () => {
         deliverables: [],
         tags: values.tags ? values.tags.split(',').map((t: string) => t.trim()) : [],
         created_by: 'current_user', // Would be from auth context
-        updated_by: 'current_user'
+        updated_by: 'current_user',
       };
-
       const newSchedule = auditCalendarSystem.createSchedule(scheduleData);
-      
       setCalendarState(prev => ({ ...prev, showCreateModal: false }));
       loadCalendarData();
-      
       console.log('Schedule created:', newSchedule);
     } catch (error) {
       console.error('Failed to create schedule:', error);
     }
   };
-
   const handleUpdateSchedule = (scheduleId: string, updates: unknown) => {
     try {
       auditCalendarSystem.updateSchedule(scheduleId, updates);
@@ -280,10 +254,9 @@ export const AuditCalendarDashboard: React.FC = () => {
       console.error('Failed to update schedule:', error);
     }
   };
-
   const handleCompleteSchedule = (scheduleId: string) => {
     try {
-      auditCalendarSystem.completeSchedule(scheduleId, {
+      auditCalendarSystem.completeSchedule(scheduleId, {)
         actual_end: new Date(),
         completion_notes: 'Completed via dashboard'
       });
@@ -293,9 +266,8 @@ export const AuditCalendarDashboard: React.FC = () => {
       console.error('Failed to complete schedule:', error);
     }
   };
-
   // Render main calendar view
-  const renderCalendarView = () => (
+  const renderCalendarView = () => (;)
     <Card 
       title={
         <Space>
@@ -332,9 +304,9 @@ export const AuditCalendarDashboard: React.FC = () => {
       }
       loading={calendarState.loading}
     >
-      {calendarState.currentView === 'agenda' ? (
+      {calendarState.currentView === 'agenda' ? ()
         <AgendaView events={calendarState.calendarEvents} onEventClick={handleEventClick} />
-      ) : (
+      ) : ()
         <Calendar
           value={calendarState.selectedDate}
           onSelect={(date) => setCalendarState(prev => ({ ...prev, selectedDate: date }))}
@@ -344,15 +316,14 @@ export const AuditCalendarDashboard: React.FC = () => {
       )}
     </Card>
   );
-
   // Render upcoming deadlines
-  const renderUpcomingDeadlines = () => (
+  const renderUpcomingDeadlines = () => (;)
     <Card 
       title={<><BellOutlined /> Upcoming Deadlines</>}
       style={{ marginBottom: 16 }}
     >
       <Timeline>
-        {calendarState.upcomingDeadlines.slice(0, 5).map((schedule, index) => (
+        {calendarState.upcomingDeadlines.slice(0, 5).map((schedule, index) => ()
           <Timeline.Item
             key={schedule.id}
             color={getPriorityColor(schedule.priority)}
@@ -372,7 +343,7 @@ export const AuditCalendarDashboard: React.FC = () => {
             </div>
           </Timeline.Item>
         ))}
-        {calendarState.upcomingDeadlines.length === 0 && (
+        {calendarState.upcomingDeadlines.length === 0 && ()
           <Timeline.Item color="green">
             <span style={{ color: '#666' }}>No upcoming deadlines</span>
           </Timeline.Item>
@@ -380,12 +351,10 @@ export const AuditCalendarDashboard: React.FC = () => {
       </Timeline>
     </Card>
   );
-
   // Render overdue schedules alert
   const renderOverdueAlert = () => {
     if (calendarState.overdueSchedules.length === 0) return null;
-
-    return (
+    return ()
       <Alert
         message={`${calendarState.overdueSchedules.length} Overdue Schedule${calendarState.overdueSchedules.length > 1 ? 's' : ''}`}
         description="The following audit activities are past their scheduled completion dates and require immediate attention."
@@ -400,16 +369,14 @@ export const AuditCalendarDashboard: React.FC = () => {
       />
     );
   };
-
   // Render statistics cards
   const renderStatistics = () => {
     const totalSchedules = calendarState.calendarEvents.length;
-    const completedToday = calendarState.calendarEvents.filter(e => 
+    const completedToday = calendarState.calendarEvents.filter(e => ;)
       e.status === ScheduleStatus.COMPLETED && moment(e.end).isSame(moment(), 'day')
     ).length;
     const inProgress = calendarState.calendarEvents.filter(e => e.status === ScheduleStatus.IN_PROGRESS).length;
-    
-    return (
+    return ()
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col span={6}>
           <Card>
@@ -454,16 +421,15 @@ export const AuditCalendarDashboard: React.FC = () => {
       </Row>
     );
   };
-
   // Render schedule details drawer
-  const renderScheduleDrawer = () => (
+  const renderScheduleDrawer = () => (;)
     <Drawer
       title={calendarState.selectedSchedule?.title || 'Schedule Details'}
       width={600}
       visible={drawerVisible}
       onClose={() => setDrawerVisible(false)}
       extra={
-        calendarState.selectedSchedule && (
+        calendarState.selectedSchedule && ()
           <Space>
             <Button 
               icon={<EditOutlined />}
@@ -471,7 +437,7 @@ export const AuditCalendarDashboard: React.FC = () => {
             >
               Edit
             </Button>
-            {calendarState.selectedSchedule.status === ScheduleStatus.SCHEDULED && (
+            {calendarState.selectedSchedule.status === ScheduleStatus.SCHEDULED && ()
               <Button 
                 type="primary"
                 icon={<CheckCircleOutlined />}
@@ -484,7 +450,7 @@ export const AuditCalendarDashboard: React.FC = () => {
         )
       }
     >
-      {calendarState.selectedSchedule && (
+      {calendarState.selectedSchedule && ()
         <ScheduleDetailsView 
           schedule={calendarState.selectedSchedule}
           onUpdate={(updates) => handleUpdateSchedule(calendarState.selectedSchedule!.id, updates)}
@@ -492,17 +458,14 @@ export const AuditCalendarDashboard: React.FC = () => {
       )}
     </Drawer>
   );
-
-  return (
+  return ()
     <div style={{ padding: '24px' }}>
       <div style={{ marginBottom: 24 }}>
         <h1>🗓️ Audit Calendar & Scheduling</h1>
         <p>Manage audit schedules, compliance deadlines, and activity planning</p>
       </div>
-
       {renderStatistics()}
       {renderOverdueAlert()}
-
       <Tabs activeKey={activeTab} onChange={setActiveTab}>
         <TabPane tab="Calendar View" key="calendar">
           <Row gutter={16}>
@@ -518,7 +481,6 @@ export const AuditCalendarDashboard: React.FC = () => {
             </Col>
           </Row>
         </TabPane>
-
         <TabPane tab="Schedule List" key="list">
           <ScheduleListView 
             schedules={calendarState.calendarEvents}
@@ -527,27 +489,23 @@ export const AuditCalendarDashboard: React.FC = () => {
             loading={calendarState.loading}
           />
         </TabPane>
-
-        <TabPane tab={`Overdue (${calendarState.overdueSchedules.length})`} key="overdue">
+        <TabPane tab={`Overdue (${calendarState.overdueSchedules.length})`} key="overdue">}
           <OverdueSchedulesView 
             schedules={calendarState.overdueSchedules}
             onScheduleClick={handleEventClick}
             onScheduleUpdate={handleUpdateSchedule}
           />
         </TabPane>
-
         <TabPane tab="Analytics" key="analytics">
           <CalendarAnalyticsView />
         </TabPane>
       </Tabs>
-
       {/* Create Schedule Modal */}
       <CreateScheduleModal
         visible={calendarState.showCreateModal}
         onCancel={() => setCalendarState(prev => ({ ...prev, showCreateModal: false }))}
         onSubmit={handleCreateSchedule}
       />
-
       {/* Edit Schedule Modal */}
       <EditScheduleModal
         visible={calendarState.showEditModal}
@@ -555,7 +513,6 @@ export const AuditCalendarDashboard: React.FC = () => {
         onCancel={() => setCalendarState(prev => ({ ...prev, showEditModal: false }))}
         onSubmit={(updates) => calendarState.selectedSchedule && handleUpdateSchedule(calendarState.selectedSchedule.id, updates)}
       />
-
       {renderScheduleDrawer()}
     </div>
   );
@@ -568,27 +525,25 @@ const AgendaView: React.FC<{
 }> = ({ events, onEventClick }) => {
   const groupedEvents = useMemo(() => {
     const groups: Record<string, any[]> = {};
-    events.forEach(event => {
+    events.forEach(event => {)
       const dateKey = moment(event.start).format('YYYY-MM-DD');
       if (!groups[dateKey]) groups[dateKey] = [];
       groups[dateKey].push(event);
     });
-    
     return Object.entries(groups)
       .sort(([a], [b]) => a.localeCompare(b))
       .slice(0, 30); // Show next 30 days
   }, [events]);
-
-  return (
+  return ()
     <div style={{ height: 600, overflowY: 'auto' }}>
-      {groupedEvents.map(([date, dayEvents]) => (
+      {groupedEvents.map(([date, dayEvents]) => ()
         <div key={date} style={{ marginBottom: 24 }}>
           <h4 style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: 8 }}>
             {moment(date).format('dddd, MMMM DD, YYYY')}
           </h4>
           <List
             dataSource={dayEvents}
-            renderItem={(event: unknown) => (
+            renderItem={(event: unknown) => ()
               <List.Item 
                 style={{ cursor: 'pointer' }}
                 onClick={() => onEventClick(event)}
@@ -623,7 +578,7 @@ const AgendaView: React.FC<{
 const ScheduleDetailsView: React.FC<{
   schedule: AuditSchedule;
   onUpdate: (updates: unknown) => void;
-}> = ({ schedule, onUpdate }) => (
+}> = ({ schedule, onUpdate }) => ()
   <div>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
       <div>
@@ -639,7 +594,6 @@ const ScheduleDetailsView: React.FC<{
           <Tag>{schedule.activity_type.replace('_', ' ').toUpperCase()}</Tag>
         </Space>
       </div>
-
       <div>
         <h4>Schedule Information</h4>
         <Row gutter={16}>
@@ -659,16 +613,15 @@ const ScheduleDetailsView: React.FC<{
           </Col>
         </Row>
       </div>
-
-      {schedule.progress && (
+      {schedule.progress && ()
         <div>
           <h4>Progress</h4>
           <Progress percent={schedule.progress.completion_percentage} />
-          {schedule.progress.milestones.length > 0 && (
+          {schedule.progress.milestones.length > 0 && ()
             <div style={{ marginTop: 16 }}>
               <strong>Milestones:</strong>
               <Timeline size="small" style={{ marginTop: 8 }}>
-                {schedule.progress.milestones.map((milestone, index) => (
+                {schedule.progress.milestones.map((milestone, index) => ()
                   <Timeline.Item
                     key={index}
                     color={milestone.completed ? 'green' : 'blue'}
@@ -686,14 +639,13 @@ const ScheduleDetailsView: React.FC<{
           )}
         </div>
       )}
-
-      {schedule.deliverables.length > 0 && (
+      {schedule.deliverables.length > 0 && ()
         <div>
           <h4>Deliverables</h4>
           <List
             size="small"
             dataSource={schedule.deliverables}
-            renderItem={(deliverable) => (
+            renderItem={(deliverable) => ()
               <List.Item>
                 <Space>
                   {deliverable.completed ? 
@@ -702,7 +654,7 @@ const ScheduleDetailsView: React.FC<{
                   }
                   <span>{deliverable.name}</span>
                   <Tag>{deliverable.type}</Tag>
-                  {deliverable.due_date && (
+                  {deliverable.due_date && ()
                     <small>Due: {moment(deliverable.due_date).format('MMM DD')}</small>
                   )}
                 </Space>
@@ -711,12 +663,11 @@ const ScheduleDetailsView: React.FC<{
           />
         </div>
       )}
-
-      {schedule.compliance_frameworks.length > 0 && (
+      {schedule.compliance_frameworks.length > 0 && ()
         <div>
           <h4>Compliance Frameworks</h4>
           <Space wrap>
-            {schedule.compliance_frameworks.map(framework => (
+            {schedule.compliance_frameworks.map(framework => ()
               <Tag key={framework} color="blue">{framework.toUpperCase()}</Tag>
             ))}
           </Space>
@@ -733,12 +684,12 @@ const ScheduleListView: React.FC<{
   onScheduleUpdate: (scheduleId: string, updates: unknown) => void;
   loading: boolean;
 }> = ({ schedules, onScheduleClick, onScheduleUpdate, loading }) => {
-  const columns = [
+  const columns = [;
     {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
-      render: (title: string, record: unknown) => (
+      render: (title: string, record: unknown) => ()
         <Button type="link" onClick={() => onScheduleClick(record)}>
           {title}
         </Button>
@@ -748,7 +699,7 @@ const ScheduleListView: React.FC<{
       title: 'Activity Type',
       dataIndex: 'type',
       key: 'type',
-      render: (type: AuditActivityType) => (
+      render: (type: AuditActivityType) => ()
         <Tag>{type.replace('_', ' ').toUpperCase()}</Tag>
       )
     },
@@ -756,7 +707,7 @@ const ScheduleListView: React.FC<{
       title: 'Priority',
       dataIndex: 'priority',
       key: 'priority',
-      render: (priority: SchedulePriority) => (
+      render: (priority: SchedulePriority) => ()
         <Tag color={getPriorityColor(priority)}>
           {priority.toUpperCase()}
         </Tag>
@@ -766,7 +717,7 @@ const ScheduleListView: React.FC<{
       title: 'Status',
       dataIndex: 'status', 
       key: 'status',
-      render: (status: ScheduleStatus) => (
+      render: (status: ScheduleStatus) => ()
         <Tag color={getStatusColor(status)}>
           {status.replace('_', ' ').toUpperCase()}
         </Tag>
@@ -785,8 +736,7 @@ const ScheduleListView: React.FC<{
       render: (assignee: string) => assignee ? <Tag icon={<TeamOutlined />}>{assignee}</Tag> : 'Unassigned'
     }
   ];
-
-  return (
+  return ()
     <Card title="All Schedules">
       <Table
         columns={columns}
@@ -796,7 +746,7 @@ const ScheduleListView: React.FC<{
         pagination={{
           pageSize: 20,
           showSizeChanger: true,
-          showQuickJumper: true
+          showQuickJumper: true,
         }}
       />
     </Card>
@@ -804,7 +754,7 @@ const ScheduleListView: React.FC<{
 };
 
 // Additional components would be implemented here...
-const CalendarFiltersPanel: React.FC<unknown> = ({ filters, onFiltersChange }) => (
+const CalendarFiltersPanel: React.FC<unknown> = ({ filters, onFiltersChange }) => ()
   <Card title="Filters" size="small">
     <Space direction="vertical" style={{ width: '100%' }}>
       <div>
@@ -816,7 +766,7 @@ const CalendarFiltersPanel: React.FC<unknown> = ({ filters, onFiltersChange }) =
           value={filters.activityTypes}
           onChange={(activityTypes) => onFiltersChange({ ...filters, activityTypes })}
         >
-          {Object.values(AuditActivityType).map(type => (
+          {Object.values(AuditActivityType).map(type => ()
             <Select.Option key={type} value={type}>
               {type.replace('_', ' ').toUpperCase()}
             </Select.Option>
@@ -826,17 +776,15 @@ const CalendarFiltersPanel: React.FC<unknown> = ({ filters, onFiltersChange }) =
     </Space>
   </Card>
 );
-
 const CreateScheduleModal: React.FC<unknown> = ({ visible, onCancel, onSubmit }) => {
   const [form] = Form.useForm();
-  
-  return (
+  return ()
     <Modal
       title="Create Audit Schedule"
       visible={visible}
       onCancel={onCancel}
       onOk={() => {
-        form.validateFields().then(values => {
+        form.validateFields().then(values => {)
           onSubmit(values);
           form.resetFields();
         });
@@ -853,7 +801,7 @@ const CreateScheduleModal: React.FC<unknown> = ({ visible, onCancel, onSubmit })
           <Col span={12}>
             <Form.Item name="activity_type" label="Activity Type" rules={[{ required: true }]}>
               <Select>
-                {Object.values(AuditActivityType).map(type => (
+                {Object.values(AuditActivityType).map(type => ()
                   <Select.Option key={type} value={type}>
                     {type.replace('_', ' ').toUpperCase()}
                   </Select.Option>
@@ -869,7 +817,7 @@ const CreateScheduleModal: React.FC<unknown> = ({ visible, onCancel, onSubmit })
           <Col span={12}>
             <Form.Item name="priority" label="Priority" rules={[{ required: true }]}>
               <Select>
-                {Object.values(SchedulePriority).map(priority => (
+                {Object.values(SchedulePriority).map(priority => ()
                   <Select.Option key={priority} value={priority}>
                     {priority.toUpperCase()}
                   </Select.Option>
@@ -894,24 +842,23 @@ const getViewDateRange = (view: string, selectedDate: Moment) => {
   case 'week':
     return {
       startDate: selectedDate.clone().startOf('week'),
-      endDate: selectedDate.clone().endOf('week')
+      endDate: selectedDate.clone().endOf('week'),
     };
   case 'day':
     return {
       startDate: selectedDate.clone().startOf('day'),
-      endDate: selectedDate.clone().endOf('day')
+      endDate: selectedDate.clone().endOf('day'),
     };
   default: // month
     return {
       startDate: selectedDate.clone().startOf('month'),
-      endDate: selectedDate.clone().endOf('month')
+      endDate: selectedDate.clone().endOf('month'),
     };
   }
 };
-
-const getEventBadgeStatus = (
+const getEventBadgeStatus = (;)
   priority: SchedulePriority,
-  status: ScheduleStatus
+  status: ScheduleStatus,
 ): 'error' | 'success' | 'processing' | 'warning' | 'default' => {
   if (status === ScheduleStatus.OVERDUE) return 'error';
   if (status === ScheduleStatus.COMPLETED) return 'success';
@@ -920,7 +867,6 @@ const getEventBadgeStatus = (
   if (priority === SchedulePriority.HIGH) return 'warning';
   return 'default';
 };
-
 const getPriorityColor = (priority: SchedulePriority): string => {
   const colors = {
     [SchedulePriority.LOW]: 'green',
@@ -931,7 +877,6 @@ const getPriorityColor = (priority: SchedulePriority): string => {
   };
   return colors[priority] || 'blue';
 };
-
 const getStatusColor = (status: ScheduleStatus): string => {
   const colors = {
     [ScheduleStatus.SCHEDULED]: 'blue',
@@ -953,10 +898,9 @@ const EditScheduleModal: React.FC<{
   onSubmit: (updates: unknown) => void;
 }> = ({ visible, schedule, onCancel, onSubmit }) => {
   const [form] = Form.useForm();
-
   useEffect(() => {
     if (schedule && visible) {
-      form.setFieldsValue({
+      form.setFieldsValue({)
         title: schedule.title,
         description: schedule.description,
         activity_type: schedule.activity_type,
@@ -971,22 +915,20 @@ const EditScheduleModal: React.FC<{
       });
     }
   }, [schedule, visible, form]);
-
   const handleSubmit = () => {
-    form.validateFields().then(values => {
+    form.validateFields().then(values => {)
       const updates = {
         ...values,
         scheduled_start: values.date_range[0].toDate(),
         scheduled_end: values.date_range[1].toDate(),
         tags: values.tags ? values.tags.split(',').map((t: string) => t.trim()) : [],
-        updated_by: 'current_user'
+        updated_by: 'current_user',
       };
       onSubmit(updates);
       form.resetFields();
     });
   };
-
-  return (
+  return ()
     <Modal
       title={`Edit Schedule: ${schedule?.title || ''}`}
       visible={visible}
@@ -1005,7 +947,7 @@ const EditScheduleModal: React.FC<{
           <Col span={12}>
             <Form.Item name="activity_type" label="Activity Type" rules={[{ required: true }]}>
               <Select>
-                {Object.values(AuditActivityType).map(type => (
+                {Object.values(AuditActivityType).map(type => ()
                   <Select.Option key={type} value={type}>
                     {type.replace('_', ' ').toUpperCase()}
                   </Select.Option>
@@ -1014,16 +956,14 @@ const EditScheduleModal: React.FC<{
             </Form.Item>
           </Col>
         </Row>
-        
         <Form.Item name="description" label="Description">
           <TextArea rows={3} />
         </Form.Item>
-        
         <Row gutter={16}>
           <Col span={8}>
             <Form.Item name="priority" label="Priority" rules={[{ required: true }]}>
               <Select>
-                {Object.values(SchedulePriority).map(priority => (
+                {Object.values(SchedulePriority).map(priority => ()
                   <Select.Option key={priority} value={priority}>
                     {priority.toUpperCase()}
                   </Select.Option>
@@ -1034,7 +974,7 @@ const EditScheduleModal: React.FC<{
           <Col span={8}>
             <Form.Item name="status" label="Status">
               <Select>
-                {Object.values(ScheduleStatus).map(status => (
+                {Object.values(ScheduleStatus).map(status => ()
                   <Select.Option key={status} value={status}>
                     {status.replace('_', ' ').toUpperCase()}
                   </Select.Option>
@@ -1048,11 +988,9 @@ const EditScheduleModal: React.FC<{
             </Form.Item>
           </Col>
         </Row>
-        
         <Form.Item name="date_range" label="Schedule" rules={[{ required: true }]}>
           <RangePicker showTime style={{ width: '100%' }} />
         </Form.Item>
-        
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item name="assignee_id" label="Assignee">
@@ -1074,7 +1012,6 @@ const EditScheduleModal: React.FC<{
             </Form.Item>
           </Col>
         </Row>
-        
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item name="mandatory" valuePropName="checked">
@@ -1098,12 +1035,12 @@ const OverdueSchedulesView: React.FC<{
   onScheduleClick: (schedule: AuditSchedule) => void;
   onScheduleUpdate: (scheduleId: string, updates: unknown) => void;
 }> = ({ schedules, onScheduleClick, onScheduleUpdate }) => {
-  const columns = [
+  const columns = [;
     {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
-      render: (title: string, record: AuditSchedule) => (
+      render: (title: string, record: AuditSchedule) => ()
         <Button type="link" onClick={() => onScheduleClick(record)} style={{ padding: 0 }}>
           <Space>
             <WarningOutlined style={{ color: '#f5222d' }} />
@@ -1116,7 +1053,7 @@ const OverdueSchedulesView: React.FC<{
       title: 'Activity Type',
       dataIndex: 'activity_type',
       key: 'activity_type',
-      render: (type: AuditActivityType) => (
+      render: (type: AuditActivityType) => ()
         <Tag>{type.replace('_', ' ').toUpperCase()}</Tag>
       )
     },
@@ -1124,7 +1061,7 @@ const OverdueSchedulesView: React.FC<{
       title: 'Priority',
       dataIndex: 'priority',
       key: 'priority',
-      render: (priority: SchedulePriority) => (
+      render: (priority: SchedulePriority) => ()
         <Tag color={getPriorityColor(priority)}>
           {priority.toUpperCase()}
         </Tag>
@@ -1134,7 +1071,7 @@ const OverdueSchedulesView: React.FC<{
       title: 'Original Due Date',
       dataIndex: 'scheduled_end',
       key: 'scheduled_end',
-      render: (date: Date) => (
+      render: (date: Date) => ()
         <Space>
           <ClockCircleOutlined />
           {moment(date).format('MMM DD, YYYY HH:mm')}
@@ -1148,7 +1085,7 @@ const OverdueSchedulesView: React.FC<{
       key: 'days_overdue',
       render: (_, record: AuditSchedule) => {
         const daysOverdue = moment().diff(moment(record.scheduled_end), 'days');
-        return (
+        return ()
           <Tag color="red">
             <ExclamationTriangleOutlined /> {daysOverdue} days
           </Tag>
@@ -1164,14 +1101,14 @@ const OverdueSchedulesView: React.FC<{
       title: 'Assignee',
       dataIndex: 'assignee_id',
       key: 'assignee_id',
-      render: (assignee: string) => (
+      render: (assignee: string) => ()
         assignee ? <Tag icon={<TeamOutlined />}>{assignee}</Tag> : 'Unassigned'
       )
     },
     {
       title: 'Actions',
       key: 'actions',
-      render: (_, record: AuditSchedule) => (
+      render: (_, record: AuditSchedule) => ()
         <Space>
           <Button
             size="small"
@@ -1192,8 +1129,7 @@ const OverdueSchedulesView: React.FC<{
       )
     }
   ];
-
-  return (
+  return ()
     <div>
       <Card 
         title={
@@ -1208,7 +1144,7 @@ const OverdueSchedulesView: React.FC<{
             danger
             onClick={() => {
               // Bulk action to mark all as high priority
-              schedules.forEach(schedule => {
+              schedules.forEach(schedule => {)
                 onScheduleUpdate(schedule.id, { priority: SchedulePriority.HIGH });
               });
             }}
@@ -1217,13 +1153,13 @@ const OverdueSchedulesView: React.FC<{
           </Button>
         }
       >
-        {schedules.length === 0 ? (
+        {schedules.length === 0 ? ()
           <div style={{ textAlign: 'center', padding: '40px' }}>
             <CheckCircleOutlined style={{ fontSize: '48px', color: '#52c41a', marginBottom: '16px' }} />
             <h3>No Overdue Schedules</h3>
             <p>All audit activities are on track!</p>
           </div>
-        ) : (
+        ) : ()
           <>
             <Alert
               message="Critical Action Required"
@@ -1240,7 +1176,7 @@ const OverdueSchedulesView: React.FC<{
                 pageSize: 10,
                 showSizeChanger: true,
                 showQuickJumper: true,
-                showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} overdue schedules`
+                showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} overdue schedules`}
               }}
               defaultSortOrder="descend"
               defaultSortColumnKey="days_overdue"
@@ -1256,21 +1192,19 @@ const OverdueSchedulesView: React.FC<{
 const CalendarAnalyticsView: React.FC = () => {
   const [analyticsData, setAnalyticsData] = useState<unknown>(null);
   const [loading, setLoading] = useState(true);
-  const [dateRange, setDateRange] = useState<[Moment, Moment]>([
+  const [dateRange, setDateRange] = useState<[Moment, Moment]>([)
     moment().subtract(30, 'days'),
     moment()
   ]);
-
   useEffect(() => {
     loadAnalyticsData();
   }, [dateRange, loadAnalyticsData]);
-
   const loadAnalyticsData = useCallback(() => {
     setLoading(true);
     try {
-      const analytics = auditCalendarSystem.generateScheduleAnalytics({
+      const analytics = auditCalendarSystem.generateScheduleAnalytics({)
         start: dateRange[0].toDate(),
-        end: dateRange[1].toDate()
+        end: dateRange[1].toDate(),
       });
       setAnalyticsData(analytics);
     } catch (error) {
@@ -1279,9 +1213,8 @@ const CalendarAnalyticsView: React.FC = () => {
       setLoading(false);
     }
   }, [dateRange]);
-
   if (loading) {
-    return (
+    return ()
       <Card>
         <div style={{ textAlign: 'center', padding: '40px' }}>
           <SyncOutlined spin style={{ fontSize: '24px' }} />
@@ -1290,8 +1223,7 @@ const CalendarAnalyticsView: React.FC = () => {
       </Card>
     );
   }
-
-  return (
+  return ()
     <div>
       <Card 
         title="📊 Audit Calendar Analytics"
@@ -1348,13 +1280,12 @@ const CalendarAnalyticsView: React.FC = () => {
           </Col>
         </Row>
       </Card>
-
       <Row gutter={16}>
         <Col span={12}>
           <Card title="Activity Type Distribution" style={{ marginBottom: 16 }}>
             <div style={{ height: 300 }}>
-              {analyticsData?.activity_breakdown ? (
-                Object.entries(analyticsData.activity_breakdown).map(([type, count]) => (
+              {analyticsData?.activity_breakdown ? ()
+                Object.entries(analyticsData.activity_breakdown).map(([type, count]) => ()
                   <div key={type} style={{ marginBottom: 8 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
                       <span>{type.replace('_', ' ').toUpperCase()}</span>
@@ -1367,7 +1298,7 @@ const CalendarAnalyticsView: React.FC = () => {
                     />
                   </div>
                 ))
-              ) : (
+              ) : ()
                 <div style={{ textAlign: 'center', padding: '40px' }}>
                   <FileTextOutlined style={{ fontSize: '48px', color: '#d9d9d9' }} />
                   <p>No data available</p>
@@ -1376,12 +1307,11 @@ const CalendarAnalyticsView: React.FC = () => {
             </div>
           </Card>
         </Col>
-
         <Col span={12}>
           <Card title="Priority Distribution" style={{ marginBottom: 16 }}>
             <div style={{ height: 300 }}>
-              {analyticsData?.priority_distribution ? (
-                Object.entries(analyticsData.priority_distribution).map(([priority, count]) => (
+              {analyticsData?.priority_distribution ? ()
+                Object.entries(analyticsData.priority_distribution).map(([priority, count]) => ()
                   <div key={priority} style={{ marginBottom: 12 }}>
                     <Tag color={getPriorityColor(priority as SchedulePriority)} style={{ marginBottom: 8 }}>
                       {priority.toUpperCase()}: {count as number}
@@ -1393,7 +1323,7 @@ const CalendarAnalyticsView: React.FC = () => {
                     />
                   </div>
                 ))
-              ) : (
+              ) : ()
                 <div style={{ textAlign: 'center', padding: '40px' }}>
                   <FileTextOutlined style={{ fontSize: '48px', color: '#d9d9d9' }} />
                   <p>No data available</p>
@@ -1403,12 +1333,11 @@ const CalendarAnalyticsView: React.FC = () => {
           </Card>
         </Col>
       </Row>
-
       <Card title="Timeline Analysis" style={{ marginBottom: 16 }}>
-        {analyticsData?.timeline_analysis && analyticsData.timeline_analysis.length > 0 ? (
+        {analyticsData?.timeline_analysis && analyticsData.timeline_analysis.length > 0 ? ()
           <div style={{ height: 300, overflowX: 'auto' }}>
             <Timeline>
-              {analyticsData.timeline_analysis.slice(0, 10).map((item: unknown) => (
+              {analyticsData.timeline_analysis.slice(0, 10).map((item: unknown) => ()
                 <Timeline.Item
                   key={item.date}
                   color={item.overdue > 0 ? 'red' : item.completed > item.scheduled / 2 ? 'green' : 'blue'}
@@ -1426,20 +1355,19 @@ const CalendarAnalyticsView: React.FC = () => {
               ))}
             </Timeline>
           </div>
-        ) : (
+        ) : ()
           <div style={{ textAlign: 'center', padding: '40px' }}>
             <FileTextOutlined style={{ fontSize: '48px', color: '#d9d9d9' }} />
             <p>No timeline data available for the selected period</p>
           </div>
         )}
       </Card>
-
       <Row gutter={16}>
         <Col span={12}>
           <Card title="Resource Utilization" style={{ marginBottom: 16 }}>
             <h4>By Assignee</h4>
-            {analyticsData?.resource_utilization?.by_assignee ? (
-              Object.entries(analyticsData.resource_utilization.by_assignee).map(([assignee, count]) => (
+            {analyticsData?.resource_utilization?.by_assignee ? ()
+              Object.entries(analyticsData.resource_utilization.by_assignee).map(([assignee, count]) => ()
                 <div key={assignee} style={{ marginBottom: 8 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
                     <Space>
@@ -1455,12 +1383,11 @@ const CalendarAnalyticsView: React.FC = () => {
                   />
                 </div>
               ))
-            ) : (
+            ) : ()
               <p>No assignee data available</p>
             )}
           </Card>
         </Col>
-
         <Col span={12}>
           <Card title="Performance Insights" style={{ marginBottom: 16 }}>
             <Space direction="vertical" style={{ width: '100%' }}>
@@ -1478,17 +1405,16 @@ const CalendarAnalyticsView: React.FC = () => {
                   </li>
                 </ul>
               </div>
-              
               <div>
                 <h4>🎯 Recommendations</h4>
                 <ul style={{ paddingLeft: 20 }}>
-                  {analyticsData?.summary.completion_rate < 80 && (
+                  {analyticsData?.summary.completion_rate < 80 && ()
                     <li>Consider reviewing resource allocation and scheduling</li>
                   )}
-                  {analyticsData?.summary.overdue_schedules > 0 && (
+                  {analyticsData?.summary.overdue_schedules > 0 && ()
                     <li>Address {analyticsData.summary.overdue_schedules} overdue schedule(s) immediately</li>
                   )}
-                  {analyticsData?.summary.average_duration > 10 && (
+                  {analyticsData?.summary.average_duration > 10 && ()
                     <li>Optimize audit processes to reduce average duration</li>
                   )}
                   <li>Schedule regular reviews to maintain compliance momentum</li>

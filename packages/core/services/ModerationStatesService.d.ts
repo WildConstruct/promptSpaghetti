@@ -92,7 +92,7 @@ export interface AutoModerationAction {
     triggers: AutoActionTrigger[];
     conditions: AutoActionCondition[];
     actions: ModerationAction[];
-    confidence: {
+    confidence: {,
         min: number;
         max: number;
     };
@@ -110,17 +110,17 @@ export interface ModerationAction {
 }
 export interface AIAnalysisResult {
     confidence: number;
-    categories: Array<{
+    categories: Array<{,
         category: string;
         confidence: number;
         evidence: string[];
     }>;
-    recommendations: Array<{
+    recommendations: Array<{,
         action: string;
         confidence: number;
         reasoning: string;
     }>;
-    riskAssessment: {
+    riskAssessment: {,
         level: 'low' | 'medium' | 'high' | 'critical';
         factors: string[];
         score: number;
@@ -163,7 +163,7 @@ export interface UserInfo {
     role: string;
     reputation: number;
     joinDate: Date;
-    moderationHistory: {
+    moderationHistory: {,
         totalReports: number;
         confirmedViolations: number;
         falseReports: number;
@@ -174,13 +174,13 @@ export interface ContentSnapshot {
     originalContent: string;
     currentContent: string;
     metadata: Record<string, any>;
-    attachments: Array<{
+    attachments: Array<{,
         type: string;
         url: string;
         size: number;
         checksum: string;
     }>;
-    contextData: {
+    contextData: {,
         parentContent?: string;
         threadContext?: string[];
         locationData?: Record<string, any>;
@@ -358,27 +358,27 @@ export interface ModerationStats {
     byCategory: Record<ModerationCategory, number>;
     bySeverity: Record<ModerationSeverity, number>;
     byPriority: Record<ModerationPriority, number>;
-    processingMetrics: {
+    processingMetrics: {,
         averageResolutionTime: number;
         averageReviewTime: number;
         escalationRate: number;
         automationRate: number;
         accuracyRate: number;
     };
-    performance: {
+    performance: {,
         itemsProcessedToday: number;
         itemsResolvedToday: number;
         backlogSize: number;
         overdueTasks: number;
         slaCompliance: number;
     };
-    compliance: {
+    compliance: {,
         checksPassed: number;
         checksFailed: number;
         requiresReview: number;
         legalReviewsPending: number;
     };
-    automation: {
+    automation: {,
         autoActionsTriggered: number;
         autoResolutions: number;
         falsePositives: number;
@@ -428,7 +428,7 @@ export declare class ModerationStatesService {
      */
     createState(stateData: Omit<ModerationState, 'id' | 'createdAt' | 'updatedAt'>, createdBy: string): Promise<ModerationState>;
     updateState(stateId: string, updates: Partial<ModerationState>, updatedBy: string): Promise<ModerationState | null>;
-    getStates(filter?: {
+    getStates(filter?: {)
         type?: ModerationStateType;
         active?: boolean;
     }): ModerationState[];

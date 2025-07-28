@@ -67,7 +67,7 @@ export declare function createOperationValidationMiddleware(): (req: Classificat
 /**
  * Route-specific enforcement configuration
  */
-export declare function enforceClassification(classification: DataClassificationLevel, options?: {
+export declare function enforceClassification(classification: DataClassificationLevel, options?: {)
     allowedOperations?: OperationContext['operation'][];
     requiredControls?: string[];
     customValidation?: (req: Request) => boolean;

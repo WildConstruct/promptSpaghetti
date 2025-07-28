@@ -4,7 +4,6 @@
  * Comprehensive UI for managing policies across all domains in Wild Construct.
  * Provides policy creation, editing, evaluation, and compliance monitoring.
  */
-
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -55,7 +54,7 @@ export interface PolicyManagementDashboardProps {
   className?: string;
 }
 
-export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps> = ({
+export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps> = ({)
   userId,
   userRole,
   className = ''
@@ -79,11 +78,10 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     types,
     statuses,
     frameworks
-  } = usePolicyManagement({
+  } = usePolicyManagement({)
     autoEvaluate: true,
-    enableRealTimeUpdates: true
+    enableRealTimeUpdates: true,
   });
-
   const [activeTab, setActiveTab] = useState('overview');
   const [__selectedPolicy, setSelectedPolicy] = useState<UnifiedPolicy | null>(null);
   const [__isCreatingPolicy, setIsCreatingPolicy] = useState(false);
@@ -91,23 +89,19 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
   const [searchTerm, setSearchTerm] = useState('');
   const [domainFilter, setDomainFilter] = useState<PolicyDomain | 'ALL'>('ALL');
   const [statusFilter, setStatusFilter] = useState<PolicyStatus | 'ALL'>('ALL');
-
   const statistics = useMemo(() => getPolicyStatistics(), [getPolicyStatistics]);
-
   const filteredPolicies = useMemo(() => {
-    return getFilteredPolicies({
+    return getFilteredPolicies({)
       domain: domainFilter !== 'ALL' ? domainFilter : undefined,
       status: statusFilter !== 'ALL' ? statusFilter : undefined,
-      search: searchTerm
+      search: searchTerm,
     });
   }, [getFilteredPolicies, domainFilter, statusFilter, searchTerm]);
-
   const recentEvaluations = useMemo(() => getRecentEvaluations(10), [getRecentEvaluations]);
-  const recentViolations = useMemo(() => 
+  const recentViolations = useMemo(() => ;
     getPolicyViolations({ resolved: false, limit: 10 }), 
     [getPolicyViolations]
   );
-
   const getDomainIcon = (domain: PolicyDomain) => {
     const iconMap = {
       [PolicyDomain.SECURITY]: Shield,
@@ -121,7 +115,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     };
     return iconMap[domain] || Settings;
   };
-
   const getStatusColor = (status: PolicyStatus) => {
     switch (status) {
       case PolicyStatus.ACTIVE: return 'bg-green-100 text-green-800';
@@ -132,7 +125,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'CRITICAL': return 'text-red-600';
@@ -142,18 +134,15 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       default: return 'text-gray-600';
     }
   };
-
       } catch (err) {
       console.error('Failed to create policy:', err);
     }
   };
-
         setSelectedPolicy(null);
     } catch (err) {
       console.error('Failed to update policy:', err);
     }
   };
-
   const handleDeletePolicy = async (policyId: string) => {
     if (confirm('Are you sure you want to delete this policy?')) {
       try {
@@ -163,8 +152,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       }
     }
   };
-
-  const renderOverview = () => (
+  const renderOverview = () => (;)
     <div className="policy-overview space-y-6">
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -179,7 +167,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -191,7 +178,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -203,7 +189,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -218,7 +203,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           </CardContent>
         </Card>
       </div>
-
       {/* Policy by Domain */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
@@ -232,7 +216,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             <div className="space-y-3">
               {Object.entries(statistics.byDomain).map(([domain, count]) => {
                 const Icon = getDomainIcon(domain as PolicyDomain);
-                return (
+                return ()
                   <div key={domain} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Icon className="w-4 h-4 text-gray-600" />
@@ -245,7 +229,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -255,7 +238,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {recentViolations.slice(0, 5).map((violation) => (
+              {recentViolations.slice(0, 5).map((violation) => ()
                 <div key={violation.id} className="flex items-start justify-between p-3 bg-red-50 rounded-lg">
                   <div className="flex-1">
                     <p className="text-sm font-medium text-red-900">{violation.policyName}</p>
@@ -264,7 +247,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
                       {new Date(violation.metadata.detectedAt).toLocaleString()}
                     </p>
                   </div>
-                  <Badge className={`text-xs ${getSeverityColor(violation.violation.severity)}`}>
+                  <Badge className={`text-xs ${getSeverityColor(violation.violation.severity)}`}>}
                     {violation.violation.severity}
                   </Badge>
                 </div>
@@ -275,8 +258,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </div>
     </div>
   );
-
-  const renderPolicyList = () => (
+  const renderPolicyList = () => (;)
     <div className="policy-list space-y-4">
       {/* Filters and Search */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -290,43 +272,39 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
               className="pl-9 w-full sm:w-64"
             />
           </div>
-          
           <Select value={domainFilter} onValueChange={(value) => setDomainFilter(value as PolicyDomain | 'ALL')}>
             <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="All Domains" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">All Domains</SelectItem>
-              {domains.map(domain => (
+              {domains.map(domain => ()
                 <SelectItem key={domain} value={domain}>{domain}</SelectItem>
               ))}
             </SelectContent>
           </Select>
-
           <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as PolicyStatus | 'ALL')}>
             <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="All Statuses" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">All Statuses</SelectItem>
-              {statuses.map(status => (
+              {statuses.map(status => ()
                 <SelectItem key={status} value={status}>{status}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
-
         <Button onClick={() => setIsCreatingPolicy(true)} className="flex items-center gap-2">
           <Plus className="w-4 h-4" />
           Create Policy
         </Button>
       </div>
-
       {/* Policy Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
         {filteredPolicies.map((policy) => {
           const Icon = getDomainIcon(policy.domain);
-          return (
+          return ()
             <Card key={policy.id} className="hover:shadow-md transition-shadow">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
@@ -342,12 +320,10 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
                   </Badge>
                 </div>
               </CardHeader>
-              
               <CardContent className="pt-0">
                 <p className="text-sm text-gray-700 mb-4 line-clamp-2">
                   {policy.description}
                 </p>
-                
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-gray-500">Domain:</span>
@@ -368,13 +344,12 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
                     <span className="font-medium">{policy.metadata.evaluationCount}</span>
                   </div>
                 </div>
-
                 {/* Compliance Frameworks */}
-                {policy.compliance.frameworks.length > 0 && (
+                {policy.compliance.frameworks.length > 0 && ()
                   <div className="mb-4">
                     <p className="text-xs text-gray-500 mb-2">Compliance:</p>
                     <div className="flex flex-wrap gap-1">
-                      {policy.compliance.frameworks.map(framework => (
+                      {policy.compliance.frameworks.map(framework => ()
                         <Badge key={framework} variant="outline" className="text-xs">
                           {framework}
                         </Badge>
@@ -382,7 +357,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
                     </div>
                   </div>
                 )}
-
                 {/* Actions */}
                 <div className="flex items-center justify-between pt-3 border-t">
                   <div className="flex items-center gap-2">
@@ -421,8 +395,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           );
         })}
       </div>
-
-      {filteredPolicies.length === 0 && (
+      {filteredPolicies.length === 0 && ()
         <div className="text-center py-12">
           <Shield className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-600 text-lg mb-2">No policies found</p>
@@ -432,7 +405,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
               : 'Create your first policy to get started'
             }
           </p>
-          {(!searchTerm && domainFilter === 'ALL' && statusFilter === 'ALL') && (
+          {(!searchTerm && domainFilter === 'ALL' && statusFilter === 'ALL') && ()
             <Button onClick={() => setIsCreatingPolicy(true)}>
               Create First Policy
             </Button>
@@ -441,8 +414,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       )}
     </div>
   );
-
-  const renderEvaluations = () => (
+  const renderEvaluations = () => (;)
     <div className="evaluations space-y-4">
       <Card>
         <CardHeader>
@@ -453,7 +425,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {recentEvaluations.map((evaluation) => (
+            {recentEvaluations.map((evaluation) => ()
               <div key={evaluation.evaluationId} className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
@@ -478,14 +450,13 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
                     {new Date(evaluation.timestamp).toLocaleString()}
                   </p>
                 </div>
-                
                 <div className="flex items-center gap-2">
-                  {evaluation.metadata.reviewRequired && (
+                  {evaluation.metadata.reviewRequired && ()
                     <Badge variant="outline" className="text-yellow-600">
                       Review Required
                     </Badge>
                   )}
-                  {evaluation.metadata.escalationRequired && (
+                  {evaluation.metadata.escalationRequired && ()
                     <Badge variant="outline" className="text-red-600">
                       Escalation Required
                     </Badge>
@@ -498,11 +469,10 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </Card>
     </div>
   );
-
-  const renderCompliance = () => (
+  const renderCompliance = () => (;)
     <div className="compliance space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {frameworks.map(framework => (
+        {frameworks.map(framework => ()
           <Card key={framework}>
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
@@ -521,9 +491,8 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </div>
     </div>
   );
-
   if (error) {
-    return (
+    return ()
       <div className="p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
         <p className="text-red-800 text-lg mb-2">Policy Management Error</p>
@@ -531,16 +500,14 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </div>
     );
   }
-
-  return (
-    <div className={`policy-management-dashboard ${className}`}>
+  return ()
+    <div className={`policy-management-dashboard ${className}`}>}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Policy Management</h1>
         <p className="text-gray-600">
           Manage security, compliance, and governance policies across the Wild Construct platform
         </p>
       </div>
-
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview" className="flex items-center gap-2">
@@ -560,25 +527,20 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             Compliance
           </TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview">
           {renderOverview()}
         </TabsContent>
-
         <TabsContent value="policies">
           {renderPolicyList()}
         </TabsContent>
-
         <TabsContent value="evaluations">
           {renderEvaluations()}
         </TabsContent>
-
         <TabsContent value="compliance">
           {renderCompliance()}
         </TabsContent>
       </Tabs>
-
-      {isLoading && (
+      {isLoading && ()
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
@@ -586,39 +548,32 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           </div>
         </div>
       )}
-
       <style>{`
         .policy-management-dashboard {
           max-width: 1400px;
           margin: 0 auto;
           padding: 1rem;
         }
-
         .line-clamp-2 {
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
-
         .policy-overview .grid {
           gap: 1rem;
         }
-
         .policy-list .policy-card {
           transition: all 0.2s ease;
         }
-
         .policy-list .policy-card:hover {
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
         @media (max-width: 768px) {
           .policy-management-dashboard {
             padding: 0.5rem;
           }
-          
           .grid {
             grid-template-columns: 1fr;
           }

@@ -2,30 +2,23 @@
  * UI Extension Interface - Epic 8.4 Story 8.4.2
  * Defines interfaces for extending the user interface system
  */
-
 import React from 'react';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 
 // UI Extension Interface
 export interface UIExtension extends BaseExtension {
   readonly extensionType: 'ui';
-  
   // Component registration
   getComponentDefinitions(): UIComponentDefinition[];
   createComponentInstance(componentId: string, props: any): React.ComponentType<any>;
-  
   // Theme contributions
   getThemeContributions(): ThemeContribution[];
-  
   // Command contributions
   getCommandContributions(): CommandContribution[];
-  
   // Menu contributions
   getMenuContributions(): MenuContribution[];
-  
   // Keybinding contributions
   getKeybindingContributions(): KeybindingContribution[];
-  
   // UI lifecycle hooks
   onUIInitialized?(context: ExtensionContext): void;
   onUIDestroyed?(context: ExtensionContext): void;
@@ -40,19 +33,14 @@ export interface UIComponentDefinition {
   category: UIComponentCategory;
   description: string;
   version: string;
-  
   // Component class
   component: React.ComponentType<any>;
-  
   // Props schema
   propsSchema?: any; // Zod schema for props validation
-  
   // UI configuration
   ui: UIComponentUIConfiguration;
-  
   // Runtime configuration
   runtime: UIComponentRuntimeConfiguration;
-  
   // Metadata
   metadata: UIComponentMetadata;
 }
@@ -73,13 +61,10 @@ export enum UIComponentCategory {
 export interface UIComponentUIConfiguration {
   // Layout
   layout?: UIComponentLayout;
-  
   // Styling
   styling?: UIComponentStyling;
-  
   // Responsive behavior
   responsive?: UIComponentResponsive;
-  
   // Accessibility
   accessibility?: UIComponentAccessibility;
 }
@@ -136,13 +121,10 @@ export interface UIComponentRuntimeConfiguration {
   lazy?: boolean;
   suspense?: boolean;
   errorBoundary?: boolean;
-  
   // Performance
   performance?: UIComponentPerformance;
-  
   // State management
   state?: UIComponentStateConfiguration;
-  
   // Event handling
   events?: UIComponentEventConfiguration;
 }
@@ -180,7 +162,6 @@ export interface UIComponentMetadata {
   documentation?: string;
   examples?: UIComponentExample[];
   screenshots?: string[];
-  
   // Compatibility
   compatibility?: {
     minVersion: string;
@@ -188,7 +169,6 @@ export interface UIComponentMetadata {
     browsers?: string[];
     devices?: string[];
   };
-  
   // Tags
   tags?: string[];
   keywords?: string[];
@@ -209,25 +189,18 @@ export interface ThemeContribution {
   name: string;
   description: string;
   type: 'light' | 'dark' | 'auto';
-  
   // Color palette
   colors: ThemeColors;
-  
   // Typography
   typography: ThemeTypography;
-  
   // Spacing
   spacing: ThemeSpacing;
-  
   // Shadows
   shadows: ThemeShadows;
-  
   // Borders
   borders: ThemeBorders;
-  
   // Transitions
   transitions: ThemeTransitions;
-  
   // Custom properties
   custom?: Record<string, any>;
 }
@@ -246,7 +219,6 @@ export interface ThemeColors {
   warning: string;
   success: string;
   info: string;
-  
   // Extended colors
   extended?: Record<string, string>;
 }
@@ -254,7 +226,7 @@ export interface ThemeColors {
 // Theme Typography
 export interface ThemeTypography {
   fontFamily: string;
-  fontSize: {
+  fontSize: {,
     xs: string;
     sm: string;
     md: string;
@@ -263,19 +235,19 @@ export interface ThemeTypography {
     '2xl': string;
     '3xl': string;
   };
-  fontWeight: {
+  fontWeight: {,
     light: number;
     normal: number;
     medium: number;
     semibold: number;
     bold: number;
   };
-  lineHeight: {
+  lineHeight: {,
     tight: number;
     normal: number;
     relaxed: number;
   };
-  letterSpacing: {
+  letterSpacing: {,
     tight: string;
     normal: string;
     wide: string;
@@ -291,7 +263,6 @@ export interface ThemeSpacing {
   xl: string;
   '2xl': string;
   '3xl': string;
-  
   // Custom spacing
   custom?: Record<string, string>;
 }
@@ -303,26 +274,25 @@ export interface ThemeShadows {
   lg: string;
   xl: string;
   none: string;
-  
   // Custom shadows
   custom?: Record<string, string>;
 }
 
 // Theme Borders
 export interface ThemeBorders {
-  width: {
+  width: {,
     thin: string;
     normal: string;
     thick: string;
   };
-  radius: {
+  radius: {,
     none: string;
     sm: string;
     md: string;
     lg: string;
     full: string;
   };
-  style: {
+  style: {,
     solid: string;
     dashed: string;
     dotted: string;
@@ -331,12 +301,12 @@ export interface ThemeBorders {
 
 // Theme Transitions
 export interface ThemeTransitions {
-  duration: {
+  duration: {,
     fast: string;
     normal: string;
     slow: string;
   };
-  easing: {
+  easing: {,
     linear: string;
     ease: string;
     easeIn: string;
@@ -352,16 +322,12 @@ export interface CommandContribution {
   description?: string;
   category?: string;
   icon?: string;
-  
   // Command handler
   handler: CommandHandler;
-  
   // Enablement
   enablement?: CommandEnablement;
-  
   // Keybinding
   keybinding?: string;
-  
   // Context
   context?: string[];
 }
@@ -384,19 +350,14 @@ export interface MenuContribution {
   label: string;
   icon?: string;
   order?: number;
-  
   // Menu type
   type: 'item' | 'submenu' | 'separator';
-  
   // Command reference
   command?: string;
-  
   // Submenu items
   submenu?: MenuContribution[];
-  
   // Visibility
   when?: string; // Boolean expression
-  
   // Target menu
   menu: MenuTarget;
 }
@@ -419,7 +380,6 @@ export interface KeybindingContribution {
   command: string;
   when?: string; // Boolean expression
   args?: any[];
-  
   // Platform-specific
   mac?: string;
   win?: string;
@@ -447,7 +407,6 @@ export interface UIContextManager {
   unregisterComponent(componentId: string): void;
   getComponent(componentId: string): UIComponentDefinition | undefined;
   getAllComponents(): UIComponentDefinition[];
-  
   // Theme management
   registerTheme(theme: ThemeContribution): void;
   unregisterTheme(themeId: string): void;
@@ -455,26 +414,22 @@ export interface UIContextManager {
   getAllThemes(): ThemeContribution[];
   setActiveTheme(themeId: string): void;
   getActiveTheme(): ThemeContribution | undefined;
-  
   // Command management
   registerCommand(command: CommandContribution): void;
   unregisterCommand(commandId: string): void;
   executeCommand(commandId: string, ...args: any[]): Promise<any>;
   getCommand(commandId: string): CommandContribution | undefined;
   getAllCommands(): CommandContribution[];
-  
   // Menu management
   registerMenu(menu: MenuContribution): void;
   unregisterMenu(menuId: string): void;
   getMenu(menuId: string): MenuContribution | undefined;
   getMenusByTarget(target: MenuTarget): MenuContribution[];
-  
   // Keybinding management
   registerKeybinding(keybinding: KeybindingContribution): void;
   unregisterKeybinding(keybindingId: string): void;
   getKeybinding(keybindingId: string): KeybindingContribution | undefined;
   getAllKeybindings(): KeybindingContribution[];
-  
   // Event handling
   on(event: string, listener: (...args: any[]) => void): void;
   off(event: string, listener: (...args: any[]) => void): void;
@@ -497,7 +452,7 @@ export namespace UIExtensionHelpers {
       name: partial.name || 'Custom Theme',
       description: partial.description || 'A custom theme',
       type: partial.type || 'light',
-      colors: {
+      colors: {,
         primary: '#007bff',
         secondary: '#6c757d',
         accent: '#17a2b8',
@@ -512,9 +467,9 @@ export namespace UIExtensionHelpers {
         info: '#17a2b8',
         ...partial.colors
       },
-      typography: {
+      typography: {,
         fontFamily: 'system-ui, -apple-system, sans-serif',
-        fontSize: {
+        fontSize: {,
           xs: '0.75rem',
           sm: '0.875rem',
           md: '1rem',
@@ -523,26 +478,26 @@ export namespace UIExtensionHelpers {
           '2xl': '1.5rem',
           '3xl': '1.875rem'
         },
-        fontWeight: {
+        fontWeight: {,
           light: 300,
           normal: 400,
           medium: 500,
           semibold: 600,
-          bold: 700
+          bold: 700,
         },
-        lineHeight: {
+        lineHeight: {,
           tight: 1.25,
           normal: 1.5,
-          relaxed: 1.75
+          relaxed: 1.75,
         },
-        letterSpacing: {
+        letterSpacing: {,
           tight: '-0.025em',
           normal: '0em',
-          wide: '0.025em'
+          wide: '0.025em',
         },
         ...partial.typography
       },
-      spacing: {
+      spacing: {,
         xs: '0.25rem',
         sm: '0.5rem',
         md: '1rem',
@@ -552,7 +507,7 @@ export namespace UIExtensionHelpers {
         '3xl': '4rem',
         ...partial.spacing
       },
-      shadows: {
+      shadows: {,
         sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
         md: '0 1px 3px rgba(0, 0, 0, 0.1)',
         lg: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -560,45 +515,44 @@ export namespace UIExtensionHelpers {
         none: 'none',
         ...partial.shadows
       },
-      borders: {
-        width: {
+      borders: {,
+        width: {,
           thin: '1px',
           normal: '2px',
-          thick: '4px'
+          thick: '4px',
         },
-        radius: {
+        radius: {,
           none: '0',
           sm: '0.125rem',
           md: '0.25rem',
           lg: '0.5rem',
-          full: '9999px'
+          full: '9999px',
         },
-        style: {
+        style: {,
           solid: 'solid',
           dashed: 'dashed',
-          dotted: 'dotted'
+          dotted: 'dotted',
         },
         ...partial.borders
       },
-      transitions: {
-        duration: {
+      transitions: {,
+        duration: {,
           fast: '150ms',
           normal: '200ms',
-          slow: '300ms'
+          slow: '300ms',
         },
-        easing: {
+        easing: {,
           linear: 'linear',
           ease: 'ease',
           easeIn: 'ease-in',
           easeOut: 'ease-out',
-          easeInOut: 'ease-in-out'
+          easeInOut: 'ease-in-out',
         },
         ...partial.transitions
       },
-      custom: partial.custom
+      custom: partial.custom,
     };
   }
-  
   export function createCommand(partial: Partial<CommandContribution>): CommandContribution {
     return {
       id: partial.id || 'custom-command',
@@ -609,10 +563,9 @@ export namespace UIExtensionHelpers {
       handler: partial.handler || (() => {}),
       enablement: partial.enablement,
       keybinding: partial.keybinding,
-      context: partial.context
+      context: partial.context,
     };
   }
-  
   export function createMenu(partial: Partial<MenuContribution>): MenuContribution {
     return {
       id: partial.id || 'custom-menu',
@@ -626,21 +579,17 @@ export namespace UIExtensionHelpers {
       menu: partial.menu || MenuTarget.CUSTOM
     };
   }
-  
   export function validateUIComponent(definition: UIComponentDefinition): ExtensionValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
-    
     // Basic validation
     if (!definition.id) errors.push('Component ID is required');
     if (!definition.name) errors.push('Component name is required');
     if (!definition.component) errors.push('Component class is required');
-    
     // React component validation
     if (definition.component && typeof definition.component !== 'function') {
       errors.push('Component must be a valid React component');
     }
-    
     return {
       valid: errors.length === 0,
       errors,

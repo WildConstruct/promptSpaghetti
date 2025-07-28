@@ -4,7 +4,6 @@
  * Tests all aspects of security event policy management, enforcement,
  * compliance mapping, and integration with existing audit infrastructure.
  */
-
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import {
   SecurityEventLoggingPolicyEngine,
@@ -17,40 +16,31 @@ import {
   registerSecurityPolicy,
   generateSecurityComplianceReport
 } from '../SecurityEventLoggingPolicies';
-
 describe('SecurityEventLoggingPolicyEngine', () => {
   let policyEngine: SecurityEventLoggingPolicyEngine;
-
   beforeEach(() => {
     policyEngine = new SecurityEventLoggingPolicyEngine();
   });
-
   describe('Policy Registration and Management', () => {
     it('should register application security policies on initialization', () => {
       const policies = policyEngine.getPolicies();
-      
       expect(policies.length).toBeGreaterThan(5);
-      
       // Check for key policy types
       const authPolicy = policies.find(p => p.policy_id === 'APPSEC_001');
       const injectionPolicy = policies.find(p => p.policy_id === 'APPSEC_002');
       const networkPolicy = policies.find(p => p.policy_id === 'NETSEC_001');
       const soxPolicy = policies.find(p => p.policy_id === 'SOX_001');
       const gdprPolicy = policies.find(p => p.policy_id === 'GDPR_001');
-
       expect(authPolicy).toBeDefined();
       expect(authPolicy?.policy_name).toBe('Authentication Failure Policy');
       expect(authPolicy?.enabled).toBe(true);
-
       expect(injectionPolicy).toBeDefined();
       expect(injectionPolicy?.policy_name).toBe('Code Injection Attack Policy');
       expect(injectionPolicy?.severity_threshold).toBe(SecurityEventSeverity.CRITICAL);
-
       expect(networkPolicy).toBeDefined();
       expect(soxPolicy).toBeDefined();
       expect(gdprPolicy).toBeDefined();
     });
-
     it('should register custom security policies', () => {
       const customPolicy = {
         policy_id: 'CUSTOM_001',
@@ -58,64 +48,55 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         event_types: [SecurityEventType.API_ABUSE_DETECTED],
         severity_threshold: SecurityEventSeverity.MEDIUM,
         enabled: true,
-        detection_rules: {
-          conditions: [
+        detection_rules: {,
+          conditions: [,
             { field: 'request_rate', operator: 'gt' as const, value: 100 }
           ],
           time_window: 60000,
-          frequency_threshold: 5
+          frequency_threshold: 5,
         },
-        response_actions: {
+        response_actions: {,
           immediate_actions: ['rate_limit', 'generate_alert'],
           escalation_actions: ['notify_api_team'],
           notification_channels: ['email'],
-          automated_containment: true
+          automated_containment: true,
         },
-        compliance_mapping: {
+        compliance_mapping: {,
           frameworks: [ComplianceFramework.NIST],
           requirements: ['api_security'],
           retention_period: 365,
-          requires_encryption: false
+          requires_encryption: false,
         },
-        reporting: {
+        reporting: {,
           real_time_alerts: true,
           periodic_reports: ['daily'],
           stakeholders: ['api_team'],
-          external_reporting: false
+          external_reporting: false,
         }
       };
-
       policyEngine.registerPolicy(customPolicy);
-      
       const retrievedPolicy = policyEngine.getPolicy('CUSTOM_001');
       expect(retrievedPolicy).toBeDefined();
       expect(retrievedPolicy?.policy_name).toBe('Custom Test Policy');
     });
-
     it('should update existing policies', () => {
-      const updated = policyEngine.updatePolicy('APPSEC_001', {
-        severity_threshold: SecurityEventSeverity.HIGH
+      const updated = policyEngine.updatePolicy('APPSEC_001', {)
+        severity_threshold: SecurityEventSeverity.HIGH,
       });
-
       expect(updated).toBe(true);
-
       const policy = policyEngine.getPolicy('APPSEC_001');
       expect(policy?.severity_threshold).toBe(SecurityEventSeverity.HIGH);
     });
-
     it('should enable/disable policies', () => {
       const disabled = policyEngine.setPolicyEnabled('APPSEC_001', false);
       expect(disabled).toBe(true);
-
       const policy = policyEngine.getPolicy('APPSEC_001');
       expect(policy?.enabled).toBe(false);
-
       const enabled = policyEngine.setPolicyEnabled('APPSEC_001', true);
       expect(enabled).toBe(true);
       expect(policy?.enabled).toBe(true);
     });
   });
-
   describe('Security Event Processing', () => {
     it('should process authentication failure events', () => {
       const authEvent = {
@@ -147,9 +128,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         created_by: 'security_system',
         created_at: new Date()
       };
-
       const result = policyEngine.processSecurityEvent(authEvent);
-
       expect(result.matched_policies).toContain('APPSEC_001');
       expect(result.actions_triggered).toContain('block_ip');
       expect(result.actions_triggered).toContain('lock_account');
@@ -157,7 +136,6 @@ describe('SecurityEventLoggingPolicyEngine', () => {
       expect(result.compliance_requirements).toContain(ComplianceFramework.SOX);
       expect(result.escalation_required).toBe(true);
     });
-
     it('should process code injection attack events', () => {
       const injectionEvent = {
         event_id: crypto.randomUUID(),
@@ -190,9 +168,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         created_by: 'waf_system',
         created_at: new Date()
       };
-
       const result = policyEngine.processSecurityEvent(injectionEvent);
-
       expect(result.matched_policies).toContain('APPSEC_002');
       expect(result.actions_triggered).toContain('block_request');
       expect(result.actions_triggered).toContain('preserve_evidence');
@@ -201,7 +177,6 @@ describe('SecurityEventLoggingPolicyEngine', () => {
       expect(result.compliance_requirements).toContain(ComplianceFramework.PCI_DSS);
       expect(result.escalation_required).toBe(true);
     });
-
     it('should process SOX IT controls violations', () => {
       const soxEvent = {
         event_id: crypto.randomUUID(),
@@ -229,16 +204,13 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         created_by: 'compliance_monitor',
         created_at: new Date()
       };
-
       const result = policyEngine.processSecurityEvent(soxEvent);
-
       expect(result.matched_policies).toContain('SOX_001');
       expect(result.actions_triggered).toContain('document_violation');
       expect(result.actions_triggered).toContain('notify_compliance');
       expect(result.compliance_requirements).toContain(ComplianceFramework.SOX);
       expect(result.escalation_required).toBe(true);
     });
-
     it('should process GDPR data subject requests', () => {
       const gdprEvent = {
         event_id: crypto.randomUUID(),
@@ -266,15 +238,12 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         created_by: 'privacy_system',
         created_at: new Date()
       };
-
       const result = policyEngine.processSecurityEvent(gdprEvent);
-
       expect(result.matched_policies).toContain('GDPR_001');
       expect(result.actions_triggered).toContain('acknowledge_request');
       expect(result.actions_triggered).toContain('start_timer');
       expect(result.compliance_requirements).toContain(ComplianceFramework.GDPR);
     });
-
     it('should process behavioral anomaly events', () => {
       const behaviorEvent = {
         event_id: crypto.randomUUID(),
@@ -301,20 +270,17 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         created_by: 'ml_analytics',
         created_at: new Date()
       };
-
       const result = policyEngine.processSecurityEvent(behaviorEvent);
-
       expect(result.matched_policies).toContain('BEHAVIOR_001');
       expect(result.actions_triggered).toContain('flag_for_review');
       expect(result.actions_triggered).toContain('increase_monitoring');
       expect(result.compliance_requirements).toContain(ComplianceFramework.NIST);
     });
   });
-
   describe('Compliance Reporting', () => {
     beforeEach(() => {
       // Create sample events for compliance reporting
-      const sampleEvents = [
+      const sampleEvents = [;
         {
           event_id: crypto.randomUUID(),
           event_type: SecurityEventType.SOX_ITGC_VIOLATION,
@@ -344,9 +310,8 @@ describe('SecurityEventLoggingPolicyEngine', () => {
           created_at: new Date()
         }
       ];
-
       // Process sample events
-      sampleEvents.forEach(event => {
+      sampleEvents.forEach(event => {)
         const fullEvent = {
           ...event,
           threat_level: 3.0,
@@ -359,50 +324,43 @@ describe('SecurityEventLoggingPolicyEngine', () => {
           forensic_artifacts: [],
           chain_of_custody: [],
           tags: [],
-          related_events: []
+          related_events: [],
         };
         policyEngine.processSecurityEvent(fullEvent);
       });
     });
-
     it('should generate SOX compliance report', () => {
-      const report = policyEngine.generateComplianceReport(
+      const report = policyEngine.generateComplianceReport(;)
         ComplianceFramework.SOX,
         new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
         new Date()
       );
-
       expect(report.framework).toBe(ComplianceFramework.SOX);
       expect(report.events_count).toBeGreaterThanOrEqual(1);
       expect(report.events_by_severity).toBeDefined();
       expect(report.compliance_score).toBeLessThanOrEqual(100);
       expect(Array.isArray(report.recommendations)).toBe(true);
     });
-
     it('should generate GDPR compliance report', () => {
-      const report = policyEngine.generateComplianceReport(
+      const report = policyEngine.generateComplianceReport(;)
         ComplianceFramework.GDPR,
         new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
         new Date()
       );
-
       expect(report.framework).toBe(ComplianceFramework.GDPR);
       expect(report.events_count).toBeGreaterThanOrEqual(1);
       expect(report.events_by_severity[SecurityEventSeverity.MEDIUM]).toBeGreaterThanOrEqual(1);
     });
-
     it('should provide appropriate recommendations', () => {
-      const report = policyEngine.generateComplianceReport(
+      const report = policyEngine.generateComplianceReport(;)
         ComplianceFramework.SOX,
         new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
         new Date()
       );
-
       expect(report.recommendations.length).toBeGreaterThan(0);
       expect(report.recommendations.some(rec => rec.includes('IT General Controls'))).toBe(true);
     });
   });
-
   describe('Policy Effectiveness', () => {
     it('should track policy metrics', () => {
       const testEvent = {
@@ -430,19 +388,16 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         created_by: 'system',
         created_at: new Date()
       };
-
       // Process the same event multiple times to build metrics
       for (let i = 0; i < 5; i++) {
         const eventCopy = { ...testEvent, event_id: crypto.randomUUID() };
         policyEngine.processSecurityEvent(eventCopy);
       }
-
       // Verify that metrics are being tracked
       const policies = policyEngine.getPolicies();
       expect(policies.length).toBeGreaterThan(0);
     });
   });
-
   describe('Error Handling', () => {
     it('should handle invalid event data gracefully', () => {
       const invalidEvent = {
@@ -470,27 +425,22 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         created_by: '',
         created_at: new Date()
       };
-
       // This should not throw an error but handle gracefully
       expect(() => {
         policyEngine.processSecurityEvent(invalidEvent);
       }).not.toThrow();
     });
-
     it('should handle non-existent policy updates', () => {
-      const updated = policyEngine.updatePolicy('NON_EXISTENT_POLICY', {
-        enabled: false
+      const updated = policyEngine.updatePolicy('NON_EXISTENT_POLICY', {)
+        enabled: false,
       });
-
       expect(updated).toBe(false);
     });
-
     it('should handle non-existent policy enable/disable', () => {
       const enabled = policyEngine.setPolicyEnabled('NON_EXISTENT_POLICY', false);
       expect(enabled).toBe(false);
     });
   });
-
   describe('Integration with Utility Functions', () => {
     it('should work with global security event processing', () => {
       const testEvent = {
@@ -520,13 +470,10 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         created_by: 'network_ids',
         created_at: new Date()
       };
-
       const result = processSecurityEvent(testEvent);
-
       expect(result.matched_policies.length).toBeGreaterThan(0);
       expect(result.actions_triggered.length).toBeGreaterThan(0);
     });
-
     it('should work with policy registration utility', () => {
       const customPolicy = {
         policy_id: 'UTIL_TEST_001',
@@ -534,45 +481,41 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         event_types: [SecurityEventType.API_ABUSE_DETECTED],
         severity_threshold: SecurityEventSeverity.LOW,
         enabled: true,
-        detection_rules: {
+        detection_rules: {,
           conditions: [{ field: 'test', operator: 'eq' as const, value: true }],
           time_window: 30000,
-          frequency_threshold: 1
+          frequency_threshold: 1,
         },
-        response_actions: {
+        response_actions: {,
           immediate_actions: ['log_event'],
           escalation_actions: [],
           notification_channels: [],
-          automated_containment: false
+          automated_containment: false,
         },
-        compliance_mapping: {
+        compliance_mapping: {,
           frameworks: [],
           requirements: [],
           retention_period: 30,
-          requires_encryption: false
+          requires_encryption: false,
         },
-        reporting: {
+        reporting: {,
           real_time_alerts: false,
           periodic_reports: [],
           stakeholders: [],
-          external_reporting: false
+          external_reporting: false,
         }
       };
-
       registerSecurityPolicy(customPolicy);
-
       const retrievedPolicy = securityEventPolicyEngine.getPolicy('UTIL_TEST_001');
       expect(retrievedPolicy).toBeDefined();
       expect(retrievedPolicy?.policy_name).toBe('Utility Test Policy');
     });
-
     it('should work with compliance report generation utility', () => {
-      const report = generateSecurityComplianceReport(
+      const report = generateSecurityComplianceReport(;)
         ComplianceFramework.NIST,
         new Date(Date.now() - 24 * 60 * 60 * 1000),
         new Date()
       );
-
       expect(report.framework).toBe(ComplianceFramework.NIST);
       expect(report.period).toBeDefined();
       expect(typeof report.compliance_score).toBe('number');
@@ -585,8 +528,7 @@ describe('Security Event Logging Policy Utilities', () => {
   describe('Event Type Coverage', () => {
     it('should have policies for all critical event types', () => {
       const policies = securityEventPolicyEngine.getPolicies();
-      
-      const criticalEventTypes = [
+      const criticalEventTypes = [;
         SecurityEventType.AUTHENTICATION_FAILURE,
         SecurityEventType.CODE_INJECTION_ATTEMPT,
         SecurityEventType.NETWORK_INTRUSION_ATTEMPT,
@@ -594,19 +536,17 @@ describe('Security Event Logging Policy Utilities', () => {
         SecurityEventType.GDPR_DATA_SUBJECT_REQUEST,
         SecurityEventType.SECURITY_INCIDENT_DETECTED
       ];
-
       for (const eventType of criticalEventTypes) {
-        const hasPolicy = policies.some(policy => 
+        const hasPolicy = policies.some(policy => ;)
           policy.event_types.includes(eventType)
         );
         expect(hasPolicy).toBe(true);
       }
     });
   });
-
   describe('Compliance Framework Coverage', () => {
     it('should support all major compliance frameworks', () => {
-      const supportedFrameworks = [
+      const supportedFrameworks = [;
         ComplianceFramework.SOX,
         ComplianceFramework.GDPR,
         ComplianceFramework.CCPA,
@@ -615,9 +555,8 @@ describe('Security Event Logging Policy Utilities', () => {
         ComplianceFramework.PCI_DSS,
         ComplianceFramework.NIST
       ];
-
       for (const framework of supportedFrameworks) {
-        const report = generateSecurityComplianceReport(
+        const report = generateSecurityComplianceReport(;)
           framework,
           new Date(Date.now() - 24 * 60 * 60 * 1000),
           new Date()
@@ -626,11 +565,9 @@ describe('Security Event Logging Policy Utilities', () => {
       }
     });
   });
-
   describe('Policy Configuration Validation', () => {
     it('should validate policy severity thresholds', () => {
       const policies = securityEventPolicyEngine.getPolicies();
-      
       for (const policy of policies) {
         expect(Object.values(SecurityEventSeverity)).toContain(policy.severity_threshold);
         expect(policy.policy_id).toBeDefined();
@@ -639,10 +576,8 @@ describe('Security Event Logging Policy Utilities', () => {
         expect(typeof policy.enabled).toBe('boolean');
       }
     });
-
     it('should validate compliance mapping', () => {
       const policies = securityEventPolicyEngine.getPolicies();
-      
       for (const policy of policies) {
         expect(Array.isArray(policy.compliance_mapping.frameworks)).toBe(true);
         expect(Array.isArray(policy.compliance_mapping.requirements)).toBe(true);

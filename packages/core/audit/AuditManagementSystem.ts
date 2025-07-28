@@ -4,7 +4,6 @@
  * Enhanced audit management tools built on PromptScape's existing enterprise-grade audit infrastructure.
  * Provides advanced audit analytics, compliance management, and automated reporting capabilities.
  */
-
 import { z } from 'zod';
 
 // Audit Management Schema Definitions
@@ -46,95 +45,80 @@ export enum AuditStatus {
 }
 
 // Core Audit Event Schema
-export const AuditEventSchema = z.object({
+export const AuditEventSchema = z.object({)
   id: z.string().uuid(),
   timestamp: z.date(),
   event_type: z.nativeEnum(AuditEventType),
   severity: z.nativeEnum(AuditSeverity),
   status: z.nativeEnum(AuditStatus),
-  
   // Event Details
   title: z.string(),
   description: z.string(),
   category: z.string(),
   subcategory: z.string().optional(),
-  
   // Context Information
   user_id: z.string().optional(),
   session_id: z.string().optional(),
   ip_address: z.string().optional(),
   user_agent: z.string().optional(),
-  geo_location: z.object({
+  geo_location: z.object({),
     country: z.string(),
     region: z.string(),
-    city: z.string()
+    city: z.string(),
   }).optional(),
-  
   // System Context
   system_component: z.string(),
   endpoint: z.string().optional(),
   http_method: z.string().optional(),
   response_code: z.number().optional(),
-  
   // Risk Assessment
   risk_score: z.number().min(0).max(10),
   risk_factors: z.array(z.string()),
-  
   // Compliance Context
   compliance_frameworks: z.array(z.nativeEnum(ComplianceFramework)),
   regulatory_impact: z.boolean(),
-  
   // Data Context
   data_types: z.array(z.string()).optional(),
   data_volume: z.number().optional(),
   sensitive_data_involved: z.boolean(),
-  
   // Chain Integrity (from existing infrastructure)
   chain_hash: z.string(),
   previous_hash: z.string().optional(),
-  
   // Metadata
   metadata: z.record(z.unknown()).optional(),
   tags: z.array(z.string()),
-  
   // Resolution Information
   resolution_notes: z.string().optional(),
   resolved_by: z.string().optional(),
   resolved_at: z.date().optional(),
-  
   // Alerts and Notifications
   alert_triggered: z.boolean(),
   notification_sent: z.boolean(),
-  escalation_level: z.number().min(0).max(5)
+  escalation_level: z.number().min(0).max(5),
 });
 
 export type AuditEvent = z.infer<typeof AuditEventSchema>;
 
 // Audit Query and Filtering Schema
-export const AuditQuerySchema = z.object({
+export const AuditQuerySchema = z.object({)
   // Time Range
   start_date: z.date().optional(),
   end_date: z.date().optional(),
-  
   // Filtering
   event_types: z.array(z.nativeEnum(AuditEventType)).optional(),
   severities: z.array(z.nativeEnum(AuditSeverity)).optional(),
   statuses: z.array(z.nativeEnum(AuditStatus)).optional(),
   compliance_frameworks: z.array(z.nativeEnum(ComplianceFramework)).optional(),
-  
   // Search
   search_text: z.string().optional(),
   user_id: z.string().optional(),
   ip_address: z.string().optional(),
-  
   // Risk Assessment
   min_risk_score: z.number().min(0).max(10).optional(),
   max_risk_score: z.number().min(0).max(10).optional(),
-  
   // Pagination
   page: z.number().min(1).default(1),
   limit: z.number().min(1).max(1000).default(50),
-  
   // Sorting
   sort_field: z.string().default('timestamp'),
   sort_order: z.enum(['asc', 'desc']).default('desc')
@@ -143,9 +127,9 @@ export const AuditQuerySchema = z.object({
 export type AuditQuery = z.infer<typeof AuditQuerySchema>;
 
 // Audit Analytics Schema
-export const AuditAnalyticsSchema = z.object({
+export const AuditAnalyticsSchema = z.object({)
   timeframe: z.enum(['hour', 'day', 'week', 'month', 'year']),
-  metrics: z.array(z.enum([
+  metrics: z.array(z.enum([),
     'event_count',
     'unique_users',
     'risk_score_average',
@@ -155,11 +139,10 @@ export const AuditAnalyticsSchema = z.object({
     'system_component_activity'
   ])),
   group_by: z.array(z.string()).optional(),
-  filters: AuditQuerySchema.optional()
+  filters: AuditQuerySchema.optional(),
 });
 
 export type AuditAnalytics = z.infer<typeof AuditAnalyticsSchema>;
-
 /**
  * Enhanced Audit Management System
  * 
@@ -174,7 +157,6 @@ export class AuditManagementSystem {
     byCompliance: Map<ComplianceFramework, string[]>;
     byTimeRange: Map<string, string[]>;
   };
-
   constructor() {
     this.indexedData = {
       byUser: new Map(),
@@ -184,7 +166,6 @@ export class AuditManagementSystem {
       byTimeRange: new Map()
     };
   }
-
   /**
    * Create a new audit event with enhanced management capabilities
    */
@@ -195,20 +176,15 @@ export class AuditManagementSystem {
       chain_hash: this.generateChainHash(eventData),
       ...eventData
     };
-
     // Validate the event
     const validatedEvent = AuditEventSchema.parse(event);
-    
     // Store and index the event
     this.storeEvent(validatedEvent);
     this.indexEvent(validatedEvent);
-    
     // Process alerts and notifications
     this.processEventAlerts(validatedEvent);
-    
     return validatedEvent;
   }
-
   /**
    * Advanced audit event query with filtering, pagination, and analytics
    */
@@ -220,22 +196,17 @@ export class AuditManagementSystem {
     analytics: unknown;
   }> {
     const validatedQuery = AuditQuerySchema.parse(query);
-    
     // Apply filters
     let filteredEvents = this.applyFilters(Array.from(this.events.values()), validatedQuery);
-    
     // Apply sorting
     filteredEvents = this.applySorting(filteredEvents, validatedQuery);
-    
     // Calculate pagination
     const totalCount = filteredEvents.length;
     const totalPages = Math.ceil(totalCount / validatedQuery.limit);
     const startIndex = (validatedQuery.page - 1) * validatedQuery.limit;
     const paginatedEvents = filteredEvents.slice(startIndex, startIndex + validatedQuery.limit);
-    
     // Generate analytics for the filtered dataset
     const analytics = this.generateAnalytics(filteredEvents);
-    
     return {
       events: paginatedEvents,
       totalCount,
@@ -244,32 +215,27 @@ export class AuditManagementSystem {
       analytics
     };
   }
-
   /**
    * Generate comprehensive audit analytics and insights
    */
   generateAuditAnalytics(request: AuditAnalytics): any {
     const validatedRequest = AuditAnalyticsSchema.parse(request);
-    
     let events = Array.from(this.events.values());
-    
     // Apply filters if provided
     if (validatedRequest.filters) {
       events = this.applyFilters(events, validatedRequest.filters);
     }
-    
     const analytics: any = {
       timeframe: validatedRequest.timeframe,
       total_events: events.length,
-      date_range: {
+      date_range: {,
         start: events.length > 0 ? Math.min(...events.map(e => e.timestamp.getTime())) : null,
         end: events.length > 0 ? Math.max(...events.map(e => e.timestamp.getTime())) : null
       },
       metrics: {}
     };
-    
     // Generate requested metrics
-    validatedRequest.metrics.forEach(metric => {
+    validatedRequest.metrics.forEach(metric => {)
       switch (metric) {
       case 'event_count':
         analytics.metrics.event_count = this.calculateEventCountMetrics(events, validatedRequest.timeframe);
@@ -294,55 +260,46 @@ export class AuditManagementSystem {
         break;
       }
     });
-    
     return analytics;
   }
-
   /**
    * Compliance-specific audit report generation
    */
   generateComplianceReport(framework: ComplianceFramework, dateRange: { start: Date; end: Date }): any {
-    const events = Array.from(this.events.values()).filter(event => 
+    const events = Array.from(this.events.values()).filter(event => ;)
       event.compliance_frameworks.includes(framework) &&
       event.timestamp >= dateRange.start &&
       event.timestamp <= dateRange.end
     );
-    
     return {
       framework,
       report_period: dateRange,
       generated_at: new Date(),
-      
-      summary: {
+      summary: {,
         total_events: events.length,
         critical_events: events.filter(e => e.severity === AuditSeverity.CRITICAL).length,
         high_risk_events: events.filter(e => e.risk_score >= 7).length,
         unresolved_events: events.filter(e => e.status !== AuditStatus.RESOLVED).length
       },
-      
-      event_breakdown: {
+      event_breakdown: {,
         by_severity: this.calculateSeverityDistribution(events),
         by_type: this.calculateEventTypeDistribution(events),
-        by_status: this.calculateStatusDistribution(events)
+        by_status: this.calculateStatusDistribution(events),
       },
-      
-      risk_analysis: {
+      risk_analysis: {,
         average_risk_score: events.reduce((sum, e) => sum + e.risk_score, 0) / events.length || 0,
         high_risk_events: events.filter(e => e.risk_score >= 7),
-        risk_trends: this.calculateRiskTrends(events)
+        risk_trends: this.calculateRiskTrends(events),
       },
-      
       compliance_specific: this.generateFrameworkSpecificReport(framework, events),
-      
       recommendations: this.generateComplianceRecommendations(framework, events)
     };
   }
-
   /**
    * Real-time audit monitoring and alerting
    */
-  setupRealTimeMonitoring(config: {
-    alertThresholds: {
+  setupRealTimeMonitoring(config: {)
+    alertThresholds: {,
       criticalEventRate: number;      // Events per minute
       highRiskEventRate: number;      // Events per hour
       failedLoginRate: number;        // Failed logins per minute
@@ -353,97 +310,81 @@ export class AuditManagementSystem {
   }): void {
     // Set up real-time monitoring logic
     console.log('Real-time audit monitoring configured:', config);
-    
     // This would integrate with existing monitoring infrastructure
     // Implementation would include WebSocket connections, event streams, etc.
   }
-
   /**
    * Audit event correlation and pattern detection
    */
   detectAnomalousPatterns(timeWindow: number = 3600000): any[] { // 1 hour default
-    const recentEvents = Array.from(this.events.values())
+    const recentEvents = Array.from(this.events.values());
       .filter(event => event.timestamp.getTime() > Date.now() - timeWindow);
-    
     const patterns = [];
-    
     // Detect unusual login patterns
     const loginEvents = recentEvents.filter(e => e.event_type === AuditEventType.AUTHENTICATION);
     const failedLogins = loginEvents.filter(e => e.metadata?.success === false);
-    
     if (failedLogins.length > 10) {
-      patterns.push({
+      patterns.push({)
         type: 'suspicious_login_activity',
         severity: 'high',
-        description: `${failedLogins.length} failed login attempts in the last hour`,
+        description: `${failedLogins.length} failed login attempts in the last hour`,}
         events: failedLogins.map(e => e.id),
         recommendation: 'Investigate potential brute force attack'
       });
     }
-    
     // Detect unusual data access patterns
     const dataAccessEvents = recentEvents.filter(e => e.event_type === AuditEventType.DATA_ACCESS);
     const highVolumeAccess = dataAccessEvents.filter(e => (e.data_volume || 0) > 1000);
-    
     if (highVolumeAccess.length > 5) {
-      patterns.push({
+      patterns.push({)
         type: 'unusual_data_access_volume',
         severity: 'medium',
-        description: `${highVolumeAccess.length} high-volume data access events detected`,
+        description: `${highVolumeAccess.length} high-volume data access events detected`,}
         events: highVolumeAccess.map(e => e.id),
         recommendation: 'Review data access patterns for potential data exfiltration'
       });
     }
-    
     // Detect privilege escalation attempts
-    const privilegeEvents = recentEvents.filter(e => 
+    const privilegeEvents = recentEvents.filter(e => ;)
       e.risk_factors.some(factor => factor.includes('privilege') || factor.includes('escalation'))
     );
-    
     if (privilegeEvents.length > 3) {
-      patterns.push({
+      patterns.push({)
         type: 'potential_privilege_escalation',
         severity: 'critical',
-        description: `${privilegeEvents.length} potential privilege escalation attempts`,
+        description: `${privilegeEvents.length} potential privilege escalation attempts`,}
         events: privilegeEvents.map(e => e.id),
         recommendation: 'Immediate investigation required - potential security breach'
       });
     }
-    
     return patterns;
   }
-
   /**
    * Audit retention and archival management
    */
-  manageAuditRetention(policies: {
+  manageAuditRetention(policies: {)
     defaultRetentionDays: number;
     complianceRetentionDays: { [framework in ComplianceFramework]?: number };
     archivalStorage: string;
     legalHoldOverride: boolean;
   }): void {
     const now = new Date();
-    
     // Process retention for each event
-    Array.from(this.events.values()).forEach(event => {
+    Array.from(this.events.values()).forEach(event => {)
       const eventAge = now.getTime() - event.timestamp.getTime();
       const eventAgeDays = eventAge / (1000 * 60 * 60 * 24);
-      
       // Check compliance-specific retention requirements
       let retentionDays = policies.defaultRetentionDays;
-      
-      event.compliance_frameworks.forEach(framework => {
+      event.compliance_frameworks.forEach(framework => {)
         const frameworkRetention = policies.complianceRetentionDays[framework];
         if (frameworkRetention && frameworkRetention > retentionDays) {
           retentionDays = frameworkRetention;
         }
       });
-      
       // Check for legal hold
       if (policies.legalHoldOverride && event.metadata?.legal_hold) {
         return; // Skip deletion if under legal hold
       }
-      
       // Archive or delete based on age
       if (eventAgeDays > retentionDays) {
         if (eventAgeDays > retentionDays * 2) {
@@ -456,12 +397,10 @@ export class AuditManagementSystem {
       }
     });
   }
-
   // Private helper methods
   private storeEvent(event: AuditEvent): void {
     this.events.set(event.id, event);
   }
-
   private indexEvent(event: AuditEvent): void {
     // Index by user
     if (event.user_id) {
@@ -470,98 +409,79 @@ export class AuditManagementSystem {
       }
       this.indexedData.byUser.get(event.user_id)!.push(event.id);
     }
-    
     // Index by type
     if (!this.indexedData.byType.has(event.event_type)) {
       this.indexedData.byType.set(event.event_type, []);
     }
     this.indexedData.byType.get(event.event_type)!.push(event.id);
-    
     // Index by severity
     if (!this.indexedData.bySeverity.has(event.severity)) {
       this.indexedData.bySeverity.set(event.severity, []);
     }
     this.indexedData.bySeverity.get(event.severity)!.push(event.id);
-    
     // Index by compliance frameworks
-    event.compliance_frameworks.forEach(framework => {
+    event.compliance_frameworks.forEach(framework => {)
       if (!this.indexedData.byCompliance.has(framework)) {
         this.indexedData.byCompliance.set(framework, []);
       }
       this.indexedData.byCompliance.get(framework)!.push(event.id);
     });
   }
-
   private generateChainHash(eventData: any): string {
     // This would integrate with the existing chain hash system
     // from EvidenceAccessAuditService
     const dataString = JSON.stringify(eventData);
-    return `hash_${Date.now()}_${dataString.length}`;
+    return `hash_${Date.now()}_${dataString.length}`;}
   }
-
   private processEventAlerts(event: AuditEvent): void {
     // Process alerts based on event severity and risk score
     if (event.severity === AuditSeverity.CRITICAL || event.risk_score >= 8) {
-      console.log(`CRITICAL ALERT: ${event.title}`, event);
+      console.log(`CRITICAL ALERT: ${event.title}`, event);}
       // This would trigger real notifications
     }
   }
-
   private applyFilters(events: AuditEvent[], query: AuditQuery): AuditEvent[] {
-    return events.filter(event => {
+    return events.filter(event => {)
       // Time range filter
       if (query.start_date && event.timestamp < query.start_date) return false;
       if (query.end_date && event.timestamp > query.end_date) return false;
-      
       // Event type filter
       if (query.event_types && !query.event_types.includes(event.event_type)) return false;
-      
       // Severity filter
       if (query.severities && !query.severities.includes(event.severity)) return false;
-      
       // Status filter
       if (query.statuses && !query.statuses.includes(event.status)) return false;
-      
       // Compliance framework filter
-      if (query.compliance_frameworks && 
+      if (query.compliance_frameworks && )
           !query.compliance_frameworks.some(cf => event.compliance_frameworks.includes(cf))) {
         return false;
       }
-      
       // Risk score filter
       if (query.min_risk_score && event.risk_score < query.min_risk_score) return false;
       if (query.max_risk_score && event.risk_score > query.max_risk_score) return false;
-      
       // User filter
       if (query.user_id && event.user_id !== query.user_id) return false;
-      
       // IP address filter
       if (query.ip_address && event.ip_address !== query.ip_address) return false;
-      
       // Text search
       if (query.search_text) {
         const searchText = query.search_text.toLowerCase();
-        const searchableText = `${event.title} ${event.description} ${event.category}`.toLowerCase();
+        const searchableText = `${event.title} ${event.description} ${event.category}`.toLowerCase();}
         if (!searchableText.includes(searchText)) return false;
       }
-      
       return true;
     });
   }
-
   private applySorting(events: AuditEvent[], query: AuditQuery): AuditEvent[] {
     return events.sort((a, b) => {
       const aValue = (a as any)[query.sort_field];
       const bValue = (b as any)[query.sort_field];
-      
       let comparison = 0;
       if (aValue < bValue) comparison = -1;
       else if (aValue > bValue) comparison = 1;
-      
       return query.sort_order === 'desc' ? -comparison : comparison;
     });
   }
-
   private generateAnalytics(events: AuditEvent[]): any {
     return {
       total_events: events.length,
@@ -573,7 +493,6 @@ export class AuditManagementSystem {
       high_risk_events: events.filter(e => e.risk_score >= 7).length
     };
   }
-
   private calculateEventCountMetrics(events: AuditEvent[], timeframe: string): any {
     // Implementation for event count metrics over time
     return {
@@ -582,15 +501,13 @@ export class AuditManagementSystem {
       hourly_breakdown: {} // This would contain hourly event counts
     };
   }
-
   private calculateUniqueUsersMetrics(events: AuditEvent[]): any {
     const uniqueUsers = new Set(events.map(e => e.user_id).filter(Boolean));
     return {
       total: uniqueUsers.size,
-      active_users: Array.from(uniqueUsers)
+      active_users: Array.from(uniqueUsers),
     };
   }
-
   private calculateRiskScoreMetrics(events: AuditEvent[]): any {
     const riskScores = events.map(e => e.risk_score);
     return {
@@ -599,44 +516,39 @@ export class AuditManagementSystem {
       high_risk_count: riskScores.filter(score => score >= 7).length
     };
   }
-
   private calculateSeverityDistribution(events: AuditEvent[]): any {
     const distribution: Record<string, number> = {};
-    Object.values(AuditSeverity).forEach(severity => {
+    Object.values(AuditSeverity).forEach(severity => {)
       distribution[severity] = events.filter(e => e.severity === severity).length;
     });
     return distribution;
   }
-
   private calculateEventTypeDistribution(events: AuditEvent[]): any {
     const distribution: Record<string, number> = {};
-    Object.values(AuditEventType).forEach(type => {
+    Object.values(AuditEventType).forEach(type => {)
       distribution[type] = events.filter(e => e.event_type === type).length;
     });
     return distribution;
   }
-
   private calculateStatusDistribution(events: AuditEvent[]): any {
     const distribution: Record<string, number> = {};
-    Object.values(AuditStatus).forEach(status => {
+    Object.values(AuditStatus).forEach(status => {)
       distribution[status] = events.filter(e => e.status === status).length;
     });
     return distribution;
   }
-
   private calculateComplianceViolations(events: AuditEvent[]): any {
-    return events.filter(e => e.regulatory_impact).map(event => ({
+    return events.filter(e => e.regulatory_impact).map(event => ({)
       event_id: event.id,
       frameworks: event.compliance_frameworks,
       severity: event.severity,
       risk_score: event.risk_score,
-      timestamp: event.timestamp
+      timestamp: event.timestamp,
     }));
   }
-
   private calculateGeographicDistribution(events: AuditEvent[]): any {
     const distribution: Record<string, number> = {};
-    events.forEach(event => {
+    events.forEach(event => {)
       if (event.geo_location) {
         const country = event.geo_location.country;
         distribution[country] = (distribution[country] || 0) + 1;
@@ -644,26 +556,23 @@ export class AuditManagementSystem {
     });
     return distribution;
   }
-
   private calculateSystemComponentActivity(events: AuditEvent[]): any {
     const distribution: Record<string, number> = {};
-    events.forEach(event => {
+    events.forEach(event => {)
       const component = event.system_component;
       distribution[component] = (distribution[component] || 0) + 1;
     });
     return distribution;
   }
-
   private calculateComplianceFrameworkDistribution(events: AuditEvent[]): any {
     const distribution: Record<string, number> = {};
-    events.forEach(event => {
-      event.compliance_frameworks.forEach(framework => {
+    events.forEach(event => {)
+      event.compliance_frameworks.forEach(framework => {)
         distribution[framework] = (distribution[framework] || 0) + 1;
       });
     });
     return distribution;
   }
-
   private calculateRiskTrends(events: AuditEvent[]): any {
     // This would calculate risk score trends over time
     return {
@@ -672,7 +581,6 @@ export class AuditManagementSystem {
       peak_risk_period: new Date() // When risk was highest
     };
   }
-
   private generateFrameworkSpecificReport(framework: ComplianceFramework, events: AuditEvent[]): any {
     switch (framework) {
     case ComplianceFramework.GDPR:
@@ -691,31 +599,25 @@ export class AuditManagementSystem {
       return {};
     }
   }
-
   private generateComplianceRecommendations(framework: ComplianceFramework, events: AuditEvent[]): string[] {
     const recommendations = [];
-    
     const highRiskEvents = events.filter(e => e.risk_score >= 7);
     if (highRiskEvents.length > 5) {
       recommendations.push('Implement additional monitoring for high-risk activities');
     }
-    
     const unresolved = events.filter(e => e.status !== AuditStatus.RESOLVED);
     if (unresolved.length > 10) {
       recommendations.push('Prioritize resolution of outstanding audit events');
     }
-    
     return recommendations;
   }
-
   private deleteEvent(eventId: string): void {
     this.events.delete(eventId);
     // Also remove from indexes
   }
-
   private archiveEvent(eventId: string, archivalStorage: string): void {
     // Archive event to long-term storage
-    console.log(`Archiving event ${eventId} to ${archivalStorage}`);
+    console.log(`Archiving event ${eventId} to ${archivalStorage}`);}
   }
 }
 

@@ -2,7 +2,6 @@
  * MFA Data Models - Epic 19 Implementation
  * Comprehensive TypeScript types for Multi-Factor Authentication system
  */
-
 import { z } from 'zod';
 
 // ========================================
@@ -98,7 +97,7 @@ export interface EmailVerification {
   encryptedToken: string;     // AES-256 encrypted verification token
   expiresAt: Date;           // 10 minute expiry
   attempts: number;          // Failed verification attempts
-  metadata: {
+  metadata: {,
     ipAddress: string;
     userAgent: string;
     location?: string;
@@ -130,7 +129,7 @@ export interface SMSVerification {
   expiresAt: Date;          // 5 minute expiry
   attempts: number;         // Failed verification attempts
   dailyCount: number;       // SMS sent today (rate limiting)
-  metadata: {
+  metadata: {,
     ipAddress: string;
     userAgent: string;
     carrierResponse?: string; // Gateway response
@@ -236,7 +235,7 @@ export interface SecurityEvent {
   eventType: 'suspicious_activity' | 'rate_limit_exceeded' | 'brute_force' | 'geo_anomaly';
   severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
-  metadata: {
+  metadata: {,
     ipAddress?: string;
     userAgent?: string;
     location?: string;
@@ -262,7 +261,7 @@ export interface UserMFAProfile {
     methodType: MFAMethodType;
     timestamp: Date;
   };
-  securityMetrics: {
+  securityMetrics: {,
     totalAttempts: number;
     successfulAttempts: number;
     failedAttempts: number;
@@ -270,7 +269,7 @@ export interface UserMFAProfile {
     accountLocked: boolean;
     lockedUntil?: Date;
   };
-  preferences: {
+  preferences: {,
     defaultMethod: MFAMethodType;
     backupMethodEnabled: boolean;
     securityNotifications: boolean;
@@ -281,7 +280,7 @@ export interface UserMFAProfile {
 // Zod Validation Schemas
 // ========================================
 
-export const TOTPConfigurationSchema = z.object({
+export const TOTPConfigurationSchema = z.object({)
   id: z.string().uuid(),
   userId: z.string().uuid(),
   methodType: z.literal(MFAMethodType.TOTP),
@@ -297,10 +296,10 @@ export const TOTPConfigurationSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   lastUsedAt: z.date().optional(),
-  lockedUntil: z.date().optional()
+  lockedUntil: z.date().optional(),
 });
 
-export const EmailConfigurationSchema = z.object({
+export const EmailConfigurationSchema = z.object({)
   id: z.string().uuid(),
   userId: z.string().uuid(),
   methodType: z.literal(MFAMethodType.EMAIL),
@@ -313,10 +312,10 @@ export const EmailConfigurationSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   lastUsedAt: z.date().optional(),
-  lockedUntil: z.date().optional()
+  lockedUntil: z.date().optional(),
 });
 
-export const SMSConfigurationSchema = z.object({
+export const SMSConfigurationSchema = z.object({)
   id: z.string().uuid(),
   userId: z.string().uuid(),
   methodType: z.literal(MFAMethodType.SMS),
@@ -330,10 +329,10 @@ export const SMSConfigurationSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   lastUsedAt: z.date().optional(),
-  lockedUntil: z.date().optional()
+  lockedUntil: z.date().optional(),
 });
 
-export const MFAVerificationAttemptSchema = z.object({
+export const MFAVerificationAttemptSchema = z.object({)
   id: z.string().uuid(),
   userId: z.string().uuid(),
   methodType: z.nativeEnum(MFAMethodType),
@@ -342,7 +341,7 @@ export const MFAVerificationAttemptSchema = z.object({
   ipAddress: z.string().ip(),
   userAgent: z.string().min(1),
   attemptedAt: z.date(),
-  processingTimeMs: z.number().min(0)
+  processingTimeMs: z.number().min(0),
 });
 
 // ========================================
@@ -371,7 +370,7 @@ export const MFA_DATABASE_TABLES = {
   MFA_VERIFICATION_ATTEMPTS: 'mfa_verification_attempts',
   MFA_SESSIONS: 'mfa_sessions',
   MFA_RATE_LIMITS: 'mfa_rate_limits',
-  MFA_SECURITY_EVENTS: 'mfa_security_events'
+  MFA_SECURITY_EVENTS: 'mfa_security_events',
 } as const;
 
 // ========================================
@@ -418,23 +417,23 @@ export interface MFAListResponse {
 // ========================================
 
 export const MFA_CONSTANTS = {
-  TOTP: {
+  TOTP: {,
     SECRET_LENGTH: 32,        // Bytes
     QR_CODE_EXPIRY: 300,     // 5 minutes
     BACKUP_CODE_COUNT: 10,    // Number of backup codes
     MAX_CLOCK_SKEW: 90      // Seconds
   },
-  EMAIL: {
+  EMAIL: {,
     TOKEN_EXPIRY: 600,       // 10 minutes
     MAX_DAILY_SENDS: 5,      // Per user per day
     RATE_LIMIT_WINDOW: 3600 // 1 hour
   },
-  SMS: {
+  SMS: {,
     CODE_EXPIRY: 300,        // 5 minutes
     MAX_DAILY_SENDS: 3,      // Per user per day
     CODE_LENGTH: 6          // Digits
   },
-  SECURITY: {
+  SECURITY: {,
     MAX_FAILED_ATTEMPTS: 5,  // Before account lock
     LOCKOUT_DURATION: 900,   // 15 minutes
     SESSION_DURATION: 3600  // 1 hour

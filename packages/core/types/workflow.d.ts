@@ -122,19 +122,19 @@ export interface WorkflowStatistics {
     active_locks: number;
     scheduled_executions: number;
     resources_by_state: Record<string, number>;
-    approval_stats: {
+    approval_stats: {,
         pending: number;
         approved: number;
         rejected: number;
         cancelled: number;
         avg_approval_time_hours: number;
     };
-    lock_stats: {
+    lock_stats: {,
         total_active: number;
         by_type: Record<string, number>;
         avg_lock_duration_hours: number;
     };
-    schedule_stats: {
+    schedule_stats: {,
         total_active: number;
         by_type: Record<string, number>;
         successful_executions: number;
@@ -171,7 +171,7 @@ export interface WorkflowConfiguration {
     default_approval_timeout_hours: number;
     max_concurrent_locks_per_resource: number;
     audit_retention_days: number;
-    notification_settings: {
+    notification_settings: {,
         approval_requested: boolean;
         approval_completed: boolean;
         lock_acquired: boolean;

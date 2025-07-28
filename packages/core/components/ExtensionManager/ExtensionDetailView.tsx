@@ -2,7 +2,6 @@
  * Extension Detail View - Epic 8.4 Story 8.4.5
  * Detailed view component for individual extensions
  */
-
 import React, { useState } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { ExtensionStatus } from './ExtensionManagerStore';
@@ -19,7 +18,7 @@ export interface ExtensionDetailViewProps {
   onClose: () => void;
 }
 
-export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
+export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({)
   extension,
   status,
   viewMode,
@@ -31,7 +30,6 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
   onClose
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'permissions' | 'dependencies' | 'configuration'>('overview');
-
   const getExtensionIcon = (type: string): string => {
     switch (type) {
     case 'node': return '🔧';
@@ -41,21 +39,18 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
     default: return '📦';
     }
   };
-
   const formatFileSize = (bytes: number): string => {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    if (bytes < 1024) return `${bytes} B`;}
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;}
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;}
   };
-
   const isInstalled = viewMode === 'installed';
   const canToggle = isInstalled && onToggle;
   const canUninstall = isInstalled && onUninstall;
   const canUpdate = isInstalled && status.updateAvailable && onUpdate;
   const canConfigure = isInstalled && onConfigure;
   const canInstall = !isInstalled && onInstall;
-
-  return (
+  return ()
     <div className="extension-detail-view">
       {/* Header */}
       <div className="extension-detail-header">
@@ -63,17 +58,17 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
           ← Back
         </button>
         <div className="header-actions">
-          {canInstall && (
+          {canInstall && ()
             <button className="primary-btn install-btn" onClick={onInstall}>
               Install Extension
             </button>
           )}
-          {canUpdate && (
+          {canUpdate && ()
             <button className="primary-btn update-btn" onClick={onUpdate}>
               Update to {status.availableVersion}
             </button>
           )}
-          {canToggle && (
+          {canToggle && ()
             <button 
               className={`toggle-btn ${status.enabled ? 'enabled' : 'disabled'}`}
               onClick={onToggle}
@@ -83,7 +78,6 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
           )}
         </div>
       </div>
-
       {/* Extension Info */}
       <div className="extension-info-section">
         <div className="extension-header">
@@ -100,18 +94,17 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
               <span className="type">{extension.extension_type} extension</span>
             </div>
             <p className="extension-description">{extension.description}</p>
-            
-            {isInstalled && (
+            {isInstalled && ()
               <div className="extension-status-info">
-                <span className={`status-badge ${status.enabled ? 'enabled' : 'disabled'}`}>
+                <span className={`status-badge ${status.enabled ? 'enabled' : 'disabled'}`}>}
                   {status.enabled ? '✅ Enabled' : '⭕ Disabled'}
                 </span>
-                {status.hasErrors && (
+                {status.hasErrors && ()
                   <span className="status-badge error">
                     ❌ Error: {status.lastError}
                   </span>
                 )}
-                {status.updateAvailable && (
+                {status.updateAvailable && ()
                   <span className="status-badge update">
                     ⬆️ Update Available
                   </span>
@@ -120,7 +113,6 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
             )}
           </div>
         </div>
-
         {/* Quick Stats */}
         <div className="extension-stats">
           <div className="stat-item">
@@ -141,7 +133,6 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
           </div>
         </div>
       </div>
-
       {/* Tabs */}
       <div className="extension-detail-tabs">
         <button 
@@ -162,7 +153,7 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
         >
           Dependencies
         </button>
-        {isInstalled && (
+        {isInstalled && ()
           <button 
             className={activeTab === 'configuration' ? 'active' : ''}
             onClick={() => setActiveTab('configuration')}
@@ -171,23 +162,21 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
           </button>
         )}
       </div>
-
       {/* Tab Content */}
       <div className="extension-detail-content">
-        {activeTab === 'overview' && (
+        {activeTab === 'overview' && ()
           <div className="overview-tab">
             <section className="detail-section">
               <h3>Description</h3>
               <p>{extension.description}</p>
             </section>
-
             <section className="detail-section">
               <h3>Capabilities</h3>
               <div className="capabilities-grid">
                 <div className="capability-group">
                   <h4>Provides</h4>
                   <ul>
-                    {extension.capabilities?.provides?.map((capability, index) => (
+                    {extension.capabilities?.provides?.map((capability, index) => ()
                       <li key={index}>{capability}</li>
                     )) || <li>No capabilities specified</li>}
                   </ul>
@@ -195,15 +184,14 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
                 <div className="capability-group">
                   <h4>Requires</h4>
                   <ul>
-                    {extension.capabilities?.requires?.map((requirement, index) => (
+                    {extension.capabilities?.requires?.map((requirement, index) => ()
                       <li key={index}>{requirement}</li>
                     )) || <li>No requirements specified</li>}
                   </ul>
                 </div>
               </div>
             </section>
-
-            {extension.runtime && (
+            {extension.runtime && ()
               <section className="detail-section">
                 <h3>Runtime Information</h3>
                 <div className="runtime-info">
@@ -211,13 +199,13 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
                     <span className="label">Entry Point:</span>
                     <span className="value">{extension.runtime.entry_point}</span>
                   </div>
-                  {extension.runtime.node_types && (
+                  {extension.runtime.node_types && ()
                     <div className="info-item">
                       <span className="label">Node Types:</span>
                       <span className="value">{extension.runtime.node_types.join(', ')}</span>
                     </div>
                   )}
-                  {extension.runtime.storage_providers && (
+                  {extension.runtime.storage_providers && ()
                     <div className="info-item">
                       <span className="label">Storage Providers:</span>
                       <span className="value">{extension.runtime.storage_providers.join(', ')}</span>
@@ -226,18 +214,17 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
                 </div>
               </section>
             )}
-
-            {extension.ui && (
+            {extension.ui && ()
               <section className="detail-section">
                 <h3>UI Components</h3>
                 <div className="ui-info">
-                  {extension.ui.themes && (
+                  {extension.ui.themes && ()
                     <div className="info-item">
                       <span className="label">Themes:</span>
                       <span className="value">{extension.ui.themes.join(', ')}</span>
                     </div>
                   )}
-                  {extension.ui.components && (
+                  {extension.ui.components && ()
                     <div className="info-item">
                       <span className="label">Components:</span>
                       <span className="value">{extension.ui.components.join(', ')}</span>
@@ -248,14 +235,13 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
             )}
           </div>
         )}
-
-        {activeTab === 'permissions' && (
+        {activeTab === 'permissions' && ()
           <div className="permissions-tab">
             <section className="detail-section">
               <h3>Required Permissions</h3>
-              {extension.permissions && extension.permissions.length > 0 ? (
+              {extension.permissions && extension.permissions.length > 0 ? ()
                 <div className="permissions-list">
-                  {extension.permissions.map((permission, index) => (
+                  {extension.permissions.map((permission, index) => ()
                     <div key={index} className="permission-item">
                       <span className="permission-name">{permission}</span>
                       <span className="permission-description">
@@ -264,28 +250,27 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
                     </div>
                   ))}
                 </div>
-              ) : (
+              ) : ()
                 <p>This extension does not request any special permissions.</p>
               )}
             </section>
-
-            {extension.security && (
+            {extension.security && ()
               <section className="detail-section">
                 <h3>Security Configuration</h3>
                 <div className="security-info">
-                  {extension.security.sandbox && (
+                  {extension.security.sandbox && ()
                     <div className="info-item">
                       <span className="label">Sandboxed:</span>
                       <span className="value">{extension.security.sandbox.enabled ? 'Yes' : 'No'}</span>
                     </div>
                   )}
-                  {extension.security.content_security_policy && (
+                  {extension.security.content_security_policy && ()
                     <div className="info-item">
                       <span className="label">CSP:</span>
                       <span className="value">{extension.security.content_security_policy}</span>
                     </div>
                   )}
-                  {extension.security.trusted_domains && (
+                  {extension.security.trusted_domains && ()
                     <div className="info-item">
                       <span className="label">Trusted Domains:</span>
                       <span className="value">{extension.security.trusted_domains.join(', ')}</span>
@@ -296,8 +281,7 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
             )}
           </div>
         )}
-
-        {activeTab === 'dependencies' && (
+        {activeTab === 'dependencies' && ()
           <div className="dependencies-tab">
             <section className="detail-section">
               <h3>System Dependencies</h3>
@@ -307,12 +291,11 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
                 <span className="dependency-status satisfied">✅</span>
               </div>
             </section>
-
-            {extension.dependencies?.extensions && Object.keys(extension.dependencies.extensions).length > 0 && (
+            {extension.dependencies?.extensions && Object.keys(extension.dependencies.extensions).length > 0 && ()
               <section className="detail-section">
                 <h3>Extension Dependencies</h3>
                 <div className="dependencies-list">
-                  {Object.entries(extension.dependencies.extensions).map(([depId, version], index) => (
+                  {Object.entries(extension.dependencies.extensions).map(([depId, version], index) => ()
                     <div key={index} className="dependency-item">
                       <span className="dependency-name">{depId}</span>
                       <span className="dependency-version">{version}</span>
@@ -322,28 +305,27 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
                 </div>
               </section>
             )}
-
-            {extension.compatibility && (
+            {extension.compatibility && ()
               <section className="detail-section">
                 <h3>Compatibility</h3>
                 <div className="compatibility-info">
-                  {extension.compatibility.min_system_version && (
+                  {extension.compatibility.min_system_version && ()
                     <div className="info-item">
                       <span className="label">Minimum System Version:</span>
                       <span className="value">{extension.compatibility.min_system_version}</span>
                     </div>
                   )}
-                  {extension.compatibility.platforms && (
+                  {extension.compatibility.platforms && ()
                     <div className="info-item">
                       <span className="label">Supported Platforms:</span>
                       <span className="value">{extension.compatibility.platforms.join(', ')}</span>
                     </div>
                   )}
-                  {extension.compatibility.browsers && (
+                  {extension.compatibility.browsers && ()
                     <div className="info-item">
                       <span className="label">Browser Requirements:</span>
                       <div className="browser-list">
-                        {Object.entries(extension.compatibility.browsers).map(([browser, version]) => (
+                        {Object.entries(extension.compatibility.browsers).map(([browser, version]) => ()
                           <span key={browser} className="browser-item">
                             {browser} {version}
                           </span>
@@ -356,13 +338,12 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
             )}
           </div>
         )}
-
-        {activeTab === 'configuration' && isInstalled && (
+        {activeTab === 'configuration' && isInstalled && ()
           <div className="configuration-tab">
             <section className="detail-section">
               <h3>Extension Configuration</h3>
               <div className="config-actions">
-                {canConfigure && (
+                {canConfigure && ()
                   <button className="config-btn" onClick={onConfigure}>
                     ⚙️ Open Configuration
                   </button>
@@ -374,10 +355,9 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
                   📥 Import Settings
                 </button>
               </div>
-
               <div className="config-info">
                 <p>Extension configuration allows you to customize behavior and settings specific to this extension.</p>
-                {status.hasErrors && (
+                {status.hasErrors && ()
                   <div className="config-warning">
                     <span className="warning-icon">⚠️</span>
                     <span>This extension has configuration errors that need to be resolved.</span>
@@ -388,11 +368,10 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
           </div>
         )}
       </div>
-
       {/* Footer Actions */}
       <div className="extension-detail-footer">
         <div className="footer-left">
-          {canUninstall && (
+          {canUninstall && ()
             <button className="danger-btn" onClick={onUninstall}>
               🗑️ Uninstall Extension
             </button>
@@ -423,7 +402,6 @@ function getPermissionDescription(permission: string): string {
     'system-info': 'Access system information and statistics',
     'data-storage': 'Store and retrieve persistent data'
   };
-  
   return descriptions[permission] || 'Access to system functionality';
 }
 

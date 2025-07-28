@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Node } from 'reactflow';
 import { ZodSchema } from 'zod';
-
 interface InspectorState {
   selectedNode: Node | null;
   selectedSchema: ZodSchema<unknown> | null;
@@ -9,7 +8,6 @@ interface InspectorState {
   panelCollapsed: boolean;
   panelVisible: boolean;
 }
-
 interface InspectorActions {
   setSelectedNode: (node: Node | null) => void;
   setSelectedSchema: (schema: ZodSchema<unknown> | null) => void;
@@ -18,11 +16,8 @@ interface InspectorActions {
   setPanelVisible: (visible: boolean) => void;
   updateNodeData: (nodeId: string, data: Record<string, unknown>) => void;
 }
-
 interface InspectorContextValue extends InspectorState, InspectorActions {}
-
 const InspectorContext = createContext<InspectorContextValue | null>(null);
-
 interface InspectorProviderProps {
   children: ReactNode;
   onNodeUpdate?: (nodeId: string, data: Record<string, unknown>) => void;
@@ -31,7 +26,7 @@ interface InspectorProviderProps {
   initialVisible?: boolean;
 }
 
-export const InspectorProvider: React.FC<InspectorProviderProps> = ({
+export const InspectorProvider: React.FC<InspectorProviderProps> = ({)
   children,
   onNodeUpdate,
   initialWidth = 320,
@@ -43,13 +38,11 @@ export const InspectorProvider: React.FC<InspectorProviderProps> = ({
   const [panelWidth, setPanelWidth] = useState(initialWidth);
   const [panelCollapsed, setPanelCollapsed] = useState(initialCollapsed);
   const [panelVisible, setPanelVisible] = useState(initialVisible);
-
   const updateNodeData = (nodeId: string, data: Record<string, unknown>) => {
     if (onNodeUpdate) {
       onNodeUpdate(nodeId, data);
     }
   };
-
   const contextValue: InspectorContextValue = {
     // State
     selectedNode,
@@ -65,8 +58,7 @@ export const InspectorProvider: React.FC<InspectorProviderProps> = ({
     setPanelVisible,
     updateNodeData
   };
-
-  return (
+  return ()
     <InspectorContext.Provider value={contextValue}>
       {children}
     </InspectorContext.Provider>

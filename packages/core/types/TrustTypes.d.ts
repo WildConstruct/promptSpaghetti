@@ -375,7 +375,7 @@ export interface PaymentEvent {
 }
 export interface TrustScoreConfig {
     version: string;
-    weights: {
+    weights: {,
         creator: CreatorTrustWeights;
         buyer: BuyerTrustWeights;
         template: TemplateTrustWeights;
@@ -525,7 +525,7 @@ export interface TrustRecommendation {
     title: string;
     description: string;
     expectedImpact: string;
-    implementation: {
+    implementation: {,
         effort: 'low' | 'medium' | 'high';
         timeline: string;
         resources: string[];

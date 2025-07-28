@@ -33,7 +33,7 @@ export interface VersionDiff {
     diff_type: 'incremental' | 'full' | 'structural';
     diff_format: 'json' | 'binary' | 'text';
     diff_data: any;
-    diff_summary: {
+    diff_summary: {,
         total_changes: number;
         added: number;
         removed: number;
@@ -141,7 +141,7 @@ export declare class VersionHistoryManager {
     compareFreshSnapshots(fromSnapshotId: string, toSnapshotId: string): Promise<VersionDiff>;
     getSnapshotDiff(fromSnapshotId: string, toSnapshotId: string): Promise<VersionDiff>;
     private computeDiff;
-    createBranch(name: string, options?: {
+    createBranch(name: string, options?: {)
         description?: string;
         branch_type?: 'feature' | 'hotfix' | 'experiment';
         parent_branch_id?: string;
@@ -150,12 +150,12 @@ export declare class VersionHistoryManager {
     }): Promise<Branch>;
     getBranches(): Promise<Branch[]>;
     switchBranch(branchName: string): Promise<Branch>;
-    mergeBranch(sourceBranchId: string, targetBranchId: string, options?: {
+    mergeBranch(sourceBranchId: string, targetBranchId: string, options?: {)
         merge_message?: string;
         strategy?: 'merge' | 'squash' | 'rebase';
         delete_source?: boolean;
     }): Promise<VersionSnapshot>;
-    recordChangeEvent(event: {
+    recordChangeEvent(event: {)
         event_type: string;
         event_data: any;
         affected_nodes: string[];
@@ -163,7 +163,7 @@ export declare class VersionHistoryManager {
         workflow_state?: string;
         approval_required?: boolean;
     }): Promise<ChangeEvent>;
-    getChangeEvents(filter?: {
+    getChangeEvents(filter?: {)
         start_date?: string;
         end_date?: string;
         author_id?: string;
@@ -174,7 +174,7 @@ export declare class VersionHistoryManager {
         events: ChangeEvent[];
         total: number;
     }>;
-    addAnnotation(snapshotId: string, annotation: {
+    addAnnotation(snapshotId: string, annotation: {)
         annotation_type?: 'comment' | 'review' | 'approval' | 'flag';
         title?: string;
         content_markdown: string;
@@ -194,21 +194,21 @@ export declare class VersionHistoryManager {
         total_snapshots: number;
         total_branches: number;
         total_changes: number;
-        most_active_authors: Array<{
+        most_active_authors: Array<{,
             author_id: string;
             change_count: number;
         }>;
-        change_frequency: Array<{
+        change_frequency: Array<{,
             date: string;
             count: number;
         }>;
-        branch_activity: Array<{
+        branch_activity: Array<{,
             branch_name: string;
             snapshot_count: number;
         }>;
     }>;
     startNewSession(): void;
-    cleanupOldData(options?: {
+    cleanupOldData(options?: {)
         days_old?: number;
         keep_milestones?: boolean;
         keep_tagged_versions?: boolean;

@@ -12,7 +12,6 @@
  * - Progress tracking and user feedback
  * - Integration with existing security managers
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Mail, 
@@ -70,7 +69,7 @@ export interface PasswordValidation {
   strength: PasswordStrength;
   score: number;
   feedback: string[];
-  requirements: {
+  requirements: {,
     length: boolean;
     uppercase: boolean;
     lowercase: boolean;
@@ -89,7 +88,7 @@ export interface PasswordResetFlowProps {
   customValidation?: (password: string) => PasswordValidation;
 }
 
-export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
+export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
   onResetComplete,
   onStepChange,
   onSecurityEvent,
@@ -106,29 +105,26 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
   // UI state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const [tokenSent, setTokenSent] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
-  
   // Password validation
-  const [passwordValidation, setPasswordValidation] = useState<PasswordValidation>({
+  const [passwordValidation, setPasswordValidation] = useState<PasswordValidation>({)
     isValid: false,
     strength: PasswordStrength.WEAK,
     score: 0,
     feedback: [],
-    requirements: {
+    requirements: {,
       length: false,
       uppercase: false,
       lowercase: false,
       numbers: false,
-      symbols: false
+      symbols: false,
     }
   });
-
   // Timer for resend cooldown
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -141,22 +137,19 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
       if (interval) clearInterval(interval);
     };
   }, [resendTimer]);
-
   // Step change notification
   useEffect(() => {
     onStepChange?.(currentStep);
   }, [currentStep, onStepChange]);
-
   // Password validation
   useEffect(() => {
     if (newPassword) {
-      const validation = customValidation ? 
+      const validation = customValidation ? ;
         customValidation(newPassword) : 
         validatePassword(newPassword);
       setPasswordValidation(validation);
     }
   }, [newPassword, customValidation]);
-
   // Default password validation
   const validatePassword = (password: string): PasswordValidation => {
     const requirements = {
@@ -166,38 +159,31 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
       numbers: /\d/.test(password),
       symbols: /[!@#$%^&*(),.?":{}|<>]/.test(password)
     };
-
     const score = Object.values(requirements).filter(Boolean).length;
     const feedback: string[] = [];
-
     if (!requirements.length) feedback.push('Password must be at least 8 characters long');
     if (!requirements.uppercase) feedback.push('Add at least one uppercase letter');
     if (!requirements.lowercase) feedback.push('Add at least one lowercase letter');
     if (!requirements.numbers) feedback.push('Add at least one number');
     if (!requirements.symbols) feedback.push('Add at least one special character');
-
     let strength: PasswordStrength;
     if (score <= 2) strength = PasswordStrength.WEAK;
     else if (score === 3) strength = PasswordStrength.FAIR;
     else if (score === 4) strength = PasswordStrength.GOOD;
     else strength = PasswordStrength.STRONG;
-
     // Additional security checks
     if (password.length >= 12 && score >= 4) {
       strength = PasswordStrength.STRONG;
     }
-
     // Check for common patterns
     if (/^(.)\1+$/.test(password)) {
       feedback.push('Avoid repeating characters');
       strength = PasswordStrength.WEAK;
     }
-
     if (/^(012|123|234|345|456|567|678|789|890|abc|def|ghi|jkl|mno|pqr|stu|vwx|yza)/i.test(password)) {
       feedback.push('Avoid sequential characters');
       strength = PasswordStrength.WEAK;
     }
-
     return {
       isValid: score >= 4 && password.length >= 8,
       strength,
@@ -206,92 +192,73 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
       requirements
     };
   };
-
   // API simulation helpers (replace with actual API calls)
   const requestPasswordReset = async (requestData: PasswordResetRequest): Promise<boolean> => {
     await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API delay
-    
     // Mock validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(requestData.email)) {
       throw new Error('Please enter a valid email address');
     }
-
     // Mock rate limiting
     if (requestData.email === 'blocked@example.com') {
       throw new Error('Too many reset requests. Please try again later.');
     }
-
     return true;
   };
-
   const verifyResetToken = async (verification: TokenVerification): Promise<boolean> => {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
     // Mock token validation
     if (verification.token.length < 6) {
       throw new Error('Please enter a valid reset code');
     }
-
     if (verification.token === '000000') {
       throw new Error('Invalid or expired reset code');
     }
-
     return true;
   };
-
   const resetPassword = async (resetData: PasswordResetData): Promise<boolean> => {
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
     // Validate passwords match
     if (resetData.newPassword !== resetData.confirmPassword) {
       throw new Error('Passwords do not match');
     }
-
     // Validate password strength
-    const validation = customValidation ? 
+    const validation = customValidation ? ;
       customValidation(resetData.newPassword) : 
       validatePassword(resetData.newPassword);
-
     if (!validation.isValid) {
       throw new Error('Password does not meet security requirements');
     }
-
     return true;
   };
-
   // Event handlers
   const handleRequestReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
       const requestData: PasswordResetRequest = {
         email,
         ipAddress: '192.168.1.100', // Would be detected from client
         userAgent: navigator.userAgent,
-        metadata: {
+        metadata: {,
           timestamp: new Date().toISOString(),
-          referrer: document.referrer
+          referrer: document.referrer,
         }
       };
-
       await requestPasswordReset(requestData);
-      
       setTokenSent(true);
-      setSuccess(`Reset code sent to ${email}`);
+      setSuccess(`Reset code sent to ${email}`);}
       setResendTimer(60); // 60 second cooldown
       setCurrentStep(ResetStep.VERIFY);
-
-      onSecurityEvent?.(SecurityEvent.RESET_REQUESTED, {
+      onSecurityEvent?.(SecurityEvent.RESET_REQUESTED, {)
         email,
         timestamp: new Date()
       });
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send reset code');
-      onSecurityEvent?.(SecurityEvent.RESET_REQUEST_FAILED, {
+      onSecurityEvent?.(SecurityEvent.RESET_REQUEST_FAILED, {)
         email,
         error: err instanceof Error ? err.message : 'Unknown error'
       });
@@ -299,31 +266,25 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
       setLoading(false);
     }
   };
-
   const handleVerifyToken = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
       const verification: TokenVerification = {
         token,
         email
       };
-
       await verifyResetToken(verification);
-      
       setSuccess('Code verified successfully');
       setCurrentStep(ResetStep.RESET);
-
-      onSecurityEvent?.(SecurityEvent.TOKEN_VERIFIED, {
+      onSecurityEvent?.(SecurityEvent.TOKEN_VERIFIED, {)
         email,
         timestamp: new Date()
       });
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to verify code');
-      onSecurityEvent?.(SecurityEvent.TOKEN_VERIFICATION_FAILED, {
+      onSecurityEvent?.(SecurityEvent.TOKEN_VERIFICATION_FAILED, {)
         email,
         error: err instanceof Error ? err.message : 'Unknown error'
       });
@@ -331,32 +292,26 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
       setLoading(false);
     }
   };
-
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
       const resetData: PasswordResetData = {
         token,
         newPassword,
         confirmPassword
       };
-
       await resetPassword(resetData);
-      
       setCurrentStep(ResetStep.SUCCESS);
       onResetComplete?.(true, email);
-
-      onSecurityEvent?.(SecurityEvent.PASSWORD_RESET_COMPLETED, {
+      onSecurityEvent?.(SecurityEvent.PASSWORD_RESET_COMPLETED, {)
         email,
         timestamp: new Date()
       });
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to reset password');
-      onSecurityEvent?.(SecurityEvent.PASSWORD_RESET_FAILED, {
+      onSecurityEvent?.(SecurityEvent.PASSWORD_RESET_FAILED, {)
         email,
         error: err instanceof Error ? err.message : 'Unknown error'
       });
@@ -364,41 +319,33 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
       setLoading(false);
     }
   };
-
   const handleResendCode = async () => {
     if (resendTimer > 0) return;
-
     setError('');
     setLoading(true);
-
     try {
       await requestPasswordReset({ email });
       setSuccess('New reset code sent');
       setResendTimer(60);
-
-      onSecurityEvent?.(SecurityEvent.RESET_CODE_RESENT, {
+      onSecurityEvent?.(SecurityEvent.RESET_CODE_RESENT, {)
         email,
         timestamp: new Date()
       });
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to resend code');
     } finally {
       setLoading(false);
     }
   };
-
   const handleGoBack = () => {
     setError('');
     setSuccess('');
-    
     if (currentStep === ResetStep.VERIFY) {
       setCurrentStep(ResetStep.REQUEST);
     } else if (currentStep === ResetStep.RESET) {
       setCurrentStep(ResetStep.VERIFY);
     }
   };
-
   const getPasswordStrengthColor = (strength: PasswordStrength) => {
     switch (strength) {
     case PasswordStrength.WEAK: return 'text-red-600 bg-red-100';
@@ -408,13 +355,11 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-
   const getPasswordStrengthWidth = (score: number) => {
-    return `${Math.max(score, 10)}%`;
+    return `${Math.max(score, 10)}%`;}
   };
-
-  return (
-    <div className={`max-w-md mx-auto bg-white rounded-lg shadow-lg ${className}`}>
+  return ()
+    <div className={`max-w-md mx-auto bg-white rounded-lg shadow-lg ${className}`}>}
       {/* Header */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center space-x-3">
@@ -432,7 +377,6 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
           </div>
         </div>
       </div>
-
       {/* Progress Indicator */}
       <div className="px-6 py-4 bg-gray-50">
         <div className="flex items-center justify-between text-sm">
@@ -448,11 +392,9 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
             </div>
             <span>Request</span>
           </div>
-
           <div className={`w-8 h-0.5 ${
             ['verify', 'reset', 'success'].includes(currentStep) ? 'bg-green-600' : 'bg-gray-300'
           }`} />
-
           <div className={`flex items-center space-x-2 ${
             currentStep === ResetStep.VERIFY ? 'text-blue-600' : 
               ['reset', 'success'].includes(currentStep) ? 'text-green-600' : 'text-gray-400'
@@ -465,11 +407,9 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
             </div>
             <span>Verify</span>
           </div>
-
           <div className={`w-8 h-0.5 ${
             ['reset', 'success'].includes(currentStep) ? 'bg-green-600' : 'bg-gray-300'
           }`} />
-
           <div className={`flex items-center space-x-2 ${
             currentStep === ResetStep.RESET ? 'text-blue-600' : 
               currentStep === ResetStep.SUCCESS ? 'text-green-600' : 'text-gray-400'
@@ -484,11 +424,10 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
           </div>
         </div>
       </div>
-
       {/* Content */}
       <div className="p-6">
         {/* Error Message */}
-        {error && (
+        {error && ()
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-2">
             <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
             <div>
@@ -496,9 +435,8 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
             </div>
           </div>
         )}
-
         {/* Success Message */}
-        {success && (
+        {success && ()
           <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-start space-x-2">
             <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
             <div>
@@ -506,9 +444,8 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
             </div>
           </div>
         )}
-
         {/* Step 1: Request Reset */}
-        {currentStep === ResetStep.REQUEST && (
+        {currentStep === ResetStep.REQUEST && ()
           <form onSubmit={handleRequestReset} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
@@ -531,18 +468,17 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
                 We'll send a reset code to this email address
               </p>
             </div>
-
             <button
               type="submit"
               disabled={loading || !email}
               className="w-full flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? (
+              {loading ? ()
                 <>
                   <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
                   Sending Code...
                 </>
-              ) : (
+              ) : ()
                 <>
                   <Mail className="w-4 h-4 mr-2" />
                   Send Reset Code
@@ -551,9 +487,8 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
             </button>
           </form>
         )}
-
         {/* Step 2: Verify Token */}
-        {currentStep === ResetStep.VERIFY && (
+        {currentStep === ResetStep.VERIFY && ()
           <div className="space-y-4">
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -564,7 +499,6 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
                 <span className="font-medium text-gray-900">{email}</span>
               </p>
             </div>
-
             <form onSubmit={handleVerifyToken} className="space-y-4">
               <div>
                 <label htmlFor="token" className="block text-sm font-medium text-gray-700 mb-2">
@@ -585,18 +519,17 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
                   Enter the 6-digit code from your email
                 </p>
               </div>
-
               <button
                 type="submit"
                 disabled={loading || token.length !== 6}
                 className="w-full flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? (
+                {loading ? ()
                   <>
                     <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
                     Verifying...
                   </>
-                ) : (
+                ) : ()
                   <>
                     <Shield className="w-4 h-4 mr-2" />
                     Verify Code
@@ -604,7 +537,6 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
                 )}
               </button>
             </form>
-
             <div className="text-center">
               <button
                 type="button"
@@ -612,17 +544,16 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
                 disabled={loading || resendTimer > 0}
                 className="text-sm text-blue-600 hover:text-blue-700 disabled:text-gray-400 disabled:cursor-not-allowed"
               >
-                {resendTimer > 0 ? (
+                {resendTimer > 0 ? ()
                   <>
                     <Clock className="w-4 h-4 inline mr-1" />
                     Resend in {resendTimer}s
                   </>
-                ) : (
+                ) : ()
                   'Resend Code'
                 )}
               </button>
             </div>
-
             <div className="text-center">
               <button
                 type="button"
@@ -635,9 +566,8 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
             </div>
           </div>
         )}
-
         {/* Step 3: Reset Password */}
-        {currentStep === ResetStep.RESET && (
+        {currentStep === ResetStep.RESET && ()
           <form onSubmit={handleResetPassword} className="space-y-4">
             <div>
               <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-2">
@@ -664,13 +594,12 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
                 </button>
               </div>
             </div>
-
             {/* Password Strength Indicator */}
-            {newPassword && (
+            {newPassword && ()
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-600">Password Strength</span>
-                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${getPasswordStrengthColor(passwordValidation.strength)}`}>
+                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${getPasswordStrengthColor(passwordValidation.strength)}`}>}
                     {passwordValidation.strength.toUpperCase()}
                   </span>
                 </div>
@@ -684,11 +613,10 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
                     style={{ width: getPasswordStrengthWidth(passwordValidation.score) }}
                   />
                 </div>
-                
                 {/* Password Requirements */}
                 <div className="grid grid-cols-1 gap-1 text-xs">
-                  {Object.entries(passwordValidation.requirements).map(([requirement, met]) => (
-                    <div key={requirement} className={`flex items-center space-x-2 ${met ? 'text-green-600' : 'text-gray-400'}`}>
+                  {Object.entries(passwordValidation.requirements).map(([requirement, met]) => ()
+                    <div key={requirement} className={`flex items-center space-x-2 ${met ? 'text-green-600' : 'text-gray-400'}`}>}
                       {met ? <CheckCircle className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
                       <span>
                         {requirement === 'length' && 'At least 8 characters'}
@@ -702,7 +630,6 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
                 </div>
               </div>
             )}
-
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                 Confirm Password
@@ -727,29 +654,27 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              {confirmPassword && newPassword !== confirmPassword && (
+              {confirmPassword && newPassword !== confirmPassword && ()
                 <p className="mt-1 text-xs text-red-600">Passwords do not match</p>
               )}
             </div>
-
             <button
               type="submit"
               disabled={loading || !passwordValidation.isValid || newPassword !== confirmPassword}
               className="w-full flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? (
+              {loading ? ()
                 <>
                   <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
                   Resetting Password...
                 </>
-              ) : (
+              ) : ()
                 <>
                   <Key className="w-4 h-4 mr-2" />
                   Reset Password
                 </>
               )}
             </button>
-
             <div className="text-center">
               <button
                 type="button"
@@ -762,9 +687,8 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
             </div>
           </form>
         )}
-
         {/* Step 4: Success */}
-        {currentStep === ResetStep.SUCCESS && (
+        {currentStep === ResetStep.SUCCESS && ()
           <div className="text-center space-y-4">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
               <CheckCircle className="w-8 h-8 text-green-600" />
@@ -787,12 +711,11 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
           </div>
         )}
       </div>
-
       {/* Footer */}
       <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
         <p className="text-xs text-gray-500 text-center">
           Need help? Contact{' '}
-          <a href={`mailto:${supportEmail}`} className="text-blue-600 hover:text-blue-700">
+          <a href={`mailto:${supportEmail}`} className="text-blue-600 hover:text-blue-700">}
             {supportEmail}
           </a>
         </p>

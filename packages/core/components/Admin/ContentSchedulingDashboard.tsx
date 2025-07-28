@@ -7,7 +7,6 @@
  * Task: E17-1753114396947-96EB34 - Design content scheduling
  * Epic: 17 - Backstage Admin Controls
  */
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -46,7 +45,6 @@ import {
   Share2,
   Bell
 } from 'lucide-react';
-
 import {
   contentSchedulingService,
   ContentItem,
@@ -56,13 +54,11 @@ import {
   SchedulingStats,
   ScheduleBatch
 } from '../../services/ContentSchedulingService';
-
 interface ContentSchedulingDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
 }
-
 const CONTENT_TYPE_CONFIG = {
   article: { color: 'text-blue-600 bg-blue-100', icon: FileText },
   blog_post: { color: 'text-green-600 bg-green-100', icon: Edit },
@@ -78,7 +74,6 @@ const CONTENT_TYPE_CONFIG = {
   gallery: { color: 'text-teal-600 bg-teal-100', icon: Image },
   document: { color: 'text-gray-600 bg-gray-100', icon: FileText }
 };
-
 const STATUS_CONFIG = {
   draft: { color: 'text-gray-600 bg-gray-100', icon: Edit },
   scheduled: { color: 'text-blue-600 bg-blue-100', icon: Clock },
@@ -89,7 +84,7 @@ const STATUS_CONFIG = {
   error: { color: 'text-red-600 bg-red-100', icon: XCircle }
 };
 
-export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProps> = ({
+export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProps> = ({)
   className = '',
   userId,
   userRole
@@ -100,37 +95,31 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
   const [stats, setStats] = useState<SchedulingStats | null>(null);
   const [selectedContent, setSelectedContent] = useState<ContentItem | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
   // Filters
   const [_____filter, _____setFilter] = useState<ContentFilter>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState<ContentType | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<ContentStatus | 'all'>('all');
   const [dateRange, setDateRange] = useState<'today' | 'week' | 'month' | 'all'>('week');
-
   // Load data
   useEffect(() => {
     loadData();
-    const interval = setInterval(loadData, 30000); // Refresh every 30 seconds
+    const interval = setInterval(loadData, 30000); // Refresh every 30 seconds;
     return () => clearInterval(interval);
   }, []);
-
   const loadData = async () => {
     try {
       setIsLoading(true);
-      
       // Build filter
       const contentFilter: ContentFilter = {
         searchQuery: searchQuery || undefined,
         types: typeFilter !== 'all' ? [typeFilter] : undefined,
         statuses: statusFilter !== 'all' ? [statusFilter] : undefined
       };
-
       // Add date range filter
       if (dateRange !== 'all') {
         const now = new Date();
         let start: Date;
-        
         switch (dateRange) {
         case 'today':
           start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -148,26 +137,21 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
         }
         contentFilter.dateRange = { start, end: now };
       }
-
       // Load content
       const contentList = contentSchedulingService.getContent(contentFilter);
       setContent(contentList);
-
       // Load stats
       const statsData = contentSchedulingService.getSchedulingStats();
       setStats(statsData);
-
       // Load batches
       const batchList = contentSchedulingService.getBatches();
       setBatches(batchList);
-
     } catch (error) {
       console.error('Failed to load scheduling data:', error);
     } finally {
       setIsLoading(false);
     }
   };
-
   const handlePublishContent = async (contentId: string) => {
     try {
       await contentSchedulingService.publishContent(contentId, userId || 'admin');
@@ -176,7 +160,6 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       console.error('Failed to publish content:', error);
     }
   };
-
   const handleUnpublishContent = async (contentId: string) => {
     try {
       await contentSchedulingService.unpublishContent(contentId, userId || 'admin');
@@ -185,21 +168,19 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       console.error('Failed to unpublish content:', error);
     }
   };
-
   const handleScheduleContent = async (contentId: string, publishAt: Date) => {
     try {
-      await contentSchedulingService.scheduleContent(contentId, {
+      await contentSchedulingService.scheduleContent(contentId, {)
         publishAt,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       }, userId || 'admin');
       loadData();
     } catch (error) {
       console.error('Failed to schedule content:', error);
     }
   };
-
   const filteredContent = useMemo(() => {
-    return content.filter(item => {
+    return content.filter(item => {)
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         if (!item.title.toLowerCase().includes(query) &&
@@ -208,23 +189,18 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           return false;
         }
       }
-      
       if (typeFilter !== 'all' && item.type !== typeFilter) {
         return false;
       }
-      
       if (statusFilter !== 'all' && item.status !== statusFilter) {
         return false;
       }
-      
       return true;
     });
   }, [content, searchQuery, typeFilter, statusFilter]);
-
   const renderOverview = () => {
     if (!stats) return <div>Loading overview...</div>;
-
-    return (
+    return ()
       <div className="overview-section">
         <div className="metrics-grid">
           <Card>
@@ -239,7 +215,6 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-6">
               <div className="metric-item">
@@ -252,7 +227,6 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-6">
               <div className="metric-item">
@@ -265,7 +239,6 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-6">
               <div className="metric-item">
@@ -281,7 +254,6 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
             </CardContent>
           </Card>
         </div>
-
         <div className="upcoming-section">
           <Card>
             <CardHeader>
@@ -289,7 +261,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
             </CardHeader>
             <CardContent>
               <div className="upcoming-schedules">
-                {stats.upcomingSchedules.slice(0, 5).map((schedule, index) => (
+                {stats.upcomingSchedules.slice(0, 5).map((schedule, index) => ()
                   <div key={index} className="schedule-item">
                     <div className="schedule-date">
                       <Calendar className="w-4 h-4" />
@@ -301,7 +273,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
                       </Badge>
                     </div>
                     <div className="schedule-preview">
-                      {schedule.items.slice(0, 3).map(item => (
+                      {schedule.items.slice(0, 3).map(item => ()
                         <div key={item.id} className="preview-item">
                           <span className="item-title">{item.title}</span>
                           <Badge className={CONTENT_TYPE_CONFIG[item.type].color} size="sm">
@@ -309,7 +281,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
                           </Badge>
                         </div>
                       ))}
-                      {schedule.items.length > 3 && (
+                      {schedule.items.length > 3 && ()
                         <div className="preview-more">
                           +{schedule.items.length - 3} more
                         </div>
@@ -321,7 +293,6 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
             </CardContent>
           </Card>
         </div>
-
         <div className="performance-section">
           <Card>
             <CardHeader>
@@ -329,7 +300,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
             </CardHeader>
             <CardContent>
               <div className="performance-list">
-                {stats.performanceMetrics.topPerformingContent.map(item => (
+                {stats.performanceMetrics.topPerformingContent.map(item => ()
                   <div key={item.id} className="performance-item">
                     <div className="item-info">
                       <div className="item-title">{item.title}</div>
@@ -342,9 +313,9 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
                       <div 
                         className="performance-bar"
                         style={{ 
-                          width: `${Math.min(
+                          width: `${Math.min(),}
                             100,
-                            (item.views / Math.max(...stats.performanceMetrics.topPerformingContent.map(c => c.views
+                            (item.views / Math.max(...stats.performanceMetrics.topPerformingContent.map(c => c.views)
                           ))) * 100)}%` 
                         }}
                       />
@@ -358,8 +329,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       </div>
     );
   };
-
-  const renderContentList = () => (
+  const renderContentList = () => (;)
     <div className="content-section">
       {/* Controls */}
       <div className="content-controls">
@@ -373,7 +343,6 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
               className="search-input"
             />
           </div>
-
           <Select
             value={typeFilter}
             onValueChange={(value) => setTypeFilter(value as ContentType | 'all')}
@@ -393,7 +362,6 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
             <option value="gallery">Gallery</option>
             <option value="document">Document</option>
           </Select>
-
           <Select
             value={statusFilter}
             onValueChange={(value) => setStatusFilter(value as ContentStatus | 'all')}
@@ -405,7 +373,6 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
             <option value="unpublished">Unpublished</option>
             <option value="archived">Archived</option>
           </Select>
-
           <Select
             value={dateRange}
             onValueChange={(value) => setDateRange(value as typeof dateRange)}
@@ -416,10 +383,9 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
             <option value="all">All Time</option>
           </Select>
         </div>
-
         <div className="action-buttons">
           <Button onClick={loadData} disabled={isLoading} variant="outline">
-            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />}
             Refresh
           </Button>
           <Button>
@@ -428,10 +394,9 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           </Button>
         </div>
       </div>
-
       {/* Content Grid */}
       <div className="content-grid">
-        {filteredContent.map(item => (
+        {filteredContent.map(item => ()
           <ContentCard
             key={item.id}
             content={item}
@@ -443,8 +408,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           />
         ))}
       </div>
-
-      {filteredContent.length === 0 && (
+      {filteredContent.length === 0 && ()
         <div className="empty-state">
           <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No content found</h3>
@@ -453,8 +417,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       )}
     </div>
   );
-
-  const renderBatchOperations = () => (
+  const renderBatchOperations = () => (;)
     <div className="batch-section">
       <div className="batch-header">
         <h3>Batch Operations</h3>
@@ -463,9 +426,8 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           Create Batch
         </Button>
       </div>
-
       <div className="batch-list">
-        {batches.map(batch => (
+        {batches.map(batch => ()
           <BatchCard
             key={batch.id}
             batch={batch}
@@ -474,8 +436,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           />
         ))}
       </div>
-
-      {batches.length === 0 && (
+      {batches.length === 0 && ()
         <div className="empty-state">
           <Settings className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No batch operations</h3>
@@ -484,11 +445,9 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       )}
     </div>
   );
-
   const renderAnalytics = () => {
     if (!stats) return <div>Loading analytics...</div>;
-
-    return (
+    return ()
       <div className="analytics-section">
         <div className="analytics-grid">
           <Card>
@@ -500,11 +459,10 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
                 {Object.entries(stats.performanceMetrics.contentTypePerformance).map(([type, performance]) => {
                   const config = CONTENT_TYPE_CONFIG[type as ContentType];
                   const Icon = config.icon;
-                  
-                  return (
+                  return ()
                     <div key={type} className="type-item">
                       <div className="type-info">
-                        <Icon className={`w-4 h-4 ${config.color.split(' ')[0]}`} />
+                        <Icon className={`w-4 h-4 ${config.color.split(' ')[0]}`} />}
                         <span className="type-name">{type.replace('_', ' ')}</span>
                       </div>
                       <div className="type-stats">
@@ -531,15 +489,13 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       </div>
     );
   };
-
-  return (
-    <div className={`content-scheduling-dashboard ${className}`}>
+  return ()
+    <div className={`content-scheduling-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-info">
           <h2>Content Scheduling</h2>
           <p>Manage content lifecycle, publication scheduling, and performance</p>
         </div>
-        
         <div className="header-actions">
           <Button variant="outline">
             <Download className="w-4 h-4 mr-2" />
@@ -547,7 +503,6 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           </Button>
         </div>
       </div>
-
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid grid-cols-4 w-full">
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -558,26 +513,21 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           <TabsTrigger value="batch">Batch Operations</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview" className="tab-content">
           {renderOverview()}
         </TabsContent>
-
         <TabsContent value="content" className="tab-content">
           {renderContentList()}
         </TabsContent>
-
         <TabsContent value="batch" className="tab-content">
           {renderBatchOperations()}
         </TabsContent>
-
         <TabsContent value="analytics" className="tab-content">
           {renderAnalytics()}
         </TabsContent>
       </Tabs>
-
       {/* Content Detail Modal */}
-      {selectedContent && (
+      {selectedContent && ()
         <ContentDetailModal
           content={selectedContent}
           onClose={() => setSelectedContent(null)}
@@ -585,7 +535,6 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           userRole={userRole}
         />
       )}
-
       <style>{`
         .content-scheduling-dashboard {
           max-width: 1400px;
@@ -595,80 +544,66 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .dashboard-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           gap: 1rem;
         }
-
         .header-info h2 {
           font-size: 1.875rem;
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 0.5rem;
         }
-
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
         }
-
         .overview-section {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 1rem;
         }
-
         .metric-item {
           display: flex;
           align-items: flex-start;
           gap: 0.75rem;
         }
-
         .metric-info {
           flex: 1;
         }
-
         .metric-label {
           font-size: 0.875rem;
           color: #6b7280;
           margin-bottom: 0.25rem;
         }
-
         .metric-value {
           font-size: 1.5rem;
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 0.25rem;
         }
-
         .metric-change {
           font-size: 0.75rem;
           color: #6b7280;
         }
-
         .metric-change.positive {
           color: #059669;
         }
-
         .upcoming-section {
           margin-top: 1rem;
         }
-
         .upcoming-schedules {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .schedule-item {
           display: flex;
           align-items: center;
@@ -677,7 +612,6 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           border: 1px solid #e5e7eb;
           border-radius: 6px;
         }
-
         .schedule-date {
           display: flex;
           align-items: center;
@@ -686,41 +620,34 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           font-weight: 500;
           color: #1f2937;
         }
-
         .schedule-preview {
           flex: 1;
           display: flex;
           flex-direction: column;
           gap: 0.25rem;
         }
-
         .preview-item {
           display: flex;
           align-items: center;
           gap: 0.5rem;
           font-size: 0.875rem;
         }
-
         .item-title {
           color: #1f2937;
         }
-
         .preview-more {
           font-size: 0.75rem;
           color: #6b7280;
           margin-top: 0.25rem;
         }
-
         .performance-section {
           margin-top: 1rem;
         }
-
         .performance-list {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
         }
-
         .performance-item {
           display: flex;
           align-items: center;
@@ -729,24 +656,20 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           border: 1px solid #e5e7eb;
           border-radius: 6px;
         }
-
         .item-info {
           flex: 1;
         }
-
         .item-title {
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 0.25rem;
         }
-
         .item-stats {
           display: flex;
           gap: 1rem;
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .item-chart {
           width: 100px;
           height: 4px;
@@ -754,13 +677,11 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           border-radius: 2px;
           overflow: hidden;
         }
-
         .performance-bar {
           height: 100%;
           background: #3b82f6;
           transition: width 0.3s ease;
         }
-
         .content-controls {
           display: flex;
           justify-content: space-between;
@@ -771,82 +692,68 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           border-radius: 8px;
           margin-bottom: 1.5rem;
         }
-
         .search-filters {
           display: flex;
           align-items: center;
           gap: 0.75rem;
         }
-
         .search-bar {
           position: relative;
           display: flex;
           align-items: center;
         }
-
         .search-bar .lucide {
           position: absolute;
           left: 0.75rem;
           z-index: 1;
         }
-
         .search-input {
           padding-left: 2.25rem;
           min-width: 300px;
         }
-
         .action-buttons {
           display: flex;
           gap: 0.5rem;
         }
-
         .content-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
           gap: 1rem;
         }
-
         .batch-section {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .batch-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-
         .batch-header h3 {
           font-size: 1.25rem;
           font-weight: 600;
           color: #1f2937;
         }
-
         .batch-list {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
         }
-
         .analytics-section {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .analytics-grid {
           display: grid;
           gap: 1rem;
         }
-
         .type-performance {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
         }
-
         .type-item {
           display: flex;
           justify-content: space-between;
@@ -855,96 +762,78 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           border: 1px solid #e5e7eb;
           border-radius: 6px;
         }
-
         .type-info {
           display: flex;
           align-items: center;
           gap: 0.5rem;
         }
-
         .type-name {
           font-weight: 500;
           color: #1f2937;
           text-transform: capitalize;
         }
-
         .type-stats {
           display: flex;
           gap: 1rem;
         }
-
         .stat {
           display: flex;
           align-items: center;
           gap: 0.25rem;
           font-size: 0.875rem;
         }
-
         .stat-label {
           color: #6b7280;
         }
-
         .stat-value {
           color: #1f2937;
           font-weight: 500;
         }
-
         .empty-state {
           text-align: center;
           padding: 4rem 2rem;
           color: #6b7280;
         }
-
         .empty-state h3 {
           color: #1f2937;
         }
-
         @media (max-width: 768px) {
           .dashboard-header {
             flex-direction: column;
             align-items: stretch;
           }
-
           .content-controls {
             flex-direction: column;
             align-items: stretch;
             gap: 0.75rem;
           }
-
           .search-filters {
             flex-direction: column;
             align-items: stretch;
           }
-
           .search-input {
             min-width: auto;
           }
-
           .content-grid {
             grid-template-columns: 1fr;
           }
-
           .metrics-grid {
             grid-template-columns: repeat(2, 1fr);
           }
-
           .schedule-item {
             flex-direction: column;
             align-items: stretch;
             gap: 0.75rem;
           }
-
           .type-item {
             flex-direction: column;
             align-items: stretch;
             gap: 0.75rem;
           }
-
           .type-stats {
             justify-content: space-between;
           }
         }
-
         @media (max-width: 480px) {
           .metrics-grid {
             grid-template-columns: 1fr;
@@ -964,8 +853,7 @@ interface ContentCardProps {
   onSchedule: (contentId: string, publishAt: Date) => void;
   userRole?: string;
 }
-
-const ContentCard: React.FC<ContentCardProps> = ({ 
+const ContentCard: React.FC<ContentCardProps> = ({ )
   content, 
   onSelect, 
   onPublish, 
@@ -977,10 +865,8 @@ const ContentCard: React.FC<ContentCardProps> = ({
   const statusConfig = STATUS_CONFIG[content.status];
   const TypeIcon = typeConfig.icon;
   const StatusIcon = statusConfig.icon;
-
   const canPublish = userRole === 'admin' || userRole === 'editor';
-
-  return (
+  return ()
     <Card className="content-card">
       <CardContent className="p-4">
         <div className="content-card-header">
@@ -1001,7 +887,6 @@ const ContentCard: React.FC<ContentCardProps> = ({
             </Badge>
           </div>
         </div>
-
         <div className="content-details">
           <div className="detail-item">
             <span className="detail-label">Author:</span>
@@ -1013,7 +898,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
               {content.createdAt.toLocaleDateString()}
             </span>
           </div>
-          {content.scheduling.publishAt && (
+          {content.scheduling.publishAt && ()
             <div className="detail-item">
               <span className="detail-label">Scheduled:</span>
               <span className="detail-value">
@@ -1028,7 +913,6 @@ const ContentCard: React.FC<ContentCardProps> = ({
             </span>
           </div>
         </div>
-
         <div className="content-actions">
           <Button 
             onClick={() => onSelect(content)} 
@@ -1038,8 +922,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
             <Eye className="w-4 h-4 mr-1" />
             View
           </Button>
-          
-          {canPublish && content.status === 'draft' && (
+          {canPublish && content.status === 'draft' && ()
             <Button 
               onClick={() => onPublish(content.id)} 
               size="sm"
@@ -1048,8 +931,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
               Publish
             </Button>
           )}
-          
-          {canPublish && content.status === 'published' && (
+          {canPublish && content.status === 'published' && ()
             <Button 
               onClick={() => onUnpublish(content.id)} 
               size="sm"
@@ -1059,8 +941,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
               Unpublish
             </Button>
           )}
-          
-          {canPublish && (content.status === 'draft' || content.status === 'scheduled') && (
+          {canPublish && (content.status === 'draft' || content.status === 'scheduled') && ()
             <Button 
               onClick={() => {
                 const tomorrow = new Date();
@@ -1076,43 +957,36 @@ const ContentCard: React.FC<ContentCardProps> = ({
           )}
         </div>
       </CardContent>
-
       <style>{`
         .content-card {
           transition: box-shadow 0.2s ease;
         }
-
         .content-card:hover {
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-
         .content-card-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
         }
-
         .content-title {
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 0.25rem;
           line-height: 1.4;
         }
-
         .content-description {
           font-size: 0.875rem;
           color: #6b7280;
           line-height: 1.4;
         }
-
         .content-badges {
           display: flex;
           flex-direction: column;
           gap: 0.25rem;
           align-items: flex-end;
         }
-
         .content-details {
           display: flex;
           flex-direction: column;
@@ -1122,23 +996,19 @@ const ContentCard: React.FC<ContentCardProps> = ({
           background: #f9fafb;
           border-radius: 6px;
         }
-
         .detail-item {
           display: flex;
           justify-content: space-between;
           font-size: 0.875rem;
         }
-
         .detail-label {
           color: #6b7280;
           font-weight: 500;
         }
-
         .detail-value {
           color: #1f2937;
           text-align: right;
         }
-
         .content-actions {
           display: flex;
           gap: 0.5rem;
@@ -1155,7 +1025,6 @@ interface BatchCardProps {
   onExecute: (batchId: string) => void;
   onCancel: (batchId: string) => void;
 }
-
 const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -1167,12 +1036,10 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-
-  const progressPercentage = batch.progress.total > 0 
+  const progressPercentage = batch.progress.total > 0 ;
     ? (batch.progress.completed / batch.progress.total) * 100 
     : 0;
-
-  return (
+  return ()
     <Card className="batch-card">
       <CardContent className="p-4">
         <div className="batch-header">
@@ -1186,7 +1053,6 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
             {batch.status.toUpperCase()}
           </Badge>
         </div>
-
         <div className="batch-progress">
           <div className="progress-bar">
             <div 
@@ -1198,9 +1064,8 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
             {batch.progress.completed} / {batch.progress.total} completed
           </div>
         </div>
-
         <div className="batch-actions">
-          {batch.status === 'pending' && (
+          {batch.status === 'pending' && ()
             <>
               <Button onClick={() => onExecute(batch.id)} size="sm">
                 Execute
@@ -1216,34 +1081,28 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
           </Button>
         </div>
       </CardContent>
-
       <style>{`
         .batch-card {
           transition: box-shadow 0.2s ease;
         }
-
         .batch-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
         }
-
         .batch-name {
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 0.25rem;
         }
-
         .batch-operation {
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .batch-progress {
           margin-bottom: 1rem;
         }
-
         .progress-bar {
           height: 4px;
           background: #e5e7eb;
@@ -1251,18 +1110,15 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
           overflow: hidden;
           margin-bottom: 0.5rem;
         }
-
         .progress-fill {
           height: 100%;
           background: #3b82f6;
           transition: width 0.3s ease;
         }
-
         .progress-text {
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .batch-actions {
           display: flex;
           gap: 0.5rem;
@@ -1279,14 +1135,13 @@ interface ContentDetailModalProps {
   onUpdate: () => void;
   userRole?: string;
 }
-
-const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
+const ContentDetailModal: React.FC<ContentDetailModalProps> = ({)
   content,
   onClose,
   onUpdate,
   userRole
 }) => {
-  return (
+  return ()
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
@@ -1295,7 +1150,6 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
             ✕
           </Button>
         </div>
-
         <div className="modal-body">
           <div className="content-details">
             <div className="detail-section">
@@ -1331,8 +1185,7 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
                 </div>
               </div>
             </div>
-
-            {content.scheduling.publishAt && (
+            {content.scheduling.publishAt && ()
               <div className="detail-section">
                 <h3>Scheduling</h3>
                 <div className="detail-grid">
@@ -1347,7 +1200,6 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
                 </div>
               </div>
             )}
-
             <div className="detail-section">
               <h3>Performance</h3>
               <div className="detail-grid">
@@ -1371,7 +1223,6 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
             </div>
           </div>
         </div>
-
         <div className="modal-footer">
           <Button onClick={onClose} variant="outline">
             Close
@@ -1381,7 +1232,6 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
           </Button>
         </div>
       </div>
-
       <style>{`
         .modal-overlay {
           position: fixed;
@@ -1392,7 +1242,6 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
           justify-content: center;
           z-index: 1000;
         }
-
         .modal-content {
           background: white;
           border-radius: 8px;
@@ -1401,7 +1250,6 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
           max-height: 80vh;
           overflow: auto;
         }
-
         .modal-header {
           display: flex;
           justify-content: space-between;
@@ -1409,23 +1257,19 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
           padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
         }
-
         .modal-header h2 {
           font-size: 1.25rem;
           font-weight: 600;
           color: #1f2937;
         }
-
         .modal-body {
           padding: 1.5rem;
         }
-
         .content-details {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .detail-section h3 {
           font-size: 1rem;
           font-weight: 600;
@@ -1434,30 +1278,25 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
           border-bottom: 1px solid #e5e7eb;
           padding-bottom: 0.5rem;
         }
-
         .detail-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1rem;
         }
-
         .detail-item {
           display: flex;
           flex-direction: column;
           gap: 0.25rem;
         }
-
         .detail-item label {
           color: #6b7280;
           font-weight: 500;
           font-size: 0.875rem;
         }
-
         .detail-item span {
           color: #1f2937;
           font-size: 0.875rem;
         }
-
         .modal-footer {
           display: flex;
           justify-content: flex-end;
@@ -1465,12 +1304,10 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;
         }
-
         @media (max-width: 768px) {
           .detail-grid {
             grid-template-columns: 1fr;
           }
-
           .modal-content {
             width: 95vw;
             max-height: 90vh;

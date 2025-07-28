@@ -167,7 +167,7 @@ export interface ScheduleBatch {
     operation: BatchOperation;
     schedule: BatchSchedule;
     status: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
-    progress: {
+    progress: {,
         total: number;
         completed: number;
         failed: number;
@@ -201,19 +201,19 @@ export interface SchedulingStats {
     scheduledContent: number;
     publishedToday: number;
     unpublishedToday: number;
-    upcomingSchedules: Array<{
+    upcomingSchedules: Array<{,
         date: Date;
         count: number;
-        items: Array<{
+        items: Array<{,
             id: string;
             title: string;
             type: ContentType;
             operation: string;
         }>;
     }>;
-    performanceMetrics: {
+    performanceMetrics: {,
         averageViewsPerPost: number;
-        topPerformingContent: Array<{
+        topPerformingContent: Array<{,
             id: string;
             title: string;
             views: number;

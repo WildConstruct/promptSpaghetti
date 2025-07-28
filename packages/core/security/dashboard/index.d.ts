@@ -25,7 +25,7 @@ export { ComplianceSecurityDashboard, ComplianceFramework, ComplianceStatus, typ
 export declare class SecurityDashboardFactory {
     private framework;
     private registry;
-    constructor(options?: {
+    constructor(options?: {)
         frameworkOptions?: Partial<SecurityDashboardFrameworkOptions>;
         registryOptions?: Partial<RegistryOptions>;
     });
@@ -40,7 +40,7 @@ export declare class SecurityDashboardFactory {
     /**
      * Create a dashboard from template
      */
-    createDashboard(
+    createDashboard()
       templateId: string,
       userId: string,
       overrides?: Partial<DashboardConfig>
@@ -48,7 +48,7 @@ export declare class SecurityDashboardFactory {
     /**
      * Create a dashboard from preset
      */
-    createDashboardFromPreset(
+    createDashboardFromPreset()
       presetId: string,
       userId: string,
       overrides?: Partial<DashboardConfig>
@@ -73,12 +73,12 @@ export declare class SecurityDashboardFactory {
      * Get framework statistics
      */
     getStatistics(): {
-        framework: {
+        framework: {,
             dashboardCount: number;
             widgetCount: number;
             themeCount: number;
         };
-        registry: {
+        registry: {,
             dashboardCount: number;
             presetCount: number;
             widgetCount: number;
@@ -93,7 +93,7 @@ export declare class SecurityDashboardFactory {
 /**
  * Default factory instance for convenience
  */
-export declare function createSecurityDashboardFactory(options?: {
+export declare function createSecurityDashboardFactory(options?: {)
     frameworkOptions?: Partial<SecurityDashboardFrameworkOptions>;
     registryOptions?: Partial<RegistryOptions>;
 }): SecurityDashboardFactory;

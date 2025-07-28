@@ -65,7 +65,7 @@ export declare class ParameterManager {
     /**
      * Create new preset from parameters
      */
-    createPreset(
+    createPreset()
       name: string,
       description: string,
       category: string,
@@ -87,7 +87,7 @@ export declare class ParameterManager {
     /**
      * Add to history
      */
-    addToHistory(
+    addToHistory()
       parameters: RandomizerParameters,
       success: boolean,
       generationTime?: number,
@@ -106,7 +106,7 @@ export declare class ParameterManager {
         averageGenerationTime: number;
         mostUsedComplexity: string;
         mostUsedProvider: string;
-        popularNodeTypes: Array<{
+        popularNodeTypes: Array<{,
             nodeType: string;
             count: number;
         }>;
@@ -126,7 +126,7 @@ export declare class ParameterManager {
     /**
      * Import parameters and presets
      */
-    importData(data: {
+    importData(data: {)
         presets?: ParameterPreset[];
         history?: ParameterHistory[];
     }): {

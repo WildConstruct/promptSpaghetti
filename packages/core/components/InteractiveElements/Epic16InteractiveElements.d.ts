@@ -11,7 +11,7 @@ interface Epic16InteractiveElementsProps {
     userAvatar?: string;
     userRole: 'user' | 'creator' | 'admin';
     userTier: 'free' | 'premium' | 'enterprise';
-    pageContext: {
+    pageContext: {,
         pageUrl: string;
         pageType: 'marketplace' | 'community' | 'profile' | 'template' | 'learning';
         templateId?: string;

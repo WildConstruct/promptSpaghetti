@@ -4,7 +4,6 @@
  * 
  * Main interface and export for the runtime execution domain
  */
-
 import React from 'react';
 import {
   ExecutionTask,
@@ -312,20 +311,18 @@ export interface SecurityAlert {
 // Main domain interface
 export interface IRuntimeDomain {
   // React Components
-  components: {
+  components: {,
     RuntimeDashboard: React.ComponentType<RuntimeDashboardProps>;
     ExecutionQueue: React.ComponentType<ExecutionQueueProps>;
     NodeRegistry: React.ComponentType<NodeRegistryProps>;
-    
     // Specific runtime components
     ExecutionMonitor: React.ComponentType<any>;
     PerformanceMetrics: React.ComponentType<any>;
     NodeEditor: React.ComponentType<any>;
     ValidationResults: React.ComponentType<any>;
   };
-
   // React Hooks
-  hooks: {
+  hooks: {,
     useRuntime: () => {
       state: RuntimeDomainState;
       executeGraph: (graph: Graph, seeds: number[], options?: ExecutionOptions) => Promise<ExecutionRecord[]>;
@@ -333,7 +330,6 @@ export interface IRuntimeDomain {
       cancelExecution: (taskId: string) => Promise<void>;
       getMetrics: () => Promise<RuntimeMetrics>;
     };
-    
     useExecutionQueue: () => {
       queue: ExecutionTask[];
       running: ExecutionInstance[];
@@ -343,7 +339,6 @@ export interface IRuntimeDomain {
       pauseQueue: () => Promise<void>;
       resumeQueue: () => Promise<void>;
     };
-    
     useNodeRegistry: () => {
       nodes: NodeDefinition[];
       loading: boolean;
@@ -351,7 +346,6 @@ export interface IRuntimeDomain {
       getNode: (nodeType: string) => NodeDefinition | null;
       searchNodes: (query: string) => NodeDefinition[];
     };
-    
     usePerformanceMetrics: () => {
       metrics: RuntimeMetrics | null;
       nodeMetrics: Map<string, NodeMetrics>;
@@ -360,16 +354,14 @@ export interface IRuntimeDomain {
       startProfiling: (executionId: string) => Promise<void>;
       stopProfiling: (executionId: string) => Promise<ProfileResult>;
     };
-    
     useValidation: () => {
       validateGraph: (graph: Graph) => Promise<ValidationResult>;
       validateNode: (node: any, definition: NodeDefinition) => Promise<ValidationResult>;
       getValidationRules: (nodeType: string) => Promise<any[]>;
     };
   };
-
   // Domain Services
-  services: {
+  services: {,
     execution: IExecutionService;
     nodeRegistry: INodeRegistryService;
     validation: IValidationService;
@@ -377,22 +369,19 @@ export interface IRuntimeDomain {
     cache: ICacheService;
     security: ISecurityService;
   };
-
   // Event System
   events: RuntimeDomainEvents & {
     subscribe: (event: keyof RuntimeDomainEvents, callback: Function) => () => void;
     emit: (event: keyof RuntimeDomainEvents, ...args: any[]) => void;
   };
-
   // Configuration
-  config: {
+  config: {,
     getConfig: () => RuntimeConfig;
     updateConfig: (config: Partial<RuntimeConfig>) => void;
     resetConfig: () => void;
   };
-
   // Utilities
-  utils: {
+  utils: {,
     createExecutionContext: (graph: Graph, seed: number) => ExecutionContext;
     measureExecution: <T>(fn: () => Promise<T>) => Promise<{ result: T; metrics: ExecutionMetrics }>;
     optimizeGraph: (graph: Graph) => Promise<OptimizedGraph>;
@@ -425,7 +414,7 @@ export const RUNTIME_DOMAIN_EVENTS = {
   METRICS_UPDATED: 'runtime:metrics:updated',
   CACHE_CLEARED: 'runtime:cache:cleared',
   PROFILING_STARTED: 'runtime:profiling:started',
-  PROFILING_COMPLETED: 'runtime:profiling:completed'
+  PROFILING_COMPLETED: 'runtime:profiling:completed',
 } as const;
 
 export type RuntimeDomainEventType = typeof RUNTIME_DOMAIN_EVENTS[keyof typeof RUNTIME_DOMAIN_EVENTS];

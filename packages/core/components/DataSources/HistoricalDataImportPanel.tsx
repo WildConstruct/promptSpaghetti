@@ -1,6 +1,5 @@
 // packages/core/components/DataSources/HistoricalDataImportPanel.tsx
 // Epic 8.8 Task 1: Historical Data Import Interface
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { 
   useExternalDataImport, 
@@ -15,8 +14,7 @@ export interface HistoricalDataImportPanelProps {
   onDataImported?: (results: QueryResult[]) => void;
   onError?: (error: Error) => void;
 }
-
-const ERA_OPTIONS = [
+const ERA_OPTIONS = [;
   { value: 'ancient', label: 'Ancient (3000 BC - 500 AD)' },
   { value: 'early-medieval', label: 'Early Medieval (500-1000)' },
   { value: 'high-medieval', label: 'High Medieval (1000-1300)' },
@@ -26,8 +24,7 @@ const ERA_OPTIONS = [
   { value: 'modern', label: 'Modern (1800-1950)' },
   { value: 'contemporary', label: 'Contemporary (1950+)' }
 ];
-
-const CATEGORY_OPTIONS = [
+const CATEGORY_OPTIONS = [;
   { value: 'clothing', label: 'Clothing & Fashion' },
   { value: 'architecture', label: 'Architecture' },
   { value: 'art', label: 'Art & Sculpture' },
@@ -39,8 +36,7 @@ const CATEGORY_OPTIONS = [
   { value: 'technology', label: 'Technology & Tools' },
   { value: 'materials', label: 'Materials & Crafts' }
 ];
-
-const REGION_OPTIONS = [
+const REGION_OPTIONS = [;
   { value: 'europe', label: 'Europe' },
   { value: 'england', label: 'England' },
   { value: 'france', label: 'France' },
@@ -53,7 +49,7 @@ const REGION_OPTIONS = [
   { value: 'americas', label: 'Americas' }
 ];
 
-export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps> = ({
+export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps> = ({)
   visible,
   onClose,
   onDataImported,
@@ -62,7 +58,6 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
   const [selectedSources, setSelectedSources] = useState<string[]>([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [importResults, setImportResults] = useState<QueryResult[] | null>(null);
-
   const { 
     state: dataState, 
     queryData, 
@@ -71,7 +66,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
     validateQuery,
     getQuerySuggestions,
     exportResults
-  } = useExternalDataImport({
+  } = useExternalDataImport({)
     autoRefresh: false,
     cacheStrategy: 'conservative',
     onSuccess: (results) => {
@@ -82,7 +77,6 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
     },
     onError
   });
-
   const {
     query,
     isValid,
@@ -91,60 +85,50 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
     resetQuery,
     buildQuery
   } = useHistoricalQueryBuilder();
-
   const { _____cacheStats, clearCache: clearCacheStats } = useDataSourceCache();
-
   const suggestions = getQuerySuggestions(query);
   const availableSources = dataState.availableDataSources.filter(s => s.enabled);
-
   useEffect(() => {
     // Auto-select all enabled sources by default
     if (availableSources.length > 0 && selectedSources.length === 0) {
       setSelectedSources(availableSources.map(s => s.id));
     }
   }, [availableSources.length, selectedSources.length]);
-
   const handleImportData = useCallback(async () => {
     const finalQuery = buildQuery();
     if (!finalQuery) return;
-
     const sourcesToUse = selectedSources.length > 0 ? selectedSources : undefined;
     await queryData(finalQuery, sourcesToUse);
   }, [buildQuery, queryData, selectedSources]);
-
   const handleClearAll = useCallback(() => {
     resetQuery();
     setImportResults(null);
     clearCache();
     clearCacheStats();
   }, [resetQuery, clearCache, clearCacheStats]);
-
   const handleSourceToggle = useCallback((sourceId: string) => {
-    setSelectedSources(prev => 
+    setSelectedSources(prev => )
       prev.includes(sourceId)
         ? prev.filter(id => id !== sourceId)
         : [...prev, sourceId]
     );
   }, []);
-
   const handleExport = useCallback((format: 'json' | 'csv') => {
     const data = exportResults(format);
-    const blob = new Blob([data], { 
+    const blob = new Blob([data], { )
       type: format === 'json' ? 'application/json' : 'text/csv' 
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `historical-data-${Date.now()}.${format}`;
+    a.download = `historical-data-${Date.now()}.${format}`;}
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }, [exportResults]);
-
   if (!visible) return null;
-
-  return (
+  return ()
     <div style={{
       position: 'fixed',
       top: 0,
@@ -155,7 +139,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 2001
+      zIndex: 2001,
     }}>
       <div style={{
         background: '#2d3748',
@@ -165,7 +149,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
         maxWidth: 1400,
         maxHeight: '90vh',
         display: 'flex',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}>
         {/* Query Builder Panel */}
         <div style={{
@@ -173,7 +157,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
           background: '#1a202c',
           borderRight: '1px solid #4a5568',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}>
           {/* Header */}
           <div style={{
@@ -187,7 +171,6 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
               Query historical databases for UTDG content
             </div>
           </div>
-
           {/* Query Form */}
           <div style={{ flex: 1, overflowY: 'auto', padding: 16 }}>
             {/* Era Selection */}
@@ -197,7 +180,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                 color: '#e2e8f0',
                 fontSize: 12,
                 marginBottom: 6,
-                fontWeight: 500
+                fontWeight: 500,
               }}>
                 Historical Era *
               </label>
@@ -211,18 +194,17 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                   border: '1px solid #4a5568',
                   borderRadius: 4,
                   color: '#e2e8f0',
-                  fontSize: 14
+                  fontSize: 14,
                 }}
               >
                 <option value="">Select era...</option>
-                {ERA_OPTIONS.map(era => (
+                {ERA_OPTIONS.map(era => ()
                   <option key={era.value} value={era.value}>
                     {era.label}
                   </option>
                 ))}
               </select>
             </div>
-
             {/* Category Selection */}
             <div style={{ marginBottom: 16 }}>
               <label style={{
@@ -230,7 +212,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                 color: '#e2e8f0',
                 fontSize: 12,
                 marginBottom: 6,
-                fontWeight: 500
+                fontWeight: 500,
               }}>
                 Category *
               </label>
@@ -244,18 +226,17 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                   border: '1px solid #4a5568',
                   borderRadius: 4,
                   color: '#e2e8f0',
-                  fontSize: 14
+                  fontSize: 14,
                 }}
               >
                 <option value="">Select category...</option>
-                {CATEGORY_OPTIONS.map(category => (
+                {CATEGORY_OPTIONS.map(category => ()
                   <option key={category.value} value={category.value}>
                     {category.label}
                   </option>
                 ))}
               </select>
             </div>
-
             {/* Region Selection */}
             <div style={{ marginBottom: 16 }}>
               <label style={{
@@ -263,7 +244,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                 color: '#e2e8f0',
                 fontSize: 12,
                 marginBottom: 6,
-                fontWeight: 500
+                fontWeight: 500,
               }}>
                 Region
               </label>
@@ -277,18 +258,17 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                   border: '1px solid #4a5568',
                   borderRadius: 4,
                   color: '#e2e8f0',
-                  fontSize: 14
+                  fontSize: 14,
                 }}
               >
                 <option value="">Any region...</option>
-                {REGION_OPTIONS.map(region => (
+                {REGION_OPTIONS.map(region => ()
                   <option key={region.value} value={region.value}>
                     {region.label}
                   </option>
                 ))}
               </select>
             </div>
-
             {/* Keywords */}
             <div style={{ marginBottom: 16 }}>
               <label style={{
@@ -296,14 +276,14 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                 color: '#e2e8f0',
                 fontSize: 12,
                 marginBottom: 6,
-                fontWeight: 500
+                fontWeight: 500,
               }}>
                 Keywords (optional)
               </label>
               <input
                 type="text"
                 value={query.keywords?.join(', ') || ''}
-                onChange={(e) => updateQuery({ 
+                onChange={(e) => updateQuery({ )
                   keywords: e.target.value.split(',').map(k => k.trim()).filter(k => k) 
                 })}
                 placeholder="wool, silk, embroidery..."
@@ -314,11 +294,10 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                   border: '1px solid #4a5568',
                   borderRadius: 4,
                   color: '#e2e8f0',
-                  fontSize: 14
+                  fontSize: 14,
                 }}
               />
             </div>
-
             {/* Advanced Options */}
             <div style={{ marginBottom: 16 }}>
               <button
@@ -330,13 +309,12 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                   fontSize: 12,
                   cursor: 'pointer',
                   padding: 0,
-                  marginBottom: 8
+                  marginBottom: 8,
                 }}
               >
                 {showAdvanced ? '▼' : '▶'} Advanced Options
               </button>
-
-              {showAdvanced && (
+              {showAdvanced && ()
                 <div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
                     <div>
@@ -344,7 +322,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                         display: 'block',
                         color: '#a0aec0',
                         fontSize: 11,
-                        marginBottom: 4
+                        marginBottom: 4,
                       }}>
                         Limit
                       </label>
@@ -361,7 +339,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                           border: '1px solid #4a5568',
                           borderRadius: 4,
                           color: '#e2e8f0',
-                          fontSize: 12
+                          fontSize: 12,
                         }}
                       />
                     </div>
@@ -370,7 +348,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                         display: 'block',
                         color: '#a0aec0',
                         fontSize: 11,
-                        marginBottom: 4
+                        marginBottom: 4,
                       }}>
                         Offset
                       </label>
@@ -386,18 +364,17 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                           border: '1px solid #4a5568',
                           borderRadius: 4,
                           color: '#e2e8f0',
-                          fontSize: 12
+                          fontSize: 12,
                         }}
                       />
                     </div>
                   </div>
-
                   <div>
                     <label style={{
                       display: 'block',
                       color: '#a0aec0',
                       fontSize: 11,
-                      marginBottom: 4
+                      marginBottom: 4,
                     }}>
                       Subcategory
                     </label>
@@ -413,51 +390,48 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                         border: '1px solid #4a5568',
                         borderRadius: 4,
                         color: '#e2e8f0',
-                        fontSize: 12
+                        fontSize: 12,
                       }}
                     />
                   </div>
                 </div>
               )}
             </div>
-
             {/* Validation Errors */}
-            {validationErrors.length > 0 && (
+            {validationErrors.length > 0 && ()
               <div style={{
                 background: 'rgba(245, 101, 101, 0.1)',
                 border: '1px solid #f56565',
                 borderRadius: 4,
                 padding: 8,
-                marginBottom: 16
+                marginBottom: 16,
               }}>
-                {validationErrors.map((error, index) => (
+                {validationErrors.map((error, index) => ()
                   <div key={index} style={{ color: '#f56565', fontSize: 12 }}>
                     • {error}
                   </div>
                 ))}
               </div>
             )}
-
             {/* Query Suggestions */}
-            {suggestions.length > 0 && (
+            {suggestions.length > 0 && ()
               <div style={{
                 background: 'rgba(66, 153, 225, 0.1)',
                 border: '1px solid #4299e1',
                 borderRadius: 4,
                 padding: 8,
-                marginBottom: 16
+                marginBottom: 16,
               }}>
                 <div style={{ color: '#4299e1', fontSize: 11, marginBottom: 4, fontWeight: 500 }}>
                   💡 Suggestions:
                 </div>
-                {suggestions.map((suggestion, index) => (
+                {suggestions.map((suggestion, index) => ()
                   <div key={index} style={{ color: '#4299e1', fontSize: 11, marginBottom: 2 }}>
                     • {suggestion}
                   </div>
                 ))}
               </div>
             )}
-
             {/* Data Sources */}
             <div style={{ marginBottom: 16 }}>
               <label style={{
@@ -465,13 +439,12 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                 color: '#e2e8f0',
                 fontSize: 12,
                 marginBottom: 8,
-                fontWeight: 500
+                fontWeight: 500,
               }}>
                 Data Sources ({selectedSources.length}/{availableSources.length} selected)
               </label>
-              
               <div style={{ maxHeight: 120, overflowY: 'auto', background: '#2d3748', borderRadius: 4, padding: 8 }}>
-                {availableSources.map(source => (
+                {availableSources.map(source => ()
                   <label key={source.id} style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -479,7 +452,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                     padding: '4px 0',
                     color: '#e2e8f0',
                     fontSize: 12,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}>
                     <input
                       type="checkbox"
@@ -497,7 +470,6 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                 ))}
               </div>
             </div>
-
             {/* Actions */}
             <div style={{ display: 'flex', gap: 8 }}>
               <button
@@ -525,7 +497,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                   borderRadius: 4,
                   color: 'white',
                   fontSize: 14,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 Clear
@@ -533,7 +505,6 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
             </div>
           </div>
         </div>
-
         {/* Results Panel */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           {/* Results Header */}
@@ -542,22 +513,21 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
             borderBottom: '1px solid #4a5568',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
           }}>
             <div>
               <h3 style={{ color: '#e2e8f0', margin: 0, fontSize: 16 }}>
                 Import Results
               </h3>
-              {importResults && (
+              {importResults && ()
                 <div style={{ color: '#a0aec0', fontSize: 12, marginTop: 4 }}>
                   {importResults.reduce((total, result) => total + result.data.length, 0)} items 
                   from {importResults.length} sources • Cache hit rate: {dataState.cacheHitRate}%
                 </div>
               )}
             </div>
-            
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              {importResults && importResults.some(r => r.data.length > 0) && (
+              {importResults && importResults.some(r => r.data.length > 0) && ()
                 <>
                   <button
                     onClick={() => handleExport('json')}
@@ -568,7 +538,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                       borderRadius: 4,
                       color: 'white',
                       fontSize: 12,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     Export JSON
@@ -582,7 +552,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                       borderRadius: 4,
                       color: 'white',
                       fontSize: 12,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     Export CSV
@@ -598,47 +568,16 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                   borderRadius: 4,
                   color: 'white',
                   fontSize: 12,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 Close
               </button>
             </div>
           </div>
-
           {/* Results Content */}
           <div style={{ flex: 1, overflow: 'hidden' }}>
-            {dataState.isLoading ? (
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '100%',
-                flexDirection: 'column',
-                gap: 16
-              }}>
-                <div style={{ color: '#4299e1', fontSize: 16 }}>Importing historical data...</div>
-                <div style={{ color: '#a0aec0', fontSize: 14 }}>
-                  Querying {selectedSources.length} data sources
-                </div>
-              </div>
-            ) : dataState.hasError ? (
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '100%',
-                flexDirection: 'column',
-                gap: 16
-              }}>
-                <div style={{ color: '#f56565', fontSize: 16 }}>Import Error</div>
-                <div style={{ color: '#a0aec0', fontSize: 14, textAlign: 'center', maxWidth: 400 }}>
-                  {dataState.error?.message || 'An unexpected error occurred while importing data'}
-                </div>
-              </div>
-            ) : importResults ? (
-              <HistoricalDataResults results={importResults} />
-            ) : (
+            {dataState.isLoading ? ()
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -646,7 +585,37 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                 height: '100%',
                 flexDirection: 'column',
                 gap: 16,
-                color: '#a0aec0'
+              }}>
+                <div style={{ color: '#4299e1', fontSize: 16 }}>Importing historical data...</div>
+                <div style={{ color: '#a0aec0', fontSize: 14 }}>
+                  Querying {selectedSources.length} data sources
+                </div>
+              </div>
+            ) : dataState.hasError ? ()
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+                flexDirection: 'column',
+                gap: 16,
+              }}>
+                <div style={{ color: '#f56565', fontSize: 16 }}>Import Error</div>
+                <div style={{ color: '#a0aec0', fontSize: 14, textAlign: 'center', maxWidth: 400 }}>
+                  {dataState.error?.message || 'An unexpected error occurred while importing data'}
+                </div>
+              </div>
+            ) : importResults ? ()
+              <HistoricalDataResults results={importResults} />
+            ) : ()
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+                flexDirection: 'column',
+                gap: 16,
+                color: '#a0aec0',
               }}>
                 <div style={{ fontSize: 48 }}>📚</div>
                 <div style={{ fontSize: 16 }}>Configure your query and click "Import Data"</div>
@@ -666,9 +635,8 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
 const HistoricalDataResults: React.FC<{ results: QueryResult[] }> = ({ results }) => {
   const [selectedSource, setSelectedSource] = useState<string | null>(null);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
-
   const toggleExpanded = useCallback((itemId: string) => {
-    setExpandedItems(prev => {
+    setExpandedItems(prev => {)
       const next = new Set(prev);
       if (next.has(itemId)) {
         next.delete(itemId);
@@ -678,36 +646,32 @@ const HistoricalDataResults: React.FC<{ results: QueryResult[] }> = ({ results }
       return next;
     });
   }, []);
-
-  const filteredResults = selectedSource 
+  const filteredResults = selectedSource ;
     ? results.filter(r => r.metadata.source === selectedSource)
     : results;
-
-  const allItems = filteredResults.flatMap(result => 
+  const allItems = filteredResults.flatMap(result => ;)
     result.data.map(item => ({ ...item, _source: result.metadata.source }))
   );
-
-  return (
+  return ()
     <div style={{ height: '100%', display: 'flex' }}>
       {/* Source Filter Sidebar */}
       <div style={{
         width: 200,
         background: '#1a202c',
         borderRight: '1px solid #4a5568',
-        overflowY: 'auto'
+        overflowY: 'auto',
       }}>
         <div style={{ padding: 12 }}>
           <div style={{ color: '#e2e8f0', fontSize: 12, marginBottom: 8, fontWeight: 500 }}>
             Sources
           </div>
-          
           <div
             style={{
               padding: '6px 8px',
               background: !selectedSource ? '#2d3748' : 'transparent',
               borderRadius: 4,
               cursor: 'pointer',
-              marginBottom: 4
+              marginBottom: 4,
             }}
             onClick={() => setSelectedSource(null)}
           >
@@ -716,8 +680,7 @@ const HistoricalDataResults: React.FC<{ results: QueryResult[] }> = ({ results }
               {allItems.length} items
             </div>
           </div>
-
-          {results.map(result => (
+          {results.map(result => ()
             <div
               key={result.metadata.source}
               style={{
@@ -725,7 +688,7 @@ const HistoricalDataResults: React.FC<{ results: QueryResult[] }> = ({ results }
                 background: selectedSource === result.metadata.source ? '#2d3748' : 'transparent',
                 borderRadius: 4,
                 cursor: 'pointer',
-                marginBottom: 4
+                marginBottom: 4,
               }}
               onClick={() => setSelectedSource(result.metadata.source)}
             >
@@ -736,23 +699,22 @@ const HistoricalDataResults: React.FC<{ results: QueryResult[] }> = ({ results }
               <div style={{ color: '#a0aec0', fontSize: 10 }}>
                 {result.data.length} items • {Math.round(result.metadata.executionTime)}ms
               </div>
-              {result.metadata.cached && (
+              {result.metadata.cached && ()
                 <div style={{ color: '#4299e1', fontSize: 9 }}>• Cached</div>
               )}
             </div>
           ))}
         </div>
       </div>
-
       {/* Items List */}
       <div style={{ flex: 1, overflowY: 'auto', padding: 16 }}>
-        {allItems.length === 0 ? (
+        {allItems.length === 0 ? ()
           <div style={{ textAlign: 'center', color: '#a0aec0', marginTop: 48 }}>
             No data found for the current query
           </div>
-        ) : (
+        ) : ()
           <div style={{ display: 'grid', gap: 12 }}>
-            {allItems.map((item, index) => (
+            {allItems.map((item, index) => ()
               <div
                 key={`${item._source}-${index}`}
                 style={{
@@ -760,7 +722,7 @@ const HistoricalDataResults: React.FC<{ results: QueryResult[] }> = ({ results }
                   border: '1px solid #4a5568',
                   borderRadius: 6,
                   padding: 16,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
                 onClick={() => toggleExpanded(`${item._source}-${index}`)}
               >
@@ -768,16 +730,16 @@ const HistoricalDataResults: React.FC<{ results: QueryResult[] }> = ({ results }
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'flex-start',
-                  marginBottom: 8
+                  marginBottom: 8,
                 }}>
                   <div style={{ flex: 1 }}>
                     <div style={{ color: '#e2e8f0', fontSize: 14, fontWeight: 500, marginBottom: 4 }}>
                       {item.name || item.title || 'Unnamed Item'}
                     </div>
-                    {item.description && (
+                    {item.description && ()
                       <div style={{ color: '#a0aec0', fontSize: 12, marginBottom: 4 }}>
-                        {item.description.length > 100 && !expandedItems.has(`${item._source}-${index}`)
-                          ? `${item.description.substring(0, 100)}...`
+                        {item.description.length > 100 && !expandedItems.has(`${item._source}-${index}`)}
+                          ? `${item.description.substring(0, 100)}...`}
                           : item.description}
                       </div>
                     )}
@@ -786,11 +748,10 @@ const HistoricalDataResults: React.FC<{ results: QueryResult[] }> = ({ results }
                     {expandedItems.has(`${item._source}-${index}`) ? '▼' : '▶'}
                   </div>
                 </div>
-
-                {expandedItems.has(`${item._source}-${index}`) && (
+                {expandedItems.has(`${item._source}-${index}`) && ()}
                   <div style={{ borderTop: '1px solid #4a5568', paddingTop: 12 }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12 }}>
-                      {Object.entries(item).filter(([key]) => !key.startsWith('_') && key !== 'description').map(([key, value]) => (
+                      {Object.entries(item).filter(([key]) => !key.startsWith('_') && key !== 'description').map(([key, value]) => ()
                         <div key={key}>
                           <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 2 }}>
                             {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
@@ -807,19 +768,18 @@ const HistoricalDataResults: React.FC<{ results: QueryResult[] }> = ({ results }
                     </div>
                   </div>
                 )}
-
                 <div style={{
                   marginTop: 8,
                   paddingTop: 8,
                   borderTop: '1px solid #4a5568',
                   display: 'flex',
                   justifyContent: 'space-between',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}>
                   <div style={{ color: '#a0aec0', fontSize: 10 }}>
                     Source: {item._source}
                   </div>
-                  {item.authenticity && (
+                  {item.authenticity && ()
                     <div style={{ color: '#48bb78', fontSize: 10 }}>
                       Authenticity: {Math.round(item.authenticity * 100)}%
                     </div>

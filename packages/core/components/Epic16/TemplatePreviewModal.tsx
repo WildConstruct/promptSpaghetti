@@ -4,10 +4,8 @@
  * Modal component for previewing marketplace templates with Claude integration,
  * sandboxed content protection, and purchase flow integration.
  */
-
 import React, { useState, useEffect, useRef } from 'react';
 import { MarketplaceTemplate } from './MarketplaceCard';
-
 interface PreviewResult {
   output: string;
   cost: number;
@@ -16,7 +14,6 @@ interface PreviewResult {
   model: string;
   executionTime: number;
 }
-
 interface TemplatePreviewModalProps {
   template: MarketplaceTemplate;
   isOpen: boolean;
@@ -31,7 +28,7 @@ interface TemplatePreviewModalProps {
   };
 }
 
-export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
+export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({)
   template,
   isOpen,
   onClose,
@@ -48,7 +45,6 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
   const [previewError, setPreviewError] = useState<string | null>(null);
   const [usageCount, setUsageCount] = useState(0);
   const streamRef = useRef<HTMLDivElement>(null);
-
   // Rate limiting based on user tier
   const getRateLimit = () => {
     if (!currentUser) return 3;
@@ -58,9 +54,7 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
     case 'free': default: return 3;
     }
   };
-
   const canGenerate = usageCount < getRateLimit();
-
   useEffect(() => {
     if (isOpen) {
       setActiveTab('preview');
@@ -70,14 +64,11 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
       setUsageCount(0);
     }
   }, [isOpen]);
-
   const handlePreviewGenerate = async () => {
     if (!onPreviewGenerate || !canGenerate || !previewInput.trim()) return;
-
     setIsGenerating(true);
     setPreviewError(null);
     setPreviewResult(null);
-
     try {
       const result = await onPreviewGenerate(template, previewInput, selectedModel);
       setPreviewResult(result);
@@ -88,27 +79,23 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
       setIsGenerating(false);
     }
   };
-
   const formatCost = (cost: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-US', {)
       style: 'currency',
       currency: 'USD',
-      minimumFractionDigits: 4
+      minimumFractionDigits: 4,
     }).format(cost);
   };
-
   const formatPrice = (cents: number, currency: string) => {
     if (cents === 0) return 'Free';
     const amount = cents / 100;
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-US', {)
       style: 'currency',
-      currency: currency.toUpperCase()
+      currency: currency.toUpperCase(),
     }).format(amount);
   };
-
   if (!isOpen) return null;
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-hidden">
         {/* Header */}
@@ -119,27 +106,23 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
                 <h2 className="text-xl font-semibold text-gray-900">{template.title}</h2>
                 <p className="text-sm text-gray-500">by {template.creatorName}</p>
               </div>
-              
               {/* Price and badges */}
               <div className="flex items-center space-x-3">
                 <div className="text-lg font-bold text-gray-900">
                   {formatPrice(template.price, template.currency)}
                 </div>
-                
-                {template.isAiGenerated && (
+                {template.isAiGenerated && ()
                   <span className="px-3 py-1 text-sm font-medium bg-purple-100 text-purple-800 rounded-full">
                     AI Generated
                   </span>
                 )}
-                
-                {isPurchased && (
+                {isPurchased && ()
                   <span className="px-3 py-1 text-sm font-medium bg-green-100 text-green-800 rounded-full">
                     Owned
                   </span>
                 )}
               </div>
             </div>
-
             <button
               onClick={onClose}
               className="p-2 text-gray-400 hover:text-gray-600"
@@ -149,7 +132,6 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
               </svg>
             </button>
           </div>
-
           {/* Tabs */}
           <nav className="flex space-x-8 mt-4">
             <button
@@ -184,10 +166,9 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
             </button>
           </nav>
         </div>
-
         {/* Content */}
         <div className="overflow-y-auto" style={{ maxHeight: 'calc(90vh - 200px)' }}>
-          {activeTab === 'preview' && (
+          {activeTab === 'preview' && ()
             <div className="p-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Input Section */}
@@ -206,7 +187,6 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
                       className="w-full h-32 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
-
                   <div className="flex items-center space-x-4">
                     <div className="flex-1">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -217,14 +197,13 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
                         onChange={(e) => setSelectedModel(e.target.value)}
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                       >
-                        {template.compatibility.map((model) => (
+                        {template.compatibility.map((model) => ()
                           <option key={model} value={model}>
                             {model}
                           </option>
                         ))}
                       </select>
                     </div>
-
                     <div className="flex-shrink-0 pt-6">
                       <button
                         onClick={handlePreviewGenerate}
@@ -239,24 +218,21 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
                       </button>
                     </div>
                   </div>
-
                   {/* Rate limit warning */}
                   <div className="text-sm text-gray-600">
                     Preview generations remaining: <span className="font-medium">{getRateLimit() - usageCount}</span>
-                    {currentUser?.tier === 'free' && (
+                    {currentUser?.tier === 'free' && ()
                       <span className="text-blue-600"> (Upgrade for more previews)</span>
                     )}
                   </div>
                 </div>
-
                 {/* Output Section */}
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Preview Output:
                     </label>
-                    
-                    {previewError ? (
+                    {previewError ? ()
                       <div className="p-4 bg-red-50 border border-red-200 rounded-md">
                         <div className="flex">
                           <svg className="w-5 h-5 text-red-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
@@ -268,7 +244,7 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
                           </div>
                         </div>
                       </div>
-                    ) : previewResult ? (
+                    ) : previewResult ? ()
                       <div className="space-y-3">
                         <div className="p-4 bg-gray-50 border border-gray-200 rounded-md">
                           <div 
@@ -278,7 +254,6 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
                             {previewResult.output}
                           </div>
                         </div>
-                        
                         {/* Preview metadata */}
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           <div className="bg-white p-3 border border-gray-200 rounded">
@@ -298,8 +273,7 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
                             <div className="font-medium">{previewResult.executionTime}ms</div>
                           </div>
                         </div>
-
-                        {!isPurchased && (
+                        {!isPurchased && ()
                           <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
                             <div className="flex">
                               <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -314,7 +288,7 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
                           </div>
                         )}
                       </div>
-                    ) : (
+                    ) : ()
                       <div className="h-32 border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center">
                         <div className="text-center">
                           <svg className="mx-auto h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -331,20 +305,18 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
               </div>
             </div>
           )}
-
-          {activeTab === 'details' && (
+          {activeTab === 'details' && ()
             <div className="p-6 space-y-6">
               {/* Description */}
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-3">Description</h3>
                 <p className="text-gray-700 leading-relaxed">{template.description}</p>
               </div>
-
               {/* Tags */}
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-3">Tags</h3>
                 <div className="flex flex-wrap gap-2">
-                  {template.tags.map((tag) => (
+                  {template.tags.map((tag) => ()
                     <span
                       key={tag}
                       className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
@@ -354,19 +326,17 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
                   ))}
                 </div>
               </div>
-
               {/* Compatibility */}
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-3">Compatible Models</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {template.compatibility.map((model) => (
+                  {template.compatibility.map((model) => ()
                     <div key={model} className="p-3 bg-gray-50 border border-gray-200 rounded-md">
                       <div className="font-medium text-sm">{model}</div>
                     </div>
                   ))}
                 </div>
               </div>
-
               {/* Stats */}
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-3">Statistics</h3>
@@ -387,8 +357,7 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
               </div>
             </div>
           )}
-
-          {activeTab === 'reviews' && (
+          {activeTab === 'reviews' && ()
             <div className="p-6">
               <div className="text-center py-12">
                 <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -402,14 +371,12 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
             </div>
           )}
         </div>
-
         {/* Footer */}
         <div className="border-t border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-500">
               Last updated: {template.updatedAt.toLocaleDateString()}
             </div>
-            
             <div className="flex space-x-3">
               <button
                 onClick={onClose}
@@ -417,8 +384,7 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
               >
                 Close
               </button>
-              
-              {!isPurchased && (
+              {!isPurchased && ()
                 <button
                   onClick={() => onPurchase(template)}
                   className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"

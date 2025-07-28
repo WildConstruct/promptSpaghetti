@@ -36,7 +36,7 @@ export declare const useCommandPaletteShortcuts: (shortcuts: KeyboardShortcut[])
 /**
  * Default keyboard shortcuts for the graph editor
  */
-export declare const createDefaultShortcuts: (actions: {
+export declare const createDefaultShortcuts: (actions: {)
     onUndo?: () => void;
     onRedo?: () => void;
     onSave?: () => void;

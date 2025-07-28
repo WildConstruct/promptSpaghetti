@@ -1,13 +1,12 @@
 import { executeGraph } from '../../../../server/src/engine';
 import { Graph } from '../../graphSchema';
-
 const sampleGraph: Graph = {
   seed: 42,
-  nodes: [
+  nodes: [,
     {
       id: 'wc1',
       type: 'WeightedChoice',
-      choices: [
+      choices: [,
         { value: 'A', weight: 1 },
         { value: 'B', weight: 1 }
       ]
@@ -15,18 +14,16 @@ const sampleGraph: Graph = {
     {
       id: 'out1',
       type: 'Output',
-      inputs: ['wc1']
+      inputs: ['wc1'],
     }
   ]
 };
-
 describe('executeGraph determinism', () => {
   it('returns identical output for same seed', async () => {
     const out1 = await executeGraph(sampleGraph);
     const out2 = await executeGraph(sampleGraph);
     expect(out1).toEqual(out2);
   });
-
   it('returns different output for different seed (probabilistic)', async () => {
     const g1 = { ...sampleGraph, seed: 1 };
     const g2 = { ...sampleGraph, seed: 999 };

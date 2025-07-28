@@ -2,10 +2,8 @@
  * Epic 9.2.6 - Template Creation Wizard
  * Multi-step wizard for creating new project templates from existing graphs
  */
-
 import React, { useState, useEffect } from 'react';
 import { ProjectTemplate, TemplateVariable, CustomizationPoint, TemplateCategory, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
-
 interface TemplateCreationWizardProps {
   graphData: unknown; // The current graph to turn into a template
   isOpen: boolean;
@@ -13,10 +11,9 @@ interface TemplateCreationWizardProps {
   onComplete: (template: ProjectTemplate) => void;
   templateManager: ProjectTemplateManager;
 }
-
 type WizardStep = 'basic' | 'variables' | 'customization' | 'preview' | 'publish';
 
-export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
+export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({)
   graphData,
   isOpen,
   onClose,
@@ -24,7 +21,7 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
   templateManager
 }) => {
   const [currentStep, setCurrentStep] = useState<WizardStep>('basic');
-  const [templateData, setTemplateData] = useState<Partial<ProjectTemplate>>({
+  const [templateData, setTemplateData] = useState<Partial<ProjectTemplate>>({)
     name: '',
     description: '',
     category: '',
@@ -38,18 +35,16 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
     is_featured: false,
     variables: [],
     customization_points: [],
-    graph_data: graphData
+    graph_data: graphData,
   });
   const [categories, setCategories] = useState<TemplateCategory[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
-
   useEffect(() => {
     if (isOpen) {
       loadCategories();
       setTemplateData(prev => ({ ...prev, graph_data: graphData }));
     }
   }, [isOpen, graphData]);
-
   const loadCategories = async () => {
     try {
       const cats = templateManager.getCategories();
@@ -58,7 +53,6 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
       console.error('Failed to load categories:', error);
     }
   };
-
   const steps: { key: WizardStep; title: string; description: string }[] = [
     { key: 'basic', title: 'Basic Information', description: 'Template name, description, and category' },
     { key: 'variables', title: 'Variables', description: 'Define configurable variables' },
@@ -66,12 +60,9 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
     { key: 'preview', title: 'Preview', description: 'Review your template' },
     { key: 'publish', title: 'Publish', description: 'Publish your template' }
   ];
-
   const currentStepIndex = steps.findIndex(step => step.key === currentStep);
-
   const validateCurrentStep = (): boolean => {
     const newErrors: Record<string, string> = {};
-
     switch (currentStep) {
     case 'basic':
       if (!templateData.name?.trim()) {
@@ -88,23 +79,19 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
       }
       break;
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const nextStep = () => {
     if (validateCurrentStep()) {
       const nextIndex = Math.min(currentStepIndex + 1, steps.length - 1);
       setCurrentStep(steps[nextIndex].key);
     }
   };
-
   const prevStep = () => {
     const prevIndex = Math.max(currentStepIndex - 1, 0);
     setCurrentStep(steps[prevIndex].key);
   };
-
   const handleComplete = async () => {
     try {
       const template = await templateManager.createTemplate(templateData as any);
@@ -115,17 +102,15 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
       setErrors({ publish: 'Failed to create template. Please try again.' });
     }
   };
-
   const updateTemplateData = (updates: Partial<ProjectTemplate>) => {
     setTemplateData(prev => ({ ...prev, ...updates }));
     // Clear related errors
     const newErrors = { ...errors };
-    Object.keys(updates).forEach(key => {
+    Object.keys(updates).forEach(key => {)
       delete newErrors[key];
     });
     setErrors(newErrors);
   };
-
   const addVariable = () => {
     const newVariable: TemplateVariable = {
       id: crypto.randomUUID(),
@@ -134,31 +119,27 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
       type: 'text',
       description: '',
       default_value: '',
-      required: false
+      required: false,
     };
-    
-    setTemplateData(prev => ({
+    setTemplateData(prev => ({)
       ...prev,
       variables: [...(prev.variables || []), newVariable]
     }));
   };
-
   const updateVariable = (index: number, updates: Partial<TemplateVariable>) => {
-    setTemplateData(prev => ({
+    setTemplateData(prev => ({)
       ...prev,
       variables: prev.variables?.map((variable, i) => 
         i === index ? { ...variable, ...updates } : variable
       ) || []
     }));
   };
-
   const removeVariable = (index: number) => {
-    setTemplateData(prev => ({
+    setTemplateData(prev => ({)
       ...prev,
       variables: prev.variables?.filter((_, i) => i !== index) || []
     }));
   };
-
   const addCustomizationPoint = () => {
     const newPoint: CustomizationPoint = {
       id: crypto.randomUUID(),
@@ -167,34 +148,29 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
       target_nodes: [],
       properties: [],
       description: '',
-      ui_component: 'input'
+      ui_component: 'input',
     };
-    
-    setTemplateData(prev => ({
+    setTemplateData(prev => ({)
       ...prev,
       customization_points: [...(prev.customization_points || []), newPoint]
     }));
   };
-
   const updateCustomizationPoint = (index: number, updates: Partial<CustomizationPoint>) => {
-    setTemplateData(prev => ({
+    setTemplateData(prev => ({)
       ...prev,
       customization_points: prev.customization_points?.map((point, i) => 
         i === index ? { ...point, ...updates } : point
       ) || []
     }));
   };
-
   const removeCustomizationPoint = (index: number) => {
-    setTemplateData(prev => ({
+    setTemplateData(prev => ({)
       ...prev,
       customization_points: prev.customization_points?.filter((_, i) => i !== index) || []
     }));
   };
-
   if (!isOpen) return null;
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
@@ -216,11 +192,10 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
             </button>
           </div>
         </div>
-
         {/* Progress Bar */}
         <div className="bg-gray-50 px-6 py-3">
           <div className="flex items-center space-x-4">
-            {steps.map((step, index) => (
+            {steps.map((step, index) => ()
               <div
                 key={step.key}
                 className={`flex items-center ${index < steps.length - 1 ? 'flex-1' : ''}`}
@@ -237,7 +212,7 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
                 }`}>
                   {step.title}
                 </span>
-                {index < steps.length - 1 && (
+                {index < steps.length - 1 && ()
                   <div className={`flex-1 h-0.5 mx-4 ${
                     index < currentStepIndex ? 'bg-blue-500' : 'bg-gray-200'
                   }`} />
@@ -246,10 +221,9 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
             ))}
           </div>
         </div>
-
         {/* Content */}
         <div className="px-6 py-6 overflow-y-auto max-h-[60vh]">
-          {currentStep === 'basic' && (
+          {currentStep === 'basic' && ()
             <BasicInfoStep
               data={templateData}
               categories={categories}
@@ -257,8 +231,7 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
               onChange={updateTemplateData}
             />
           )}
-
-          {currentStep === 'variables' && (
+          {currentStep === 'variables' && ()
             <VariablesStep
               variables={templateData.variables || []}
               onAdd={addVariable}
@@ -266,8 +239,7 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
               onRemove={removeVariable}
             />
           )}
-
-          {currentStep === 'customization' && (
+          {currentStep === 'customization' && ()
             <CustomizationStep
               points={templateData.customization_points || []}
               graphData={graphData}
@@ -276,12 +248,10 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
               onRemove={removeCustomizationPoint}
             />
           )}
-
-          {currentStep === 'preview' && (
+          {currentStep === 'preview' && ()
             <PreviewStep template={templateData as ProjectTemplate} />
           )}
-
-          {currentStep === 'publish' && (
+          {currentStep === 'publish' && ()
             <PublishStep
               data={templateData}
               errors={errors}
@@ -289,7 +259,6 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
             />
           )}
         </div>
-
         {/* Footer */}
         <div className="border-t border-gray-200 px-6 py-4 flex justify-between">
           <button
@@ -299,7 +268,6 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
           >
             Previous
           </button>
-          
           <div className="flex space-x-3">
             <button
               onClick={onClose}
@@ -307,15 +275,14 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
             >
               Cancel
             </button>
-            
-            {currentStepIndex < steps.length - 1 ? (
+            {currentStepIndex < steps.length - 1 ? ()
               <button
                 onClick={nextStep}
                 className="px-4 py-2 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
               >
                 Next
               </button>
-            ) : (
+            ) : ()
               <button
                 onClick={handleComplete}
                 className="px-4 py-2 text-sm bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
@@ -331,29 +298,24 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
 };
 
 // Step Components
-
 interface BasicInfoStepProps {
   data: Partial<ProjectTemplate>;
   categories: TemplateCategory[];
   errors: Record<string, string>;
   onChange: (updates: Partial<ProjectTemplate>) => void;
 }
-
 const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors, onChange }) => {
   const [newTag, setNewTag] = useState('');
-
   const addTag = () => {
     if (newTag.trim() && !data.tags?.includes(newTag.trim())) {
       onChange({ tags: [...(data.tags || []), newTag.trim()] });
       setNewTag('');
     }
   };
-
   const removeTag = (tag: string) => {
     onChange({ tags: data.tags?.filter(t => t !== tag) || [] });
   };
-
-  return (
+  return ()
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -371,7 +333,6 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
           />
           {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name}</p>}
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Category *
@@ -384,14 +345,13 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
             }`}
           >
             <option value="">Select a category</option>
-            {categories.map(category => (
+            {categories.map(category => ()
               <option key={category.id} value={category.id}>{category.name}</option>
             ))}
           </select>
           {errors.category && <p className="text-sm text-red-600 mt-1">{errors.category}</p>}
         </div>
       </div>
-
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Description *
@@ -407,7 +367,6 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
         />
         {errors.description && <p className="text-sm text-red-600 mt-1">{errors.description}</p>}
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -423,7 +382,6 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
             <option value="advanced">Advanced</option>
           </select>
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Estimated Time (minutes) *
@@ -441,7 +399,6 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
           {errors.estimated_time && <p className="text-sm text-red-600 mt-1">{errors.estimated_time}</p>}
         </div>
       </div>
-
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Tags
@@ -464,7 +421,7 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
           </button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {data.tags?.map(tag => (
+          {data.tags?.map(tag => ()
             <span
               key={tag}
               className="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-md"
@@ -484,16 +441,14 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
     </div>
   );
 };
-
 interface VariablesStepProps {
   variables: TemplateVariable[];
   onAdd: () => void;
   onUpdate: (index: number, updates: Partial<TemplateVariable>) => void;
   onRemove: (index: number) => void;
 }
-
 const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdate, onRemove }) => {
-  return (
+  return ()
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
@@ -509,14 +464,13 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
           Add Variable
         </button>
       </div>
-
-      {variables.length === 0 ? (
+      {variables.length === 0 ? ()
         <div className="text-center py-8 text-gray-500">
           No variables defined. Click "Add Variable" to create configurable elements.
         </div>
-      ) : (
+      ) : ()
         <div className="space-y-4">
-          {variables.map((variable, index) => (
+          {variables.map((variable, index) => ()
             <div key={variable.id} className="border border-gray-200 rounded-lg p-4">
               <div className="flex items-start justify-between mb-4">
                 <h4 className="font-medium text-gray-900">Variable {index + 1}</h4>
@@ -527,7 +481,6 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
                   Remove
                 </button>
               </div>
-              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -541,7 +494,6 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
-                
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Label
@@ -554,7 +506,6 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
-                
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Type
@@ -571,7 +522,6 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
                     <option value="select">Select</option>
                   </select>
                 </div>
-                
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Default Value
@@ -585,7 +535,6 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
                   />
                 </div>
               </div>
-              
               <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Description
@@ -598,7 +547,6 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-              
               <div className="mt-4 flex items-center">
                 <label className="flex items-center">
                   <input
@@ -617,7 +565,6 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
     </div>
   );
 };
-
 interface CustomizationStepProps {
   points: CustomizationPoint[];
   graphData: unknown;
@@ -625,11 +572,9 @@ interface CustomizationStepProps {
   onUpdate: (index: number, updates: Partial<CustomizationPoint>) => void;
   onRemove: (index: number) => void;
 }
-
 const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData, onAdd, onUpdate, onRemove }) => {
   const _____availableNodes = graphData?.nodes?.map((node: Error) => node.id) || [];
-
-  return (
+  return ()
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
@@ -645,14 +590,13 @@ const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData
           Add Customization Point
         </button>
       </div>
-
-      {points.length === 0 ? (
+      {points.length === 0 ? ()
         <div className="text-center py-8 text-gray-500">
           No customization points defined. Users will use the template as-is.
         </div>
-      ) : (
+      ) : ()
         <div className="space-y-4">
-          {points.map((point, index) => (
+          {points.map((point, index) => ()
             <div key={point.id} className="border border-gray-200 rounded-lg p-4">
               <div className="flex items-start justify-between mb-4">
                 <h4 className="font-medium text-gray-900">Customization Point {index + 1}</h4>
@@ -663,7 +607,6 @@ const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData
                   Remove
                 </button>
               </div>
-              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -677,7 +620,6 @@ const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
-                
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Type
@@ -693,7 +635,6 @@ const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData
                     <option value="behavior">Behavior</option>
                   </select>
                 </div>
-                
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     UI Component
@@ -711,7 +652,6 @@ const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData
                   </select>
                 </div>
               </div>
-              
               <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Description
@@ -731,16 +671,13 @@ const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData
     </div>
   );
 };
-
 interface PreviewStepProps {
   template: ProjectTemplate;
 }
-
 const PreviewStep: React.FC<PreviewStepProps> = ({ template }) => {
-  return (
+  return ()
     <div className="space-y-6">
       <h3 className="text-lg font-medium text-gray-900">Template Preview</h3>
-      
       <div className="bg-gray-50 rounded-lg p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -764,7 +701,6 @@ const PreviewStep: React.FC<PreviewStepProps> = ({ template }) => {
               </div>
             </dl>
           </div>
-          
           <div>
             <h4 className="font-medium text-gray-900 mb-2">Configuration</h4>
             <dl className="space-y-2">
@@ -785,7 +721,6 @@ const PreviewStep: React.FC<PreviewStepProps> = ({ template }) => {
             </dl>
           </div>
         </div>
-        
         <div className="mt-6">
           <h4 className="font-medium text-gray-900 mb-2">Description</h4>
           <p className="text-sm text-gray-700">{template.description}</p>
@@ -794,18 +729,15 @@ const PreviewStep: React.FC<PreviewStepProps> = ({ template }) => {
     </div>
   );
 };
-
 interface PublishStepProps {
   data: Partial<ProjectTemplate>;
   errors: Record<string, string>;
   onChange: (updates: Partial<ProjectTemplate>) => void;
 }
-
 const PublishStep: React.FC<PublishStepProps> = ({ data, errors, onChange }) => {
-  return (
+  return ()
     <div className="space-y-6">
       <h3 className="text-lg font-medium text-gray-900">Publish Template</h3>
-      
       <div className="space-y-4">
         <div>
           <label className="flex items-center">
@@ -823,7 +755,6 @@ const PublishStep: React.FC<PublishStepProps> = ({ data, errors, onChange }) => 
             Public templates can be discovered and used by other users
           </p>
         </div>
-        
         <div>
           <label className="flex items-center">
             <input
@@ -841,8 +772,7 @@ const PublishStep: React.FC<PublishStepProps> = ({ data, errors, onChange }) => 
           </p>
         </div>
       </div>
-      
-      {errors.publish && (
+      {errors.publish && ()
         <div className="bg-red-50 border border-red-200 rounded-md p-4">
           <div className="flex">
             <svg className="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

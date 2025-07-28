@@ -56,7 +56,7 @@ export interface BreachIncident {
     type: BreachType;
     category: BreachCategory;
     dataTypes: string[];
-    dataSubjects: {
+    dataSubjects: {,
         category: DataSubjectCategory;
         count: number;
         countries: string[];
@@ -135,46 +135,46 @@ export interface ComplianceRequirement {
     evidence?: string[];
 }
 export interface BreachNotificationConfig {
-    detection: {
+    detection: {,
         enabled: boolean;
         autoClassification: boolean;
         riskThreshold: BreachSeverity;
         monitoringSources: string[];
     };
-    notifications: {
-        gdpr: {
+    notifications: {,
+        gdpr: {,
             enabled: boolean;
             supervisoryAuthority: string;
             contactEmail: string;
             autoFile: boolean;
             deadline: number;
         };
-        internal: {
+        internal: {,
             securityTeam: string[];
             management: string[];
             legal: string[];
             dpo: string;
         };
-        external: {
-            customers: {
+        external: {,
+            customers: {,
                 enabled: boolean;
                 highRiskThreshold: BreachSeverity;
                 template: string;
             };
-            media: {
+            media: {,
                 enabled: boolean;
                 criticalThreshold: BreachSeverity;
                 contactList: string[];
             };
         };
     };
-    automation: {
+    automation: {,
         containmentActions: boolean;
         evidenceCollection: boolean;
         reportGeneration: boolean;
         statusUpdates: boolean;
     };
-    compliance: {
+    compliance: {,
         frameworks: string[];
         auditLogging: boolean;
         retentionPeriod: string;
@@ -191,7 +191,7 @@ export declare class BreachNotificationService extends EventEmitter {
     /**
      * Report a new breach incident
      */
-    reportBreach(incidentData: {
+    reportBreach(incidentData: {)
         title: string;
         description: string;
         severity?: BreachSeverity;
@@ -210,7 +210,7 @@ export declare class BreachNotificationService extends EventEmitter {
     /**
      * Send notification to specified recipients
      */
-    sendNotification(
+    sendNotification()
       incidentId: string,
       type: NotificationType,
       recipients: string[],
@@ -240,7 +240,7 @@ export declare class BreachNotificationService extends EventEmitter {
     /**
      * Get all incidents with optional filtering
      */
-    getIncidents(filter?: {
+    getIncidents(filter?: {)
         status?: IncidentStatus;
         severity?: BreachSeverity;
         dateRange?: {

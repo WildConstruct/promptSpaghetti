@@ -186,7 +186,7 @@ export interface TransactionSearchQuery {
 export type TransactionSortField = 'created_at' | 'amount' | 'risk_score' | 'status' | 'buyer_name' | 'seller_name' | 'template_title' | 'processing_time';
 export interface TransactionSearchResults {
     transactions: TrackedTransaction[];
-    pagination: {
+    pagination: {,
         page: number;
         pageSize: number;
         total: number;
@@ -201,19 +201,19 @@ export interface TransactionAggregations {
     statusBreakdown: Record<TransactionStatus, number>;
     typeBreakdown: Record<TransactionType, number>;
     riskLevelBreakdown: Record<string, number>;
-    topTemplates: Array<{
+    topTemplates: Array<{,
         templateId: string;
         title: string;
         count: number;
         revenue: number;
     }>;
-    topSellers: Array<{
+    topSellers: Array<{,
         sellerId: string;
         name: string;
         count: number;
         revenue: number;
     }>;
-    dailyVolume: Array<{
+    dailyVolume: Array<{,
         date: string;
         count: number;
         amount: number;
@@ -221,7 +221,7 @@ export interface TransactionAggregations {
 }
 export interface AppliedFilters {
     count: number;
-    filters: Array<{
+    filters: Array<{,
         field: string;
         operator: string;
         value: any;
@@ -240,7 +240,7 @@ export interface MonitoringThresholds {
     largeTransactionAlert: number;
     failureRateAlert: number;
     averageProcessingTimeAlert: number;
-    suspiciousPatternAlert: {
+    suspiciousPatternAlert: {,
         velocityThreshold: number;
         locationAnomalyThreshold: number;
         newPaymentMethodThreshold: number;
@@ -450,7 +450,7 @@ export interface TransactionRecommendation {
     title: string;
     description: string;
     expectedImpact: string;
-    implementation: {
+    implementation: {,
         complexity: 'low' | 'medium' | 'high';
         timeframe: string;
         requirements: string[];
@@ -460,22 +460,22 @@ export interface TransactionRecommendation {
 export interface TransactionTrackingConfig {
     realTimeMonitoring: boolean;
     dataRetentionDays: number;
-    exportLimits: {
+    exportLimits: {,
         maxRecords: number;
         maxFileSize: number;
         allowedFormats: string[];
     };
-    alertSettings: {
+    alertSettings: {,
         enabled: boolean;
         channels: AlertChannel[];
         thresholds: MonitoringThresholds;
     };
-    riskSettings: {
+    riskSettings: {,
         enableMLDetection: boolean;
         manualReviewThreshold: number;
         autoFlagThreshold: number;
     };
-    integrations: {
+    integrations: {,
         stripe: boolean;
         paypal: boolean;
         analytics: boolean;

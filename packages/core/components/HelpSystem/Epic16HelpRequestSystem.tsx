@@ -4,7 +4,6 @@
  * Main integration component that brings together all Epic 16 help request
  * functionality including dashboard, form, and intelligent routing.
  */
-
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   HelpRequest,
@@ -13,7 +12,6 @@ import {
 } from '../../services/Epic16HelpRequestService';
 import HelpRequestDashboard from './HelpRequestDashboard';
 import HelpRequestForm from './HelpRequestForm';
-
 interface Epic16HelpRequestSystemProps {
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
@@ -23,7 +21,7 @@ interface Epic16HelpRequestSystemProps {
   onConfigChange?: (config: HelpRequestConfig) => void;
 }
 
-export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = ({
+export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = ({)
   userId,
   userRole,
   userType,
@@ -35,7 +33,6 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
   const helpService = useMemo(() => {
     return new Epic16HelpRequestService(config);
   }, [config]);
-
   // State management
   const [_____selectedRequest, setSelectedRequest] = useState<HelpRequest | null>(null);
   const [view, setView] = useState<'dashboard' | 'form' | 'settings'>('dashboard');
@@ -45,70 +42,63 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
     message: string;
     timestamp: Date;
   }>>([]);
-
   // Set up event listeners for service events
   useEffect(() => {
     const handleRequestSubmitted = (data: { request: HelpRequest }) => {
-      setNotifications(prev => [...prev, {
-        id: `submitted-${data.request.id}`,
+      setNotifications(prev => [...prev, {)
+        id: `submitted-${data.request.id}`,}
         type: 'success',
-        message: `Help request ${data.request.id} has been submitted`,
+        message: `Help request ${data.request.id} has been submitted`,}
         timestamp: new Date()
       }]);
     };
-
     const handleRequestAutoResolved = (data: { request: HelpRequest }) => {
-      setNotifications(prev => [...prev, {
-        id: `auto-resolved-${data.request.id}`,
+      setNotifications(prev => [...prev, {)
+        id: `auto-resolved-${data.request.id}`,}
         type: 'info',
-        message: `Help request ${data.request.id} was automatically resolved`,
+        message: `Help request ${data.request.id} was automatically resolved`,}
         timestamp: new Date()
       }]);
     };
-
-    const handleRequestStatusChanged = (data: { 
+    const handleRequestStatusChanged = (data: { )
       request: HelpRequest; 
       oldStatus: string; 
       newStatus: string; 
     }) => {
-      setNotifications(prev => [...prev, {
-        id: `status-${data.request.id}-${Date.now()}`,
+      setNotifications(prev => [...prev, {)
+        id: `status-${data.request.id}-${Date.now()}`,}
         type: 'info',
-        message: `Help request ${data.request.id} status changed to ${data.newStatus}`,
+        message: `Help request ${data.request.id} status changed to ${data.newStatus}`,}
         timestamp: new Date()
       }]);
     };
-
-    const handleRequestEscalated = (data: { 
+    const handleRequestEscalated = (data: { )
       request: HelpRequest; 
       reason: string; 
     }) => {
-      setNotifications(prev => [...prev, {
-        id: `escalated-${data.request.id}`,
+      setNotifications(prev => [...prev, {)
+        id: `escalated-${data.request.id}`,}
         type: 'warning',
-        message: `Help request ${data.request.id} has been escalated`,
+        message: `Help request ${data.request.id} has been escalated`,}
         timestamp: new Date()
       }]);
     };
-
-    const handleResponseAdded = (data: { 
+    const handleResponseAdded = (data: { )
       request: HelpRequest; 
     }) => {
-      setNotifications(prev => [...prev, {
-        id: `response-${data.request.id}-${Date.now()}`,
+      setNotifications(prev => [...prev, {)
+        id: `response-${data.request.id}-${Date.now()}`,}
         type: 'info',
-        message: `New response added to help request ${data.request.id}`,
+        message: `New response added to help request ${data.request.id}`,}
         timestamp: new Date()
       }]);
     };
-
     // Subscribe to events
     helpService.on('help_request_submitted', handleRequestSubmitted);
     helpService.on('help_request_auto_resolved', handleRequestAutoResolved);
     helpService.on('help_request_status_changed', handleRequestStatusChanged);
     helpService.on('help_request_escalated', handleRequestEscalated);
     helpService.on('help_response_added', handleResponseAdded);
-
     return () => {
       // Cleanup listeners
       helpService.off('help_request_submitted', handleRequestSubmitted);
@@ -118,35 +108,29 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
       helpService.off('help_response_added', handleResponseAdded);
     };
   }, [helpService]);
-
   // Auto-dismiss notifications
   useEffect(() => {
     if (notifications.length > 0) {
       const timer = setTimeout(() => {
         setNotifications(prev => prev.slice(1));
       }, 5000);
-
       return () => clearTimeout(timer);
     }
   }, [notifications]);
-
   // Handle request selection
   const handleRequestSelect = (request: HelpRequest) => {
     setSelectedRequest(request);
   };
-
   // Handle form submission
   const handleFormSubmitted = (request: HelpRequest) => {
     setSelectedRequest(request);
     setView('dashboard');
   };
-
   // Handle view navigation
   const handleViewChange = (newView: 'dashboard' | 'form' | 'settings') => {
     setView(newView);
   };
-
-  return (
+  return ()
     <div className="epic16-help-request-system h-full flex flex-col relative">
       {/* Navigation Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -162,7 +146,6 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
             >
               Help Dashboard
             </button>
-            
             <button
               onClick={() => handleViewChange('form')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
@@ -173,8 +156,7 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
             >
               Submit Request
             </button>
-            
-            {userRole === 'admin' && (
+            {userRole === 'admin' && ()
               <button
                 onClick={() => handleViewChange('settings')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
@@ -187,7 +169,6 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
               </button>
             )}
           </nav>
-
           <div className="flex items-center space-x-4">
             <div className="text-sm text-gray-600">
               User: <span className="font-medium">{userId}</span>
@@ -201,10 +182,9 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
           </div>
         </div>
       </div>
-
       {/* Main Content Area */}
       <div className="flex-1 overflow-hidden">
-        {view === 'dashboard' && (
+        {view === 'dashboard' && ()
           <HelpRequestDashboard
             helpService={helpService}
             userId={userId}
@@ -212,8 +192,7 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
             onRequestSelect={handleRequestSelect}
           />
         )}
-
-        {view === 'form' && (
+        {view === 'form' && ()
           <div className="p-6 overflow-y-auto">
             <HelpRequestForm
               helpService={helpService}
@@ -225,18 +204,15 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
             />
           </div>
         )}
-
-        {view === 'settings' && userRole === 'admin' && (
+        {view === 'settings' && userRole === 'admin' && ()
           <HelpSystemSettings
             helpService={helpService}
             onConfigChange={onConfigChange}
           />
         )}
       </div>
-
       {/* Notifications */}
       <NotificationSystem notifications={notifications} />
-
       {/* Help & Documentation */}
       <HelpSystemDocumentation />
     </div>
@@ -248,20 +224,17 @@ interface HelpSystemSettingsProps {
   helpService: Epic16HelpRequestService;
   onConfigChange?: (config: HelpRequestConfig) => void;
 }
-
-const HelpSystemSettings: React.FC<HelpSystemSettingsProps> = ({
+const HelpSystemSettings: React.FC<HelpSystemSettingsProps> = ({)
   helpService,
   onConfigChange
 }) => {
-  return (
+  return ()
     <div className="p-6">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Help System Settings</h2>
-      
       <div className="space-y-6">
         {/* Auto-Resolution Settings */}
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Auto-Resolution</h3>
-          
           <div className="space-y-4">
             <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
               <div className="flex">
@@ -285,7 +258,6 @@ const HelpSystemSettings: React.FC<HelpSystemSettingsProps> = ({
                 </div>
               </div>
             </div>
-
             <div className="grid grid-cols-3 gap-6">
               <div>
                 <h4 className="text-sm font-medium text-gray-900 mb-2">Auto-Resolution</h4>
@@ -298,7 +270,6 @@ const HelpSystemSettings: React.FC<HelpSystemSettingsProps> = ({
                   </div>
                 </div>
               </div>
-
               <div>
                 <h4 className="text-sm font-medium text-gray-900 mb-2">Smart Routing</h4>
                 <div className="bg-green-50 border border-green-200 rounded-md p-3">
@@ -310,7 +281,6 @@ const HelpSystemSettings: React.FC<HelpSystemSettingsProps> = ({
                   </div>
                 </div>
               </div>
-
               <div>
                 <h4 className="text-sm font-medium text-gray-900 mb-2">Analytics</h4>
                 <div className="bg-green-50 border border-green-200 rounded-md p-3">
@@ -325,11 +295,9 @@ const HelpSystemSettings: React.FC<HelpSystemSettingsProps> = ({
             </div>
           </div>
         </div>
-
         {/* Knowledge Base Integration */}
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Knowledge Base Integration</h3>
-          
           <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
@@ -351,11 +319,9 @@ const HelpSystemSettings: React.FC<HelpSystemSettingsProps> = ({
             </div>
           </div>
         </div>
-
         {/* SLA Configuration */}
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">SLA Configuration</h3>
-          
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -408,18 +374,16 @@ const HelpSystemSettings: React.FC<HelpSystemSettingsProps> = ({
 
 // Notification System Component
 interface NotificationSystemProps {
-  notifications: Array<{
+  notifications: Array<{,
     id: string;
     type: 'success' | 'error' | 'info' | 'warning';
     message: string;
     timestamp: Date;
   }>;
 }
-
 const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => {
   if (notifications.length === 0) return null;
-
-  return (
+  return ()
     <div className="fixed top-4 right-4 z-50 space-y-2">
       {notifications.slice(-3).map((notification) => {
         const colors = {
@@ -428,30 +392,29 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }
           info: 'bg-blue-50 border-blue-200 text-blue-700',
           warning: 'bg-yellow-50 border-yellow-200 text-yellow-700'
         };
-
-        return (
+        return ()
           <div
             key={notification.id}
             className={`max-w-sm w-full border rounded-md p-4 shadow-lg ${colors[notification.type]}`}
           >
             <div className="flex">
               <div className="flex-shrink-0">
-                {notification.type === 'success' && (
+                {notification.type === 'success' && ()
                   <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                 )}
-                {notification.type === 'error' && (
+                {notification.type === 'error' && ()
                   <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                   </svg>
                 )}
-                {notification.type === 'info' && (
+                {notification.type === 'info' && ()
                   <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
                 )}
-                {notification.type === 'warning' && (
+                {notification.type === 'warning' && ()
                   <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
@@ -474,8 +437,7 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }
 // Help System Documentation Component
 const HelpSystemDocumentation: React.FC = () => {
   const [showHelp, setShowHelp] = useState(false);
-
-  return (
+  return ()
     <>
       <button
         onClick={() => setShowHelp(true)}
@@ -486,8 +448,7 @@ const HelpSystemDocumentation: React.FC = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </button>
-
-      {showHelp && (
+      {showHelp && ()
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-gray-200">
@@ -503,7 +464,6 @@ const HelpSystemDocumentation: React.FC = () => {
                 </button>
               </div>
             </div>
-            
             <div className="p-6 space-y-6">
               <div>
                 <h4 className="font-medium text-gray-900 mb-2">Intelligent Help System</h4>
@@ -513,7 +473,6 @@ const HelpSystemDocumentation: React.FC = () => {
                   analytics for marketplace and community support.
                 </p>
               </div>
-
               <div>
                 <h4 className="font-medium text-gray-900 mb-2">Key Features</h4>
                 <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
@@ -525,7 +484,6 @@ const HelpSystemDocumentation: React.FC = () => {
                   <li><strong>Knowledge Base:</strong> Integrated article suggestions and search</li>
                 </ul>
               </div>
-
               <div>
                 <h4 className="font-medium text-gray-900 mb-2">Request Types</h4>
                 <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
@@ -543,7 +501,6 @@ const HelpSystemDocumentation: React.FC = () => {
                   <div>• Onboarding Help</div>
                 </div>
               </div>
-
               <div>
                 <h4 className="font-medium text-gray-900 mb-2">How It Works</h4>
                 <ol className="text-sm text-gray-600 space-y-2 list-decimal list-inside">
@@ -555,7 +512,6 @@ const HelpSystemDocumentation: React.FC = () => {
                   <li>Analytics and continuous improvement</li>
                 </ol>
               </div>
-
               <div>
                 <h4 className="font-medium text-gray-900 mb-2">User Roles</h4>
                 <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">

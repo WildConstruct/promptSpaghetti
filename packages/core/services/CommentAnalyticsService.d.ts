@@ -56,7 +56,7 @@ export declare class CommentAnalyticsService {
     /**
      * Get comprehensive comment analytics for a resource
      */
-    getCommentAnalytics(resourceId: string, resourceType: CommentableResourceType, options?: {
+    getCommentAnalytics(resourceId: string, resourceType: CommentableResourceType, options?: {)
         startDate?: Date;
         endDate?: Date;
         includeRealTime?: boolean;

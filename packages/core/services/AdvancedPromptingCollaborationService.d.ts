@@ -26,7 +26,7 @@ export interface MARSRegionTemplate {
     tags: string[];
     defaultNodes: string[];
     vfxCompatible: boolean;
-    marsParameters: {
+    marsParameters: {,
         category: string;
         subcategory: string;
         controlNetMapping?: string;
@@ -40,14 +40,14 @@ export interface ZadaPromptPattern {
     methodology: PromptingMethodology;
     filmGenre: string[];
     complexity: 'simple' | 'intermediate' | 'advanced';
-    elements: {
+    elements: {,
         timeAndSetting: string;
         actions: string;
         locations: string;
         characters: string;
         cinematography: string;
     };
-    accessibility: {
+    accessibility: {,
         directorFriendly: boolean;
         technicalLevel: number;
         humanReadableScore: number;
@@ -80,7 +80,7 @@ export interface VFXPipelineConfig {
     includeZadaPatterns: boolean;
     exportFormat: 'controlnet' | 'stable_diffusion' | 'custom_pipeline';
     targetSoftware: string[];
-    pipelineMetadata: {
+    pipelineMetadata: {,
         project: string;
         sequence: string;
         shot: string;
@@ -141,21 +141,21 @@ export declare class AdvancedPromptingCollaborationService extends EventEmitter 
     private initializeMARSRegionTemplates;
     private initializeZadaPromptPatterns;
     private initializeWorkflowTemplates;
-    createCollaborationSession(
+    createCollaborationSession()
       title: string,
       methodology: PromptingMethodology,
-      creatorId: string
+      creatorId: string,
     ): Promise<PromptingMethodologySession>;
     joinCollaborationSession(sessionId: string, userId: string): Promise<boolean>;
-    createZadaPattern(
+    createZadaPattern()
       sessionId: string,
       userId: string,
-      patternData: Partial<ZadaPromptPattern>
+      patternData: Partial<ZadaPromptPattern>,
     ): Promise<ZadaPromptPattern>;
-    createMARSRegion(
+    createMARSRegion()
       sessionId: string,
       userId: string,
-      regionData: Partial<MARSRegionTemplate>
+      regionData: Partial<MARSRegionTemplate>,
     ): Promise<MARSRegionTemplate>;
     generateVFXExport(sessionId: string, userId: string): Promise<any>;
     registerUser(user: FilmIndustryUser): void;

@@ -4,7 +4,6 @@
  * 
  * Main interface and export for the admin dashboard domain
  */
-
 import React from 'react';
 import {
   AdminDashboardState,
@@ -82,11 +81,10 @@ export interface IWidgetRegistry {
 // Main domain interface
 export interface IAdminDashboardDomain {
   // React Components
-  components: {
+  components: {,
     AdminDashboard: React.ComponentType<AdminDashboardProps>;
     WidgetGrid: React.ComponentType<WidgetGridProps>;
     WidgetLibrary: React.ComponentType<WidgetLibraryProps>;
-    
     // Specific widgets
     SecurityWidget: React.ComponentType<any>;
     UserManagementWidget: React.ComponentType<any>;
@@ -94,9 +92,8 @@ export interface IAdminDashboardDomain {
     SystemMetricsWidget: React.ComponentType<any>;
     AlertIndicatorsWidget: React.ComponentType<any>;
   };
-
   // React Hooks
-  hooks: {
+  hooks: {,
     useAdminDashboard: () => {
       state: AdminDashboardState;
       loadLayout: (layoutId: string) => Promise<void>;
@@ -106,7 +103,6 @@ export interface IAdminDashboardDomain {
       updateWidget: (widgetId: string, updates: any) => void;
       toggleEditMode: () => void;
     };
-    
     useAdminUsers: () => {
       users: AdminUser[];
       loading: boolean;
@@ -116,7 +112,6 @@ export interface IAdminDashboardDomain {
       deleteUser: (userId: string) => Promise<void>;
       suspendUser: (userId: string, reason: string) => Promise<void>;
     };
-    
     useSecurity: () => {
       alerts: SecurityAlert[];
       metrics: any;
@@ -125,7 +120,6 @@ export interface IAdminDashboardDomain {
       performScan: () => Promise<void>;
       generateReport: () => Promise<any>;
     };
-    
     useApiManagement: () => {
       apiKeys: ApiKey[];
       loading: boolean;
@@ -134,7 +128,6 @@ export interface IAdminDashboardDomain {
       revokeApiKey: (keyId: string) => Promise<void>;
       updateRateLimit: (keyId: string, rateLimit: any) => Promise<void>;
     };
-    
     useSystemMonitoring: () => {
       metrics: SystemMetrics | null;
       health: any;
@@ -143,9 +136,8 @@ export interface IAdminDashboardDomain {
       restartService: (serviceName: string) => Promise<void>;
     };
   };
-
   // Domain Services
-  services: {
+  services: {,
     users: IAdminUserService;
     security: ISecurityService;
     apiManagement: IApiManagementService;
@@ -153,22 +145,19 @@ export interface IAdminDashboardDomain {
     dashboardConfig: IDashboardConfigService;
     widgetRegistry: IWidgetRegistry;
   };
-
   // Event System
   events: AdminDomainEvents & {
     subscribe: (event: keyof AdminDomainEvents, callback: Function) => () => void;
     emit: (event: keyof AdminDomainEvents, ...args: any[]) => void;
   };
-
   // Configuration
-  config: {
+  config: {,
     getConfig: () => AdminDashboardConfig;
     updateConfig: (config: Partial<AdminDashboardConfig>) => void;
     resetConfig: () => void;
   };
-
   // Utilities
-  utils: {
+  utils: {,
     validatePermission: (userPermissions: string[], requiredPermission: string) => boolean;
     formatUserRole: (role: string) => string;
     calculateSecurityScore: (metrics: any) => number;
@@ -201,7 +190,7 @@ export const ADMIN_DOMAIN_EVENTS = {
   API_KEY_CREATED: 'admin:api:key:created',
   API_KEY_REVOKED: 'admin:api:key:revoked',
   SYSTEM_HEALTH_CHANGED: 'admin:system:health:changed',
-  CONFIG_UPDATED: 'admin:config:updated'
+  CONFIG_UPDATED: 'admin:config:updated',
 } as const;
 
 export type AdminDomainEventType = typeof ADMIN_DOMAIN_EVENTS[keyof typeof ADMIN_DOMAIN_EVENTS];

@@ -11,16 +11,16 @@ interface UseActivityFeedOptions {
 interface ActivityStatsData {
     total_events: number;
     events_by_type: Record<string, number>;
-    events_by_day: Array<{
+    events_by_day: Array<{,
         date: string;
         count: number;
     }>;
-    most_active_users: Array<{
+    most_active_users: Array<{,
         user_id: string;
         count: number;
     }>;
 }
-export declare function useActivityFeed(
+export declare function useActivityFeed()
   workspaceId: string,
   userId: string,
   filters?: ActivityEventFilter,

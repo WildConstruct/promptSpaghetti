@@ -41,12 +41,12 @@ export declare class ErrorRecovery {
     /**
      * Execute multiple operations with graceful degradation
      */
-    static withGracefulDegradation<T>(operations: Array<{
+    static withGracefulDegradation<T>(operations: Array<{)
         operation: () => Promise<T>;
         name: string;
         priority: 'critical' | 'important' | 'optional';
     }>, context: string): Promise<{
-        results: Array<{
+        results: Array<{,
             name: string;
             result?: T;
             error?: Error;
@@ -87,7 +87,7 @@ interface CircuitBreakerState extends CircuitBreakerOptions {
 /**
  * Decorator for automatic error recovery
  */
-export declare function withErrorRecovery<T extends any[], R>(
+export declare function withErrorRecovery<T extends any[], R>()
   retryOptions?: Partial<RetryOptions>,
   fallbackOptions?: FallbackOptions<R>
 ): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor;

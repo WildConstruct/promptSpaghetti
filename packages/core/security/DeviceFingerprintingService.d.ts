@@ -41,7 +41,7 @@ export interface DeviceFingerprint {
     createdAt: Date;
     lastSeen: Date;
     seenCount: number;
-    basic: {
+    basic: {,
         userAgent: string;
         language: string;
         platform: string;
@@ -50,15 +50,15 @@ export interface DeviceFingerprint {
         timezone: string;
         timezoneOffset: number;
     };
-    enhanced: {
-        screen: {
+    enhanced: {,
+        screen: {,
             width: number;
             height: number;
             colorDepth: number;
             pixelRatio: number;
             orientation: string;
         };
-        browser: {
+        browser: {,
             name: string;
             version: string;
             engine: string;
@@ -69,14 +69,14 @@ export interface DeviceFingerprint {
             vendor?: string;
             vendorSub?: string;
         };
-        plugins: Array<{
+        plugins: Array<{,
             name: string;
             filename: string;
             description: string;
             version?: string;
         }>;
         fonts: string[];
-        webgl: {
+        webgl: {,
             vendor: string;
             renderer: string;
             version: string;
@@ -84,54 +84,54 @@ export interface DeviceFingerprint {
             extensions: string[];
             parameters: Record<string, any>;
         };
-        canvas: {
+        canvas: {,
             fingerprint: string;
             geometry: string;
             text: string;
         };
-        audio: {
+        audio: {,
             fingerprint: string;
             sampleRate: number;
             channelCount: number;
             contextState: string;
         };
     };
-    comprehensive: {
-        hardware: {
+    comprehensive: {,
+        hardware: {,
             cpuCores: number;
             memory: number;
             touchSupport: boolean;
             sensors: string[];
             bluetooth: boolean;
             usb: boolean;
-            webrtc: {
+            webrtc: {,
                 supported: boolean;
                 localCandidates: string[];
                 stunServers: string[];
             };
         };
-        network: {
+        network: {,
             connectionType: string;
             downlink?: number;
             effectiveType?: string;
             rtt?: number;
             saveData?: boolean;
         };
-        permissions: {
+        permissions: {,
             camera: string;
             microphone: string;
             location: string;
             notifications: string;
             persistentStorage: string;
         };
-        storage: {
+        storage: {,
             localStorage: boolean;
             sessionStorage: boolean;
             indexedDB: boolean;
             webSQL: boolean;
             quota: number;
         };
-        features: {
+        features: {,
             webAssembly: boolean;
             serviceWorker: boolean;
             webWorker: boolean;
@@ -149,7 +149,7 @@ export interface LocationData {
     source: 'ip' | 'gps' | 'wifi' | 'cell' | 'manual';
     accuracy: number;
     confidence: number;
-    coordinates: {
+    coordinates: {,
         latitude: number;
         longitude: number;
         altitude?: number;
@@ -158,7 +158,7 @@ export interface LocationData {
         heading?: number;
         speed?: number;
     };
-    address: {
+    address: {,
         country: string;
         countryCode: string;
         region: string;
@@ -168,7 +168,7 @@ export interface LocationData {
         street?: string;
         district?: string;
     };
-    network: {
+    network: {,
         ipAddress: string;
         isp: string;
         organization?: string;
@@ -180,7 +180,7 @@ export interface LocationData {
         hostingProvider: boolean;
         datacenter: boolean;
     };
-    metadata: {
+    metadata: {,
         language: string;
         currency: string;
         callingCode: string;
@@ -193,7 +193,7 @@ export interface RiskAssessment {
     deviceId: string;
     overallRisk: RiskLevel;
     riskScore: number;
-    factors: Array<{
+    factors: Array<{,
         category: string;
         factor: string;
         impact: number;
@@ -266,7 +266,7 @@ export declare class DeviceFingerprintingService extends EventEmitter {
         totalFingerprints: number;
         uniqueDevices: number;
         riskDistribution: Record<RiskLevel, number>;
-        topCountries: Array<{
+        topCountries: Array<{,
             country: string;
             count: number;
         }>;

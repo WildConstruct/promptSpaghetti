@@ -14,7 +14,6 @@
  * - Predictive anomaly forecasting
  * - Integration with external monitoring systems
  */
-
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { 
   ConversionFunnelDefinition,
@@ -459,23 +458,19 @@ export interface AnomalyDetectionExportData {
 
 // Default configuration
 
-
-export   const [error, setError] = useState<string | null>(null);
+export const [error, setError] = useState<string | null>(null);
   const [selectedAnomaly, setSelectedAnomaly] = useState<DetectedAnomaly | null>(null);
   const [activeTab, setActiveTab] = useState<'current' | 'historical' | 'predicted' | 'alerts'>('current');
   const [filterSeverity, setFilterSeverity] = useState<AnomalySeverity | 'all'>('all');
   const [filterType, setFilterType] = useState<AnomalyType | 'all'>('all');
   const [realTimeEnabled, setRealTimeEnabled] = useState(realTimeMonitoring);
-  
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
-
   // Load anomaly detection data
   const loadAnomalyData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
       const query: ConversionMetricQuery = {
         funnelId: funnelDefinition.id,
         timeRange,
@@ -483,22 +478,18 @@ export   const [error, setError] = useState<string | null>(null);
         cohorts: cohorts.map(c => c.id),
         metrics: ['anomaly_detection', 'alert_history', 'impact_assessment'],
         aggregation: 'raw',
-        filters: []
+        filters: [],
       };
-
       const result = await analyticsInfrastructure.executeQuery(query);
-      
       if (result.success && result.data) {
-        const anomalyData = await processAnomalyDetectionData(
+        const anomalyData = await processAnomalyDetectionData(;)
           result.data,
           detectionConfig,
           alertConfig
         );
-        
         setDetectionData(anomalyData);
-        
         // Trigger callbacks for new anomalies
-        anomalyData.currentAnomalies.forEach(anomaly => {
+        anomalyData.currentAnomalies.forEach(anomaly => {)
           if (anomaly.status === 'new' && onAnomalyDetected) {
             onAnomalyDetected(anomaly);
           }
@@ -512,18 +503,16 @@ export   const [error, setError] = useState<string | null>(null);
       setLoading(false);
     }
   }, [funnelDefinition, analyticsInfrastructure, timeRange, segments, cohorts, detectionConfig, alertConfig, onAnomalyDetected]);
-
   // Process anomaly detection data
-  const processAnomalyDetectionData = async (
+  const processAnomalyDetectionData = async (;)
     rawData: unknown,
     config: AnomalyDetectionConfig,
-    alertCfg: AlertConfiguration
+    alertCfg: AlertConfiguration,
   ): Promise<AnomalyDetectionData> => {
     // Simulate comprehensive anomaly detection processing
     const currentAnomalies: DetectedAnomaly[] = generateMockAnomalies('current');
     const historicalAnomalies: DetectedAnomaly[] = generateMockAnomalies('historical');
     const predictedAnomalies: PredictedAnomaly[] = generateMockPredictions();
-    
     return {
       currentAnomalies,
       historicalAnomalies,
@@ -533,17 +522,15 @@ export   const [error, setError] = useState<string | null>(null);
       impactAssessment: generateImpactAssessments(currentAnomalies),
       alertHistory: generateAlertHistory(),
       systemHealth: generateSystemHealth(),
-      detectionPerformance: generateDetectionPerformance(config.algorithms)
+      detectionPerformance: generateDetectionPerformance(config.algorithms),
     };
   };
-
   // Generate mock anomalies for demo
   const generateMockAnomalies = (type: 'current' | 'historical'): DetectedAnomaly[] => {
     const baseTime = type === 'current' ? Date.now() : Date.now() - 24 * 60 * 60 * 1000;
-    
     return [
       {
-        id: `anom-${type}-001`,
+        id: `anom-${type}-001`,}
         timestamp: baseTime - Math.random() * 60 * 60 * 1000,
         type: 'conversion_anomaly',
         severity: 'high',
@@ -556,49 +543,49 @@ export   const [error, setError] = useState<string | null>(null);
         deviationPercentage: -46.7,
         algorithm: 'statistical_zscore',
         description: 'Significant drop in conversion rate detected at checkout step',
-        context: {
+        context: {,
           timeOfDay: 14,
           dayOfWeek: 2,
           seasonality: 'normal',
-          environmentalFactors: [
+          environmentalFactors: [,
             { factor: 'server_load', value: 0.85, impact: 'negative', confidence: 0.9 }
           ],
-          concurrentEvents: [
+          concurrentEvents: [,
             { eventType: 'deployment', eventName: 'Payment System Update', timestamp: baseTime - 30 * 60 * 1000, impact: 'negative', correlation: 0.8 }
           ],
           marketConditions: [],
-          systemMetrics: [
+          systemMetrics: [,
             { metric: 'response_time', value: 450, threshold: 300, status: 'warning' }
           ]
         },
-        rootCauses: [
+        rootCauses: [,
           {
             category: 'technical',
             description: 'Payment processing latency increased after deployment',
             probability: 0.8,
-            evidence: [
+            evidence: [,
               { type: 'metric', description: 'Response time spike at deployment time', strength: 'strong', timestamp: baseTime, source: 'monitoring' }
             ],
             investigationSteps: ['Check payment service logs', 'Review deployment changes', 'Analyze error rates']
           }
         ],
-        impact: {
+        impact: {,
           revenueImpact: -2400,
           userImpact: 150,
           conversionImpact: -0.07,
           scopeOfImpact: 'localized',
           durationEstimate: 120,
           recoveryEstimate: 30,
-          businessCritical: true
+          businessCritical: true,
         },
-        recommendations: [
+        recommendations: [,
           { action: 'Rollback payment system changes', priority: 'immediate', effort: 'low', expectedImpact: 'high', timeline: '15 minutes', owner: 'DevOps', dependencies: [] },
           { action: 'Implement payment timeout optimization', priority: 'high', effort: 'medium', expectedImpact: 'medium', timeline: '2 hours', owner: 'Backend Team', dependencies: ['Root cause confirmation'] }
         ],
         status: type === 'current' ? 'new' : 'resolved'
       },
       {
-        id: `anom-${type}-002`,
+        id: `anom-${type}-002`,}
         timestamp: baseTime - Math.random() * 2 * 60 * 60 * 1000,
         type: 'traffic_anomaly',
         severity: 'medium',
@@ -610,38 +597,38 @@ export   const [error, setError] = useState<string | null>(null);
         deviationPercentage: 54.2,
         algorithm: 'isolation_forest',
         description: 'Unexpected traffic spike detected - 54% above normal levels',
-        context: {
+        context: {,
           timeOfDay: 10,
           dayOfWeek: 3,
           seasonality: 'normal',
           environmentalFactors: [],
-          concurrentEvents: [
+          concurrentEvents: [,
             { eventType: 'marketing', eventName: 'Social Media Campaign Launch', timestamp: baseTime - 45 * 60 * 1000, impact: 'positive', correlation: 0.95 }
           ],
           marketConditions: [],
-          systemMetrics: []
+          systemMetrics: [],
         },
-        rootCauses: [
+        rootCauses: [,
           {
             category: 'external_factors',
             description: 'Viral social media campaign driving unexpected traffic',
             probability: 0.95,
-            evidence: [
+            evidence: [,
               { type: 'correlation', description: 'Traffic spike correlates with campaign launch', strength: 'strong', timestamp: baseTime, source: 'analytics' }
             ],
             investigationSteps: ['Verify campaign metrics', 'Check social media engagement', 'Monitor system capacity']
           }
         ],
-        impact: {
+        impact: {,
           revenueImpact: 3200,
           userImpact: 650,
           conversionImpact: 0.02,
           scopeOfImpact: 'system_wide',
           durationEstimate: 240,
           recoveryEstimate: 0,
-          businessCritical: false
+          businessCritical: false,
         },
-        recommendations: [
+        recommendations: [,
           { action: 'Scale infrastructure to handle increased load', priority: 'high', effort: 'medium', expectedImpact: 'high', timeline: '30 minutes', owner: 'DevOps', dependencies: [] },
           { action: 'Prepare follow-up marketing campaigns', priority: 'medium', effort: 'high', expectedImpact: 'medium', timeline: '2 days', owner: 'Marketing', dependencies: ['Traffic analysis'] }
         ],
@@ -649,7 +636,6 @@ export   const [error, setError] = useState<string | null>(null);
       }
     ];
   };
-
   // Generate mock predictions
   const generateMockPredictions = (): PredictedAnomaly[] => {
     return [
@@ -659,10 +645,10 @@ export   const [error, setError] = useState<string | null>(null);
         probability: 0.73,
         expectedSeverity: 'medium',
         affectedMetric: 'conversion_rate',
-        preventiveActions: [
+        preventiveActions: [,
           { action: 'Pre-scale infrastructure', effectiveness: 0.8, cost: 200, timeline: '1 hour', dependencies: [] }
         ],
-        monitoringPlan: {
+        monitoringPlan: {,
           metrics: ['response_time', 'error_rate', 'conversion_rate'],
           frequency: 60,
           alertThresholds: { 'response_time': 400, 'error_rate': 0.05 },
@@ -671,7 +657,6 @@ export   const [error, setError] = useState<string | null>(null);
       }
     ];
   };
-
   // Generate anomaly trends
   const generateAnomalyTrends = (): AnomalyTrend[] => {
     return [
@@ -679,7 +664,7 @@ export   const [error, setError] = useState<string | null>(null);
         period: 'last_24h',
         anomalyCount: 12,
         severityDistribution: { critical: 1, high: 3, medium: 5, low: 3, info: 0 },
-        typeDistribution: { 
+        typeDistribution: { ,
           performance_drop: 4, 
           conversion_anomaly: 3, 
           traffic_anomaly: 2, 
@@ -688,78 +673,75 @@ export   const [error, setError] = useState<string | null>(null);
           technical_anomaly: 1,
           performance_spike: 0,
           segment_anomaly: 0,
-          cohort_anomaly: 0
+          cohort_anomaly: 0,
         },
         falsePositiveRate: 0.15,
         averageDetectionTime: 120,
-        averageResolutionTime: 1800
+        averageResolutionTime: 1800,
       }
     ];
   };
-
   // Generate root cause analyses
   const generateRootCauseAnalyses = (anomalies: DetectedAnomaly[]): RootCauseAnalysis[] => {
-    return anomalies.map(anomaly => ({
+    return anomalies.map(anomaly => ({)
       anomalyId: anomaly.id,
       analysisTimestamp: Date.now(),
       primaryCause: anomaly.rootCauses[0],
       contributingFactors: anomaly.rootCauses.slice(1),
       correlatedAnomalies: [],
-      timeline: [
+      timeline: [,
         { timestamp: anomaly.timestamp - 30 * 60 * 1000, event: 'System deployment initiated', impact: 'neutral', correlation: 0.5 },
         { timestamp: anomaly.timestamp, event: 'Anomaly detected', impact: 'negative', correlation: 1.0 }
       ],
       confidence: anomaly.confidence,
-      validationStatus: 'pending'
+      validationStatus: 'pending',
     }));
   };
-
   // Generate impact assessments
   const generateImpactAssessments = (anomalies: DetectedAnomaly[]): AnomalyImpactAssessment[] => {
-    return anomalies.map(anomaly => ({
+    return anomalies.map(anomaly => ({)
       anomalyId: anomaly.id,
       assessmentTimestamp: Date.now(),
-      directImpact: {
+      directImpact: {,
         revenueloss: anomaly.impact.revenueImpact < 0 ? Math.abs(anomaly.impact.revenueImpact) : 0,
         userLoss: anomaly.impact.userImpact,
         conversionLoss: anomaly.impact.conversionImpact < 0 ? Math.abs(anomaly.impact.conversionImpact) : 0,
-        engagementLoss: 0.05
+        engagementLoss: 0.05,
       },
-      indirectImpact: {
+      indirectImpact: {,
         brandReputation: anomaly.severity === 'critical' ? 0.3 : 0.1,
         customerSatisfaction: 0.2,
         futureImpact: 0.15,
-        competitiveDisadvantage: 0.1
+        competitiveDisadvantage: 0.1,
       },
-      totalImpact: {
+      totalImpact: {,
         monetaryValue: Math.abs(anomaly.impact.revenueImpact),
         userValue: anomaly.impact.userImpact,
         strategicValue: 0.25,
-        severity: anomaly.severity
+        severity: anomaly.severity,
       },
-      affectedUserSegments: segments.map(segment => ({
+      affectedUserSegments: segments.map(segment => ({)
         segmentId: segment.id,
         segmentName: segment.name,
         impactPercentage: Math.random() * 30,
-        recoveryTime: anomaly.impact.recoveryEstimate
+        recoveryTime: anomaly.impact.recoveryEstimate,
       })),
-      businessImplications: [
+      businessImplications: [,
         { area: 'Revenue', impact: 'Short-term revenue loss', severity: 'high', mitigation: 'Implement quick fixes' }
       ],
-      recoveryProjection: {
+      recoveryProjection: {,
         estimatedRecoveryTime: anomaly.impact.recoveryEstimate,
-        recoveryStages: [
+        recoveryStages: [,
           { stage: 'Immediate mitigation', duration: 15, expectedImprovement: 0.6, dependencies: [] },
           { stage: 'Full resolution', duration: anomaly.impact.recoveryEstimate, expectedImprovement: 1.0, dependencies: ['Root cause fix'] }
         ],
         successProbability: 0.85,
-        resourceRequirements: [
+        resourceRequirements: [,
           { resource: 'Engineering time', amount: 4, duration: 2, criticality: 'essential' }
         ]
       }
     }));
   };
-
   // Generate alert history
   const generateAlertHistory = (): AnomalyAlert[] => {
     return [
@@ -778,7 +760,6 @@ export   const [error, setError] = useState<string | null>(null);
       }
     ];
   };
-
   // Generate system health metrics
   const generateSystemHealth = (): SystemHealthMetrics => {
     return {
@@ -788,13 +769,12 @@ export   const [error, setError] = useState<string | null>(null);
       falsePositiveRate: 0.12,
       falseNegativeRate: 0.08,
       systemAvailability: 0.999,
-      dataQuality: 0.95
+      dataQuality: 0.95,
     };
   };
-
   // Generate detection performance metrics
   const generateDetectionPerformance = (algorithms: AnomalyAlgorithm[]): DetectionPerformanceMetrics[] => {
-    return algorithms.map(algorithm => ({
+    return algorithms.map(algorithm => ({)
       algorithm,
       accuracy: 0.85 + Math.random() * 0.1,
       precision: 0.80 + Math.random() * 0.15,
@@ -805,35 +785,28 @@ export   const [error, setError] = useState<string | null>(null);
       confidence: 0.7 + Math.random() * 0.25
     }));
   };
-
   // Setup real-time monitoring
   useEffect(() => {
     if (realTimeEnabled && detectionData) {
       // WebSocket connection for real-time updates
-      const wsUrl = `ws://localhost:8000/api/anomaly-detection/stream/${funnelDefinition.id}`;
+      const wsUrl = `ws://localhost:8000/api/anomaly-detection/stream/${funnelDefinition.id}`;}
       wsRef.current = new WebSocket(wsUrl);
-      
       wsRef.current.onmessage = (event) => {
         const anomaly = JSON.parse(event.data) as DetectedAnomaly;
-        
-        setDetectionData(prev => {
+        setDetectionData(prev => {)
           if (!prev) return prev;
-          
           return {
             ...prev,
             currentAnomalies: [anomaly, ...prev.currentAnomalies]
           };
         });
-        
         if (onAnomalyDetected) {
           onAnomalyDetected(anomaly);
         }
       };
-      
       // Polling fallback
       intervalRef.current = setInterval(loadAnomalyData, 30000);
     }
-    
     return () => {
       if (wsRef.current) {
         wsRef.current.close();
@@ -843,29 +816,23 @@ export   const [error, setError] = useState<string | null>(null);
       }
     };
   }, [realTimeEnabled, detectionData, loadAnomalyData, onAnomalyDetected, funnelDefinition.id]);
-
   // Initial data load
   useEffect(() => {
     loadAnomalyData();
   }, [loadAnomalyData]);
-
   // Filter anomalies based on current filters
   const filteredAnomalies = useMemo(() => {
     if (!detectionData) return [];
-    
     const anomalies = activeTab === 'current' ? detectionData.currentAnomalies : detectionData.historicalAnomalies;
-    
-    return anomalies.filter(anomaly => {
+    return anomalies.filter(anomaly => {)
       if (filterSeverity !== 'all' && anomaly.severity !== filterSeverity) return false;
       if (filterType !== 'all' && anomaly.type !== filterType) return false;
       return true;
     });
   }, [detectionData, activeTab, filterSeverity, filterType]);
-
   // Handle export
   const handleExport = useCallback(() => {
     if (!detectionData || !onExport) return;
-    
     const exportData: AnomalyDetectionExportData = {
       anomalies: [...detectionData.currentAnomalies, ...detectionData.historicalAnomalies],
       alerts: detectionData.alertHistory,
@@ -873,20 +840,17 @@ export   const [error, setError] = useState<string | null>(null);
       rootCauseAnalyses: detectionData.rootCauseAnalysis,
       performanceMetrics: detectionData.detectionPerformance,
       exportTimestamp: Date.now(),
-      configuration: detectionConfig
+      configuration: detectionConfig,
     };
-    
     onExport(exportData);
   }, [detectionData, detectionConfig, onExport]);
-
   // Handle anomaly acknowledgment
   const handleAcknowledgeAnomaly = useCallback((anomalyId: string) => {
-    setDetectionData(prev => {
+    setDetectionData(prev => {)
       if (!prev) return prev;
-      
       return {
         ...prev,
-        currentAnomalies: prev.currentAnomalies.map(anomaly =>
+        currentAnomalies: prev.currentAnomalies.map(anomaly =>)
           anomaly.id === anomalyId
             ? { ...anomaly, status: 'acknowledged', acknowledgedBy: 'current-user', acknowledgedAt: Date.now() }
             : anomaly
@@ -894,18 +858,16 @@ export   const [error, setError] = useState<string | null>(null);
       };
     });
   }, []);
-
   if (loading) {
-    return (
+    return ()
       <div className="funnel-anomaly-detection-loading">
         <div className="loading-spinner"></div>
         <p>Loading anomaly detection data...</p>
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="funnel-anomaly-detection-error">
         <h3>Error Loading Anomaly Detection</h3>
         <p className="error-message">{error}</p>
@@ -915,19 +877,16 @@ export   const [error, setError] = useState<string | null>(null);
       </div>
     );
   }
-
   if (!detectionData) {
     return <div className="funnel-anomaly-detection-error">No data available</div>;
   }
-
-  return (
+  return ()
     <div className="funnel-anomaly-detection">
       <div className="anomaly-detection-header">
         <div className="detection-info">
           <h3>Funnel Anomaly Detection</h3>
           <p>Real-time monitoring and alerting for {funnelDefinition.name}</p>
         </div>
-        
         <div className="system-health">
           <div className="health-metric">
             <span className="label">System Health</span>
@@ -942,7 +901,6 @@ export   const [error, setError] = useState<string | null>(null);
             <span className="value">{Math.round(detectionData.systemHealth.falsePositiveRate * 100)}%</span>
           </div>
         </div>
-        
         <div className="detection-controls">
           <label className="real-time-toggle">
             <input
@@ -957,7 +915,6 @@ export   const [error, setError] = useState<string | null>(null);
           </button>
         </div>
       </div>
-
       <div className="detection-tabs">
         <button
           className={`tab ${activeTab === 'current' ? 'active' : ''}`}
@@ -984,7 +941,6 @@ export   const [error, setError] = useState<string | null>(null);
           Alert History ({detectionData.alertHistory.length})
         </button>
       </div>
-
       <div className="detection-filters">
         <select
           value={filterSeverity}
@@ -998,7 +954,6 @@ export   const [error, setError] = useState<string | null>(null);
           <option value="low">Low</option>
           <option value="info">Info</option>
         </select>
-        
         <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value as AnomalyType | 'all')}
@@ -1012,28 +967,26 @@ export   const [error, setError] = useState<string | null>(null);
           <option value="technical_anomaly">Technical Anomaly</option>
         </select>
       </div>
-
       <div className="detection-content">
-        {activeTab === 'current' || activeTab === 'historical' ? (
+        {activeTab === 'current' || activeTab === 'historical' ? ()
           <div className="anomaly-list">
-            {filteredAnomalies.length === 0 ? (
+            {filteredAnomalies.length === 0 ? ()
               <div className="no-anomalies">
                 <p>No anomalies detected matching current filters</p>
               </div>
-            ) : (
-              filteredAnomalies.map(anomaly => (
-                <div key={anomaly.id} className={`anomaly-card ${anomaly.severity}`}>
+            ) : ()
+              filteredAnomalies.map(anomaly => ()
+                <div key={anomaly.id} className={`anomaly-card ${anomaly.severity}`}>}
                   <div className="anomaly-header">
                     <div className="anomaly-title">
                       <h4>{anomaly.description}</h4>
-                      <span className={`severity-badge ${anomaly.severity}`}>
+                      <span className={`severity-badge ${anomaly.severity}`}>}
                         {anomaly.severity.toUpperCase()}
                       </span>
-                      <span className={`status-badge ${anomaly.status}`}>
+                      <span className={`status-badge ${anomaly.status}`}>}
                         {anomaly.status.replace('_', ' ').toUpperCase()}
                       </span>
                     </div>
-                    
                     <div className="anomaly-meta">
                       <span className="timestamp">
                         {new Date(anomaly.timestamp).toLocaleString()}
@@ -1043,7 +996,6 @@ export   const [error, setError] = useState<string | null>(null);
                       </span>
                     </div>
                   </div>
-
                   <div className="anomaly-metrics">
                     <div className="metric">
                       <span className="label">Metric:</span>
@@ -1059,22 +1011,21 @@ export   const [error, setError] = useState<string | null>(null);
                     </div>
                     <div className="metric">
                       <span className="label">Deviation:</span>
-                      <span className={`value ${anomaly.deviation < 0 ? 'negative' : 'positive'}`}>
+                      <span className={`value ${anomaly.deviation < 0 ? 'negative' : 'positive'}`}>}
                         {anomaly.deviationPercentage.toFixed(1)}%
                       </span>
                     </div>
                   </div>
-
-                  {anomaly.impact && (
+                  {anomaly.impact && ()
                     <div className="impact-summary">
                       <strong>Impact:</strong>
                       <div className="impact-metrics">
-                        {anomaly.impact.revenueImpact !== 0 && (
+                        {anomaly.impact.revenueImpact !== 0 && ()
                           <span className="impact-metric">
                             Revenue: ${Math.abs(anomaly.impact.revenueImpact)}
                           </span>
                         )}
-                        {anomaly.impact.userImpact !== 0 && (
+                        {anomaly.impact.userImpact !== 0 && ()
                           <span className="impact-metric">
                             Users: {anomaly.impact.userImpact}
                           </span>
@@ -1085,12 +1036,11 @@ export   const [error, setError] = useState<string | null>(null);
                       </div>
                     </div>
                   )}
-
-                  {anomaly.rootCauses.length > 0 && (
+                  {anomaly.rootCauses.length > 0 && ()
                     <div className="root-causes">
                       <strong>Likely Causes:</strong>
                       <ul>
-                        {anomaly.rootCauses.slice(0, 2).map((cause, index) => (
+                        {anomaly.rootCauses.slice(0, 2).map((cause, index) => ()
                           <li key={index}>
                             {cause.description} ({Math.round(cause.probability * 100)}% probability)
                           </li>
@@ -1098,22 +1048,20 @@ export   const [error, setError] = useState<string | null>(null);
                       </ul>
                     </div>
                   )}
-
-                  {anomaly.recommendations.length > 0 && (
+                  {anomaly.recommendations.length > 0 && ()
                     <div className="recommendations">
                       <strong>Recommended Actions:</strong>
                       <ul>
-                        {anomaly.recommendations.slice(0, 2).map((rec, index) => (
-                          <li key={index} className={`priority-${rec.priority}`}>
+                        {anomaly.recommendations.slice(0, 2).map((rec, index) => ()
+                          <li key={index} className={`priority-${rec.priority}`}>}
                             {rec.action} ({rec.priority} priority)
                           </li>
                         ))}
                       </ul>
                     </div>
                   )}
-
                   <div className="anomaly-actions">
-                    {anomaly.status === 'new' && (
+                    {anomaly.status === 'new' && ()
                       <button
                         onClick={() => handleAcknowledgeAnomaly(anomaly.id)}
                         className="acknowledge-button"
@@ -1132,27 +1080,25 @@ export   const [error, setError] = useState<string | null>(null);
               ))
             )}
           </div>
-        ) : activeTab === 'predicted' ? (
+        ) : activeTab === 'predicted' ? ()
           <div className="prediction-list">
-            {detectionData.predictedAnomalies.map((prediction, index) => (
+            {detectionData.predictedAnomalies.map((prediction, index) => ()
               <div key={index} className="prediction-card">
                 <div className="prediction-header">
                   <h4>Predicted {prediction.type.replace('_', ' ')}</h4>
-                  <span className={`severity-badge ${prediction.expectedSeverity}`}>
+                  <span className={`severity-badge ${prediction.expectedSeverity}`}>}
                     {prediction.expectedSeverity.toUpperCase()}
                   </span>
                 </div>
-                
                 <div className="prediction-details">
                   <div className="prediction-meta">
                     <span>Expected: {new Date(prediction.predictedTimestamp).toLocaleString()}</span>
                     <span>Probability: {Math.round(prediction.probability * 100)}%</span>
                   </div>
-                  
                   <div className="preventive-actions">
                     <strong>Preventive Actions:</strong>
                     <ul>
-                      {prediction.preventiveActions.map((action, actionIndex) => (
+                      {prediction.preventiveActions.map((action, actionIndex) => ()
                         <li key={actionIndex}>
                           {action.action} (Effectiveness: {Math.round(action.effectiveness * 100)}%)
                         </li>
@@ -1163,25 +1109,23 @@ export   const [error, setError] = useState<string | null>(null);
               </div>
             ))}
           </div>
-        ) : (
+        ) : ()
           <div className="alert-history">
-            {detectionData.alertHistory.map(alert => (
-              <div key={alert.id} className={`alert-card ${alert.severity}`}>
+            {detectionData.alertHistory.map(alert => ()
+              <div key={alert.id} className={`alert-card ${alert.severity}`}>}
                 <div className="alert-header">
                   <h4>{alert.message}</h4>
-                  <span className={`status-badge ${alert.status}`}>
+                  <span className={`status-badge ${alert.status}`}>}
                     {alert.status.toUpperCase()}
                   </span>
                 </div>
-                
                 <div className="alert-details">
                   <div className="alert-meta">
                     <span>Channel: {alert.channel}</span>
                     <span>Recipient: {alert.recipient}</span>
                     <span>Time: {new Date(alert.timestamp).toLocaleString()}</span>
                   </div>
-                  
-                  {alert.acknowledgedBy && (
+                  {alert.acknowledgedBy && ()
                     <div className="alert-acknowledgment">
                       Acknowledged by {alert.acknowledgedBy} at {new Date(alert.acknowledgedAt!).toLocaleString()}
                     </div>
@@ -1192,8 +1136,7 @@ export   const [error, setError] = useState<string | null>(null);
           </div>
         )}
       </div>
-
-      {selectedAnomaly && (
+      {selectedAnomaly && ()
         <div className="anomaly-detail-modal">
           <div className="modal-overlay" onClick={() => setSelectedAnomaly(null)}>
             <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -1203,12 +1146,11 @@ export   const [error, setError] = useState<string | null>(null);
                   ×
                 </button>
               </div>
-              
               <div className="modal-body">
                 <div className="anomaly-overview">
                   <h4>{selectedAnomaly.description}</h4>
                   <div className="anomaly-badges">
-                    <span className={`severity-badge ${selectedAnomaly.severity}`}>
+                    <span className={`severity-badge ${selectedAnomaly.severity}`}>}
                       {selectedAnomaly.severity}
                     </span>
                     <span className="algorithm-badge">
@@ -1216,13 +1158,11 @@ export   const [error, setError] = useState<string | null>(null);
                     </span>
                   </div>
                 </div>
-                
                 {/* Add more detailed views here */}
                 <div className="detailed-metrics">
                   <h5>Detailed Metrics</h5>
                   {/* Implementation would include comprehensive metric displays */}
                 </div>
-                
                 <div className="context-analysis">
                   <h5>Context Analysis</h5>
                   {/* Implementation would include environmental factors, concurrent events, etc. */}

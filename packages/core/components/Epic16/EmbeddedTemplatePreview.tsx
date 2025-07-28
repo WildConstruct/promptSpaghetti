@@ -4,7 +4,6 @@
  * Embeddable template preview component for social sharing and external site integration.
  * Builds upon existing TemplatePreviewModal and EmbeddableContent infrastructure.
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   EyeIcon,
@@ -143,76 +142,68 @@ export const EmbedCodeGenerator: React.FC<{
 }> = ({ template, customization, onCustomizationChange }) => {
   const [activeTab, setActiveTab] = useState<'iframe' | 'javascript' | 'react'>('iframe');
   const [copied, setCopied] = useState(false);
-
   const embedCode = useMemo(() => {
-    const baseUrl = `${window.location.origin}/embed/template/${template.id}`;
-    const params = new URLSearchParams({
+    const baseUrl = `${window.location.origin}/embed/template/${template.id}`;}
+    const params = new URLSearchParams({)
       theme: customization.theme.name,
-      size: `${customization.size.width}x${customization.size.height}`,
+      size: `${customization.size.width}x${customization.size.height}`,}
       features: JSON.stringify(customization.features),
       layout: JSON.stringify(customization.layout),
       branding: JSON.stringify(customization.branding),
-      social: JSON.stringify(customization.social)
+      social: JSON.stringify(customization.social),
     });
-
     switch (activeTab) {
     case 'iframe':
       return `<iframe
-  src="${baseUrl}?${params}"
-  width="${customization.size.width}"
-  height="${customization.size.height}"
+  src="${baseUrl}?${params}"}
+  width="${customization.size.width}"}
+  height="${customization.size.height}"}
   frameborder="0"
   scrolling="no"
   allowtransparency="true"
   sandbox="allow-scripts allow-same-origin allow-popups"
-  title="${template.title} - Template Preview"
+  title="${template.title} - Template Preview"}
 ></iframe>`;
-
     case 'javascript':
-      return `<div id="template-embed-${template.id}"></div>
+      return `<div id="template-embed-${template.id}"></div>}
 <script>
 (function() {
   const embed = document.createElement('iframe');
-  embed.src = '${baseUrl}?${params}';
-  embed.width = '${customization.size.width}';
-  embed.height = '${customization.size.height}';
+  embed.src = '${baseUrl}?${params}';}
+  embed.width = '${customization.size.width}';}
+  embed.height = '${customization.size.height}';}
   embed.frameBorder = '0';
   embed.scrolling = 'no';
   embed.allowTransparency = true;
   embed.sandbox = 'allow-scripts allow-same-origin allow-popups';
-  embed.title = '${template.title} - Template Preview';
-  
-  document.getElementById('template-embed-${template.id}').appendChild(embed);
+  embed.title = '${template.title} - Template Preview';}
+  document.getElementById('template-embed-${template.id}').appendChild(embed);}
 })();
 </script>`;
-
     case 'react':
       return `import { EmbeddedTemplatePreview } from '@promptspaghetti/components';
-
 <EmbeddedTemplatePreview
   template={{
-    id: "${template.id}",
-    title: "${template.title}",
-    description: "${template.description}"
+    id: "${template.id}",}
+    title: "${template.title}",}
+    description: "${template.description}"}
   }}
   embedConfig={{
-    theme: "${customization.theme.name}",
-    size: { width: ${customization.size.width}, height: ${customization.size.height} },
-    features: ${JSON.stringify(customization.features, null, 2)},
-    layout: ${JSON.stringify(customization.layout, null, 2)},
-    branding: ${JSON.stringify(customization.branding, null, 2)},
+    theme: "${customization.theme.name}",}
+    size: { width: ${customization.size.width}, height: ${customization.size.height} },}
+    features: ${JSON.stringify(customization.features, null, 2)},}
+    layout: ${JSON.stringify(customization.layout, null, 2)},}
+    branding: ${JSON.stringify(customization.branding, null, 2)},}
     social: ${JSON.stringify(customization.social, null, 2)}
   }}
   variant="standard"
   interactive={true}
   showSocialActions={true}
 />`;
-
     default:
       return '';
     }
   }, [template, customization, activeTab]);
-
   const copyToClipboard = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(embedCode);
@@ -222,8 +213,7 @@ export const EmbedCodeGenerator: React.FC<{
       console.error('Failed to copy code:', err);
     }
   }, [embedCode]);
-
-  return (
+  return ()
     <div className="bg-white border border-gray-200 rounded-lg">
       <div className="border-b border-gray-200">
         <div className="flex items-center justify-between p-4">
@@ -236,13 +226,12 @@ export const EmbedCodeGenerator: React.FC<{
             {copied ? 'Copied!' : 'Copy'}
           </button>
         </div>
-        
         <nav className="flex space-x-8 px-4">
           {[
             { id: 'iframe', label: 'HTML (iframe)', description: 'Standard embed code' },
             { id: 'javascript', label: 'JavaScript', description: 'Dynamic loading' },
             { id: 'react', label: 'React', description: 'Component usage' }
-          ].map((tab) => (
+          ].map((tab) => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
@@ -257,7 +246,6 @@ export const EmbedCodeGenerator: React.FC<{
           ))}
         </nav>
       </div>
-
       <div className="p-4">
         <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg text-sm overflow-auto max-h-64">
           <code>{embedCode}</code>
@@ -275,38 +263,32 @@ export const EmbedCustomizationPanel: React.FC<{
   onPreviewSizeChange: (size: PreviewSize) => void;
 }> = ({ customization, onCustomizationChange, previewSize, onPreviewSizeChange }) => {
   const [activeSection, setActiveSection] = useState<'size' | 'theme' | 'layout' | 'features' | 'branding'>('size');
-
   const updateSize = useCallback((updates: Partial<EmbedSize>) => {
-    onCustomizationChange({
+    onCustomizationChange({)
       size: { ...customization.size, ...updates }
     });
   }, [customization.size, onCustomizationChange]);
-
   const updateTheme = useCallback((updates: Partial<EmbedTheme>) => {
-    onCustomizationChange({
+    onCustomizationChange({)
       theme: { ...customization.theme, ...updates }
     });
   }, [customization.theme, onCustomizationChange]);
-
   const updateLayout = useCallback((updates: Partial<EmbedLayout>) => {
-    onCustomizationChange({
+    onCustomizationChange({)
       layout: { ...customization.layout, ...updates }
     });
   }, [customization.layout, onCustomizationChange]);
-
   const updateFeatures = useCallback((updates: Partial<EmbedFeatures>) => {
-    onCustomizationChange({
+    onCustomizationChange({)
       features: { ...customization.features, ...updates }
     });
   }, [customization.features, onCustomizationChange]);
-
   const updateBranding = useCallback((updates: Partial<EmbedBranding>) => {
-    onCustomizationChange({
+    onCustomizationChange({)
       branding: { ...customization.branding, ...updates }
     });
   }, [customization.branding, onCustomizationChange]);
-
-  return (
+  return ()
     <div className="bg-white border border-gray-200 rounded-lg">
       <div className="border-b border-gray-200">
         <h3 className="font-semibold text-gray-900 p-4">Customize Embed</h3>
@@ -319,7 +301,7 @@ export const EmbedCustomizationPanel: React.FC<{
             { id: 'branding', label: 'Branding', icon: PaintBrushIcon }
           ].map((section) => {
             const Icon = section.icon;
-            return (
+            return ()
               <button
                 key={section.id}
                 onClick={() => setActiveSection(section.id as any)}
@@ -336,15 +318,14 @@ export const EmbedCustomizationPanel: React.FC<{
           })}
         </nav>
       </div>
-
       <div className="p-4 space-y-6">
-        {activeSection === 'size' && (
+        {activeSection === 'size' && ()
           <div>
             <h4 className="font-medium text-gray-700 mb-3">Preview Size</h4>
             <div className="grid grid-cols-2 gap-3 mb-4">
               {PREVIEW_SIZES.map((size) => {
                 const Icon = size.icon;
-                return (
+                return ()
                   <button
                     key={size.label}
                     onClick={() => onPreviewSizeChange(size)}
@@ -362,7 +343,6 @@ export const EmbedCustomizationPanel: React.FC<{
                 );
               })}
             </div>
-            
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Width</label>
@@ -389,12 +369,11 @@ export const EmbedCustomizationPanel: React.FC<{
             </div>
           </div>
         )}
-
-        {activeSection === 'theme' && (
+        {activeSection === 'theme' && ()
           <div>
             <h4 className="font-medium text-gray-700 mb-3">Theme</h4>
             <div className="grid grid-cols-3 gap-3 mb-4">
-              {['light', 'dark', 'auto'].map((theme) => (
+              {['light', 'dark', 'auto'].map((theme) => ()
                 <button
                   key={theme}
                   onClick={() => updateTheme({ name: theme as any })}
@@ -406,18 +385,17 @@ export const EmbedCustomizationPanel: React.FC<{
                 </button>
               ))}
             </div>
-            
-            {customization.branding.customColors && (
+            {customization.branding.customColors && ()
               <div className="space-y-3">
                 <h5 className="font-medium text-gray-700">Custom Colors</h5>
-                {Object.entries(customization.branding.customColors).map(([key, value]) => (
+                {Object.entries(customization.branding.customColors).map(([key, value]) => ()
                   <div key={key} className="flex items-center gap-3">
                     <label className="w-20 text-sm text-gray-600 capitalize">{key}</label>
                     <input
                       type="color"
                       value={value}
-                      onChange={(e) => updateBranding({
-                        customColors: {
+                      onChange={(e) => updateBranding({)
+                        customColors: {,
                           ...customization.branding.customColors,
                           [key]: e.target.value
                         }
@@ -427,8 +405,8 @@ export const EmbedCustomizationPanel: React.FC<{
                     <input
                       type="text"
                       value={value}
-                      onChange={(e) => updateBranding({
-                        customColors: {
+                      onChange={(e) => updateBranding({)
+                        customColors: {,
                           ...customization.branding.customColors,
                           [key]: e.target.value
                         }
@@ -441,13 +419,12 @@ export const EmbedCustomizationPanel: React.FC<{
             )}
           </div>
         )}
-
-        {activeSection === 'layout' && (
+        {activeSection === 'layout' && ()
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Orientation</label>
               <div className="flex gap-2">
-                {['horizontal', 'vertical', 'grid'].map((orientation) => (
+                {['horizontal', 'vertical', 'grid'].map((orientation) => ()
                   <button
                     key={orientation}
                     onClick={() => updateLayout({ orientation: orientation as any })}
@@ -462,11 +439,10 @@ export const EmbedCustomizationPanel: React.FC<{
                 ))}
               </div>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Content Alignment</label>
               <div className="flex gap-2">
-                {['left', 'center', 'right'].map((alignment) => (
+                {['left', 'center', 'right'].map((alignment) => ()
                   <button
                     key={alignment}
                     onClick={() => updateLayout({ contentAlignment: alignment as any })}
@@ -481,13 +457,12 @@ export const EmbedCustomizationPanel: React.FC<{
                 ))}
               </div>
             </div>
-
             <div className="space-y-3">
               {[
                 { key: 'showHeader', label: 'Show Header' },
                 { key: 'showFooter', label: 'Show Footer' },
                 { key: 'showSidebar', label: 'Show Sidebar' }
-              ].map((option) => (
+              ].map((option) => ()
                 <label key={option.key} className="flex items-center gap-3">
                   <input
                     type="checkbox"
@@ -501,11 +476,10 @@ export const EmbedCustomizationPanel: React.FC<{
             </div>
           </div>
         )}
-
-        {activeSection === 'features' && (
+        {activeSection === 'features' && ()
           <div className="space-y-3">
             <h4 className="font-medium text-gray-700 mb-3">Features</h4>
-            {Object.entries(customization.features).map(([key, value]) => (
+            {Object.entries(customization.features).map(([key, value]) => ()
               <label key={key} className="flex items-center gap-3">
                 <input
                   type="checkbox"
@@ -520,8 +494,7 @@ export const EmbedCustomizationPanel: React.FC<{
             ))}
           </div>
         )}
-
-        {activeSection === 'branding' && (
+        {activeSection === 'branding' && ()
           <div className="space-y-4">
             <h4 className="font-medium text-gray-700 mb-3">Branding Options</h4>
             <div className="space-y-3">
@@ -530,7 +503,7 @@ export const EmbedCustomizationPanel: React.FC<{
                 { key: 'showTitle', label: 'Show Title' },
                 { key: 'showAuthor', label: 'Show Author' },
                 { key: 'showPoweredBy', label: 'Show "Powered by" Link' }
-              ].map((option) => (
+              ].map((option) => ()
                 <label key={option.key} className="flex items-center gap-3">
                   <input
                     type="checkbox"
@@ -550,7 +523,7 @@ export const EmbedCustomizationPanel: React.FC<{
 };
 
 // Main embedded template preview component
-export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = ({
+export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = ({)
   template,
   embedConfig,
   showCustomization = false,
@@ -572,10 +545,10 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
 }) => {
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [previewSize, setPreviewSize] = useState<PreviewSize>(PREVIEW_SIZES[1]); // Default to tablet
-  const [customization, setCustomization] = useState<EmbedCustomization>({
+  const [customization, setCustomization] = useState<EmbedCustomization>({)
     size: { width: previewSize.width, height: previewSize.height, responsive: true },
     theme: { name: 'light', colors: {}, fonts: {} },
-    features: {
+    features: {,
       showPreview: true,
       showMetadata: true,
       showActions: showSocialActions,
@@ -583,9 +556,9 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
       enableInteraction: interactive,
       enableSharing: true,
       enablePurchase: showPurchaseButton,
-      showRating: true
+      showRating: true,
     },
-    layout: {
+    layout: {,
       orientation: 'vertical',
       showHeader: true,
       showFooter: true,
@@ -593,22 +566,22 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
       contentAlignment: 'center',
       spacing: 'normal',
       borderRadius: 8,
-      shadow: 'md'
+      shadow: 'md',
     },
-    branding: {
+    branding: {,
       showLogo: true,
       showTitle: true,
       showAuthor: true,
       showPoweredBy: true,
-      customColors: {
+      customColors: {,
         primary: '#3B82F6',
         secondary: '#64748B',
         accent: '#10B981',
         background: '#FFFFFF',
-        text: '#1F2937'
+        text: '#1F2937',
       }
     },
-    social: {
+    social: {,
       showLikes: true,
       showShares: true,
       showComments: false,
@@ -616,28 +589,24 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
       showDownloads: true,
       enableInteraction: interactive,
       showAuthorInfo: true,
-      showStats: showMetrics
+      showStats: showMetrics,
     }
   });
-
   // Update customization when preview size changes
   useEffect(() => {
-    setCustomization(prev => ({
+    setCustomization(prev => ({)
       ...prev,
       size: { ...prev.size, width: previewSize.width, height: previewSize.height }
     }));
   }, [previewSize]);
-
   const handleCustomizationChange = useCallback((updates: Partial<EmbedCustomization>) => {
     const newCustomization = { ...customization, ...updates };
     setCustomization(newCustomization);
     onCustomize?.({ ...embedConfig, ...newCustomization } as any);
   }, [customization, embedConfig, onCustomize]);
-
   const handleShare = useCallback((method: ShareMethod) => {
     onShare?.({ ...method, customization });
   }, [onShare, customization]);
-
   const getVariantStyles = () => {
     switch (variant) {
     case 'compact':
@@ -650,9 +619,8 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
       return 'p-4 text-sm';
     }
   };
-
-  return (
-    <div className={`bg-white border border-gray-200 rounded-lg overflow-hidden ${className}`}>
+  return ()
+    <div className={`bg-white border border-gray-200 rounded-lg overflow-hidden ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
         <div className="flex items-center justify-between">
@@ -663,9 +631,8 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
               <p className="text-sm text-gray-600">{template.title}</p>
             </div>
           </div>
-          
           <div className="flex items-center gap-2">
-            {showCustomization && (
+            {showCustomization && ()
               <button
                 onClick={() => setIsCustomizing(!isCustomizing)}
                 className="flex items-center gap-2 px-3 py-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded"
@@ -674,7 +641,6 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
                 Customize
               </button>
             )}
-            
             <button
               onClick={() => handleShare({ type: 'embed' })}
               className="flex items-center gap-2 px-3 py-1 bg-blue-600 text-white hover:bg-blue-700 rounded"
@@ -685,7 +651,6 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
           </div>
         </div>
       </div>
-
       {/* Main content */}
       <div className={isCustomizing ? 'grid grid-cols-1 lg:grid-cols-2 gap-6 p-6' : 'p-6'}>
         {/* Preview */}
@@ -698,13 +663,12 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
               <span>{customization.size.width} × {customization.size.height}</span>
             </div>
           </div>
-          
           <div 
             className="border border-gray-300 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center"
             style={{ 
               maxWidth: maxWidth || 'none',
               maxHeight: maxHeight || 'none',
-              minHeight: '400px'
+              minHeight: '400px',
             }}
           >
             <div 
@@ -713,20 +677,19 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
                 width: Math.min(customization.size.width, maxWidth || customization.size.width),
                 height: Math.min(customization.size.height, maxHeight || customization.size.height),
                 maxWidth: '100%',
-                maxHeight: '100%'
+                maxHeight: '100%',
               }}
             >
               {/* Simulated embedded content */}
-              <div className={`h-full flex flex-col ${getVariantStyles()}`}>
-                {customization.layout.showHeader && customization.branding.showTitle && (
+              <div className={`h-full flex flex-col ${getVariantStyles()}`}>}
+                {customization.layout.showHeader && customization.branding.showTitle && ()
                   <div className="border-b border-gray-100 pb-2 mb-3">
                     <h5 className="font-semibold text-gray-900 truncate">{template.title}</h5>
-                    {customization.branding.showAuthor && (
+                    {customization.branding.showAuthor && ()
                       <p className="text-xs text-gray-600">by {template.author.name}</p>
                     )}
                   </div>
                 )}
-                
                 <div className="flex-1 flex items-center justify-center bg-gray-50 rounded mb-3">
                   <div className="text-center text-gray-500">
                     <PlayIcon className="h-8 w-8 mx-auto mb-2" />
@@ -734,22 +697,21 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
                     <p className="text-xs">{template.description}</p>
                   </div>
                 </div>
-                
-                {customization.social.showStats && showMetrics && (
+                {customization.social.showStats && showMetrics && ()
                   <div className="flex items-center gap-4 text-xs text-gray-600 mb-3">
-                    {customization.social.showLikes && (
+                    {customization.social.showLikes && ()
                       <div className="flex items-center gap-1">
                         <HeartIcon className="h-3 w-3" />
                         <span>{template.metrics?.likes || 0}</span>
                       </div>
                     )}
-                    {customization.social.showDownloads && (
+                    {customization.social.showDownloads && ()
                       <div className="flex items-center gap-1">
                         <DownloadIcon className="h-3 w-3" />
                         <span>{template.metrics?.downloads || 0}</span>
                       </div>
                     )}
-                    {customization.social.showRating && (
+                    {customization.social.showRating && ()
                       <div className="flex items-center gap-1">
                         <StarIcon className="h-3 w-3" />
                         <span>{template.rating?.average.toFixed(1) || '0.0'}</span>
@@ -757,10 +719,9 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
                     )}
                   </div>
                 )}
-                
-                {showSocialActions && customization.features.showActions && (
+                {showSocialActions && customization.features.showActions && ()
                   <div className="flex items-center gap-2">
-                    {customization.social.enableInteraction && (
+                    {customization.social.enableInteraction && ()
                       <>
                         <button 
                           onClick={() => onLike?.(template)}
@@ -778,7 +739,7 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
                         </button>
                       </>
                     )}
-                    {showPurchaseButton && customization.features.enablePurchase && (
+                    {showPurchaseButton && customization.features.enablePurchase && ()
                       <button 
                         onClick={() => onPurchase?.(template)}
                         className="flex items-center gap-1 px-2 py-1 text-xs bg-blue-600 text-white hover:bg-blue-700 rounded ml-auto"
@@ -789,8 +750,7 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
                     )}
                   </div>
                 )}
-                
-                {customization.layout.showFooter && customization.branding.showPoweredBy && (
+                {customization.layout.showFooter && customization.branding.showPoweredBy && ()
                   <div className="border-t border-gray-100 pt-2 mt-3">
                     <p className="text-xs text-gray-500 text-center">
                       Powered by <span className="text-blue-600">PromptSpaghetti</span>
@@ -801,9 +761,8 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
             </div>
           </div>
         </div>
-
         {/* Customization panel */}
-        {isCustomizing && (
+        {isCustomizing && ()
           <div className="space-y-6">
             <EmbedCustomizationPanel
               customization={customization}
@@ -811,7 +770,6 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
               previewSize={previewSize}
               onPreviewSizeChange={setPreviewSize}
             />
-            
             <EmbedCodeGenerator
               template={template}
               customization={customization}
@@ -820,9 +778,8 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
           </div>
         )}
       </div>
-      
       {/* Quick actions */}
-      {!isCustomizing && (
+      {!isCustomizing && ()
         <div className="border-t border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4 text-sm text-gray-600">
@@ -851,7 +808,6 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
                 </button>
               </div>
             </div>
-            
             <div className="flex items-center gap-2">
               <button
                 onClick={() => onPreview?.(template)}
@@ -860,7 +816,7 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
                 <EyeIcon className="h-4 w-4" />
                 Full Preview
               </button>
-              {showPurchaseButton && (
+              {showPurchaseButton && ()
                 <button
                   onClick={() => onPurchase?.(template)}
                   className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white hover:bg-blue-700 rounded text-sm"

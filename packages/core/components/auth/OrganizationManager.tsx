@@ -1,6 +1,5 @@
 // Epic 11.4 Organization Manager Component
 // React component for comprehensive organization management with settings and branding
-
 import React, { useState, useEffect } from 'react';
 import { 
   Users, 
@@ -16,7 +15,6 @@ import {
   ChevronRight,
   Palette
 } from 'lucide-react';
-
 interface Organization {
   id: string;
   name: string;
@@ -31,24 +29,22 @@ interface Organization {
   createdAt: Date;
   updatedAt: Date;
 }
-
 interface OrganizationStats {
   totalMembers: number;
   totalTeams: number;
   activeTeams: number;
   recentActivity: number;
-  planLimits: {
+  planLimits: {,
     maxUsers: number;
     maxTeams: number;
     maxStorage: number;
   };
-  usage: {
+  usage: {,
     users: number;
     teams: number;
     storage: number;
   };
 }
-
 interface CreateOrganizationData {
   name: string;
   slug?: string;
@@ -59,7 +55,6 @@ interface CreateOrganizationData {
   settings?: Record<string, unknown>;
   branding?: Record<string, unknown>;
 }
-
 interface OrganizationManagerProps {
   currentUser?: { id: string; name: string; email: string; role: string };
   onOrganizationChange?: (org: Organization) => void;
@@ -67,16 +62,15 @@ interface OrganizationManagerProps {
   onMembershipUpdated?: (membership: { id: string; userId: string; role: string }) => void;
 }
 
-export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
+export const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
   const [stats, setStats] = useState<OrganizationStats | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'settings' | 'branding' | 'members' | 'teams'>('overview');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingOrg, setEditingOrg] = useState<Organization | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   // Form state for creating/editing organizations
-  const [formData, setFormData] = useState<CreateOrganizationData>({
+  const [formData, setFormData] = useState<CreateOrganizationData>({)
     name: '',
     slug: '',
     description: '',
@@ -85,31 +79,25 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
     settings: {},
     branding: {}
   });
-
   useEffect(() => {
     loadOrganizations();
   }, []);
-
   useEffect(() => {
     if (selectedOrg) {
       loadOrganizationStats(selectedOrg.id);
     }
   }, [selectedOrg]);
-
   const loadOrganizations = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/auth/organizations/my', {
-        credentials: 'include'
+      const response = await fetch('/api/auth/organizations/my', {)
+        credentials: 'include',
       });
-
       if (!response.ok) {
         throw new Error('Failed to load organizations');
       }
-
       const data = await response.json();
       setOrganizations(data.data);
-      
       // Auto-select first organization
       if (data.data.length > 0 && !selectedOrg) {
         setSelectedOrg(data.data[0]);
@@ -120,40 +108,34 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
       setLoading(false);
     }
   };
-
   const loadOrganizationStats = async (organizationId: string) => {
     try {
-      const response = await fetch(`/api/auth/organizations/${organizationId}/stats`, {
-        credentials: 'include'
+      const response = await fetch(`/api/auth/organizations/${organizationId}/stats`, {)}
+        credentials: 'include',
       });
-
       if (!response.ok) {
         throw new Error('Failed to load organization stats');
       }
-
       const data = await response.json();
       setStats(data.data);
     } catch (err) {
       console.error('Failed to load organization stats:', err);
     }
   };
-
   const createOrganization = async () => {
     try {
-      const response = await fetch('/api/auth/organizations', {
+      const response = await fetch('/api/auth/organizations', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to create organization');
       }
-
       const data = await response.json();
       setOrganizations(prev => [...prev, data.data]);
       setSelectedOrg(data.data);
@@ -163,59 +145,48 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
       setError(err instanceof Error ? err.message : 'Failed to create organization');
     }
   };
-
   const updateOrganization = async () => {
     if (!editingOrg) return;
-
     try {
-      const response = await fetch(`/api/auth/organizations/${editingOrg.id}`, {
+      const response = await fetch(`/api/auth/organizations/${editingOrg.id}`, {)}
         method: 'PUT',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to update organization');
       }
-
       const data = await response.json();
-      setOrganizations(prev => 
+      setOrganizations(prev => )
         prev.map(org => org.id === editingOrg.id ? data.data : org)
       );
-      
       if (selectedOrg?.id === editingOrg.id) {
         setSelectedOrg(data.data);
       }
-      
       setEditingOrg(null);
       resetForm();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update organization');
     }
   };
-
   const deleteOrganization = async (organizationId: string) => {
     if (!confirm('Are you sure you want to delete this organization? This action cannot be undone.')) {
       return;
     }
-
     try {
-      const response = await fetch(`/api/auth/organizations/${organizationId}`, {
+      const response = await fetch(`/api/auth/organizations/${organizationId}`, {)}
         method: 'DELETE',
-        credentials: 'include'
+        credentials: 'include',
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to delete organization');
       }
-
       setOrganizations(prev => prev.filter(org => org.id !== organizationId));
-      
       if (selectedOrg?.id === organizationId) {
         setSelectedOrg(organizations.find(org => org.id !== organizationId) || null);
       }
@@ -223,9 +194,8 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
       setError(err instanceof Error ? err.message : 'Failed to delete organization');
     }
   };
-
   const resetForm = () => {
-    setFormData({
+    setFormData({)
       name: '',
       slug: '',
       description: '',
@@ -235,20 +205,18 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
       branding: {}
     });
   };
-
   const startEditing = (org: Organization) => {
     setEditingOrg(org);
-    setFormData({
+    setFormData({)
       name: org.name,
       slug: org.slug,
       description: org.description || '',
       website: org.website || '',
       plan: org.plan,
       settings: org.settings,
-      branding: org.branding
+      branding: org.branding,
     });
   };
-
   const getPlanColor = (plan: string) => {
     switch (plan) {
     case 'free': return 'text-gray-600';
@@ -257,7 +225,6 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
     default: return 'text-gray-600';
     }
   };
-
   const getPlanBadge = (plan: string) => {
     switch (plan) {
     case 'free': return 'bg-gray-100 text-gray-800';
@@ -266,16 +233,14 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="max-w-7xl mx-auto p-6">
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -290,8 +255,7 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
           Create Organization
         </button>
       </div>
-
-      {error && (
+      {error && ()
         <div className="mb-6 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg">
           {error}
           <button 
@@ -302,7 +266,6 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
           </button>
         </div>
       )}
-
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Organization List */}
         <div className="lg:col-span-1">
@@ -311,7 +274,7 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
               <h2 className="text-lg font-semibold text-gray-900">Organizations</h2>
             </div>
             <div className="divide-y divide-gray-200">
-              {organizations.map((org) => (
+              {organizations.map((org) => ()
                 <div
                   key={org.id}
                   onClick={() => setSelectedOrg(org)}
@@ -325,7 +288,7 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                         {org.name}
                       </h3>
                       <p className="text-xs text-gray-500 mt-1">@{org.slug}</p>
-                      <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full mt-2 ${getPlanBadge(org.plan)}`}>
+                      <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full mt-2 ${getPlanBadge(org.plan)}`}>}
                         {org.plan.charAt(0).toUpperCase() + org.plan.slice(1)}
                       </span>
                     </div>
@@ -336,30 +299,29 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
             </div>
           </div>
         </div>
-
         {/* Organization Details */}
         <div className="lg:col-span-3">
-          {selectedOrg ? (
+          {selectedOrg ? ()
             <div className="bg-white rounded-lg border border-gray-200">
               {/* Header */}
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center space-x-4">
                     <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-                      {selectedOrg.logoUrl ? (
+                      {selectedOrg.logoUrl ? ()
                         <img 
                           src={selectedOrg.logoUrl} 
                           alt={selectedOrg.name}
                           className="w-12 h-12 object-cover rounded-lg"
                         />
-                      ) : (
+                      ) : ()
                         <Building2 className="w-8 h-8 text-gray-400" />
                       )}
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold text-gray-900">{selectedOrg.name}</h2>
                       <p className="text-gray-600">@{selectedOrg.slug}</p>
-                      {selectedOrg.description && (
+                      {selectedOrg.description && ()
                         <p className="text-sm text-gray-500 mt-2">{selectedOrg.description}</p>
                       )}
                     </div>
@@ -380,7 +342,6 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                   </div>
                 </div>
               </div>
-
               {/* Tabs */}
               <div className="border-b border-gray-200">
                 <nav className="flex space-x-8 px-6">
@@ -390,7 +351,7 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                     { id: 'branding', label: 'Branding', icon: Palette },
                     { id: 'members', label: 'Members', icon: Users },
                     { id: 'teams', label: 'Teams', icon: Shield }
-                  ].map((tab) => (
+                  ].map((tab) => ()
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id as any)}
@@ -406,10 +367,9 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                   ))}
                 </nav>
               </div>
-
               {/* Tab Content */}
               <div className="p-6">
-                {activeTab === 'overview' && stats && (
+                {activeTab === 'overview' && stats && ()
                   <div className="space-y-6">
                     {/* Stats Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -433,7 +393,7 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                         <div className="text-xs text-gray-500 mt-1">Last 30 days</div>
                       </div>
                       <div className="bg-gray-50 p-4 rounded-lg">
-                        <div className={`text-2xl font-bold ${getPlanColor(selectedOrg.plan)}`}>
+                        <div className={`text-2xl font-bold ${getPlanColor(selectedOrg.plan)}`}>}
                           {selectedOrg.plan.charAt(0).toUpperCase() + selectedOrg.plan.slice(1)}
                         </div>
                         <div className="text-sm text-gray-600">Current Plan</div>
@@ -442,7 +402,6 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                         </div>
                       </div>
                     </div>
-
                     {/* Quick Info */}
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h3 className="text-lg font-semibold text-gray-900 mb-3">Organization Info</h3>
@@ -463,8 +422,7 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                     </div>
                   </div>
                 )}
-
-                {activeTab === 'settings' && (
+                {activeTab === 'settings' && ()
                   <div className="space-y-6">
                     <h3 className="text-lg font-semibold text-gray-900">Organization Settings</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -484,7 +442,7 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Plan
                         </label>
-                        <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${getPlanBadge(selectedOrg.plan)}`}>
+                        <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${getPlanBadge(selectedOrg.plan)}`}>}
                           {selectedOrg.plan.charAt(0).toUpperCase() + selectedOrg.plan.slice(1)}
                         </span>
                       </div>
@@ -497,8 +455,7 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                     </div>
                   </div>
                 )}
-
-                {activeTab === 'branding' && (
+                {activeTab === 'branding' && ()
                   <div className="space-y-6">
                     <h3 className="text-lg font-semibold text-gray-900">Branding & Appearance</h3>
                     <div className="text-sm text-gray-600">
@@ -507,8 +464,7 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                     {/* Branding controls would go here */}
                   </div>
                 )}
-
-                {activeTab === 'members' && (
+                {activeTab === 'members' && ()
                   <div className="space-y-6">
                     <h3 className="text-lg font-semibold text-gray-900">Members</h3>
                     <div className="text-sm text-gray-600">
@@ -517,8 +473,7 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                     {/* Member management would go here */}
                   </div>
                 )}
-
-                {activeTab === 'teams' && (
+                {activeTab === 'teams' && ()
                   <div className="space-y-6">
                     <h3 className="text-lg font-semibold text-gray-900">Teams</h3>
                     <div className="text-sm text-gray-600">
@@ -529,7 +484,7 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                 )}
               </div>
             </div>
-          ) : (
+          ) : ()
             <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
               <Building2 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No Organization Selected</h3>
@@ -538,15 +493,13 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
           )}
         </div>
       </div>
-
       {/* Create/Edit Organization Modal */}
-      {(showCreateForm || editingOrg) && (
+      {(showCreateForm || editingOrg) && ()
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-md w-full p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {editingOrg ? 'Edit Organization' : 'Create Organization'}
             </h3>
-            
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -560,7 +513,6 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                   placeholder="Enter organization name"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Slug
@@ -573,7 +525,6 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                   placeholder="organization-slug"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Description
@@ -586,7 +537,6 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                   placeholder="Describe your organization"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Website
@@ -599,7 +549,6 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                   placeholder="https://example.com"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Plan
@@ -615,7 +564,6 @@ export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(nul
                 </select>
               </div>
             </div>
-
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={() => {

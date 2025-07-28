@@ -74,7 +74,7 @@ export interface UserAccessibilityProfile {
     assistiveTechnologies: AssistiveTechnology[];
     preferredFallbacks: FallbackMethod[];
     interfaceAdaptations: InterfaceAdaptation[];
-    customSettings: {
+    customSettings: {,
         fontSize: number;
         contrastRatio: number;
         timeoutMultiplier: number;
@@ -84,19 +84,19 @@ export interface UserAccessibilityProfile {
         animationsReduced: boolean;
         colorBlindnessType?: 'protanopia' | 'deuteranopia' | 'tritanopia' | 'monochromacy';
     };
-    verificationMethods: {
+    verificationMethods: {,
         primary: string[];
         fallback: string[];
         emergency: string[];
     };
-    emergencyContacts: Array<{
+    emergencyContacts: Array<{,
         name: string;
         relationship: string;
         phone: string;
         email: string;
         canAuthorize: boolean;
     }>;
-    documentation: {
+    documentation: {,
         medicalCertification?: string;
         accommodationLetter?: string;
         renewalDate?: Date;
@@ -108,25 +108,25 @@ export interface AccessibilityContext {
     userAgent: string;
     screenReaderDetected: boolean;
     assistiveTechDetected: AssistiveTechnology[];
-    deviceCapabilities: {
+    deviceCapabilities: {,
         hasCamera: boolean;
         hasMicrophone: boolean;
         hasTouch: boolean;
         hasKeyboard: boolean;
         hasMouse: boolean;
-        screenSize: {
+        screenSize: {,
             width: number;
             height: number;
         };
         colorDepth: number;
     };
-    environmentalFactors: {
+    environmentalFactors: {,
         isNoisy: boolean;
         isLowLight: boolean;
         isPublicSpace: boolean;
         hasTimeConstraints: boolean;
     };
-    sessionContext: {
+    sessionContext: {,
         isEmergency: boolean;
         attemptCount: number;
         timeRemaining: number;
@@ -137,24 +137,24 @@ export interface FallbackConfiguration {
     method: FallbackMethod;
     enabled: boolean;
     priority: number;
-    requirements: {
+    requirements: {,
         needsAudio: boolean;
         needsVisual: boolean;
         needsInteraction: boolean;
         minimumTime: number;
         maximumTime: number;
     };
-    accessibility: {
+    accessibility: {,
         supportedNeeds: AccessibilityNeed[];
         incompatibleWith: AccessibilityNeed[];
         assistiveTechSupport: AssistiveTechnology[];
     };
-    implementation: {
+    implementation: {,
         component: string;
         params: Record<string, unknown>;
         validationRules: string[];
     };
-    compliance: {
+    compliance: {,
         wcagLevel: 'A' | 'AA' | 'AAA';
         section508: boolean;
         ada: boolean;
@@ -164,7 +164,7 @@ export interface AccessibilityValidationResult {
     isAccessible: boolean;
     fallbacksRequired: FallbackMethod[];
     adaptationsNeeded: InterfaceAdaptation[];
-    issues: Array<{
+    issues: Array<{,
         type: 'critical' | 'major' | 'minor';
         description: string;
         wcagReference: string;
@@ -182,7 +182,7 @@ export interface EmergencyBypass {
     expiresAt: Date;
     usageCount: number;
     maxUsages: number;
-    conditions: {
+    conditions: {,
         ipRestriction?: string[];
         timeRestriction?: {
             start: string;
@@ -191,7 +191,7 @@ export interface EmergencyBypass {
         requiresNotification: boolean;
         requiresFollowUp: boolean;
     };
-    auditTrail: Array<{
+    auditTrail: Array<{,
         timestamp: Date;
         action: string;
         details: Record<string, unknown>;
@@ -209,9 +209,9 @@ export declare class AccessibilityManager extends EventEmitter {
     /**
      * Create or update user accessibility profile
      */
-    createAccessibilityProfile(
+    createAccessibilityProfile()
       userId: string,
-      profileData: Partial<UserAccessibilityProfile>
+      profileData: Partial<UserAccessibilityProfile>,
     ): Promise<UserAccessibilityProfile>;
     /**
      * Analyze user context and recommend accessibility accommodations
@@ -220,7 +220,7 @@ export declare class AccessibilityManager extends EventEmitter {
         recommendedFallbacks: FallbackMethod[];
         requiredAdaptations: InterfaceAdaptation[];
         estimatedDifficulty: 'low' | 'medium' | 'high' | 'critical';
-        alternatives: Array<{
+        alternatives: Array<{,
             method: string;
             accessibility: number;
             estimated_time: number;
@@ -230,14 +230,14 @@ export declare class AccessibilityManager extends EventEmitter {
     /**
      * Validate accessibility compliance for authentication flow
      */
-    validateAccessibilityCompliance(
+    validateAccessibilityCompliance()
       authenticationFlow: unknown,
       userProfile?: UserAccessibilityProfile
     ): AccessibilityValidationResult;
     /**
      * Create emergency accessibility bypass
      */
-    createEmergencyBypass(
+    createEmergencyBypass()
       userId: string,
       reason: string,
       authorizedBy: string,
@@ -256,10 +256,10 @@ export declare class AccessibilityManager extends EventEmitter {
      * Get accessibility adaptation recommendations
      */
     getAdaptationRecommendations(userId: string, _currentInterface: unknown): {
-        adaptations: Array<{
+        adaptations: Array<{,
             type: InterfaceAdaptation;
             priority: 'high' | 'medium' | 'low';
-            implementation: {
+            implementation: {,
                 css?: Record<string, string>;
                 js?: string;
                 html?: string;
@@ -276,16 +276,16 @@ export declare class AccessibilityManager extends EventEmitter {
         usersWithProfiles: number;
         accessibilityNeeds: Record<AccessibilityNeed, number>;
         fallbackUsage: Record<FallbackMethod, number>;
-        complianceScores: {
+        complianceScores: {,
             average: number;
             distribution: Record<'A' | 'AA' | 'AAA' | 'Non-compliant', number>;
         };
-        emergencyBypasses: {
+        emergencyBypasses: {,
             active: number;
             used: number;
             expired: number;
         };
-        topIssues: Array<{
+        topIssues: Array<{,
             issue: string;
             frequency: number;
             severity: 'critical' | 'major' | 'minor';

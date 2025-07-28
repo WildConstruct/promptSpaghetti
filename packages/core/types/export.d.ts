@@ -901,7 +901,7 @@ export declare const CommonExportOptionsSchema: z.ZodObject<{
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{
+    date_range: z.ZodOptional<z.ZodObject<{,
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -953,7 +953,7 @@ export declare const JsonExportOptionsSchema: z.ZodObject<{
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{
+    date_range: z.ZodOptional<z.ZodObject<{,
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -1014,7 +1014,7 @@ export declare const YamlExportOptionsSchema: z.ZodObject<{
     include_history: z.ZodDefault<z.ZodBoolean>;
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{
+    date_range: z.ZodOptional<z.ZodObject<{,
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -1074,7 +1074,7 @@ export declare const XmlExportOptionsSchema: z.ZodObject<{
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{
+    date_range: z.ZodOptional<z.ZodObject<{,
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -1139,7 +1139,7 @@ export declare const CsvExportOptionsSchema: z.ZodObject<{
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{
+    date_range: z.ZodOptional<z.ZodObject<{,
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -1204,7 +1204,7 @@ export declare const MarkdownExportOptionsSchema: z.ZodObject<{
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{
+    date_range: z.ZodOptional<z.ZodObject<{,
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -1269,7 +1269,7 @@ export declare const PdfExportOptionsSchema: z.ZodObject<{
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{
+    date_range: z.ZodOptional<z.ZodObject<{,
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -1288,7 +1288,7 @@ export declare const PdfExportOptionsSchema: z.ZodObject<{
     orientation: z.ZodDefault<z.ZodEnum<["portrait", "landscape"]>>;
     include_images: z.ZodDefault<z.ZodBoolean>;
     font_size: z.ZodDefault<z.ZodNumber>;
-    margins: z.ZodDefault<z.ZodObject<{
+    margins: z.ZodDefault<z.ZodObject<{,
         top: z.ZodDefault<z.ZodNumber>;
         right: z.ZodDefault<z.ZodNumber>;
         bottom: z.ZodDefault<z.ZodNumber>;
@@ -1317,7 +1317,7 @@ export declare const PdfExportOptionsSchema: z.ZodObject<{
     page_size: "A4" | "A3" | "Letter" | "Legal";
     include_images: boolean;
     font_size: number;
-    margins: {
+    margins: {,
         top: number;
         bottom: number;
         left: number;
@@ -1362,7 +1362,7 @@ export declare const HtmlExportOptionsSchema: z.ZodObject<{
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{
+    date_range: z.ZodOptional<z.ZodObject<{,
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -1426,7 +1426,7 @@ export declare const ZipExportOptionsSchema: z.ZodObject<{
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{
+    date_range: z.ZodOptional<z.ZodObject<{,
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -1489,7 +1489,7 @@ export declare const VFXExportOptionsSchema: z.ZodObject<{
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{
+    date_range: z.ZodOptional<z.ZodObject<{,
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -1640,7 +1640,7 @@ export declare const ExportStatisticsSchema: z.ZodObject<{
     exports_by_type: z.ZodRecord<z.ZodEnum<["version", "branch", "comparison", "full_project"]>, z.ZodNumber>;
     total_size: z.ZodNumber;
     average_processing_time: z.ZodNumber;
-    most_used_templates: z.ZodArray<z.ZodObject<{
+    most_used_templates: z.ZodArray<z.ZodObject<{,
         template_id: z.ZodString;
         template_name: z.ZodString;
         usage_count: z.ZodNumber;
@@ -1662,7 +1662,7 @@ export declare const ExportStatisticsSchema: z.ZodObject<{
     exports_by_type: Partial<Record<"version" | "branch" | "comparison" | "full_project", number>>;
     total_size: number;
     average_processing_time: number;
-    most_used_templates: {
+    most_used_templates: {,
         usage_count: number;
         template_id: string;
         template_name: string;
@@ -1676,7 +1676,7 @@ export declare const ExportStatisticsSchema: z.ZodObject<{
     exports_by_type: Partial<Record<"version" | "branch" | "comparison" | "full_project", number>>;
     total_size: number;
     average_processing_time: number;
-    most_used_templates: {
+    most_used_templates: {,
         usage_count: number;
         template_id: string;
         template_name: string;

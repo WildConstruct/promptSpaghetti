@@ -68,7 +68,6 @@ export {
   type ComplianceMetrics,
   type ComplianceSecurityDashboardProps
 } from './ComplianceSecurityDashboard';
-
 /**
  * Security Dashboard Framework Factory
  * 
@@ -78,39 +77,33 @@ export {
 export class SecurityDashboardFactory {
   private framework: SecurityDashboardFramework;
   private registry: DashboardRegistry;
-
-  constructor(options: {
+  constructor(options: {)
     frameworkOptions?: Partial<SecurityDashboardFrameworkOptions>;
     registryOptions?: Partial<RegistryOptions>;
   } = {}) {
     // Initialize framework
     this.framework = new SecurityDashboardFramework(options.frameworkOptions);
-    
     // Initialize registry
     this.registry = new DashboardRegistry(options.registryOptions);
-    
     // Register default dashboard types
     this.registerDefaultDashboards();
   }
-
   /**
    * Get the framework instance
    */
   getFramework(): SecurityDashboardFramework {
     return this.framework;
   }
-
   /**
    * Get the registry instance
    */
   getRegistry(): DashboardRegistry {
     return this.registry;
   }
-
   /**
    * Create a dashboard from template
    */
-  createDashboard(
+  createDashboard()
     templateId: string,
     userId: string,
     overrides?: Partial<DashboardConfig>
@@ -119,15 +112,13 @@ export class SecurityDashboardFactory {
     if (!config) {
       return Promise.resolve(null);
     }
-
     return this.framework.registerDashboard(config, userId)
       .then(success => success ? config : null);
   }
-
   /**
    * Create a dashboard from preset
    */
-  createDashboardFromPreset(
+  createDashboardFromPreset()
     presetId: string,
     userId: string,
     overrides?: Partial<DashboardConfig>
@@ -136,48 +127,42 @@ export class SecurityDashboardFactory {
     if (!config) {
       return Promise.resolve(null);
     }
-
     return this.framework.registerDashboard(config, userId)
       .then(success => success ? config : null);
   }
-
   /**
    * Get available dashboards for user
    */
-  getAvailableDashboards(
+  getAvailableDashboards()
     userId: string,
     type?: DashboardType
   ): DashboardConfig[] {
     return this.framework.listDashboards(userId, type);
   }
-
   /**
    * Get dashboard templates
    */
-  getTemplates(
+  getTemplates()
     type?: DashboardType,
     role?: SecurityRole,
     category?: string
   ): DashboardTemplate[] {
     return this.registry.getDashboardTemplates(type, role, category);
   }
-
   /**
    * Get dashboard presets
    */
-  getPresets(
+  getPresets()
     dashboardType?: DashboardType,
     layout?: string
   ): DashboardPreset[] {
     return this.registry.getDashboardPresets(dashboardType, layout);
   }
-
   /**
    * Register default dashboard types with the framework
    */
   private registerDefaultDashboards(): void {
     const templates = this.registry.getDashboardTemplates();
-    
     for (const template of templates) {
       // Create a default configuration from the template
       const config = this.registry.createDashboardFromTemplate(template.id);
@@ -187,17 +172,16 @@ export class SecurityDashboardFactory {
       }
     }
   }
-
   /**
    * Get framework statistics
    */
   getStatistics(): {
-    framework: {
+    framework: {,
       dashboardCount: number;
       widgetCount: number;
       themeCount: number;
     };
-    registry: {
+    registry: {,
       dashboardCount: number;
       presetCount: number;
       widgetCount: number;
@@ -205,15 +189,14 @@ export class SecurityDashboardFactory {
     };
     } {
     return {
-      framework: {
+      framework: {,
         dashboardCount: this.framework['dashboards'].size,
         widgetCount: this.framework['widgets'].size,
-        themeCount: this.framework['themes'].size
+        themeCount: this.framework['themes'].size,
       },
-      registry: this.registry.getRegistryStats()
+      registry: this.registry.getRegistryStats(),
     };
   }
-
   /**
    * Destroy the factory and cleanup resources
    */
@@ -222,7 +205,6 @@ export class SecurityDashboardFactory {
     this.registry.clear();
   }
 }
-
 /**
  * Default factory instance for convenience
  */
@@ -230,13 +212,12 @@ export
 /**
  * Utility function to create a dashboard factory with custom options
  */
-export function createSecurityDashboardFactory(options: {
+export function createSecurityDashboardFactory(options: {)
   frameworkOptions?: Partial<SecurityDashboardFrameworkOptions>;
   registryOptions?: Partial<RegistryOptions>;
 } = {}): SecurityDashboardFactory {
   return new SecurityDashboardFactory(options);
 }
-
 /**
  * Utility function to get supported dashboard types
  */

@@ -17,20 +17,20 @@ export interface ModerationRequest {
     id: string;
     contentId: string;
     contentType: ContentType;
-    content: {
+    content: {,
         title?: string;
         description?: string;
         body?: string;
         metadata?: Record<string, any>;
     };
-    author: {
+    author: {,
         userId: string;
         userEmail?: string;
         trustScore?: number;
         previousViolations?: number;
         accountAge?: number;
     };
-    context: {
+    context: {,
         source: string;
         timestamp: string;
         ipAddress?: string;
@@ -58,13 +58,13 @@ export interface ModerationResult {
         languageQuality: number;
         contentSimilarity?: number;
     };
-    trustAnalysis: {
+    trustAnalysis: {,
         authorTrustScore: number;
         trustTrend: 'increasing' | 'stable' | 'decreasing';
         riskFactors: string[];
         historicalViolations: number;
     };
-    recommendedActions: Array<{
+    recommendedActions: Array<{,
         action: ModerationAction;
         reason: string;
         priority: number;
@@ -85,14 +85,14 @@ export interface ModerationRule {
     enabled: boolean;
     priority: number;
     contentTypes: ContentType[];
-    triggers: {
+    triggers: {,
         policyViolation?: boolean;
         trustScoreBelow?: number;
         mlFlagThreshold?: number;
         communityReports?: number;
         keywordMatches?: string[];
     };
-    actions: Array<{
+    actions: Array<{,
         condition: string;
         action: ModerationAction;
         parameters?: Record<string, any>;
@@ -124,19 +124,19 @@ export interface ModerationWorkflowStep {
 export interface ModerationQueue {
     id: string;
     name: string;
-    filters: {
+    filters: {,
         contentTypes?: ContentType[];
         severityLevels?: ModerationSeverity[];
         requiresReview?: boolean;
         assignedTo?: string;
     };
-    priorityRules: Array<{
+    priorityRules: Array<{,
         condition: string;
         priority: number;
     }>;
-    autoAssignment: {
+    autoAssignment: {,
         enabled: boolean;
-        rules: Array<{
+        rules: Array<{,
             condition: string;
             assignTo: string;
         }>;
@@ -163,7 +163,7 @@ export declare class AutomatedModerationService {
         actionBreakdown: Record<ModerationAction, number>;
         averageConfidence: number;
         humanReviewRate: number;
-        topViolationReasons: Array<{
+        topViolationReasons: Array<{,
             reason: ModerationReason;
             count: number;
         }>;

@@ -62,10 +62,10 @@ export declare const ProjectSettingsSchema: z.ZodObject<{
     autoLayout?: boolean | undefined;
 }>;
 export declare const CollaborationDataSchema: z.ZodObject<{
-    stickyNotes: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    stickyNotes: z.ZodDefault<z.ZodArray<z.ZodObject<{,
         id: z.ZodString;
         content: z.ZodString;
-        position: z.ZodObject<{
+        position: z.ZodObject<{,
             x: z.ZodNumber;
             y: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
@@ -75,7 +75,7 @@ export declare const CollaborationDataSchema: z.ZodObject<{
             x: number;
             y: number;
         }>;
-        size: z.ZodObject<{
+        size: z.ZodObject<{,
             width: z.ZodNumber;
             height: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
@@ -90,12 +90,12 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         timestamp: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id: string;
-        position: {
+        position: {,
             x: number;
             y: number;
         };
         content: string;
-        size: {
+        size: {,
             width: number;
             height: number;
         };
@@ -104,12 +104,12 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         author?: string | undefined;
     }, {
         id: string;
-        position: {
+        position: {,
             x: number;
             y: number;
         };
         content: string;
-        size: {
+        size: {,
             width: number;
             height: number;
         };
@@ -117,13 +117,13 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         timestamp: string;
         author?: string | undefined;
     }>, "many">>;
-    annotations: z.ZodDefault<z.ZodObject<{
+    annotations: z.ZodDefault<z.ZodObject<{,
         nodeLabels: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
-        regionGroups: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        regionGroups: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             id: z.ZodString;
             name: z.ZodString;
             nodeIds: z.ZodArray<z.ZodString, "many">;
-            position: z.ZodObject<{
+            position: z.ZodObject<{,
                 x: z.ZodNumber;
                 y: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
@@ -133,7 +133,7 @@ export declare const CollaborationDataSchema: z.ZodObject<{
                 x: number;
                 y: number;
             }>;
-            size: z.ZodObject<{
+            size: z.ZodObject<{,
                 width: z.ZodNumber;
                 height: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
@@ -148,11 +148,11 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id: string;
             name: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -162,11 +162,11 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         }, {
             id: string;
             name: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -177,14 +177,14 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         connectionLabels: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
         nodeLabels: Record<string, string>;
-        regionGroups: {
+        regionGroups: {,
             id: string;
             name: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -198,11 +198,11 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         regionGroups?: {
             id: string;
             name: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -213,14 +213,14 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         connectionLabels?: Record<string, string> | undefined;
     }>>;
 }, "strip", z.ZodTypeAny, {
-    stickyNotes: {
+    stickyNotes: {,
         id: string;
-        position: {
+        position: {,
             x: number;
             y: number;
         };
         content: string;
-        size: {
+        size: {,
             width: number;
             height: number;
         };
@@ -228,16 +228,16 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         timestamp: string;
         author?: string | undefined;
     }[];
-    annotations: {
+    annotations: {,
         nodeLabels: Record<string, string>;
-        regionGroups: {
+        regionGroups: {,
             id: string;
             name: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -250,12 +250,12 @@ export declare const CollaborationDataSchema: z.ZodObject<{
 }, {
     stickyNotes?: {
         id: string;
-        position: {
+        position: {,
             x: number;
             y: number;
         };
         content: string;
-        size: {
+        size: {,
             width: number;
             height: number;
         };
@@ -268,11 +268,11 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         regionGroups?: {
             id: string;
             name: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -286,7 +286,7 @@ export declare const CollaborationDataSchema: z.ZodObject<{
 export declare const PsgFileSchema: z.ZodObject<{
     fileType: z.ZodLiteral<"psg">;
     formatVersion: z.ZodString;
-    metadata: z.ZodObject<{
+    metadata: z.ZodObject<{,
         name: z.ZodString;
         description: z.ZodOptional<z.ZodString>;
         version: z.ZodDefault<z.ZodString>;
@@ -314,7 +314,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         author?: string | undefined;
         fileFormatVersion?: string | undefined;
     }>;
-    settings: z.ZodObject<{
+    settings: z.ZodObject<{,
         autoSave: z.ZodDefault<z.ZodBoolean>;
         backupInterval: z.ZodDefault<z.ZodNumber>;
         maxBackups: z.ZodDefault<z.ZodNumber>;
@@ -342,12 +342,12 @@ export declare const PsgFileSchema: z.ZodObject<{
         showMinimap?: boolean | undefined;
         autoLayout?: boolean | undefined;
     }>;
-    graph: z.ZodObject<{
+    graph: z.ZodObject<{,
         nodes: z.ZodArray<z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             id: z.ZodString;
             inputs: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             template: z.ZodOptional<z.ZodString>;
-            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 name: z.ZodString;
                 placeholder: z.ZodString;
                 startIndex: z.ZodNumber;
@@ -374,7 +374,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             }>, "many">>;
         } & {
             type: z.ZodLiteral<"WeightedChoice">;
-            choices: z.ZodArray<z.ZodObject<{
+            choices: z.ZodArray<z.ZodObject<{,
                 value: z.ZodString;
                 weight: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
@@ -387,7 +387,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id: string;
             type: "WeightedChoice";
-            choices: {
+            choices: {,
                 value: string;
                 weight: number;
             }[];
@@ -405,7 +405,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         }, {
             id: string;
             type: "WeightedChoice";
-            choices: {
+            choices: {,
                 value: string;
                 weight: number;
             }[];
@@ -424,7 +424,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             id: z.ZodString;
             inputs: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             template: z.ZodOptional<z.ZodString>;
-            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 name: z.ZodString;
                 placeholder: z.ZodString;
                 startIndex: z.ZodNumber;
@@ -483,7 +483,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             id: z.ZodString;
             inputs: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             template: z.ZodOptional<z.ZodString>;
-            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 name: z.ZodString;
                 placeholder: z.ZodString;
                 startIndex: z.ZodNumber;
@@ -542,7 +542,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             id: z.ZodString;
             inputs: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             template: z.ZodOptional<z.ZodString>;
-            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 name: z.ZodString;
                 placeholder: z.ZodString;
                 startIndex: z.ZodNumber;
@@ -604,7 +604,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             id: z.ZodString;
             inputs: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             template: z.ZodOptional<z.ZodString>;
-            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 name: z.ZodString;
                 placeholder: z.ZodString;
                 startIndex: z.ZodNumber;
@@ -669,7 +669,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             id: z.ZodString;
             inputs: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             template: z.ZodOptional<z.ZodString>;
-            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 name: z.ZodString;
                 placeholder: z.ZodString;
                 startIndex: z.ZodNumber;
@@ -731,7 +731,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             id: z.ZodString;
             inputs: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             template: z.ZodOptional<z.ZodString>;
-            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 name: z.ZodString;
                 placeholder: z.ZodString;
                 startIndex: z.ZodNumber;
@@ -758,7 +758,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             }>, "many">>;
         } & {
             type: z.ZodLiteral<"WeightedAdvanced">;
-            choices: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            choices: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 value: z.ZodString;
                 weight: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
@@ -768,7 +768,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 value: string;
                 weight: number;
             }>, "many">>;
-            distributionConfig: z.ZodOptional<z.ZodObject<{
+            distributionConfig: z.ZodOptional<z.ZodObject<{,
                 type: z.ZodEnum<["linear", "exponential", "gaussian", "custom"]>;
                 parameters: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
                 normalize: z.ZodOptional<z.ZodBoolean>;
@@ -836,7 +836,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             id: z.ZodString;
             inputs: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             template: z.ZodOptional<z.ZodString>;
-            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 name: z.ZodString;
                 placeholder: z.ZodString;
                 startIndex: z.ZodNumber;
@@ -863,7 +863,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             }>, "many">>;
         } & {
             type: z.ZodLiteral<"Conditional">;
-            branches: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            branches: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 condition: z.ZodEffects<z.ZodString, string, string>;
                 output: z.ZodEffects<z.ZodString, string, string>;
                 label: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
@@ -877,7 +877,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 label?: string | undefined;
             }>, "many">>;
             defaultOutput: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
-            conditionalConfig: z.ZodOptional<z.ZodObject<{
+            conditionalConfig: z.ZodOptional<z.ZodObject<{,
                 allowVariableAccess: z.ZodOptional<z.ZodBoolean>;
                 strictMode: z.ZodOptional<z.ZodBoolean>;
                 customFunctions: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<[z.ZodEffects<z.ZodString, string, string>, z.ZodEffects<z.ZodNumber, number, number>, z.ZodBoolean, z.ZodEffects<z.ZodArray<z.ZodString, "many">, string[], string[]>, z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>, z.ZodNull, z.ZodUndefined]>>>;
@@ -944,7 +944,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             id: z.ZodString;
             inputs: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             template: z.ZodOptional<z.ZodString>;
-            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 name: z.ZodString;
                 placeholder: z.ZodString;
                 startIndex: z.ZodNumber;
@@ -972,9 +972,9 @@ export declare const PsgFileSchema: z.ZodObject<{
         } & {
             type: z.ZodLiteral<"Sequential">;
             sequence: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            pattern: z.ZodOptional<z.ZodObject<{
+            pattern: z.ZodOptional<z.ZodObject<{,
                 type: z.ZodEnum<["linear", "cyclical", "random", "weighted"]>;
-                config: z.ZodOptional<z.ZodObject<{
+                config: z.ZodOptional<z.ZodObject<{,
                     weights: z.ZodOptional<z.ZodArray<z.ZodNumber, "many">>;
                     allowRepeats: z.ZodOptional<z.ZodBoolean>;
                     custom: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
@@ -1052,7 +1052,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             id: z.ZodString;
             inputs: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             template: z.ZodOptional<z.ZodString>;
-            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 name: z.ZodString;
                 placeholder: z.ZodString;
                 startIndex: z.ZodNumber;
@@ -1082,7 +1082,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             states: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             transitions: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodNumber>>>;
             initialState: z.ZodOptional<z.ZodString>;
-            markovConfig: z.ZodOptional<z.ZodObject<{
+            markovConfig: z.ZodOptional<z.ZodObject<{,
                 maxTransitions: z.ZodOptional<z.ZodNumber>;
                 normalizeProbabilities: z.ZodOptional<z.ZodBoolean>;
                 terminationStates: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -1153,7 +1153,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             id: z.ZodString;
             inputs: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             template: z.ZodOptional<z.ZodString>;
-            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extractedVariables: z.ZodOptional<z.ZodArray<z.ZodObject<{,
                 name: z.ZodString;
                 placeholder: z.ZodString;
                 startIndex: z.ZodNumber;
@@ -1184,7 +1184,7 @@ export declare const PsgFileSchema: z.ZodObject<{
             timeout: z.ZodOptional<z.ZodNumber>;
             memoryLimit: z.ZodOptional<z.ZodString>;
             allowedModules: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            pythonConfig: z.ZodOptional<z.ZodObject<{
+            pythonConfig: z.ZodOptional<z.ZodObject<{,
                 strictMode: z.ZodOptional<z.ZodBoolean>;
                 enableCaching: z.ZodOptional<z.ZodBoolean>;
                 executorUrl: z.ZodOptional<z.ZodString>;
@@ -1261,10 +1261,10 @@ export declare const PsgFileSchema: z.ZodObject<{
         }>]>, "many">;
         seed: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
     }, "strip", z.ZodTypeAny, {
-        nodes: ({
+        nodes: ({),
             id: string;
             type: "WeightedChoice";
-            choices: {
+            choices: {,
                 value: string;
                 weight: number;
             }[];
@@ -1478,10 +1478,10 @@ export declare const PsgFileSchema: z.ZodObject<{
         })[];
         seed?: string | number | undefined;
     }, {
-        nodes: ({
+        nodes: ({),
             id: string;
             type: "WeightedChoice";
-            choices: {
+            choices: {,
                 value: string;
                 weight: number;
             }[];
@@ -1695,11 +1695,11 @@ export declare const PsgFileSchema: z.ZodObject<{
         })[];
         seed?: string | number | undefined;
     }>;
-    collaboration: z.ZodOptional<z.ZodObject<{
-        stickyNotes: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    collaboration: z.ZodOptional<z.ZodObject<{,
+        stickyNotes: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             id: z.ZodString;
             content: z.ZodString;
-            position: z.ZodObject<{
+            position: z.ZodObject<{,
                 x: z.ZodNumber;
                 y: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
@@ -1709,7 +1709,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 x: number;
                 y: number;
             }>;
-            size: z.ZodObject<{
+            size: z.ZodObject<{,
                 width: z.ZodNumber;
                 height: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
@@ -1724,12 +1724,12 @@ export declare const PsgFileSchema: z.ZodObject<{
             timestamp: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             id: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
             content: string;
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -1738,12 +1738,12 @@ export declare const PsgFileSchema: z.ZodObject<{
             author?: string | undefined;
         }, {
             id: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
             content: string;
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -1751,13 +1751,13 @@ export declare const PsgFileSchema: z.ZodObject<{
             timestamp: string;
             author?: string | undefined;
         }>, "many">>;
-        annotations: z.ZodDefault<z.ZodObject<{
+        annotations: z.ZodDefault<z.ZodObject<{,
             nodeLabels: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
-            regionGroups: z.ZodDefault<z.ZodArray<z.ZodObject<{
+            regionGroups: z.ZodDefault<z.ZodArray<z.ZodObject<{,
                 id: z.ZodString;
                 name: z.ZodString;
                 nodeIds: z.ZodArray<z.ZodString, "many">;
-                position: z.ZodObject<{
+                position: z.ZodObject<{,
                     x: z.ZodNumber;
                     y: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
@@ -1767,7 +1767,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                     x: number;
                     y: number;
                 }>;
-                size: z.ZodObject<{
+                size: z.ZodObject<{,
                     width: z.ZodNumber;
                     height: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
@@ -1782,11 +1782,11 @@ export declare const PsgFileSchema: z.ZodObject<{
             }, "strip", z.ZodTypeAny, {
                 id: string;
                 name: string;
-                position: {
+                position: {,
                     x: number;
                     y: number;
                 };
-                size: {
+                size: {,
                     width: number;
                     height: number;
                 };
@@ -1796,11 +1796,11 @@ export declare const PsgFileSchema: z.ZodObject<{
             }, {
                 id: string;
                 name: string;
-                position: {
+                position: {,
                     x: number;
                     y: number;
                 };
-                size: {
+                size: {,
                     width: number;
                     height: number;
                 };
@@ -1811,14 +1811,14 @@ export declare const PsgFileSchema: z.ZodObject<{
             connectionLabels: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             nodeLabels: Record<string, string>;
-            regionGroups: {
+            regionGroups: {,
                 id: string;
                 name: string;
-                position: {
+                position: {,
                     x: number;
                     y: number;
                 };
-                size: {
+                size: {,
                     width: number;
                     height: number;
                 };
@@ -1832,11 +1832,11 @@ export declare const PsgFileSchema: z.ZodObject<{
             regionGroups?: {
                 id: string;
                 name: string;
-                position: {
+                position: {,
                     x: number;
                     y: number;
                 };
-                size: {
+                size: {,
                     width: number;
                     height: number;
                 };
@@ -1847,14 +1847,14 @@ export declare const PsgFileSchema: z.ZodObject<{
             connectionLabels?: Record<string, string> | undefined;
         }>>;
     }, "strip", z.ZodTypeAny, {
-        stickyNotes: {
+        stickyNotes: {,
             id: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
             content: string;
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -1862,16 +1862,16 @@ export declare const PsgFileSchema: z.ZodObject<{
             timestamp: string;
             author?: string | undefined;
         }[];
-        annotations: {
+        annotations: {,
             nodeLabels: Record<string, string>;
-            regionGroups: {
+            regionGroups: {,
                 id: string;
                 name: string;
-                position: {
+                position: {,
                     x: number;
                     y: number;
                 };
-                size: {
+                size: {,
                     width: number;
                     height: number;
                 };
@@ -1884,12 +1884,12 @@ export declare const PsgFileSchema: z.ZodObject<{
     }, {
         stickyNotes?: {
             id: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
             content: string;
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -1902,11 +1902,11 @@ export declare const PsgFileSchema: z.ZodObject<{
             regionGroups?: {
                 id: string;
                 name: string;
-                position: {
+                position: {,
                     x: number;
                     y: number;
                 };
-                size: {
+                size: {,
                     width: number;
                     height: number;
                 };
@@ -1923,7 +1923,7 @@ export declare const PsgFileSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     fileType: "psg";
     formatVersion: string;
-    metadata: {
+    metadata: {,
         createdAt: string;
         name: string;
         tags: string[];
@@ -1933,7 +1933,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         description?: string | undefined;
         author?: string | undefined;
     };
-    settings: {
+    settings: {,
         autoSave: boolean;
         backupInterval: number;
         maxBackups: number;
@@ -1943,11 +1943,11 @@ export declare const PsgFileSchema: z.ZodObject<{
         showMinimap: boolean;
         autoLayout: boolean;
     };
-    graph: {
-        nodes: ({
+    graph: {,
+        nodes: ({),
             id: string;
             type: "WeightedChoice";
-            choices: {
+            choices: {,
                 value: string;
                 weight: number;
             }[];
@@ -2163,14 +2163,14 @@ export declare const PsgFileSchema: z.ZodObject<{
     };
     exportedAt: string;
     collaboration?: {
-        stickyNotes: {
+        stickyNotes: {,
             id: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
             content: string;
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -2178,16 +2178,16 @@ export declare const PsgFileSchema: z.ZodObject<{
             timestamp: string;
             author?: string | undefined;
         }[];
-        annotations: {
+        annotations: {,
             nodeLabels: Record<string, string>;
-            regionGroups: {
+            regionGroups: {,
                 id: string;
                 name: string;
-                position: {
+                position: {,
                     x: number;
                     y: number;
                 };
-                size: {
+                size: {,
                     width: number;
                     height: number;
                 };
@@ -2203,7 +2203,7 @@ export declare const PsgFileSchema: z.ZodObject<{
 }, {
     fileType: "psg";
     formatVersion: string;
-    metadata: {
+    metadata: {,
         createdAt: string;
         name: string;
         lastModified: string;
@@ -2213,7 +2213,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         author?: string | undefined;
         fileFormatVersion?: string | undefined;
     };
-    settings: {
+    settings: {,
         autoSave?: boolean | undefined;
         backupInterval?: number | undefined;
         maxBackups?: number | undefined;
@@ -2223,11 +2223,11 @@ export declare const PsgFileSchema: z.ZodObject<{
         showMinimap?: boolean | undefined;
         autoLayout?: boolean | undefined;
     };
-    graph: {
-        nodes: ({
+    graph: {,
+        nodes: ({),
             id: string;
             type: "WeightedChoice";
-            choices: {
+            choices: {,
                 value: string;
                 weight: number;
             }[];
@@ -2445,12 +2445,12 @@ export declare const PsgFileSchema: z.ZodObject<{
     collaboration?: {
         stickyNotes?: {
             id: string;
-            position: {
+            position: {,
                 x: number;
                 y: number;
             };
             content: string;
-            size: {
+            size: {,
                 width: number;
                 height: number;
             };
@@ -2463,11 +2463,11 @@ export declare const PsgFileSchema: z.ZodObject<{
             regionGroups?: {
                 id: string;
                 name: string;
-                position: {
+                position: {,
                     x: number;
                     y: number;
                 };
-                size: {
+                size: {,
                     width: number;
                     height: number;
                 };

@@ -85,7 +85,7 @@ export declare enum HelpRequestStatus {
 export interface RequestContext {
     userAgent: string;
     ipAddress: string;
-    location: {
+    location: {,
         country: string;
         region: string;
         timezone: string;
@@ -98,7 +98,7 @@ export interface RequestContext {
     section: string;
     templateId?: string;
     marketplaceListingId?: string;
-    browserInfo: {
+    browserInfo: {,
         name: string;
         version: string;
         platform: string;
@@ -137,20 +137,20 @@ export interface HelpAttachment {
     uploadedBy: string;
     uploadedAt: Date;
     processed: boolean;
-    metadata: {
+    metadata: {,
         isScreenshot: boolean;
         containsPersonalInfo: boolean;
         category: string;
     };
 }
 export interface HelpSLA {
-    responseTime: {
+    responseTime: {,
         target: number;
         actual?: number;
         deadline: Date;
         breached: boolean;
     };
-    resolutionTime: {
+    resolutionTime: {,
         target: number;
         actual?: number;
         deadline: Date;
@@ -212,33 +212,33 @@ export interface RoutingAction {
     parameters: Record<string, any>;
 }
 export interface HelpRequestConfig {
-    autoResolution: {
+    autoResolution: {,
         enabled: boolean;
         confidenceThreshold: number;
         maxAttempts: number;
     };
-    knowledgeBase: {
+    knowledgeBase: {,
         enabled: boolean;
         searchEndpoint: string;
         minRelevanceScore: number;
         maxSuggestions: number;
     };
-    routing: {
+    routing: {,
         enableSmartRouting: boolean;
         defaultQueue: string;
         escalationRules: EscalationRule[];
     };
-    sla: {
+    sla: {,
         responseTargets: Record<HelpPriority, number>;
         resolutionTargets: Record<HelpPriority, number>;
         businessHoursOnly: boolean;
     };
-    analytics: {
+    analytics: {,
         trackUserJourney: boolean;
         enableSentimentAnalysis: boolean;
         collectFeedback: boolean;
     };
-    integrations: {
+    integrations: {,
         ticketSystem: boolean;
         communityForum: boolean;
         chatbot: boolean;
@@ -307,7 +307,7 @@ export declare class Epic16HelpRequestService extends EventEmitter {
     /**
      * Get help requests with filtering
      */
-    getHelpRequests(filters?: {
+    getHelpRequests(filters?: {)
         status?: HelpRequestStatus[];
         category?: HelpCategory[];
         priority?: HelpPriority[];
@@ -327,7 +327,7 @@ export declare class Epic16HelpRequestService extends EventEmitter {
     /**
      * Get help request analytics
      */
-    getAnalytics(timeRange: {
+    getAnalytics(timeRange: {)
         start: Date;
         end: Date;
     }): Promise<{

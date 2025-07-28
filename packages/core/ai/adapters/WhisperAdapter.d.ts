@@ -48,7 +48,7 @@ export interface WhisperTranscriptionResult {
         start: number;
         end: number;
     }>;
-    metadata: {
+    metadata: {,
         model: string;
         task: string;
         language: string;
@@ -56,7 +56,7 @@ export interface WhisperTranscriptionResult {
         processing_time: number;
         confidence_score?: number;
     };
-    usage: {
+    usage: {,
         audio_duration: number;
         cost: number;
     };
@@ -75,24 +75,24 @@ export declare class WhisperAdapter extends BaseAIModel {
     private supportedFormats;
     constructor(id: string, config: WhisperConfig);
     initialize(): Promise<void>;
-    process(input: File | Blob | ArrayBuffer | {
+    process(input: File | Blob | ArrayBuffer | {)
         file?: File | Blob | ArrayBuffer;
         audio?: File | Blob | ArrayBuffer;
         data?: File | Blob | ArrayBuffer;
     }, options?: WhisperRequestOptions): Promise<WhisperTranscriptionResult>;
     cleanup(): Promise<void>;
-    estimate(input: File | Blob | ArrayBuffer | {
+    estimate(input: File | Blob | ArrayBuffer | {)
         file?: File | Blob | ArrayBuffer;
         audio?: File | Blob | ArrayBuffer;
         data?: File | Blob | ArrayBuffer;
     }, options?: WhisperRequestOptions): Promise<CostEstimate>;
-    transcribeFile(
+    transcribeFile()
       file: File,
       language?: string,
       options?: Partial<WhisperRequestOptions>
     ): Promise<WhisperTranscriptionResult>;
     translateToEnglish(file: File, options?: Partial<WhisperRequestOptions>): Promise<WhisperTranscriptionResult>;
-    transcribeWithTimestamps(
+    transcribeWithTimestamps()
       file: File,
       granularity?: 'word' | 'segment' | 'both',
       options?: Partial<WhisperRequestOptions>

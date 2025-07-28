@@ -23,22 +23,22 @@ export interface KPIAlert {
 export interface KPIMonitoringConfig {
     monitoringInterval: number;
     alertingEnabled: boolean;
-    alertThresholds: {
+    alertThresholds: {,
         critical: number;
         consecutive: number;
         degradationThreshold: number;
     };
-    kpiFilters: {
+    kpiFilters: {,
         categories: string[];
         priorities: string[];
         enabled: string[];
     };
-    baseline: {
+    baseline: {,
         autoCapture: boolean;
         captureInterval: number;
         retentionPeriod: number;
     };
-    reporting: {
+    reporting: {,
         enabled: boolean;
         interval: number;
         includeRecommendations: boolean;
@@ -51,7 +51,7 @@ export interface KPITrendAnalysis {
     changePercent: number;
     periodDays: number;
     significance: 'minor' | 'moderate' | 'major';
-    projection: {
+    projection: {,
         nextWeek: number;
         nextMonth: number;
         confidence: number;
@@ -121,13 +121,13 @@ export declare class KPIMonitoringService extends EventEmitter {
      */
     generateKPIReport(): {
         timestamp: number;
-        summary: {
+        summary: {,
             totalKPIs: number;
             monitoredKPIs: number;
             alertsActive: number;
             averageScore: number;
         };
-        kpiStatus: Array<{
+        kpiStatus: Array<{,
             kpiId: string;
             name: string;
             category: string;

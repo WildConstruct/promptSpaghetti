@@ -7,21 +7,18 @@ import {
   FiAlertCircle,
   FiInfo
 } from 'react-icons/fi';
-
 interface ImportDialogProps {
   onClose: () => void;
   onImportComplete: (result: Record<string, unknown>) => void;
   className?: string;
 }
-
 interface ImportResult {
   success: boolean;
   message: string;
   data?: unknown;
   warnings?: string[];
 }
-
-const SUPPORTED_FORMATS = [
+const SUPPORTED_FORMATS = [;
   'application/json',
   'text/yaml',
   'application/x-yaml',
@@ -32,10 +29,9 @@ const SUPPORTED_FORMATS = [
   'text/markdown',
   'application/zip'
 ];
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB;
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-
-export const ImportDialog: React.FC<ImportDialogProps> = ({
+export const ImportDialog: React.FC<ImportDialogProps> = ({)
   onClose,
   onImportComplete,
   className = ''
@@ -46,49 +42,41 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       validateAndSetFile(file);
     }
   };
-
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setDragOver(false);
-    
     const file = event.dataTransfer.files[0];
     if (file) {
       validateAndSetFile(file);
     }
   };
-
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setDragOver(true);
   };
-
   const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setDragOver(false);
   };
-
   const validateAndSetFile = (file: File) => {
     // Reset previous states
     setImportResult(null);
-    
     // Check file size
     if (file.size > MAX_FILE_SIZE) {
-      setImportResult({
+      setImportResult({)
         success: false,
-        message: `File size ${formatFileSize(file.size)} exceeds maximum limit of ${formatFileSize(MAX_FILE_SIZE)}`
+        message: `File size ${formatFileSize(file.size)} exceeds maximum limit of ${formatFileSize(MAX_FILE_SIZE)}`}
       });
       return;
     }
-
     // Check file type
-    const isSupported = SUPPORTED_FORMATS.includes(file.type) || 
+    const isSupported = SUPPORTED_FORMATS.includes(file.type) || ;
                        file.name.endsWith('.json') ||
                        file.name.endsWith('.yaml') ||
                        file.name.endsWith('.yml') ||
@@ -96,31 +84,25 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
                        file.name.endsWith('.csv') ||
                        file.name.endsWith('.md') ||
                        file.name.endsWith('.zip');
-
     if (!isSupported) {
-      setImportResult({
+      setImportResult({)
         success: false,
-        message: `Unsupported file type: ${file.type || 'unknown'}. Supported formats: JSON, YAML, XML, CSV, Markdown, ZIP`
+        message: `Unsupported file type: ${file.type || 'unknown'}. Supported formats: JSON, YAML, XML, CSV, Markdown, ZIP`}
       });
       return;
     }
-
     setSelectedFile(file);
   };
-
   const handleImport = async () => {
     if (!selectedFile) return;
-
     setUploading(true);
     setUploadProgress(0);
-
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
-
       // Simulate upload progress
       const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
+        setUploadProgress(prev => {)
           if (prev >= 90) {
             clearInterval(progressInterval);
             return 90;
@@ -128,33 +110,26 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
           return prev + 10;
         });
       }, 100);
-
-      const response = await fetch('/api/import', {
+      const response = await fetch('/api/import', {)
         method: 'POST',
-        body: formData
+        body: formData,
       });
-
       clearInterval(progressInterval);
       setUploadProgress(100);
-
       const result = await response.json();
-
       if (!response.ok) {
         throw new Error(result.message || 'Import failed');
       }
-
-      setImportResult({
+      setImportResult({)
         success: true,
         message: result.message || 'Import completed successfully',
         data: result.data,
-        warnings: result.warnings
+        warnings: result.warnings,
       });
-
       // Notify parent component
       onImportComplete(result);
-
     } catch (error) {
-      setImportResult({
+      setImportResult({)
         success: false,
         message: error instanceof Error ? error.message : 'Import failed with unknown error'
       });
@@ -163,14 +138,12 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
       setTimeout(() => setUploadProgress(0), 1000);
     }
   };
-
   const formatFileSize = (bytes: number) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     if (bytes === 0) return '0 Bytes';
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
     return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
   };
-
   const resetDialog = () => {
     setSelectedFile(null);
     setImportResult(null);
@@ -180,15 +153,13 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
       fileInputRef.current.value = '';
     }
   };
-
   const handleClose = () => {
     if (!uploading) {
       onClose();
     }
   };
-
-  return (
-    <div className={`import-dialog ${className}`}>
+  return ()
+    <div className={`import-dialog ${className}`}>}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-2">
           <FiUpload className="w-6 h-6 text-blue-600" />
@@ -204,8 +175,7 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
           <FiX className="w-6 h-6" />
         </button>
       </div>
-
-      {importResult?.success ? (
+      {importResult?.success ? ()
         // Success State
         <div className="text-center py-8">
           <FiCheck className="w-16 h-16 text-green-600 mx-auto mb-4" />
@@ -215,8 +185,7 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
           <p className="text-gray-600 dark:text-gray-300 mb-4">
             {importResult.message}
           </p>
-          
-          {importResult.warnings && importResult.warnings.length > 0 && (
+          {importResult.warnings && importResult.warnings.length > 0 && ()
             <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4 text-left">
               <div className="flex items-start space-x-2">
                 <FiAlertCircle className="w-5 h-5 text-yellow-600 mt-0.5" />
@@ -225,7 +194,7 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
                     Warnings:
                   </h5>
                   <ul className="text-sm text-yellow-700 dark:text-yellow-300 list-disc list-inside space-y-1">
-                    {importResult.warnings.map((warning, index) => (
+                    {importResult.warnings.map((warning, index) => ()
                       <li key={index}>{warning}</li>
                     ))}
                   </ul>
@@ -233,7 +202,6 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
               </div>
             </div>
           )}
-
           <div className="flex justify-center space-x-3">
             <button
               onClick={resetDialog}
@@ -249,7 +217,7 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
             </button>
           </div>
         </div>
-      ) : (
+      ) : ()
         // Upload State
         <div className="space-y-6">
           {/* Info Banner */}
@@ -266,9 +234,8 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
               </div>
             </div>
           </div>
-
           {/* File Drop Zone */}
-          {!selectedFile && (
+          {!selectedFile && ()
             <div
               onDrop={handleDrop}
               onDragOver={handleDragOver}
@@ -306,9 +273,8 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
               />
             </div>
           )}
-
           {/* Selected File Info */}
-          {selectedFile && (
+          {selectedFile && ()
             <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
@@ -332,9 +298,8 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
               </div>
             </div>
           )}
-
           {/* Upload Progress */}
-          {uploading && (
+          {uploading && ()
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -352,9 +317,8 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
               </div>
             </div>
           )}
-
           {/* Error Message */}
-          {importResult && !importResult.success && (
+          {importResult && !importResult.success && ()
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
               <div className="flex items-start space-x-2">
                 <FiAlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
@@ -369,7 +333,6 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
               </div>
             </div>
           )}
-
           {/* Actions */}
           <div className="flex justify-end space-x-3">
             <button

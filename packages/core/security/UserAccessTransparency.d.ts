@@ -219,7 +219,7 @@ export interface ComplianceAction {
 }
 export interface PrivacyScore {
     overall: number;
-    categories: {
+    categories: {,
         dataMinimization: number;
         consentHealth: number;
         securityPosture: number;
@@ -344,7 +344,7 @@ export interface NotificationPreferences {
     smsNotifications: boolean;
     frequency: 'IMMEDIATE' | 'HOURLY' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
     eventTypes: TransparencyEventType[];
-    quietHours: {
+    quietHours: {,
         enabled: boolean;
         start: string;
         end: string;
@@ -413,17 +413,17 @@ export declare class UserAccessTransparencyService extends EventEmitter {
     /**
      * Get real-time user access activity
      */
-    getUserAccessActivity(userId: string, timeRange?: {
+    getUserAccessActivity(userId: string, timeRange?: {)
         start: Date;
         end: Date;
     }, limit?: number): Promise<UserAccessActivity[]>;
     /**
      * Submit Data Subject Access Request
      */
-    submitDSAR(
+    submitDSAR()
       userId: string,
       requestType: DataSubjectAccessRequest['requestType'],
-      details: DSARRequestDetails
+      details: DSARRequestDetails,
     ): Promise<DataSubjectAccessRequest>;
     /**
      * Get user's privacy score and recommendations
@@ -444,7 +444,7 @@ export declare class UserAccessTransparencyService extends EventEmitter {
     /**
      * Export user data for portability
      */
-    exportUserData(
+    exportUserData()
       userId: string,
       format?: 'JSON' | 'XML' | 'CSV' | 'PDF',
       categories?: string[]

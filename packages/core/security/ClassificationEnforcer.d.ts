@@ -77,7 +77,7 @@ export declare class ClassificationEnforcer {
     /**
      * Enforce classification policies for an operation
      */
-    enforceClassification(
+    enforceClassification()
       classification: DataClassificationLevel,
       operation: OperationContext,
       currentControls?: string[]
@@ -85,12 +85,12 @@ export declare class ClassificationEnforcer {
     /**
      * Make an access control decision
      */
-    makeAccessDecision(
+    makeAccessDecision()
       userId: string,
       dataId: string,
       classification: DataClassificationLevel,
       operation: string,
-      context: Partial<OperationContext>
+      context: Partial<OperationContext>,
     ): Promise<AccessDecision>;
     /**
      * Validate an operation against classification policies

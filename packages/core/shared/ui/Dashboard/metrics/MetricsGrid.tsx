@@ -4,7 +4,6 @@
  * 
  * Provides consistent grid layout for dashboard metrics
  */
-
 import React from 'react';
 import './MetricsGrid.css';
 
@@ -16,7 +15,7 @@ export interface MetricsGridProps {
   className?: string;
 }
 
-export const MetricsGrid: React.FC<MetricsGridProps> = ({
+export const MetricsGrid: React.FC<MetricsGridProps> = ({)
   children,
   columns = 'auto',
   gap = 'medium',
@@ -25,22 +24,20 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({
 }) => {
   const getGridTemplateColumns = () => {
     if (columns === 'auto') {
-      return `repeat(auto-fit, minmax(${minCardWidth}, 1fr))`;
+      return `repeat(auto-fit, minmax(${minCardWidth}, 1fr))`;}
     }
-    return `repeat(${columns}, 1fr)`;
+    return `repeat(${columns}, 1fr)`;}
   };
-
   const gapClass = {
     small: 'gap-small',
     medium: 'gap-medium', 
-    large: 'gap-large'
+    large: 'gap-large',
   }[gap];
-
-  return (
+  return ()
     <div 
       className={`metrics-grid ${gapClass} ${className}`}
       style={{
-        gridTemplateColumns: getGridTemplateColumns()
+        gridTemplateColumns: getGridTemplateColumns(),
       }}
     >
       {children}

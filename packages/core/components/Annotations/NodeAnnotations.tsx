@@ -4,7 +4,6 @@
  * Professional annotation tools for individual nodes in the VFX pipeline.
  * Supports performance notes, creative direction, technical specs, and director approvals.
  */
-
 import React, { useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -100,57 +99,56 @@ export interface NodeAnnotationSystemProps {
 
 // Annotation type configurations
 const ANNOTATION_TYPES = {
-  performance: {
+  performance: {,
     icon: <Zap className="w-4 h-4" />,
     color: '#f59e0b',
     bgColor: 'bg-amber-50',
     borderColor: 'border-amber-200',
-    label: 'Performance'
+    label: 'Performance',
   },
-  creative: {
+  creative: {,
     icon: <Camera className="w-4 h-4" />,
     color: '#8b5cf6',
     bgColor: 'bg-purple-50',
     borderColor: 'border-purple-200',
-    label: 'Creative'
+    label: 'Creative',
   },
-  technical: {
+  technical: {,
     icon: <Settings className="w-4 h-4" />,
     color: '#6b7280',
     bgColor: 'bg-gray-50',
     borderColor: 'border-gray-200',
-    label: 'Technical'
+    label: 'Technical',
   },
-  review: {
+  review: {,
     icon: <Eye className="w-4 h-4" />,
     color: '#3b82f6',
     bgColor: 'bg-blue-50',
     borderColor: 'border-blue-200',
-    label: 'Review'
+    label: 'Review',
   },
-  approval: {
+  approval: {,
     icon: <CheckCircle className="w-4 h-4" />,
     color: '#10b981',
     bgColor: 'bg-green-50',
     borderColor: 'border-green-200',
-    label: 'Approval'
+    label: 'Approval',
   },
-  question: {
+  question: {,
     icon: <MessageCircle className="w-4 h-4" />,
     color: '#06b6d4',
     bgColor: 'bg-cyan-50',
     borderColor: 'border-cyan-200',
-    label: 'Question'
+    label: 'Question',
   },
-  reference: {
+  reference: {,
     icon: <FileText className="w-4 h-4" />,
     color: '#84cc16',
     bgColor: 'bg-lime-50',
     borderColor: 'border-lime-200',
-    label: 'Reference'
+    label: 'Reference',
   }
 };
-
 const STATUS_CONFIGS = {
   open: { icon: <MessageCircle className="w-3 h-3" />, color: '#6b7280', label: 'Open' },
   in_progress: { icon: <Clock className="w-3 h-3" />, color: '#f59e0b', label: 'In Progress' },
@@ -159,7 +157,6 @@ const STATUS_CONFIGS = {
   rejected: { icon: <X className="w-3 h-3" />, color: '#ef4444', label: 'Rejected' },
   on_hold: { icon: <Pause className="w-3 h-3" />, color: '#8b5cf6', label: 'On Hold' }
 };
-
 const PRIORITY_CONFIGS = {
   low: { color: '#6b7280', bg: 'bg-gray-100', label: 'Low' },
   medium: { color: '#f59e0b', bg: 'bg-amber-100', label: 'Medium' },
@@ -167,7 +164,7 @@ const PRIORITY_CONFIGS = {
   critical: { color: '#dc2626', bg: 'bg-red-200', label: 'Critical' }
 };
 
-export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
+export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({)
   nodeId,
   nodeName,
   nodeType,
@@ -188,9 +185,8 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
   const [filterPriority, setFilterPriority] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'timestamp' | 'priority' | 'status'>('timestamp');
   const [showResolved, setShowResolved] = useState(false);
-  
   // New annotation form state
-  const [newAnnotation, setNewAnnotation] = useState({
+  const [newAnnotation, setNewAnnotation] = useState({)
     type: 'review' as NodeAnnotation['type'],
     content: '',
     priority: 'medium' as NodeAnnotation['priority'],
@@ -200,17 +196,15 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
     deadline: undefined as string | undefined,
     assignee: undefined as VFXUser | undefined
   });
-
   // Filter and sort annotations
   const filteredAndSortedAnnotations = useMemo(() => {
-    const filtered = annotations.filter(annotation => {
+    const filtered = annotations.filter(annotation => {)
       if (!showResolved && ['resolved', 'approved', 'rejected'].includes(annotation.status)) return false;
       if (filterType !== 'all' && annotation.type !== filterType) return false;
       if (filterStatus !== 'all' && annotation.status !== filterStatus) return false;
       if (filterPriority !== 'all' && annotation.priority !== filterPriority) return false;
       return true;
     });
-
     // Sort annotations
     filtered.sort((a, b) => {
       switch (sortBy) {
@@ -224,10 +218,8 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
         return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
       }
     });
-
     return filtered;
   }, [annotations, showResolved, filterType, filterStatus, filterPriority, sortBy]);
-
   // Statistics
   const stats = useMemo(() => {
     const total = annotations.length;
@@ -235,13 +227,10 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
     const critical = annotations.filter(a => a.priority === 'critical').length;
     const myAnnotations = annotations.filter(a => a.author.id === currentUser.id).length;
     const assigned = annotations.filter(a => a.assignee?.id === currentUser.id).length;
-    
     return { total, open, critical, myAnnotations, assigned };
   }, [annotations, currentUser.id]);
-
   const handleCreateAnnotation = useCallback(() => {
     if (!newAnnotation.content.trim()) return;
-
     const annotation: Omit<NodeAnnotation, 'id' | 'timestamp' | 'lastModified' | 'replies'> = {
       nodeId,
       type: newAnnotation.type,
@@ -255,13 +244,11 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
       linkedAnnotations: [],
       estimatedTime: newAnnotation.estimatedTime,
       deadline: newAnnotation.deadline,
-      assignee: newAnnotation.assignee
+      assignee: newAnnotation.assignee,
     };
-
     onAnnotationCreate(annotation);
-    
     // Reset form
-    setNewAnnotation({
+    setNewAnnotation({)
       type: 'review',
       content: '',
       priority: 'medium',
@@ -269,21 +256,18 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
       tags: [],
       estimatedTime: undefined,
       deadline: undefined,
-      assignee: undefined
+      assignee: undefined,
     });
     setIsCreating(false);
   }, [newAnnotation, nodeId, currentUser, onAnnotationCreate]);
-
   const handleStatusChange = useCallback((annotationId: string, status: NodeAnnotation['status']) => {
     onAnnotationUpdate(annotationId, { status, lastModified: new Date().toISOString() });
   }, [onAnnotationUpdate]);
-
   const _____handlePriorityChange = useCallback((annotationId: string, priority: NodeAnnotation['priority']) => {
     onAnnotationUpdate(annotationId, { priority, lastModified: new Date().toISOString() });
   }, [onAnnotationUpdate]);
-
   // Single Annotation Component
-  const AnnotationCard: React.FC<{ annotation: NodeAnnotation; expanded?: boolean }> = ({ 
+  const AnnotationCard: React.FC<{ annotation: NodeAnnotation; expanded?: boolean }> = ({ )
     annotation, 
     expanded = false 
   }) => {
@@ -292,19 +276,16 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
     const typeConfig = ANNOTATION_TYPES[annotation.type];
     const statusConfig = STATUS_CONFIGS[annotation.status];
     const priorityConfig = PRIORITY_CONFIGS[annotation.priority];
-
     const handleReplySubmit = () => {
       if (!replyContent.trim()) return;
-      
-      onReplyCreate(annotation.id, {
+      onReplyCreate(annotation.id, {)
         content: replyContent.trim(),
-        author: currentUser
+        author: currentUser,
       });
       setReplyContent('');
     };
-
-    return (
-      <Card className={`annotation-card ${typeConfig.borderColor} ${expanded ? 'ring-2 ring-blue-200' : ''}`}>
+    return ()
+      <Card className={`annotation-card ${typeConfig.borderColor} ${expanded ? 'ring-2 ring-blue-200' : ''}`}>}
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
@@ -329,7 +310,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                   <span>{annotation.author.name}</span>
                   <span>•</span>
                   <span>{new Date(annotation.timestamp).toLocaleDateString()}</span>
-                  {annotation.estimatedTime && (
+                  {annotation.estimatedTime && ()
                     <>
                       <span>•</span>
                       <span>{annotation.estimatedTime}h est.</span>
@@ -338,7 +319,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                 </div>
               </div>
             </div>
-            
             <div className="flex items-center gap-2">
               {/* Status Selector */}
               <Select
@@ -352,7 +332,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                   </div>
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.entries(STATUS_CONFIGS).map(([status, config]) => (
+                  {Object.entries(STATUS_CONFIGS).map(([status, config]) => ()
                     <SelectItem key={status} value={status}>
                       <div className="flex items-center gap-2">
                         {config.icon}
@@ -362,11 +342,10 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                   ))}
                 </SelectContent>
               </Select>
-              
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setSelectedAnnotation(
+                onClick={() => setSelectedAnnotation()
                   selectedAnnotation === annotation.id ? null : annotation.id
                 )}
               >
@@ -375,29 +354,26 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
             </div>
           </div>
         </CardHeader>
-
         <CardContent className="pt-0">
           <div className="space-y-3">
             {/* Content */}
             <div className="text-sm text-gray-700 whitespace-pre-wrap">
               {annotation.content}
             </div>
-
             {/* Tags */}
-            {annotation.tags.length > 0 && (
+            {annotation.tags.length > 0 && ()
               <div className="flex flex-wrap gap-1">
-                {annotation.tags.map(tag => (
+                {annotation.tags.map(tag => ()
                   <Badge key={tag} variant="outline" className="text-xs">
                     #{tag}
                   </Badge>
                 ))}
               </div>
             )}
-
             {/* Attachments */}
-            {annotation.attachments.length > 0 && (
+            {annotation.attachments.length > 0 && ()
               <div className="flex flex-wrap gap-2">
-                {annotation.attachments.map(attachment => (
+                {annotation.attachments.map(attachment => ()
                   <div key={attachment.id} className="flex items-center gap-1 px-2 py-1 bg-gray-100 rounded text-xs">
                     {attachment.type === 'image' && <ImageIcon className="w-3 h-3" />}
                     {attachment.type === 'link' && <Link className="w-3 h-3" />}
@@ -406,17 +382,16 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                 ))}
               </div>
             )}
-
             {/* Assignee & Deadline */}
-            {(annotation.assignee || annotation.deadline) && (
+            {(annotation.assignee || annotation.deadline) && ()
               <div className="flex items-center gap-4 text-xs text-gray-500">
-                {annotation.assignee && (
+                {annotation.assignee && ()
                   <div className="flex items-center gap-1">
                     <User className="w-3 h-3" />
                     <span>{annotation.assignee.name}</span>
                   </div>
                 )}
-                {annotation.deadline && (
+                {annotation.deadline && ()
                   <div className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     <span>{new Date(annotation.deadline).toLocaleDateString()}</span>
@@ -424,9 +399,8 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                 )}
               </div>
             )}
-
             {/* Replies */}
-            {annotation.replies.length > 0 && (
+            {annotation.replies.length > 0 && ()
               <div className="border-t pt-3">
                 <Button
                   variant="ghost"
@@ -436,10 +410,9 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                 >
                   {showReplies ? 'Hide' : 'Show'} {annotation.replies.length} replies
                 </Button>
-                
-                {showReplies && (
+                {showReplies && ()
                   <div className="mt-2 space-y-2">
-                    {annotation.replies.map(reply => (
+                    {annotation.replies.map(reply => ()
                       <div key={reply.id} className="pl-4 border-l-2 border-gray-200">
                         <div className="flex items-center gap-2 text-xs text-gray-500 mb-1">
                           <span className="font-medium">{reply.author.name}</span>
@@ -448,7 +421,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                         <div className="text-sm text-gray-700">{reply.content}</div>
                       </div>
                     ))}
-                    
                     {/* Reply Input */}
                     <div className="flex gap-2 mt-3">
                       <input
@@ -472,11 +444,10 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
       </Card>
     );
   };
-
   if (compact) {
     // Compact view for inspector panels
-    return (
-      <div className={`node-annotations-compact ${className}`}>
+    return ()
+      <div className={`node-annotations-compact ${className}`}>}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <MessageCircle className="w-4 h-4 text-gray-600" />
@@ -492,9 +463,8 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
             <span className="text-xs">Add</span>
           </Button>
         </div>
-        
         <div className="space-y-2 max-h-64 overflow-y-auto">
-          {filteredAndSortedAnnotations.map(annotation => (
+          {filteredAndSortedAnnotations.map(annotation => ()
             <div key={annotation.id} className="p-2 border rounded text-xs">
               <div className="flex items-center gap-2 mb-1">
                 {ANNOTATION_TYPES[annotation.type].icon}
@@ -506,8 +476,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
               <div className="text-gray-600 line-clamp-2">{annotation.content}</div>
             </div>
           ))}
-          
-          {filteredAndSortedAnnotations.length === 0 && (
+          {filteredAndSortedAnnotations.length === 0 && ()
             <div className="text-xs text-gray-500 text-center py-4">
               No annotations found
             </div>
@@ -516,9 +485,8 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`node-annotation-system ${className}`}>
+  return ()
+    <div className={`node-annotation-system ${className}`}>}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
@@ -531,7 +499,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                 {nodeName}
               </Badge>
             </div>
-            
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -550,7 +517,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
               </Button>
             </div>
           </CardTitle>
-          
           {/* Statistics */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-4">
             <div className="bg-blue-50 p-3 rounded-lg text-center">
@@ -575,7 +541,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
             </div>
           </div>
         </CardHeader>
-
         <CardContent>
           <Tabs defaultValue="annotations" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
@@ -583,7 +548,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
               <TabsTrigger value="create">Create New</TabsTrigger>
               <TabsTrigger value="filters">Filters</TabsTrigger>
             </TabsList>
-
             <TabsContent value="annotations" className="space-y-4">
               {/* Quick Filters */}
               <div className="flex items-center gap-2 text-sm">
@@ -599,18 +563,16 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                   </SelectContent>
                 </Select>
               </div>
-
               {/* Annotations List */}
               <div className="space-y-3">
-                {filteredAndSortedAnnotations.map(annotation => (
+                {filteredAndSortedAnnotations.map(annotation => ()
                   <AnnotationCard
                     key={annotation.id}
                     annotation={annotation}
                     expanded={selectedAnnotation === annotation.id}
                   />
                 ))}
-                
-                {filteredAndSortedAnnotations.length === 0 && (
+                {filteredAndSortedAnnotations.length === 0 && ()
                   <div className="text-center py-8 text-gray-500">
                     <MessageCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     <div>No annotations found</div>
@@ -619,7 +581,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                 )}
               </div>
             </TabsContent>
-
             <TabsContent value="create" className="space-y-4">
               {/* Create New Annotation Form */}
               <Card>
@@ -638,7 +599,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {Object.entries(ANNOTATION_TYPES).map(([type, config]) => (
+                          {Object.entries(ANNOTATION_TYPES).map(([type, config]) => ()
                             <SelectItem key={type} value={type}>
                               <div className="flex items-center gap-2">
                                 {config.icon}
@@ -649,7 +610,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                         </SelectContent>
                       </Select>
                     </div>
-
                     <div>
                       <label className="block text-sm font-medium mb-2">Priority</label>
                       <Select
@@ -660,7 +620,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {Object.entries(PRIORITY_CONFIGS).map(([priority, config]) => (
+                          {Object.entries(PRIORITY_CONFIGS).map(([priority, config]) => ()
                             <SelectItem key={priority} value={priority}>
                               <div className="flex items-center gap-2">
                                 <div 
@@ -675,7 +635,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                       </Select>
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium mb-2">Content</label>
                     <textarea
@@ -686,7 +645,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
-
                   <div className="flex justify-end gap-2">
                     <Button
                       variant="outline"
@@ -705,7 +663,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                 </CardContent>
               </Card>
             </TabsContent>
-
             <TabsContent value="filters" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
@@ -716,7 +673,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Types</SelectItem>
-                      {Object.entries(ANNOTATION_TYPES).map(([type, config]) => (
+                      {Object.entries(ANNOTATION_TYPES).map(([type, config]) => ()
                         <SelectItem key={type} value={type}>
                           <div className="flex items-center gap-2">
                             {config.icon}
@@ -727,7 +684,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium mb-2">Status</label>
                   <Select value={filterStatus} onValueChange={setFilterStatus}>
@@ -736,7 +692,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Statuses</SelectItem>
-                      {Object.entries(STATUS_CONFIGS).map(([status, config]) => (
+                      {Object.entries(STATUS_CONFIGS).map(([status, config]) => ()
                         <SelectItem key={status} value={status}>
                           <div className="flex items-center gap-2">
                             {config.icon}
@@ -747,7 +703,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium mb-2">Priority</label>
                   <Select value={filterPriority} onValueChange={setFilterPriority}>
@@ -756,7 +711,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Priorities</SelectItem>
-                      {Object.entries(PRIORITY_CONFIGS).map(([priority, config]) => (
+                      {Object.entries(PRIORITY_CONFIGS).map(([priority, config]) => ()
                         <SelectItem key={priority} value={priority}>
                           <div className="flex items-center gap-2">
                             <div 

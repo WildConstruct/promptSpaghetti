@@ -21,7 +21,6 @@ export interface ProgressiveDisclosureSectionProps {
   priority?: FieldPriority;
   fieldName?: string; // For automatic priority classification
 }
-
 /**
  * Epic 8.4 - Progressive Disclosure Section Component
  * 
@@ -30,7 +29,7 @@ export interface ProgressiveDisclosureSectionProps {
  * - Advanced: Power user options with collapsible sections
  * - Debug: All technical details visible
  */
-const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> = ({ 
+const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> = ({ )
   title, 
   level, 
   children, 
@@ -46,12 +45,9 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
     shouldShowAdvancedFeatures, 
     shouldShowTechnicalFields 
   } = useUISettingsStore();
-
   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
-  
   // Determine field priority using hierarchy design system
   const priority = explicitPriority || (fieldName ? classifyFieldPriority(fieldName) : 'standard');
-
   // Determine if this section should be visible based on current complexity level
   const shouldShow = React.useMemo(() => {
     switch (level) {
@@ -65,23 +61,19 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
         return true;
     }
   }, [level, complexityLevel, shouldShowAdvancedFeatures, shouldShowTechnicalFields]);
-
   // Don't render if section shouldn't be shown
   if (!shouldShow) {
     return null;
   }
-
   // Auto-expand for basic level or debug level
   const shouldAutoExpand = level === 'basic' || complexityLevel === 'expert';
   const effectivelyExpanded = shouldAutoExpand ? true : isExpanded;
-
   // Memoize visual hierarchy colors and styles for performance
   const colors = React.useMemo(() => HierarchyColors[level], [level]);
-  const typography = React.useMemo(() => 
+  const typography = React.useMemo(() => ;
     priority === 'critical' ? TypographyScale.secondary : TypographyScale.tertiary, 
     [priority]
   );
-  
   // Enhanced section styles using design system - memoized for performance
   const sectionStyles = React.useMemo(() => {
     const baseStyles = {
@@ -91,28 +83,25 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
       transition: 'all 0.2s ease-in-out',
       position: 'relative' as const,
     };
-
     // Add priority-based visual indicators
     const priorityIndicator = priority === 'critical' ? {
-      borderLeft: `4px solid ${colors.primary}`,
-      backgroundColor: `${colors.primary}15`, // 15% opacity
+      borderLeft: `4px solid ${colors.primary}`,}
+      backgroundColor: `${colors.primary}15`, // 15% opacity}
     } : priority === 'important' ? {
-      borderLeft: `3px solid ${colors.secondary}`,
-      backgroundColor: `${colors.secondary}10`, // 10% opacity
+      borderLeft: `3px solid ${colors.secondary}`,}
+      backgroundColor: `${colors.secondary}10`, // 10% opacity}
     } : {
-      borderLeft: `2px solid ${colors.border}`,
+      borderLeft: `2px solid ${colors.border}`,}
       backgroundColor: colors.background,
     };
-
     return {
       ...baseStyles,
       ...priorityIndicator,
-      border: `1px solid ${colors.border}`,
+      border: `1px solid ${colors.border}`,}
     };
   }, [colors, priority]);
-
   // Memoize header styles for performance
-  const headerStyles = React.useMemo(() => ({
+  const headerStyles = React.useMemo(() => ({)
     ...ComponentSizes.header,
     cursor: shouldAutoExpand ? 'default' : 'pointer',
     display: 'flex' as const,
@@ -120,21 +109,20 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
     justifyContent: 'space-between' as const,
     userSelect: 'none' as const,
     backgroundColor: colors.background,
-    borderBottom: effectivelyExpanded ? `1px solid ${colors.border}` : 'none',
+    borderBottom: effectivelyExpanded ? `1px solid ${colors.border}` : 'none',}
     transition: 'all 0.2s ease-in-out',
     ...typography,
     // Enhanced focus styles for accessibility
     ':focus': {
-      outline: `2px solid ${colors.primary}`,
+      outline: `2px solid ${colors.primary}`,}
       outlineOffset: 2,
     },
     ':hover': shouldAutoExpand ? {} : {
       backgroundColor: colors.accent,
       transform: 'translateY(-1px)',
-      boxShadow: `0 4px 12px ${colors.primary}20`,
+      boxShadow: `0 4px 12px ${colors.primary}20`,}
     }
   }), [colors, typography, shouldAutoExpand, effectivelyExpanded]);
-
   const getLevelIndicator = () => {
     switch (level) {
       case 'basic':
@@ -147,8 +135,7 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
         return '';
     }
   };
-
-  return (
+  return ()
     <div 
       style={sectionStyles} 
       className={className}
@@ -178,11 +165,11 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
           <span style={{ 
             color: colors.text, 
             fontWeight: typography.fontWeight,
-            fontSize: typography.fontSize 
+            fontSize: typography.fontSize ,
           }}>
             {title}
           </span>
-          {priority !== 'standard' && (
+          {priority !== 'standard' && ()
             <span 
               style={{
                 ...TypographyScale.micro,
@@ -199,7 +186,7 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
               {priority === 'critical' ? 'Required' : priority === 'important' ? 'Key' : priority}
             </span>
           )}
-          {description && (
+          {description && ()
             <span
               id={`section-desc-${title.replace(/\s+/g, '-').toLowerCase()}`}
               style={{
@@ -214,9 +201,8 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
             </span>
           )}
         </div>
-        
         <div style={{ display: 'flex', alignItems: 'center', gap: SpacingScale.xs }}>
-          {!shouldAutoExpand && (
+          {!shouldAutoExpand && ()
             <span
               style={{
                 fontSize: TypographyScale.caption.fontSize,
@@ -231,8 +217,7 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
           )}
         </div>
       </div>
-      
-      {effectivelyExpanded && (
+      {effectivelyExpanded && ()
         <div
           style={{
             ...ComponentSizes.section,
@@ -244,7 +229,6 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
           {children}
         </div>
       )}
-      
       {/* CSS Animation */}
       <style>{`
         @keyframes fadeIn {

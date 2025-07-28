@@ -5,7 +5,6 @@
  * dashboard, viewer, and service components for Epic 16 Marketplace
  * & Community learning system.
  */
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   LearningPath,
@@ -14,7 +13,6 @@ import {
 } from '../../services/Epic16LearningPathService';
 import { LearningPathDashboard } from './LearningPathDashboard';
 import { LearningPathViewer } from './LearningPathViewer';
-
 interface Epic16LearningPathsProps {
   userId: string;
   userRole: 'user' | 'creator' | 'admin';
@@ -23,7 +21,7 @@ interface Epic16LearningPathsProps {
   onCertification?: (certification: unknown) => void;
 }
 
-export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({
+export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({)
   userId,
   userRole,
   userTier,
@@ -32,77 +30,63 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({
 }) => {
   // Service initialization
   const learningService = useMemo(() => new Epic16LearningPathService(), []);
-  
   // State management
   const [currentView, setCurrentView] = useState<'dashboard' | 'viewer'>('dashboard');
   const [selectedPath, setSelectedPath] = useState<LearningPath | null>(null);
   const [userEnrollment, setUserEnrollment] = useState<UserEnrollment | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   // Initialize service with user context
   useEffect(() => {
     const initializeService = async () => {
       setLoading(true);
       setError(null);
-
       try {
         // Set up service event listeners for analytics and certifications
         learningService.on('certificateEarned', (certificate) => {
           onCertification?.(certificate);
         });
-
         learningService.on('analyticsUpdate', (analytics) => {
           onAnalytics?.(analytics);
         });
-
         learningService.on('pathCompleted', async (data) => {
           const { userId: completedUserId, pathId } = data;
           if (completedUserId === userId) {
             // Handle path completion
-            console.log(`Path ${pathId} completed by user ${userId}`);
+            console.log(`Path ${pathId} completed by user ${userId}`);}
           }
         });
-
         learningService.on('skillUnlocked', (skill) => {
           // Handle skill unlock notifications
           console.log('Skill unlocked:', skill);
         });
-
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to initialize learning service');
       } finally {
         setLoading(false);
       }
     };
-
     initializeService();
-
     // Cleanup event listeners
     return () => {
       learningService.removeAllListeners();
     };
   }, [learningService, userId, onAnalytics, onCertification]);
-
   // Handle path selection from dashboard
   const handlePathSelect = useCallback(async (path: LearningPath) => {
     setLoading(true);
     setError(null);
-
     try {
       setSelectedPath(path);
-
       // Get user's enrollment for this path
       const userPaths = await learningService.getUserPaths(userId);
       const enrollment = userPaths.find(e => e.pathId === path.id);
       setUserEnrollment(enrollment || null);
-
       // If not enrolled, auto-enroll for seamless experience
       if (!enrollment) {
         const newEnrollment = await learningService.enrollUser(userId, path.id);
         setUserEnrollment(newEnrollment);
       }
-
       setCurrentView('viewer');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load learning path');
@@ -110,20 +94,18 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({
       setLoading(false);
     }
   }, [learningService, userId]);
-
   // Handle progress updates
   const handleProgress = useCallback((progress: number) => {
     if (userEnrollment) {
-      setUserEnrollment({
+      setUserEnrollment({)
         ...userEnrollment,
-        progress: {
+        progress: {,
           ...userEnrollment.progress,
-          overallProgress: progress
+          overallProgress: progress,
         }
       });
     }
   }, [userEnrollment]);
-
   // Handle path completion
   const handlePathComplete = useCallback(() => {
     // Show completion celebration or navigate back to dashboard
@@ -131,17 +113,15 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({
     setSelectedPath(null);
     setUserEnrollment(null);
   }, []);
-
   // Handle back to dashboard
   const handleBackToDashboard = useCallback(() => {
     setCurrentView('dashboard');
     setSelectedPath(null);
     setUserEnrollment(null);
   }, []);
-
   // Render loading state
   if (loading && !selectedPath) {
-    return (
+    return ()
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -150,10 +130,9 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({
       </div>
     );
   }
-
   // Render error state
   if (error && !selectedPath) {
-    return (
+    return ()
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <div className="flex-shrink-0">
@@ -179,10 +158,9 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="epic16-learning-paths h-full">
-      {currentView === 'dashboard' && (
+      {currentView === 'dashboard' && ()
         <div className="h-full">
           {/* Breadcrumb */}
           <div className="bg-white border-b border-gray-200 px-6 py-2">
@@ -207,7 +185,6 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({
               </ol>
             </nav>
           </div>
-
           <LearningPathDashboard
             learningService={learningService}
             userId={userId}
@@ -216,8 +193,7 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({
           />
         </div>
       )}
-
-      {currentView === 'viewer' && selectedPath && (
+      {currentView === 'viewer' && selectedPath && ()
         <div className="h-full">
           {/* Navigation Bar */}
           <div className="bg-white border-b border-gray-200 px-6 py-3">
@@ -257,14 +233,12 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({
                   </li>
                 </ol>
               </nav>
-
               <div className="flex items-center space-x-3">
-                {userEnrollment && (
+                {userEnrollment && ()
                   <div className="text-sm text-gray-600">
                     Progress: {Math.round(userEnrollment.progress.overallProgress)}%
                   </div>
                 )}
-                
                 <button
                   onClick={handleBackToDashboard}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200"
@@ -274,7 +248,6 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({
               </div>
             </div>
           </div>
-
           <div className="h-full" style={{ height: 'calc(100% - 60px)' }}>
             <LearningPathViewer
               path={selectedPath}
@@ -287,9 +260,8 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({
           </div>
         </div>
       )}
-
       {/* Global Loading Overlay */}
-      {loading && selectedPath && (
+      {loading && selectedPath && ()
         <div className="fixed inset-0 bg-black bg-opacity-25 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 shadow-xl">
             <div className="flex items-center space-x-3">
@@ -299,9 +271,8 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({
           </div>
         </div>
       )}
-
       {/* Global Error Toast */}
-      {error && selectedPath && (
+      {error && selectedPath && ()
         <div className="fixed top-4 right-4 bg-red-50 border border-red-200 rounded-md p-4 shadow-lg z-50">
           <div className="flex">
             <div className="flex-shrink-0">

@@ -28,11 +28,9 @@ export interface CorrectionRule {
   createdAt: Date;
   updatedAt: Date;
 }
-
 interface CorrectionsState {
   rules: CorrectionRule[];
   isEnabled: boolean;
-  
   // Actions
   addRule: (rule: Omit<CorrectionRule, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateRule: (id: string, updates: Partial<CorrectionRule>) => void;
@@ -40,32 +38,29 @@ interface CorrectionsState {
   toggleRule: (id: string) => void;
   reorderRules: (fromIndex: number, toIndex: number) => void;
   clearAllRules: () => void;
-  
   // Application
   applyCorrections: (text: string) => string;
   getActiveRules: () => CorrectionRule[];
   getDraftRules: () => CorrectionRule[];
-  
   // Import/Export
-  exportRules: (
+  exportRules: (),
     format: 'json' | 'yaml' | 'csv',
     options?: ExportOptions
   ) => Promise<{ success: boolean; data?: Blob; error?: string; filename?: string }>;
-  importRules: (
+  importRules: (),
     content: string,
     filename: string,
     options?: ImportOptions
   ) => Promise<{ success: boolean; importedCount?: number; error?: string }>;
 }
 
-export const useCorrectionsStore = create<CorrectionsState>()(
-  devtools(
-    persist(
-      (set, get) => ({
+export const useCorrectionsStore = create<CorrectionsState>()()
+  devtools()
+    persist()
+      (set, get) => ({)
         // Initial state
         rules: [],
         isEnabled: true,
-        
         // Actions
         addRule: (rule: Omit<CorrectionRule, 'id' | 'createdAt' | 'updatedAt'>) => {
           const newRule: CorrectionRule = {
@@ -74,14 +69,12 @@ export const useCorrectionsStore = create<CorrectionsState>()(
             createdAt: new Date(),
             updatedAt: new Date()
           };
-          
-          set((state) => ({
+          set((state) => ({)
             rules: [...state.rules, newRule].sort((a, b) => a.priority - b.priority)
           }));
         },
-        
         updateRule: (id: string, updates: Partial<CorrectionRule>) => {
-          set((state) => ({
+          set((state) => ({)
             rules: state.rules.map((rule) =>
               rule.id === id
                 ? { ...rule, ...updates, updatedAt: new Date() }
@@ -89,15 +82,13 @@ export const useCorrectionsStore = create<CorrectionsState>()(
             )
           }));
         },
-        
         deleteRule: (id: string) => {
-          set((state) => ({
+          set((state) => ({)
             rules: state.rules.filter((rule) => rule.id !== id)
           }));
         },
-        
         toggleRule: (id: string) => {
-          set((state) => ({
+          set((state) => ({)
             rules: state.rules.map((rule) =>
               rule.id === id
                 ? { ...rule, isActive: !rule.isActive, updatedAt: new Date() }
@@ -105,16 +96,14 @@ export const useCorrectionsStore = create<CorrectionsState>()(
             )
           }));
         },
-        
         reorderRules: (fromIndex: number, toIndex: number) => {
           set((state) => {
             const newRules = [...state.rules];
             const [movedRule] = newRules.splice(fromIndex, 1);
             newRules.splice(toIndex, 0, movedRule);
-            
             // Update priorities to match new order
             return {
-              rules: newRules.map((rule, index) => ({
+              rules: newRules.map((rule, index) => ({)
                 ...rule,
                 priority: index,
                 updatedAt: new Date()
@@ -122,21 +111,16 @@ export const useCorrectionsStore = create<CorrectionsState>()(
             };
           });
         },
-        
         clearAllRules: () => {
           set({ rules: [] });
         },
-        
         applyCorrections: (text: string) => {
           const { rules } = get();
-          
           // Check if corrections are enabled dynamically
-          const isEnabled = process.env.NODE_ENV === 'development' || 
+          const isEnabled = process.env.NODE_ENV === 'development' || ;
                            process.env.REACT_APP_ENABLE_CORRECTIONS === 'true' ||
                            process.env.ENABLE_CORRECTIONS === 'true';
-          
           if (!isEnabled) return text;
-          
           return rules
             .filter((rule) => rule.isActive)
             .sort((a, b) => a.priority - b.priority)
@@ -149,26 +133,23 @@ export const useCorrectionsStore = create<CorrectionsState>()(
                   return currentText.replace(new RegExp(escapeRegExp(rule.findPattern), 'g'), rule.replaceWith);
                 }
               } catch (error) {
-                console.warn(`Error applying correction rule "${rule.name}":`, error);
+                console.warn(`Error applying correction rule "${rule.name}":`, error);}
                 return currentText;
               }
             }, text);
         },
-        
         getActiveRules: () => {
           const { rules } = get();
           return rules.filter((rule) => rule.isActive).sort((a, b) => a.priority - b.priority);
         },
-        
         getDraftRules: () => {
           const { rules } = get();
           return rules.filter((rule) => !rule.isActive);
         },
-        
         exportRules: async (format: 'json' | 'yaml' | 'csv', options: ExportOptions = {}) => {
           try {
             // Prepare query parameters
-            const params = new URLSearchParams({
+            const params = new URLSearchParams({)
               format,
               ...(options.name && { name: options.name }),
               ...(options.description && { description: options.description }),
@@ -176,9 +157,7 @@ export const useCorrectionsStore = create<CorrectionsState>()(
               ...(options.includeStatistics && { includeStatistics: 'true' }),
               ...(options.ruleIds && { ruleIds: options.ruleIds.join(',') })
             });
-            
-            const response = await fetch(`/api/corrections/export?${params}`);
-            
+            const response = await fetch(`/api/corrections/export?${params}`);}
             if (!response.ok) {
               const errorData = await response.json();
               return { 
@@ -186,20 +165,16 @@ export const useCorrectionsStore = create<CorrectionsState>()(
                 error: errorData.error || 'Export failed' 
               };
             }
-            
             // Get filename from Content-Disposition header
             const contentDisposition = response.headers.get('Content-Disposition');
-            const filenameMatch = contentDisposition?.match(/filename="(.+)"/);  
-            const filename = filenameMatch?.[1] || `corrections-export.${format}`;
-            
+            const filenameMatch = contentDisposition?.match(/filename="(.+)"/);  ;
+            const filename = filenameMatch?.[1] || `corrections-export.${format}`;}
             const blob = await response.blob();
-            
             return {
               success: true,
               data: blob,
               filename
             };
-            
           } catch (error) {
             console.error('Export error:', error);
             return {
@@ -208,15 +183,14 @@ export const useCorrectionsStore = create<CorrectionsState>()(
             };
           }
         },
-        
         importRules: async (content: string, filename: string, options: ImportOptions = {}) => {
           try {
-            const response = await fetch('/api/corrections/import', {
+            const response = await fetch('/api/corrections/import', {)
               method: 'POST',
-              headers: {
+              headers: {,
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({
+              body: JSON.stringify({),
                 filename,
                 content,
                 overwrite: options.overwrite || false,
@@ -224,23 +198,19 @@ export const useCorrectionsStore = create<CorrectionsState>()(
                 skipDuplicates: options.skipDuplicates !== false // default true
               })
             });
-            
             const result = await response.json();
-            
             if (!result.success) {
               return {
                 success: false,
                 error: result.error || result.errors?.join(', ') || 'Import failed'
               };
             }
-            
             // Refresh rules from server after successful import
             // For now, just return success - real integration would sync with server
             return {
               success: true,
               importedCount: result.importedCount || 0
             };
-            
           } catch (error) {
             console.error('Import error:', error);
             return {
@@ -253,18 +223,18 @@ export const useCorrectionsStore = create<CorrectionsState>()(
       {
         name: 'corrections-store',
         // Only persist if corrections are enabled
-        skipHydration: !process.env.ENABLE_CORRECTIONS
+        skipHydration: !process.env.ENABLE_CORRECTIONS,
       }
     ),
     {
-      name: 'corrections-store'
+      name: 'corrections-store',
     }
   )
 );
 
 // Helper function to escape special regex characters
 function escapeRegExp(string: string): string {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');}
 }
 
 // Hook to check if corrections feature is enabled
@@ -281,7 +251,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     replaceWith: ' ',
     isRegex: true,
     isActive: true,
-    priority: 1
+    priority: 1,
   },
   {
     name: 'Fix trailing spaces',
@@ -290,6 +260,6 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     replaceWith: '',
     isRegex: true,
     isActive: true,
-    priority: 2
+    priority: 2,
   }
 ];

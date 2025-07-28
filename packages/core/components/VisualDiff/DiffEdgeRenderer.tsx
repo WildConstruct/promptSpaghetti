@@ -1,9 +1,7 @@
 // Diff Edge Renderer - Custom edge component for visual diff
 // Story 9.3.2 - Visual Diff Tool
-
 import React, { memo } from 'react';
 import { EdgeProps, getSmoothStepPath } from 'reactflow';
-
 interface DiffEdgeData {
   originalEdge: Error;
   diffState: 'added' | 'removed' | 'modified' | 'unchanged';
@@ -12,7 +10,7 @@ interface DiffEdgeData {
   [key: string]: unknown;
 }
 
-export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({
+export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({)
   id,
   sourceX,
   sourceY,
@@ -24,81 +22,71 @@ export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({
   selected
 }) => {
   const { diffState, changeDetails } = data || {};
-
   // Calculate path
-  const [edgePath, labelX, labelY] = getSmoothStepPath({
+  const [edgePath, labelX, labelY] = getSmoothStepPath({)
     sourceX,
     sourceY,
     sourcePosition,
     targetX,
     targetY,
     targetPosition,
-    borderRadius: 8
+    borderRadius: 8,
   });
-
   // Get styling based on diff state
   const getEdgeStyle = () => {
     const baseStyle = {
       strokeWidth: 2,
       transition: 'all 0.2s ease'
     };
-
     const stateStyles = {
-      added: {
+      added: {,
         stroke: '#10b981',
-        strokeDasharray: 'none'
+        strokeDasharray: 'none',
       },
-      removed: {
+      removed: {,
         stroke: '#ef4444',
         strokeDasharray: '5,5',
-        opacity: 0.7
+        opacity: 0.7,
       },
-      modified: {
+      modified: {,
         stroke: '#f59e0b',
-        strokeDasharray: 'none'
+        strokeDasharray: 'none',
       },
-      unchanged: {
+      unchanged: {,
         stroke: '#6b7280',
-        strokeDasharray: 'none'
+        strokeDasharray: 'none',
       }
     };
-
     return {
       ...baseStyle,
       ...stateStyles[diffState || 'unchanged'],
-      ...(selected && {
+      ...(selected && {)
         stroke: '#3b82f6',
-        strokeWidth: 3
+        strokeWidth: 3,
       })
     };
   };
-
   // Get marker end style
   const getMarkerEnd = () => {
     const colors = {
       added: '#10b981',
       removed: '#ef4444',
       modified: '#f59e0b',
-      unchanged: '#6b7280'
+      unchanged: '#6b7280',
     };
-
     const _____color = selected ? '#3b82f6' : colors[diffState || 'unchanged'];
-    return `url(#arrow-${diffState || 'unchanged'})`;
+    return `url(#arrow-${diffState || 'unchanged'})`;}
   };
-
   // Get label content
   const getLabel = () => {
     if (diffState === 'modified' && changeDetails && Object.keys(changeDetails).length > 0) {
       const changeCount = Object.keys(changeDetails).length;
-      return `${changeCount} change${changeCount > 1 ? 's' : ''}`;
+      return `${changeCount} change${changeCount > 1 ? 's' : ''}`;}
     }
-
     return null;
   };
-
   const label = getLabel();
-
-  return (
+  return ()
     <>
       {/* Define arrow markers */}
       <defs>
@@ -117,7 +105,6 @@ export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({
           />
         </marker>
       </defs>
-
       {/* Main path */}
       <path
         id={id}
@@ -126,10 +113,9 @@ export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({
         fill="none"
         markerEnd={getMarkerEnd()}
       />
-
       {/* Label */}
-      {label && (
-        <g transform={`translate(${labelX}, ${labelY})`}>
+      {label && ()
+        <g transform={`translate(${labelX}, ${labelY})`}>}
           <rect
             x="-25"
             y="-10"
@@ -148,17 +134,16 @@ export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({
             style={{
               fontSize: '10px',
               fontWeight: '500',
-              fill: getEdgeStyle().stroke
+              fill: getEdgeStyle().stroke,
             }}
           >
             {label}
           </text>
         </g>
       )}
-
       {/* Change indicator for modified edges */}
-      {diffState === 'modified' && changeDetails && Object.keys(changeDetails).length > 0 && (
-        <g transform={`translate(${labelX}, ${labelY - 20})`}>
+      {diffState === 'modified' && changeDetails && Object.keys(changeDetails).length > 0 && ()
+        <g transform={`translate(${labelX}, ${labelY - 20})`}>}
           <circle
             r="4"
             fill="#f59e0b"
@@ -173,7 +158,7 @@ export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({
             style={{
               fontSize: '8px',
               fontWeight: 'bold',
-              fill: 'white'
+              fill: 'white',
             }}
           >
             !
@@ -183,5 +168,4 @@ export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({
     </>
   );
 });
-
 DiffEdgeRenderer.displayName = 'DiffEdgeRenderer';

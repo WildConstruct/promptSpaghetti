@@ -12,7 +12,7 @@ export interface ReviewItem {
     description?: string;
     status: 'pending' | 'under_review' | 'approved' | 'rejected' | 'changes_requested';
     priority: 'low' | 'medium' | 'high' | 'urgent';
-    submitter: {
+    submitter: {,
         id: string;
         name: string;
         email: string;

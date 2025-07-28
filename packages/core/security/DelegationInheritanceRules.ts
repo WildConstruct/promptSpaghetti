@@ -10,7 +10,6 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  * Task: T-1752989143998-6 - Define delegation and inheritance rules
  */
-
 import { 
   DataClassificationRole,
   RoleConstraint,
@@ -97,7 +96,6 @@ export interface RiskFactor {
   description: string;
   mitigationStatus: 'NONE' | 'PARTIAL' | 'COMPLETE';
 }
-
 /**
  * Role Inheritance Framework
  */
@@ -593,7 +591,6 @@ export interface TestCase {
   lastRun: Date;
   result: 'PASS' | 'FAIL' | 'PENDING' | 'SKIPPED';
 }
-
 /**
  * Delegation and Inheritance Engine
  */
@@ -602,53 +599,48 @@ export class DelegationInheritanceEngine {
   private inheritanceFramework: InheritanceFramework;
   private validationEngine: ValidationEngine;
   private auditLogger: AuditLogger;
-
   constructor(framework: InheritanceFramework) {
     this.inheritanceFramework = framework;
     this.validationEngine = new ValidationEngine();
     this.auditLogger = new AuditLogger();
   }
-
   /**
    * Apply inheritance rules to determine effective permissions
    */
-  public async applyInheritance(
+  public async applyInheritance()
     userId: string,
     baseRoles: string[],
-    context: OperationContext
+    context: OperationContext,
   ): Promise<EffectivePermissions> {
     // Implementation would go here
     throw new Error('Method not implemented');
   }
-
   /**
    * Process delegation request
    */
-  public async processDelegation(
-    delegationRequest: DelegationRequest
+  public async processDelegation()
+    delegationRequest: DelegationRequest,
   ): Promise<DelegationResult> {
     // Implementation would go here
     throw new Error('Method not implemented');
   }
-
   /**
    * Validate inheritance chain for conflicts
    */
-  public async validateInheritance(
+  public async validateInheritance()
     userId: string,
-    roleChain: string[]
+    roleChain: string[],
   ): Promise<ValidationResult> {
     // Implementation would go here
     throw new Error('Method not implemented');
   }
-
   /**
    * Revoke delegated permissions
    */
-  public async revokeDelegation(
+  public async revokeDelegation()
     delegationId: string,
     reason: string,
-    revokedBy: string
+    revokedBy: string,
   ): Promise<RevocationResult> {
     // Implementation would go here
     throw new Error('Method not implemented');
@@ -762,19 +754,15 @@ class ValidationEngine {
   public async validateRoleAssignment(assignment: UserRoleAssignment): Promise<ValidationResult> {
     throw new Error('Method not implemented');
   }
-
   public async detectConflicts(roles: string[]): Promise<ConflictDetail[]> {
     throw new Error('Method not implemented');
   }
 }
-
 class AuditLogger {
   public async logDelegation(delegation: DelegationRule): Promise<void> {
     throw new Error('Method not implemented');
   }
-
   public async logInheritance(inheritance: InheritanceRule): Promise<void> {
     throw new Error('Method not implemented');
   }
 }
-

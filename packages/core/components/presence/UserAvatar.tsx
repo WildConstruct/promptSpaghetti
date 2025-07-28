@@ -12,7 +12,7 @@ export interface UserAvatarProps {
   className?: string;
 }
 
-export const UserAvatar: React.FC<UserAvatarProps> = ({
+export const UserAvatar: React.FC<UserAvatarProps> = ({)
   userId,
   userName,
   userAvatar,
@@ -28,20 +28,17 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
     medium: 'w-8 h-8 text-sm',
     large: 'w-12 h-12 text-base'
   };
-
   const statusColors = {
     active: 'bg-green-500',
     idle: 'bg-yellow-500',
     away: 'bg-orange-500',
-    offline: 'bg-gray-400'
+    offline: 'bg-gray-400',
   };
-
   const statusSizes = {
     small: 'w-2 h-2',
     medium: 'w-2.5 h-2.5',
     large: 'w-3 h-3'
   };
-
   const getInitials = (name?: string): string => {
     if (!name) return userId.slice(0, 2).toUpperCase();
     return name
@@ -51,9 +48,8 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
       .slice(0, 2)
       .toUpperCase();
   };
-
   const getBackgroundColor = (id: string): string => {
-    const colors = [
+    const colors = [;
       'bg-red-500',
       'bg-blue-500',
       'bg-green-500',
@@ -63,40 +59,35 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
       'bg-indigo-500',
       'bg-teal-500'
     ];
-    
     const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return colors[hash % colors.length];
   };
-
   const handleClick = () => {
     if (onClick) {
       onClick(userId);
     }
   };
-
-  const avatarContent = userAvatar ? (
+  const avatarContent = userAvatar ? (;)
     <img
       src={userAvatar}
       alt={userName || userId}
       className={`${sizeClasses[size]} rounded-full object-cover`}
     />
-  ) : (
+  ) : ()
     <div
       className={`${sizeClasses[size]} rounded-full flex items-center justify-center text-white font-medium ${getBackgroundColor(userId)}`}
     >
       {getInitials(userName)}
     </div>
   );
-
-  return (
+  return ()
     <div 
       className={`relative inline-block ${onClick ? 'cursor-pointer' : ''} ${className}`}
       onClick={handleClick}
       title={showTooltip ? `${userName || userId} (${status})` : undefined}
     >
       {avatarContent}
-      
-      {showStatus && (
+      {showStatus && ()
         <div
           className={`absolute -bottom-0.5 -right-0.5 ${statusSizes[size]} ${statusColors[status]} rounded-full border-2 border-white`}
         />
@@ -106,7 +97,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
 };
 
 export interface UserAvatarListProps {
-  users: Array<{
+  users: Array<{,
     userId: string;
     userName?: string;
     userAvatar?: string;
@@ -119,7 +110,7 @@ export interface UserAvatarListProps {
   className?: string;
 }
 
-export const UserAvatarList: React.FC<UserAvatarListProps> = ({
+export const UserAvatarList: React.FC<UserAvatarListProps> = ({)
   users,
   maxVisible = 5,
   size = 'medium',
@@ -129,22 +120,19 @@ export const UserAvatarList: React.FC<UserAvatarListProps> = ({
 }) => {
   const visibleUsers = users.slice(0, maxVisible);
   const overflowCount = users.length - maxVisible;
-
   const sizeClasses = {
     small: 'w-6 h-6 text-xs -ml-1',
     medium: 'w-8 h-8 text-sm -ml-2',
     large: 'w-12 h-12 text-base -ml-3'
   };
-
   const overflowSizeClasses = {
     small: 'w-6 h-6 text-xs',
     medium: 'w-8 h-8 text-sm',
     large: 'w-12 h-12 text-base'
   };
-
-  return (
-    <div className={`flex items-center ${className}`}>
-      {visibleUsers.map((user, index) => (
+  return ()
+    <div className={`flex items-center ${className}`}>}
+      {visibleUsers.map((user, index) => ()
         <div
           key={user.userId}
           className={index > 0 ? sizeClasses[size] : ''}
@@ -160,8 +148,7 @@ export const UserAvatarList: React.FC<UserAvatarListProps> = ({
           />
         </div>
       ))}
-      
-      {showOverflow && overflowCount > 0 && (
+      {showOverflow && overflowCount > 0 && ()
         <div
           className={`${overflowSizeClasses[size]} ${sizeClasses[size]} bg-gray-300 rounded-full flex items-center justify-center text-gray-600 font-medium border-2 border-white`}
           style={{ zIndex: 0 }}

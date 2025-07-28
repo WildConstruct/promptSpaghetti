@@ -30,7 +30,7 @@ export interface PresencePanelProps {
   className?: string;
 }
 
-export const PresencePanel: React.FC<PresencePanelProps> = ({
+export const PresencePanel: React.FC<PresencePanelProps> = ({)
   users,
   currentUserId,
   onUserClick,
@@ -42,57 +42,51 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({
   className = ''
 }) => {
   const [expanded, setExpanded] = useState(false);
-
   const activeUsers = users.filter(user => user.status === 'active');
   const idleUsers = users.filter(user => user.status === 'idle');
   const awayUsers = users.filter(user => user.status === 'away');
   const typingUsers = users.filter(user => user.isTyping);
-
   const formatLastSeen = (timestamp: number): string => {
     const now = Date.now();
     const diff = now - timestamp;
-    
     if (diff < 60000) { // Less than 1 minute
       return 'Just now';
     } else if (diff < 3600000) { // Less than 1 hour
       const minutes = Math.floor(diff / 60000);
-      return `${minutes}m ago`;
+      return `${minutes}m ago`;}
     } else if (diff < 86400000) { // Less than 1 day
       const hours = Math.floor(diff / 3600000);
-      return `${hours}h ago`;
+      return `${hours}h ago`;}
     } else {
       const days = Math.floor(diff / 86400000);
-      return `${days}d ago`;
+      return `${days}d ago`;}
     }
   };
-
   const getActivityText = (user: PresenceUser): string => {
     if (user.isTyping) {
       return 'Typing...';
     }
     if (user.currentTool) {
-      return `Using ${user.currentTool}`;
+      return `Using ${user.currentTool}`;}
     }
     if (user.focusedNodeId) {
       return 'Editing node';
     }
     if (user.selection && user.selection.length > 0) {
-      return `Selected ${user.selection.length} item${user.selection.length > 1 ? 's' : ''}`;
+      return `Selected ${user.selection.length} item${user.selection.length > 1 ? 's' : ''}`;}
     }
     return 'Viewing';
   };
-
   if (!showDetailedView) {
     // Compact view - just avatars
-    return (
-      <div className={`flex items-center space-x-2 ${className}`}>
+    return ()
+      <div className={`flex items-center space-x-2 ${className}`}>}
         <UserAvatarList
           users={users}
           maxVisible={maxAvatars}
           onUserClick={onUserClick}
         />
-        
-        {typingUsers.length > 0 && (
+        {typingUsers.length > 0 && ()
           <div className="flex items-center space-x-1 text-xs text-gray-500">
             <div className="flex space-x-1">
               <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" />
@@ -105,10 +99,9 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({
       </div>
     );
   }
-
   // Detailed view - expandable panel
-  return (
-    <div className={`bg-white rounded-lg shadow-lg border ${className}`}>
+  return ()
+    <div className={`bg-white rounded-lg shadow-lg border ${className}`}>}
       {/* Header */}
       <div 
         className="flex items-center justify-between p-3 border-b cursor-pointer hover:bg-gray-50"
@@ -125,9 +118,8 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({
             showOverflow={false}
           />
         </div>
-        
         <div className="flex items-center space-x-2">
-          {typingUsers.length > 0 && (
+          {typingUsers.length > 0 && ()
             <div className="flex items-center space-x-1 text-xs text-gray-500">
               <div className="flex space-x-1">
                 <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" />
@@ -137,7 +129,6 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({
               <span>{typingUsers.length}</span>
             </div>
           )}
-          
           <svg
             className={`w-4 h-4 text-gray-400 transition-transform ${expanded ? 'rotate-180' : ''}`}
             fill="none"
@@ -148,18 +139,17 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({
           </svg>
         </div>
       </div>
-
       {/* Expanded content */}
-      {expanded && (
+      {expanded && ()
         <div className="p-3 space-y-3">
           {/* Active users */}
-          {activeUsers.length > 0 && (
+          {activeUsers.length > 0 && ()
             <div>
               <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
                 Active ({activeUsers.length})
               </h4>
               <div className="space-y-2">
-                {activeUsers.map(user => (
+                {activeUsers.map(user => ()
                   <UserPresenceItem
                     key={user.userId}
                     user={user}
@@ -175,15 +165,14 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({
               </div>
             </div>
           )}
-
           {/* Idle/Away users */}
-          {(idleUsers.length > 0 || awayUsers.length > 0) && (
+          {(idleUsers.length > 0 || awayUsers.length > 0) && ()
             <div>
               <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
                 Away ({idleUsers.length + awayUsers.length})
               </h4>
               <div className="space-y-2">
-                {[...idleUsers, ...awayUsers].map(user => (
+                {[...idleUsers, ...awayUsers].map(user => ()
                   <UserPresenceItem
                     key={user.userId}
                     user={user}
@@ -199,9 +188,8 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({
               </div>
             </div>
           )}
-
           {/* Following indicator */}
-          {followingUserId && (
+          {followingUserId && ()
             <div className="pt-2 border-t">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600">
@@ -221,7 +209,6 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({
     </div>
   );
 };
-
 interface UserPresenceItemProps {
   user: PresenceUser;
   isCurrentUser: boolean;
@@ -232,8 +219,7 @@ interface UserPresenceItemProps {
   formatLastSeen: (timestamp: number) => string;
   getActivityText: (user: PresenceUser) => string;
 }
-
-const UserPresenceItem: React.FC<UserPresenceItemProps> = ({
+const UserPresenceItem: React.FC<UserPresenceItemProps> = ({)
   user,
   isCurrentUser,
   isFollowing,
@@ -248,7 +234,6 @@ const UserPresenceItem: React.FC<UserPresenceItemProps> = ({
       onUserClick(user.userId);
     }
   };
-
   const handleFollowClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isFollowing && onUnfollowUser) {
@@ -257,8 +242,7 @@ const UserPresenceItem: React.FC<UserPresenceItemProps> = ({
       onFollowUser(user.userId);
     }
   };
-
-  return (
+  return ()
     <div
       className={`flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 ${
         !isCurrentUser && onUserClick ? 'cursor-pointer' : ''
@@ -273,16 +257,15 @@ const UserPresenceItem: React.FC<UserPresenceItemProps> = ({
           status={user.status}
           size="medium"
         />
-        
         <div className="min-w-0 flex-1">
           <div className="flex items-center space-x-2">
             <span className="font-medium text-gray-900 truncate">
               {user.userName || user.userId}
-              {isCurrentUser && (
+              {isCurrentUser && ()
                 <span className="ml-2 text-xs text-gray-500">(You)</span>
               )}
             </span>
-            {user.isTyping && (
+            {user.isTyping && ()
               <div className="flex space-x-1">
                 <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" />
                 <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
@@ -290,7 +273,6 @@ const UserPresenceItem: React.FC<UserPresenceItemProps> = ({
               </div>
             )}
           </div>
-          
           <div className="flex items-center space-x-2 text-xs text-gray-500">
             <span>{getActivityText(user)}</span>
             <span>•</span>
@@ -298,8 +280,7 @@ const UserPresenceItem: React.FC<UserPresenceItemProps> = ({
           </div>
         </div>
       </div>
-
-      {!isCurrentUser && (onFollowUser || onUnfollowUser) && (
+      {!isCurrentUser && (onFollowUser || onUnfollowUser) && ()
         <button
           onClick={handleFollowClick}
           className={`px-2 py-1 text-xs font-medium rounded ${

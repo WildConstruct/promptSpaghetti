@@ -8,7 +8,6 @@
  * - Responsive design with mobile-first approach
  * - Integration with authorization system for permission-based navigation
  */
-
 import React, { useState, useMemo, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -34,7 +33,6 @@ import {
   HelpCircle,
   Zap
 } from 'lucide-react';
-
 import { useEpic17Authorization } from '../../../client/src/hooks/useEpic17Authorization';
 
 // Navigation configuration interfaces
@@ -50,7 +48,7 @@ export interface NavigationItem {
     actions: string[];
   }[];
   badge?: NavigationBadge;
-  metadata: {
+  metadata: {,
     category: string;
     priority: number;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -118,7 +116,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
     description: 'System overview and dashboard',
     icon: Home,
     path: '/admin',
-    metadata: {
+    metadata: {,
       category: 'dashboard',
       priority: 100,
       riskLevel: 'low',
@@ -131,7 +129,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
     description: 'Feature toggles and rollout controls',
     icon: ToggleLeft,
     path: '/admin/features',
-    children: [
+    children: [,
       {
         id: 'feature-toggles',
         label: 'Feature Toggles',
@@ -139,7 +137,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         icon: ToggleLeft,
         path: '/admin/features/toggles',
         badge: { type: 'count', value: 12, color: 'blue' },
-        metadata: {
+        metadata: {,
           category: 'feature_toggles',
           priority: 90,
           riskLevel: 'high',
@@ -153,7 +151,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         description: 'Manage toggle dependencies and conflicts',
         icon: Zap,
         path: '/admin/features/dependencies',
-        metadata: {
+        metadata: {,
           category: 'dependencies',
           priority: 85,
           riskLevel: 'high',
@@ -166,7 +164,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         description: 'Advanced targeting and conditions',
         icon: Settings,
         path: '/admin/features/conditions',
-        metadata: {
+        metadata: {,
           category: 'conditions',
           priority: 80,
           riskLevel: 'medium',
@@ -174,7 +172,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         }
       }
     ],
-    metadata: {
+    metadata: {,
       category: 'feature_management',
       priority: 95,
       riskLevel: 'high',
@@ -188,7 +186,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
     description: 'User accounts and permissions',
     icon: Users,
     path: '/admin/users',
-    children: [
+    children: [,
       {
         id: 'user-accounts',
         label: 'User Accounts',
@@ -196,7 +194,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         icon: Users,
         path: '/admin/users/accounts',
         badge: { type: 'count', value: 1247, color: 'green' },
-        metadata: {
+        metadata: {,
           category: 'user_accounts',
           priority: 80,
           riskLevel: 'critical',
@@ -210,7 +208,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         icon: Shield,
         path: '/admin/users/permissions',
         badge: { type: 'alert', value: '!', color: 'yellow', pulse: true },
-        metadata: {
+        metadata: {,
           category: 'permissions',
           priority: 85,
           riskLevel: 'critical',
@@ -223,7 +221,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         description: 'User activity and behavior tracking',
         icon: BarChart3,
         path: '/admin/users/activity',
-        metadata: {
+        metadata: {,
           category: 'monitoring',
           priority: 70,
           riskLevel: 'medium',
@@ -231,7 +229,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         }
       }
     ],
-    metadata: {
+    metadata: {,
       category: 'user_management',
       priority: 90,
       riskLevel: 'critical',
@@ -245,7 +243,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
     description: 'Content moderation and publishing',
     icon: FileText,
     path: '/admin/content',
-    children: [
+    children: [,
       {
         id: 'content-review',
         label: 'Content Review',
@@ -253,7 +251,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         icon: FileText,
         path: '/admin/content/review',
         badge: { type: 'count', value: 23, color: 'red', pulse: true },
-        metadata: {
+        metadata: {,
           category: 'content_review',
           priority: 75,
           riskLevel: 'medium',
@@ -266,7 +264,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         description: 'Manage content categories and tags',
         icon: Settings,
         path: '/admin/content/categories',
-        metadata: {
+        metadata: {,
           category: 'categories',
           priority: 60,
           riskLevel: 'low',
@@ -274,7 +272,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         }
       }
     ],
-    metadata: {
+    metadata: {,
       category: 'content_management',
       priority: 75,
       riskLevel: 'medium',
@@ -288,7 +286,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
     description: 'Marketplace management and transactions',
     icon: ShoppingCart,
     path: '/admin/marketplace',
-    children: [
+    children: [,
       {
         id: 'template-review',
         label: 'Template Review',
@@ -296,7 +294,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         icon: FileText,
         path: '/admin/marketplace/review',
         badge: { type: 'count', value: 8, color: 'purple' },
-        metadata: {
+        metadata: {,
           category: 'template_review',
           priority: 70,
           riskLevel: 'medium',
@@ -309,7 +307,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         description: 'Monitor transactions and payments',
         icon: BarChart3,
         path: '/admin/marketplace/transactions',
-        metadata: {
+        metadata: {,
           category: 'transactions',
           priority: 65,
           riskLevel: 'high',
@@ -317,7 +315,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         }
       }
     ],
-    metadata: {
+    metadata: {,
       category: 'marketplace',
       priority: 70,
       riskLevel: 'medium',
@@ -331,14 +329,14 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
     description: 'System settings and configuration',
     icon: Settings,
     path: '/admin/system',
-    children: [
+    children: [,
       {
         id: 'api-management',
         label: 'API Management',
         description: 'Manage API keys and rate limits',
         icon: Key,
         path: '/admin/system/api',
-        metadata: {
+        metadata: {,
           category: 'api_management',
           priority: 60,
           riskLevel: 'high',
@@ -351,7 +349,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         description: 'Third-party integrations and webhooks',
         icon: Zap,
         path: '/admin/system/integrations',
-        metadata: {
+        metadata: {,
           category: 'integrations',
           priority: 55,
           riskLevel: 'medium',
@@ -359,7 +357,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         }
       }
     ],
-    metadata: {
+    metadata: {,
       category: 'system_configuration',
       priority: 65,
       riskLevel: 'high',
@@ -373,14 +371,14 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
     description: 'System analytics and performance monitoring',
     icon: BarChart3,
     path: '/admin/analytics',
-    children: [
+    children: [,
       {
         id: 'dashboards',
         label: 'Dashboards',
         description: 'System health and performance dashboards',
         icon: BarChart3,
         path: '/admin/analytics/dashboards',
-        metadata: {
+        metadata: {,
           category: 'dashboards',
           priority: 50,
           riskLevel: 'low',
@@ -394,7 +392,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         icon: Bell,
         path: '/admin/analytics/alerts',
         badge: { type: 'status', value: 'OK', color: 'green' },
-        metadata: {
+        metadata: {,
           category: 'alerts',
           priority: 65,
           riskLevel: 'medium',
@@ -402,7 +400,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         }
       }
     ],
-    metadata: {
+    metadata: {,
       category: 'analytics',
       priority: 60,
       riskLevel: 'low',
@@ -417,7 +415,7 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
     icon: ScrollText,
     path: '/admin/audit',
     badge: { type: 'info', value: 'New', color: 'blue' },
-    metadata: {
+    metadata: {,
       category: 'audit_security',
       priority: 85,
       riskLevel: 'critical',
@@ -425,7 +423,6 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
     }
   }
 ];
-
 interface Epic17NavigationSystemProps {
   currentSection?: string;
   onSectionChange?: (section: string) => void;
@@ -435,7 +432,7 @@ interface Epic17NavigationSystemProps {
   enableSearch?: boolean;
 }
 
-export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
+export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   currentSection = 'overview',
   onSectionChange,
   variant = 'sidebar',
@@ -446,37 +443,32 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
   const location = useLocation();
   const navigate = useNavigate();
   const { canAccess, userRoles, availableSections } = useEpic17Authorization();
-
   // Navigation state
-  const [state, setState] = useState<NavigationState>({
+  const [state, setState] = useState<NavigationState>({)
     expandedSections: new Set(['feature-management', 'user-management']),
     pinnedItems: new Set(['feature-toggles', 'user-accounts']),
     recentItems: [],
     favoriteItems: new Set(['feature-toggles', 'permissions']),
     searchQuery: '',
-    mobileMenuOpen: false
+    mobileMenuOpen: false,
   });
-
   // Filter navigation items based on permissions
   const availableNavItems = useMemo(() => {
     const filterItems = (items: NavigationItem[]): NavigationItem[] => {
-      return items.filter(item => {
+      return items.filter(item => {)
         // For now, return all items - in full implementation would check permissions
         return true;
-      }).map(item => ({
+      }).map(item => ({)
         ...item,
         children: item.children ? filterItems(item.children) : undefined
       }));
     };
-
     return filterItems(EPIC17_NAVIGATION);
   }, [canAccess]);
-
   // Generate navigation context
   const navigationContext: NavigationContext = useMemo(() => {
     const pathSegments = location.pathname.split('/').filter(Boolean);
     const currentPath = location.pathname;
-    
     // Find current item
     const findCurrentItem = (items: NavigationItem[], segments: string[]): NavigationItem | null => {
       for (const item of items) {
@@ -488,42 +480,36 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
       }
       return null;
     };
-
     const currentItem = findCurrentItem(availableNavItems, pathSegments);
-    
     // Generate breadcrumbs
     const breadcrumbs: BreadcrumbItem[] = [
       { label: 'Admin', path: '/admin', icon: Shield, active: false }
     ];
-
     if (currentItem) {
       // Add parent breadcrumbs
       const parentPath = currentItem.path.split('/').slice(0, -1).join('/');
       if (parentPath !== '/admin') {
-        breadcrumbs.push({
+        breadcrumbs.push({)
           label: 'Section',
           path: parentPath,
-          active: false
+          active: false,
         });
       }
-
-      breadcrumbs.push({
+      breadcrumbs.push({)
         label: currentItem.label,
         path: currentItem.path,
         icon: currentItem.icon,
-        active: true
+        active: true,
       });
     }
-
     return {
       currentPath,
       currentSection: currentItem?.id || 'overview',
       parentSections: [],
       breadcrumbs,
-      availableActions: generateQuickActions(currentItem)
+      availableActions: generateQuickActions(currentItem),
     };
   }, [location.pathname, availableNavItems]);
-
   // Generate quick actions based on current context
   const generateQuickActions = (currentItem: NavigationItem | null): QuickAction[] => {
     const baseActions: QuickAction[] = [
@@ -535,7 +521,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
         action: () => setState(prev => ({ ...prev, searchQuery: '' })),
         shortcut: 'Ctrl+K',
         category: 'primary',
-        enabled: true
+        enabled: true,
       },
       {
         id: 'help',
@@ -544,13 +530,12 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
         icon: HelpCircle,
         action: () => window.open('/docs/epic17', '_blank'),
         category: 'secondary',
-        enabled: true
+        enabled: true,
       }
     ];
-
     // Add context-specific actions
     if (currentItem?.id === 'feature-toggles') {
-      baseActions.unshift({
+      baseActions.unshift({)
         id: 'create-toggle',
         label: 'Create Toggle',
         description: 'Create a new feature toggle',
@@ -558,22 +543,19 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
         action: () => navigate('/admin/features/toggles/create'),
         shortcut: 'Ctrl+N',
         category: 'primary',
-        enabled: true
+        enabled: true,
       });
     }
-
     return baseActions;
   };
-
   // Handle navigation item click
   const handleNavItemClick = useCallback((item: NavigationItem, event: React.MouseEvent) => {
     event.preventDefault();
-    
     if (item.children && item.children.length > 0) {
       // Toggle expansion for items with children
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
-        expandedSections: prev.expandedSections.has(item.id)
+        expandedSections: prev.expandedSections.has(item.id),
           ? new Set([...prev.expandedSections].filter(id => id !== item.id))
           : new Set([...prev.expandedSections, item.id])
       }));
@@ -581,29 +563,26 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
       // Navigate to item
       navigate(item.path);
       onSectionChange?.(item.id);
-      
       // Add to recent items
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
-        recentItems: [
+        recentItems: [,
           {
             id: item.id,
             label: item.label,
             path: item.path,
             timestamp: new Date(),
-            icon: item.icon
+            icon: item.icon,
           },
           ...prev.recentItems.filter(r => r.id !== item.id).slice(0, 9)
         ]
       }));
-
       // Close mobile menu if open
       if (variant === 'mobile') {
         setState(prev => ({ ...prev, mobileMenuOpen: false }));
       }
     }
   }, [navigate, onSectionChange, variant]);
-
   // Render navigation badge
   const renderBadge = (badge: NavigationBadge) => {
     const colorClasses = {
@@ -614,8 +593,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
       purple: 'bg-purple-500 text-white',
       gray: 'bg-gray-500 text-white'
     };
-
-    return (
+    return ()
       <span
         className={`
           px-2 py-1 rounded-full text-xs font-medium
@@ -627,7 +605,6 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
       </span>
     );
   };
-
   // Render navigation item
   const renderNavItem = (item: NavigationItem, level = 0) => {
     const isActive = navigationContext.currentPath === item.path;
@@ -635,17 +612,15 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
     const hasChildren = item.children && item.children.length > 0;
     const isPinned = state.pinnedItems.has(item.id);
     const isFavorite = state.favoriteItems.has(item.id);
-
     const Icon = item.icon;
     const riskColors = {
       low: 'text-green-600',
       medium: 'text-yellow-600',
       high: 'text-orange-600',
-      critical: 'text-red-600'
+      critical: 'text-red-600',
     };
-
-    return (
-      <div key={item.id} className={`nav-item-container ${level > 0 ? 'ml-4' : ''}`}>
+    return ()
+      <div key={item.id} className={`nav-item-container ${level > 0 ? 'ml-4' : ''}`}>}
         <div
           className={`
             nav-item flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer
@@ -661,34 +636,31 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
                 size={18}
                 className={isActive ? 'text-blue-600' : riskColors[item.metadata.riskLevel]}
               />
-              {isPinned && (
+              {isPinned && ()
                 <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full"></div>
               )}
             </div>
-            
             <div className="flex-1">
               <div className="flex items-center space-x-2">
                 <span className="font-medium text-sm">{item.label}</span>
                 {isFavorite && <Star size={12} className="text-yellow-500 fill-current" />}
                 {item.badge && renderBadge(item.badge)}
               </div>
-              {item.description && (
+              {item.description && ()
                 <p className="text-xs text-gray-500 mt-1">{item.description}</p>
               )}
             </div>
           </div>
-
           <div className="flex items-center space-x-1">
-            {hasChildren && (
+            {hasChildren && ()
               <button className="p-1 hover:bg-gray-200 rounded">
                 {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
               </button>
             )}
           </div>
         </div>
-
         {/* Children */}
-        {hasChildren && isExpanded && (
+        {hasChildren && isExpanded && ()
           <div className="mt-1 space-y-1">
             {item.children!.map(child => renderNavItem(child, level + 1))}
           </div>
@@ -696,21 +668,19 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
       </div>
     );
   };
-
   // Render breadcrumbs
   const renderBreadcrumbs = () => {
     if (!showBreadcrumbs) return null;
-
-    return (
+    return ()
       <div className="breadcrumb-container flex items-center space-x-2 px-4 py-2 bg-gray-50 border-b">
-        {navigationContext.breadcrumbs.map((crumb, index) => (
+        {navigationContext.breadcrumbs.map((crumb, index) => ()
           <React.Fragment key={index}>
             {index > 0 && <ChevronRight size={14} className="text-gray-400" />}
             <button
               onClick={() => !crumb.active && navigate(crumb.path)}
               className={`
                 flex items-center space-x-1 text-sm px-2 py-1 rounded
-                ${crumb.active 
+                ${crumb.active }
             ? 'text-blue-600 font-medium bg-blue-100' 
             : 'text-gray-600 hover:text-blue-600 hover:bg-gray-100'
           }
@@ -725,12 +695,10 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
       </div>
     );
   };
-
   // Render search bar
   const renderSearch = () => {
     if (!enableSearch) return null;
-
-    return (
+    return ()
       <div className="search-container p-4 border-b">
         <div className="relative">
           <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -745,23 +713,21 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
       </div>
     );
   };
-
   // Render quick actions
   const renderQuickActions = () => {
     if (!showQuickActions || navigationContext.availableActions.length === 0) return null;
-
-    return (
+    return ()
       <div className="quick-actions-container p-4 border-b bg-gray-50">
         <h3 className="text-sm font-medium text-gray-700 mb-2">Quick Actions</h3>
         <div className="grid grid-cols-2 gap-2">
-          {navigationContext.availableActions.slice(0, 4).map(action => (
+          {navigationContext.availableActions.slice(0, 4).map(action => ()
             <button
               key={action.id}
               onClick={action.action}
               disabled={!action.enabled}
               className={`
                 flex items-center space-x-2 p-2 rounded-lg text-left text-sm
-                ${action.category === 'primary' 
+                ${action.category === 'primary' }
               ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }
@@ -772,7 +738,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
               <action.icon size={16} />
               <div className="flex-1">
                 <div className="font-medium">{action.label}</div>
-                {action.shortcut && (
+                {action.shortcut && ()
                   <div className="text-xs opacity-70">{action.shortcut}</div>
                 )}
               </div>
@@ -782,19 +748,17 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
       </div>
     );
   };
-
   // Render recent items
   const renderRecentItems = () => {
     if (state.recentItems.length === 0) return null;
-
-    return (
+    return ()
       <div className="recent-items-container p-4 border-b">
         <h3 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
           <Clock size={14} className="mr-1" />
           Recent
         </h3>
         <div className="space-y-1">
-          {state.recentItems.slice(0, 5).map(item => (
+          {state.recentItems.slice(0, 5).map(item => ()
             <button
               key={item.id}
               onClick={() => navigate(item.path)}
@@ -808,11 +772,10 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
       </div>
     );
   };
-
-  return (
-    <div className={`epic17-navigation-system ${variant}`}>
+  return ()
+    <div className={`epic17-navigation-system ${variant}`}>}
       {/* Mobile Header */}
-      {variant === 'mobile' && (
+      {variant === 'mobile' && ()
         <div className="mobile-header flex items-center justify-between p-4 bg-white border-b">
           <button
             onClick={() => setState(prev => ({ ...prev, mobileMenuOpen: !prev.mobileMenuOpen }))}
@@ -829,7 +792,6 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
           </button>
         </div>
       )}
-
       {/* Main Navigation Container */}
       <div className={`
         navigation-container bg-white
@@ -838,18 +800,14 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
       `}>
         {/* Search */}
         {renderSearch()}
-
         {/* Quick Actions */}
         {renderQuickActions()}
-
         {/* Recent Items */}
         {renderRecentItems()}
-
         {/* Main Navigation */}
         <div className="navigation-items p-4 space-y-1 flex-1 overflow-y-auto">
           {availableNavItems.map(item => renderNavItem(item))}
         </div>
-
         {/* User Info Footer */}
         <div className="navigation-footer p-4 border-t bg-gray-50">
           <div className="text-xs text-gray-600">
@@ -859,7 +817,6 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({
           </div>
         </div>
       </div>
-
       {/* Breadcrumbs (for non-sidebar variants) */}
       {variant !== 'sidebar' && renderBreadcrumbs()}
     </div>

@@ -4,7 +4,6 @@
  * Administrative interface for creating and managing content selection criteria
  * Part of Epic 17.5.2 - Featured Content Tools (Backstage Admin Controls)
  */
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -42,33 +41,26 @@ export interface ContentCriteria {
   min_rating?: number;
   min_download_count?: number;
   quality_score_threshold?: number;
-  
   // Category filters
   categories?: string[];
   tags?: string[];
   exclude_categories?: string[];
-  
   // Time-based filters
   published_after?: Date;
   last_updated_after?: Date;
-  
   // Creator filters
   creator_ids?: string[];
   creator_tiers?: string[];
-  
   // Performance filters
   min_conversion_rate?: number;
   min_engagement_score?: number;
-  
   // Content attributes
   content_types?: string[];
   languages?: string[];
-  
   // Exclusions
   exclude_content_ids?: string[];
   exclude_recently_promoted?: boolean;
   exclude_current_promotions?: boolean;
-  
   // Limits
   max_content_count?: number;
   diversification_rules?: DiversificationRule[];
@@ -95,7 +87,7 @@ export interface SelectionCriteriaTemplate {
 
 export interface ContentSelectionPreview {
   total_matches: number;
-  sample_content: Array<{
+  sample_content: Array<{,
     id: string;
     title: string;
     creator: string;
@@ -106,12 +98,12 @@ export interface ContentSelectionPreview {
   }>;
   category_distribution: Record<string, number>;
   creator_distribution: Record<string, number>;
-  quality_stats: {
+  quality_stats: {,
     avg_rating: number;
     avg_downloads: number;
     avg_engagement: number;
   };
-  performance_prediction: {
+  performance_prediction: {,
     expected_ctr: number;
     expected_conversion_rate: number;
     confidence_level: number;
@@ -122,24 +114,24 @@ export interface ContentSelectionCriteriaProps {
   className?: string;
 }
 
-export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> = ({
+export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> = ({)
   className = ''
 }) => {
   const [activeTab, setActiveTab] = useState('builder');
   const [currentCriteria, setCurrentCriteria] = useState<ContentCriteria>({});
-  const [templates] = useState<SelectionCriteriaTemplate[]>([
+  const [templates] = useState<SelectionCriteriaTemplate[]>([)
     {
       id: 'template-trending',
       name: 'Trending Content',
       description: 'High-performing content with recent engagement',
       category: 'trending',
-      criteria: {
+      criteria: {,
         min_rating: 4.0,
         min_download_count: 100,
         published_after: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         min_engagement_score: 75,
         exclude_recently_promoted: true,
-        max_content_count: 20
+        max_content_count: 20,
       },
       is_system_template: true,
       usage_count: 45,
@@ -152,13 +144,13 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       name: 'Premium Quality',
       description: 'Highest quality content from top creators',
       category: 'quality',
-      criteria: {
+      criteria: {,
         min_rating: 4.5,
         quality_score_threshold: 90,
         creator_tiers: ['premium', 'verified'],
         min_download_count: 500,
         exclude_current_promotions: true,
-        diversification_rules: [
+        diversification_rules: [,
           { attribute: 'creator', max_percentage: 30, enforce_uniqueness: true },
           { attribute: 'category', max_percentage: 40, enforce_uniqueness: false }
         ]
@@ -170,10 +162,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       last_used: new Date(Date.now() - 24 * 60 * 60 * 1000)
     }
   ]);
-
-  const [previewData] = useState<ContentSelectionPreview>({
+  const [previewData] = useState<ContentSelectionPreview>({)
     total_matches: 187,
-    sample_content: [
+    sample_content: [,
       {
         id: 'content-1',
         title: 'Professional Business Card Template',
@@ -193,34 +184,32 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
         match_reasons: ['Quality score', 'Recent engagement', 'Trending']
       }
     ],
-    category_distribution: {
+    category_distribution: {,
       'Business': 45,
       'Events': 32,
       'Marketing': 28,
       'Creative': 25,
       'Educational': 18
     },
-    creator_distribution: {
+    creator_distribution: {,
       'Premium': 67,
       'Verified': 89,
       'Community': 31
     },
-    quality_stats: {
+    quality_stats: {,
       avg_rating: 4.6,
       avg_downloads: 1845,
-      avg_engagement: 82.5
+      avg_engagement: 82.5,
     },
-    performance_prediction: {
+    performance_prediction: {,
       expected_ctr: 3.8,
       expected_conversion_rate: 12.4,
-      confidence_level: 0.85
+      confidence_level: 0.85,
     }
   });
-
   const categories = ['Business', 'Events', 'Marketing', 'Creative', 'Educational', 'Technology'];
   const contentTypes = ['Template', 'Asset Pack', 'Component', 'Theme', 'Tool'];
     const creatorTiers = ['premium', 'verified', 'community'];
-
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
       'trending': 'text-orange-600 bg-orange-100',
@@ -232,8 +221,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
     };
     return colors[category] || 'text-gray-600 bg-gray-100';
   };
-
-  const renderCriteriaBuilder = () => (
+  const renderCriteriaBuilder = () => (;)
     <div className="criteria-builder">
       <div className="builder-sections">
         {/* Quality Filters */}
@@ -255,7 +243,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     max="5"
                     step="0.1"
                     value={currentCriteria.min_rating || ''}
-                    onChange={(e) => setCurrentCriteria({
+                    onChange={(e) => setCurrentCriteria({)
                       ...currentCriteria,
                       min_rating: parseFloat(e.target.value) || undefined
                     })}
@@ -265,7 +253,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   <span className="input-unit">stars</span>
                 </div>
               </div>
-
               <div className="filter-item">
                 <label>Minimum Downloads</label>
                 <div className="input-with-unit">
@@ -273,7 +260,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     type="number"
                     min="0"
                     value={currentCriteria.min_download_count || ''}
-                    onChange={(e) => setCurrentCriteria({
+                    onChange={(e) => setCurrentCriteria({)
                       ...currentCriteria,
                       min_download_count: parseInt(e.target.value) || undefined
                     })}
@@ -283,7 +270,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   <span className="input-unit">downloads</span>
                 </div>
               </div>
-
               <div className="filter-item">
                 <label>Quality Score Threshold</label>
                 <div className="input-with-unit">
@@ -292,7 +278,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     min="0"
                     max="100"
                     value={currentCriteria.quality_score_threshold || ''}
-                    onChange={(e) => setCurrentCriteria({
+                    onChange={(e) => setCurrentCriteria({)
                       ...currentCriteria,
                       quality_score_threshold: parseInt(e.target.value) || undefined
                     })}
@@ -305,7 +291,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
             </div>
           </CardContent>
         </Card>
-
         {/* Category & Content Filters */}
         <Card className="builder-section">
           <CardHeader>
@@ -319,7 +304,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
               <div className="filter-item span-2">
                 <label>Include Categories</label>
                 <div className="multi-select">
-                  {categories.map(category => (
+                  {categories.map(category => ()
                     <label key={category} className="checkbox-label">
                       <input
                         type="checkbox"
@@ -327,12 +312,12 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                         onChange={(e) => {
                           const categories = currentCriteria.categories || [];
                           if (e.target.checked) {
-                            setCurrentCriteria({
+                            setCurrentCriteria({)
                               ...currentCriteria,
                               categories: [...categories, category]
                             });
                           } else {
-                            setCurrentCriteria({
+                            setCurrentCriteria({)
                               ...currentCriteria,
                               categories: categories.filter(c => c !== category)
                             });
@@ -344,11 +329,10 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   ))}
                 </div>
               </div>
-
               <div className="filter-item span-2">
                 <label>Content Types</label>
                 <div className="multi-select">
-                  {contentTypes.map(type => (
+                  {contentTypes.map(type => ()
                     <label key={type} className="checkbox-label">
                       <input
                         type="checkbox"
@@ -356,12 +340,12 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                         onChange={(e) => {
                           const types = currentCriteria.content_types || [];
                           if (e.target.checked) {
-                            setCurrentCriteria({
+                            setCurrentCriteria({)
                               ...currentCriteria,
                               content_types: [...types, type]
                             });
                           } else {
-                            setCurrentCriteria({
+                            setCurrentCriteria({)
                               ...currentCriteria,
                               content_types: types.filter(t => t !== type)
                             });
@@ -376,7 +360,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
             </div>
           </CardContent>
         </Card>
-
         {/* Performance Filters */}
         <Card className="builder-section">
           <CardHeader>
@@ -396,7 +379,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     max="100"
                     step="0.1"
                     value={currentCriteria.min_conversion_rate || ''}
-                    onChange={(e) => setCurrentCriteria({
+                    onChange={(e) => setCurrentCriteria({)
                       ...currentCriteria,
                       min_conversion_rate: parseFloat(e.target.value) || undefined
                     })}
@@ -406,7 +389,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   <span className="input-unit">%</span>
                 </div>
               </div>
-
               <div className="filter-item">
                 <label>Min Engagement Score</label>
                 <div className="input-with-unit">
@@ -415,7 +397,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     min="0"
                     max="100"
                     value={currentCriteria.min_engagement_score || ''}
-                    onChange={(e) => setCurrentCriteria({
+                    onChange={(e) => setCurrentCriteria({)
                       ...currentCriteria,
                       min_engagement_score: parseInt(e.target.value) || undefined
                     })}
@@ -428,7 +410,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
             </div>
           </CardContent>
         </Card>
-
         {/* Creator & Time Filters */}
         <Card className="builder-section">
           <CardHeader>
@@ -442,7 +423,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
               <div className="filter-item">
                 <label>Creator Tiers</label>
                 <div className="multi-select">
-                  {creatorTiers.map(tier => (
+                  {creatorTiers.map(tier => ()
                     <label key={tier} className="checkbox-label">
                       <input
                         type="checkbox"
@@ -450,12 +431,12 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                         onChange={(e) => {
                           const tiers = currentCriteria.creator_tiers || [];
                           if (e.target.checked) {
-                            setCurrentCriteria({
+                            setCurrentCriteria({)
                               ...currentCriteria,
                               creator_tiers: [...tiers, tier]
                             });
                           } else {
-                            setCurrentCriteria({
+                            setCurrentCriteria({)
                               ...currentCriteria,
                               creator_tiers: tiers.filter(t => t !== tier)
                             });
@@ -467,14 +448,13 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   ))}
                 </div>
               </div>
-
               <div className="filter-item">
                 <label>Published After</label>
                 <input
                   type="date"
                   value={currentCriteria.published_after ? 
                     currentCriteria.published_after.toISOString().split('T')[0] : ''}
-                  onChange={(e) => setCurrentCriteria({
+                  onChange={(e) => setCurrentCriteria({)
                     ...currentCriteria,
                     published_after: e.target.value ? new Date(e.target.value) : undefined
                   })}
@@ -484,7 +464,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
             </div>
           </CardContent>
         </Card>
-
         {/* Advanced Settings */}
         <Card className="builder-section">
           <CardHeader>
@@ -501,7 +480,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   type="number"
                   min="1"
                   value={currentCriteria.max_content_count || ''}
-                  onChange={(e) => setCurrentCriteria({
+                  onChange={(e) => setCurrentCriteria({)
                     ...currentCriteria,
                     max_content_count: parseInt(e.target.value) || undefined
                   })}
@@ -509,28 +488,26 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   placeholder="50"
                 />
               </div>
-
               <div className="filter-item span-2">
                 <div className="checkbox-group">
                   <label className="checkbox-label">
                     <input
                       type="checkbox"
                       checked={currentCriteria.exclude_recently_promoted || false}
-                      onChange={(e) => setCurrentCriteria({
+                      onChange={(e) => setCurrentCriteria({)
                         ...currentCriteria,
-                        exclude_recently_promoted: e.target.checked
+                        exclude_recently_promoted: e.target.checked,
                       })}
                     />
                     <span>Exclude recently promoted content</span>
                   </label>
-                  
                   <label className="checkbox-label">
                     <input
                       type="checkbox"
                       checked={currentCriteria.exclude_current_promotions || false}
-                      onChange={(e) => setCurrentCriteria({
+                      onChange={(e) => setCurrentCriteria({)
                         ...currentCriteria,
-                        exclude_current_promotions: e.target.checked
+                        exclude_current_promotions: e.target.checked,
                       })}
                     />
                     <span>Exclude currently promoted content</span>
@@ -541,7 +518,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           </CardContent>
         </Card>
       </div>
-
       <div className="builder-actions">
         <Button variant="outline">
           <RefreshCw className="w-4 h-4 mr-2" />
@@ -562,8 +538,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       </div>
     </div>
   );
-
-  const renderTemplates = () => (
+  const renderTemplates = () => (;)
     <div className="templates-section">
       <div className="templates-header">
         <h3>Selection Criteria Templates</h3>
@@ -572,9 +547,8 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           Create Template
         </Button>
       </div>
-
       <div className="templates-grid">
-        {templates.map(template => (
+        {templates.map(template => ()
           <Card key={template.id} className="template-card">
             <CardHeader>
               <div className="template-header">
@@ -600,23 +574,22 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   </span>
                 </div>
               </div>
-
               <div className="template-preview">
                 <h5>Criteria Overview</h5>
                 <div className="criteria-tags">
-                  {template.criteria.min_rating && (
+                  {template.criteria.min_rating && ()
                     <Badge className="criteria-tag">
                       <Star className="w-3 h-3 mr-1" />
                       {template.criteria.min_rating}+ rating
                     </Badge>
                   )}
-                  {template.criteria.min_download_count && (
+                  {template.criteria.min_download_count && ()
                     <Badge className="criteria-tag">
                       <Download className="w-3 h-3 mr-1" />
                       {template.criteria.min_download_count}+ downloads
                     </Badge>
                   )}
-                  {template.criteria.creator_tiers && (
+                  {template.criteria.creator_tiers && ()
                     <Badge className="criteria-tag">
                       <Users className="w-3 h-3 mr-1" />
                       {template.criteria.creator_tiers.join(', ')}
@@ -624,7 +597,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   )}
                 </div>
               </div>
-
               <div className="template-actions">
                 <Button size="sm" variant="outline">
                   <Eye className="w-4 h-4 mr-1" />
@@ -634,7 +606,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   <Copy className="w-4 h-4 mr-1" />
                   Use Template
                 </Button>
-                {!template.is_system_template && (
+                {!template.is_system_template && ()
                   <Button size="sm" variant="outline" className="text-red-600">
                     <Trash2 className="w-4 h-4 mr-1" />
                     Delete
@@ -647,8 +619,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       </div>
     </div>
   );
-
-  const renderPreview = () => (
+  const renderPreview = () => (;)
     <div className="preview-section">
       <div className="preview-header">
         <h3>Selection Preview</h3>
@@ -663,7 +634,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           </Button>
         </div>
       </div>
-
       <div className="preview-metrics">
         <Card className="metric-card">
           <CardContent>
@@ -671,21 +641,18 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
             <div className="metric-label">Total Matches</div>
           </CardContent>
         </Card>
-        
         <Card className="metric-card">
           <CardContent>
             <div className="metric-value">{previewData.quality_stats.avg_rating.toFixed(1)}</div>
             <div className="metric-label">Avg Rating</div>
           </CardContent>
         </Card>
-        
         <Card className="metric-card">
           <CardContent>
             <div className="metric-value">{previewData.quality_stats.avg_downloads.toLocaleString()}</div>
             <div className="metric-label">Avg Downloads</div>
           </CardContent>
         </Card>
-        
         <Card className="metric-card">
           <CardContent>
             <div className="metric-value">{previewData.performance_prediction.expected_ctr.toFixed(1)}%</div>
@@ -693,7 +660,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           </CardContent>
         </Card>
       </div>
-
       <div className="preview-content">
         <div className="preview-left">
           <Card>
@@ -702,7 +668,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
             </CardHeader>
             <CardContent>
               <div className="sample-content-list">
-                {previewData.sample_content.map(content => (
+                {previewData.sample_content.map(content => ()
                   <div key={content.id} className="sample-content-item">
                     <div className="content-info">
                       <h5>{content.title}</h5>
@@ -716,7 +682,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                       </div>
                     </div>
                     <div className="match-reasons">
-                      {content.match_reasons.map(reason => (
+                      {content.match_reasons.map(reason => ()
                         <Badge key={reason} className="reason-badge">
                           {reason}
                         </Badge>
@@ -728,7 +694,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
             </CardContent>
           </Card>
         </div>
-
         <div className="preview-right">
           <Card>
             <CardHeader>
@@ -739,7 +704,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                 <div className="chart-section">
                   <h5>By Category</h5>
                   <div className="distribution-bars">
-                    {Object.entries(previewData.category_distribution).map(([category, count]) => (
+                    {Object.entries(previewData.category_distribution).map(([category, count]) => ()
                       <div key={category} className="distribution-bar">
                         <span className="bar-label">{category}</span>
                         <div className="bar-container">
@@ -753,7 +718,6 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     ))}
                   </div>
                 </div>
-
                 <div className="chart-section">
                   <h5>Performance Prediction</h5>
                   <div className="prediction-metrics">
@@ -784,16 +748,14 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       </div>
     </div>
   );
-
-  return (
-    <div className={`content-selection-criteria ${className}`}>
+  return ()
+    <div className={`content-selection-criteria ${className}`}>}
       <div className="criteria-header">
         <div className="header-info">
           <h2>Content Selection Criteria</h2>
           <p>Create and manage criteria for featured content selection</p>
         </div>
       </div>
-
       <Tabs value={activeTab} onValueChange={setActiveTab} className="criteria-tabs">
         <TabsList className="grid grid-cols-3 w-full">
           <TabsTrigger value="builder">
@@ -809,20 +771,16 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
             Preview
           </TabsTrigger>
         </TabsList>
-
         <TabsContent value="builder" className="tab-content">
           {renderCriteriaBuilder()}
         </TabsContent>
-
         <TabsContent value="templates" className="tab-content">
           {renderTemplates()}
         </TabsContent>
-
         <TabsContent value="preview" className="tab-content">
           {renderPreview()}
         </TabsContent>
       </Tabs>
-
       <style>{`
         .content-selection-criteria {
           max-width: 1400px;
@@ -832,100 +790,83 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .criteria-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
         }
-
         .header-info h2 {
           font-size: 1.875rem;
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 0.5rem;
         }
-
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
         }
-
         .criteria-builder {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .builder-sections {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .builder-section .section-title {
           display: flex;
           align-items: center;
           gap: 0.5rem;
           font-size: 1.125rem;
         }
-
         .filter-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 1rem;
         }
-
         .filter-item {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
         }
-
         .filter-item.span-2 {
           grid-column: span 2;
         }
-
         .filter-item label {
           font-weight: 500;
           color: #374151;
         }
-
         .criteria-input {
           padding: 0.5rem 0.75rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
         }
-
         .criteria-input:focus {
           outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         }
-
         .input-with-unit {
           display: flex;
           align-items: center;
           gap: 0.5rem;
         }
-
         .input-with-unit .criteria-input {
           flex: 1;
         }
-
         .input-unit {
           font-size: 0.875rem;
           color: #6b7280;
           font-weight: 500;
         }
-
         .multi-select {
           display: flex;
           flex-wrap: wrap;
           gap: 0.5rem;
         }
-
         .checkbox-label {
           display: flex;
           align-items: center;
@@ -934,18 +875,15 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           color: #374151;
           cursor: pointer;
         }
-
         .checkbox-label input[type="checkbox"] {
           width: 1rem;
           height: 1rem;
         }
-
         .checkbox-group {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
         }
-
         .builder-actions {
           display: flex;
           gap: 0.75rem;
@@ -953,54 +891,45 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           padding-top: 1rem;
           border-top: 1px solid #e5e7eb;
         }
-
         .templates-section {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .templates-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-
         .templates-header h3 {
           font-weight: 600;
           color: #1f2937;
           margin: 0;
         }
-
         .templates-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
           gap: 1rem;
         }
-
         .template-card .card-content {
           padding-top: 0;
         }
-
         .template-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           gap: 1rem;
         }
-
         .template-info h4 {
           font-weight: 600;
           color: #1f2937;
           margin: 0 0 0.5rem 0;
         }
-
         .template-info p {
           color: #6b7280;
           font-size: 0.875rem;
           margin: 0;
         }
-
         .template-stats {
           display: flex;
           justify-content: space-between;
@@ -1009,38 +938,32 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           background: #f9fafb;
           border-radius: 6px;
         }
-
         .stat-group {
           display: flex;
           flex-direction: column;
           gap: 0.25rem;
         }
-
         .stat-label {
           font-size: 0.75rem;
           color: #6b7280;
           font-weight: 500;
         }
-
         .stat-value {
           font-size: 0.875rem;
           color: #1f2937;
           font-weight: 600;
         }
-
         .template-preview h5 {
           font-weight: 600;
           color: #1f2937;
           margin: 0 0 0.5rem 0;
         }
-
         .criteria-tags {
           display: flex;
           flex-wrap: wrap;
           gap: 0.375rem;
           margin-bottom: 1rem;
         }
-
         .criteria-tag {
           font-size: 0.75rem;
           padding: 0.25rem 0.5rem;
@@ -1049,101 +972,84 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           display: flex;
           align-items: center;
         }
-
         .template-actions {
           display: flex;
           gap: 0.5rem;
           justify-content: flex-end;
         }
-
         .preview-section {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .preview-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-
         .preview-header h3 {
           font-weight: 600;
           color: #1f2937;
           margin: 0;
         }
-
         .preview-actions {
           display: flex;
           gap: 0.5rem;
         }
-
         .preview-metrics {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 1rem;
         }
-
         .metric-card .card-content {
           text-align: center;
           padding: 1.5rem;
         }
-
         .metric-value {
           font-size: 2rem;
           font-weight: 700;
           color: #1f2937;
           line-height: 1;
         }
-
         .metric-label {
           font-size: 0.875rem;
           color: #6b7280;
           margin-top: 0.5rem;
         }
-
         .preview-content {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1rem;
         }
-
         .sample-content-list {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .sample-content-item {
           padding: 1rem;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
         }
-
         .content-info h5 {
           font-weight: 600;
           color: #1f2937;
           margin: 0 0 0.5rem 0;
         }
-
         .content-meta {
           display: flex;
           align-items: center;
           gap: 0.5rem;
           margin-bottom: 0.5rem;
         }
-
         .content-meta span {
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .category-badge {
           font-size: 0.75rem;
           padding: 0.125rem 0.375rem;
         }
-
         .content-stats {
           display: flex;
           gap: 1rem;
@@ -1151,50 +1057,42 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           color: #374151;
           margin-bottom: 0.5rem;
         }
-
         .match-reasons {
           display: flex;
           flex-wrap: wrap;
           gap: 0.25rem;
         }
-
         .reason-badge {
           font-size: 0.75rem;
           padding: 0.125rem 0.375rem;
           background: #eff6ff;
           color: #1e40af;
         }
-
         .distribution-charts {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .chart-section h5 {
           font-weight: 600;
           color: #1f2937;
           margin: 0 0 0.75rem 0;
         }
-
         .distribution-bars {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
         }
-
         .distribution-bar {
           display: flex;
           align-items: center;
           gap: 0.75rem;
         }
-
         .bar-label {
           font-size: 0.875rem;
           color: #374151;
           min-width: 80px;
         }
-
         .bar-container {
           flex: 1;
           height: 20px;
@@ -1202,13 +1100,11 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           border-radius: 10px;
           overflow: hidden;
         }
-
         .bar-fill {
           height: 100%;
           background: #3b82f6;
           transition: width 0.3s ease;
         }
-
         .bar-value {
           font-size: 0.875rem;
           color: #374151;
@@ -1216,13 +1112,11 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           min-width: 30px;
           text-align: right;
         }
-
         .prediction-metrics {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
         }
-
         .prediction-item {
           display: flex;
           justify-content: space-between;
@@ -1230,54 +1124,43 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           background: #f9fafb;
           border-radius: 6px;
         }
-
         .prediction-label {
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .prediction-value {
           font-size: 0.875rem;
           color: #1f2937;
           font-weight: 600;
         }
-
         @media (max-width: 1200px) {
           .preview-content {
             grid-template-columns: 1fr;
           }
-          
           .preview-metrics {
             grid-template-columns: repeat(2, 1fr);
           }
-          
           .filter-grid {
             grid-template-columns: 1fr;
           }
-          
           .filter-item.span-2 {
             grid-column: span 1;
           }
         }
-
         @media (max-width: 768px) {
           .criteria-header {
             flex-direction: column;
             gap: 1rem;
           }
-          
           .preview-metrics {
             grid-template-columns: 1fr;
           }
-          
           .templates-grid {
             grid-template-columns: 1fr;
           }
-          
           .builder-actions {
             flex-wrap: wrap;
           }
-          
           .multi-select {
             flex-direction: column;
           }

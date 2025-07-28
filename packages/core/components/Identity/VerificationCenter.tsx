@@ -3,7 +3,6 @@
  * 
  * Comprehensive identity verification interface for Wild Construct creators
  */
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -34,7 +33,7 @@ export interface VerificationCenterProps {
   className?: string;
 }
 
-export const VerificationCenter: React.FC<VerificationCenterProps> = ({
+export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
   userId,
   onVerificationComplete,
   className = ''
@@ -53,14 +52,11 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
     submitPortfolioVerification,
     isLoading
   } = useIdentityValidation({ userId, autoLoadUserData: true });
-
   const [activeStep, setActiveStep] = useState<string | null>(null);
   const [formData, setFormData] = useState<unknown>({});
-
   const completionPercentage = getVerificationCompletionPercentage();
   const recommendedSteps = getRecommendedVerificationSteps();
   const trustBenefits = getTrustTierBenefits();
-
   const getTrustTierColor = (tier?: string) => {
     switch (tier) {
     case 'expert': return 'text-purple-600 bg-purple-100';
@@ -70,7 +66,6 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-
   const getVerificationIcon = (type: string, status: string) => {
     const icons = {
       email_verification: Mail,
@@ -78,11 +73,9 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
       government_id: FileText,
       professional_credentials: Award,
       portfolio_verification: Camera,
-      social_media_verification: ExternalLink
+      social_media_verification: ExternalLink,
     };
-
     const Icon = icons[type as keyof typeof icons] || User;
-
     if (status === 'completed') {
       return <CheckCircle className="w-5 h-5 text-green-500" />;
     } else if (status === 'pending') {
@@ -90,13 +83,10 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
     } else if (status === 'rejected') {
       return <XCircle className="w-5 h-5 text-red-500" />;
     }
-
     return <Icon className="w-5 h-5 text-gray-400" />;
   };
-
   const handleVerificationSubmit = async (type: string, data: Record<string, unknown>) => {
     let result;
-
     switch (type) {
     case 'email_verification':
       result = await submitEmailVerification(data.email);
@@ -117,15 +107,13 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
       result = await submitPortfolioVerification(data);
       break;
     }
-
     if (result?.success) {
       setActiveStep(null);
       setFormData({});
       onVerificationComplete?.(type);
     }
   };
-
-  const renderTrustScoreOverview = () => (
+  const renderTrustScoreOverview = () => (;)
     <Card className="trust-score-overview">
       <CardHeader>
         <div className="trust-header">
@@ -154,8 +142,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
           </div>
           <Progress value={completionPercentage} className="progress-bar" />
         </div>
-
-        {userTrustScore && (
+        {userTrustScore && ()
           <div className="trust-breakdown">
             <h4>Trust Components</h4>
             <div className="components-grid">
@@ -182,11 +169,10 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
             </div>
           </div>
         )}
-
         <div className="trust-benefits">
           <h4>Your Benefits</h4>
           <ul className="benefits-list">
-            {trustBenefits.map((benefit, index) => (
+            {trustBenefits.map((benefit, index) => ()
               <li key={index}>
                 <CheckCircle className="w-4 h-4 text-green-500" />
                 <span>{benefit}</span>
@@ -197,16 +183,15 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
       </CardContent>
     </Card>
   );
-
-  const renderVerificationSteps = () => (
+  const renderVerificationSteps = () => (;)
     <Card className="verification-steps">
       <CardHeader>
         <CardTitle>Verification Steps</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="steps-list">
-          {recommendedSteps.map((step, index) => (
-            <div key={step.type} className={`step-item ${activeStep === step.type ? 'active' : ''}`}>
+          {recommendedSteps.map((step, index) => ()
+            <div key={step.type} className={`step-item ${activeStep === step.type ? 'active' : ''}`}>}
               <div className="step-header">
                 <div className="step-icon">
                   {getVerificationIcon(step.type, 'incomplete')}
@@ -229,8 +214,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
                   </Button>
                 </div>
               </div>
-              
-              {activeStep === step.type && (
+              {activeStep === step.type && ()
                 <div className="step-form">
                   {renderVerificationForm(step.type)}
                 </div>
@@ -241,11 +225,10 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
       </CardContent>
     </Card>
   );
-
   const renderVerificationForm = (type: string) => {
     switch (type) {
     case 'email_verification':
-      return (
+      return ()
         <div className="verification-form">
           <div className="form-group">
             <label>Email Address</label>
@@ -267,9 +250,8 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
           </div>
         </div>
       );
-
     case 'phone_verification':
-      return (
+      return ()
         <div className="verification-form">
           <div className="form-group">
             <label>Phone Number</label>
@@ -291,9 +273,8 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
           </div>
         </div>
       );
-
     case 'professional_credentials':
-      return (
+      return ()
         <div className="verification-form">
           <div className="form-group">
             <label>Professional Role</label>
@@ -311,7 +292,6 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
               <option value="other">Other</option>
             </select>
           </div>
-            
           <div className="form-group">
             <label>Experience Level</label>
             <select 
@@ -326,7 +306,6 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
               <option value="veteran">Veteran</option>
             </select>
           </div>
-
           <div className="form-group">
             <label>Education/Training</label>
             <textarea
@@ -337,20 +316,19 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
               rows={4}
             />
           </div>
-
           <div className="form-actions">
-            <Button onClick={() => handleVerificationSubmit(type, {
-              professionalCredentials: {
+            <Button onClick={() => handleVerificationSubmit(type, {)
+              professionalCredentials: {,
                 role: formData.role,
                 experience: formData.experience,
-                credentials: [{
+                credentials: [{,
                   type: 'degree',
                   title: formData.education,
                   institution: 'User Provided',
                   year: new Date().getFullYear(),
-                  verificationStatus: 'pending'
+                  verificationStatus: 'pending',
                 }],
-                portfolio: []
+                portfolio: [],
               }
             })}>
                 Submit Credentials
@@ -361,9 +339,8 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
           </div>
         </div>
       );
-
     case 'social_media_verification':
-      return (
+      return ()
         <div className="verification-form">
           <div className="form-group">
             <label>LinkedIn Profile</label>
@@ -375,7 +352,6 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
               className="form-input"
             />
           </div>
-            
           <div className="form-group">
             <label>IMDb Profile (if available)</label>
             <input
@@ -386,7 +362,6 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
               className="form-input"
             />
           </div>
-            
           <div className="form-group">
             <label>Professional Website</label>
             <input
@@ -397,23 +372,22 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
               className="form-input"
             />
           </div>
-
           <div className="form-actions">
-            <Button onClick={() => handleVerificationSubmit(type, [
-              ...(formData.linkedin ? [{
+            <Button onClick={() => handleVerificationSubmit(type, [)
+              ...(formData.linkedin ? [{)
                 platform: 'linkedin',
                 url: formData.linkedin,
-                verified: false
+                verified: false,
               }] : []),
-              ...(formData.imdb ? [{
+              ...(formData.imdb ? [{)
                 platform: 'imdb',
                 url: formData.imdb,
-                verified: false
+                verified: false,
               }] : []),
-              ...(formData.website ? [{
+              ...(formData.website ? [{)
                 platform: 'website',
                 url: formData.website,
-                verified: false
+                verified: false,
               }] : [])
             ])}>
                 Verify Profiles
@@ -424,9 +398,8 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
           </div>
         </div>
       );
-
     default:
-      return (
+      return ()
         <div className="verification-form">
           <p>Verification form for {type} is coming soon.</p>
           <Button variant="outline" onClick={() => setActiveStep(null)}>
@@ -436,14 +409,13 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
       );
     }
   };
-
-  const renderValidationHistory = () => (
+  const renderValidationHistory = () => (;)
     <Card className="validation-history">
       <CardHeader>
         <CardTitle>Verification History</CardTitle>
       </CardHeader>
       <CardContent>
-        {validationSummary && (
+        {validationSummary && ()
           <div className="history-summary">
             <div className="summary-stats">
               <div className="stat-item">
@@ -463,12 +435,11 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
                 <span className="stat-value text-red-600">{validationSummary.rejectedCount}</span>
               </div>
             </div>
-
-            {userTrustScore?.badges && userTrustScore.badges.length > 0 && (
+            {userTrustScore?.badges && userTrustScore.badges.length > 0 && ()
               <div className="earned-badges">
                 <h4>Earned Badges</h4>
                 <div className="badges-grid">
-                  {userTrustScore.badges.map((badge, index) => (
+                  {userTrustScore.badges.map((badge, index) => ()
                     <Badge key={index} variant="default" className="badge-item">
                       <Award className="w-3 h-3 mr-1" />
                       {badge.replace('_', ' ').toUpperCase()}
@@ -482,109 +453,90 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
       </CardContent>
     </Card>
   );
-
   if (isLoading) {
-    return (
+    return ()
       <div className="verification-center loading">
         <div className="loading-spinner"></div>
         <p>Loading verification data...</p>
       </div>
     );
   }
-
-  return (
-    <div className={`verification-center ${className}`}>
+  return ()
+    <div className={`verification-center ${className}`}>}
       <div className="verification-header">
         <h2>Identity Verification</h2>
         <p>Build trust and unlock premium features by verifying your identity and professional credentials.</p>
       </div>
-
       <Tabs defaultValue="overview" className="verification-tabs">
         <TabsList className="grid grid-cols-3 w-full">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="verify">Verify Identity</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview" className="tab-content">
           {renderTrustScoreOverview()}
         </TabsContent>
-
         <TabsContent value="verify" className="tab-content">
           {renderVerificationSteps()}
         </TabsContent>
-
         <TabsContent value="history" className="tab-content">
           {renderValidationHistory()}
         </TabsContent>
       </Tabs>
-
       <style>{`
         .verification-center {
           max-width: 1200px;
           margin: 0 auto;
           padding: 1rem;
         }
-
         .verification-header {
           text-align: center;
           margin-bottom: 2rem;
         }
-
         .verification-header h2 {
           font-size: 1.875rem;
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 0.5rem;
         }
-
         .verification-header p {
           color: #6b7280;
           font-size: 1.125rem;
         }
-
         .trust-score-overview {
           margin-bottom: 1rem;
         }
-
         .trust-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-
         .trust-info {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
         }
-
         .trust-tier {
           display: flex;
           align-items: center;
         }
-
         .score-circle {
           display: flex;
           align-items: baseline;
           gap: 0.25rem;
         }
-
         .score-value {
           font-size: 2rem;
           font-weight: 700;
           color: #1f2937;
         }
-
         .score-max {
           font-size: 1rem;
           color: #9ca3af;
         }
-
         .verification-progress {
           margin: 1.5rem 0;
         }
-
         .progress-header {
           display: flex;
           justify-content: space-between;
@@ -592,23 +544,19 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .trust-breakdown {
           margin: 1.5rem 0;
         }
-
         .trust-breakdown h4 {
           font-weight: 600;
           color: #374151;
           margin-bottom: 0.75rem;
         }
-
         .components-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 0.75rem;
         }
-
         .component-item {
           display: flex;
           align-items: center;
@@ -617,25 +565,21 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
           border: 1px solid #e5e7eb;
           border-radius: 6px;
         }
-
         .component-score {
           margin-left: auto;
           font-weight: 600;
           color: #374151;
         }
-
         .trust-benefits h4 {
           font-weight: 600;
           color: #374151;
           margin-bottom: 0.75rem;
         }
-
         .benefits-list {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
         }
-
         .benefits-list li {
           display: flex;
           align-items: center;
@@ -643,109 +587,90 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .steps-list {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .step-item {
           border: 1px solid #e5e7eb;
           border-radius: 8px;
           overflow: hidden;
         }
-
         .step-item.active {
           border-color: #3b82f6;
         }
-
         .step-header {
           display: flex;
           align-items: center;
           gap: 1rem;
           padding: 1rem;
         }
-
         .step-icon {
           flex-shrink: 0;
         }
-
         .step-info {
           flex: 1;
         }
-
         .step-title {
           font-weight: 600;
           color: #1f2937;
           margin-bottom: 0.25rem;
         }
-
         .step-description {
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .step-actions {
           display: flex;
           align-items: center;
           gap: 0.5rem;
         }
-
         .step-form {
           border-top: 1px solid #e5e7eb;
           padding: 1rem;
           background: #f9fafb;
         }
-
         .verification-form {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-
         .form-group {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
         }
-
         .form-group label {
           font-weight: 500;
           color: #374151;
         }
-
         .form-input, .form-select, .form-textarea {
           padding: 0.5rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
         }
-
         .form-input:focus, .form-select:focus, .form-textarea:focus {
           outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         }
-
         .form-actions {
           display: flex;
           gap: 0.5rem;
           justify-content: flex-end;
         }
-
         .history-summary {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
         }
-
         .summary-stats {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 1rem;
         }
-
         .stat-item {
           display: flex;
           flex-direction: column;
@@ -754,35 +679,29 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
           border: 1px solid #e5e7eb;
           border-radius: 8px;
         }
-
         .stat-label {
           font-size: 0.875rem;
           color: #6b7280;
         }
-
         .stat-value {
           font-size: 1.5rem;
           font-weight: 700;
           color: #1f2937;
         }
-
         .earned-badges h4 {
           font-weight: 600;
           color: #374151;
           margin-bottom: 0.75rem;
         }
-
         .badges-grid {
           display: flex;
           flex-wrap: wrap;
           gap: 0.5rem;
         }
-
         .badge-item {
           display: flex;
           align-items: center;
         }
-
         .loading {
           display: flex;
           flex-direction: column;
@@ -790,7 +709,6 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
           padding: 4rem;
           gap: 1rem;
         }
-
         .loading-spinner {
           width: 2rem;
           height: 2rem;
@@ -799,33 +717,27 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
           border-radius: 50%;
           animation: spin 1s linear infinite;
         }
-
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-
         @media (max-width: 768px) {
           .trust-header {
             flex-direction: column;
             gap: 1rem;
             align-items: stretch;
           }
-
           .components-grid {
             grid-template-columns: 1fr;
           }
-
           .summary-stats {
             grid-template-columns: repeat(2, 1fr);
           }
-
           .step-header {
             flex-direction: column;
             gap: 0.75rem;
             align-items: stretch;
           }
-
           .step-actions {
             justify-content: center;
           }

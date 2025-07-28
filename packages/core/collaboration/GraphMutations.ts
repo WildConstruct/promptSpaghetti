@@ -4,14 +4,12 @@
  * Defines the operational model for real-time collaborative graph editing
  * Integrates with existing WebSocket collaboration infrastructure
  */
-
 import { z } from 'zod';
 import { NodeTypeEnum, Node } from '../graphSchema';
 
 // =============================================================================
 // Core Mutation Operation Types
 // =============================================================================
-
 /**
  * Base interface for all graph mutation operations
  */
@@ -24,14 +22,12 @@ export interface BaseMutationOperation {
   operationVector?: VersionVector;
   dependencies?: string[];
 }
-
 /**
  * Version vector for operation ordering and conflict resolution
  */
 export interface VersionVector {
   [clientId: string]: number;
 }
-
 /**
  * Operation priority for conflict resolution
  */
@@ -45,7 +41,6 @@ export enum OperationPriority {
 // =============================================================================
 // Node Operations
 // =============================================================================
-
 /**
  * Node Addition Operation
  */
@@ -58,7 +53,6 @@ export interface NodeAddOperation extends BaseMutationOperation {
   parentId?: string;
   priority?: OperationPriority;
 }
-
 /**
  * Node Update Operation
  */
@@ -72,7 +66,6 @@ export interface NodeUpdateOperation extends BaseMutationOperation {
   validationSchema?: string;
   priority?: OperationPriority;
 }
-
 /**
  * Node Removal Operation
  */
@@ -88,7 +81,6 @@ export interface NodeRemoveOperation extends BaseMutationOperation {
 // =============================================================================
 // Edge Operations
 // =============================================================================
-
 /**
  * Edge data structure
  */
@@ -101,7 +93,6 @@ export interface GraphEdge {
   type: 'data' | 'control' | 'conditional';
   metadata?: Record<string, unknown>;
 }
-
 /**
  * Edge Addition Operation
  */
@@ -116,7 +107,6 @@ export interface EdgeAddOperation extends BaseMutationOperation {
   metadata?: Record<string, unknown>;
   priority?: OperationPriority;
 }
-
 /**
  * Edge Update Operation
  */
@@ -128,7 +118,6 @@ export interface EdgeUpdateOperation extends BaseMutationOperation {
   newValue: unknown;
   priority?: OperationPriority;
 }
-
 /**
  * Edge Removal Operation
  */
@@ -144,7 +133,6 @@ export interface EdgeRemoveOperation extends BaseMutationOperation {
 // =============================================================================
 // Parameter Operations
 // =============================================================================
-
 /**
  * Parameter Update Operation
  */
@@ -163,7 +151,6 @@ export interface ParameterUpdateOperation extends BaseMutationOperation {
 // =============================================================================
 // Batch Operations
 // =============================================================================
-
 /**
  * Batch Operation for atomic multi-operation execution
  */
@@ -179,7 +166,6 @@ export interface BatchMutationOperation extends BaseMutationOperation {
 // =============================================================================
 // Union Types
 // =============================================================================
-
 /**
  * All possible mutation operation types
  */
@@ -192,7 +178,6 @@ export type MutationOperation =
   | EdgeRemoveOperation
   | ParameterUpdateOperation
   | BatchMutationOperation;
-
 /**
  * Node-specific operations
  */
@@ -200,7 +185,6 @@ export type NodeMutationOperation =
   | NodeAddOperation
   | NodeUpdateOperation
   | NodeRemoveOperation;
-
 /**
  * Edge-specific operations  
  */
@@ -212,7 +196,6 @@ export type EdgeMutationOperation =
 // =============================================================================
 // Conflict Resolution
 // =============================================================================
-
 /**
  * Conflict types for different scenarios
  */
@@ -228,7 +211,6 @@ export enum ConflictType {
   CIRCULAR_DEPENDENCY = 'circular_dependency',
   VALIDATION_ERROR = 'validation_error'
 }
-
 /**
  * Conflict resolution strategies
  */
@@ -242,7 +224,6 @@ export enum ResolutionStrategy {
   ROLLBACK_OPERATION = 'rollback_operation',
   AUTO_MERGE = 'auto_merge'
 }
-
 /**
  * Conflict resolution data
  */
@@ -257,7 +238,6 @@ export interface ConflictResolution {
   timestamp: number;
   automatic: boolean;
 }
-
 /**
  * Conflict operation for manual resolution UI
  */
@@ -277,7 +257,6 @@ export interface ConflictOperation {
   suggestedResolution?: ResolutionStrategy;
   options: ResolutionOption[];
 }
-
 /**
  * Resolution option for conflict UI
  */
@@ -292,7 +271,6 @@ export interface ResolutionOption {
 // =============================================================================
 // WebSocket Message Types
 // =============================================================================
-
 /**
  * Graph mutation message for WebSocket transport
  */
@@ -307,7 +285,6 @@ export interface GraphMutationMessage {
   dependencies?: string[];
   requiresAck: boolean;
 }
-
 /**
  * Batch mutation message
  */
@@ -320,7 +297,6 @@ export interface BatchMutationMessage {
   userId: string;
   timestamp: number;
 }
-
 /**
  * Conflict detected message
  */
@@ -336,7 +312,6 @@ export interface ConflictDetectedMessage {
   suggestedResolution?: ResolutionStrategy;
   timeout?: number;
 }
-
 /**
  * Conflict resolved message
  */
@@ -348,7 +323,6 @@ export interface ConflictResolvedMessage {
   resultingOperations: MutationOperation[];
   timestamp: number;
 }
-
 /**
  * Delta synchronization message
  */
@@ -361,7 +335,6 @@ export interface DeltaSyncMessage {
   checksum: string;
   userId: string;
 }
-
 /**
  * State verification message
  */
@@ -376,7 +349,6 @@ export interface StateVerificationMessage {
   lastOperationId: string;
   requiredResync: boolean;
 }
-
 /**
  * Operation acknowledgment message
  */
@@ -393,24 +365,21 @@ export interface OperationAckMessage {
 // =============================================================================
 // Validation Schemas (Zod)
 // =============================================================================
-
 /**
  * Version vector validation schema
  */
 export const VersionVectorSchema = z.record(z.string(), z.number().min(0));
-
 /**
  * Position validation schema
  */
-export const PositionSchema = z.object({
+export const PositionSchema = z.object({)
   x: z.number(),
-  y: z.number()
+  y: z.number(),
 });
-
 /**
  * Node add operation validation schema
  */
-export const NodeAddOperationSchema = z.object({
+export const NodeAddOperationSchema = z.object({)
   type: z.literal('NODE_ADD'),
   operationId: z.string().min(1),
   documentId: z.string().min(1),
@@ -424,13 +393,12 @@ export const NodeAddOperationSchema = z.object({
   clientId: z.string().optional(),
   operationVector: VersionVectorSchema.optional(),
   dependencies: z.array(z.string()).optional(),
-  priority: z.nativeEnum(OperationPriority).optional()
+  priority: z.nativeEnum(OperationPriority).optional(),
 });
-
 /**
  * Node update operation validation schema
  */
-export const NodeUpdateOperationSchema = z.object({
+export const NodeUpdateOperationSchema = z.object({)
   type: z.literal('NODE_UPDATE'),
   operationId: z.string().min(1),
   documentId: z.string().min(1),
@@ -445,13 +413,12 @@ export const NodeUpdateOperationSchema = z.object({
   clientId: z.string().optional(),
   operationVector: VersionVectorSchema.optional(),
   dependencies: z.array(z.string()).optional(),
-  priority: z.nativeEnum(OperationPriority).optional()
+  priority: z.nativeEnum(OperationPriority).optional(),
 });
-
 /**
  * Edge add operation validation schema
  */
-export const EdgeAddOperationSchema = z.object({
+export const EdgeAddOperationSchema = z.object({)
   type: z.literal('EDGE_ADD'),
   operationId: z.string().min(1),
   documentId: z.string().min(1),
@@ -467,13 +434,12 @@ export const EdgeAddOperationSchema = z.object({
   clientId: z.string().optional(),
   operationVector: VersionVectorSchema.optional(),
   dependencies: z.array(z.string()).optional(),
-  priority: z.nativeEnum(OperationPriority).optional()
+  priority: z.nativeEnum(OperationPriority).optional(),
 });
-
 /**
  * All mutation operation schemas union
  */
-export const MutationOperationSchema = z.discriminatedUnion('type', [
+export const MutationOperationSchema = z.discriminatedUnion('type', [)
   NodeAddOperationSchema,
   NodeUpdateOperationSchema
   // Additional schemas would be added here for other operation types
@@ -482,34 +448,30 @@ export const MutationOperationSchema = z.discriminatedUnion('type', [
 // =============================================================================
 // Utility Functions
 // =============================================================================
-
 /**
  * Generate a unique operation ID
  */
 export function generateOperationId(userId: string, timestamp?: number): string {
   const ts = timestamp || Date.now();
   const random = Math.random().toString(36).substring(2, 8);
-  return `op_${userId}_${ts}_${random}`;
+  return `op_${userId}_${ts}_${random}`;}
 }
-
 /**
  * Generate a unique node ID
  */
 export function generateNodeId(prefix: string = 'node'): string {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 8);
-  return `${prefix}_${timestamp}_${random}`;
+  return `${prefix}_${timestamp}_${random}`;}
 }
-
 /**
  * Generate a unique edge ID
  */
 export function generateEdgeId(sourceId: string, targetId: string): string {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 6);
-  return `edge_${sourceId}_${targetId}_${timestamp}_${random}`;
+  return `edge_${sourceId}_${targetId}_${timestamp}_${random}`;}
 }
-
 /**
  * Check if an operation affects a specific node
  */
@@ -530,7 +492,6 @@ export function operationAffectsNode(operation: MutationOperation, nodeId: strin
     return false;
   }
 }
-
 /**
  * Check if an operation affects a specific edge
  */
@@ -546,7 +507,6 @@ export function operationAffectsEdge(operation: MutationOperation, edgeId: strin
     return false;
   }
 }
-
 /**
  * Compare operation timestamps for ordering
  */
@@ -554,11 +514,9 @@ export function compareOperations(op1: MutationOperation, op2: MutationOperation
   if (op1.timestamp !== op2.timestamp) {
     return op1.timestamp - op2.timestamp;
   }
-  
   // Tie-breaker using operation ID
   return op1.operationId.localeCompare(op2.operationId);
 }
-
 /**
  * Check if two operations conflict
  */
@@ -567,7 +525,6 @@ export function operationsConflict(op1: MutationOperation, op2: MutationOperatio
   if (op1.operationId === op2.operationId) {
     return false;
   }
-  
   // Check for node conflicts
   if ((op1.type.startsWith('NODE_') || op1.type === 'PARAMETER_UPDATE') && 
       (op2.type.startsWith('NODE_') || op2.type === 'PARAMETER_UPDATE')) {
@@ -575,23 +532,19 @@ export function operationsConflict(op1: MutationOperation, op2: MutationOperatio
     const nodeId2 = 'nodeId' in op2 ? op2.nodeId : '';
     return nodeId1 === nodeId2 && nodeId1 !== '';
   }
-  
   // Check for edge conflicts
   if (op1.type.startsWith('EDGE_') && op2.type.startsWith('EDGE_')) {
     const edgeId1 = 'edgeId' in op1 ? op1.edgeId : '';
     const edgeId2 = 'edgeId' in op2 ? op2.edgeId : '';
     return edgeId1 === edgeId2 && edgeId1 !== '';
   }
-  
   return false;
 }
-
 /**
  * Extract all node IDs affected by an operation
  */
 export function getAffectedNodeIds(operation: MutationOperation): string[] {
   const nodeIds: string[] = [];
-  
   switch (operation.type) {
   case 'NODE_ADD':
   case 'NODE_UPDATE':
@@ -605,21 +558,18 @@ export function getAffectedNodeIds(operation: MutationOperation): string[] {
     nodeIds.push(operation.sourceNodeId, operation.targetNodeId);
     break;
   case 'BATCH_MUTATION':
-    operation.operations.forEach(op => {
+    operation.operations.forEach(op => {)
       nodeIds.push(...getAffectedNodeIds(op));
     });
     break;
   }
-  
   return Array.from(new Set(nodeIds));
 }
-
 /**
  * Extract all edge IDs affected by an operation
  */
 export function getAffectedEdgeIds(operation: MutationOperation): string[] {
   const edgeIds: string[] = [];
-  
   switch (operation.type) {
   case 'EDGE_ADD':
   case 'EDGE_UPDATE':
@@ -627,12 +577,11 @@ export function getAffectedEdgeIds(operation: MutationOperation): string[] {
     edgeIds.push(operation.edgeId);
     break;
   case 'BATCH_MUTATION':
-    operation.operations.forEach(op => {
+    operation.operations.forEach(op => {)
       edgeIds.push(...getAffectedEdgeIds(op));
     });
     break;
   }
-  
   return Array.from(new Set(edgeIds));
 }
 
@@ -641,7 +590,6 @@ export default {
   ConflictType,
   ResolutionStrategy,
   OperationPriority,
-  
   // Schemas
   NodeAddOperationSchema,
   NodeUpdateOperationSchema,
@@ -649,7 +597,6 @@ export default {
   MutationOperationSchema,
   VersionVectorSchema,
   PositionSchema,
-  
   // Utilities
   generateOperationId,
   generateNodeId,

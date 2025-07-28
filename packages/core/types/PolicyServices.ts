@@ -6,7 +6,6 @@
  * Defines contracts for policy CRUD operations, evaluation services,
  * and administrative functions.
  */
-
 import {
   BasePolicy,
   PolicyType,
@@ -32,7 +31,6 @@ import {
 // =============================================================================
 // Core Policy Service Interfaces
 // =============================================================================
-
 /**
  * Main policy management service interface
  */
@@ -43,60 +41,48 @@ export interface IPolicyService {
   getPolicy(id: string, version?: string): Promise<PolicyServiceResponse<BasePolicy>>;
   getPolicies(criteria?: PolicySearchCriteria): Promise<PolicyServiceResponse<PolicySearchResult>>;
   deletePolicy(id: string): Promise<PolicyServiceResponse<void>>;
-  
   // Policy lifecycle management
   activatePolicy(id: string): Promise<PolicyServiceResponse<BasePolicy>>;
   deactivatePolicy(id: string, reason?: string): Promise<PolicyServiceResponse<BasePolicy>>;
   deprecatePolicy(id: string, replacementId?: string): Promise<PolicyServiceResponse<BasePolicy>>;
   archivePolicy(id: string): Promise<PolicyServiceResponse<BasePolicy>>;
-  
   // Validation and testing
   validatePolicy(policy: Partial<BasePolicy>): Promise<PolicyServiceResponse<PolicyValidationResult>>;
   testPolicy(id: string, testCases: PolicyTestCase[]): Promise<PolicyServiceResponse<PolicyTestResult>>;
-  dryRunPolicy(
+  dryRunPolicy()
     policy: Partial<BasePolicy>,
-    context: EvaluationContext
+    context: EvaluationContext,
   ): Promise<PolicyServiceResponse<PolicyEvaluation>>;
-  
   // Version management
   createPolicyVersion(id: string, changes: Partial<BasePolicy>): Promise<PolicyServiceResponse<BasePolicy>>;
   getPolicyVersions(id: string): Promise<PolicyServiceResponse<PolicyVersion[]>>;
   comparePolicyVersions(id: string, version1: string, version2: string): Promise<PolicyServiceResponse<PolicyDiff>>;
   rollbackToVersion(id: string, version: string): Promise<PolicyServiceResponse<BasePolicy>>;
-  
   // Bulk operations
   bulkCreatePolicies(policies: CreatePolicyRequest[]): Promise<PolicyServiceResponse<BulkOperationResult>>;
   bulkUpdatePolicies(updates: BulkUpdateRequest[]): Promise<PolicyServiceResponse<BulkOperationResult>>;
   bulkDeletePolicies(ids: string[]): Promise<PolicyServiceResponse<BulkOperationResult>>;
 }
-
 /**
  * Policy evaluation service interface
  */
 export interface IPolicyEvaluationService {
   // Single evaluation
   evaluatePolicy(policyId: string, context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
-  
   // Multi-policy evaluation
   evaluatePolicies(policyIds: string[], context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation[]>>;
-  
   // Context-based evaluation (finds applicable policies automatically)
   evaluateForContext(context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
-  
   // Bulk evaluation
   bulkEvaluate(requests: EvaluationRequest[]): Promise<PolicyServiceResponse<PolicyEvaluation[]>>;
-  
   // Real-time evaluation
   evaluateRealtime(context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
-  
   // Cached evaluation
   getCachedEvaluation(cacheKey: string): Promise<PolicyServiceResponse<PolicyEvaluation | null>>;
   invalidateEvaluationCache(policyIds?: string[]): Promise<PolicyServiceResponse<void>>;
-  
   // Performance monitoring
   getEvaluationMetrics(period?: AnalyticsPeriod): Promise<PolicyServiceResponse<EvaluationPerformanceMetrics>>;
 }
-
 /**
  * Policy assignment service interface
  */
@@ -107,73 +93,64 @@ export interface IPolicyAssignmentService {
   getAssignment(id: string): Promise<PolicyServiceResponse<PolicyAssignment>>;
   getAssignments(criteria?: AssignmentSearchCriteria): Promise<PolicyServiceResponse<AssignmentSearchResult>>;
   deleteAssignment(id: string): Promise<PolicyServiceResponse<void>>;
-  
   // Target-based operations
-  getAssignmentsForTarget(
+  getAssignmentsForTarget()
     targetType: AssignmentTargetType,
-    targetId: string
+    targetId: string,
   ): Promise<PolicyServiceResponse<PolicyAssignment[]>>;
-  assignPolicyToTarget(
+  assignPolicyToTarget()
     policyId: string,
     targetType: AssignmentTargetType,
     targetId: string,
     options?: AssignmentOptions
   ): Promise<PolicyServiceResponse<PolicyAssignment>>;
-  unassignPolicyFromTarget(
+  unassignPolicyFromTarget()
     policyId: string,
     targetType: AssignmentTargetType,
-    targetId: string
+    targetId: string,
   ): Promise<PolicyServiceResponse<void>>;
-  
   // Bulk assignment operations
   bulkAssign(assignments: CreateAssignmentRequest[]): Promise<PolicyServiceResponse<BulkOperationResult>>;
   bulkUnassign(criteria: AssignmentSearchCriteria): Promise<PolicyServiceResponse<BulkOperationResult>>;
-  
   // Inheritance and conflict resolution
-  resolveAssignmentConflicts(
+  resolveAssignmentConflicts()
     targetType: AssignmentTargetType,
-    targetId: string
+    targetId: string,
   ): Promise<PolicyServiceResponse<ConflictResolutionResult>>;
   getInheritanceChain(assignmentId: string): Promise<PolicyServiceResponse<AssignmentInheritanceChain>>;
-  
   // Assignment validation
   validateAssignment(assignment: CreateAssignmentRequest): Promise<PolicyServiceResponse<AssignmentValidationResult>>;
   simulateAssignment(assignment: CreateAssignmentRequest): Promise<PolicyServiceResponse<AssignmentSimulationResult>>;
 }
-
 /**
  * Policy analytics service interface
  */
 export interface IPolicyAnalyticsService {
   // Analytics generation
-  generateAnalytics(
+  generateAnalytics()
     period: AnalyticsPeriod,
     criteria?: AnalyticsSearchCriteria
   ): Promise<PolicyServiceResponse<PolicyAnalytics>>;
   getUsageAnalytics(policyIds?: string[], period?: AnalyticsPeriod): Promise<PolicyServiceResponse<UsageAnalytics>>;
-  getComplianceAnalytics(
+  getComplianceAnalytics()
     frameworks?: ComplianceFramework[],
     period?: AnalyticsPeriod
   ): Promise<PolicyServiceResponse<ComplianceAnalytics>>;
   getPerformanceAnalytics(period?: AnalyticsPeriod): Promise<PolicyServiceResponse<PerformanceAnalytics>>;
-  
   // Real-time metrics
   getRealTimeMetrics(): Promise<PolicyServiceResponse<RealTimeMetrics>>;
   getSystemHealth(): Promise<PolicyServiceResponse<SystemHealthMetrics>>;
-  
   // Reporting
-  generateComplianceReport(
+  generateComplianceReport()
     frameworks: ComplianceFramework[],
     format?: ReportFormat
   ): Promise<PolicyServiceResponse<ComplianceReport>>;
   generateUsageReport(period: AnalyticsPeriod, format?: ReportFormat): Promise<PolicyServiceResponse<UsageReport>>;
   generateAuditReport(period: AnalyticsPeriod, format?: ReportFormat): Promise<PolicyServiceResponse<AuditReport>>;
-  
   // Insights and recommendations
   getInsights(criteria?: InsightCriteria): Promise<PolicyServiceResponse<PolicyInsight[]>>;
   getRecommendations(criteria?: RecommendationCriteria): Promise<PolicyServiceResponse<PolicyRecommendation[]>>;
 }
-
 /**
  * Policy template service interface
  */
@@ -184,44 +161,38 @@ export interface IPolicyTemplateService {
   getTemplate(id: string): Promise<PolicyServiceResponse<PolicyTemplate>>;
   getTemplates(criteria?: TemplateSearchCriteria): Promise<PolicyServiceResponse<TemplateSearchResult>>;
   deleteTemplate(id: string): Promise<PolicyServiceResponse<void>>;
-  
   // Template usage
-  createPolicyFromTemplate(
+  createPolicyFromTemplate()
     templateId: string,
-    customizations: TemplateCustomization
+    customizations: TemplateCustomization,
   ): Promise<PolicyServiceResponse<BasePolicy>>;
   getTemplateUsage(templateId: string): Promise<PolicyServiceResponse<TemplateUsageStats>>;
-  
   // Template discovery
   recommendTemplates(context: TemplateRecommendationContext): Promise<PolicyServiceResponse<PolicyTemplate[]>>;
   searchTemplatesByFramework(frameworks: ComplianceFramework[]): Promise<PolicyServiceResponse<PolicyTemplate[]>>;
-  
   // Template validation
   validateTemplate(template: CreateTemplateRequest): Promise<PolicyServiceResponse<TemplateValidationResult>>;
   testTemplate(templateId: string, testData: TemplateTestData): Promise<PolicyServiceResponse<TemplateTestResult>>;
 }
-
 /**
  * Policy import/export service interface
  */
 export interface IPolicyImportExportService {
   // Export operations
   exportPolicies(criteria: PolicySearchCriteria, options: ExportOptions): Promise<PolicyServiceResponse<PolicyExport>>;
-  exportAssignments(
+  exportAssignments()
     criteria: AssignmentSearchCriteria,
-    options: ExportOptions
+    options: ExportOptions,
   ): Promise<PolicyServiceResponse<PolicyAssignment[]>>;
   downloadExport(exportId: string): Promise<PolicyServiceResponse<Blob>>;
-  
   // Import operations
   importPolicies(data: ImportData, options: ImportOptions): Promise<PolicyServiceResponse<PolicyImport>>;
   validateImportData(data: ImportData): Promise<PolicyServiceResponse<ImportValidationResult>>;
   getImportStatus(importId: string): Promise<PolicyServiceResponse<PolicyImport>>;
-  
   // Batch operations
-  scheduleBatchExport(
+  scheduleBatchExport()
     criteria: PolicySearchCriteria,
-    schedule: ExportSchedule
+    schedule: ExportSchedule,
   ): Promise<PolicyServiceResponse<BatchJob>>;
   scheduleBatchImport(source: ImportSource, schedule: ImportSchedule): Promise<PolicyServiceResponse<BatchJob>>;
 }

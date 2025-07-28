@@ -1,8 +1,6 @@
 // packages/core/types/TemplateTypes.ts
 // Epic 8.7 Task 6: Template Library - Type Definitions
-
 import { Node, Edge } from 'reactflow';
-
 /**
  * Template data structure as defined in story requirements
  */
@@ -18,7 +16,6 @@ export interface Template {
   graph: GraphData; // Complete graph with annotations
   metadata: TemplateMetadata;
 }
-
 /**
  * Complete graph data including annotations from Epic 8.7
  */
@@ -27,7 +24,6 @@ export interface GraphData {
   edges: Edge[];
   annotations: GraphAnnotations;
 }
-
 /**
  * Epic 8.7 annotation system as defined in story architecture
  */
@@ -36,7 +32,7 @@ export interface GraphAnnotations {
   nodeLabels: Record<string, string>;
   regionGroups: RegionGroup[];
   connectionLabels: Record<string, string>;
-  metadata: {
+  metadata: {,
     author: string;
     created: string;
     modified: string;
@@ -62,7 +58,6 @@ export interface RegionGroup {
   nodeIds: string[];
   collapsed: boolean;
 }
-
 /**
  * Review system for templates
  */
@@ -74,7 +69,6 @@ export interface Review {
   timestamp: string;
   helpful: number; // helpful votes
 }
-
 /**
  * Template metadata
  */
@@ -90,7 +84,6 @@ export interface TemplateMetadata {
   parentTemplateId?: string; // for version tracking
   language: string;
 }
-
 /**
  * Template category system
  */
@@ -105,7 +98,6 @@ export type TemplateCategory =
   | 'technical'
   | 'vfx'
   | 'general';
-
 /**
  * Template sharing and permissions
  */
@@ -116,7 +108,6 @@ export interface TemplateSharing {
   shareUrl?: string;
   team?: string; // team ID
 }
-
 /**
  * Template search and filtering
  */
@@ -130,7 +121,6 @@ export interface TemplateFilter {
   sortBy?: 'name' | 'created' | 'rating' | 'usage' | 'modified';
   sortOrder?: 'asc' | 'desc';
 }
-
 /**
  * Template instantiation options
  */
@@ -141,7 +131,6 @@ export interface TemplateInstantiationOptions {
   offsetY?: number;
   customizationValues?: Record<string, any>;
 }
-
 /**
  * Template validation result
  */
@@ -149,13 +138,12 @@ export interface TemplateValidation {
   isValid: boolean;
   errors: string[];
   warnings: string[];
-  compatibility: {
+  compatibility: {,
     version: string;
     features: string[];
     missingFeatures: string[];
   };
 }
-
 /**
  * Template library state
  */
@@ -167,7 +155,6 @@ export interface TemplateLibraryState {
   filter: TemplateFilter;
   selectedTemplate: Template | null;
 }
-
 /**
  * Template operations
  */
@@ -177,31 +164,25 @@ export interface TemplateOperations {
   loadTemplate: (id: string) => Promise<Template>;
   updateTemplate: (id: string, updates: Partial<Template>) => Promise<Template>;
   deleteTemplate: (id: string) => Promise<void>;
-  
   // Search and browse
   searchTemplates: (filter: TemplateFilter) => Promise<Template[]>;
   getTemplatesByCategory: (category: TemplateCategory) => Promise<Template[]>;
   getPopularTemplates: (limit?: number) => Promise<Template[]>;
   getRecentTemplates: (limit?: number) => Promise<Template[]>;
-  
   // Instantiation
-  instantiateTemplate: (
+  instantiateTemplate: (),
     templateId: string, 
-    options: TemplateInstantiationOptions
+    options: TemplateInstantiationOptions,
   ) => Promise<GraphData>;
-  
   // Sharing
   shareTemplate: (templateId: string, sharing: TemplateSharing) => Promise<string>;
   importSharedTemplate: (shareUrl: string) => Promise<Template>;
-  
   // Reviews
   addReview: (templateId: string, review: Omit<Review, 'id' | 'timestamp'>) => Promise<Review>;
   getReviews: (templateId: string) => Promise<Review[]>;
-  
   // Validation
   validateTemplate: (template: Template) => Promise<TemplateValidation>;
 }
-
 /**
  * Template save dialog data
  */
@@ -213,7 +194,6 @@ export interface TemplateSaveData {
   isPublic: boolean;
   includeAnnotations: boolean;
 }
-
 /**
  * Template browser UI state
  */
@@ -226,7 +206,6 @@ export interface TemplateBrowserState {
   showOnlyMyTemplates: boolean;
   previewTemplate: Template | null;
 }
-
 /**
  * Template event types for component communication
  */
@@ -235,7 +214,6 @@ export type TemplateEvent =
   | { type: 'template-applied'; templateId: string; options: TemplateInstantiationOptions }
   | { type: 'template-shared'; templateId: string; shareUrl: string }
   | { type: 'review-added'; templateId: string; review: Review };
-
 /**
  * Template compatibility with existing graph system
  */
@@ -243,7 +221,7 @@ export interface TemplateCompatibility {
   supportsNodeTypes: string[];
   requiredFeatures: string[];
   minEditorVersion: string;
-  annotations: {
+  annotations: {,
     stickyNotes: boolean;
     nodeLabels: boolean;
     regionGroups: boolean;

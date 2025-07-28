@@ -5,7 +5,6 @@
  * Visual region grouping component with boundaries, labels, and interactive controls
  * for organizing and managing collections of nodes on the graph canvas.
  */
-
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { 
   RegionGroup as RegionGroupType, 
@@ -13,7 +12,6 @@ import {
   REGION_GROUP_COLORS,
   REGION_GROUP_STYLES
 } from '../../types/CollaborationTypes';
-
 interface RegionGroupProps {
   group: RegionGroupType;
   onAction: (action: RegionGroupAction) => void;
@@ -27,7 +25,7 @@ interface RegionGroupProps {
   zoom?: number;
 }
 
-export const RegionGroup: React.FC<RegionGroupProps> = ({
+export const RegionGroup: React.FC<RegionGroupProps> = ({)
   group,
   onAction,
   selected = false,
@@ -42,28 +40,23 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [resizeStart, setResizeStart] = useState({ 
+  const [resizeStart, setResizeStart] = useState({ )
     x: 0, y: 0, width: 0, height: 0, handle: '' 
   });
   const [isEditingLabel, setIsEditingLabel] = useState(false);
   const [editLabelValue, setEditLabelValue] = useState(group.label);
-
   const groupRef = useRef<HTMLDivElement>(null);
   const labelInputRef = useRef<HTMLInputElement>(null);
-
   // Get color theme
-  const colorKey = Object.keys(REGION_GROUP_COLORS).find(key => 
+  const colorKey = Object.keys(REGION_GROUP_COLORS).find(key => ;)
     REGION_GROUP_COLORS[key as keyof typeof REGION_GROUP_COLORS].primary === group.color
   ) || 'blue';
   const colorTheme = REGION_GROUP_COLORS[colorKey as keyof typeof REGION_GROUP_COLORS];
-
   // Get style configuration
   const styleConfig = REGION_GROUP_STYLES[group.style] || REGION_GROUP_STYLES.rounded;
-
   // Determine if group should be visible
   const shouldShowGroup = useCallback(() => {
     if (!group.visible) return false;
-    
     switch (group.visibility) {
       case 'always':
         return true;
@@ -79,30 +72,24 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
         return true;
     }
   }, [group.visible, group.visibility, group.collapsed, selected, isDragging, isResizing, isEditingLabel]);
-
   // Handle mouse down for dragging
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (!canMove || isEditingLabel) return;
-    
     e.stopPropagation();
     e.preventDefault();
-    
     setIsDragging(true);
-    setDragStart({
+    setDragStart({)
       x: e.clientX - group.bounds.x,
       y: e.clientY - group.bounds.y
     });
   }, [canMove, isEditingLabel, group.bounds]);
-
   // Handle resize handle mouse down
   const handleResizeMouseDown = useCallback((e: React.MouseEvent, handle: string) => {
     if (!canResize || isEditingLabel) return;
-    
     e.stopPropagation();
     e.preventDefault();
-    
     setIsResizing(true);
-    setResizeStart({
+    setResizeStart({)
       x: e.clientX,
       y: e.clientY,
       width: group.bounds.width,
@@ -110,15 +97,13 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
       handle
     });
   }, [canResize, isEditingLabel, group.bounds]);
-
   // Handle mouse move for dragging and resizing
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
         const newX = e.clientX - dragStart.x;
         const newY = e.clientY - dragStart.y;
-        
-        onAction({
+        onAction({)
           type: 'move',
           groupId: group.id,
           position: { x: newX, y: newY }
@@ -126,9 +111,7 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
       } else if (isResizing) {
         const deltaX = e.clientX - resizeStart.x;
         const deltaY = e.clientY - resizeStart.y;
-        
         const newBounds = { ...group.bounds };
-        
         switch (resizeStart.handle) {
           case 'se': // Southeast
             newBounds.width = Math.max(100, resizeStart.width + deltaX);
@@ -151,52 +134,44 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
             newBounds.y = group.bounds.y + deltaY;
             break;
         }
-        
-        onAction({
+        onAction({)
           type: 'resize',
           groupId: group.id,
-          bounds: newBounds
+          bounds: newBounds,
         });
       }
     };
-
     const handleMouseUp = () => {
       setIsDragging(false);
       setIsResizing(false);
     };
-
     if (isDragging || isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
-      
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
   }, [isDragging, isResizing, dragStart, resizeStart, group, onAction]);
-
   // Handle label editing
   const startEditingLabel = useCallback(() => {
     if (!canEdit) return;
     setIsEditingLabel(true);
     setEditLabelValue(group.label);
   }, [canEdit, group.label]);
-
   const saveLabel = useCallback(() => {
     setIsEditingLabel(false);
-    onAction({
+    onAction({)
       type: 'update',
       groupId: group.id,
       group: { label: editLabelValue.trim() || 'Untitled Group' }
     });
   }, [editLabelValue, group.id, onAction]);
-
   const cancelEditLabel = useCallback(() => {
     setIsEditingLabel(false);
     setEditLabelValue(group.label);
   }, [group.label]);
-
   // Handle key events for label editing
   const handleLabelKeyDown = useCallback((e: React.KeyboardEvent) => {
     switch (e.key) {
@@ -210,7 +185,6 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
         break;
     }
   }, [saveLabel, cancelEditLabel]);
-
   // Focus input when editing starts
   useEffect(() => {
     if (isEditingLabel && labelInputRef.current) {
@@ -218,21 +192,18 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
       labelInputRef.current.select();
     }
   }, [isEditingLabel]);
-
   // Handle collapse/expand
   const handleToggleCollapse = useCallback(() => {
-    onAction({
+    onAction({)
       type: group.collapsed ? 'expand' : 'collapse',
-      groupId: group.id
+      groupId: group.id,
     });
   }, [group.collapsed, group.id, onAction]);
-
   // Don't render if not visible
   if (!shouldShowGroup()) {
     return null;
   }
-
-  return (
+  return ()
     <div
       ref={groupRef}
       data-testid={`region-group-${group.id}`}
@@ -242,7 +213,7 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
         top: group.bounds.y,
         width: group.bounds.width,
         height: group.bounds.height,
-        border: `${group.borderWidth || 2}px ${styleConfig.borderStyle} ${group.color}`,
+        border: `${group.borderWidth || 2}px ${styleConfig.borderStyle} ${group.color}`,}
         borderRadius: styleConfig.borderRadius,
         backgroundColor: group.backgroundColor || colorTheme.background,
         opacity: group.opacity || 0.8,
@@ -258,7 +229,7 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
       onDoubleClick={startEditingLabel}
     >
       {/* Header with label and controls */}
-      {(showLabel || group.showLabel !== false) && (
+      {(showLabel || group.showLabel !== false) && ()
         <div
           style={{
             position: 'absolute',
@@ -276,7 +247,7 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
             fontWeight: 600,
             borderRadius: '4px 4px 0 0',
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            cursor: 'default'
+            cursor: 'default',
           }}
           onMouseDown={(e) => e.stopPropagation()}
         >
@@ -303,9 +274,8 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
           >
             {group.collapsed ? '▶' : '▼'}
           </button>
-
           {/* Label */}
-          {isEditingLabel ? (
+          {isEditingLabel ? ()
             <input
               ref={labelInputRef}
               type="text"
@@ -322,18 +292,18 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
                 padding: '2px 6px',
                 fontSize: 12,
                 fontWeight: 600,
-                borderRadius: 3
+                borderRadius: 3,
               }}
               maxLength={50}
             />
-          ) : (
+          ) : ()
             <span
               style={{ 
                 flex: 1,
                 cursor: canEdit ? 'pointer' : 'default',
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
               }}
               onDoubleClick={startEditingLabel}
               title={group.label}
@@ -341,9 +311,8 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
               {group.label}
             </span>
           )}
-
           {/* Node count */}
-          {(showNodeCount || group.showNodeCount !== false) && (
+          {(showNodeCount || group.showNodeCount !== false) && ()
             <span
               style={{
                 fontSize: 10,
@@ -352,25 +321,23 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
                 padding: '2px 6px',
                 borderRadius: 10,
                 minWidth: 16,
-                textAlign: 'center'
+                textAlign: 'center',
               }}
               title={`${nodeCount} node${nodeCount !== 1 ? 's' : ''}`}
             >
               {nodeCount}
             </span>
           )}
-
           {/* Lock indicator */}
-          {group.isLocked && (
+          {group.isLocked && ()
             <span style={{ fontSize: 10, opacity: 0.8 }} title="Group is locked">
               🔒
             </span>
           )}
         </div>
       )}
-
       {/* Resize handles */}
-      {canResize && selected && !group.isLocked && (
+      {canResize && selected && !group.isLocked && ()
         <>
           {/* Southeast handle */}
           <div
@@ -388,7 +355,6 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
             }}
             onMouseDown={(e) => handleResizeMouseDown(e, 'se')}
           />
-          
           {/* Southwest handle */}
           <div
             style={{
@@ -405,7 +371,6 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
             }}
             onMouseDown={(e) => handleResizeMouseDown(e, 'sw')}
           />
-          
           {/* Northeast handle */}
           <div
             style={{
@@ -422,7 +387,6 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
             }}
             onMouseDown={(e) => handleResizeMouseDown(e, 'ne')}
           />
-          
           {/* Northwest handle */}
           <div
             style={{
@@ -441,9 +405,8 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
           />
         </>
       )}
-
       {/* Description tooltip on hover */}
-      {group.description && (
+      {group.description && ()
         <div
           style={{
             position: 'absolute',
@@ -460,14 +423,13 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
             opacity: 0,
             pointerEvents: 'none',
             transition: 'opacity 0.2s ease',
-            zIndex: 1000
+            zIndex: 1000,
           }}
           className="group-description-tooltip"
         />
       )}
-
       {/* Collapsed state indicator */}
-      {group.collapsed && (
+      {group.collapsed && ()
         <div
           style={{
             position: 'absolute',
@@ -477,13 +439,12 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({
             color: colorTheme.text,
             fontSize: 24,
             opacity: 0.6,
-            pointerEvents: 'none'
+            pointerEvents: 'none',
           }}
         >
           ⋯
         </div>
       )}
-
       <style>{`
         [data-testid^="region-group-"]:hover .group-description-tooltip {
           opacity: 1;

@@ -49,25 +49,25 @@ export interface SecurityPattern {
 }
 export interface BehavioralBaseline {
     userId: string;
-    normalPatterns: {
-        loginTimes: {
+    normalPatterns: {,
+        loginTimes: {,
             hour: number;
             frequency: number;
         }[];
-        ipAddresses: {
+        ipAddresses: {,
             ip: string;
             frequency: number;
         }[];
-        devices: {
+        devices: {,
             deviceId: string;
             frequency: number;
         }[];
-        actions: {
+        actions: {,
             action: string;
             frequency: number;
         }[];
     };
-    riskProfile: {
+    riskProfile: {,
         baselineRisk: number;
         recentDeviations: number;
         trustedScore: number;
@@ -83,16 +83,16 @@ export interface SecurityInsight {
     severity: RiskLevel;
     confidence: number;
     impact: 'low' | 'medium' | 'high' | 'critical';
-    timeframe: {
+    timeframe: {,
         start: Date;
         end: Date;
     };
-    evidence: {
+    evidence: {,
         eventIds: string[];
         patterns: string[];
         metrics: Record<string, number>;
     };
-    recommendations: {
+    recommendations: {,
         immediate: string[];
         shortTerm: string[];
         longTerm: string[];
@@ -100,50 +100,50 @@ export interface SecurityInsight {
     generatedAt: Date;
 }
 export interface SecurityMetricsSummary {
-    period: {
+    period: {,
         start: Date;
         end: Date;
     };
-    overallRisk: {
+    overallRisk: {,
         level: RiskLevel;
         score: number;
         trend: 'increasing' | 'decreasing' | 'stable';
-        contributors: Array<{
+        contributors: Array<{,
             factor: string;
             impact: number;
         }>;
     };
-    eventVolume: {
+    eventVolume: {,
         total: number;
         byType: Record<SecurityEventType, number>;
         bySeverity: Record<string, number>;
         hourlyDistribution: number[];
-        trends: {
+        trends: {,
             weekOverWeek: number;
             monthOverMonth: number;
         };
     };
-    threatLandscape: {
+    threatLandscape: {,
         activeThreats: number;
         newPatterns: number;
-        topCategories: Array<{
+        topCategories: Array<{,
             category: ThreatCategory;
             count: number;
         }>;
-        geographicHotspots: Array<{
+        geographicHotspots: Array<{,
             location: string;
             riskScore: number;
         }>;
     };
-    userBehavior: {
+    userBehavior: {,
         anomalousUsers: number;
-        highRiskUsers: Array<{
+        highRiskUsers: Array<{,
             userId: string;
             riskScore: number;
         }>;
         behavioralDeviations: number;
     };
-    systemHealth: {
+    systemHealth: {,
         securityPosture: number;
         vulnerabilityExposure: number;
         complianceScore: number;
@@ -154,14 +154,14 @@ export interface AlertConfiguration {
     id: string;
     name: string;
     description: string;
-    conditions: {
+    conditions: {,
         eventTypes?: SecurityEventType[];
         thresholds?: Record<string, number>;
         timeWindow?: number;
         userScope?: string[];
         riskLevel?: RiskLevel;
     };
-    actions: {
+    actions: {,
         notify: string[];
         escalate: boolean;
         autoResponse: string[];
@@ -182,7 +182,7 @@ export declare class SecurityEventAnalytics extends EventEmitter {
     /**
      * Analyze security events and generate insights
      */
-    analyzeSecurityEvents(timeframe?: {
+    analyzeSecurityEvents(timeframe?: {)
         start: Date;
         end: Date;
     }): Promise<SecurityMetricsSummary>;
@@ -200,7 +200,7 @@ export declare class SecurityEventAnalytics extends EventEmitter {
     getUserBehaviorAnalysis(userId: string): {
         baseline: BehavioralBaseline | null;
         currentRisk: number;
-        recentAnomalies: Array<{
+        recentAnomalies: Array<{,
             type: string;
             severity: RiskLevel;
             timestamp: Date;
@@ -210,24 +210,24 @@ export declare class SecurityEventAnalytics extends EventEmitter {
     /**
      * Generate executive security report
      */
-    generateExecutiveReport(period: {
+    generateExecutiveReport(period: {)
         start: Date;
         end: Date;
     }): {
         executiveSummary: string;
         keyMetrics: Record<string, string | number>;
-        topThreats: Array<{
+        topThreats: Array<{,
             threat: string;
             impact: string;
             status: string;
         }>;
-        recommendations: Array<{
+        recommendations: Array<{,
             priority: string;
             action: string;
             timeline: string;
         }>;
         complianceStatus: Record<ComplianceFramework, string>;
-        riskTrend: Array<{
+        riskTrend: Array<{,
             date: Date;
             riskScore: number;
         }>;

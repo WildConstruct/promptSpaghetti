@@ -9,7 +9,7 @@
 // Core Era and Period Definitions
 export interface Era {
   name: string;
-  period: {
+  period: {,
     start: number; // Year
     end: number;   // Year
   };
@@ -21,28 +21,28 @@ export interface Era {
 
 // Predefined Historical Eras - exported below with other interfaces
 export const HISTORICAL_ERAS = {
-  MEDIEVAL_EARLY: {
+  MEDIEVAL_EARLY: {,
     name: 'Early Medieval',
     period: { start: 476, end: 1000 },
     region: ['Europe'],
     accuracy: 'high',
     description: 'Early medieval period characterized by the fall of Rome and rise of feudalism'
   },
-  MEDIEVAL_HIGH: {
+  MEDIEVAL_HIGH: {,
     name: 'High Medieval', 
     period: { start: 1000, end: 1300 },
     region: ['Europe'],
     accuracy: 'high',
     description: 'High medieval period of cathedral building, crusades, and scholasticism'
   },
-  MEDIEVAL_LATE: {
+  MEDIEVAL_LATE: {,
     name: 'Late Medieval',
     period: { start: 1300, end: 1500 },
     region: ['Europe'], 
     accuracy: 'high',
     description: 'Late medieval period transitioning toward Renaissance'
   },
-  RENAISSANCE: {
+  RENAISSANCE: {,
     name: 'Renaissance',
     period: { start: 1400, end: 1600 },
     region: ['Europe'],
@@ -70,8 +70,7 @@ export interface UTDGNode {
   type: 'material' | 'texture' | 'pattern' | 'style' | 'garment' | 'accessory' | 'tool' | 'decoration';
   content: string;
   description?: string;
-  
-  metadata: {
+  metadata: {,
     era: Era[];
     authenticity: number; // 0-1 scale
     source: string;       // Data source reference
@@ -83,18 +82,15 @@ export interface UTDGNode {
     ceremonial?: boolean;
     daily_use?: boolean;
   };
-  
-  relationships: {
+  relationships: {,
     compatible: string[];    // Compatible node IDs
     incompatible: string[];  // Incompatible node IDs
     variations: Variation[];
     requires?: string[];     // Required accompanying nodes
     enhances?: string[];     // Nodes this enhances when present
   };
-  
   // Historical accuracy constraints
   constraints: HistoricalConstraint[];
-  
   // External data source information
   external_source?: {
     source_id: string;
@@ -154,21 +150,18 @@ export interface DataSource {
   type: 'api' | 'database' | 'file' | 'webscrape';
   endpoint?: string;
   authentication?: AuthConfig;
-  
-  caching: {
+  caching: {,
     enabled: boolean;
     ttl: number; // Time to live in seconds
     strategy: 'memory' | 'disk' | 'hybrid';
     max_size?: number;
   };
-  
   transforms: DataTransform[];
   rate_limiting?: {
     requests_per_minute: number;
     requests_per_hour: number;
   };
-  
-  metadata: {
+  metadata: {,
     description: string;
     coverage_eras: Era[];
     data_types: UTDGNodeType[];
@@ -197,7 +190,6 @@ export interface HistoricalQuery {
   category: UTDGNodeType | UTDGNodeType[];
   social_class?: SocialClass | SocialClass[];
   filters: Record<string, any>;
-  
   // Query options
   limit?: number;
   offset?: number;
@@ -209,7 +201,7 @@ export interface HistoricalQuery {
 export interface HistoricalQueryResult {
   nodes: UTDGNode[];
   total_count: number;
-  query_metadata: {
+  query_metadata: {,
     query_time: number;
     cache_hit: boolean;
     sources_used: string[];
@@ -219,7 +211,7 @@ export interface HistoricalQueryResult {
 // Medieval Demo Specific Types
 export interface MedievalClothing extends UTDGNode {
   type: 'garment';
-  medieval_specific: {
+  medieval_specific: {,
     garment_type: 'tunic' | 'surcoat' | 'hose' | 'braies' | 'chemise' | 'gown' | 'cloak' | 'hood';
     construction_method: 'sewn' | 'wrapped' | 'pinned' | 'laced';
     fabric_type: 'wool' | 'linen' | 'silk' | 'hemp' | 'cotton' | 'fur' | 'leather';
@@ -233,7 +225,7 @@ export interface MedievalClothing extends UTDGNode {
 export interface UTDGGraph {
   nodes: UTDGNode[];
   constraints: HistoricalConstraint[];
-  metadata: {
+  metadata: {,
     version: string;
     created: string;
     last_modified: string;
@@ -251,12 +243,10 @@ export interface ContentGenerationConfig {
   scenario: 'daily_life' | 'ceremonial' | 'military' | 'religious' | 'artistic';
   gender?: 'male' | 'female' | 'mixed';
   age_groups?: ('child' | 'adult' | 'elder')[];
-  
   // Generation parameters
   variation_level: 'low' | 'medium' | 'high';
   historical_accuracy: 'strict' | 'moderate' | 'flexible';
   creativity_factor: number; // 0-1 scale
-  
   // Constraints
   required_elements?: string[];
   forbidden_elements?: string[];
@@ -266,7 +256,7 @@ export interface ContentGenerationConfig {
 export interface GeneratedContent {
   nodes: UTDGNode[];
   constraints_applied: HistoricalConstraint[];
-  generation_metadata: {
+  generation_metadata: {,
     config: ContentGenerationConfig;
     generation_time: number;
     accuracy_score: number;
@@ -280,13 +270,11 @@ export interface VFXExportData {
   scene_description: string;
   historical_context: Era;
   accuracy_notes: string[];
-  
   // VFX Pipeline data
   materials: MaterialDescription[];
   textures: TextureDescription[];
   lighting_notes?: string[];
   atmospheric_notes?: string[];
-  
   // Metadata for other Wild Construct tools
   crowd_control_data?: CrowdControlData;
   backdrop_data?: BackdropData;

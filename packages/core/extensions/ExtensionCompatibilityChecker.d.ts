@@ -14,9 +14,9 @@ export declare class ExtensionCompatibilityChecker {
     /**
      * Comprehensive compatibility check
      */
-    checkExtensionCompatibility(
+    checkExtensionCompatibility()
       extension: ExtensionManifest,
-      context: CompatibilityContext
+      context: CompatibilityContext,
     ): ExtensionCompatibilityResult;
     /**
      * Check system compatibility

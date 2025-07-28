@@ -7,14 +7,14 @@
  */
 import React from 'react';
 interface DragSelectBoxProps {
-    onSelectionComplete: (bounds: {
+    onSelectionComplete: (bounds: {)
         x: number;
         y: number;
         width: number;
         height: number;
     }) => void;
     onSelectionCancel: () => void;
-    canvasOffset: {
+    canvasOffset: {,
         x: number;
         y: number;
     };

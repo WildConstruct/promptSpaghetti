@@ -68,7 +68,7 @@ export declare     /**
     /**
      * Safe object validation
      */
-    safeObject: <T>(
+    safeObject: <T>(),
       valueSchema: z.ZodSchema<T>,
       maxKeys?: number
     ) => z.ZodEffects<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodType<T, z.ZodTypeDef, T>>, Record<string, T>, Record<string, T>>, Record<string, T>, Record<string, T>>;

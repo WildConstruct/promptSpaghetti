@@ -114,12 +114,12 @@ export interface StorageInfo {
         distribution: string;
         region: string;
     };
-    compression: {
+    compression: {,
         enabled: boolean;
         algorithm: string;
         ratio: number;
     };
-    backup: {
+    backup: {,
         enabled: boolean;
         locations: string[];
         lastBackup?: Date;
@@ -180,13 +180,13 @@ export interface MediaProcessingOptions {
     };
 }
 export interface MultimediaConfig {
-    storage: {
+    storage: {,
         provider: 'local' | 'aws' | 'gcp' | 'azure';
         maxFileSize: number;
         allowedTypes: string[];
         compressionEnabled: boolean;
     };
-    processing: {
+    processing: {,
         enableTranscoding: boolean;
         enableOptimization: boolean;
         enableThumbnails: boolean;
@@ -194,13 +194,13 @@ export interface MultimediaConfig {
         maxConcurrentJobs: number;
         timeoutMs: number;
     };
-    delivery: {
+    delivery: {,
         cdnEnabled: boolean;
         cacheMaxAge: number;
         adaptiveStreaming: boolean;
         lazyLoading: boolean;
     };
-    accessibility: {
+    accessibility: {,
         requireAltText: boolean;
         autoGenerateTranscriptions: boolean;
         autoGenerateCaptions: boolean;
@@ -217,7 +217,7 @@ export declare class MultimediaContentSupport extends EventEmitter {
     uploadAsset(file: File | Buffer, metadata?: Partial<MediaMetadata>, options?: MediaProcessingOptions): Promise<string>;
     processAsset(assetId: string, options?: MediaProcessingOptions): Promise<void>;
     getAsset(assetId: string): MediaAsset | null;
-    listAssets(filters?: {
+    listAssets(filters?: {)
         type?: MediaAsset['type'];
         tags?: string[];
         dateRange?: {
@@ -228,7 +228,7 @@ export declare class MultimediaContentSupport extends EventEmitter {
     }): MediaAsset[];
     updateAsset(assetId: string, updates: Partial<MediaAsset>): Promise<void>;
     deleteAsset(assetId: string): Promise<boolean>;
-    getOptimizedUrl(assetId: string, options?: {
+    getOptimizedUrl(assetId: string, options?: {)
         quality?: 'low' | 'medium' | 'high';
         format?: string;
         size?: {
@@ -237,7 +237,7 @@ export declare class MultimediaContentSupport extends EventEmitter {
         };
     }): string;
     getProcessingStatus(assetId: string): ProcessingStatus | null;
-    generateThumbnail(assetId: string, options?: {
+    generateThumbnail(assetId: string, options?: {)
         size?: {
             width: number;
             height: number;
@@ -250,13 +250,13 @@ export declare class MultimediaContentSupport extends EventEmitter {
         totalAssets: number;
         totalSize: number;
         assetsByType: Record<string, number>;
-        processingStats: {
+        processingStats: {,
             pending: number;
             processing: number;
             completed: number;
             failed: number;
         };
-        storageUsage: {
+        storageUsage: {,
             used: number;
             available: number;
             efficiency: number;

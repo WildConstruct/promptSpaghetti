@@ -8,7 +8,7 @@ export interface SimpleVariationListProps {
   emptyMessage?: string;
 }
 
-export const SimpleVariationList: React.FC<SimpleVariationListProps> = ({
+export const SimpleVariationList: React.FC<SimpleVariationListProps> = ({)
   variations,
   onChange,
   placeholder = 'Add item...',
@@ -16,34 +16,29 @@ export const SimpleVariationList: React.FC<SimpleVariationListProps> = ({
   emptyMessage = 'No items defined.'
 }) => {
   const [newItem, setNewItem] = useState('');
-
   const handleAdd = () => {
     if (newItem.trim()) {
       onChange([...variations, newItem.trim()]);
       setNewItem('');
     }
   };
-
   const handleRemove = (index: number) => {
     onChange(variations.filter((_, i) => i !== index));
   };
-
   const handleUpdate = (index: number, value: string) => {
     const updated = [...variations];
     updated[index] = value;
     onChange(updated);
   };
-
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleAdd();
     }
   };
-
-  return (
+  return ()
     <div style={{ marginBottom: 12 }}>
-      {variations.length === 0 ? (
+      {variations.length === 0 ? ()
         <div style={{
           padding: 12,
           background: '#2d3748',
@@ -53,19 +48,19 @@ export const SimpleVariationList: React.FC<SimpleVariationListProps> = ({
           color: '#a0aec0',
           fontSize: 12,
           fontStyle: 'italic',
-          marginBottom: 8
+          marginBottom: 8,
         }}>
           {emptyMessage}
         </div>
-      ) : (
+      ) : ()
         <div style={{
           background: '#2d3748',
           border: '1px solid #4a5568',
           borderRadius: 4,
           padding: 8,
-          marginBottom: 8
+          marginBottom: 8,
         }}>
-          {variations.map((variation, index) => (
+          {variations.map((variation, index) => ()
             <div
               key={index}
               style={{
@@ -86,7 +81,7 @@ export const SimpleVariationList: React.FC<SimpleVariationListProps> = ({
                   borderRadius: 2,
                   background: '#1a202c',
                   color: '#e2e8f0',
-                  fontSize: 12
+                  fontSize: 12,
                 }}
               />
               <button
@@ -98,7 +93,7 @@ export const SimpleVariationList: React.FC<SimpleVariationListProps> = ({
                   borderRadius: 2,
                   color: 'white',
                   cursor: 'pointer',
-                  fontSize: 10
+                  fontSize: 10,
                 }}
               >
                 ✕
@@ -107,7 +102,6 @@ export const SimpleVariationList: React.FC<SimpleVariationListProps> = ({
           ))}
         </div>
       )}
-      
       <div style={{ display: 'flex', gap: 8 }}>
         <input
           type="text"
@@ -122,7 +116,7 @@ export const SimpleVariationList: React.FC<SimpleVariationListProps> = ({
             borderRadius: 4,
             background: '#2d3748',
             color: '#e2e8f0',
-            fontSize: 12
+            fontSize: 12,
           }}
         />
         <button
@@ -136,7 +130,7 @@ export const SimpleVariationList: React.FC<SimpleVariationListProps> = ({
             color: 'white',
             cursor: newItem.trim() ? 'pointer' : 'not-allowed',
             fontSize: 12,
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
           }}
         >
           {addButtonText}

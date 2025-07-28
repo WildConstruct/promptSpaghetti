@@ -4,7 +4,6 @@
  * 
  * Provides standardized tab navigation with badges and states
  */
-
 import React from 'react';
 import type { TabConfig } from './DashboardShell';
 
@@ -15,7 +14,7 @@ export interface DashboardTabsProps {
   className?: string;
 }
 
-export const DashboardTabs: React.FC<DashboardTabsProps> = ({
+export const DashboardTabs: React.FC<DashboardTabsProps> = ({)
   tabs,
   activeTab,
   onTabChange,
@@ -26,12 +25,11 @@ export const DashboardTabs: React.FC<DashboardTabsProps> = ({
       onTabChange(tabId);
     }
   };
-
-  return (
-    <div className={`dashboard-tabs ${className}`}>
+  return ()
+    <div className={`dashboard-tabs ${className}`}>}
       <div className="tabs-container">
         <div className="tabs-list" role="tablist">
-          {tabs.map((tab) => (
+          {tabs.map((tab) => ()
             <button
               key={tab.id}
               role="tab"
@@ -40,13 +38,13 @@ export const DashboardTabs: React.FC<DashboardTabsProps> = ({
               disabled={tab.disabled}
               className={`
                 tab-trigger 
-                ${activeTab === tab.id ? 'active' : ''} 
+                ${activeTab === tab.id ? 'active' : ''} }
                 ${tab.disabled ? 'disabled' : ''}
               `}
               onClick={() => handleTabClick(tab.id, tab.disabled)}
             >
               <span className="tab-label">{tab.label}</span>
-              {tab.badge && (
+              {tab.badge && ()
                 <span className="tab-badge">
                   {tab.badge}
                 </span>
@@ -54,7 +52,6 @@ export const DashboardTabs: React.FC<DashboardTabsProps> = ({
             </button>
           ))}
         </div>
-        
         {/* Active tab indicator */}
         <div className="tab-indicator" />
       </div>

@@ -99,7 +99,7 @@ interface ManifestComparison {
     dependenciesChanged: boolean;
     permissionsChanged: boolean;
     configurationChanged: boolean;
-    changes: Array<{
+    changes: Array<{,
         field: string;
         oldValue: string;
         newValue: string;

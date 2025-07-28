@@ -48,7 +48,7 @@ export interface SessionConfiguration {
     reauthenticationInterval: number;
     enableActivityTracking: boolean;
     enableAnomalyDetection: boolean;
-    encryptionSettings: {
+    encryptionSettings: {,
         algorithm: string;
         keyDerivation: 'pbkdf2' | 'scrypt' | 'argon2';
         iterations: number;
@@ -73,14 +73,14 @@ export interface SecureSession {
     csrfToken: string;
     mfaVerified: boolean;
     mfaExpiresAt?: Date;
-    metadata: {
-        deviceInfo: {
+    metadata: {,
+        deviceInfo: {,
             type: 'desktop' | 'mobile' | 'tablet' | 'unknown';
             os: string;
             browser: string;
             version: string;
         };
-        location: {
+        location: {,
             country?: string;
             region?: string;
             city?: string;
@@ -89,21 +89,21 @@ export interface SecureSession {
                 lon: number;
             };
         };
-        security: {
+        security: {,
             isVpn: boolean;
             isProxy: boolean;
             riskScore: number;
             trustLevel: 'low' | 'medium' | 'high';
         };
     };
-    activities: Array<{
+    activities: Array<{,
         timestamp: Date;
         action: string;
         endpoint: string;
         riskScore: number;
         anomalyDetected: boolean;
     }>;
-    rotationHistory: Array<{
+    rotationHistory: Array<{,
         timestamp: Date;
         oldTokenHash: string;
         newTokenHash: string;
@@ -120,7 +120,7 @@ export interface SessionContext {
         region: string;
         city: string;
     };
-    securityFlags: {
+    securityFlags: {,
         isSuspiciousLocation: boolean;
         isNewDevice: boolean;
         hasVpn: boolean;
@@ -132,12 +132,12 @@ export interface SessionValidationResult {
     session?: SecureSession;
     requiresRotation: boolean;
     requiresReauthentication: boolean;
-    securityIssues: Array<{
+    securityIssues: Array<{,
         type: 'warning' | 'critical';
         description: string;
         recommendation: string;
     }>;
-    anomalies: Array<{
+    anomalies: Array<{,
         type: string;
         severity: 'low' | 'medium' | 'high';
         description: string;
@@ -147,7 +147,7 @@ export interface SessionValidationResult {
 export interface ActivityPattern {
     userId: string;
     deviceId: string;
-    pattern: {
+    pattern: {,
         typicalHours: number[];
         typicalDays: number[];
         commonLocations: string[];
@@ -172,7 +172,7 @@ export declare class SecureSessionManager extends EventEmitter {
     /**
      * Create a new secure session
      */
-    createSession(
+    createSession()
       userId: string,
       context: SessionContext,
       securityLevel?: SessionSecurityLevel,
@@ -196,7 +196,7 @@ export declare class SecureSessionManager extends EventEmitter {
     /**
      * Terminate all sessions for a user
      */
-    terminateAllUserSessions(
+    terminateAllUserSessions()
       userId: string,
       reason: SessionTerminationReason,
       excludeSessionId?: string

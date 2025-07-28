@@ -49,18 +49,18 @@ export interface MonitoringConfig {
     enabled: boolean;
     collectionInterval: number;
     retentionPeriod: number;
-    alerting: {
+    alerting: {,
         enabled: boolean;
         email?: string[];
         webhook?: string;
         slackChannel?: string;
     };
     thresholds: PerformanceThreshold[];
-    sampling: {
+    sampling: {,
         enabled: boolean;
         rate: number;
     };
-    storage: {
+    storage: {,
         type: 'memory' | 'disk' | 'database';
         path?: string;
         maxSize?: number;
@@ -76,7 +76,7 @@ export interface ModelPerformanceData {
     healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline';
 }
 export interface PerformanceReport {
-    summary: {
+    summary: {,
         totalModels: number;
         healthyModels: number;
         totalRequests: number;
@@ -84,26 +84,26 @@ export interface PerformanceReport {
         totalCost: number;
         successRate: number;
     };
-    trends: {
-        responseTimeTrend: Array<{
+    trends: {,
+        responseTimeTrend: Array<{,
             timestamp: number;
             value: number;
         }>;
-        successRateTrend: Array<{
+        successRateTrend: Array<{,
             timestamp: number;
             value: number;
         }>;
-        costTrend: Array<{
+        costTrend: Array<{,
             timestamp: number;
             value: number;
         }>;
     };
-    topPerformers: Array<{
+    topPerformers: Array<{,
         modelId: string;
         metric: string;
         value: number;
     }>;
-    bottomPerformers: Array<{
+    bottomPerformers: Array<{,
         modelId: string;
         metric: string;
         value: number;
@@ -124,11 +124,11 @@ export declare class PerformanceMonitor {
     stop(): void;
     registerModel(modelId: string, modelType: string, provider: string): void;
     unregisterModel(modelId: string): void;
-    recordRequest(modelId: string, responseTime: number, success: boolean, tokensUsed: {
+    recordRequest(modelId: string, responseTime: number, success: boolean, tokensUsed: {)
         input: number;
         output: number;
     }, cost: number): void;
-    recordResourceUsage(modelId: string, resourceMetrics: {
+    recordResourceUsage(modelId: string, resourceMetrics: {)
         memoryUsage?: number;
         cpuUsage?: number;
         networkLatency?: number;
@@ -138,7 +138,7 @@ export declare class PerformanceMonitor {
     getAllModelsMetrics(): ModelPerformanceData[];
     getActiveAlerts(): PerformanceAlert[];
     getAlertsForModel(modelId: string): PerformanceAlert[];
-    generateReport(timeRange?: {
+    generateReport(timeRange?: {)
         start: number;
         end: number;
     }): PerformanceReport;

@@ -158,28 +158,28 @@ export interface ThreatIndicator {
     associatedThreats: string[];
 }
 export interface DashboardMetrics {
-    securityEvents: {
+    securityEvents: {,
         total: number;
         critical: number;
         resolved: number;
         averageResponseTime: number;
     };
-    anomalies: {
+    anomalies: {,
         detected: number;
         falsePositives: number;
         accuracy: number;
     };
-    systemHealth: {
+    systemHealth: {,
         availability: number;
         performance: number;
         errors: number;
     };
-    compliance: {
+    compliance: {,
         overallScore: number;
         violations: number;
         auditReadiness: number;
     };
-    threats: {
+    threats: {,
         active: number;
         mitigated: number;
         severity: Record<string, number>;
@@ -189,7 +189,7 @@ export interface ExecutiveReport {
     id: string;
     reportType: ReportType;
     generatedAt: Date;
-    period: {
+    period: {,
         start: Date;
         end: Date;
     };
@@ -299,7 +299,7 @@ export declare class SecurityIntelligenceDashboard extends EventEmitter {
     /**
      * Generate executive report
      */
-    generateExecutiveReport(reportType: ReportType, period: {
+    generateExecutiveReport(reportType: ReportType, period: {)
         start: Date;
         end: Date;
     }): Promise<ExecutiveReport>;

@@ -1,7 +1,6 @@
 /**
  * OptimizationControls - Interface for enabling/disabling graph optimization features
  */
-
 import React, { useState } from 'react';
 
 export interface OptimizationSettings {
@@ -14,14 +13,12 @@ export interface OptimizationSettings {
   performanceMonitoring: boolean;
   debugMode: boolean;
 }
-
 interface OptimizationControlsProps {
   settings: OptimizationSettings;
   onSettingsChange: (settings: OptimizationSettings) => void;
   isOpen: boolean;
   onClose: () => void;
 }
-
 const DEFAULT_SETTINGS: OptimizationSettings = {
   deadCodeElimination: true,
   constantPropagation: true,
@@ -30,10 +27,10 @@ const DEFAULT_SETTINGS: OptimizationSettings = {
   memoryOptimization: true,
   precompilation: false,
   performanceMonitoring: true,
-  debugMode: false
+  debugMode: false,
 };
 
-export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
+export const OptimizationControls: React.FC<OptimizationControlsProps> = ({)
   settings,
   onSettingsChange,
   isOpen,
@@ -41,32 +38,26 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
 }) => {
   const [localSettings, setLocalSettings] = useState<OptimizationSettings>(settings);
   const [hasChanges, setHasChanges] = useState(false);
-
   const handleSettingChange = (key: keyof OptimizationSettings, value: boolean) => {
     const newSettings = { ...localSettings, [key]: value };
     setLocalSettings(newSettings);
     setHasChanges(JSON.stringify(newSettings) !== JSON.stringify(settings));
   };
-
   const handleApplyChanges = () => {
     onSettingsChange(localSettings);
     setHasChanges(false);
   };
-
   const handleReset = () => {
     setLocalSettings(DEFAULT_SETTINGS);
     setHasChanges(JSON.stringify(DEFAULT_SETTINGS) !== JSON.stringify(settings));
   };
-
   const handleCancel = () => {
     setLocalSettings(settings);
     setHasChanges(false);
     onClose();
   };
-
   if (!isOpen) return null;
-
-  const optimizationFeatures = [
+  const optimizationFeatures = [;
     {
       key: 'deadCodeElimination' as keyof OptimizationSettings,
       title: 'Dead Code Elimination',
@@ -74,7 +65,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       icon: '🗑️',
       impact: 'High',
       impactColor: '#28a745',
-      recommended: true
+      recommended: true,
     },
     {
       key: 'constantPropagation' as keyof OptimizationSettings,
@@ -83,7 +74,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       icon: '⚡',
       impact: 'Medium',
       impactColor: '#ffc107',
-      recommended: true
+      recommended: true,
     },
     {
       key: 'resultCaching' as keyof OptimizationSettings,
@@ -92,7 +83,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       icon: '💾',
       impact: 'High',
       impactColor: '#28a745',
-      recommended: true
+      recommended: true,
     },
     {
       key: 'parallelExecution' as keyof OptimizationSettings,
@@ -102,7 +93,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       impact: 'High',
       impactColor: '#28a745',
       recommended: false,
-      experimental: true
+      experimental: true,
     },
     {
       key: 'memoryOptimization' as keyof OptimizationSettings,
@@ -111,7 +102,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       icon: '🧹',
       impact: 'Medium',
       impactColor: '#ffc107',
-      recommended: true
+      recommended: true,
     },
     {
       key: 'precompilation' as keyof OptimizationSettings,
@@ -121,7 +112,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       impact: 'High',
       impactColor: '#28a745',
       recommended: false,
-      experimental: true
+      experimental: true,
     },
     {
       key: 'performanceMonitoring' as keyof OptimizationSettings,
@@ -130,7 +121,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       icon: '📊',
       impact: 'Low',
       impactColor: '#17a2b8',
-      recommended: true
+      recommended: true,
     },
     {
       key: 'debugMode' as keyof OptimizationSettings,
@@ -139,11 +130,10 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       icon: '🐛',
       impact: 'None',
       impactColor: '#6c757d',
-      recommended: false
+      recommended: false,
     }
   ];
-
-  return (
+  return ()
     <div style={{
       position: 'fixed',
       top: 0,
@@ -154,7 +144,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000
+      zIndex: 1000,
     }}>
       <div style={{
         backgroundColor: 'white',
@@ -171,13 +161,13 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '24px'
+          marginBottom: '24px',
         }}>
           <h2 style={{
             margin: 0,
             fontSize: '20px',
             fontWeight: '600',
-            color: '#333'
+            color: '#333',
           }}>
             ⚙️ Optimization Settings
           </h2>
@@ -194,13 +184,12 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
               height: '32px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           >
             ×
           </button>
         </div>
-
         {/* Warning for Experimental Features */}
         <div style={{
           padding: '12px 16px',
@@ -209,19 +198,18 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
           borderRadius: '4px',
           marginBottom: '24px',
           fontSize: '14px',
-          color: '#856404'
+          color: '#856404',
         }}>
           ⚠️ <strong>Note:</strong> Experimental features may affect graph execution behavior. 
           Enable them only if you understand the implications.
         </div>
-
         {/* Optimization Features */}
         <div style={{
           display: 'grid',
           gap: '16px',
-          marginBottom: '24px'
+          marginBottom: '24px',
         }}>
-          {optimizationFeatures.map((feature) => (
+          {optimizationFeatures.map((feature) => ()
             <div
               key={feature.key}
               style={{
@@ -235,7 +223,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'flex-start',
-                marginBottom: '8px'
+                marginBottom: '8px',
               }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
@@ -244,11 +232,11 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                       margin: 0,
                       fontSize: '16px',
                       fontWeight: '600',
-                      color: '#333'
+                      color: '#333',
                     }}>
                       {feature.title}
                     </h3>
-                    {feature.experimental && (
+                    {feature.experimental && ()
                       <span style={{
                         padding: '2px 6px',
                         backgroundColor: '#ffc107',
@@ -256,12 +244,12 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                         borderRadius: '8px',
                         fontSize: '10px',
                         fontWeight: '500',
-                        textTransform: 'uppercase'
+                        textTransform: 'uppercase',
                       }}>
                         Experimental
                       </span>
                     )}
-                    {feature.recommended && (
+                    {feature.recommended && ()
                       <span style={{
                         padding: '2px 6px',
                         backgroundColor: '#28a745',
@@ -269,36 +257,33 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                         borderRadius: '8px',
                         fontSize: '10px',
                         fontWeight: '500',
-                        textTransform: 'uppercase'
+                        textTransform: 'uppercase',
                       }}>
                         Recommended
                       </span>
                     )}
                   </div>
-                  
                   <p style={{
                     margin: '0 0 8px 0',
                     fontSize: '14px',
                     color: '#6c757d',
-                    lineHeight: 1.4
+                    lineHeight: 1.4,
                   }}>
                     {feature.description}
                   </p>
-                  
                   <div style={{
                     fontSize: '12px',
                     color: feature.impactColor,
-                    fontWeight: '500'
+                    fontWeight: '500',
                   }}>
                     Impact: {feature.impact}
                   </div>
                 </div>
-                
                 <label style={{
                   display: 'flex',
                   alignItems: 'center',
                   cursor: 'pointer',
-                  marginLeft: '16px'
+                  marginLeft: '16px',
                 }}>
                   <input
                     type="checkbox"
@@ -307,7 +292,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                     style={{
                       width: '18px',
                       height: '18px',
-                      margin: 0
+                      margin: 0,
                     }}
                   />
                 </label>
@@ -315,33 +300,31 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
             </div>
           ))}
         </div>
-
         {/* Performance Impact Summary */}
         <div style={{
           padding: '16px',
           backgroundColor: '#e7f3ff',
           border: '1px solid #b3d9ff',
           borderRadius: '8px',
-          marginBottom: '24px'
+          marginBottom: '24px',
         }}>
           <h4 style={{
             margin: '0 0 8px 0',
             fontSize: '14px',
-            color: '#0066cc'
+            color: '#0066cc',
           }}>
             📈 Current Configuration Impact
           </h4>
           <div style={{
             fontSize: '13px',
             color: '#0066cc',
-            lineHeight: 1.5
+            lineHeight: 1.5,
           }}>
             {(() => {
               const enabledFeatures = optimizationFeatures.filter(f => localSettings[f.key]);
               const highImpact = enabledFeatures.filter(f => f.impact === 'High').length;
               const mediumImpact = enabledFeatures.filter(f => f.impact === 'Medium').length;
-              
-              return (
+              return ()
                 <>
                   <div>• {highImpact} high-impact optimization{highImpact !== 1 ? 's' : ''} enabled</div>
                   <div>• {mediumImpact} medium-impact optimization{mediumImpact !== 1 ? 's' : ''} enabled</div>
@@ -351,12 +334,11 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
             })()}
           </div>
         </div>
-
         {/* Action Buttons */}
         <div style={{
           display: 'flex',
           gap: '12px',
-          justifyContent: 'flex-end'
+          justifyContent: 'flex-end',
         }}>
           <button
             onClick={handleReset}
@@ -367,12 +349,11 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
               color: '#6c757d',
               borderRadius: '4px',
               cursor: 'pointer',
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           >
             Reset to Defaults
           </button>
-          
           <button
             onClick={handleCancel}
             style={{
@@ -382,12 +363,11 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
               color: '#666',
               borderRadius: '4px',
               cursor: 'pointer',
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           >
             Cancel
           </button>
-          
           <button
             onClick={handleApplyChanges}
             disabled={!hasChanges}
@@ -398,7 +378,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
               color: 'white',
               borderRadius: '4px',
               cursor: hasChanges ? 'pointer' : 'not-allowed',
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           >
             Apply Changes

@@ -6,7 +6,6 @@
  * infrastructure. Provides easy content reporting with reason selection
  * and tracks flagging status.
  */
-
 import React, { useState, useCallback } from 'react';
 
 export interface FlaggingReason {
@@ -50,7 +49,6 @@ export interface FlaggingStatus {
   resolvedAt?: Date;
   moderatorNote?: string;
 }
-
 const DEFAULT_FLAGGING_REASONS: FlaggingReason[] = [
   {
     id: 'inappropriate_content',
@@ -58,7 +56,7 @@ const DEFAULT_FLAGGING_REASONS: FlaggingReason[] = [
     description: 'Content contains inappropriate, offensive, or harmful material',
     severity: 'high',
     category: 'content',
-    requiresDetails: false
+    requiresDetails: false,
   },
   {
     id: 'spam',
@@ -66,7 +64,7 @@ const DEFAULT_FLAGGING_REASONS: FlaggingReason[] = [
     description: 'Content is spam, promotional, or repetitive',
     severity: 'medium',
     category: 'spam',
-    requiresDetails: false
+    requiresDetails: false,
   },
   {
     id: 'harassment',
@@ -74,7 +72,7 @@ const DEFAULT_FLAGGING_REASONS: FlaggingReason[] = [
     description: 'Content contains harassment, bullying, or personal attacks',
     severity: 'high',
     category: 'harassment',
-    requiresDetails: true
+    requiresDetails: true,
   },
   {
     id: 'copyright_violation',
@@ -82,7 +80,7 @@ const DEFAULT_FLAGGING_REASONS: FlaggingReason[] = [
     description: 'Content violates copyright or intellectual property rights',
     severity: 'high',
     category: 'legal',
-    requiresDetails: true
+    requiresDetails: true,
   },
   {
     id: 'security_issue',
@@ -90,7 +88,7 @@ const DEFAULT_FLAGGING_REASONS: FlaggingReason[] = [
     description: 'Content contains security vulnerabilities or malicious code',
     severity: 'critical',
     category: 'security',
-    requiresDetails: true
+    requiresDetails: true,
   },
   {
     id: 'misinformation',
@@ -98,7 +96,7 @@ const DEFAULT_FLAGGING_REASONS: FlaggingReason[] = [
     description: 'Content contains false or misleading information',
     severity: 'medium',
     category: 'content',
-    requiresDetails: true
+    requiresDetails: true,
   },
   {
     id: 'privacy_violation',
@@ -106,7 +104,7 @@ const DEFAULT_FLAGGING_REASONS: FlaggingReason[] = [
     description: 'Content exposes private or personal information',
     severity: 'high',
     category: 'legal',
-    requiresDetails: true
+    requiresDetails: true,
   },
   {
     id: 'low_quality',
@@ -114,7 +112,7 @@ const DEFAULT_FLAGGING_REASONS: FlaggingReason[] = [
     description: 'Content is low quality, incomplete, or not useful',
     severity: 'low',
     category: 'content',
-    requiresDetails: false
+    requiresDetails: false,
   },
   {
     id: 'off_topic',
@@ -122,7 +120,7 @@ const DEFAULT_FLAGGING_REASONS: FlaggingReason[] = [
     description: 'Content is not relevant to the platform or category',
     severity: 'low',
     category: 'content',
-    requiresDetails: false
+    requiresDetails: false,
   },
   {
     id: 'other',
@@ -130,11 +128,11 @@ const DEFAULT_FLAGGING_REASONS: FlaggingReason[] = [
     description: 'Other issue not covered by the above categories',
     severity: 'medium',
     category: 'other',
-    requiresDetails: true
+    requiresDetails: true,
   }
 ];
 
-export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
+export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
   contentId,
   contentType,
   userId,
@@ -153,20 +151,18 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [status, setStatus] = useState<FlaggingStatus>({
+  const [status, setStatus] = useState<FlaggingStatus>({)
     contentId,
     canFlag: true,
     alreadyFlagged: false,
     flagCount: 0,
     userHasFlagged: false,
-    status: 'none'
+    status: 'none',
   });
-
   // Load flagging status
   React.useEffect(() => {
     loadFlaggingStatus();
   }, [contentId, userId]);
-
   const loadFlaggingStatus = async () => {
     try {
       // In real implementation, this would call the API
@@ -177,11 +173,9 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
         alreadyFlagged: Math.random() > 0.8, // 20% chance already flagged
         flagCount: Math.floor(Math.random() * 5),
         userHasFlagged: Math.random() > 0.9, // 10% chance user already flagged
-        status: 'none'
+        status: 'none',
       };
-
       setStatus(mockStatus);
-      
       if (onStatusChange) {
         onStatusChange(mockStatus);
       }
@@ -189,32 +183,26 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
       console.error('Failed to load flagging status:', err);
     }
   };
-
   const handleFlagClick = useCallback(() => {
     if (disabled || status.userHasFlagged) {
       return;
     }
-
     setShowModal(true);
     setError(null);
     setSuccess(false);
   }, [disabled, status.userHasFlagged]);
-
   const handleSubmitFlag = async () => {
     if (!selectedReason) {
       setError('Please select a reason for flagging this content');
       return;
     }
-
     const reason = DEFAULT_FLAGGING_REASONS.find(r => r.id === selectedReason);
     if (reason?.requiresDetails && !details.trim()) {
       setError('Please provide additional details for this type of report');
       return;
     }
-
     setLoading(true);
     setError(null);
-
     try {
       const submission: FlagSubmission = {
         contentId,
@@ -222,33 +210,27 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
         reasonId: selectedReason,
         details: details.trim() || undefined,
         reporterId: userId,
-        metadata: {
+        metadata: {,
           severity: reason?.severity,
           category: reason?.category,
           timestamp: new Date().toISOString()
         }
       };
-
       if (onFlag) {
         await onFlag(submission);
       }
-
       // Update status
       const updatedStatus: FlaggingStatus = {
         ...status,
         userHasFlagged: true,
         flagCount: status.flagCount + 1,
-        status: 'pending'
+        status: 'pending',
       };
-      
       setStatus(updatedStatus);
-      
       if (onStatusChange) {
         onStatusChange(updatedStatus);
       }
-
       setSuccess(true);
-      
       // Close modal after delay
       setTimeout(() => {
         setShowModal(false);
@@ -256,17 +238,14 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
         setDetails('');
         setSuccess(false);
       }, 2000);
-
-      console.log(`✅ Content flagged: ${contentId} for reason: ${selectedReason}`);
-
+      console.log(`✅ Content flagged: ${contentId} for reason: ${selectedReason}`);}
     } catch (err) {
-      setError(`Failed to submit flag: ${err.message}`);
+      setError(`Failed to submit flag: ${err.message}`);}
       console.error('Flagging failed:', err);
     } finally {
       setLoading(false);
     }
   };
-
   const handleCancel = () => {
     setShowModal(false);
     setSelectedReason('');
@@ -274,47 +253,42 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
     setError(null);
     setSuccess(false);
   };
-
   // Button styling based on props
   const buttonStyles = {
-    small: {
+    small: {,
       padding: '4px 8px',
       fontSize: '11px',
       minWidth: variant === 'icon' ? '24px' : '60px',
-      height: '24px'
+      height: '24px',
     },
-    medium: {
+    medium: {,
       padding: '6px 12px',
       fontSize: '12px',
       minWidth: variant === 'icon' ? '28px' : '70px',
-      height: '28px'
+      height: '28px',
     },
-    large: {
+    large: {,
       padding: '8px 16px',
       fontSize: '14px',
       minWidth: variant === 'icon' ? '32px' : '80px',
-      height: '32px'
+      height: '32px',
     }
   };
-
   const getButtonColor = () => {
     if (disabled || status.userHasFlagged) return '#9ca3af';
     if (status.alreadyFlagged) return '#d97706';
     return '#6b7280';
   };
-
   const getButtonText = () => {
     if (status.userHasFlagged) return '✓ Flagged';
     if (variant === 'icon') return '🚩';
     return showLabel ? '🚩 Flag' : '🚩';
   };
-
   const getTooltipText = () => {
     if (status.userHasFlagged) return 'You have already flagged this content';
     if (disabled) return 'Flagging is not available';
     return 'Report this content for review';
   };
-
   // Render button
   const renderButton = () => {
     const baseStyle = {
@@ -333,8 +307,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
       opacity: (disabled || status.userHasFlagged) ? 0.6 : 1,
       transition: 'all 0.2s ease'
     };
-
-    return (
+    return ()
       <button
         onClick={handleFlagClick}
         disabled={disabled || status.userHasFlagged}
@@ -351,14 +324,14 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
         }}
       >
         {getButtonText()}
-        {status.flagCount > 0 && variant !== 'icon' && (
+        {status.flagCount > 0 && variant !== 'icon' && ()
           <span style={{
             fontSize: '10px',
             backgroundColor: '#fee2e2',
             color: '#dc2626',
             padding: '1px 4px',
             borderRadius: '8px',
-            marginLeft: '4px'
+            marginLeft: '4px',
           }}>
             {status.flagCount}
           </span>
@@ -366,13 +339,11 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
       </button>
     );
   };
-
-  return (
+  return ()
     <>
       {renderButton()}
-
       {/* Flagging Modal */}
-      {showModal && (
+      {showModal && ()
         <div style={{
           position: 'fixed',
           top: 0,
@@ -383,7 +354,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 1000
+          zIndex: 1000,
         }}>
           <div style={{
             backgroundColor: 'white',
@@ -408,7 +379,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
                 margin: 0,
                 fontSize: '18px',
                 fontWeight: '600',
-                color: '#111827'
+                color: '#111827',
               }}>
                 🚩 Flag Content
               </h3>
@@ -419,15 +390,14 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
                   border: 'none',
                   fontSize: '20px',
                   color: '#6b7280',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 ×
               </button>
             </div>
-
             {/* Success Message */}
-            {success && (
+            {success && ()
               <div style={{
                 padding: '12px',
                 backgroundColor: '#d1fae5',
@@ -435,38 +405,35 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
                 borderRadius: '6px',
                 color: '#065f46',
                 marginBottom: '16px',
-                textAlign: 'center'
+                textAlign: 'center',
               }}>
                 ✅ Content has been flagged for review. Thank you for helping keep our community safe!
               </div>
             )}
-
             {/* Error Message */}
-            {error && (
+            {error && ()
               <div style={{
                 padding: '12px',
                 backgroundColor: '#fef2f2',
                 border: '1px solid #fecaca',
                 borderRadius: '6px',
                 color: '#dc2626',
-                marginBottom: '16px'
+                marginBottom: '16px',
               }}>
                 ❌ {error}
               </div>
             )}
-
-            {!success && (
+            {!success && ()
               <>
                 {/* Instructions */}
                 <p style={{
                   margin: '0 0 16px 0',
                   fontSize: '14px',
                   color: '#6b7280',
-                  lineHeight: '1.4'
+                  lineHeight: '1.4',
                 }}>
                   Please select the reason why you're flagging this {contentType}. Our moderation team will review your report.
                 </p>
-
                 {/* Reason Selection */}
                 <div style={{ marginBottom: '16px' }}>
                   <label style={{
@@ -474,15 +441,15 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
                     fontSize: '14px',
                     fontWeight: '500',
                     color: '#374151',
-                    marginBottom: '8px'
+                    marginBottom: '8px',
                   }}>
                     Reason for flagging:
                   </label>
                   <div style={{
                     display: 'grid',
-                    gap: '8px'
+                    gap: '8px',
                   }}>
-                    {DEFAULT_FLAGGING_REASONS.map(reason => (
+                    {DEFAULT_FLAGGING_REASONS.map(reason => ()
                       <label
                         key={reason.id}
                         style={{
@@ -509,7 +476,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
                             fontSize: '13px',
                             fontWeight: '500',
                             color: '#111827',
-                            marginBottom: '2px'
+                            marginBottom: '2px',
                           }}>
                             {reason.label}
                             <span style={{
@@ -520,14 +487,14 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
                               backgroundColor: reason.severity === 'critical' ? '#dc2626' :
                                 reason.severity === 'high' ? '#d97706' :
                                   reason.severity === 'medium' ? '#3b82f6' : '#6b7280',
-                              color: 'white'
+                              color: 'white',
                             }}>
                               {reason.severity}
                             </span>
                           </div>
                           <div style={{
                             fontSize: '12px',
-                            color: '#6b7280'
+                            color: '#6b7280',
                           }}>
                             {reason.description}
                           </div>
@@ -536,16 +503,15 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
                     ))}
                   </div>
                 </div>
-
                 {/* Additional Details */}
-                {selectedReason && DEFAULT_FLAGGING_REASONS.find(r => r.id === selectedReason)?.requiresDetails && (
+                {selectedReason && DEFAULT_FLAGGING_REASONS.find(r => r.id === selectedReason)?.requiresDetails && ()
                   <div style={{ marginBottom: '16px' }}>
                     <label style={{
                       display: 'block',
                       fontSize: '14px',
                       fontWeight: '500',
                       color: '#374151',
-                      marginBottom: '8px'
+                      marginBottom: '8px',
                     }}>
                       Additional details: <span style={{ color: '#dc2626' }}>*</span>
                     </label>
@@ -561,12 +527,11 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
                         borderRadius: '4px',
                         fontSize: '13px',
                         fontFamily: 'inherit',
-                        resize: 'vertical'
+                        resize: 'vertical',
                       }}
                     />
                   </div>
                 )}
-
                 {/* Action Buttons */}
                 <div style={{
                   display: 'flex',
@@ -606,10 +571,10 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
                       cursor: selectedReason && !loading ? 'pointer' : 'not-allowed',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '6px'
+                      gap: '6px',
                     }}
                   >
-                    {loading && (
+                    {loading && ()
                       <div style={{
                         width: '12px',
                         height: '12px',
@@ -627,7 +592,6 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
           </div>
         </div>
       )}
-
       {/* Add CSS animation for loading spinner */}
       <style>
         {`

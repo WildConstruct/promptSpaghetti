@@ -15,7 +15,6 @@
  * - Recovery options configuration
  * - Real-time status updates
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Shield, 
@@ -53,14 +52,12 @@ interface MFAMethod {
     secretKey?: string;
   };
 }
-
 interface BackupCode {
   id: string;
   code: string;
   used: boolean;
   usedAt?: Date;
 }
-
 interface TrustedDevice {
   id: string;
   name: string;
@@ -71,7 +68,6 @@ interface TrustedDevice {
   lastAccess: Date;
   current: boolean;
 }
-
 interface SecurityEvent {
   id: string;
   type: 'login' | 'mfa_enabled' | 'mfa_disabled' | 'device_added' | 'device_removed' | 'backup_used';
@@ -81,7 +77,6 @@ interface SecurityEvent {
   location: string;
   riskLevel: 'low' | 'medium' | 'high';
 }
-
 interface MFASettings {
   requireMFA: boolean;
   allowBackupCodes: boolean;
@@ -91,7 +86,6 @@ interface MFASettings {
   emailNotifications: boolean;
   smsNotifications: boolean;
 }
-
 interface MFAManagementProps {
   userId: string;
   onMFAStatusChange?: (enabled: boolean) => void;
@@ -99,7 +93,7 @@ interface MFAManagementProps {
   className?: string;
 }
 
-export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
+export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
   userId,
   onMFAStatusChange,
   onSecurityEvent,
@@ -110,33 +104,30 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
   const [backupCodes, setBackupCodes] = useState<BackupCode[]>([]);
   const [trustedDevices, setTrustedDevices] = useState<TrustedDevice[]>([]);
   const [securityEvents, setSecurityEvents] = useState<SecurityEvent[]>([]);
-  const [settings, setSettings] = useState<MFASettings>({
+  const [settings, setSettings] = useState<MFASettings>({)
     requireMFA: false,
     allowBackupCodes: true,
     trustedDeviceExpiry: 30,
     maxTrustedDevices: 5,
     sessionTimeout: 30,
     emailNotifications: true,
-    smsNotifications: false
+    smsNotifications: false,
   });
-
   const [activeTab, setActiveTab] = useState<'methods' | 'backup' | 'devices' | 'history' | 'settings'>('methods');
   const [loading, setLoading] = useState(false);
   const [showBackupCodes, setShowBackupCodes] = useState(false);
   const [totpSecret, setTotpSecret] = useState<string>('');
   const [totpQRCode, setTotpQRCode] = useState<string>('');
   const [setupMethod, setSetupMethod] = useState<string>('');
-
   // Load MFA data on component mount
   useEffect(() => {
     loadMFAData();
   }, [userId]);
-
   const loadMFAData = async () => {
     setLoading(true);
     try {
       // In a real implementation, these would be API calls
-      await Promise.all([
+      await Promise.all([)
         loadMFAMethods(),
         loadBackupCodes(),
         loadTrustedDevices(),
@@ -149,7 +140,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
       setLoading(false);
     }
   };
-
   const loadMFAMethods = async () => {
     // Mock data - replace with actual API call
     const methods: MFAMethod[] = [
@@ -161,7 +151,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
         primary: true,
         configuredAt: new Date('2024-01-15'),
         lastUsed: new Date('2024-07-19'),
-        configuration: {
+        configuration: {,
           appName: 'Google Authenticator'
         }
       },
@@ -172,7 +162,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
         enabled: false,
         primary: false,
         configuredAt: new Date('2024-02-01'),
-        configuration: {
+        configuration: {,
           phoneNumber: '+1 (555) 123-4567'
         }
       },
@@ -184,14 +174,13 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
         primary: false,
         configuredAt: new Date('2024-01-10'),
         lastUsed: new Date('2024-07-18'),
-        configuration: {
-          email: 'user@example.com'
+        configuration: {,
+          email: 'user@example.com',
         }
       }
     ];
     setMFAMethods(methods);
   };
-
   const loadBackupCodes = async () => {
     // Mock data - replace with actual API call
     const codes: BackupCode[] = [
@@ -203,7 +192,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
     ];
     setBackupCodes(codes);
   };
-
   const loadTrustedDevices = async () => {
     // Mock data - replace with actual API call
     const devices: TrustedDevice[] = [
@@ -215,7 +203,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
         location: 'San Francisco, CA',
         addedAt: new Date('2024-07-01'),
         lastAccess: new Date('2024-07-20'),
-        current: true
+        current: true,
       },
       {
         id: 'device-2',
@@ -225,12 +213,11 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
         location: 'San Francisco, CA',
         addedAt: new Date('2024-06-15'),
         lastAccess: new Date('2024-07-19'),
-        current: false
+        current: false,
       }
     ];
     setTrustedDevices(devices);
   };
-
   const loadSecurityEvents = async () => {
     // Mock data - replace with actual API call
     const events: SecurityEvent[] = [
@@ -241,7 +228,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
         timestamp: new Date('2024-07-20T10:30:00'),
         ipAddress: '192.168.1.100',
         location: 'San Francisco, CA',
-        riskLevel: 'low'
+        riskLevel: 'low',
       },
       {
         id: 'event-2',
@@ -250,7 +237,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
         timestamp: new Date('2024-07-19T15:45:00'),
         ipAddress: '192.168.1.100',
         location: 'San Francisco, CA',
-        riskLevel: 'low'
+        riskLevel: 'low',
       },
       {
         id: 'event-3',
@@ -259,12 +246,11 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
         timestamp: new Date('2024-06-15T09:15:00'),
         ipAddress: '10.0.0.50',
         location: 'San Francisco, CA',
-        riskLevel: 'medium'
+        riskLevel: 'medium',
       }
     ];
     setSecurityEvents(events);
   };
-
   const loadSettings = async () => {
     // Mock data - replace with actual API call
     const userSettings: MFASettings = {
@@ -274,41 +260,36 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
       maxTrustedDevices: 5,
       sessionTimeout: 30,
       emailNotifications: true,
-      smsNotifications: false
+      smsNotifications: false,
     };
     setSettings(userSettings);
   };
-
   // Event handlers
   const handleToggleMFAMethod = async (methodId: string, enabled: boolean) => {
     setLoading(true);
     try {
       // API call to toggle MFA method
-      setMFAMethods(prev => 
-        prev.map(method => 
+      setMFAMethods(prev => )
+        prev.map(method => )
           method.id === methodId 
             ? { ...method, enabled }
             : method
         )
       );
-      
       const hasEnabledMethods = mfaMethods.some(m => m.id !== methodId && m.enabled) || enabled;
       onMFAStatusChange?.(hasEnabledMethods);
-      
     } catch (error) {
       console.error('Failed to toggle MFA method:', error);
     } finally {
       setLoading(false);
     }
   };
-
   const handleSetupTOTP = async () => {
     setLoading(true);
     try {
       // Generate TOTP secret and QR code
       const secret = generateTOTPSecret();
       const qrCode = generateQRCode(secret);
-      
       setTotpSecret(secret);
       setTotpQRCode(qrCode);
       setSetupMethod('totp');
@@ -318,13 +299,12 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
       setLoading(false);
     }
   };
-
   const handleSetupSMS = async (phoneNumber: string) => {
     setLoading(true);
     try {
       // API call to setup SMS verification
       const newMethod: MFAMethod = {
-        id: `sms-${Date.now()}`,
+        id: `sms-${Date.now()}`,}
         type: 'sms',
         name: 'SMS Verification',
         enabled: true,
@@ -332,7 +312,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
         configuredAt: new Date(),
         configuration: { phoneNumber }
       };
-      
       setMFAMethods(prev => [...prev, newMethod]);
       setSetupMethod('');
     } catch (error) {
@@ -341,17 +320,15 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
       setLoading(false);
     }
   };
-
   const handleGenerateBackupCodes = async () => {
     setLoading(true);
     try {
       // Generate new backup codes
-      const newCodes: BackupCode[] = Array.from({ length: 10 }, (_, i) => ({
-        id: `backup-${Date.now()}-${i}`,
+      const newCodes: BackupCode[] = Array.from({ length: 10 }, (_, i) => ({)
+        id: `backup-${Date.now()}-${i}`,}
         code: generateBackupCode(),
-        used: false
+        used: false,
       }));
-      
       setBackupCodes(newCodes);
     } catch (error) {
       console.error('Failed to generate backup codes:', error);
@@ -359,7 +336,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
       setLoading(false);
     }
   };
-
   const handleRemoveTrustedDevice = async (deviceId: string) => {
     setLoading(true);
     try {
@@ -370,7 +346,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
       setLoading(false);
     }
   };
-
   const handleUpdateSettings = async (newSettings: Partial<MFASettings>) => {
     setLoading(true);
     try {
@@ -381,20 +356,16 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
       setLoading(false);
     }
   };
-
   // Helper functions
   const generateTOTPSecret = (): string => {
     return 'JBSWY3DPEHPK3PXP'; // Mock secret
   };
-
   const generateQRCode = (secret: string): string => {
     return `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==`; // Mock QR code
   };
-
   const generateBackupCode = (): string => {
     return Math.random().toString(36).substring(2, 11).toUpperCase();
   };
-
   const getSeverityColor = (riskLevel: string): string => {
     switch (riskLevel) {
       case 'high': return 'text-red-600';
@@ -403,7 +374,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
       default: return 'text-gray-600';
     }
   };
-
   const getDeviceIcon = (type: string) => {
     switch (type) {
       case 'mobile': return <Smartphone className="w-4 h-4" />;
@@ -411,9 +381,8 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
       default: return <Monitor className="w-4 h-4" />;
     }
   };
-
-  return (
-    <div className={`bg-white rounded-lg shadow-lg ${className}`}>
+  return ()
+    <div className={`bg-white rounded-lg shadow-lg ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 p-6">
         <div className="flex items-center space-x-3">
@@ -424,7 +393,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
           Secure your account with additional verification methods
         </p>
       </div>
-
       {/* Tab Navigation */}
       <div className="border-b border-gray-200">
         <nav className="flex space-x-8 px-6">
@@ -434,7 +402,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
             { id: 'devices', label: 'Trusted Devices', icon: Monitor },
             { id: 'history', label: 'Security History', icon: Clock },
             { id: 'settings', label: 'Settings', icon: Settings }
-          ].map(({ id, label, icon: Icon }) => (
+          ].map(({ id, label, icon: Icon }) => ()
             <button
               key={id}
               onClick={() => setActiveTab(id as any)}
@@ -450,18 +418,16 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
           ))}
         </nav>
       </div>
-
       {/* Tab Content */}
       <div className="p-6">
-        {loading && (
+        {loading && ()
           <div className="flex items-center justify-center py-8">
             <RefreshCw className="w-6 h-6 animate-spin text-blue-600" />
             <span className="ml-2 text-gray-600">Loading...</span>
           </div>
         )}
-
         {/* MFA Methods Tab */}
-        {activeTab === 'methods' && !loading && (
+        {activeTab === 'methods' && !loading && ()
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-medium text-gray-900">Authentication Methods</h3>
@@ -473,37 +439,33 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                 Add Method
               </button>
             </div>
-
             {/* Method List */}
             <div className="space-y-4">
-              {mfaMethods.map((method) => (
+              {mfaMethods.map((method) => ()
                 <div key={method.id} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       {method.type === 'totp' && <Smartphone className="w-5 h-5 text-blue-600" />}
                       {method.type === 'sms' && <Smartphone className="w-5 h-5 text-green-600" />}
                       {method.type === 'email' && <Mail className="w-5 h-5 text-purple-600" />}
-                      
                       <div>
                         <h4 className="text-sm font-medium text-gray-900">{method.name}</h4>
                         <p className="text-xs text-gray-500">
                           {method.configuration?.phoneNumber || method.configuration?.email || method.configuration?.appName}
                         </p>
-                        {method.primary && (
+                        {method.primary && ()
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mt-1">
                             Primary
                           </span>
                         )}
                       </div>
                     </div>
-
                     <div className="flex items-center space-x-3">
-                      {method.lastUsed && (
+                      {method.lastUsed && ()
                         <span className="text-xs text-gray-500">
                           Last used: {method.lastUsed.toLocaleDateString()}
                         </span>
                       )}
-                      
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
                           type="checkbox"
@@ -518,16 +480,14 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                 </div>
               ))}
             </div>
-
             {/* Setup Method Modal */}
-            {setupMethod && (
+            {setupMethod && ()
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div className="bg-white rounded-lg p-6 w-full max-w-md">
                   <h3 className="text-lg font-medium text-gray-900 mb-4">
                     {setupMethod === 'select' ? 'Choose Authentication Method' : 'Setup Authentication'}
                   </h3>
-                  
-                  {setupMethod === 'select' && (
+                  {setupMethod === 'select' && ()
                     <div className="space-y-3">
                       <button
                         onClick={handleSetupTOTP}
@@ -539,7 +499,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                           <div className="text-sm text-gray-500">Use Google Authenticator, Authy, etc.</div>
                         </div>
                       </button>
-                      
                       <button
                         onClick={() => setSetupMethod('sms')}
                         className="w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50"
@@ -552,8 +511,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                       </button>
                     </div>
                   )}
-                  
-                  {setupMethod === 'totp' && (
+                  {setupMethod === 'totp' && ()
                     <div className="space-y-4">
                       <div className="text-center">
                         <img src={totpQRCode} alt="QR Code" className="mx-auto w-32 h-32 border" />
@@ -561,7 +519,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                           Scan this QR code with your authenticator app
                         </p>
                       </div>
-                      
                       <div className="text-center">
                         <p className="text-xs text-gray-500 mb-2">Or enter this code manually:</p>
                         <code className="text-sm font-mono bg-gray-100 px-2 py-1 rounded">
@@ -570,7 +527,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                       </div>
                     </div>
                   )}
-                  
                   <div className="flex justify-end space-x-3 mt-6">
                     <button
                       onClick={() => setSetupMethod('')}
@@ -590,9 +546,8 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
             )}
           </div>
         )}
-
         {/* Backup Codes Tab */}
-        {activeTab === 'backup' && !loading && (
+        {activeTab === 'backup' && !loading && ()
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
@@ -609,7 +564,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                 Generate New Codes
               </button>
             </div>
-
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
               <div className="flex items-start space-x-3">
                 <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
@@ -621,7 +575,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                 </div>
               </div>
             </div>
-
             <div className="relative">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm font-medium text-gray-700">
@@ -635,10 +588,9 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                   {showBackupCodes ? 'Hide' : 'Show'} Codes
                 </button>
               </div>
-
-              {showBackupCodes && (
+              {showBackupCodes && ()
                 <div className="grid grid-cols-2 gap-3">
-                  {backupCodes.map((code) => (
+                  {backupCodes.map((code) => ()
                     <div
                       key={code.id}
                       className={`p-3 rounded-lg border font-mono text-sm ${
@@ -648,7 +600,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                       }`}
                     >
                       {code.code}
-                      {code.used && code.usedAt && (
+                      {code.used && code.usedAt && ()
                         <div className="text-xs text-gray-500 mt-1">
                           Used {code.usedAt.toLocaleDateString()}
                         </div>
@@ -660,9 +612,8 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
             </div>
           </div>
         )}
-
         {/* Trusted Devices Tab */}
-        {activeTab === 'devices' && !loading && (
+        {activeTab === 'devices' && !loading && ()
           <div className="space-y-6">
             <div>
               <h3 className="text-lg font-medium text-gray-900">Trusted Devices</h3>
@@ -670,9 +621,8 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                 Devices you've marked as trusted won't require MFA for {settings.trustedDeviceExpiry} days
               </p>
             </div>
-
             <div className="space-y-4">
-              {trustedDevices.map((device) => (
+              {trustedDevices.map((device) => ()
                 <div key={device.id} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
@@ -680,7 +630,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                       <div>
                         <h4 className="text-sm font-medium text-gray-900">
                           {device.name}
-                          {device.current && (
+                          {device.current && ()
                             <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
                               Current Device
                             </span>
@@ -694,8 +644,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                         </p>
                       </div>
                     </div>
-
-                    {!device.current && (
+                    {!device.current && ()
                       <button
                         onClick={() => handleRemoveTrustedDevice(device.id)}
                         className="text-red-600 hover:text-red-700"
@@ -709,9 +658,8 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
             </div>
           </div>
         )}
-
         {/* Security History Tab */}
-        {activeTab === 'history' && !loading && (
+        {activeTab === 'history' && !loading && ()
           <div className="space-y-6">
             <div>
               <h3 className="text-lg font-medium text-gray-900">Security History</h3>
@@ -719,9 +667,8 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                 Recent security events and authentication activity
               </p>
             </div>
-
             <div className="space-y-4">
-              {securityEvents.map((event) => (
+              {securityEvents.map((event) => ()
                 <div key={event.id} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-3">
@@ -729,7 +676,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                         event.riskLevel === 'high' ? 'bg-red-500' :
                         event.riskLevel === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
                       }`} />
-                      
                       <div>
                         <h4 className="text-sm font-medium text-gray-900">{event.description}</h4>
                         <div className="flex items-center space-x-4 mt-1 text-xs text-gray-500">
@@ -745,7 +691,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                         </div>
                       </div>
                     </div>
-
                     <span className={`text-xs font-medium px-2 py-1 rounded-full ${
                       event.riskLevel === 'high' ? 'bg-red-100 text-red-800' :
                       event.riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
@@ -759,9 +704,8 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
             </div>
           </div>
         )}
-
         {/* Settings Tab */}
-        {activeTab === 'settings' && !loading && (
+        {activeTab === 'settings' && !loading && ()
           <div className="space-y-6">
             <div>
               <h3 className="text-lg font-medium text-gray-900">MFA Settings</h3>
@@ -769,7 +713,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                 Configure how multi-factor authentication works for your account
               </p>
             </div>
-
             <div className="space-y-6">
               {/* Require MFA */}
               <div className="flex items-center justify-between">
@@ -787,7 +730,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                 </label>
               </div>
-
               {/* Trusted Device Expiry */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -804,7 +746,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                   <option value={365}>1 year</option>
                 </select>
               </div>
-
               {/* Session Timeout */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -821,11 +762,9 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                   <option value={240}>4 hours</option>
                 </select>
               </div>
-
               {/* Notifications */}
               <div className="space-y-4">
                 <h4 className="text-sm font-medium text-gray-900">Notifications</h4>
-                
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-sm text-gray-700">Email notifications</span>
@@ -841,7 +780,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
-
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-sm text-gray-700">SMS notifications</span>

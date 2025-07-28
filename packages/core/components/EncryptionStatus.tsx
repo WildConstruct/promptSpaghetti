@@ -1,5 +1,4 @@
 import React from 'react';
-
 /**
  * Encryption status types
  */
@@ -10,7 +9,6 @@ export type EncryptionStatusType =
   | 'decrypting'         // Decryption in progress
   | 'error'              // Encryption/decryption error
   | 'unknown';           // Status unknown
-
 /**
  * Encryption algorithm types
  */
@@ -22,7 +20,6 @@ export type EncryptionAlgorithm =
   | 'RSA-4096'
   | 'ChaCha20-Poly1305'
   | 'unknown';
-
 /**
  * Encryption state interface
  */
@@ -37,14 +34,13 @@ export interface EncryptionState {
   encryptionTime?: number; // milliseconds
   strength?: 'weak' | 'medium' | 'strong';
 }
-
 interface EncryptionStatusProps {
   encryptionState: EncryptionState;
   className?: string;
   showDetails?: boolean;
 }
 
-export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({
+export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({)
   encryptionState,
   className = '',
   showDetails = false
@@ -65,7 +61,6 @@ export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({
       return 'text-gray-500';
     }
   };
-
   const getStatusIcon = (status: EncryptionStatusType): string => {
     switch (status) {
     case 'encrypted':
@@ -82,7 +77,6 @@ export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({
       return '❓';
     }
   };
-
   const getStatusText = (status: EncryptionStatusType): string => {
     switch (status) {
     case 'encrypted':
@@ -100,7 +94,6 @@ export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({
       return 'Unknown';
     }
   };
-
   const getStrengthColor = (strength?: string): string => {
     switch (strength) {
     case 'strong':
@@ -113,41 +106,35 @@ export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({
       return 'text-gray-600';
     }
   };
-
   const formatTime = (timestamp?: number): string => {
     if (!timestamp) return 'Never';
     const date = new Date(timestamp);
     return date.toLocaleTimeString();
   };
-
   const formatDataSize = (size?: number): string => {
     if (!size) return 'Unknown';
-    if (size < 1024) return `${size} B`;
-    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
-    if (size < 1024 * 1024 * 1024) return `${(size / (1024 * 1024)).toFixed(1)} MB`;
-    return `${(size / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+    if (size < 1024) return `${size} B`;}
+    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;}
+    if (size < 1024 * 1024 * 1024) return `${(size / (1024 * 1024)).toFixed(1)} MB`;}
+    return `${(size / (1024 * 1024 * 1024)).toFixed(1)} GB`;}
   };
-
-  return (
-    <div className={`flex items-center space-x-2 ${className}`}>
+  return ()
+    <div className={`flex items-center space-x-2 ${className}`}>}
       <span 
         className={`text-sm ${getStatusColor(encryptionState.status)}`}
         title={`Encryption: ${getStatusText(encryptionState.status)}`}
       >
         {getStatusIcon(encryptionState.status)}
       </span>
-      
       <span className="text-sm text-gray-600">
         {getStatusText(encryptionState.status)}
       </span>
-
-      {encryptionState.algorithm && (
+      {encryptionState.algorithm && ()
         <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
           {encryptionState.algorithm}
         </span>
       )}
-
-      {encryptionState.strength && (
+      {encryptionState.strength && ()
         <span 
           className={`text-xs font-semibold ${getStrengthColor(encryptionState.strength)}`}
           title={`Encryption strength: ${encryptionState.strength}`}
@@ -155,8 +142,7 @@ export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({
           {encryptionState.strength.toUpperCase()}
         </span>
       )}
-
-      {encryptionState.error && (
+      {encryptionState.error && ()
         <span 
           className="text-xs text-red-600 cursor-help" 
           title={encryptionState.error}
@@ -164,20 +150,19 @@ export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({
           ⚠
         </span>
       )}
-
-      {showDetails && (
+      {showDetails && ()
         <div className="text-xs text-gray-500 space-x-2">
-          {encryptionState.lastEncrypted && (
+          {encryptionState.lastEncrypted && ()
             <span>
               Last encrypted: {formatTime(encryptionState.lastEncrypted)}
             </span>
           )}
-          {encryptionState.dataSize && (
+          {encryptionState.dataSize && ()
             <span>
               Size: {formatDataSize(encryptionState.dataSize)}
             </span>
           )}
-          {encryptionState.encryptionTime && (
+          {encryptionState.encryptionTime && ()
             <span>
               ({encryptionState.encryptionTime}ms)
             </span>
@@ -201,17 +186,15 @@ export const EncryptionStatusIcon: React.FC<{
     error: '#ef4444',         // red
     unknown: '#6b7280'        // gray
   }[encryptionState.status];
-
   const statusIcon = {
     encrypted: '🔒',
     encrypting: '🔄',
     decrypting: '🔄',
     not_encrypted: '🔓',
     error: '⚠️',
-    unknown: '❓'
+    unknown: '❓',
   }[encryptionState.status];
-
-  return (
+  return ()
     <div 
       className="cursor-pointer flex items-center space-x-1" 
       onClick={onClick}
@@ -237,7 +220,7 @@ export const EncryptionDetails: React.FC<{
   onEncrypt?: () => void;
   onDecrypt?: () => void;
   onChangeAlgorithm?: (algorithm: EncryptionAlgorithm) => void;
-}> = ({ 
+}> = ({ )
   encryptionState, 
   onEncrypt, 
   onDecrypt, 
@@ -247,21 +230,18 @@ export const EncryptionDetails: React.FC<{
   const isProcessing = encryptionState.status === 'encrypting' || encryptionState.status === 'decrypting';
   const canEncrypt = encryptionState.status === 'not_encrypted' && !isProcessing;
   const canDecrypt = encryptionState.status === 'encrypted' && !isProcessing;
-
   const formatTime = (timestamp?: number): string => {
     if (!timestamp) return 'Never';
     const date = new Date(timestamp);
     return date.toLocaleString();
   };
-
   const formatDataSize = (size?: number): string => {
     if (!size) return 'Unknown';
-    if (size < 1024) return `${size} B`;
-    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
-    if (size < 1024 * 1024 * 1024) return `${(size / (1024 * 1024)).toFixed(1)} MB`;
-    return `${(size / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+    if (size < 1024) return `${size} B`;}
+    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;}
+    if (size < 1024 * 1024 * 1024) return `${(size / (1024 * 1024)).toFixed(1)} MB`;}
+    return `${(size / (1024 * 1024 * 1024)).toFixed(1)} GB`;}
   };
-
   const getStrengthDetails = (algorithm?: EncryptionAlgorithm): string => {
     switch (algorithm) {
     case 'AES-256-GCM':
@@ -278,15 +258,13 @@ export const EncryptionDetails: React.FC<{
       return 'Unknown encryption strength';
     }
   };
-
-  return (
+  return ()
     <div className="p-4 bg-white rounded-lg shadow-lg border w-80">
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="font-medium text-gray-900">Encryption Status</h3>
           <EncryptionStatusIcon encryptionState={encryptionState} />
         </div>
-
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-gray-600">Status:</span>
@@ -299,8 +277,7 @@ export const EncryptionDetails: React.FC<{
               {encryptionState.status.replace('_', ' ')}
             </span>
           </div>
-
-          {encryptionState.algorithm && (
+          {encryptionState.algorithm && ()
             <div className="flex justify-between">
               <span className="text-gray-600">Algorithm:</span>
               <span className="text-gray-900 font-mono text-xs">
@@ -308,8 +285,7 @@ export const EncryptionDetails: React.FC<{
               </span>
             </div>
           )}
-
-          {encryptionState.strength && (
+          {encryptionState.strength && ()
             <div className="flex justify-between">
               <span className="text-gray-600">Strength:</span>
               <span className={`font-medium ${
@@ -321,8 +297,7 @@ export const EncryptionDetails: React.FC<{
               </span>
             </div>
           )}
-
-          {encryptionState.keyId && (
+          {encryptionState.keyId && ()
             <div className="flex justify-between">
               <span className="text-gray-600">Key ID:</span>
               <span className="text-gray-900 font-mono text-xs">
@@ -330,8 +305,7 @@ export const EncryptionDetails: React.FC<{
               </span>
             </div>
           )}
-
-          {encryptionState.lastEncrypted && (
+          {encryptionState.lastEncrypted && ()
             <div className="flex justify-between">
               <span className="text-gray-600">Last Encrypted:</span>
               <span className="text-gray-900 text-xs">
@@ -339,8 +313,7 @@ export const EncryptionDetails: React.FC<{
               </span>
             </div>
           )}
-
-          {encryptionState.lastDecrypted && (
+          {encryptionState.lastDecrypted && ()
             <div className="flex justify-between">
               <span className="text-gray-600">Last Decrypted:</span>
               <span className="text-gray-900 text-xs">
@@ -348,22 +321,19 @@ export const EncryptionDetails: React.FC<{
               </span>
             </div>
           )}
-
-          {encryptionState.dataSize && (
+          {encryptionState.dataSize && ()
             <div className="flex justify-between">
               <span className="text-gray-600">Data Size:</span>
               <span className="text-gray-900">{formatDataSize(encryptionState.dataSize)}</span>
             </div>
           )}
-
-          {encryptionState.encryptionTime && (
+          {encryptionState.encryptionTime && ()
             <div className="flex justify-between">
               <span className="text-gray-600">Processing Time:</span>
               <span className="text-gray-900">{encryptionState.encryptionTime}ms</span>
             </div>
           )}
-
-          {encryptionState.algorithm && (
+          {encryptionState.algorithm && ()
             <div className="flex flex-col">
               <span className="text-gray-600 mb-1">Security Details:</span>
               <span className="text-xs text-gray-700 bg-gray-50 p-2 rounded">
@@ -371,8 +341,7 @@ export const EncryptionDetails: React.FC<{
               </span>
             </div>
           )}
-
-          {encryptionState.error && (
+          {encryptionState.error && ()
             <div className="flex flex-col">
               <span className="text-gray-600 mb-1">Error:</span>
               <span className="text-red-600 text-xs bg-red-50 p-2 rounded">
@@ -381,9 +350,8 @@ export const EncryptionDetails: React.FC<{
             </div>
           )}
         </div>
-
         <div className="flex space-x-2 pt-2 border-t">
-          {canEncrypt && onEncrypt && (
+          {canEncrypt && onEncrypt && ()
             <button
               onClick={onEncrypt}
               className="flex-1 px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600 flex items-center justify-center"
@@ -391,8 +359,7 @@ export const EncryptionDetails: React.FC<{
               🔒 Encrypt
             </button>
           )}
-
-          {canDecrypt && onDecrypt && (
+          {canDecrypt && onDecrypt && ()
             <button
               onClick={onDecrypt}
               className="flex-1 px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 flex items-center justify-center"
@@ -400,8 +367,7 @@ export const EncryptionDetails: React.FC<{
               🔓 Decrypt
             </button>
           )}
-
-          {isProcessing && (
+          {isProcessing && ()
             <div className="flex-1 px-3 py-1 bg-gray-200 text-gray-600 rounded text-sm text-center">
               Processing...
             </div>

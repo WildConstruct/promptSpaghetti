@@ -2,7 +2,6 @@
  * Node Extension Interface - Epic 8.4 Story 8.4.2
  * Defines interfaces for extending the runtime node system
  */
-
 import { z } from 'zod';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 import { RuntimeNode, AdvancedRuntimeNode, ExecutionContext, AdvancedExecutionContext } from '../../runtime';
@@ -10,22 +9,18 @@ import { RuntimeNode, AdvancedRuntimeNode, ExecutionContext, AdvancedExecutionCo
 // Node Extension Interface
 export interface NodeExtension extends BaseExtension {
   readonly extensionType: 'node';
-  
   // Node registration (supporting both legacy and new method names)
   getNodeDefinitions(): NodeDefinition[];
   getNodeTypes(): NodeDefinition[]; // Legacy method name used by engine
   createNodeInstance(nodeType: string, nodeId: string, config: any): RuntimeNode<any>;
   createNode(nodeType: string, nodeId: string, config: any): RuntimeNode<any>; // Legacy method name used by engine
-  
   // Schema validation
   validateNodeConfig(nodeType: string, config: any): ExtensionValidationResult;
   getNodeSchema(nodeType: string): z.ZodSchema<any>;
-  
   // Node lifecycle hooks
   onNodeCreated?(node: RuntimeNode<any>): void;
   onNodeExecuted?(node: RuntimeNode<any>, result: any): void;
   onNodeDestroyed?(node: RuntimeNode<any>): void;
-  
   // Advanced node support
   supportsAdvancedNodes(): boolean;
   createAdvancedNodeInstance?(nodeType: string, nodeId: string, config: any): AdvancedRuntimeNode<any>;
@@ -39,22 +34,16 @@ export interface NodeDefinition {
   category: NodeCategory;
   description: string;
   version: string;
-  
   // Node class
   nodeClass: NodeClass;
-  
   // Configuration schema
   configSchema: z.ZodSchema<any>;
-  
   // UI configuration
   ui: NodeUIConfiguration;
-  
   // Runtime configuration
   runtime: NodeRuntimeConfiguration;
-  
   // Metadata
   metadata: NodeMetadata;
-  
   // Validation
   validation?: NodeValidation;
 }
@@ -80,13 +69,10 @@ export interface NodeUIConfiguration {
   icon?: string;
   color?: string;
   shape?: 'rectangle' | 'circle' | 'diamond' | 'custom';
-  
   // Editor configuration
   editor?: NodeEditorConfiguration;
-  
   // Palette configuration
   palette?: NodePaletteConfiguration;
-  
   // Preview configuration
   preview?: NodePreviewConfiguration;
 }
@@ -95,14 +81,11 @@ export interface NodeUIConfiguration {
 export interface NodeEditorConfiguration {
   // Custom editor component
   component?: React.ComponentType<NodeEditorProps>;
-  
   // Form generation
   autoGenerateForm?: boolean;
   formLayout?: 'vertical' | 'horizontal' | 'grid';
-  
   // Field customization
   fields?: Record<string, NodeFieldConfiguration>;
-  
   // Validation
   validation?: NodeEditorValidation;
 }
@@ -140,14 +123,11 @@ export interface NodePaletteConfiguration {
   // Grouping
   group?: string;
   order?: number;
-  
   // Visibility
   visible?: boolean;
   condition?: (context: ExtensionContext) => boolean;
-  
   // Drag and drop
   dragData?: any;
-  
   // Tooltip
   tooltip?: string;
 }
@@ -156,13 +136,10 @@ export interface NodePaletteConfiguration {
 export interface NodePreviewConfiguration {
   // Preview component
   component?: React.ComponentType<NodePreviewProps>;
-  
   // Auto-generate preview
   autoGenerate?: boolean;
-  
   // Preview mode
   mode?: 'static' | 'dynamic' | 'interactive';
-  
   // Update frequency
   updateFrequency?: 'onChange' | 'onFocus' | 'manual';
 }
@@ -180,13 +157,10 @@ export interface NodeRuntimeConfiguration {
   // Execution settings
   timeout?: number;
   retries?: number;
-  
   // Performance hints
   performance?: NodePerformanceHints;
-  
   // Security settings
   security?: NodeSecuritySettings;
-  
   // Caching
   caching?: NodeCachingConfiguration;
 }
@@ -226,7 +200,6 @@ export interface NodeMetadata {
   documentation?: string;
   examples?: NodeExample[];
   changelog?: string;
-  
   // Compatibility
   compatibility?: {
     minVersion: string;
@@ -234,7 +207,6 @@ export interface NodeMetadata {
     deprecatedIn?: string;
     removedIn?: string;
   };
-  
   // Tags
   tags?: string[];
   keywords?: string[];
@@ -253,13 +225,10 @@ export interface NodeExample {
 export interface NodeValidation {
   // Configuration validation
   configValidation?: (config: any) => ExtensionValidationResult;
-  
   // Runtime validation
   runtimeValidation?: (node: RuntimeNode<any>, context: ExecutionContext) => ExtensionValidationResult;
-  
   // Context validation
   contextValidation?: (context: ExecutionContext) => ExtensionValidationResult;
-  
   // Custom validation rules
   customRules?: NodeValidationRule[];
 }
@@ -277,19 +246,15 @@ export interface NodeRegistry {
   // Registration
   register(definition: NodeDefinition): void;
   unregister(nodeId: string): void;
-  
   // Lookup
   get(nodeId: string): NodeDefinition | undefined;
   getAll(): NodeDefinition[];
   getByCategory(category: NodeCategory): NodeDefinition[];
-  
   // Search
   search(query: string): NodeDefinition[];
   filter(predicate: (definition: NodeDefinition) => boolean): NodeDefinition[];
-  
   // Validation
   validate(definition: NodeDefinition): ExtensionValidationResult;
-  
   // Events
   on(event: 'registered' | 'unregistered' | 'updated', listener: (definition: NodeDefinition) => void): void;
   off(event: 'registered' | 'unregistered' | 'updated', listener: (definition: NodeDefinition) => void): void;
@@ -300,13 +265,10 @@ export interface NodeFactory {
   // Creation
   create(nodeType: string, nodeId: string, config: any): RuntimeNode<any>;
   createAdvanced(nodeType: string, nodeId: string, config: any): AdvancedRuntimeNode<any>;
-  
   // Validation
   validateConfig(nodeType: string, config: any): ExtensionValidationResult;
-  
   // Schema access
   getSchema(nodeType: string): z.ZodSchema<any>;
-  
   // Capabilities
   supports(nodeType: string): boolean;
   supportsAdvanced(nodeType: string): boolean;
@@ -316,27 +278,24 @@ export interface NodeFactory {
 export interface NodeExecutionContextExtensions {
   // Node-specific extensions
   nodeExtensions: Map<string, any>;
-  
   // Performance tracking
-  performanceTracking: {
+  performanceTracking: {,
     startTime: number;
     endTime?: number;
     executionTime?: number;
     memoryUsage?: number;
   };
-  
   // Security context
-  securityContext: {
+  securityContext: {,
     permissions: string[];
     sandboxed: boolean;
-    resourceLimits: {
+    resourceLimits: {,
       memory?: number;
       time?: number;
     };
   };
-  
   // Caching context
-  cachingContext: {
+  cachingContext: {,
     enabled: boolean;
     cacheKey?: string;
     cacheHit?: boolean;
@@ -355,11 +314,9 @@ export interface NodeExecutionMonitor {
   onExecutionStart(node: RuntimeNode<any>, context: ExtendedExecutionContext): void;
   onExecutionEnd(node: RuntimeNode<any>, context: ExtendedExecutionContext, result: any): void;
   onExecutionError(node: RuntimeNode<any>, context: ExtendedExecutionContext, error: Error): void;
-  
   // Metrics
   getMetrics(nodeId: string): NodeExecutionMetrics;
   getAllMetrics(): Map<string, NodeExecutionMetrics>;
-  
   // Events
   on(event: 'execution' | 'error' | 'performance', listener: (data: any) => void): void;
 }
@@ -395,45 +352,38 @@ export namespace NodeExtensionHelpers {
       runtime: config.runtime || {},
       metadata: config.metadata || {
         author: 'Unknown',
-        license: 'MIT'
+        license: 'MIT',
       },
       ...config
     };
   }
-  
   export function validateNodeDefinition(definition: NodeDefinition): ExtensionValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
-    
     // Basic validation
     if (!definition.id) errors.push('Node ID is required');
     if (!definition.name) errors.push('Node name is required');
     if (!definition.nodeClass) errors.push('Node class is required');
-    
     // Schema validation
     try {
       definition.configSchema.parse({});
     } catch (e) {
       warnings.push('Configuration schema validation failed');
     }
-    
     return {
       valid: errors.length === 0,
       errors,
       warnings
     };
   }
-  
   export function createNodeRegistry(): NodeRegistry {
     const registry = new Map<string, NodeDefinition>();
     const eventEmitter = new EventTarget();
-    
     return {
       register(definition: NodeDefinition) {
         registry.set(definition.id, definition);
         eventEmitter.dispatchEvent(new CustomEvent('registered', { detail: definition }));
       },
-      
       unregister(nodeId: string) {
         const definition = registry.get(nodeId);
         if (definition) {
@@ -441,39 +391,31 @@ export namespace NodeExtensionHelpers {
           eventEmitter.dispatchEvent(new CustomEvent('unregistered', { detail: definition }));
         }
       },
-      
       get(nodeId: string) {
         return registry.get(nodeId);
       },
-      
       getAll() {
         return Array.from(registry.values());
       },
-      
       getByCategory(category: NodeCategory) {
         return Array.from(registry.values()).filter(def => def.category === category);
       },
-      
       search(query: string) {
         const lowercaseQuery = query.toLowerCase();
-        return Array.from(registry.values()).filter(def =>
+        return Array.from(registry.values()).filter(def =>)
           def.name.toLowerCase().includes(lowercaseQuery) ||
           def.description.toLowerCase().includes(lowercaseQuery)
         );
       },
-      
       filter(predicate: (definition: NodeDefinition) => boolean) {
         return Array.from(registry.values()).filter(predicate);
       },
-      
       validate(definition: NodeDefinition) {
         return validateNodeDefinition(definition);
       },
-      
       on(event: string, listener: any) {
         eventEmitter.addEventListener(event, listener);
       },
-      
       off(event: string, listener: any) {
         eventEmitter.removeEventListener(event, listener);
       }

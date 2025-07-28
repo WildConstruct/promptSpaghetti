@@ -5,7 +5,6 @@
  * Gamifies the platform experience while highlighting professional accomplishments
  * and building trust through verified achievements.
  */
-
 import { identityValidationService, IdentityValidationType } from '../auth/IdentityValidation';
 import { marketplaceMetrics } from '../analytics/MarketplaceMetrics';
 import { conversionTracker } from '../analytics/ConversionTracker';
@@ -25,7 +24,7 @@ export interface Badge {
   prerequisites?: string[];
   isVisible: boolean;
   isActive: boolean;
-  metadata: {
+  metadata: {,
     createdAt: number;
     updatedAt: number;
     version: string;
@@ -85,7 +84,7 @@ export interface UserBadgeProgress {
   experience: number;
   streak: number;
   lastActivity: number;
-  statistics: {
+  statistics: {,
     templatesCreated: number;
     templatesDownloaded: number;
     projectsCompleted: number;
@@ -97,7 +96,7 @@ export interface UserBadgeProgress {
     mentoringSessions: number;
     workshopsAttended: number;
   };
-  achievements: {
+  achievements: {,
     firstTemplate: boolean;
     firstCollaboration: boolean;
     firstSale: boolean;
@@ -120,12 +119,10 @@ export class BadgeSystem {
   private badges: Map<string, Badge> = new Map();
   private userProgress: Map<string, UserBadgeProgress> = new Map();
   private eventListeners: Map<string, ((event: BadgeUnlockEvent) => void)[]> = new Map();
-
   constructor() {
     this.initializeDefaultBadges();
     this.initializeMockUserData();
   }
-
   private initializeDefaultBadges(): void {
     const defaultBadges: Badge[] = [
       // Verification Badges
@@ -179,7 +176,6 @@ export class BadgeSystem {
         isActive: true,
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
       },
-
       // Creation Badges  
       {
         id: 'first-template',
@@ -221,7 +217,7 @@ export class BadgeSystem {
         category: 'creation',
         tier: 'diamond',
         icon: '💎',
-        criteria: { 
+        criteria: { ,
           type: 'composite',
           customLogic: (user) => {
             return user.statistics.templatesCreated >= 100 && 
@@ -237,7 +233,6 @@ export class BadgeSystem {
         isActive: true,
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
       },
-
       // Marketplace Badges
       {
         id: 'first-sale',
@@ -272,7 +267,6 @@ export class BadgeSystem {
         isActive: true,
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
       },
-
       // Community Badges
       {
         id: 'helpful-reviewer',
@@ -306,7 +300,6 @@ export class BadgeSystem {
         isActive: true,
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
       },
-
       // Achievement Badges
       {
         id: 'early-adopter',
@@ -315,7 +308,7 @@ export class BadgeSystem {
         category: 'special',
         tier: 'diamond',
         icon: '🚀',
-        criteria: { 
+        criteria: { ,
           type: 'completion', 
           conditions: { joined_before: Date.now() + (30 * 24 * 60 * 60 * 1000) } // 30 days from now
         },
@@ -343,7 +336,6 @@ export class BadgeSystem {
         isActive: true,
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
       },
-
       // Milestone Badges
       {
         id: 'level-10',
@@ -378,18 +370,16 @@ export class BadgeSystem {
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
       }
     ];
-
-    defaultBadges.forEach(badge => {
+    defaultBadges.forEach(badge => {)
       this.badges.set(badge.id, badge);
     });
   }
-
   private initializeMockUserData(): void {
     // Initialize sample user progress
-    const sampleUsers = [
+    const sampleUsers = [;
       {
         userId: 'creator-johnsmith',
-        progress: {
+        progress: {,
           templatesCreated: 15,
           templatesDownloaded: 47,
           projectsCompleted: 8,
@@ -399,13 +389,13 @@ export class BadgeSystem {
           forumPosts: 12,
           helpfulVotes: 34,
           mentoringSessions: 3,
-          workshopsAttended: 2
+          workshopsAttended: 2,
         },
         badges: ['email-verified', 'first-template', 'first-sale']
       },
       {
         userId: 'creator-maryjones',
-        progress: {
+        progress: {,
           templatesCreated: 32,
           templatesDownloaded: 89,
           projectsCompleted: 18,
@@ -415,13 +405,12 @@ export class BadgeSystem {
           forumPosts: 28,
           helpfulVotes: 67,
           mentoringSessions: 8,
-          workshopsAttended: 5
+          workshopsAttended: 5,
         },
         badges: ['email-verified', 'identity-verified', 'first-template', 'prolific-creator', 'first-sale', 'helpful-reviewer']
       }
     ];
-
-    sampleUsers.forEach(user => {
+    sampleUsers.forEach(user => {)
       const userProgress: UserBadgeProgress = {
         userId: user.userId,
         badges: new Map(),
@@ -430,7 +419,7 @@ export class BadgeSystem {
         experience: user.progress.templatesCreated * 100,
         streak: 5,
         lastActivity: Date.now(),
-        statistics: {
+        statistics: {,
           templatesCreated: user.progress.templatesCreated,
           templatesDownloaded: user.progress.templatesDownloaded,
           projectsCompleted: user.progress.projectsCompleted,
@@ -440,9 +429,9 @@ export class BadgeSystem {
           forumPosts: user.progress.forumPosts,
           helpfulVotes: user.progress.helpfulVotes,
           mentoringSessions: user.progress.mentoringSessions,
-          workshopsAttended: user.progress.workshopsAttended
+          workshopsAttended: user.progress.workshopsAttended,
         },
-        achievements: {
+        achievements: {,
           firstTemplate: user.progress.templatesCreated > 0,
           firstCollaboration: user.progress.collaborations > 0,
           firstSale: user.badges.includes('first-sale'),
@@ -450,49 +439,42 @@ export class BadgeSystem {
           communityLeader: user.progress.helpfulVotes > 50
         }
       };
-
       // Add badges
-      user.badges.forEach(badgeId => {
+      user.badges.forEach(badgeId => {)
         const badge = this.badges.get(badgeId);
         if (badge) {
-          userProgress.badges.set(badgeId, {
+          userProgress.badges.set(badgeId, {)
             badgeId,
             userId: user.userId,
             unlockedAt: Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000,
             tier: badge.tier,
             progress: 100,
             isDisplayed: true,
-            isNotificationSent: true
+            isNotificationSent: true,
           });
           userProgress.totalPoints += badge.points;
         }
       });
-
       this.userProgress.set(user.userId, userProgress);
     });
   }
-
   /**
    * Check and award badges for a user based on their current progress
    */
   public checkAndAwardBadges(userId: string): BadgeUnlockEvent[] {
     const userProgress = this.getUserProgress(userId);
     if (!userProgress) return [];
-
     const unlockedBadges: BadgeUnlockEvent[] = [];
-
     for (const [badgeId, badge] of this.badges) {
       // Skip if already unlocked
       if (userProgress.badges.has(badgeId)) continue;
-
       // Check prerequisites
       if (badge.prerequisites) {
-        const hasPrerequisites = badge.prerequisites.every(prereq => 
+        const hasPrerequisites = badge.prerequisites.every(prereq => ;)
           userProgress.badges.has(prereq)
         );
         if (!hasPrerequisites) continue;
       }
-
       // Check criteria
       if (this.checkBadgeCriteria(badge, userProgress)) {
         const unlockEvent = this.awardBadge(userId, badgeId);
@@ -501,44 +483,33 @@ export class BadgeSystem {
         }
       }
     }
-
     return unlockedBadges;
   }
-
   private checkBadgeCriteria(badge: Badge, userProgress: UserBadgeProgress): boolean {
     const { criteria } = badge;
-
     switch (criteria.type) {
     case 'verification':
       return this.checkVerificationCriteria(criteria.metric!, userProgress.userId);
-      
     case 'count':
       const currentValue = this.getStatisticValue(criteria.metric!, userProgress);
       return currentValue >= (criteria.target || 0);
-      
     case 'threshold':
       const thresholdValue = this.getStatisticValue(criteria.metric!, userProgress);
       return thresholdValue >= (criteria.target || 0);
-      
     case 'completion':
       return this.checkCompletionCriteria(criteria.conditions!, userProgress);
-      
     case 'composite':
       return criteria.customLogic ? criteria.customLogic(userProgress) : false;
-      
     default:
       return false;
     }
   }
-
   private checkVerificationCriteria(metric: string, userId: string): boolean {
     const validationSummary = identityValidationService.getUserValidationSummary(userId);
     return validationSummary.completedValidations.includes(metric as IdentityValidationType);
   }
-
   private getStatisticValue(metric: string, userProgress: UserBadgeProgress): number {
     const stats = userProgress.statistics;
-    
     switch (metric) {
     case 'templates_created': return stats.templatesCreated;
     case 'templates_downloaded': return stats.templatesDownloaded;
@@ -553,7 +524,6 @@ export class BadgeSystem {
     default: return 0;
     }
   }
-
   private checkCompletionCriteria(conditions: Record<string, any>, userProgress: UserBadgeProgress): boolean {
     // Check custom conditions
     for (const [key, value] of Object.entries(conditions)) {
@@ -567,13 +537,10 @@ export class BadgeSystem {
     }
     return true;
   }
-
   private awardBadge(userId: string, badgeId: string): BadgeUnlockEvent | null {
     const badge = this.badges.get(badgeId);
     const userProgress = this.getUserProgress(userId);
-    
     if (!badge || !userProgress) return null;
-
     // Create user badge
     const userBadge: UserBadge = {
       badgeId,
@@ -582,21 +549,18 @@ export class BadgeSystem {
       tier: badge.tier,
       progress: 100,
       isDisplayed: true,
-      isNotificationSent: false
+      isNotificationSent: false,
     };
-
     // Add to user progress
     userProgress.badges.set(badgeId, userBadge);
     userProgress.totalPoints += badge.points;
     userProgress.experience += badge.points;
-
     // Check for level up
     const newLevel = this.calculateLevel(userProgress.experience);
     const isLevelUp = newLevel > userProgress.level;
     if (isLevelUp) {
       userProgress.level = newLevel;
     }
-
     // Create unlock event
     const unlockEvent: BadgeUnlockEvent = {
       userId,
@@ -605,23 +569,19 @@ export class BadgeSystem {
       progress: 100,
       isLevelUp,
       newLevel: isLevelUp ? newLevel : undefined,
-      pointsEarned: badge.points
+      pointsEarned: badge.points,
     };
-
     // Trigger event listeners
     this.triggerBadgeUnlockEvent(unlockEvent);
-
     return unlockEvent;
   }
-
   private calculateLevel(experience: number): number {
     // Level progression: 100 XP for level 1, then +100 per level
     return Math.floor(experience / 100) + 1;
   }
-
   private triggerBadgeUnlockEvent(event: BadgeUnlockEvent): void {
     const listeners = this.eventListeners.get('badge_unlock') || [];
-    listeners.forEach(listener => {
+    listeners.forEach(listener => {)
       try {
         listener(event);
       } catch (error) {
@@ -629,14 +589,12 @@ export class BadgeSystem {
       }
     });
   }
-
   /**
    * Get user's badge progress
    */
   public getUserProgress(userId: string): UserBadgeProgress | null {
     return this.userProgress.get(userId) || null;
   }
-
   /**
    * Get all available badges
    */
@@ -645,54 +603,44 @@ export class BadgeSystem {
       .filter(badge => badge.isVisible && badge.isActive)
       .sort((a, b) => a.points - b.points);
   }
-
   /**
    * Get badges by category
    */
   public getBadgesByCategory(category: BadgeCategory): Badge[] {
     return this.getAllBadges().filter(badge => badge.category === category);
   }
-
   /**
    * Get user's earned badges
    */
   public getUserBadges(userId: string): UserBadge[] {
     const userProgress = this.getUserProgress(userId);
     if (!userProgress) return [];
-    
     return Array.from(userProgress.badges.values())
       .sort((a, b) => b.unlockedAt - a.unlockedAt);
   }
-
   /**
    * Get badge by ID
    */
   public getBadge(badgeId: string): Badge | null {
     return this.badges.get(badgeId) || null;
   }
-
   /**
    * Get user's badge progress for a specific badge
    */
   public getBadgeProgress(userId: string, badgeId: string): number {
     const badge = this.badges.get(badgeId);
     const userProgress = this.getUserProgress(userId);
-    
     if (!badge || !userProgress) return 0;
-
     // If already unlocked, return 100%
     if (userProgress.badges.has(badgeId)) return 100;
-
     // Calculate progress based on criteria
     if (badge.criteria.type === 'count' || badge.criteria.type === 'threshold') {
       const currentValue = this.getStatisticValue(badge.criteria.metric!, userProgress);
       const targetValue = badge.criteria.target || 1;
       return Math.min((currentValue / targetValue) * 100, 99); // Cap at 99% until actually unlocked
     }
-
     return 0;
   }
-
   /**
    * Get leaderboard data
    */
@@ -704,33 +652,29 @@ export class BadgeSystem {
     rank: number;
   }> {
     return Array.from(this.userProgress.values())
-      .map(progress => ({
+      .map(progress => ({)
         userId: progress.userId,
         totalPoints: progress.totalPoints,
         level: progress.level,
         badgeCount: progress.badges.size,
-        rank: 0
+        rank: 0,
       }))
       .sort((a, b) => b.totalPoints - a.totalPoints)
       .map((item, index) => ({ ...item, rank: index + 1 }))
       .slice(0, limit);
   }
-
   /**
    * Update user statistics
    */
   public updateUserStatistics(userId: string, updates: Partial<UserBadgeProgress['statistics']>): BadgeUnlockEvent[] {
     const userProgress = this.getUserProgress(userId);
     if (!userProgress) return [];
-
     // Update statistics
     Object.assign(userProgress.statistics, updates);
     userProgress.lastActivity = Date.now();
-
     // Check for new badge unlocks
     return this.checkAndAwardBadges(userId);
   }
-
   /**
    * Add event listener for badge unlocks
    */
@@ -739,7 +683,6 @@ export class BadgeSystem {
     listeners.push(listener);
     this.eventListeners.set('badge_unlock', listeners);
   }
-
   /**
    * Remove event listener
    */
@@ -750,7 +693,6 @@ export class BadgeSystem {
       listeners.splice(index, 1);
     }
   }
-
   /**
    * Get badge statistics
    */
@@ -763,7 +705,6 @@ export class BadgeSystem {
     } {
     const totalBadges = this.badges.size;
     const totalUsers = this.userProgress.size;
-    
     // Count badge unlocks
     const badgeUnlockCounts = new Map<string, number>();
     for (const userProgress of this.userProgress.values()) {
@@ -771,18 +712,13 @@ export class BadgeSystem {
         badgeUnlockCounts.set(badgeId, (badgeUnlockCounts.get(badgeId) || 0) + 1);
       }
     }
-
-    const mostPopular = Array.from(badgeUnlockCounts.entries())
+    const mostPopular = Array.from(badgeUnlockCounts.entries());
       .sort(([,a], [,b]) => b - a)[0]?.[0] || '';
-      
-    const rarest = Array.from(badgeUnlockCounts.entries())
+    const rarest = Array.from(badgeUnlockCounts.entries());
       .sort(([,a], [,b]) => a - b)[0]?.[0] || '';
-
-    const totalBadgesUnlocked = Array.from(this.userProgress.values())
+    const totalBadgesUnlocked = Array.from(this.userProgress.values());
       .reduce((sum, progress) => sum + progress.badges.size, 0);
-    
     const averageBadgesPerUser = totalUsers > 0 ? totalBadgesUnlocked / totalUsers : 0;
-
     return {
       totalBadges,
       totalUsers,

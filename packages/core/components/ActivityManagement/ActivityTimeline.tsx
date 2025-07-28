@@ -4,7 +4,6 @@
  * Comprehensive user activity timeline interface with advanced filtering,
  * real-time updates, collaboration tracking, and analytics.
  */
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -32,7 +31,6 @@ import {
   Eye,
   BarChart3
 } from 'lucide-react';
-
 import {
   activityTimeline,
   ActivityEvent,
@@ -43,7 +41,6 @@ import {
   ActivityImpact,
   ActivitySource as _ActivitySource
 } from '../../services/ActivityTimeline';
-
 interface ActivityTimelineProps {
   userId?: string;
   workspaceId?: string;
@@ -54,63 +51,61 @@ interface ActivityTimelineProps {
   maxItems?: number;
   className?: string;
 }
-
 /**
  * Activity type configurations for UI styling
  */
 const ACTIVITY_TYPE_CONFIG = {
-  user_interaction: {
+  user_interaction: {,
     icon: User,
     color: 'text-blue-600 bg-blue-50 border-blue-200',
     badgeColor: 'bg-blue-100 text-blue-800'
   },
-  system_event: {
+  system_event: {,
     icon: Settings,
     color: 'text-gray-600 bg-gray-50 border-gray-200',
     badgeColor: 'bg-gray-100 text-gray-800'
   },
-  graph_operation: {
+  graph_operation: {,
     icon: GitBranch,
     color: 'text-green-600 bg-green-50 border-green-200',
     badgeColor: 'bg-green-100 text-green-800'
   },
-  file_operation: {
+  file_operation: {,
     icon: FileText,
     color: 'text-purple-600 bg-purple-50 border-purple-200',
     badgeColor: 'bg-purple-100 text-purple-800'
   },
-  collaboration: {
+  collaboration: {,
     icon: Users,
     color: 'text-orange-600 bg-orange-50 border-orange-200',
     badgeColor: 'bg-orange-100 text-orange-800'
   },
-  performance: {
+  performance: {,
     icon: Zap,
     color: 'text-yellow-600 bg-yellow-50 border-yellow-200',
     badgeColor: 'bg-yellow-100 text-yellow-800'
   },
-  error: {
+  error: {,
     icon: AlertTriangle,
     color: 'text-red-600 bg-red-50 border-red-200',
     badgeColor: 'bg-red-100 text-red-800'
   },
-  authentication: {
+  authentication: {,
     icon: User,
     color: 'text-indigo-600 bg-indigo-50 border-indigo-200',
     badgeColor: 'bg-indigo-100 text-indigo-800'
   },
-  admin: {
+  admin: {,
     icon: Settings,
     color: 'text-gray-700 bg-gray-100 border-gray-300',
     badgeColor: 'bg-gray-200 text-gray-900'
   },
-  integration: {
+  integration: {,
     icon: Globe,
     color: 'text-teal-600 bg-teal-50 border-teal-200',
     badgeColor: 'bg-teal-100 text-teal-800'
   }
 };
-
 /**
  * Impact level configurations
  */
@@ -122,7 +117,7 @@ const IMPACT_CONFIG = {
   none: { color: 'text-gray-700', badgeColor: 'bg-gray-100 text-gray-800', priority: 1 }
 };
 
-export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
+export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
   userId,
   workspaceId,
   projectId,
@@ -135,23 +130,21 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
   const [activities, setActivities] = useState<ActivityEvent[]>([]);
   const [stats, setStats] = useState<ActivityStats | null>(null);
   const [selectedTab, setSelectedTab] = useState<string>('timeline');
-  const [filter, setFilter] = useState<ActivityFilter>({
+  const [filter, setFilter] = useState<ActivityFilter>({)
     userIds: userId ? [userId] : undefined,
     workspaceIds: workspaceId ? [workspaceId] : undefined,
     projectIds: projectId ? [projectId] : undefined,
-    limit: maxItems
+    limit: maxItems,
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedActivity, setSelectedActivity] = useState<ActivityEvent | null>(null);
   const [dateRange, setDateRange] = useState<'today' | 'week' | 'month' | 'all'>('week');
-
   // Load activities and stats
   useEffect(() => {
     const loadData = () => {
       // Update date range filter
       const now = new Date();
       let startDate: Date;
-      
       switch (dateRange) {
       case 'today':
         startDate = new Date();
@@ -170,65 +163,54 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
         startDate = new Date(0);
         break;
       }
-
       const updatedFilter = {
         ...filter,
         dateRange: dateRange !== 'all' ? { start: startDate, end: now } : undefined,
         searchQuery: searchQuery || undefined
       };
-
       setActivities(activityTimeline.getActivities(updatedFilter));
       if (showStats) {
         setStats(activityTimeline.getActivityStats(updatedFilter));
       }
     };
-
     loadData();
-
     // Subscribe to real-time updates
-    const listenerId = `activity-timeline-${Math.random().toString(36).substr(2, 9)}`;
+    const listenerId = `activity-timeline-${Math.random().toString(36).substr(2, 9)}`;}
     activityTimeline.subscribe(listenerId, (_event) => {
       loadData(); // Refresh data when new activities are tracked
     });
-
     return () => {
       activityTimeline.unsubscribe(listenerId);
     };
   }, [filter, searchQuery, dateRange, maxItems, showStats]);
-
   // Group activities by date for timeline view
   const groupedActivities = useMemo(() => {
     const groups: Record<string, ActivityEvent[]> = {};
-    
-    activities.forEach(activity => {
+    activities.forEach(activity => {)
       const dateKey = activity.timestamp.toDateString();
       if (!groups[dateKey]) {
         groups[dateKey] = [];
       }
       groups[dateKey].push(activity);
     });
-    
     return groups;
   }, [activities]);
-
   // Filter update helpers
   const updateFilter = (updates: Partial<ActivityFilter>) => {
     setFilter(prev => ({ ...prev, ...updates }));
   };
-
   const resetFilters = () => {
-    setFilter({
+    setFilter({)
       userIds: userId ? [userId] : undefined,
       workspaceIds: workspaceId ? [workspaceId] : undefined,
       projectIds: projectId ? [projectId] : undefined,
-      limit: maxItems
+      limit: maxItems,
     });
     setSearchQuery('');
     setDateRange('week');
   };
-
-  return (
-    <div className={`activity-timeline space-y-6 ${className}`}>
+  return ()
+    <div className={`activity-timeline space-y-6 ${className}`}>}
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
@@ -249,9 +231,8 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
           </Button>
         </div>
       </div>
-
       {/* Statistics Cards */}
-      {showStats && stats && !compact && (
+      {showStats && stats && !compact && ()
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>
             <CardContent className="p-4">
@@ -266,7 +247,6 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center">
@@ -280,7 +260,6 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center">
@@ -296,7 +275,6 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center">
@@ -314,9 +292,8 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
           </Card>
         </div>
       )}
-
       {/* Filters */}
-      {showFilters && !compact && (
+      {showFilters && !compact && ()
         <Card>
           <CardContent className="p-4">
             <div className="flex flex-wrap gap-4 items-center">
@@ -329,7 +306,6 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                   className="w-64"
                 />
               </div>
-
               <Select
                 value={dateRange}
                 onValueChange={(value) => setDateRange(value as typeof dateRange)}
@@ -339,11 +315,10 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                 <option value="month">Last Month</option>
                 <option value="all">All Time</option>
               </Select>
-
               <Select
                 value={filter.types?.[0] || 'all'}
                 onValueChange={(value) => 
-                  updateFilter({ 
+                  updateFilter({ )
                     types: value === 'all' ? undefined : [value as ActivityType] 
                   })
                 }
@@ -356,11 +331,10 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                 <option value="performance">Performance</option>
                 <option value="error">Errors</option>
               </Select>
-
               <Select
                 value={filter.impactLevels?.[0] || 'all'}
                 onValueChange={(value) => 
-                  updateFilter({ 
+                  updateFilter({ )
                     impactLevels: value === 'all' ? undefined : [value as ActivityImpact] 
                   })
                 }
@@ -371,14 +345,13 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                 <option value="medium">Medium</option>
                 <option value="low">Low</option>
               </Select>
-
               <div className="flex items-center space-x-2">
                 <Button
                   variant={filter.successOnly ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => updateFilter({ 
+                  onClick={() => updateFilter({ )
                     successOnly: filter.successOnly ? undefined : true,
-                    errorsOnly: undefined 
+                    errorsOnly: undefined ,
                   })}
                 >
                   <CheckCircle className="w-4 h-4 mr-1" />
@@ -387,9 +360,9 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                 <Button
                   variant={filter.errorsOnly ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => updateFilter({ 
+                  onClick={() => updateFilter({ )
                     errorsOnly: filter.errorsOnly ? undefined : true,
-                    successOnly: undefined 
+                    successOnly: undefined ,
                   })}
                 >
                   <XCircle className="w-4 h-4 mr-1" />
@@ -400,7 +373,6 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
           </CardContent>
         </Card>
       )}
-
       {/* Main Content */}
       <Card>
         <CardHeader>
@@ -416,7 +388,6 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
               <TabsTrigger value="list">List View</TabsTrigger>
               {showStats && <TabsTrigger value="analytics">Analytics</TabsTrigger>}
             </TabsList>
-
             <TabsContent value="timeline" className="mt-6">
               <TimelineView
                 groupedActivities={groupedActivities}
@@ -424,7 +395,6 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                 compact={compact}
               />
             </TabsContent>
-
             <TabsContent value="list" className="mt-6">
               <ListView
                 activities={activities}
@@ -432,8 +402,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                 compact={compact}
               />
             </TabsContent>
-
-            {showStats && (
+            {showStats && ()
               <TabsContent value="analytics" className="mt-6">
                 <AnalyticsView stats={stats} activities={activities} />
               </TabsContent>
@@ -441,9 +410,8 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
           </Tabs>
         </CardContent>
       </Card>
-
       {/* Activity Detail Modal */}
-      {selectedActivity && (
+      {selectedActivity && ()
         <ActivityDetailModal
           activity={selectedActivity}
           onClose={() => setSelectedActivity(null)}
@@ -452,7 +420,6 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
     </div>
   );
 };
-
 /**
  * Timeline View Component
  */
@@ -461,18 +428,16 @@ interface TimelineViewProps {
   onSelectActivity: (activity: ActivityEvent) => void;
   compact: boolean;
 }
-
-const TimelineView: React.FC<TimelineViewProps> = ({
+const TimelineView: React.FC<TimelineViewProps> = ({)
   groupedActivities,
   onSelectActivity,
   compact
 }) => {
-  const dates = Object.keys(groupedActivities).sort((a, b) => 
+  const dates = Object.keys(groupedActivities).sort((a, b) => ;
     new Date(b).getTime() - new Date(a).getTime()
   );
-
   if (dates.length === 0) {
-    return (
+    return ()
       <div className="text-center py-8">
         <ActivityIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No activities found</h3>
@@ -480,19 +445,18 @@ const TimelineView: React.FC<TimelineViewProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="space-y-8">
-      {dates.map(dateKey => (
+      {dates.map(dateKey => ()
         <div key={dateKey}>
           <div className="flex items-center mb-4">
             <Calendar className="w-4 h-4 text-gray-400 mr-2" />
             <h3 className="text-sm font-medium text-gray-900">
-              {new Date(dateKey).toLocaleDateString('en-US', {
+              {new Date(dateKey).toLocaleDateString('en-US', {)
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
-                day: 'numeric'
+                day: 'numeric',
               })}
             </h3>
             <div className="flex-1 border-t border-gray-200 ml-4" />
@@ -500,9 +464,8 @@ const TimelineView: React.FC<TimelineViewProps> = ({
               {groupedActivities[dateKey].length} events
             </Badge>
           </div>
-          
           <div className="space-y-3">
-            {groupedActivities[dateKey].map(activity => (
+            {groupedActivities[dateKey].map(activity => ()
               <ActivityCard
                 key={activity.id}
                 activity={activity}
@@ -517,7 +480,6 @@ const TimelineView: React.FC<TimelineViewProps> = ({
     </div>
   );
 };
-
 /**
  * List View Component
  */
@@ -526,14 +488,13 @@ interface ListViewProps {
   onSelectActivity: (activity: ActivityEvent) => void;
   compact: boolean;
 }
-
-const ListView: React.FC<ListViewProps> = ({
+const ListView: React.FC<ListViewProps> = ({)
   activities,
   onSelectActivity,
   compact
 }) => {
   if (activities.length === 0) {
-    return (
+    return ()
       <div className="text-center py-8">
         <ActivityIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No activities found</h3>
@@ -541,10 +502,9 @@ const ListView: React.FC<ListViewProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="space-y-2">
-      {activities.map(activity => (
+      {activities.map(activity => ()
         <ActivityCard
           key={activity.id}
           activity={activity}
@@ -556,7 +516,6 @@ const ListView: React.FC<ListViewProps> = ({
     </div>
   );
 };
-
 /**
  * Analytics View Component
  */
@@ -564,11 +523,9 @@ interface AnalyticsViewProps {
   stats: ActivityStats | null;
   activities: ActivityEvent[];
 }
-
 const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => {
   if (!stats) return null;
-
-  return (
+  return ()
     <div className="space-y-6">
       {/* Activity Distribution */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -580,10 +537,10 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => 
             <div className="space-y-3">
               {Object.entries(stats.byType)
                 .sort(([, a], [, b]) => b - a)
-                .map(([type, count]) => (
+                .map(([type, count]) => ()
                   <div key={type} className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <div className={`w-3 h-3 rounded-full ${ACTIVITY_TYPE_CONFIG[type as ActivityType]?.color.split(' ')[1] || 'bg-gray-500'}`} />
+                      <div className={`w-3 h-3 rounded-full ${ACTIVITY_TYPE_CONFIG[type as ActivityType]?.color.split(' ')[1] || 'bg-gray-500'}`} />}
                       <span className="text-sm font-medium capitalize">
                         {type.replace('_', ' ')}
                       </span>
@@ -602,14 +559,13 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => 
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader>
             <CardTitle>Most Active Users</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {stats.mostActiveUsers.slice(0, 5).map(user => (
+              {stats.mostActiveUsers.slice(0, 5).map(user => ()
                 <div key={user.userId} className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <User className="w-4 h-4 text-gray-400" />
@@ -627,7 +583,6 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => 
           </CardContent>
         </Card>
       </div>
-
       {/* Performance Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
@@ -638,7 +593,6 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => 
             <div className="text-sm text-gray-600">Avg Execution Time</div>
           </CardContent>
         </Card>
-        
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-red-900">
@@ -647,7 +601,6 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => 
             <div className="text-sm text-gray-600">Error Rate</div>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-blue-900">
@@ -660,7 +613,6 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => 
     </div>
   );
 };
-
 /**
  * Activity Card Component
  */
@@ -671,8 +623,7 @@ interface ActivityCardProps {
   showTimestamp?: boolean;
   showDate?: boolean;
 }
-
-const ActivityCard: React.FC<ActivityCardProps> = ({
+const ActivityCard: React.FC<ActivityCardProps> = ({)
   activity,
   onClick,
   compact = false,
@@ -682,8 +633,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   const typeConfig = ACTIVITY_TYPE_CONFIG[activity.type];
   const impactConfig = IMPACT_CONFIG[activity.impact];
   const TypeIcon = typeConfig?.icon || ActivityIcon;
-
-  return (
+  return ()
     <div
       className={`border rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer ${
         compact ? 'bg-white' : typeConfig?.color || 'bg-gray-50'
@@ -692,23 +642,22 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     >
       <div className="flex items-start space-x-3">
         <div className="flex-shrink-0 mt-0.5">
-          <TypeIcon className={`w-4 h-4 ${typeConfig?.color.split(' ')[0] || 'text-gray-600'}`} />
+          <TypeIcon className={`w-4 h-4 ${typeConfig?.color.split(' ')[0] || 'text-gray-600'}`} />}
         </div>
-        
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2 mb-1">
             <h4 className="text-sm font-medium truncate">{activity.title}</h4>
-            {!compact && (
+            {!compact && ()
               <>
                 <Badge className={typeConfig?.badgeColor} size="sm">
                   {activity.type.replace('_', ' ')}
                 </Badge>
-                {activity.impact !== 'none' && (
+                {activity.impact !== 'none' && ()
                   <Badge className={impactConfig.badgeColor} size="sm">
                     {activity.impact}
                   </Badge>
                 )}
-                {!activity.success && (
+                {!activity.success && ()
                   <Badge className="bg-red-100 text-red-800" size="sm">
                     error
                   </Badge>
@@ -716,17 +665,15 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
               </>
             )}
           </div>
-          
-          {activity.description && (
+          {activity.description && ()
             <p className="text-sm text-gray-600 line-clamp-2 mb-1">
               {activity.description}
             </p>
           )}
-          
           <div className="flex items-center space-x-3 text-xs text-gray-500">
             <span>{activity.userDisplayName || activity.userId}</span>
             <span>{activity.source}</span>
-            {(showTimestamp || showDate) && (
+            {(showTimestamp || showDate) && ()
               <span>
                 {showDate 
                   ? activity.timestamp.toLocaleDateString()
@@ -734,10 +681,10 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
                 }
               </span>
             )}
-            {activity.duration && (
+            {activity.duration && ()
               <span>{activity.duration}ms</span>
             )}
-            {activity.collaborators && activity.collaborators.length > 0 && (
+            {activity.collaborators && activity.collaborators.length > 0 && ()
               <div className="flex items-center space-x-1">
                 <Users className="w-3 h-3" />
                 <span>{activity.collaborators.length}</span>
@@ -749,7 +696,6 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     </div>
   );
 };
-
 /**
  * Activity Detail Modal
  */
@@ -757,28 +703,26 @@ interface ActivityDetailModalProps {
   activity: ActivityEvent;
   onClose: () => void;
 }
-
-const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({
+const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({)
   activity,
   onClose
 }) => {
   const typeConfig = ACTIVITY_TYPE_CONFIG[activity.type];
   const TypeIcon = typeConfig?.icon || ActivityIcon;
-
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-auto">
         <div className="p-6">
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center space-x-3">
-              <TypeIcon className={`w-6 h-6 ${typeConfig?.color.split(' ')[0] || 'text-gray-600'}`} />
+              <TypeIcon className={`w-6 h-6 ${typeConfig?.color.split(' ')[0] || 'text-gray-600'}`} />}
               <div>
                 <h2 className="text-xl font-bold text-gray-900">{activity.title}</h2>
                 <div className="flex items-center space-x-2 mt-1">
                   <Badge className={typeConfig?.badgeColor}>
                     {activity.type.replace('_', ' ')}
                   </Badge>
-                  {activity.impact !== 'none' && (
+                  {activity.impact !== 'none' && ()
                     <Badge className={IMPACT_CONFIG[activity.impact].badgeColor}>
                       {activity.impact}
                     </Badge>
@@ -793,15 +737,13 @@ const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({
               ✕
             </Button>
           </div>
-
           <div className="space-y-6">
-            {activity.description && (
+            {activity.description && ()
               <div>
                 <h3 className="text-sm font-medium text-gray-900 mb-2">Description</h3>
                 <p className="text-gray-700">{activity.description}</p>
               </div>
             )}
-
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <h3 className="text-sm font-medium text-gray-900 mb-2">Basic Info</h3>
@@ -816,31 +758,29 @@ const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({
                 <h3 className="text-sm font-medium text-gray-900 mb-2">Timing</h3>
                 <div className="text-sm text-gray-600 space-y-1">
                   <div><span className="font-medium">Timestamp:</span> {activity.timestamp.toLocaleString()}</div>
-                  {activity.duration && (
+                  {activity.duration && ()
                     <div><span className="font-medium">Duration:</span> {activity.duration}ms</div>
                   )}
-                  {activity.sessionId && (
+                  {activity.sessionId && ()
                     <div><span className="font-medium">Session:</span> {activity.sessionId.slice(-8)}</div>
                   )}
                 </div>
               </div>
             </div>
-
-            {activity.resource && (
+            {activity.resource && ()
               <div>
                 <h3 className="text-sm font-medium text-gray-900 mb-2">Resource</h3>
                 <p className="text-sm text-gray-600">{activity.resource}</p>
-                {activity.resourceId && (
+                {activity.resourceId && ()
                   <p className="text-xs text-gray-500 mt-1">ID: {activity.resourceId}</p>
                 )}
               </div>
             )}
-
-            {activity.collaborators && activity.collaborators.length > 0 && (
+            {activity.collaborators && activity.collaborators.length > 0 && ()
               <div>
                 <h3 className="text-sm font-medium text-gray-900 mb-2">Collaborators</h3>
                 <div className="flex flex-wrap gap-1">
-                  {activity.collaborators.map(collaborator => (
+                  {activity.collaborators.map(collaborator => ()
                     <Badge key={collaborator} variant="outline" size="sm">
                       {collaborator}
                     </Badge>
@@ -848,12 +788,11 @@ const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({
                 </div>
               </div>
             )}
-
-            {activity.tags.length > 0 && (
+            {activity.tags.length > 0 && ()
               <div>
                 <h3 className="text-sm font-medium text-gray-900 mb-2">Tags</h3>
                 <div className="flex flex-wrap gap-1">
-                  {activity.tags.map(tag => (
+                  {activity.tags.map(tag => ()
                     <Badge key={tag} variant="outline" size="sm">
                       {tag}
                     </Badge>
@@ -861,8 +800,7 @@ const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({
                 </div>
               </div>
             )}
-
-            {Object.keys(activity.details).length > 0 && (
+            {Object.keys(activity.details).length > 0 && ()
               <div>
                 <h3 className="text-sm font-medium text-gray-900 mb-2">Details</h3>
                 <pre className="text-xs bg-gray-100 p-3 rounded overflow-auto max-h-40">

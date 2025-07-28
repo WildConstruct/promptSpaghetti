@@ -14,7 +14,6 @@
  * - Webhook integration for status updates
  * - Email template management and tracking
  */
-
 import { EventEmitter } from 'events';
 
 // Email delivery statuses
@@ -111,10 +110,8 @@ export interface EmailDeliveryRecord {
   bouncedAt?: Date;
   failedAt?: Date;
   metadata: EmailMetadata;
-  
   // Delivery attempts
   attempts: EmailDeliveryAttempt[];
-  
   // Bounce information
   bounceInfo?: {
     type: BounceType;
@@ -123,14 +120,12 @@ export interface EmailDeliveryRecord {
     diagnosticCode?: string;
     remoteMta?: string;
   };
-  
   // Tracking data
-  tracking: {
+  tracking: {,
     opens: EmailOpenEvent[];
     clicks: EmailClickEvent[];
     unsubscribes: EmailUnsubscribeEvent[];
   };
-  
   // Provider-specific data
   providerData: Record<string, any>;
 }
@@ -182,16 +177,14 @@ export interface DeliveryStatistics {
   rejectedEmails: number;
   spamEmails: number;
   failedEmails: number;
-  
   // Rates
   deliveryRate: number;
   openRate: number;
   clickRate: number;
   bounceRate: number;
   spamRate: number;
-  
   // By email type
-  statisticsByType: {
+  statisticsByType: {,
     [key in EmailType]: {
       count: number;
       deliveryRate: number;
@@ -199,20 +192,18 @@ export interface DeliveryStatistics {
       bounceRate: number;
     };
   };
-  
   // By provider
-  statisticsByProvider: {
+  statisticsByProvider: {,
     [key in EmailProvider]: {
       count: number;
       deliveryRate: number;
       averageDeliveryTime: number;
     };
   };
-  
   // Time-based metrics
   averageDeliveryTime: number;
   averageOpenTime: number;
-  peakSendTimes: Array<{
+  peakSendTimes: Array<{,
     hour: number;
     count: number;
     deliveryRate: number;
@@ -229,7 +220,7 @@ export interface EmailDeliveryConfig {
   enableAnalytics: boolean;
   webhookEndpoint?: string;
   webhookSecret?: string;
-  providerConfigs: {
+  providerConfigs: {,
     [key in EmailProvider]?: {
       apiKey?: string;
       endpoint?: string;
@@ -243,7 +234,7 @@ export interface EmailSendRequest {
   type: EmailType;
   recipient: string;
   subject: string;
-  content: {
+  content: {,
     text?: string;
     html?: string;
     templateId?: string;
@@ -254,7 +245,6 @@ export interface EmailSendRequest {
   sendAt?: Date;
   priority?: 'low' | 'normal' | 'high' | 'urgent';
 }
-
 /**
  * Email Delivery Tracker Service
  */
@@ -262,20 +252,17 @@ export class EmailDeliveryTracker extends EventEmitter {
   private config: EmailDeliveryConfig;
   private deliveryRecords: Map<string, EmailDeliveryRecord> = new Map();
   private statistics: DeliveryStatistics;
-
   constructor(config: Partial<EmailDeliveryConfig> = {}) {
     super();
     this.config = this.mergeConfig(config);
     this.statistics = this.initializeStatistics();
   }
-
   /**
    * Send an email and start tracking delivery
    */
   public async sendEmail(request: EmailSendRequest): Promise<string> {
     const emailId = this.generateEmailId();
     const provider = request.provider || this.config.defaultProvider;
-
     const deliveryRecord: EmailDeliveryRecord = {
       id: emailId,
       messageId: await this.generateMessageId(provider),
@@ -288,44 +275,38 @@ export class EmailDeliveryTracker extends EventEmitter {
       createdAt: new Date(),
       metadata: request.metadata,
       attempts: [],
-      tracking: {
+      tracking: {,
         opens: [],
         clicks: [],
-        unsubscribes: []
+        unsubscribes: [],
       },
       providerData: {}
     };
-
     // Store the record
     this.deliveryRecords.set(emailId, deliveryRecord);
-
     // Send the email
     try {
       await this.sendEmailViaProvider(deliveryRecord, request);
       this.updateStatus(emailId, DeliveryStatus.QUEUED);
     } catch (error) {
       this.updateStatus(emailId, DeliveryStatus.FAILED);
-      this.addDeliveryAttempt(emailId, {
+      this.addDeliveryAttempt(emailId, {)
         attemptNumber: 1,
         timestamp: new Date(),
         status: DeliveryStatus.FAILED,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
     }
-
     return emailId;
   }
-
   /**
    * Update email delivery status
    */
   public updateStatus(emailId: string, status: DeliveryStatus, additionalData?: any): void {
     const record = this.deliveryRecords.get(emailId);
     if (!record) return;
-
     const previousStatus = record.status;
     record.status = status;
-
     // Update timestamps
     switch (status) {
     case DeliveryStatus.SENT:
@@ -350,39 +331,33 @@ export class EmailDeliveryTracker extends EventEmitter {
       record.failedAt = new Date();
       break;
     }
-
     // Update provider data if provided
     if (additionalData?.providerData) {
       record.providerData = { ...record.providerData, ...additionalData.providerData };
     }
-
     this.deliveryRecords.set(emailId, record);
     this.updateStatistics(previousStatus, status, record.type, record.provider);
-
     // Emit status change event
-    this.emit('statusChanged', {
+    this.emit('statusChanged', {)
       emailId,
       previousStatus,
       newStatus: status,
       record,
       additionalData
     });
-
     // Handle specific status changes
     this.handleStatusChange(record, previousStatus, status);
   }
-
   /**
    * Add delivery tracking event
    */
-  public addTrackingEvent(
+  public addTrackingEvent()
     emailId: string,
     eventType: 'open' | 'click' | 'unsubscribe',
-    eventData: any
+    eventData: any,
   ): void {
     const record = this.deliveryRecords.get(emailId);
     if (!record) return;
-
     switch (eventType) {
     case 'open':
       record.tracking.opens.push(eventData as EmailOpenEvent);
@@ -401,24 +376,20 @@ export class EmailDeliveryTracker extends EventEmitter {
       this.updateStatus(emailId, DeliveryStatus.UNSUBSCRIBED);
       break;
     }
-
     this.deliveryRecords.set(emailId, record);
-
-    this.emit('trackingEvent', {
+    this.emit('trackingEvent', {)
       emailId,
       eventType,
       eventData,
       record
     });
   }
-
   /**
    * Handle webhook notifications from email providers
    */
   public async handleWebhook(provider: EmailProvider, payload: any): Promise<void> {
     try {
       const events = this.parseWebhookPayload(provider, payload);
-      
       for (const event of events) {
         const emailId = this.findEmailByMessageId(event.messageId);
         if (emailId) {
@@ -426,21 +397,19 @@ export class EmailDeliveryTracker extends EventEmitter {
         }
       }
     } catch (error) {
-      this.emit('webhookError', {
+      this.emit('webhookError', {)
         provider,
         error: error instanceof Error ? error.message : 'Unknown webhook error',
         payload
       });
     }
   }
-
   /**
    * Get delivery record by email ID
    */
   public getDeliveryRecord(emailId: string): EmailDeliveryRecord | null {
     return this.deliveryRecords.get(emailId) || null;
   }
-
   /**
    * Get delivery records by user ID
    */
@@ -448,14 +417,12 @@ export class EmailDeliveryTracker extends EventEmitter {
     return Array.from(this.deliveryRecords.values())
       .filter(record => record.metadata.userId === userId);
   }
-
   /**
    * Get delivery statistics
    */
   public getStatistics(): DeliveryStatistics {
     return { ...this.statistics };
   }
-
   /**
    * Get email delivery status for a specific email
    */
@@ -463,7 +430,6 @@ export class EmailDeliveryTracker extends EventEmitter {
     const record = this.deliveryRecords.get(emailId);
     return record ? record.status : null;
   }
-
   /**
    * Retry failed email delivery
    */
@@ -472,29 +438,26 @@ export class EmailDeliveryTracker extends EventEmitter {
     if (!record || record.status !== DeliveryStatus.FAILED) {
       return false;
     }
-
     if (record.attempts.length >= this.config.retryAttempts) {
       return false;
     }
-
     try {
       const request: EmailSendRequest = {
         type: record.type,
         recipient: record.recipient,
         subject: record.subject,
-        content: {
+        content: {,
           html: record.providerData.htmlContent,
-          text: record.providerData.textContent
+          text: record.providerData.textContent,
         },
         metadata: record.metadata,
-        provider: record.provider
+        provider: record.provider,
       };
-
       await this.sendEmailViaProvider(record, request);
       this.updateStatus(emailId, DeliveryStatus.QUEUED);
       return true;
     } catch (error) {
-      this.addDeliveryAttempt(emailId, {
+      this.addDeliveryAttempt(emailId, {)
         attemptNumber: record.attempts.length + 1,
         timestamp: new Date(),
         status: DeliveryStatus.FAILED,
@@ -503,7 +466,6 @@ export class EmailDeliveryTracker extends EventEmitter {
       return false;
     }
   }
-
   /**
    * Update configuration
    */
@@ -511,39 +473,32 @@ export class EmailDeliveryTracker extends EventEmitter {
     this.config = this.mergeConfig(newConfig);
     this.emit('configUpdated', { config: this.config });
   }
-
   // Private methods
-
-  private async sendEmailViaProvider(
+  private async sendEmailViaProvider()
     record: EmailDeliveryRecord,
-    request: EmailSendRequest
+    request: EmailSendRequest,
   ): Promise<void> {
     // Simulate email sending based on provider
     await this.delay(100); // Simulate API call delay
-
-    this.addDeliveryAttempt(record.id, {
+    this.addDeliveryAttempt(record.id, {)
       attemptNumber: record.attempts.length + 1,
       timestamp: new Date(),
       status: DeliveryStatus.SENT,
       providerResponse: 'Email queued for delivery'
     });
-
     // Store email content for potential retries
     record.providerData.htmlContent = request.content.html;
     record.providerData.textContent = request.content.text;
     record.providerData.templateId = request.content.templateId;
     record.providerData.templateData = request.content.templateData;
-
     // Simulate delivery progression
     setTimeout(() => {
       this.updateStatus(record.id, DeliveryStatus.SENT);
-      
       setTimeout(() => {
         this.updateStatus(record.id, DeliveryStatus.DELIVERED);
       }, 1000 + Math.random() * 5000); // 1-6 seconds for delivery
     }, 500); // 500ms for sending
   }
-
   private addDeliveryAttempt(emailId: string, attempt: EmailDeliveryAttempt): void {
     const record = this.deliveryRecords.get(emailId);
     if (record) {
@@ -551,57 +506,50 @@ export class EmailDeliveryTracker extends EventEmitter {
       this.deliveryRecords.set(emailId, record);
     }
   }
-
-  private handleStatusChange(
+  private handleStatusChange()
     record: EmailDeliveryRecord,
     previousStatus: DeliveryStatus,
-    newStatus: DeliveryStatus
+    newStatus: DeliveryStatus,
   ): void {
     // Handle bounces
     if (newStatus === DeliveryStatus.BOUNCED) {
       this.handleBounce(record);
     }
-
     // Handle spam reports
     if (newStatus === DeliveryStatus.SPAM) {
       this.handleSpamReport(record);
     }
-
     // Handle successful delivery
     if (newStatus === DeliveryStatus.DELIVERED) {
-      this.emit('emailDelivered', {
+      this.emit('emailDelivered', {)
         emailId: record.id,
         record,
         deliveryTime: record.deliveredAt!.getTime() - record.createdAt.getTime()
       });
     }
   }
-
   private handleBounce(record: EmailDeliveryRecord): void {
-    this.emit('emailBounced', {
+    this.emit('emailBounced', {)
       emailId: record.id,
       record,
-      bounceInfo: record.bounceInfo
+      bounceInfo: record.bounceInfo,
     });
-
     // If it's a hard bounce, mark the email address for suppression
     if (record.bounceInfo?.type === BounceType.HARD) {
-      this.emit('hardBounce', {
+      this.emit('hardBounce', {)
         emailAddress: record.recipient,
         reason: record.bounceInfo.reason,
-        timestamp: record.bouncedAt
+        timestamp: record.bouncedAt,
       });
     }
   }
-
   private handleSpamReport(record: EmailDeliveryRecord): void {
-    this.emit('spamReport', {
+    this.emit('spamReport', {)
       emailId: record.id,
       record,
       timestamp: new Date()
     });
   }
-
   private parseWebhookPayload(provider: EmailProvider, payload: any): any[] {
     // This would be implemented based on each provider's webhook format
     // For now, return a mock event
@@ -609,10 +557,9 @@ export class EmailDeliveryTracker extends EventEmitter {
       messageId: payload.messageId || 'mock-message-id',
       status: payload.status || DeliveryStatus.DELIVERED,
       timestamp: new Date(payload.timestamp || Date.now()),
-      providerData: payload
+      providerData: payload,
     }];
   }
-
   private findEmailByMessageId(messageId: string): string | null {
     for (const [emailId, record] of this.deliveryRecords) {
       if (record.messageId === messageId) {
@@ -621,24 +568,21 @@ export class EmailDeliveryTracker extends EventEmitter {
     }
     return null;
   }
-
   private processWebhookEvent(emailId: string, event: any): void {
-    this.updateStatus(emailId, event.status, {
-      providerData: event.providerData
+    this.updateStatus(emailId, event.status, {)
+      providerData: event.providerData,
     });
   }
-
-  private updateStatistics(
+  private updateStatistics()
     previousStatus: DeliveryStatus,
     newStatus: DeliveryStatus,
     emailType: EmailType,
-    provider: EmailProvider
+    provider: EmailProvider,
   ): void {
     // Update total counts
     if (previousStatus === DeliveryStatus.PENDING) {
       this.statistics.totalEmails++;
     }
-
     // Update status-specific counts
     switch (newStatus) {
     case DeliveryStatus.SENT:
@@ -666,30 +610,24 @@ export class EmailDeliveryTracker extends EventEmitter {
       this.statistics.failedEmails++;
       break;
     }
-
     // Recalculate rates
     this.recalculateStatistics();
   }
-
   private recalculateStatistics(): void {
     const total = this.statistics.totalEmails;
     if (total === 0) return;
-
     this.statistics.deliveryRate = (this.statistics.deliveredEmails / total) * 100;
     this.statistics.openRate = (this.statistics.openedEmails / Math.max(this.statistics.deliveredEmails, 1)) * 100;
     this.statistics.clickRate = (this.statistics.clickedEmails / Math.max(this.statistics.deliveredEmails, 1)) * 100;
     this.statistics.bounceRate = (this.statistics.bouncedEmails / total) * 100;
     this.statistics.spamRate = (this.statistics.spamEmails / total) * 100;
   }
-
   private generateEmailId(): string {
-    return `email_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+    return `email_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;}
   }
-
   private async generateMessageId(provider: EmailProvider): Promise<string> {
-    return `${provider}_msg_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+    return `${provider}_msg_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;}
   }
-
   private getSenderAddress(emailType: EmailType): string {
     // Return appropriate sender address based on email type
     switch (emailType) {
@@ -705,11 +643,9 @@ export class EmailDeliveryTracker extends EventEmitter {
       return 'noreply@example.com';
     }
   }
-
   private delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-
   private mergeConfig(config: Partial<EmailDeliveryConfig>): EmailDeliveryConfig {
     return {
       defaultProvider: EmailProvider.SENDGRID,
@@ -722,30 +658,26 @@ export class EmailDeliveryTracker extends EventEmitter {
       ...config
     };
   }
-
   private initializeStatistics(): DeliveryStatistics {
     const statisticsByType = {} as DeliveryStatistics['statisticsByType'];
     const statisticsByProvider = {} as DeliveryStatistics['statisticsByProvider'];
-
     // Initialize type statistics
-    Object.values(EmailType).forEach(type => {
+    Object.values(EmailType).forEach(type => {)
       statisticsByType[type] = {
         count: 0,
         deliveryRate: 0,
         openRate: 0,
-        bounceRate: 0
+        bounceRate: 0,
       };
     });
-
     // Initialize provider statistics
-    Object.values(EmailProvider).forEach(provider => {
+    Object.values(EmailProvider).forEach(provider => {)
       statisticsByProvider[provider] = {
         count: 0,
         deliveryRate: 0,
-        averageDeliveryTime: 0
+        averageDeliveryTime: 0,
       };
     });
-
     return {
       totalEmails: 0,
       sentEmails: 0,
@@ -765,7 +697,7 @@ export class EmailDeliveryTracker extends EventEmitter {
       statisticsByProvider,
       averageDeliveryTime: 0,
       averageOpenTime: 0,
-      peakSendTimes: []
+      peakSendTimes: [],
     };
   }
 }

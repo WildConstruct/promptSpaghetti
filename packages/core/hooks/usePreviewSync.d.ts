@@ -27,7 +27,7 @@ interface PreviewSyncReturn {
     enableSync: (enabled: boolean) => void;
     forceSyncNow: () => Promise<void>;
     getChangeAnalysis: () => GraphChangeAnalysis | null;
-    performanceMetrics: {
+    performanceMetrics: {,
         avgSyncTime: number;
         successRate: number;
         cacheHitRate: number;

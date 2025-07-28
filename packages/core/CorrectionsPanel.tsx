@@ -5,13 +5,12 @@ import {
   DEFAULT_CORRECTION_RULES,
   useCorrectionsEnabled
 } from './correctionsStore';
-
 interface CorrectionsPanelProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export   const {
+export const {
     rules,
     addRule,
     updateRule,
@@ -20,61 +19,52 @@ export   const {
     clearAllRules,
     applyCorrections
   } = useCorrectionsStore();
-
   const [editingRule, setEditingRule] = useState<CorrectionRule | null>(null);
-  const [newRule, setNewRule] = useState({
+  const [newRule, setNewRule] = useState({)
     name: '',
     description: '',
     findPattern: '',
     replaceWith: '',
     isRegex: false,
     isActive: true,
-    priority: rules.length
+    priority: rules.length,
   });
   const [testText, setTestText] = useState('');
-
   const handleAddRule = useCallback(() => {
     if (newRule.name.trim() && newRule.findPattern.trim()) {
       addRule(newRule);
-      setNewRule({
+      setNewRule({)
         name: '',
         description: '',
         findPattern: '',
         replaceWith: '',
         isRegex: false,
         isActive: true,
-        priority: rules.length
+        priority: rules.length,
       });
     }
   }, [newRule, addRule, rules.length]);
-
   const handleUpdateRule = useCallback((rule: CorrectionRule) => {
     updateRule(rule.id, rule);
     setEditingRule(null);
   }, [updateRule]);
-
   const handleDeleteRule = useCallback((id: string) => {
     if (window.confirm('Are you sure you want to delete this correction rule?')) {
       deleteRule(id);
     }
   }, [deleteRule]);
-
   const handleLoadDefaults = useCallback(() => {
     if (window.confirm('This will add default correction rules. Continue?')) {
       DEFAULT_CORRECTION_RULES.forEach(rule => addRule(rule));
     }
   }, [addRule]);
-
   const handleTestCorrections = useCallback(() => {
     return applyCorrections(testText);
   }, [testText, applyCorrections]);
-
   if (!isOpen) return null;
-
   // Don't render if corrections are not enabled
   if (!isEnabled) return null;
-
-  return (
+  return ()
     <div
       style={{
         position: 'fixed',
@@ -88,7 +78,7 @@ export   const {
         zIndex: 1000,
         overflow: 'hidden',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
       }}
       data-testid="corrections-panel"
     >
@@ -98,7 +88,7 @@ export   const {
         borderBottom: '1px solid #444',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
       }}>
         <h2 style={{ margin: 0, fontSize: '18px' }}>Corrections Manager</h2>
         <button
@@ -116,7 +106,6 @@ export   const {
           ×
         </button>
       </div>
-
       {/* Content */}
       <div style={{ flex: 1, overflow: 'auto', padding: '16px' }}>
         {/* Test Section */}
@@ -134,10 +123,10 @@ export   const {
               color: '#fff',
               border: '1px solid #444',
               borderRadius: '4px',
-              resize: 'vertical'
+              resize: 'vertical',
             }}
           />
-          {testText && (
+          {testText && ()
             <div style={{ marginTop: '8px' }}>
               <strong>Result:</strong>
               <div
@@ -147,7 +136,7 @@ export   const {
                   border: '1px solid #444',
                   borderRadius: '4px',
                   marginTop: '4px',
-                  fontSize: '14px'
+                  fontSize: '14px',
                 }}
               >
                 {handleTestCorrections()}
@@ -155,7 +144,6 @@ export   const {
             </div>
           )}
         </div>
-
         {/* Rules List */}
         <div style={{ marginBottom: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
@@ -171,7 +159,7 @@ export   const {
                   borderRadius: '4px',
                   cursor: 'pointer',
                   fontSize: '12px',
-                  marginRight: '8px'
+                  marginRight: '8px',
                 }}
               >
                 Load Defaults
@@ -185,15 +173,14 @@ export   const {
                   padding: '6px 12px',
                   borderRadius: '4px',
                   cursor: 'pointer',
-                  fontSize: '12px'
+                  fontSize: '12px',
                 }}
               >
                 Clear All
               </button>
             </div>
           </div>
-
-          {rules.map((rule) => (
+          {rules.map((rule) => ()
             <div
               key={rule.id}
               style={{
@@ -201,14 +188,14 @@ export   const {
                 border: '1px solid #444',
                 borderRadius: '4px',
                 padding: '12px',
-                marginBottom: '8px'
+                marginBottom: '8px',
               }}
             >
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginBottom: '8px'
+                marginBottom: '8px',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <input
@@ -218,14 +205,14 @@ export   const {
                     style={{ marginRight: '8px' }}
                   />
                   <strong style={{ fontSize: '14px' }}>{rule.name}</strong>
-                  {rule.isRegex && (
+                  {rule.isRegex && ()
                     <span style={{ 
                       background: '#4a5568', 
                       color: '#fff', 
                       padding: '2px 6px', 
                       borderRadius: '2px', 
                       fontSize: '10px',
-                      marginLeft: '8px'
+                      marginLeft: '8px',
                     }}>
                       REGEX
                     </span>
@@ -240,7 +227,7 @@ export   const {
                       color: '#63b3ed',
                       cursor: 'pointer',
                       fontSize: '12px',
-                      marginRight: '8px'
+                      marginRight: '8px',
                     }}
                   >
                     Edit
@@ -252,14 +239,14 @@ export   const {
                       border: 'none',
                       color: '#e53e3e',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     Delete
                   </button>
                 </div>
               </div>
-              {rule.description && (
+              {rule.description && ()
                 <p style={{ fontSize: '12px', color: '#a0aec0', margin: '4px 0' }}>
                   {rule.description}
                 </p>
@@ -273,7 +260,6 @@ export   const {
             </div>
           ))}
         </div>
-
         {/* Add New Rule */}
         <div style={{ marginBottom: '24px' }}>
           <h3 style={{ fontSize: '16px', marginBottom: '16px' }}>Add New Rule</h3>
@@ -288,7 +274,7 @@ export   const {
                 background: '#2a2e37',
                 color: '#fff',
                 border: '1px solid #444',
-                borderRadius: '4px'
+                borderRadius: '4px',
               }}
             />
             <input
@@ -301,7 +287,7 @@ export   const {
                 background: '#2a2e37',
                 color: '#fff',
                 border: '1px solid #444',
-                borderRadius: '4px'
+                borderRadius: '4px',
               }}
             />
             <input
@@ -314,7 +300,7 @@ export   const {
                 background: '#2a2e37',
                 color: '#fff',
                 border: '1px solid #444',
-                borderRadius: '4px'
+                borderRadius: '4px',
               }}
             />
             <input
@@ -327,7 +313,7 @@ export   const {
                 background: '#2a2e37',
                 color: '#fff',
                 border: '1px solid #444',
-                borderRadius: '4px'
+                borderRadius: '4px',
               }}
             />
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -367,9 +353,8 @@ export   const {
           </div>
         </div>
       </div>
-
       {/* Edit Rule Modal */}
-      {editingRule && (
+      {editingRule && ()
         <div
           style={{
             position: 'fixed',
@@ -381,7 +366,7 @@ export   const {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 1001
+            zIndex: 1001,
           }}
         >
           <div
@@ -390,7 +375,7 @@ export   const {
               padding: '24px',
               borderRadius: '8px',
               width: '400px',
-              maxWidth: '90vw'
+              maxWidth: '90vw',
             }}
           >
             <h3 style={{ marginBottom: '16px' }}>Edit Rule</h3>
@@ -405,7 +390,7 @@ export   const {
                   background: '#2a2e37',
                   color: '#fff',
                   border: '1px solid #444',
-                  borderRadius: '4px'
+                  borderRadius: '4px',
                 }}
               />
               <input
@@ -418,7 +403,7 @@ export   const {
                   background: '#2a2e37',
                   color: '#fff',
                   border: '1px solid #444',
-                  borderRadius: '4px'
+                  borderRadius: '4px',
                 }}
               />
               <input
@@ -431,7 +416,7 @@ export   const {
                   background: '#2a2e37',
                   color: '#fff',
                   border: '1px solid #444',
-                  borderRadius: '4px'
+                  borderRadius: '4px',
                 }}
               />
               <input
@@ -444,7 +429,7 @@ export   const {
                   background: '#2a2e37',
                   color: '#fff',
                   border: '1px solid #444',
-                  borderRadius: '4px'
+                  borderRadius: '4px',
                 }}
               />
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -477,7 +462,7 @@ export   const {
                     padding: '8px 16px',
                     borderRadius: '4px',
                     cursor: 'pointer',
-                    flex: 1
+                    flex: 1,
                   }}
                 >
                   Save
@@ -491,7 +476,7 @@ export   const {
                     padding: '8px 16px',
                     borderRadius: '4px',
                     cursor: 'pointer',
-                    flex: 1
+                    flex: 1,
                   }}
                 >
                   Cancel

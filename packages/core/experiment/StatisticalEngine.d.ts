@@ -31,15 +31,15 @@ export declare class StatisticalEngine {
     /**
      * Perform comprehensive statistical analysis of experiment results
      */
-    analyzeExperimentResults(
+    analyzeExperimentResults()
       variants: VariantResults[],
       metrics: ExperimentMetric[],
-      controlVariantId: string
+      controlVariantId: string,
     ): ExperimentResults;
     /**
      * Calculate required sample size for an experiment
      */
-    calculateSampleSize(
+    calculateSampleSize()
       baselineRate: number,
       minimumDetectableEffect: number,
       power?: number,
@@ -53,16 +53,16 @@ export declare class StatisticalEngine {
     /**
      * Perform chi-square test for proportions
      */
-    chiSquareTest(
+    chiSquareTest()
       controlSuccesses: number,
       controlTotal: number,
       treatmentSuccesses: number,
-      treatmentTotal: number
+      treatmentTotal: number,
     ): StatisticalTestResult;
     /**
      * Perform Bayesian analysis for conversion rates
      */
-    bayesianAnalysis(
+    bayesianAnalysis()
       controlSuccesses: number,
       controlTotal: number,
       treatmentSuccesses: number,

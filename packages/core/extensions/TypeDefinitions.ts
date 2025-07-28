@@ -2,7 +2,6 @@
  * Extension Type Definitions - Epic 8.4 Story 8.4.2
  * Comprehensive TypeScript type definitions for extension development
  */
-
 import { z } from 'zod';
 
 // Re-export all interface types
@@ -15,7 +14,7 @@ export * from './interfaces/StorageExtension';
 // Runtime Type Validation Schemas
 export const ExtensionTypeSchemas = {
   // Base Extension Schema
-  BaseExtension: z.object({
+  BaseExtension: z.object({),
     id: z.string().min(1),
     name: z.string().min(1),
     version: z.string().regex(/^\d+\.\d+\.\d+$/),
@@ -23,38 +22,32 @@ export const ExtensionTypeSchemas = {
     author: z.string().min(1),
     dependencies: z.array(z.string()).default([]),
     permissions: z.array(z.string()).default([]),
-    
     // Methods are validated at runtime
     initialize: z.function(),
     activate: z.function(),
     deactivate: z.function(),
     dispose: z.function(),
-    
     getConfiguration: z.function(),
     setConfiguration: z.function(),
-    
     isHealthy: z.function(),
-    getHealthStatus: z.function()
+    getHealthStatus: z.function(),
   }),
-
   // Node Extension Schema
-  NodeExtension: z.object({
+  NodeExtension: z.object({),
     extensionType: z.literal('node'),
     getNodeDefinitions: z.function(),
     createNodeInstance: z.function(),
     validateNodeConfig: z.function(),
     getNodeSchema: z.function(),
     supportsAdvancedNodes: z.function(),
-    
     // Optional lifecycle hooks
     onNodeCreated: z.function().optional(),
     onNodeExecuted: z.function().optional(),
     onNodeDestroyed: z.function().optional(),
-    createAdvancedNodeInstance: z.function().optional()
+    createAdvancedNodeInstance: z.function().optional(),
   }),
-
   // UI Extension Schema
-  UIExtension: z.object({
+  UIExtension: z.object({),
     extensionType: z.literal('ui'),
     getComponentDefinitions: z.function(),
     createComponentInstance: z.function(),
@@ -62,44 +55,39 @@ export const ExtensionTypeSchemas = {
     getCommandContributions: z.function(),
     getMenuContributions: z.function(),
     getKeybindingContributions: z.function(),
-    
     // Optional lifecycle hooks
     onUIInitialized: z.function().optional(),
     onUIDestroyed: z.function().optional(),
-    onThemeChanged: z.function().optional()
+    onThemeChanged: z.function().optional(),
   }),
-
   // Transform Extension Schema
-  TransformExtension: z.object({
+  TransformExtension: z.object({),
     extensionType: z.literal('transform'),
     getTransformDefinitions: z.function(),
     createTransformInstance: z.function(),
     validateTransformConfig: z.function(),
     getTransformSchema: z.function(),
     supportsPipeline: z.function(),
-    
     // Optional lifecycle hooks
     onTransformCreated: z.function().optional(),
     onTransformExecuted: z.function().optional(),
     onTransformError: z.function().optional(),
-    createPipeline: z.function().optional()
+    createPipeline: z.function().optional(),
   }),
-
   // Storage Extension Schema
-  StorageExtension: z.object({
+  StorageExtension: z.object({),
     extensionType: z.literal('storage'),
     getStorageProviders: z.function(),
     createStorageProvider: z.function(),
     validateStorageConfig: z.function(),
     getStorageSchema: z.function(),
     supportsMigration: z.function(),
-    
     // Optional lifecycle hooks
     onStorageCreated: z.function().optional(),
     onStorageConnected: z.function().optional(),
     onStorageDisconnected: z.function().optional(),
     onStorageError: z.function().optional(),
-    createMigration: z.function().optional()
+    createMigration: z.function().optional(),
   })
 };
 
@@ -113,7 +101,6 @@ export const ExtensionTypeGuards = {
       return false;
     }
   },
-
   isNodeExtension(obj: any): obj is import('./interfaces/NodeExtension').NodeExtension {
     try {
       ExtensionTypeSchemas.NodeExtension.parse(obj);
@@ -122,7 +109,6 @@ export const ExtensionTypeGuards = {
       return false;
     }
   },
-
   isUIExtension(obj: any): obj is import('./interfaces/UIExtension').UIExtension {
     try {
       ExtensionTypeSchemas.UIExtension.parse(obj);
@@ -131,7 +117,6 @@ export const ExtensionTypeGuards = {
       return false;
     }
   },
-
   isTransformExtension(obj: any): obj is import('./interfaces/TransformExtension').TransformExtension {
     try {
       ExtensionTypeSchemas.TransformExtension.parse(obj);
@@ -140,7 +125,6 @@ export const ExtensionTypeGuards = {
       return false;
     }
   },
-
   isStorageExtension(obj: any): obj is import('./interfaces/StorageExtension').StorageExtension {
     try {
       ExtensionTypeSchemas.StorageExtension.parse(obj);
@@ -154,16 +138,13 @@ export const ExtensionTypeGuards = {
 // Runtime Type Checker
 export class ExtensionTypeChecker {
   private static instance: ExtensionTypeChecker;
-
   private constructor() {}
-
   public static getInstance(): ExtensionTypeChecker {
     if (!ExtensionTypeChecker.instance) {
       ExtensionTypeChecker.instance = new ExtensionTypeChecker();
     }
     return ExtensionTypeChecker.instance;
   }
-
   /**
    * Validate extension type at runtime
    */
@@ -173,20 +154,17 @@ export class ExtensionTypeChecker {
     errors: string[];
   } {
     const errors: string[] = [];
-    
     // Check base extension
     if (!ExtensionTypeGuards.isBaseExtension(extension)) {
       errors.push('Object does not implement BaseExtension interface');
       return { valid: false, errors };
     }
-
     // Determine extension type
     const extensionType = (extension as any).extensionType;
     if (!extensionType) {
       errors.push('Extension type is not specified');
       return { valid: false, errors };
     }
-
     // Validate specific extension type
     switch (extensionType) {
     case 'node':
@@ -194,66 +172,56 @@ export class ExtensionTypeChecker {
         errors.push('Object does not implement NodeExtension interface');
       }
       break;
-      
     case 'ui':
       if (!ExtensionTypeGuards.isUIExtension(extension)) {
         errors.push('Object does not implement UIExtension interface');
       }
       break;
-      
     case 'transform':
       if (!ExtensionTypeGuards.isTransformExtension(extension)) {
         errors.push('Object does not implement TransformExtension interface');
       }
       break;
-      
     case 'storage':
       if (!ExtensionTypeGuards.isStorageExtension(extension)) {
         errors.push('Object does not implement StorageExtension interface');
       }
       break;
-      
     default:
-      errors.push(`Unknown extension type: ${extensionType}`);
+      errors.push(`Unknown extension type: ${extensionType}`);}
     }
-
     return {
       valid: errors.length === 0,
       type: extensionType,
       errors
     };
   }
-
   /**
    * Validate method signature
    */
-  public validateMethodSignature(
+  public validateMethodSignature()
     obj: any,
     methodName: string,
-    expectedSignature: {
+    expectedSignature: {,
       parameterCount?: number;
       parameterTypes?: string[];
       returnType?: string;
     }
   ): boolean {
     const method = obj[methodName];
-    
     if (typeof method !== 'function') {
       return false;
     }
-
     // Check parameter count
     if (expectedSignature.parameterCount !== undefined) {
       if (method.length !== expectedSignature.parameterCount) {
         return false;
       }
     }
-
     // Additional signature validation would go here
     // For now, we just check that it's a function
     return true;
   }
-
   /**
    * Generate TypeScript declaration file
    */
@@ -261,25 +229,21 @@ export class ExtensionTypeChecker {
     return `
 // Auto-generated TypeScript declarations for ${extensionId}
 // Generated on ${new Date().toISOString()}
-
-declare module '${extensionId}' {
+declare module '${extensionId}' {}
   import { BaseExtension } from '@prompt-spaghetti/core/extensions';
-  
-  export interface ${this.toPascalCase(extensionId)}Extension extends BaseExtension {
+  export interface ${this.toPascalCase(extensionId)}Extension extends BaseExtension {}
     // Extension-specific methods and properties
   }
-  
-  export const extension: ${this.toPascalCase(extensionId)}Extension;
+  export const extension: ${this.toPascalCase(extensionId)}Extension;}
   export default extension;
 }
 `;
   }
-
   /**
    * Generate JSDoc documentation
    */
   public generateJSDoc(extensionType: string): string {
-    const baseDoc = `
+    const baseDoc = `;
 /**
  * @typedef {Object} BaseExtension
  * @property {string} id - Unique extension identifier
@@ -299,12 +263,9 @@ declare module '${extensionId}' {
  * @property {Function} getHealthStatus - Get detailed health status
  */
 `;
-
     const typeSpecificDoc = this.getTypeSpecificJSDoc(extensionType);
-    
     return baseDoc + typeSpecificDoc;
   }
-
   private getTypeSpecificJSDoc(extensionType: string): string {
     switch (extensionType) {
     case 'node':
@@ -320,7 +281,6 @@ declare module '${extensionId}' {
  * @property {Function} supportsAdvancedNodes - Check advanced node support
  */
 `;
-      
     case 'ui':
       return `
 /**
@@ -335,7 +295,6 @@ declare module '${extensionId}' {
  * @property {Function} getKeybindingContributions - Get keybinding contributions
  */
 `;
-      
     case 'transform':
       return `
 /**
@@ -349,7 +308,6 @@ declare module '${extensionId}' {
  * @property {Function} supportsPipeline - Check pipeline support
  */
 `;
-      
     case 'storage':
       return `
 /**
@@ -363,12 +321,10 @@ declare module '${extensionId}' {
  * @property {Function} supportsMigration - Check migration support
  */
 `;
-      
     default:
       return '';
     }
   }
-
   private toPascalCase(str: string): string {
     return str.replace(/(?:^|[-_])(.)/g, (_, char) => char.toUpperCase());
   }
@@ -377,16 +333,13 @@ declare module '${extensionId}' {
 // Extension Interface Validation Tools
 export class ExtensionInterfaceValidator {
   private static instance: ExtensionInterfaceValidator;
-
   private constructor() {}
-
   public static getInstance(): ExtensionInterfaceValidator {
     if (!ExtensionInterfaceValidator.instance) {
       ExtensionInterfaceValidator.instance = new ExtensionInterfaceValidator();
     }
     return ExtensionInterfaceValidator.instance;
   }
-
   /**
    * Validate extension interface implementation
    */
@@ -402,10 +355,8 @@ export class ExtensionInterfaceValidator {
       invalidMethods: [] as string[],
       extraMethods: [] as string[]
     };
-
     const requiredMethods = this.getRequiredMethods(expectedInterface);
     const actualMethods = this.getActualMethods(extension);
-
     // Check for missing methods
     for (const method of requiredMethods) {
       if (!actualMethods.includes(method)) {
@@ -413,7 +364,6 @@ export class ExtensionInterfaceValidator {
         result.valid = false;
       }
     }
-
     // Check for invalid method signatures
     for (const method of requiredMethods) {
       if (actualMethods.includes(method)) {
@@ -424,17 +374,14 @@ export class ExtensionInterfaceValidator {
         }
       }
     }
-
     // Check for extra methods (informational only)
     for (const method of actualMethods) {
       if (!requiredMethods.includes(method) && !method.startsWith('_')) {
         result.extraMethods.push(method);
       }
     }
-
     return result;
   }
-
   private getRequiredMethods(interfaceName: string): string[] {
     const interfaces: Record<string, string[]> = {
       'BaseExtension': [
@@ -477,39 +424,31 @@ export class ExtensionInterfaceValidator {
         'supportsMigration'
       ]
     };
-
     return interfaces[interfaceName] || [];
   }
-
   private getActualMethods(obj: any): string[] {
     const methods: string[] = [];
-    
     for (const prop in obj) {
       if (typeof obj[prop] === 'function') {
         methods.push(prop);
       }
     }
-    
     return methods;
   }
-
   private getMethodSignature(interfaceName: string, methodName: string): any {
     // This would return the expected method signature
     // For now, we'll return a minimal signature
     return {
       parameterCount: 0,
       parameterTypes: [],
-      returnType: 'any'
+      returnType: 'any',
     };
   }
-
   private validateMethodSignature(obj: any, methodName: string, expectedSignature: any): boolean {
     const method = obj[methodName];
-    
     if (typeof method !== 'function') {
       return false;
     }
-
     // Basic validation - in a real implementation, this would be more thorough
     return true;
   }
@@ -547,25 +486,25 @@ export function isStorageExtension(extension: any): extension is import('./inter
 
 // Runtime type information
 export const ExtensionTypeInfo = {
-  node: {
+  node: {,
     name: 'Node Extension',
     description: 'Extends the runtime node system',
     interfaces: ['BaseExtension', 'NodeExtension'],
     capabilities: ['node-creation', 'node-validation', 'advanced-nodes']
   },
-  ui: {
+  ui: {,
     name: 'UI Extension',
     description: 'Extends the user interface system',
     interfaces: ['BaseExtension', 'UIExtension'],
     capabilities: ['components', 'themes', 'commands', 'menus', 'keybindings']
   },
-  transform: {
+  transform: {,
     name: 'Transform Extension',
     description: 'Extends the data transformation system',
     interfaces: ['BaseExtension', 'TransformExtension'],
     capabilities: ['data-transformation', 'pipeline-support', 'validation']
   },
-  storage: {
+  storage: {,
     name: 'Storage Extension',
     description: 'Extends the storage and persistence system',
     interfaces: ['BaseExtension', 'StorageExtension'],

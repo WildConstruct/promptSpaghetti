@@ -62,7 +62,7 @@ export interface DataDeletionEvent extends DataProtectionEvent {
     scheduledTime: Date;
     executionTime?: Date;
     deletionRule: string;
-    affectedRecords: {
+    affectedRecords: {,
         expected: number;
         processed: number;
         successful: number;
@@ -99,7 +99,7 @@ export declare class DataProtectionEventLogger {
     private auditLogger;
     private complianceMode;
     private retentionPolicies;
-    constructor(securityLogger?: SecurityLogger, auditLogger?: AuditLogger, options?: {
+    constructor(securityLogger?: SecurityLogger, auditLogger?: AuditLogger, options?: {)
         complianceMode?: boolean;
         retentionPolicies?: Map<ComplianceFramework, number>;
     });
@@ -139,7 +139,7 @@ export declare class DataProtectionEventLogger {
 }
 export interface ComplianceReport {
     framework: ComplianceFramework;
-    reportPeriod: {
+    reportPeriod: {,
         start: Date;
         end: Date;
     };

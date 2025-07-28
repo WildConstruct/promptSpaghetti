@@ -5,7 +5,7 @@ import React from 'react';
 interface SaveProjectDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave?: (result: {
+    onSave?: (result: {)
         success: boolean;
         error?: string;
     }) => void;

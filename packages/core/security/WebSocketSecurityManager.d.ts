@@ -60,7 +60,7 @@ export interface ConnectionSecurityContext {
     messageCount: number;
     bytesSent: number;
     bytesReceived: number;
-    flags: {
+    flags: {,
         vpnDetected: boolean;
         proxyDetected: boolean;
         botDetected: boolean;
@@ -119,17 +119,17 @@ export declare class WebSocketSecurityManager extends EventEmitter {
     private rateLimiters;
     private suspiciousIPs;
     private blockedConnections;
-    constructor(
+    constructor()
       config: WebSocketSecurityConfig,
       keyManagementService: KeyManagementService,
       dataClassifier: DataClassifier,
       fingerprintService: DeviceFingerprintingService,
-      trustedDeviceManager: TrustedDeviceManager
+      trustedDeviceManager: TrustedDeviceManager,
     );
     /**
      * Initialize connection security context
      */
-    initializeConnection(connectionId: string, userId: string, requestInfo: {
+    initializeConnection(connectionId: string, userId: string, requestInfo: {)
         ipAddress: string;
         userAgent: string;
         origin: string;
@@ -138,7 +138,7 @@ export declare class WebSocketSecurityManager extends EventEmitter {
     /**
      * Authenticate connection with enhanced security
      */
-    authenticateConnection(connectionId: string, credentials: {
+    authenticateConnection(connectionId: string, credentials: {)
         token: string;
         mfaCode?: string;
         deviceVerificationToken?: string;

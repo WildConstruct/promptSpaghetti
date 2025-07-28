@@ -2,65 +2,55 @@
  * Epic 9.2.1 - Invite User Modal Component
  * Modal for inviting users to workspaces
  */
-
 import React, { useState } from 'react';
-
 interface InviteUserModalProps {
   workspaceId: string;
   workspaceName: string;
   onSubmit: (data: { userId: string; role: string }) => void;
   onCancel: () => void;
 }
-
-const ROLES = [
+const ROLES = [;
   { value: 'admin', label: 'Admin', description: 'Full workspace access and management' },
   { value: 'editor', label: 'Editor', description: 'Can create and edit projects and resources' },
   { value: 'commenter', label: 'Commenter', description: 'Can view content and add comments' },
   { value: 'viewer', label: 'Viewer', description: 'Read-only access to content' }
 ];
 
-export const InviteUserModal: React.FC<InviteUserModalProps> = ({
+export const InviteUserModal: React.FC<InviteUserModalProps> = ({)
   workspaceId,
   workspaceName,
   onSubmit,
   onCancel
 }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({)
     userId: '',
-    role: 'editor'
+    role: 'editor',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-
     if (!formData.userId.trim()) {
       newErrors.userId = 'User ID or email is required';
     } else if (formData.userId.length < 3) {
       newErrors.userId = 'User ID must be at least 3 characters';
     }
-
     if (!formData.role) {
       newErrors.role = 'Role selection is required';
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateForm()) {
       return;
     }
-
     setIsSubmitting(true);
     try {
-      await onSubmit({
+      await onSubmit({)
         userId: formData.userId.trim(),
-        role: formData.role
+        role: formData.role,
       });
     } catch (error) {
       console.error('Failed to invite user:', error);
@@ -68,7 +58,6 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({
       setIsSubmitting(false);
     }
   };
-
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
@@ -76,10 +65,8 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
-
   const selectedRole = ROLES.find(role => role.value === formData.role);
-
-  return (
+  return ()
     <div className="modal-overlay">
       <div className="modal modal--medium">
         <div className="modal__header">
@@ -92,13 +79,11 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({
             ×
           </button>
         </div>
-
         <form onSubmit={handleSubmit} className="modal__content">
           <div className="invite-modal__workspace-info">
             <h3>Inviting to: {workspaceName}</h3>
             <p>The user will receive a notification and can start collaborating immediately.</p>
           </div>
-
           <div className="form-group">
             <label htmlFor="user-id" className="form-label">
               User ID or Email *
@@ -112,20 +97,19 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({
               placeholder="Enter user ID or email address"
               disabled={isSubmitting}
             />
-            {errors.userId && (
+            {errors.userId && ()
               <div className="form-error">{errors.userId}</div>
             )}
             <div className="form-hint">
               Enter the user's ID or email address to send them an invitation
             </div>
           </div>
-
           <div className="form-group">
             <label className="form-label">
               Role *
             </label>
             <div className="role-selection">
-              {ROLES.map(role => (
+              {ROLES.map(role => ()
                 <label
                   key={role.value}
                   className={`role-option ${formData.role === role.value ? 'role-option--selected' : ''}`}
@@ -145,12 +129,11 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({
                 </label>
               ))}
             </div>
-            {errors.role && (
+            {errors.role && ()
               <div className="form-error">{errors.role}</div>
             )}
           </div>
-
-          {selectedRole && (
+          {selectedRole && ()
             <div className="invite-preview">
               <h3>Permission Summary</h3>
               <div className="permission-summary">
@@ -163,7 +146,7 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({
                 <div className="permission-summary__details">
                   <h4>This role will be able to:</h4>
                   <ul>
-                    {formData.role === 'admin' && (
+                    {formData.role === 'admin' && ()
                       <>
                         <li>Manage workspace settings and members</li>
                         <li>Create, edit, and delete projects</li>
@@ -171,21 +154,21 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({
                         <li>Access all workspace content</li>
                       </>
                     )}
-                    {formData.role === 'editor' && (
+                    {formData.role === 'editor' && ()
                       <>
                         <li>Create and edit projects and resources</li>
                         <li>Comment on content</li>
                         <li>View workspace activity</li>
                       </>
                     )}
-                    {formData.role === 'commenter' && (
+                    {formData.role === 'commenter' && ()
                       <>
                         <li>View all workspace content</li>
                         <li>Add comments and discussions</li>
                         <li>View workspace activity</li>
                       </>
                     )}
-                    {formData.role === 'viewer' && (
+                    {formData.role === 'viewer' && ()
                       <>
                         <li>View all workspace content</li>
                         <li>View workspace activity</li>
@@ -197,7 +180,6 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({
             </div>
           )}
         </form>
-
         <div className="modal__footer">
           <button
             type="button"

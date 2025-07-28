@@ -1,6 +1,5 @@
 // Hook for managing visual diff sessions
 // Story 9.3.2 - Visual Diff Tool
-
 import { useState, useCallback } from 'react';
 import {
   VisualDiffSession,
@@ -8,7 +7,6 @@ import {
   CreateDiffSessionRequest,
   UpdateDiffSessionRequest
 } from '../types/comparison';
-
 interface UseDiffSessionResult {
   session: VisualDiffSession | null;
   comparison: DetailedComparison | null;
@@ -25,41 +23,32 @@ export const useDiffSession = (): UseDiffSessionResult => {
   const [comparison, setComparison] = useState<DetailedComparison | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const apiCall = useCallback(async (url: string, options: RequestInit = {}) => {
-    const response = await fetch(`/api/visual-diff${url}`, {
-      headers: {
+    const response = await fetch(`/api/visual-diff${url}`, {)}
+      headers: {,
         'Content-Type': 'application/json',
         ...options.headers
       },
       ...options
     });
-
     const data = await response.json();
-
     if (!response.ok) {
       throw new Error(data.message || data.error || 'Request failed');
     }
-
     return data;
   }, []);
-
   const createSession = useCallback(async (request: CreateDiffSessionRequest) => {
     setLoading(true);
     setError(null);
-
     try {
-      const result = await apiCall('/sessions', {
+      const result = await apiCall('/sessions', {)
         method: 'POST',
-        body: JSON.stringify(request)
+        body: JSON.stringify(request),
       });
-
       setSession(result.data);
-
       // Fetch the comparison data
-      const sessionData = await apiCall(`/sessions/${result.session_id}`);
+      const sessionData = await apiCall(`/sessions/${result.session_id}`);}
       setComparison(sessionData.data.comparison);
-
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to create session';
       setError(errorMessage);
@@ -68,21 +57,16 @@ export const useDiffSession = (): UseDiffSessionResult => {
       setLoading(false);
     }
   }, [apiCall]);
-
   const updateSession = useCallback(async (sessionId: string, updates: UpdateDiffSessionRequest) => {
     if (!session) return;
-
     setLoading(true);
     setError(null);
-
     try {
-      const result = await apiCall(`/sessions/${sessionId}`, {
+      const result = await apiCall(`/sessions/${sessionId}`, {)}
         method: 'PATCH',
-        body: JSON.stringify(updates)
+        body: JSON.stringify(updates),
       });
-
       setSession(result.data);
-
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to update session';
       setError(errorMessage);
@@ -91,19 +75,15 @@ export const useDiffSession = (): UseDiffSessionResult => {
       setLoading(false);
     }
   }, [session, apiCall]);
-
   const deleteSession = useCallback(async (sessionId: string) => {
     setLoading(true);
     setError(null);
-
     try {
-      await apiCall(`/sessions/${sessionId}`, {
-        method: 'DELETE'
+      await apiCall(`/sessions/${sessionId}`, {)}
+        method: 'DELETE',
       });
-
       setSession(null);
       setComparison(null);
-
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete session';
       setError(errorMessage);
@@ -112,11 +92,9 @@ export const useDiffSession = (): UseDiffSessionResult => {
       setLoading(false);
     }
   }, [apiCall]);
-
   const clearError = useCallback(() => {
     setError(null);
   }, []);
-
   return {
     session,
     comparison,

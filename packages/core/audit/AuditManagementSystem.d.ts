@@ -52,7 +52,7 @@ export declare const AuditEventSchema: z.ZodObject<{
     session_id: z.ZodOptional<z.ZodString>;
     ip_address: z.ZodOptional<z.ZodString>;
     user_agent: z.ZodOptional<z.ZodString>;
-    geo_location: z.ZodOptional<z.ZodObject<{
+    geo_location: z.ZodOptional<z.ZodObject<{,
         country: z.ZodString;
         region: z.ZodString;
         city: z.ZodString;
@@ -222,7 +222,7 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
     timeframe: z.ZodEnum<["hour", "day", "week", "month", "year"]>;
     metrics: z.ZodArray<z.ZodEnum<["event_count", "unique_users", "risk_score_average", "severity_distribution", "compliance_violations", "geographic_distribution", "system_component_activity"]>, "many">;
     group_by: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    filters: z.ZodOptional<z.ZodObject<{
+    filters: z.ZodOptional<z.ZodObject<{,
         start_date: z.ZodOptional<z.ZodDate>;
         end_date: z.ZodOptional<z.ZodDate>;
         event_types: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof AuditEventType>, "many">>;
@@ -345,15 +345,15 @@ export declare class AuditManagementSystem {
     /**
      * Compliance-specific audit report generation
      */
-    generateComplianceReport(framework: ComplianceFramework, dateRange: {
+    generateComplianceReport(framework: ComplianceFramework, dateRange: {)
         start: Date;
         end: Date;
     }): any;
     /**
      * Real-time audit monitoring and alerting
      */
-    setupRealTimeMonitoring(config: {
-        alertThresholds: {
+    setupRealTimeMonitoring(config: {)
+        alertThresholds: {,
             criticalEventRate: number;
             highRiskEventRate: number;
             failedLoginRate: number;
@@ -369,9 +369,9 @@ export declare class AuditManagementSystem {
     /**
      * Audit retention and archival management
      */
-    manageAuditRetention(policies: {
+    manageAuditRetention(policies: {)
         defaultRetentionDays: number;
-        complianceRetentionDays: {
+        complianceRetentionDays: {,
             [framework in ComplianceFramework]?: number;
         };
         archivalStorage: string;

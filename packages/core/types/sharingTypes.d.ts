@@ -62,7 +62,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
     description: z.ZodOptional<z.ZodString>;
     thumbnailUrl: z.ZodOptional<z.ZodString>;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    permissions: z.ZodObject<{
+    permissions: z.ZodObject<{,
         canView: z.ZodDefault<z.ZodBoolean>;
         canComment: z.ZodDefault<z.ZodBoolean>;
         canClone: z.ZodDefault<z.ZodBoolean>;
@@ -102,12 +102,12 @@ export declare const ShareConfigSchema: z.ZodObject<{
         maxViews?: number | undefined;
         maxShares?: number | undefined;
     }>;
-    customization: z.ZodDefault<z.ZodObject<{
-        branding: z.ZodOptional<z.ZodObject<{
+    customization: z.ZodDefault<z.ZodObject<{,
+        branding: z.ZodOptional<z.ZodObject<{,
             showLogo: z.ZodDefault<z.ZodBoolean>;
             showAttribution: z.ZodDefault<z.ZodBoolean>;
             customLogo: z.ZodOptional<z.ZodString>;
-            customColors: z.ZodOptional<z.ZodObject<{
+            customColors: z.ZodOptional<z.ZodObject<{,
                 primary: z.ZodOptional<z.ZodString>;
                 background: z.ZodOptional<z.ZodString>;
                 text: z.ZodOptional<z.ZodString>;
@@ -139,7 +139,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
                 primary?: string | undefined;
             } | undefined;
         }>>;
-        layout: z.ZodOptional<z.ZodObject<{
+        layout: z.ZodOptional<z.ZodObject<{,
             width: z.ZodDefault<z.ZodNumber>;
             height: z.ZodDefault<z.ZodNumber>;
             showHeader: z.ZodDefault<z.ZodBoolean>;
@@ -161,7 +161,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
             showToolbar?: boolean | undefined;
             responsive?: boolean | undefined;
         }>>;
-        features: z.ZodOptional<z.ZodObject<{
+        features: z.ZodOptional<z.ZodObject<{,
             allowComments: z.ZodDefault<z.ZodBoolean>;
             allowRating: z.ZodDefault<z.ZodBoolean>;
             showMetrics: z.ZodDefault<z.ZodBoolean>;
@@ -233,7 +233,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
             enableInteraction?: boolean | undefined;
         } | undefined;
     }>>;
-    metadata: z.ZodObject<{
+    metadata: z.ZodObject<{,
         createdBy: z.ZodString;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
@@ -267,7 +267,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: string;
     tags: string[];
-    metadata: {
+    metadata: {,
         createdAt: Date;
         updatedAt: Date;
         version: string;
@@ -279,7 +279,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
         estimatedTime?: number | undefined;
     };
     title: string;
-    permissions: {
+    permissions: {,
         canEdit: boolean;
         canView: boolean;
         canComment: boolean;
@@ -297,7 +297,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
     resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
     shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
     shareFormat: "link" | "embed" | "clone" | "export";
-    customization: {
+    customization: {,
         layout?: {
             width: number;
             height: number;
@@ -328,7 +328,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
     thumbnailUrl?: string | undefined;
 }, {
     id: string;
-    metadata: {
+    metadata: {,
         createdAt: Date;
         updatedAt: Date;
         createdBy: string;
@@ -340,7 +340,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
         relatedResources?: string[] | undefined;
     };
     title: string;
-    permissions: {
+    permissions: {,
         allowedDomains?: string[] | undefined;
         canEdit?: boolean | undefined;
         expiresAt?: Date | undefined;
@@ -397,8 +397,8 @@ export declare const ShareLinkSchema: z.ZodObject<{
     fullUrl: z.ZodString;
     shortUrl: z.ZodString;
     qrCode: z.ZodOptional<z.ZodString>;
-    socialTags: z.ZodObject<{
-        openGraph: z.ZodObject<{
+    socialTags: z.ZodObject<{,
+        openGraph: z.ZodObject<{,
             title: z.ZodString;
             description: z.ZodString;
             image: z.ZodOptional<z.ZodString>;
@@ -420,7 +420,7 @@ export declare const ShareLinkSchema: z.ZodObject<{
             image?: string | undefined;
             siteName?: string | undefined;
         }>;
-        twitter: z.ZodObject<{
+        twitter: z.ZodObject<{,
             card: z.ZodDefault<z.ZodEnum<["summary", "summary_large_image"]>>;
             title: z.ZodString;
             description: z.ZodString;
@@ -439,12 +439,12 @@ export declare const ShareLinkSchema: z.ZodObject<{
             creator?: string | undefined;
             card?: "summary" | "summary_large_image" | undefined;
         }>;
-        schema: z.ZodObject<{
+        schema: z.ZodObject<{,
             type: z.ZodDefault<z.ZodString>;
             name: z.ZodString;
             description: z.ZodString;
             url: z.ZodString;
-            author: z.ZodOptional<z.ZodObject<{
+            author: z.ZodOptional<z.ZodObject<{,
                 type: z.ZodDefault<z.ZodString>;
                 name: z.ZodString;
             }, "strip", z.ZodTypeAny, {
@@ -474,7 +474,7 @@ export declare const ShareLinkSchema: z.ZodObject<{
             } | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
-        schema: {
+        schema: {,
             name: string;
             description: string;
             type: string;
@@ -484,14 +484,14 @@ export declare const ShareLinkSchema: z.ZodObject<{
                 type: string;
             } | undefined;
         };
-        twitter: {
+        twitter: {,
             description: string;
             title: string;
             card: "summary" | "summary_large_image";
             image?: string | undefined;
             creator?: string | undefined;
         };
-        openGraph: {
+        openGraph: {,
             description: string;
             type: string;
             title: string;
@@ -500,7 +500,7 @@ export declare const ShareLinkSchema: z.ZodObject<{
             image?: string | undefined;
         };
     }, {
-        schema: {
+        schema: {,
             name: string;
             description: string;
             url: string;
@@ -510,14 +510,14 @@ export declare const ShareLinkSchema: z.ZodObject<{
                 type?: string | undefined;
             } | undefined;
         };
-        twitter: {
+        twitter: {,
             description: string;
             title: string;
             image?: string | undefined;
             creator?: string | undefined;
             card?: "summary" | "summary_large_image" | undefined;
         };
-        openGraph: {
+        openGraph: {,
             description: string;
             title: string;
             url: string;
@@ -526,7 +526,7 @@ export declare const ShareLinkSchema: z.ZodObject<{
             siteName?: string | undefined;
         };
     }>;
-    embedCode: z.ZodOptional<z.ZodObject<{
+    embedCode: z.ZodOptional<z.ZodObject<{,
         iframe: z.ZodString;
         javascript: z.ZodOptional<z.ZodString>;
         responsive: z.ZodOptional<z.ZodString>;
@@ -539,7 +539,7 @@ export declare const ShareLinkSchema: z.ZodObject<{
         javascript?: string | undefined;
         responsive?: string | undefined;
     }>>;
-    analytics: z.ZodDefault<z.ZodObject<{
+    analytics: z.ZodDefault<z.ZodObject<{,
         trackingEnabled: z.ZodDefault<z.ZodBoolean>;
         utmSource: z.ZodOptional<z.ZodString>;
         utmMedium: z.ZodOptional<z.ZodString>;
@@ -560,7 +560,7 @@ export declare const ShareLinkSchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    analytics: {
+    analytics: {,
         trackingEnabled: boolean;
         customParams: Record<string, string>;
         utmSource?: string | undefined;
@@ -571,8 +571,8 @@ export declare const ShareLinkSchema: z.ZodObject<{
     shortCode: string;
     fullUrl: string;
     shortUrl: string;
-    socialTags: {
-        schema: {
+    socialTags: {,
+        schema: {,
             name: string;
             description: string;
             type: string;
@@ -582,14 +582,14 @@ export declare const ShareLinkSchema: z.ZodObject<{
                 type: string;
             } | undefined;
         };
-        twitter: {
+        twitter: {,
             description: string;
             title: string;
             card: "summary" | "summary_large_image";
             image?: string | undefined;
             creator?: string | undefined;
         };
-        openGraph: {
+        openGraph: {,
             description: string;
             type: string;
             title: string;
@@ -610,8 +610,8 @@ export declare const ShareLinkSchema: z.ZodObject<{
     shortCode: string;
     fullUrl: string;
     shortUrl: string;
-    socialTags: {
-        schema: {
+    socialTags: {,
+        schema: {,
             name: string;
             description: string;
             url: string;
@@ -621,14 +621,14 @@ export declare const ShareLinkSchema: z.ZodObject<{
                 type?: string | undefined;
             } | undefined;
         };
-        twitter: {
+        twitter: {,
             description: string;
             title: string;
             image?: string | undefined;
             creator?: string | undefined;
             card?: "summary" | "summary_large_image" | undefined;
         };
-        openGraph: {
+        openGraph: {,
             description: string;
             title: string;
             url: string;
@@ -663,7 +663,7 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
     userAgent: z.ZodOptional<z.ZodString>;
     referer: z.ZodOptional<z.ZodString>;
     platform: z.ZodOptional<z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>>;
-    geolocation: z.ZodOptional<z.ZodObject<{
+    geolocation: z.ZodOptional<z.ZodObject<{,
         country: z.ZodOptional<z.ZodString>;
         region: z.ZodOptional<z.ZodString>;
         city: z.ZodOptional<z.ZodString>;
@@ -679,7 +679,7 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
         city?: string | undefined;
         timezone?: string | undefined;
     }>>;
-    deviceInfo: z.ZodOptional<z.ZodObject<{
+    deviceInfo: z.ZodOptional<z.ZodObject<{,
         type: z.ZodOptional<z.ZodEnum<["desktop", "mobile", "tablet"]>>;
         os: z.ZodOptional<z.ZodString>;
         browser: z.ZodOptional<z.ZodString>;
@@ -748,7 +748,7 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
 export type ShareAnalyticsEvent = z.infer<typeof ShareAnalyticsEventSchema>;
 export declare const ShareMetricsSchema: z.ZodObject<{
     shareLinkId: z.ZodString;
-    timeRange: z.ZodObject<{
+    timeRange: z.ZodObject<{,
         start: z.ZodDate;
         end: z.ZodDate;
     }, "strip", z.ZodTypeAny, {
@@ -758,7 +758,7 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         start: Date;
         end: Date;
     }>;
-    metrics: z.ZodObject<{
+    metrics: z.ZodObject<{,
         totalViews: z.ZodDefault<z.ZodNumber>;
         uniqueViews: z.ZodDefault<z.ZodNumber>;
         totalShares: z.ZodDefault<z.ZodNumber>;
@@ -795,7 +795,7 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         viralCoefficient?: number | undefined;
         engagementScore?: number | undefined;
     }>;
-    breakdowns: z.ZodDefault<z.ZodObject<{
+    breakdowns: z.ZodDefault<z.ZodObject<{,
         byPlatform: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         byGeography: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         byDevice: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
@@ -817,8 +817,8 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         byDayOfWeek?: number[] | undefined;
         byReferrer?: Record<string, number> | undefined;
     }>>;
-    trends: z.ZodDefault<z.ZodObject<{
-        viewsOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    trends: z.ZodDefault<z.ZodObject<{,
+        viewsOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             timestamp: z.ZodDate;
             value: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
@@ -828,7 +828,7 @@ export declare const ShareMetricsSchema: z.ZodObject<{
             value: number;
             timestamp: Date;
         }>, "many">>;
-        sharesOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        sharesOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             timestamp: z.ZodDate;
             value: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
@@ -838,7 +838,7 @@ export declare const ShareMetricsSchema: z.ZodObject<{
             value: number;
             timestamp: Date;
         }>, "many">>;
-        engagementOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        engagementOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             timestamp: z.ZodDate;
             value: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
@@ -849,15 +849,15 @@ export declare const ShareMetricsSchema: z.ZodObject<{
             timestamp: Date;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        viewsOverTime: {
+        viewsOverTime: {,
             value: number;
             timestamp: Date;
         }[];
-        sharesOverTime: {
+        sharesOverTime: {,
             value: number;
             timestamp: Date;
         }[];
-        engagementOverTime: {
+        engagementOverTime: {,
             value: number;
             timestamp: Date;
         }[];
@@ -876,7 +876,7 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         }[] | undefined;
     }>>;
 }, "strip", z.ZodTypeAny, {
-    metrics: {
+    metrics: {,
         averageRating: number;
         conversionRate: number;
         totalViews: number;
@@ -889,25 +889,25 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         viralCoefficient: number;
         engagementScore: number;
     };
-    trends: {
-        viewsOverTime: {
+    trends: {,
+        viewsOverTime: {,
             value: number;
             timestamp: Date;
         }[];
-        sharesOverTime: {
+        sharesOverTime: {,
             value: number;
             timestamp: Date;
         }[];
-        engagementOverTime: {
+        engagementOverTime: {,
             value: number;
             timestamp: Date;
         }[];
     };
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };
-    breakdowns: {
+    breakdowns: {,
         byPlatform: Record<string, number>;
         byGeography: Record<string, number>;
         byDevice: Record<string, number>;
@@ -917,7 +917,7 @@ export declare const ShareMetricsSchema: z.ZodObject<{
     };
     shareLinkId: string;
 }, {
-    metrics: {
+    metrics: {,
         averageRating?: number | undefined;
         conversionRate?: number | undefined;
         totalViews?: number | undefined;
@@ -930,7 +930,7 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         viralCoefficient?: number | undefined;
         engagementScore?: number | undefined;
     };
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };
@@ -962,7 +962,7 @@ export type ShareMetrics = z.infer<typeof ShareMetricsSchema>;
 export declare const SocialIntegrationSchema: z.ZodObject<{
     platform: z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>;
     enabled: z.ZodDefault<z.ZodBoolean>;
-    configuration: z.ZodOptional<z.ZodObject<{
+    configuration: z.ZodOptional<z.ZodObject<{,
         appId: z.ZodOptional<z.ZodString>;
         appSecret: z.ZodOptional<z.ZodString>;
         webhookUrl: z.ZodOptional<z.ZodString>;
@@ -984,7 +984,7 @@ export declare const SocialIntegrationSchema: z.ZodObject<{
         customMessage?: string | undefined;
         autoPost?: boolean | undefined;
     }>>;
-    templates: z.ZodDefault<z.ZodObject<{
+    templates: z.ZodDefault<z.ZodObject<{,
         shareMessage: z.ZodDefault<z.ZodString>;
         embedMessage: z.ZodDefault<z.ZodString>;
         achievementMessage: z.ZodDefault<z.ZodString>;
@@ -999,7 +999,7 @@ export declare const SocialIntegrationSchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     enabled: boolean;
-    templates: {
+    templates: {,
         shareMessage: string;
         embedMessage: string;
         achievementMessage: string;
@@ -1036,7 +1036,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
     name: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
     resourceIds: z.ZodArray<z.ZodString, "many">;
-    shareConfig: z.ZodObject<{
+    shareConfig: z.ZodObject<{,
         id: z.ZodString;
         resourceId: z.ZodString;
         resourceType: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
@@ -1046,7 +1046,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
         description: z.ZodOptional<z.ZodString>;
         thumbnailUrl: z.ZodOptional<z.ZodString>;
         tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        permissions: z.ZodObject<{
+        permissions: z.ZodObject<{,
             canView: z.ZodDefault<z.ZodBoolean>;
             canComment: z.ZodDefault<z.ZodBoolean>;
             canClone: z.ZodDefault<z.ZodBoolean>;
@@ -1086,12 +1086,12 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             maxViews?: number | undefined;
             maxShares?: number | undefined;
         }>;
-        customization: z.ZodDefault<z.ZodObject<{
-            branding: z.ZodOptional<z.ZodObject<{
+        customization: z.ZodDefault<z.ZodObject<{,
+            branding: z.ZodOptional<z.ZodObject<{,
                 showLogo: z.ZodDefault<z.ZodBoolean>;
                 showAttribution: z.ZodDefault<z.ZodBoolean>;
                 customLogo: z.ZodOptional<z.ZodString>;
-                customColors: z.ZodOptional<z.ZodObject<{
+                customColors: z.ZodOptional<z.ZodObject<{,
                     primary: z.ZodOptional<z.ZodString>;
                     background: z.ZodOptional<z.ZodString>;
                     text: z.ZodOptional<z.ZodString>;
@@ -1123,7 +1123,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
                     primary?: string | undefined;
                 } | undefined;
             }>>;
-            layout: z.ZodOptional<z.ZodObject<{
+            layout: z.ZodOptional<z.ZodObject<{,
                 width: z.ZodDefault<z.ZodNumber>;
                 height: z.ZodDefault<z.ZodNumber>;
                 showHeader: z.ZodDefault<z.ZodBoolean>;
@@ -1145,7 +1145,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
                 showToolbar?: boolean | undefined;
                 responsive?: boolean | undefined;
             }>>;
-            features: z.ZodOptional<z.ZodObject<{
+            features: z.ZodOptional<z.ZodObject<{,
                 allowComments: z.ZodDefault<z.ZodBoolean>;
                 allowRating: z.ZodDefault<z.ZodBoolean>;
                 showMetrics: z.ZodDefault<z.ZodBoolean>;
@@ -1217,7 +1217,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
                 enableInteraction?: boolean | undefined;
             } | undefined;
         }>>;
-        metadata: z.ZodObject<{
+        metadata: z.ZodObject<{,
             createdBy: z.ZodString;
             createdAt: z.ZodDate;
             updatedAt: z.ZodDate;
@@ -1251,7 +1251,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         id: string;
         tags: string[];
-        metadata: {
+        metadata: {,
             createdAt: Date;
             updatedAt: Date;
             version: string;
@@ -1263,7 +1263,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             estimatedTime?: number | undefined;
         };
         title: string;
-        permissions: {
+        permissions: {,
             canEdit: boolean;
             canView: boolean;
             canComment: boolean;
@@ -1281,7 +1281,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
         shareFormat: "link" | "embed" | "clone" | "export";
-        customization: {
+        customization: {,
             layout?: {
                 width: number;
                 height: number;
@@ -1312,7 +1312,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
         thumbnailUrl?: string | undefined;
     }, {
         id: string;
-        metadata: {
+        metadata: {,
             createdAt: Date;
             updatedAt: Date;
             createdBy: string;
@@ -1324,7 +1324,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             relatedResources?: string[] | undefined;
         };
         title: string;
-        permissions: {
+        permissions: {,
             allowedDomains?: string[] | undefined;
             canEdit?: boolean | undefined;
             expiresAt?: Date | undefined;
@@ -1373,10 +1373,10 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             } | undefined;
         } | undefined;
     }>;
-    organization: z.ZodOptional<z.ZodObject<{
+    organization: z.ZodOptional<z.ZodObject<{,
         sequence: z.ZodArray<z.ZodString, "many">;
         grouping: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodArray<z.ZodString, "many">>>;
-        navigation: z.ZodDefault<z.ZodObject<{
+        navigation: z.ZodDefault<z.ZodObject<{,
             showIndex: z.ZodDefault<z.ZodBoolean>;
             showProgress: z.ZodDefault<z.ZodBoolean>;
             allowJumping: z.ZodDefault<z.ZodBoolean>;
@@ -1394,7 +1394,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
         }>>;
     }, "strip", z.ZodTypeAny, {
         sequence: string[];
-        navigation: {
+        navigation: {,
             showProgress: boolean;
             showIndex: boolean;
             allowJumping: boolean;
@@ -1415,10 +1415,10 @@ export declare const ShareCollectionSchema: z.ZodObject<{
     id: string;
     name: string;
     resourceIds: string[];
-    shareConfig: {
+    shareConfig: {,
         id: string;
         tags: string[];
-        metadata: {
+        metadata: {,
             createdAt: Date;
             updatedAt: Date;
             version: string;
@@ -1430,7 +1430,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             estimatedTime?: number | undefined;
         };
         title: string;
-        permissions: {
+        permissions: {,
             canEdit: boolean;
             canView: boolean;
             canComment: boolean;
@@ -1448,7 +1448,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
         shareFormat: "link" | "embed" | "clone" | "export";
-        customization: {
+        customization: {,
             layout?: {
                 width: number;
                 height: number;
@@ -1481,7 +1481,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
     description?: string | undefined;
     organization?: {
         sequence: string[];
-        navigation: {
+        navigation: {,
             showProgress: boolean;
             showIndex: boolean;
             allowJumping: boolean;
@@ -1493,9 +1493,9 @@ export declare const ShareCollectionSchema: z.ZodObject<{
     id: string;
     name: string;
     resourceIds: string[];
-    shareConfig: {
+    shareConfig: {,
         id: string;
-        metadata: {
+        metadata: {,
             createdAt: Date;
             updatedAt: Date;
             createdBy: string;
@@ -1507,7 +1507,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             relatedResources?: string[] | undefined;
         };
         title: string;
-        permissions: {
+        permissions: {,
             allowedDomains?: string[] | undefined;
             canEdit?: boolean | undefined;
             expiresAt?: Date | undefined;
@@ -1576,7 +1576,7 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
     shareFormat: z.ZodDefault<z.ZodEnum<["link", "embed", "export", "clone"]>>;
     title: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
-    permissions: z.ZodOptional<z.ZodObject<{
+    permissions: z.ZodOptional<z.ZodObject<{,
         canView: z.ZodDefault<z.ZodBoolean>;
         canComment: z.ZodDefault<z.ZodBoolean>;
         canClone: z.ZodDefault<z.ZodBoolean>;
@@ -1666,7 +1666,7 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
     socialPlatforms?: ("email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord")[] | undefined;
 }>;
 export declare const ShareResponseSchema: z.ZodObject<{
-    shareConfig: z.ZodObject<{
+    shareConfig: z.ZodObject<{,
         id: z.ZodString;
         resourceId: z.ZodString;
         resourceType: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
@@ -1676,7 +1676,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
         description: z.ZodOptional<z.ZodString>;
         thumbnailUrl: z.ZodOptional<z.ZodString>;
         tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        permissions: z.ZodObject<{
+        permissions: z.ZodObject<{,
             canView: z.ZodDefault<z.ZodBoolean>;
             canComment: z.ZodDefault<z.ZodBoolean>;
             canClone: z.ZodDefault<z.ZodBoolean>;
@@ -1716,12 +1716,12 @@ export declare const ShareResponseSchema: z.ZodObject<{
             maxViews?: number | undefined;
             maxShares?: number | undefined;
         }>;
-        customization: z.ZodDefault<z.ZodObject<{
-            branding: z.ZodOptional<z.ZodObject<{
+        customization: z.ZodDefault<z.ZodObject<{,
+            branding: z.ZodOptional<z.ZodObject<{,
                 showLogo: z.ZodDefault<z.ZodBoolean>;
                 showAttribution: z.ZodDefault<z.ZodBoolean>;
                 customLogo: z.ZodOptional<z.ZodString>;
-                customColors: z.ZodOptional<z.ZodObject<{
+                customColors: z.ZodOptional<z.ZodObject<{,
                     primary: z.ZodOptional<z.ZodString>;
                     background: z.ZodOptional<z.ZodString>;
                     text: z.ZodOptional<z.ZodString>;
@@ -1753,7 +1753,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
                     primary?: string | undefined;
                 } | undefined;
             }>>;
-            layout: z.ZodOptional<z.ZodObject<{
+            layout: z.ZodOptional<z.ZodObject<{,
                 width: z.ZodDefault<z.ZodNumber>;
                 height: z.ZodDefault<z.ZodNumber>;
                 showHeader: z.ZodDefault<z.ZodBoolean>;
@@ -1775,7 +1775,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
                 showToolbar?: boolean | undefined;
                 responsive?: boolean | undefined;
             }>>;
-            features: z.ZodOptional<z.ZodObject<{
+            features: z.ZodOptional<z.ZodObject<{,
                 allowComments: z.ZodDefault<z.ZodBoolean>;
                 allowRating: z.ZodDefault<z.ZodBoolean>;
                 showMetrics: z.ZodDefault<z.ZodBoolean>;
@@ -1847,7 +1847,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
                 enableInteraction?: boolean | undefined;
             } | undefined;
         }>>;
-        metadata: z.ZodObject<{
+        metadata: z.ZodObject<{,
             createdBy: z.ZodString;
             createdAt: z.ZodDate;
             updatedAt: z.ZodDate;
@@ -1881,7 +1881,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         id: string;
         tags: string[];
-        metadata: {
+        metadata: {,
             createdAt: Date;
             updatedAt: Date;
             version: string;
@@ -1893,7 +1893,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
             estimatedTime?: number | undefined;
         };
         title: string;
-        permissions: {
+        permissions: {,
             canEdit: boolean;
             canView: boolean;
             canComment: boolean;
@@ -1911,7 +1911,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
         shareFormat: "link" | "embed" | "clone" | "export";
-        customization: {
+        customization: {,
             layout?: {
                 width: number;
                 height: number;
@@ -1942,7 +1942,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
         thumbnailUrl?: string | undefined;
     }, {
         id: string;
-        metadata: {
+        metadata: {,
             createdAt: Date;
             updatedAt: Date;
             createdBy: string;
@@ -1954,7 +1954,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
             relatedResources?: string[] | undefined;
         };
         title: string;
-        permissions: {
+        permissions: {,
             allowedDomains?: string[] | undefined;
             canEdit?: boolean | undefined;
             expiresAt?: Date | undefined;
@@ -2003,15 +2003,15 @@ export declare const ShareResponseSchema: z.ZodObject<{
             } | undefined;
         } | undefined;
     }>;
-    shareLink: z.ZodObject<{
+    shareLink: z.ZodObject<{,
         id: z.ZodString;
         shareConfigId: z.ZodString;
         shortCode: z.ZodString;
         fullUrl: z.ZodString;
         shortUrl: z.ZodString;
         qrCode: z.ZodOptional<z.ZodString>;
-        socialTags: z.ZodObject<{
-            openGraph: z.ZodObject<{
+        socialTags: z.ZodObject<{,
+            openGraph: z.ZodObject<{,
                 title: z.ZodString;
                 description: z.ZodString;
                 image: z.ZodOptional<z.ZodString>;
@@ -2033,7 +2033,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
                 image?: string | undefined;
                 siteName?: string | undefined;
             }>;
-            twitter: z.ZodObject<{
+            twitter: z.ZodObject<{,
                 card: z.ZodDefault<z.ZodEnum<["summary", "summary_large_image"]>>;
                 title: z.ZodString;
                 description: z.ZodString;
@@ -2052,12 +2052,12 @@ export declare const ShareResponseSchema: z.ZodObject<{
                 creator?: string | undefined;
                 card?: "summary" | "summary_large_image" | undefined;
             }>;
-            schema: z.ZodObject<{
+            schema: z.ZodObject<{,
                 type: z.ZodDefault<z.ZodString>;
                 name: z.ZodString;
                 description: z.ZodString;
                 url: z.ZodString;
-                author: z.ZodOptional<z.ZodObject<{
+                author: z.ZodOptional<z.ZodObject<{,
                     type: z.ZodDefault<z.ZodString>;
                     name: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
@@ -2087,7 +2087,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
                 } | undefined;
             }>;
         }, "strip", z.ZodTypeAny, {
-            schema: {
+            schema: {,
                 name: string;
                 description: string;
                 type: string;
@@ -2097,14 +2097,14 @@ export declare const ShareResponseSchema: z.ZodObject<{
                     type: string;
                 } | undefined;
             };
-            twitter: {
+            twitter: {,
                 description: string;
                 title: string;
                 card: "summary" | "summary_large_image";
                 image?: string | undefined;
                 creator?: string | undefined;
             };
-            openGraph: {
+            openGraph: {,
                 description: string;
                 type: string;
                 title: string;
@@ -2113,7 +2113,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
                 image?: string | undefined;
             };
         }, {
-            schema: {
+            schema: {,
                 name: string;
                 description: string;
                 url: string;
@@ -2123,14 +2123,14 @@ export declare const ShareResponseSchema: z.ZodObject<{
                     type?: string | undefined;
                 } | undefined;
             };
-            twitter: {
+            twitter: {,
                 description: string;
                 title: string;
                 image?: string | undefined;
                 creator?: string | undefined;
                 card?: "summary" | "summary_large_image" | undefined;
             };
-            openGraph: {
+            openGraph: {,
                 description: string;
                 title: string;
                 url: string;
@@ -2139,7 +2139,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
                 siteName?: string | undefined;
             };
         }>;
-        embedCode: z.ZodOptional<z.ZodObject<{
+        embedCode: z.ZodOptional<z.ZodObject<{,
             iframe: z.ZodString;
             javascript: z.ZodOptional<z.ZodString>;
             responsive: z.ZodOptional<z.ZodString>;
@@ -2152,7 +2152,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
             javascript?: string | undefined;
             responsive?: string | undefined;
         }>>;
-        analytics: z.ZodDefault<z.ZodObject<{
+        analytics: z.ZodDefault<z.ZodObject<{,
             trackingEnabled: z.ZodDefault<z.ZodBoolean>;
             utmSource: z.ZodOptional<z.ZodString>;
             utmMedium: z.ZodOptional<z.ZodString>;
@@ -2173,7 +2173,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
         }>>;
     }, "strip", z.ZodTypeAny, {
         id: string;
-        analytics: {
+        analytics: {,
             trackingEnabled: boolean;
             customParams: Record<string, string>;
             utmSource?: string | undefined;
@@ -2184,8 +2184,8 @@ export declare const ShareResponseSchema: z.ZodObject<{
         shortCode: string;
         fullUrl: string;
         shortUrl: string;
-        socialTags: {
-            schema: {
+        socialTags: {,
+            schema: {,
                 name: string;
                 description: string;
                 type: string;
@@ -2195,14 +2195,14 @@ export declare const ShareResponseSchema: z.ZodObject<{
                     type: string;
                 } | undefined;
             };
-            twitter: {
+            twitter: {,
                 description: string;
                 title: string;
                 card: "summary" | "summary_large_image";
                 image?: string | undefined;
                 creator?: string | undefined;
             };
-            openGraph: {
+            openGraph: {,
                 description: string;
                 type: string;
                 title: string;
@@ -2223,8 +2223,8 @@ export declare const ShareResponseSchema: z.ZodObject<{
         shortCode: string;
         fullUrl: string;
         shortUrl: string;
-        socialTags: {
-            schema: {
+        socialTags: {,
+            schema: {,
                 name: string;
                 description: string;
                 url: string;
@@ -2234,14 +2234,14 @@ export declare const ShareResponseSchema: z.ZodObject<{
                     type?: string | undefined;
                 } | undefined;
             };
-            twitter: {
+            twitter: {,
                 description: string;
                 title: string;
                 image?: string | undefined;
                 creator?: string | undefined;
                 card?: "summary" | "summary_large_image" | undefined;
             };
-            openGraph: {
+            openGraph: {,
                 description: string;
                 title: string;
                 url: string;
@@ -2265,7 +2265,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
         } | undefined;
     }>;
     socialLinks: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
-    embedCodes: z.ZodObject<{
+    embedCodes: z.ZodObject<{,
         basic: z.ZodString;
         responsive: z.ZodString;
         customizable: z.ZodString;
@@ -2280,10 +2280,10 @@ export declare const ShareResponseSchema: z.ZodObject<{
     }>;
     qrCode: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    shareConfig: {
+    shareConfig: {,
         id: string;
         tags: string[];
-        metadata: {
+        metadata: {,
             createdAt: Date;
             updatedAt: Date;
             version: string;
@@ -2295,7 +2295,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
             estimatedTime?: number | undefined;
         };
         title: string;
-        permissions: {
+        permissions: {,
             canEdit: boolean;
             canView: boolean;
             canComment: boolean;
@@ -2313,7 +2313,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
         shareFormat: "link" | "embed" | "clone" | "export";
-        customization: {
+        customization: {,
             layout?: {
                 width: number;
                 height: number;
@@ -2343,9 +2343,9 @@ export declare const ShareResponseSchema: z.ZodObject<{
         description?: string | undefined;
         thumbnailUrl?: string | undefined;
     };
-    shareLink: {
+    shareLink: {,
         id: string;
-        analytics: {
+        analytics: {,
             trackingEnabled: boolean;
             customParams: Record<string, string>;
             utmSource?: string | undefined;
@@ -2356,8 +2356,8 @@ export declare const ShareResponseSchema: z.ZodObject<{
         shortCode: string;
         fullUrl: string;
         shortUrl: string;
-        socialTags: {
-            schema: {
+        socialTags: {,
+            schema: {,
                 name: string;
                 description: string;
                 type: string;
@@ -2367,14 +2367,14 @@ export declare const ShareResponseSchema: z.ZodObject<{
                     type: string;
                 } | undefined;
             };
-            twitter: {
+            twitter: {,
                 description: string;
                 title: string;
                 card: "summary" | "summary_large_image";
                 image?: string | undefined;
                 creator?: string | undefined;
             };
-            openGraph: {
+            openGraph: {,
                 description: string;
                 type: string;
                 title: string;
@@ -2391,16 +2391,16 @@ export declare const ShareResponseSchema: z.ZodObject<{
         } | undefined;
     };
     socialLinks: Record<string, string>;
-    embedCodes: {
+    embedCodes: {,
         basic: string;
         customizable: string;
         responsive: string;
     };
     qrCode?: string | undefined;
 }, {
-    shareConfig: {
+    shareConfig: {,
         id: string;
-        metadata: {
+        metadata: {,
             createdAt: Date;
             updatedAt: Date;
             createdBy: string;
@@ -2412,7 +2412,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
             relatedResources?: string[] | undefined;
         };
         title: string;
-        permissions: {
+        permissions: {,
             allowedDomains?: string[] | undefined;
             canEdit?: boolean | undefined;
             expiresAt?: Date | undefined;
@@ -2461,14 +2461,14 @@ export declare const ShareResponseSchema: z.ZodObject<{
             } | undefined;
         } | undefined;
     };
-    shareLink: {
+    shareLink: {,
         id: string;
         shareConfigId: string;
         shortCode: string;
         fullUrl: string;
         shortUrl: string;
-        socialTags: {
-            schema: {
+        socialTags: {,
+            schema: {,
                 name: string;
                 description: string;
                 url: string;
@@ -2478,14 +2478,14 @@ export declare const ShareResponseSchema: z.ZodObject<{
                     type?: string | undefined;
                 } | undefined;
             };
-            twitter: {
+            twitter: {,
                 description: string;
                 title: string;
                 image?: string | undefined;
                 creator?: string | undefined;
                 card?: "summary" | "summary_large_image" | undefined;
             };
-            openGraph: {
+            openGraph: {,
                 description: string;
                 title: string;
                 url: string;
@@ -2508,7 +2508,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
             responsive?: string | undefined;
         } | undefined;
     };
-    embedCodes: {
+    embedCodes: {,
         basic: string;
         customizable: string;
         responsive: string;
@@ -2527,14 +2527,14 @@ export interface ShareSystemConfig {
     defaultPermissions: SharePermission;
     analyticsRetentionDays: number;
     maxSharesPerUser: number;
-    rateLimiting: {
+    rateLimiting: {,
         sharesPerHour: number;
         embedsPerHour: number;
     };
-    customization: {
+    customization: {,
         allowCustomBranding: boolean;
         allowCustomDomains: boolean;
-        maxEmbedSize: {
+        maxEmbedSize: {,
             width: number;
             height: number;
         };

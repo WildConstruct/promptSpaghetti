@@ -4,17 +4,17 @@ export type ViewMode = 'side-by-side' | 'overlay' | 'unified';
 export type HighlightMode = 'changes' | 'additions' | 'deletions' | 'all';
 export interface GraphData {
     id: string;
-    nodes: Array<{
+    nodes: Array<{,
         id: string;
         type: string;
-        position: {
+        position: {,
             x: number;
             y: number;
         };
         data: Record<string, unknown>;
         [key: string]: unknown;
     }>;
-    edges: Array<{
+    edges: Array<{,
         id: string;
         source: string;
         target: string;
@@ -39,7 +39,7 @@ export interface NodeChange {
     change_type: MatchType;
     old_properties?: Record<string, unknown>;
     new_properties?: Record<string, unknown>;
-    property_changes: Array<{
+    property_changes: Array<{,
         field: string;
         old_value: unknown;
         new_value: unknown;
@@ -55,7 +55,7 @@ export interface EdgeChange {
     change_type: MatchType;
     old_properties?: Record<string, unknown>;
     new_properties?: Record<string, unknown>;
-    property_changes: Array<{
+    property_changes: Array<{,
         field: string;
         old_value: unknown;
         new_value: unknown;
@@ -115,7 +115,7 @@ export interface DetailedComparison extends GraphComparison {
     target_data: GraphData;
     node_matches: NodeMatchResult[];
     edge_matches: EdgeMatchResult[];
-    algorithm_metadata: {
+    algorithm_metadata: {,
         steps_executed: string[];
         performance_metrics: Record<string, number>;
         confidence_distribution: Record<string, number>;
@@ -174,7 +174,7 @@ export interface ComparisonStatistics {
     avg_similarity: number;
     comparison_types: Record<string, number>;
     recent_comparisons: number;
-    similarity_distribution: {
+    similarity_distribution: {,
         high: number;
         medium: number;
         low: number;
@@ -210,21 +210,21 @@ export interface ApiResponse<T> {
     metadata?: Record<string, unknown>;
 }
 export interface BatchComparisonRequest {
-    comparisons: Array<{
+    comparisons: Array<{,
         source_version_id: string;
         target_version_id: string;
         comparison_type?: ComparisonType;
     }>;
 }
 export interface BatchComparisonResult {
-    successful: Array<{
+    successful: Array<{,
         similarity_score: number;
         changes_summary: ChangeSummary;
         comparison_id: string;
         source_version_id: string;
         target_version_id: string;
     }>;
-    failed: Array<{
+    failed: Array<{,
         error: string;
     }>;
     total_requested: number;

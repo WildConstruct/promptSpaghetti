@@ -9,12 +9,10 @@
  * - Integration with graph store for persistence
  * - Professional styling with multiple group styles
  */
-
 import React, { useCallback, useState } from 'react';
 import { useReactFlow, useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
 import { RegionGroupsLayer } from '../Annotations/RegionGroupsLayer';
-
 interface RegionGroupsManagerProps {
   disabled?: boolean;
   readonly?: boolean;
@@ -24,7 +22,7 @@ interface RegionGroupsManagerProps {
   onGroupSelect?: (groupId: string | null) => void;
 }
 
-export const RegionGroupsManager: React.FC<RegionGroupsManagerProps> = ({
+export const RegionGroupsManager: React.FC<RegionGroupsManagerProps> = ({)
   disabled = false,
   readonly = false,
   author = 'Anonymous',
@@ -37,34 +35,26 @@ export const RegionGroupsManager: React.FC<RegionGroupsManagerProps> = ({
     annotations,
     setRegionGroups
   } = useGraphStore();
-  
     const viewport = useViewport();
-  
   const [hoveredGroupId, setHoveredGroupId] = useState<string | null>(null);
-
   // Handle region groups changes from the layer
   const handleRegionGroupsChange = useCallback((groups: unknown[]) => {
     setRegionGroups(groups);
   }, [setRegionGroups]);
-
   // Handle group hover state
     }, [onGroupHover]);
-
   // Handle group selection
     }, [onGroupSelect]);
-
   // Get canvas size and offset from ReactFlow
   const canvasOffset = {
     x: viewport.x,
-    y: viewport.y
+    y: viewport.y,
   };
-
   // Don't render if disabled
   if (disabled) {
     return null;
   }
-
-  return (
+  return ()
     <RegionGroupsLayer
       nodes={nodes}
       regionGroups={annotations.regionGroups}

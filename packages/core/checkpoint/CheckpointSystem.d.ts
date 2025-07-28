@@ -38,14 +38,14 @@ export interface CheckpointMetadata {
 }
 export interface CheckpointData {
     metadata: CheckpointMetadata;
-    state: {
+    state: {,
         graphState: any;
         variables: Record<string, any>;
         executionHistory: any[];
         nodeStates: Record<string, any>;
         settings: Record<string, any>;
     };
-    validation: {
+    validation: {,
         checksum: string;
         stateHash: string;
         integrityScore: number;
@@ -54,19 +54,19 @@ export interface CheckpointData {
     };
 }
 export interface CheckpointPolicy {
-    autoSave: {
+    autoSave: {,
         enabled: boolean;
         interval: number;
         maxAutoSaves: number;
         triggerEvents: ('node_complete' | 'variable_change' | 'error' | 'manual')[];
     };
-    retention: {
+    retention: {,
         maxCheckpoints: number;
         maxAge: number;
         compressionThreshold: number;
         archiveAfter: number;
     };
-    recovery: {
+    recovery: {,
         autoRecovery: boolean;
         recoveryTimeout: number;
         maxRecoveryAttempts: number;
@@ -76,14 +76,14 @@ export interface CheckpointPolicy {
 export interface CheckpointDiff {
     checkpointId: string;
     previousCheckpointId: string | null;
-    changes: {
+    changes: {,
         type: 'added' | 'modified' | 'deleted';
         path: string;
         oldValue?: any;
         newValue?: any;
         size: number;
     }[];
-    summary: {
+    summary: {,
         additions: number;
         modifications: number;
         deletions: number;
@@ -113,13 +113,13 @@ export declare class CheckpointSystem extends EventEmitter {
     private isRecovering;
     private performanceMetrics;
     constructor(policy?: Partial<CheckpointPolicy>);
-    createCheckpoint(state: any, metadata?: Partial<CheckpointMetadata>, options?: {
+    createCheckpoint(state: any, metadata?: Partial<CheckpointMetadata>, options?: {)
         compress?: boolean;
         validate?: boolean;
     }): Promise<string>;
     restoreCheckpoint(checkpointId: string, options?: Partial<RecoveryOptions>): Promise<any>;
     generateDiff(currentCheckpointId: string, previousCheckpointId?: string): Promise<CheckpointDiff>;
-    listCheckpoints(filters?: {
+    listCheckpoints(filters?: {)
         tags?: string[];
         dateRange?: {
             start: Date;

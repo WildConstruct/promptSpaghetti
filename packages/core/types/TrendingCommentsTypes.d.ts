@@ -40,7 +40,7 @@ export type CommentEngagement = z.infer<typeof CommentEngagementSchema>;
 export declare const CommentScoreSchema: z.ZodObject<{
     commentId: z.ZodString;
     calculatedAt: z.ZodDate;
-    scores: z.ZodObject<{
+    scores: z.ZodObject<{,
         trendingScore: z.ZodNumber;
         engagementScore: z.ZodNumber;
         recencyScore: z.ZodNumber;
@@ -68,7 +68,7 @@ export declare const CommentScoreSchema: z.ZodObject<{
         helpfulnessScore: number;
         authorityScore: number;
     }>;
-    metrics: z.ZodObject<{
+    metrics: z.ZodObject<{,
         totalLikes: z.ZodDefault<z.ZodNumber>;
         totalDislikes: z.ZodDefault<z.ZodNumber>;
         totalReplies: z.ZodDefault<z.ZodNumber>;
@@ -99,7 +99,7 @@ export declare const CommentScoreSchema: z.ZodObject<{
         replyEngagement?: number | undefined;
         uniqueEngagers?: number | undefined;
     }>;
-    trends: z.ZodObject<{
+    trends: z.ZodObject<{,
         hourlyGrowth: z.ZodDefault<z.ZodNumber>;
         dailyGrowth: z.ZodDefault<z.ZodNumber>;
         weeklyGrowth: z.ZodDefault<z.ZodNumber>;
@@ -119,7 +119,7 @@ export declare const CommentScoreSchema: z.ZodObject<{
         velocityTrend?: "declining" | "accelerating" | "steady" | "stagnant" | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
-    metrics: {
+    metrics: {,
         totalLikes: number;
         viewCount: number;
         totalShares: number;
@@ -130,14 +130,14 @@ export declare const CommentScoreSchema: z.ZodObject<{
         replyEngagement: number;
         uniqueEngagers: number;
     };
-    trends: {
+    trends: {,
         hourlyGrowth: number;
         dailyGrowth: number;
         weeklyGrowth: number;
         velocityTrend: "declining" | "accelerating" | "steady" | "stagnant";
         peakEngagementHour?: number | undefined;
     };
-    scores: {
+    scores: {,
         qualityScore: number;
         engagementScore: number;
         trendingScore: number;
@@ -150,7 +150,7 @@ export declare const CommentScoreSchema: z.ZodObject<{
     commentId: string;
     calculatedAt: Date;
 }, {
-    metrics: {
+    metrics: {,
         totalLikes?: number | undefined;
         viewCount?: number | undefined;
         totalShares?: number | undefined;
@@ -161,14 +161,14 @@ export declare const CommentScoreSchema: z.ZodObject<{
         replyEngagement?: number | undefined;
         uniqueEngagers?: number | undefined;
     };
-    trends: {
+    trends: {,
         hourlyGrowth?: number | undefined;
         dailyGrowth?: number | undefined;
         weeklyGrowth?: number | undefined;
         peakEngagementHour?: number | undefined;
         velocityTrend?: "declining" | "accelerating" | "steady" | "stagnant" | undefined;
     };
-    scores: {
+    scores: {,
         qualityScore: number;
         engagementScore: number;
         trendingScore: number;
@@ -190,7 +190,7 @@ export declare const TrendingAlgorithmConfigSchema: z.ZodObject<{
     description: z.ZodString;
     version: z.ZodDefault<z.ZodString>;
     enabled: z.ZodDefault<z.ZodBoolean>;
-    weights: z.ZodObject<{
+    weights: z.ZodObject<{,
         engagementWeight: z.ZodDefault<z.ZodNumber>;
         recencyWeight: z.ZodDefault<z.ZodNumber>;
         qualityWeight: z.ZodDefault<z.ZodNumber>;
@@ -212,7 +212,7 @@ export declare const TrendingAlgorithmConfigSchema: z.ZodObject<{
         controversyWeight?: number | undefined;
         viralityWeight?: number | undefined;
     }>;
-    parameters: z.ZodObject<{
+    parameters: z.ZodObject<{,
         timeDecayHalfLife: z.ZodDefault<z.ZodNumber>;
         minEngagementThreshold: z.ZodDefault<z.ZodNumber>;
         controversyBoostFactor: z.ZodDefault<z.ZodNumber>;
@@ -240,8 +240,8 @@ export declare const TrendingAlgorithmConfigSchema: z.ZodObject<{
         maxCommentAge?: number | undefined;
         boostNewAuthors?: boolean | undefined;
     }>;
-    moderationRules: z.ZodObject<{
-        autoFlag: z.ZodObject<{
+    moderationRules: z.ZodObject<{,
+        autoFlag: z.ZodObject<{,
             toxicityThreshold: z.ZodDefault<z.ZodNumber>;
             spamThreshold: z.ZodDefault<z.ZodNumber>;
             offTopicThreshold: z.ZodDefault<z.ZodNumber>;
@@ -254,7 +254,7 @@ export declare const TrendingAlgorithmConfigSchema: z.ZodObject<{
             spamThreshold?: number | undefined;
             offTopicThreshold?: number | undefined;
         }>;
-        autoPromote: z.ZodObject<{
+        autoPromote: z.ZodObject<{,
             qualityThreshold: z.ZodDefault<z.ZodNumber>;
             engagementThreshold: z.ZodDefault<z.ZodNumber>;
             authorReputationThreshold: z.ZodDefault<z.ZodNumber>;
@@ -268,23 +268,23 @@ export declare const TrendingAlgorithmConfigSchema: z.ZodObject<{
             authorReputationThreshold?: number | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
-        autoFlag: {
+        autoFlag: {,
             toxicityThreshold: number;
             spamThreshold: number;
             offTopicThreshold: number;
         };
-        autoPromote: {
+        autoPromote: {,
             qualityThreshold: number;
             engagementThreshold: number;
             authorReputationThreshold: number;
         };
     }, {
-        autoFlag: {
+        autoFlag: {,
             toxicityThreshold?: number | undefined;
             spamThreshold?: number | undefined;
             offTopicThreshold?: number | undefined;
         };
-        autoPromote: {
+        autoPromote: {,
             qualityThreshold?: number | undefined;
             engagementThreshold?: number | undefined;
             authorReputationThreshold?: number | undefined;
@@ -293,7 +293,7 @@ export declare const TrendingAlgorithmConfigSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     name: string;
     description: string;
-    parameters: {
+    parameters: {,
         timeDecayHalfLife: number;
         minEngagementThreshold: number;
         controversyBoostFactor: number;
@@ -303,7 +303,7 @@ export declare const TrendingAlgorithmConfigSchema: z.ZodObject<{
         maxCommentAge: number;
         boostNewAuthors: boolean;
     };
-    weights: {
+    weights: {,
         engagementWeight: number;
         recencyWeight: number;
         qualityWeight: number;
@@ -314,13 +314,13 @@ export declare const TrendingAlgorithmConfigSchema: z.ZodObject<{
     version: string;
     enabled: boolean;
     algorithmId: string;
-    moderationRules: {
-        autoFlag: {
+    moderationRules: {,
+        autoFlag: {,
             toxicityThreshold: number;
             spamThreshold: number;
             offTopicThreshold: number;
         };
-        autoPromote: {
+        autoPromote: {,
             qualityThreshold: number;
             engagementThreshold: number;
             authorReputationThreshold: number;
@@ -329,7 +329,7 @@ export declare const TrendingAlgorithmConfigSchema: z.ZodObject<{
 }, {
     name: string;
     description: string;
-    parameters: {
+    parameters: {,
         timeDecayHalfLife?: number | undefined;
         minEngagementThreshold?: number | undefined;
         controversyBoostFactor?: number | undefined;
@@ -339,7 +339,7 @@ export declare const TrendingAlgorithmConfigSchema: z.ZodObject<{
         maxCommentAge?: number | undefined;
         boostNewAuthors?: boolean | undefined;
     };
-    weights: {
+    weights: {,
         engagementWeight?: number | undefined;
         recencyWeight?: number | undefined;
         qualityWeight?: number | undefined;
@@ -348,13 +348,13 @@ export declare const TrendingAlgorithmConfigSchema: z.ZodObject<{
         viralityWeight?: number | undefined;
     };
     algorithmId: string;
-    moderationRules: {
-        autoFlag: {
+    moderationRules: {,
+        autoFlag: {,
             toxicityThreshold?: number | undefined;
             spamThreshold?: number | undefined;
             offTopicThreshold?: number | undefined;
         };
-        autoPromote: {
+        autoPromote: {,
             qualityThreshold?: number | undefined;
             engagementThreshold?: number | undefined;
             authorReputationThreshold?: number | undefined;
@@ -373,13 +373,13 @@ export declare const TrendingResultsSchema: z.ZodObject<{
     totalComments: z.ZodDefault<z.ZodNumber>;
     qualifiedComments: z.ZodDefault<z.ZodNumber>;
     trendingComments: z.ZodArray<any, "many">;
-    summary: z.ZodObject<{
+    summary: z.ZodObject<{,
         topEngagementType: z.ZodOptional<z.ZodEnum<["like", "dislike", "reply", "share", "helpful", "report"]>>;
         averageScore: z.ZodDefault<z.ZodNumber>;
         totalEngagements: z.ZodDefault<z.ZodNumber>;
         uniqueParticipants: z.ZodDefault<z.ZodNumber>;
         conversationHealth: z.ZodDefault<z.ZodEnum<["excellent", "good", "fair", "poor"]>>;
-        sentimentDistribution: z.ZodObject<{
+        sentimentDistribution: z.ZodObject<{,
             positive: z.ZodDefault<z.ZodNumber>;
             neutral: z.ZodDefault<z.ZodNumber>;
             negative: z.ZodDefault<z.ZodNumber>;
@@ -397,7 +397,7 @@ export declare const TrendingResultsSchema: z.ZodObject<{
         controversyLevel: z.ZodDefault<z.ZodEnum<["low", "medium", "high"]>>;
     }, "strip", z.ZodTypeAny, {
         averageScore: number;
-        sentimentDistribution: {
+        sentimentDistribution: {,
             positive: number;
             neutral: number;
             negative: number;
@@ -410,7 +410,7 @@ export declare const TrendingResultsSchema: z.ZodObject<{
         controversyLevel: "low" | "medium" | "high";
         topEngagementType?: "helpful" | "like" | "reply" | "share" | "report" | "dislike" | undefined;
     }, {
-        sentimentDistribution: {
+        sentimentDistribution: {,
             positive?: number | undefined;
             neutral?: number | undefined;
             negative?: number | undefined;
@@ -424,7 +424,7 @@ export declare const TrendingResultsSchema: z.ZodObject<{
         topHashtags?: string[] | undefined;
         controversyLevel?: "low" | "medium" | "high" | undefined;
     }>;
-    metadata: z.ZodObject<{
+    metadata: z.ZodObject<{,
         calculationTimeMs: z.ZodDefault<z.ZodNumber>;
         cacheHit: z.ZodDefault<z.ZodBoolean>;
         dataFreshness: z.ZodDefault<z.ZodNumber>;
@@ -441,15 +441,15 @@ export declare const TrendingResultsSchema: z.ZodObject<{
         algorithmVersion?: string | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
-    metadata: {
+    metadata: {,
         calculationTimeMs: number;
         cacheHit: boolean;
         dataFreshness: number;
         algorithmVersion: string;
     };
-    summary: {
+    summary: {,
         averageScore: number;
-        sentimentDistribution: {
+        sentimentDistribution: {,
             positive: number;
             neutral: number;
             negative: number;
@@ -471,14 +471,14 @@ export declare const TrendingResultsSchema: z.ZodObject<{
     qualifiedComments: number;
     trendingComments: any[];
 }, {
-    metadata: {
+    metadata: {,
         calculationTimeMs?: number | undefined;
         cacheHit?: boolean | undefined;
         dataFreshness?: number | undefined;
         algorithmVersion?: string | undefined;
     };
-    summary: {
-        sentimentDistribution: {
+    summary: {,
+        sentimentDistribution: {,
             positive?: number | undefined;
             neutral?: number | undefined;
             negative?: number | undefined;
@@ -504,7 +504,7 @@ export declare const TrendingResultsSchema: z.ZodObject<{
 export type TrendingResults = z.infer<typeof TrendingResultsSchema>;
 export declare const CommentAnalyticsSchema: z.ZodObject<{
     resourceId: z.ZodString;
-    timeRange: z.ZodObject<{
+    timeRange: z.ZodObject<{,
         start: z.ZodDate;
         end: z.ZodDate;
     }, "strip", z.ZodTypeAny, {
@@ -514,7 +514,7 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         start: Date;
         end: Date;
     }>;
-    metrics: z.ZodObject<{
+    metrics: z.ZodObject<{,
         totalComments: z.ZodDefault<z.ZodNumber>;
         totalEngagements: z.ZodDefault<z.ZodNumber>;
         uniqueCommenters: z.ZodDefault<z.ZodNumber>;
@@ -542,8 +542,8 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         responseRate?: number | undefined;
         moderationRate?: number | undefined;
     }>;
-    trends: z.ZodObject<{
-        commentVelocity: z.ZodDefault<z.ZodArray<z.ZodObject<{
+    trends: z.ZodObject<{,
+        commentVelocity: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             timestamp: z.ZodDate;
             count: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
@@ -553,7 +553,7 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
             timestamp: Date;
             count: number;
         }>, "many">>;
-        engagementTrends: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        engagementTrends: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             timestamp: z.ZodDate;
             likes: z.ZodNumber;
             replies: z.ZodNumber;
@@ -569,7 +569,7 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
             shares: number;
             replies: number;
         }>, "many">>;
-        sentimentTrends: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        sentimentTrends: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             timestamp: z.ZodDate;
             positive: z.ZodNumber;
             neutral: z.ZodNumber;
@@ -585,7 +585,7 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
             neutral: number;
             negative: number;
         }>, "many">>;
-        topicEvolution: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        topicEvolution: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             topic: z.ZodString;
             mentions: z.ZodNumber;
             sentiment: z.ZodNumber;
@@ -602,23 +602,23 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
             mentions: number;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        commentVelocity: {
+        commentVelocity: {,
             timestamp: Date;
             count: number;
         }[];
-        engagementTrends: {
+        engagementTrends: {,
             timestamp: Date;
             likes: number;
             shares: number;
             replies: number;
         }[];
-        sentimentTrends: {
+        sentimentTrends: {,
             timestamp: Date;
             positive: number;
             neutral: number;
             negative: number;
         }[];
-        topicEvolution: {
+        topicEvolution: {,
             period: string;
             sentiment: number;
             topic: string;
@@ -648,13 +648,13 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
             mentions: number;
         }[] | undefined;
     }>;
-    breakdowns: z.ZodObject<{
+    breakdowns: z.ZodObject<{,
         byEngagementType: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         byUserType: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         byTimeOfDay: z.ZodDefault<z.ZodArray<z.ZodNumber, "many">>;
         byDayOfWeek: z.ZodDefault<z.ZodArray<z.ZodNumber, "many">>;
         byLanguage: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
-        bySentiment: z.ZodObject<{
+        bySentiment: z.ZodObject<{,
             positive: z.ZodDefault<z.ZodNumber>;
             neutral: z.ZodDefault<z.ZodNumber>;
             negative: z.ZodDefault<z.ZodNumber>;
@@ -673,13 +673,13 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         byEngagementType: Record<string, number>;
         byUserType: Record<string, number>;
         byLanguage: Record<string, number>;
-        bySentiment: {
+        bySentiment: {,
             positive: number;
             neutral: number;
             negative: number;
         };
     }, {
-        bySentiment: {
+        bySentiment: {,
             positive?: number | undefined;
             neutral?: number | undefined;
             negative?: number | undefined;
@@ -690,12 +690,12 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         byUserType?: Record<string, number> | undefined;
         byLanguage?: Record<string, number> | undefined;
     }>;
-    insights: z.ZodObject<{
+    insights: z.ZodObject<{,
         mostEngagedTopics: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         influentialCommenters: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         emergingTrends: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         contentRecommendations: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        moderationAlerts: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        moderationAlerts: z.ZodDefault<z.ZodArray<z.ZodObject<{,
             type: z.ZodString;
             severity: z.ZodEnum<["low", "medium", "high", "critical"]>;
             message: z.ZodString;
@@ -716,7 +716,7 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         influentialCommenters: string[];
         emergingTrends: string[];
         contentRecommendations: string[];
-        moderationAlerts: {
+        moderationAlerts: {,
             message: string;
             type: string;
             severity: "low" | "medium" | "high" | "critical";
@@ -735,7 +735,7 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         }[] | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
-    metrics: {
+    metrics: {,
         totalComments: number;
         totalEngagements: number;
         uniqueCommenters: number;
@@ -745,36 +745,36 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         responseRate: number;
         moderationRate: number;
     };
-    trends: {
-        commentVelocity: {
+    trends: {,
+        commentVelocity: {,
             timestamp: Date;
             count: number;
         }[];
-        engagementTrends: {
+        engagementTrends: {,
             timestamp: Date;
             likes: number;
             shares: number;
             replies: number;
         }[];
-        sentimentTrends: {
+        sentimentTrends: {,
             timestamp: Date;
             positive: number;
             neutral: number;
             negative: number;
         }[];
-        topicEvolution: {
+        topicEvolution: {,
             period: string;
             sentiment: number;
             topic: string;
             mentions: number;
         }[];
     };
-    insights: {
+    insights: {,
         mostEngagedTopics: string[];
         influentialCommenters: string[];
         emergingTrends: string[];
         contentRecommendations: string[];
-        moderationAlerts: {
+        moderationAlerts: {,
             message: string;
             type: string;
             severity: "low" | "medium" | "high" | "critical";
@@ -782,24 +782,24 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         }[];
     };
     resourceId: string;
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };
-    breakdowns: {
+    breakdowns: {,
         byTimeOfDay: number[];
         byDayOfWeek: number[];
         byEngagementType: Record<string, number>;
         byUserType: Record<string, number>;
         byLanguage: Record<string, number>;
-        bySentiment: {
+        bySentiment: {,
             positive: number;
             neutral: number;
             negative: number;
         };
     };
 }, {
-    metrics: {
+    metrics: {,
         totalComments?: number | undefined;
         totalEngagements?: number | undefined;
         uniqueCommenters?: number | undefined;
@@ -809,7 +809,7 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         responseRate?: number | undefined;
         moderationRate?: number | undefined;
     };
-    trends: {
+    trends: {,
         commentVelocity?: {
             timestamp: Date;
             count: number;
@@ -833,7 +833,7 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
             mentions: number;
         }[] | undefined;
     };
-    insights: {
+    insights: {,
         mostEngagedTopics?: string[] | undefined;
         influentialCommenters?: string[] | undefined;
         emergingTrends?: string[] | undefined;
@@ -846,12 +846,12 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         }[] | undefined;
     };
     resourceId: string;
-    timeRange: {
+    timeRange: {,
         start: Date;
         end: Date;
     };
-    breakdowns: {
-        bySentiment: {
+    breakdowns: {,
+        bySentiment: {,
             positive?: number | undefined;
             neutral?: number | undefined;
             negative?: number | undefined;
@@ -899,7 +899,7 @@ export declare const GetTrendingCommentsRequestSchema: z.ZodObject<{
     minScore?: number | undefined;
 }>;
 export declare const TrendingCommentsResponseSchema: z.ZodObject<{
-    results: z.ZodObject<{
+    results: z.ZodObject<{,
         resourceId: z.ZodString;
         resourceType: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
         period: z.ZodEnum<["1h", "6h", "24h", "7d", "30d", "all_time"]>;
@@ -908,13 +908,13 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
         totalComments: z.ZodDefault<z.ZodNumber>;
         qualifiedComments: z.ZodDefault<z.ZodNumber>;
         trendingComments: z.ZodArray<any, "many">;
-        summary: z.ZodObject<{
+        summary: z.ZodObject<{,
             topEngagementType: z.ZodOptional<z.ZodEnum<["like", "dislike", "reply", "share", "helpful", "report"]>>;
             averageScore: z.ZodDefault<z.ZodNumber>;
             totalEngagements: z.ZodDefault<z.ZodNumber>;
             uniqueParticipants: z.ZodDefault<z.ZodNumber>;
             conversationHealth: z.ZodDefault<z.ZodEnum<["excellent", "good", "fair", "poor"]>>;
-            sentimentDistribution: z.ZodObject<{
+            sentimentDistribution: z.ZodObject<{,
                 positive: z.ZodDefault<z.ZodNumber>;
                 neutral: z.ZodDefault<z.ZodNumber>;
                 negative: z.ZodDefault<z.ZodNumber>;
@@ -932,7 +932,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
             controversyLevel: z.ZodDefault<z.ZodEnum<["low", "medium", "high"]>>;
         }, "strip", z.ZodTypeAny, {
             averageScore: number;
-            sentimentDistribution: {
+            sentimentDistribution: {,
                 positive: number;
                 neutral: number;
                 negative: number;
@@ -945,7 +945,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
             controversyLevel: "low" | "medium" | "high";
             topEngagementType?: "helpful" | "like" | "reply" | "share" | "report" | "dislike" | undefined;
         }, {
-            sentimentDistribution: {
+            sentimentDistribution: {,
                 positive?: number | undefined;
                 neutral?: number | undefined;
                 negative?: number | undefined;
@@ -959,7 +959,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
             topHashtags?: string[] | undefined;
             controversyLevel?: "low" | "medium" | "high" | undefined;
         }>;
-        metadata: z.ZodObject<{
+        metadata: z.ZodObject<{,
             calculationTimeMs: z.ZodDefault<z.ZodNumber>;
             cacheHit: z.ZodDefault<z.ZodBoolean>;
             dataFreshness: z.ZodDefault<z.ZodNumber>;
@@ -976,15 +976,15 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
             algorithmVersion?: string | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
-        metadata: {
+        metadata: {,
             calculationTimeMs: number;
             cacheHit: boolean;
             dataFreshness: number;
             algorithmVersion: string;
         };
-        summary: {
+        summary: {,
             averageScore: number;
-            sentimentDistribution: {
+            sentimentDistribution: {,
                 positive: number;
                 neutral: number;
                 negative: number;
@@ -1006,14 +1006,14 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
         qualifiedComments: number;
         trendingComments: any[];
     }, {
-        metadata: {
+        metadata: {,
             calculationTimeMs?: number | undefined;
             cacheHit?: boolean | undefined;
             dataFreshness?: number | undefined;
             algorithmVersion?: string | undefined;
         };
-        summary: {
-            sentimentDistribution: {
+        summary: {,
+            sentimentDistribution: {,
                 positive?: number | undefined;
                 neutral?: number | undefined;
                 negative?: number | undefined;
@@ -1036,7 +1036,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
         totalComments?: number | undefined;
         qualifiedComments?: number | undefined;
     }>;
-    pagination: z.ZodObject<{
+    pagination: z.ZodObject<{,
         total: z.ZodNumber;
         limit: z.ZodNumber;
         offset: z.ZodNumber;
@@ -1052,7 +1052,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
         total: number;
         hasMore: boolean;
     }>;
-    meta: z.ZodObject<{
+    meta: z.ZodObject<{,
         requestId: z.ZodString;
         processingTime: z.ZodNumber;
         cacheStatus: z.ZodEnum<["hit", "miss", "stale"]>;
@@ -1072,23 +1072,23 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
         cacheStatus: "hit" | "miss" | "stale";
     }>;
 }, "strip", z.ZodTypeAny, {
-    meta: {
+    meta: {,
         requestId: string;
         algorithm: string;
         processingTime: number;
         dataFreshness: number;
         cacheStatus: "hit" | "miss" | "stale";
     };
-    results: {
-        metadata: {
+    results: {,
+        metadata: {,
             calculationTimeMs: number;
             cacheHit: boolean;
             dataFreshness: number;
             algorithmVersion: string;
         };
-        summary: {
+        summary: {,
             averageScore: number;
-            sentimentDistribution: {
+            sentimentDistribution: {,
                 positive: number;
                 neutral: number;
                 negative: number;
@@ -1110,29 +1110,29 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
         qualifiedComments: number;
         trendingComments: any[];
     };
-    pagination: {
+    pagination: {,
         limit: number;
         offset: number;
         total: number;
         hasMore: boolean;
     };
 }, {
-    meta: {
+    meta: {,
         requestId: string;
         algorithm: string;
         processingTime: number;
         dataFreshness: number;
         cacheStatus: "hit" | "miss" | "stale";
     };
-    results: {
-        metadata: {
+    results: {,
+        metadata: {,
             calculationTimeMs?: number | undefined;
             cacheHit?: boolean | undefined;
             dataFreshness?: number | undefined;
             algorithmVersion?: string | undefined;
         };
-        summary: {
-            sentimentDistribution: {
+        summary: {,
+            sentimentDistribution: {,
                 positive?: number | undefined;
                 neutral?: number | undefined;
                 negative?: number | undefined;
@@ -1155,7 +1155,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
         totalComments?: number | undefined;
         qualifiedComments?: number | undefined;
     };
-    pagination: {
+    pagination: {,
         limit: number;
         offset: number;
         total: number;
@@ -1167,17 +1167,17 @@ export type TrendingCommentsResponse = z.infer<typeof TrendingCommentsResponseSc
 export declare export declare export declare export interface TrendingSystemConfig {
     enabledAlgorithms: string[];
     defaultAlgorithm: string;
-    cacheSettings: {
+    cacheSettings: {,
         trendingCacheTTL: number;
         scoreCacheTTL: number;
         analyticsCacheTTL: number;
     };
-    moderationSettings: {
+    moderationSettings: {,
         autoModerationEnabled: boolean;
         humanReviewThreshold: number;
         quarantineThreshold: number;
     };
-    performanceSettings: {
+    performanceSettings: {,
         maxCommentsToAnalyze: number;
         batchSize: number;
         maxConcurrentCalculations: number;

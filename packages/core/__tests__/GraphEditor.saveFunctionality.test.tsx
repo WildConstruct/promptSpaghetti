@@ -1,7 +1,6 @@
 /**
  * Tests for GraphEditor Save Functionality - Story 6.1
  */
-
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, test, expect, beforeEach, jest } from '@jest/globals';
@@ -9,18 +8,18 @@ import { GraphEditor } from '../GraphEditor';
 import { useGraphStore } from '../graphStore';
 
 // Mock the graph store
-jest.mock('../graphStore', () => ({
+jest.mock('../graphStore', () => ({)
   useGraphStore: jest.fn<unknown[], unknown>()
 }));
 
 // Mock external dependencies
-jest.mock('reactflow', () => ({
+jest.mock('reactflow', () => ({)
   ReactFlowProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   ReactFlow: () => <div data-testid="react-flow">ReactFlow</div>,
   Background: () => <div>Background</div>,
   Controls: () => <div>Controls</div>,
   MiniMap: () => <div>MiniMap</div>,
-  useReactFlow: () => ({
+  useReactFlow: () => ({)
     fitView: jest.fn<unknown[], unknown>(),
     setNodes: jest.fn<unknown[], unknown>(),
     setEdges: jest.fn<unknown[], unknown>()
@@ -30,152 +29,122 @@ jest.mock('reactflow', () => ({
 }));
 
 // Mock other components
-jest.mock('../components/Inspector', () => ({
+jest.mock('../components/Inspector', () => ({)
   InspectorPanel: () => <div data-testid="inspector-panel">Inspector</div>,
   SmoothInspectorPanel: () => <div data-testid="smooth-inspector-panel">Smooth Inspector</div>
 }));
-
-jest.mock('../Palette', () => ({
+jest.mock('../Palette', () => ({)
   Palette: () => <div data-testid="palette">Palette</div>
 }));
 
 // Mock all heavy components to avoid dependency issues
-jest.mock('../components/ExtensionManager/ExtensionManagerPanel', () => ({
+jest.mock('../components/ExtensionManager/ExtensionManagerPanel', () => ({)
   ExtensionManagerPanel: () => <div>ExtensionManager</div>
 }));
-
-jest.mock('../ResponsiveCorrectionsPanel', () => ({
+jest.mock('../ResponsiveCorrectionsPanel', () => ({)
   ResponsiveCorrectionsPanel: () => <div>ResponsiveCorrectionsPanel</div>
 }));
-
-jest.mock('../components/CorrectionsStatsDashboard', () => ({
+jest.mock('../components/CorrectionsStatsDashboard', () => ({)
   CorrectionsStatsDashboard: () => <div>CorrectionsStatsDashboard</div>
 }));
-
-jest.mock('../correctionsStore', () => ({
+jest.mock('../correctionsStore', () => ({)
   useCorrectionsEnabled: () => true
 }));
-
-jest.mock('../palette/TabbedPalette', () => ({
+jest.mock('../palette/TabbedPalette', () => ({)
   TabbedPalette: () => <div>TabbedPalette</div>
 }));
-
-jest.mock('../components/NodeRenderer', () => ({
+jest.mock('../components/NodeRenderer', () => ({)
   NodeRenderer: () => <div>NodeRenderer</div>
 }));
-
-jest.mock('../components/VariablePortNodeRenderer', () => ({
+jest.mock('../components/VariablePortNodeRenderer', () => ({)
   VariablePortNodeRenderer: () => <div>VariablePortNodeRenderer</div>
 }));
-
-jest.mock('../components/RestorePrompt', () => ({
+jest.mock('../components/RestorePrompt', () => ({)
   RestorePrompt: () => <div>RestorePrompt</div>
 }));
-
-jest.mock('../components/EncryptionStatus', () => ({
+jest.mock('../components/EncryptionStatus', () => ({)
   EncryptionState: {},
   EncryptionAlgorithm: {}
 }));
-
-jest.mock('../nodeSchemas', () => ({
+jest.mock('../nodeSchemas', () => ({)
   nodeSchemas: {}
 }));
-
-jest.mock('../utils/canvasOptimization', () => ({
-  useCanvasOptimization: () => ({
+jest.mock('../utils/canvasOptimization', () => ({)
+  useCanvasOptimization: () => ({)
     optimizer: {},
     metrics: { fps: 60, visibleNodes: 10 },
-    isPerformanceGood: true
+    isPerformanceGood: true,
   }),
   CanvasOptimizer: {}
 }));
-
-jest.mock('../utils/smoothAnimations', () => ({
+jest.mock('../utils/smoothAnimations', () => ({)
   globalAnimationManager: {}
 }));
-
-jest.mock('../components/LoadingStates/ProfessionalSpinner', () => ({
+jest.mock('../components/LoadingStates/ProfessionalSpinner', () => ({)
   ProfessionalSpinner: () => <div>ProfessionalSpinner</div>
 }));
-
-jest.mock('../components/Nodes/SmoothNodeWrapper', () => ({
+jest.mock('../components/Nodes/SmoothNodeWrapper', () => ({)
   SmoothNodeWrapper: () => <div>SmoothNodeWrapper</div>
 }));
-
-jest.mock('../components/Demo/DemoModeManager', () => ({
+jest.mock('../components/Demo/DemoModeManager', () => ({)
   DemoModeManager: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
 }));
-
-jest.mock('../components/Demo/DemoPerformanceTester', () => ({
+jest.mock('../components/Demo/DemoPerformanceTester', () => ({)
   DemoPerformanceTester: () => <div>DemoPerformanceTester</div>
 }));
 
 // Mock all the Epic 8 components
-jest.mock('../components/GraphOptimization', () => ({
+jest.mock('../components/GraphOptimization', () => ({)
   GraphAnalysisPanel: () => <div>GraphAnalysisPanel</div>,
   PerformanceMonitor: () => <div>PerformanceMonitor</div>,
   OptimizationControls: () => <div>OptimizationControls</div>
 }));
-
-jest.mock('../components/StickyNotes/StickyNotesManager', () => ({
+jest.mock('../components/StickyNotes/StickyNotesManager', () => ({)
   StickyNotesManager: () => <div>StickyNotesManager</div>
 }));
-
-jest.mock('../components/NodeLabels/NodeLabelsManager', () => ({
+jest.mock('../components/NodeLabels/NodeLabelsManager', () => ({)
   NodeLabelsManager: () => <div>NodeLabelsManager</div>
 }));
-
-jest.mock('../components/RegionGroups/RegionGroupsManager', () => ({
+jest.mock('../components/RegionGroups/RegionGroupsManager', () => ({)
   RegionGroupsManager: () => <div>RegionGroupsManager</div>
 }));
-
-jest.mock('../components/Annotations/ConnectionAnnotationsLayer', () => ({
+jest.mock('../components/Annotations/ConnectionAnnotationsLayer', () => ({)
   ConnectionAnnotationsLayer: () => <div>ConnectionAnnotationsLayer</div>
 }));
-
-jest.mock('../components/Preview/RealTimePreviewPanel', () => ({
+jest.mock('../components/Preview/RealTimePreviewPanel', () => ({)
   RealTimePreviewPanel: () => <div>RealTimePreviewPanel</div>
 }));
-
-jest.mock('../components/Preview/IndividualResultManager', () => ({
+jest.mock('../components/Preview/IndividualResultManager', () => ({)
   IndividualResultManager: () => <div>IndividualResultManager</div>
 }));
-
-jest.mock('../components/DirectorToolbar/DirectorPreviewToolbar', () => ({
+jest.mock('../components/DirectorToolbar/DirectorPreviewToolbar', () => ({)
   DirectorPreviewToolbar: () => <div>DirectorPreviewToolbar</div>
 }));
-
-jest.mock('../components/Modal/SettingsModal', () => ({
+jest.mock('../components/Modal/SettingsModal', () => ({)
   SettingsModal: () => <div>SettingsModal</div>
 }));
-
-jest.mock('../components/ContextualHelp', () => ({
+jest.mock('../components/ContextualHelp', () => ({)
   ContextualHelpSystem: () => <div>ContextualHelpSystem</div>,
-  helpContentManager: {
+  helpContentManager: {,
     updateProgress: jest.fn<unknown[], unknown>(),
     markContentViewed: jest.fn<unknown[], unknown>()
   }
 }));
-
-jest.mock('../components/TemplateDialogs/SaveTemplateDialog', () => ({
+jest.mock('../components/TemplateDialogs/SaveTemplateDialog', () => ({)
   SaveTemplateDialog: () => <div>SaveTemplateDialog</div>
 }));
-
-jest.mock('../components/TemplateDialogs/TemplateBrowser', () => ({
+jest.mock('../components/TemplateDialogs/TemplateBrowser', () => ({)
   TemplateBrowser: () => <div>TemplateBrowser</div>
 }));
-
-jest.mock('../components/ProjectDialogs/ExportBundleDialog', () => ({
+jest.mock('../components/ProjectDialogs/ExportBundleDialog', () => ({)
   ExportBundleDialog: () => <div>ExportBundleDialog</div>,
   default: () => <div>ExportBundleDialog</div>
 }));
-
-jest.mock('../validation', () => ({
+jest.mock('../validation', () => ({)
   ValidationError: {}
 }));
-
-jest.mock('../components/StatusBar', () => ({
-  StatusBar: ({ onSaveProject, onLoadProject, onNewProject }: unknown) => (
+jest.mock('../components/StatusBar', () => ({)
+  StatusBar: ({ onSaveProject, onLoadProject, onNewProject }: unknown) => ()
     <div data-testid="status-bar">
       <button data-testid="save-button" onClick={onSaveProject}>Save</button>
       <button data-testid="load-button" onClick={onLoadProject}>Load</button>
@@ -183,10 +152,9 @@ jest.mock('../components/StatusBar', () => ({
     </div>
   )
 }));
-
-jest.mock('../components/ProjectDialogs/SaveProjectDialog', () => ({
+jest.mock('../components/ProjectDialogs/SaveProjectDialog', () => ({)
   SaveProjectDialog: ({ isOpen, onClose, onSave }: unknown) => 
-    isOpen ? (
+    isOpen ? ()
       <div data-testid="save-dialog">
         <button data-testid="save-dialog-close" onClick={onClose}>Close</button>
         <button 
@@ -198,7 +166,7 @@ jest.mock('../components/ProjectDialogs/SaveProjectDialog', () => ({
       </div>
     ) : null,
   default: ({ isOpen, onClose, onSave }: unknown) => 
-    isOpen ? (
+    isOpen ? ()
       <div data-testid="save-dialog">
         <button data-testid="save-dialog-close" onClick={onClose}>Close</button>
         <button 
@@ -210,10 +178,9 @@ jest.mock('../components/ProjectDialogs/SaveProjectDialog', () => ({
       </div>
     ) : null
 }));
-
-jest.mock('../components/ProjectDialogs/LoadProjectDialog', () => ({
+jest.mock('../components/ProjectDialogs/LoadProjectDialog', () => ({)
   LoadProjectDialog: ({ isOpen, onClose, onLoad }: unknown) => 
-    isOpen ? (
+    isOpen ? ()
       <div data-testid="load-dialog">
         <button data-testid="load-dialog-close" onClick={onClose}>Close</button>
         <button 
@@ -225,7 +192,7 @@ jest.mock('../components/ProjectDialogs/LoadProjectDialog', () => ({
       </div>
     ) : null,
   default: ({ isOpen, onClose, onLoad }: unknown) => 
-    isOpen ? (
+    isOpen ? ()
       <div data-testid="load-dialog">
         <button data-testid="load-dialog-close" onClick={onClose}>Close</button>
         <button 
@@ -239,12 +206,11 @@ jest.mock('../components/ProjectDialogs/LoadProjectDialog', () => ({
 }));
 
 // Mock all the other heavy dependencies
-jest.mock('../PreviewModal', () => ({
+jest.mock('../PreviewModal', () => ({)
   PreviewModal: () => <div>PreviewModal</div>
 }));
-
-jest.mock('../usePreviewSeeds', () => ({
-  usePreviewSeeds: () => ({
+jest.mock('../usePreviewSeeds', () => ({)
+  usePreviewSeeds: () => ({)
     runPreview: jest.fn<unknown[], unknown>(),
     previewResults: [],
     previewLoading: false,
@@ -252,32 +218,27 @@ jest.mock('../usePreviewSeeds', () => ({
     cancelPreview: jest.fn<unknown[], unknown>()
   })
 }));
-
-jest.mock('../hooks/useValidation', () => ({
-  useValidation: () => ({
+jest.mock('../hooks/useValidation', () => ({)
+  useValidation: () => ({)
     errors: [],
     validateGraph: jest.fn<unknown[], unknown>()
   })
 }));
-
-jest.mock('../hooks/useAutosave', () => ({
-  useAutosave: () => ({
+jest.mock('../hooks/useAutosave', () => ({)
+  useAutosave: () => ({)
     showRestorePrompt: false,
     restoreDraft: jest.fn<unknown[], unknown>(),
     setShowRestorePrompt: jest.fn<unknown[], unknown>()
   })
 }));
-
-jest.mock('../hooks/useNodeUtils', () => ({
-  useNodeUtils: () => ({
+jest.mock('../hooks/useNodeUtils', () => ({)
+  useNodeUtils: () => ({)
     addNode: jest.fn<unknown[], unknown>(),
     updateNode: jest.fn<unknown[], unknown>(),
     removeNode: jest.fn<unknown[], unknown>()
   })
 }));
-
 const mockUseGraphStore = useGraphStore as jest.MockedFunction<typeof useGraphStore>;
-
 describe('GraphEditor Save Functionality', () => {
   const mockGraphStoreState = {
     nodes: [],
@@ -290,7 +251,7 @@ describe('GraphEditor Save Functionality', () => {
     applyTemplate: jest.fn<unknown[], unknown>(),
     // Add other required store properties
     stickyNotes: [],
-    annotations: {
+    annotations: {,
       stickyNotes: [],
       nodeLabels: {},
       nodeLabelConfigs: {},
@@ -300,17 +261,17 @@ describe('GraphEditor Save Functionality', () => {
       labelPreferences: {},
       regionGroupPreferences: {},
       connectionAnnotationPreferences: {},
-      metadata: {
+      metadata: {,
         author: 'Test',
         created: new Date().toISOString(),
         modified: new Date().toISOString(),
-        version: '1.0.0'
+        version: '1.0.0',
       }
     },
-    projectSettings: {
+    projectSettings: {,
       autoSave: true,
       backupInterval: 5,
-      maxBackups: 10
+      maxBackups: 10,
     },
     isAutoSaveEnabled: true,
     setNodes: jest.fn<unknown[], unknown>(),
@@ -361,149 +322,115 @@ describe('GraphEditor Save Functionality', () => {
     loadGraphData: jest.fn<unknown[], unknown>(),
     getTemplateCompatibleData: jest.fn<unknown[], unknown>()
   };
-
   beforeEach(() => {
     mockUseGraphStore.mockReturnValue(mockGraphStoreState as unknown);
     jest.clearAllMocks();
   });
-
   test('renders save button in status bar', () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
-    
     expect(screen.getByTestId('save-button')).toBeInTheDocument();
   });
-
   test('opens save dialog when save button is clicked', async () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
-    
     const saveButton = screen.getByTestId('save-button');
     fireEvent.click(saveButton);
-    
     await waitFor(() => {
       expect(screen.getByTestId('save-dialog')).toBeInTheDocument();
     });
   });
-
   test('opens load dialog when load button is clicked', async () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
-    
     const loadButton = screen.getByTestId('load-button');
     fireEvent.click(loadButton);
-    
     await waitFor(() => {
       expect(screen.getByTestId('load-dialog')).toBeInTheDocument();
     });
   });
-
   test('handles keyboard shortcut Ctrl+S to save', async () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
-    
     // Simulate Ctrl+S
-    fireEvent.keyDown(document, {
+    fireEvent.keyDown(document, {)
       key: 's',
       ctrlKey: true,
       preventDefault: jest.fn<unknown[], unknown>()
     });
-    
     await waitFor(() => {
       expect(screen.getByTestId('save-dialog')).toBeInTheDocument();
     });
   });
-
   test('handles keyboard shortcut Cmd+S to save on Mac', async () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
-    
     // Simulate Cmd+S (metaKey)
-    fireEvent.keyDown(document, {
+    fireEvent.keyDown(document, {)
       key: 's',
       metaKey: true,
       preventDefault: jest.fn<unknown[], unknown>()
     });
-    
     await waitFor(() => {
       expect(screen.getByTestId('save-dialog')).toBeInTheDocument();
     });
   });
-
   test('handles keyboard shortcut Ctrl+O to load', async () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
-    
     // Simulate Ctrl+O
-    fireEvent.keyDown(document, {
+    fireEvent.keyDown(document, {)
       key: 'o',
       ctrlKey: true,
       preventDefault: jest.fn<unknown[], unknown>()
     });
-    
     await waitFor(() => {
       expect(screen.getByTestId('load-dialog')).toBeInTheDocument();
     });
   });
-
   test('prevents default browser behavior for save shortcuts', async () => {
     const preventDefault = jest.fn<unknown[], unknown>();
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
-    
-    fireEvent.keyDown(document, {
+    fireEvent.keyDown(document, {)
       key: 's',
       ctrlKey: true,
       preventDefault
     });
-    
     expect(preventDefault).toHaveBeenCalled();
   });
-
   test('closes save dialog when close button is clicked', async () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
-    
     // Open save dialog
     const saveButton = screen.getByTestId('save-button');
     fireEvent.click(saveButton);
-    
     await waitFor(() => {
       expect(screen.getByTestId('save-dialog')).toBeInTheDocument();
     });
-    
     // Close dialog
     const closeButton = screen.getByTestId('save-dialog-close');
     fireEvent.click(closeButton);
-    
     await waitFor(() => {
       expect(screen.queryByTestId('save-dialog')).not.toBeInTheDocument();
     });
   });
-
   test('handles successful save operation', async () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
-    
     // Open save dialog
     const saveButton = screen.getByTestId('save-button');
     fireEvent.click(saveButton);
-    
     await waitFor(() => {
       expect(screen.getByTestId('save-dialog')).toBeInTheDocument();
     });
-    
     // Submit save
     const submitButton = screen.getByTestId('save-dialog-submit');
     fireEvent.click(submitButton);
-    
     // Dialog should close on successful save
     await waitFor(() => {
       expect(screen.queryByTestId('save-dialog')).not.toBeInTheDocument();
     });
   });
-
   test('ignores Alt+S shortcut for settings modal', async () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
-    
     // Simulate Alt+S (should not open save dialog)
-    fireEvent.keyDown(document, {
+    fireEvent.keyDown(document, {)
       key: 's',
       altKey: true,
       preventDefault: jest.fn<unknown[], unknown>()
     });
-    
     // Save dialog should not open
     expect(screen.queryByTestId('save-dialog')).not.toBeInTheDocument();
   });

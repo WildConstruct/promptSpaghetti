@@ -4,7 +4,6 @@
  * Consolidated real-time dashboard integrating all 12+ analytics systems
  * through the unified event bus with WebSocket streaming and performance widgets.
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { UnifiedEventBus, UnifiedAnalyticsEvent, EventFilter, AnalyticsEventType, EventCategory } from './UnifiedEventBus';
 import { EventRepository } from './EventPersistenceLayer';
@@ -65,13 +64,11 @@ interface DashboardMetrics {
   topSources: Array<{ source: string; count: number; percentage: number }>;
   recentEvents: UnifiedAnalyticsEvent[];
 }
-
 interface TimeSeriesData {
   timestamp: number;
   value: number;
   label?: string;
 }
-
 interface HeatMapData {
   x: number;
   y: number;
@@ -87,11 +84,10 @@ interface RealTimeDashboardProps {
   config?: Partial<DashboardConfig>;
   onWidgetError?: (widgetId: string, error: Error) => void;
 }
-
 /**
  * Real-time Analytics Dashboard Component
  */
-export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
+export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
   eventBus,
   eventRepository,
   authService,
@@ -100,7 +96,7 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
   onWidgetError
 }) => {
   // Configuration
-  const config: DashboardConfig = useMemo(() => ({
+  const config: DashboardConfig = useMemo(() => ({)
     refreshInterval: 5000,
     maxEventsDisplay: 100,
     enableWebSocket: true,
@@ -110,9 +106,8 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
     theme: 'light',
     ...configOverride
   }), [configOverride]);
-
   // State
-  const [dashboardMetrics, setDashboardMetrics] = useState<DashboardMetrics>({
+  const [dashboardMetrics, setDashboardMetrics] = useState<DashboardMetrics>({)
     totalEvents: 0,
     eventsPerSecond: 0,
     activeUsers: 0,
@@ -121,9 +116,8 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
     systemHealth: 100,
     integrationStatus: {},
     topSources: [],
-    recentEvents: []
+    recentEvents: [],
   });
-
   const [widgets, setWidgets] = useState<WidgetConfig[]>([]);
   const [timeSeriesData, setTimeSeriesData] = useState<{ [widgetId: string]: TimeSeriesData[] }>({});
   const [heatMapData, setHeatMapData] = useState<HeatMapData[]>([]);
@@ -131,10 +125,8 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
   const [lastUpdate, setLastUpdate] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   // WebSocket connection for real-time updates
   const [eventStream, setEventStream] = useState<EventTarget | null>(null);
-
   /**
    * Initialize dashboard
    */
@@ -146,74 +138,64 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
       }
     };
   }, []);
-
   /**
    * Initialize dashboard configuration and widgets
    */
   const initializeDashboard = async () => {
     try {
       setLoading(true);
-      
       // Check dashboard access authorization
       const dashboardAuth = await authService.authorizeDashboardAccess('user', authContext);
       if (!dashboardAuth.allowed) {
-        setError(`Dashboard access denied: ${dashboardAuth.reason}`);
+        setError(`Dashboard access denied: ${dashboardAuth.reason}`);}
         return;
       }
-
       // Initialize default widgets based on user permissions
       const defaultWidgets = await createDefaultWidgets();
       setWidgets(defaultWidgets);
-
       // Setup real-time event stream if enabled
       if (config.enableWebSocket) {
         await setupEventStream();
       }
-
       // Initial data load
       await refreshDashboardData();
-      
       setLoading(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to initialize dashboard');
       setLoading(false);
     }
   };
-
   /**
    * Create default widgets based on user permissions
    */
   const createDefaultWidgets = async (): Promise<WidgetConfig[]> => {
     const authSummary = authService.getAuthorizationSummary(authContext);
     const widgets: WidgetConfig[] = [];
-
     // Event Stream Widget (always available if user can view events)
     if (authSummary.capabilities.canViewEvents) {
-      widgets.push({
+      widgets.push({)
         id: 'event-stream',
         type: WidgetType.EVENT_STREAM,
         title: 'Recent Events',
         position: { x: 0, y: 0, width: 6, height: 8 },
         enabled: true,
         collapsed: false,
-        refreshRate: 2000
+        refreshRate: 2000,
       });
     }
-
     // Metrics Summary Widget
     if (authSummary.capabilities.canViewAnalytics) {
-      widgets.push({
+      widgets.push({)
         id: 'metrics-summary',
         type: WidgetType.METRICS_SUMMARY,
         title: 'Analytics Summary',
         position: { x: 6, y: 0, width: 6, height: 4 },
         enabled: true,
-        collapsed: false
+        collapsed: false,
       });
     }
-
     // Performance Metrics Widget
-    widgets.push({
+    widgets.push({)
       id: 'performance-metrics',
       type: WidgetType.PERFORMANCE_METRICS,
       title: 'Performance Metrics',
@@ -222,22 +204,20 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
       enabled: true,
       collapsed: false,
       chartType: 'line',
-      timeGranularity: 'minute'
+      timeGranularity: 'minute',
     });
-
     // Error Rate Widget
-    widgets.push({
+    widgets.push({)
       id: 'error-rate',
       type: WidgetType.ERROR_RATE,
       title: 'Error Rate',
       position: { x: 4, y: 8, width: 4, height: 6 },
       enabled: true,
       collapsed: false,
-      chartType: 'area'
+      chartType: 'area',
     });
-
     // User Activity Widget
-    widgets.push({
+    widgets.push({)
       id: 'user-activity',
       type: WidgetType.USER_ACTIVITY,
       title: 'User Activity',
@@ -245,51 +225,46 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
       filter: { categories: [EventCategory.USER] },
       enabled: true,
       collapsed: false,
-      chartType: 'bar'
+      chartType: 'bar',
     });
-
     // System Health Widget (admin only)
     if (authSummary.capabilities.canViewAdminDashboard) {
-      widgets.push({
+      widgets.push({)
         id: 'system-health',
         type: WidgetType.SYSTEM_HEALTH,
         title: 'System Health',
         position: { x: 6, y: 4, width: 6, height: 4 },
         enabled: true,
-        collapsed: false
+        collapsed: false,
       });
     }
-
     // Integration Status Widget
-    widgets.push({
+    widgets.push({)
       id: 'integration-status',
       type: WidgetType.INTEGRATION_STATUS,
       title: 'Integration Status',
       position: { x: 0, y: 14, width: 6, height: 4 },
       filter: { categories: [EventCategory.INTEGRATION] },
       enabled: true,
-      collapsed: false
+      collapsed: false,
     });
-
     // Security Events Widget (if user has security permissions)
     if (authSummary.capabilities.canViewEvents) {
-      widgets.push({
+      widgets.push({)
         id: 'security-events',
         type: WidgetType.SECURITY_EVENTS,
         title: 'Security Events',
         position: { x: 6, y: 14, width: 6, height: 4 },
-        filter: { 
+        filter: { ,
           types: [AnalyticsEventType.SECURITY_EVENT, AnalyticsEventType.FRAUD_DETECTION],
-          categories: [EventCategory.SECURITY] 
+          categories: [EventCategory.SECURITY] ,
         },
         enabled: true,
-        collapsed: false
+        collapsed: false,
       });
     }
-
     return widgets;
   };
-
   /**
    * Setup real-time event stream
    */
@@ -301,57 +276,45 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
         console.warn('Real-time stream access denied');
         return;
       }
-
       // Create event stream with user's authorized filter
       const stream = eventBus.getEventStream(queryAuth.filteredQuery || {});
       setEventStream(stream);
-      
       stream.addEventListener('event', handleRealTimeEvent);
       setIsConnected(true);
-      
       console.log('Real-time event stream connected');
     } catch (err) {
       console.error('Failed to setup event stream:', err);
       setIsConnected(false);
     }
   };
-
   /**
    * Handle real-time event updates
    */
   const handleRealTimeEvent = useCallback((event: CustomEvent<UnifiedAnalyticsEvent>) => {
     const analyticsEvent = event.detail;
-    
     // Update dashboard metrics with new event
-    setDashboardMetrics(prev => ({
+    setDashboardMetrics(prev => ({)
       ...prev,
       totalEvents: prev.totalEvents + 1,
       recentEvents: [analyticsEvent, ...prev.recentEvents.slice(0, config.maxEventsDisplay - 1)]
     }));
-
     // Update time series data for relevant widgets
     updateTimeSeriesData(analyticsEvent);
-    
     setLastUpdate(Date.now());
   }, [config.maxEventsDisplay]);
-
   /**
    * Update time series data with new event
    */
   const updateTimeSeriesData = (event: UnifiedAnalyticsEvent) => {
     const timestamp = event.timestamp;
-    
-    setTimeSeriesData(prev => {
+    setTimeSeriesData(prev => {)
       const updated = { ...prev };
-      
       // Update data for each widget that tracks time series
-      widgets.forEach(widget => {
-        if (widget.type === WidgetType.TIME_SERIES_CHART || 
+      widgets.forEach(widget => {)
+        if (widget.type === WidgetType.TIME_SERIES_CHART || )
             widget.type === WidgetType.PERFORMANCE_METRICS ||
             widget.type === WidgetType.ERROR_RATE) {
-          
           if (!updated[widget.id]) updated[widget.id] = [];
-          
           // Add new data point
           updated[widget.id] = [
             ...updated[widget.id],
@@ -359,87 +322,73 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
           ].slice(-100); // Keep last 100 points
         }
       });
-      
       return updated;
     });
   };
-
   /**
    * Refresh dashboard data
    */
   const refreshDashboardData = async () => {
     try {
       const now = Date.now();
-      const timeRange = config.defaultTimeRange * 60 * 60 * 1000; // Convert hours to milliseconds
+      const timeRange = config.defaultTimeRange * 60 * 60 * 1000; // Convert hours to milliseconds;
       const startTime = now - timeRange;
-
       // Get authorized filter for queries
-      const queryAuth = await authService.authorizeAnalyticsQuery({
+      const queryAuth = await authService.authorizeAnalyticsQuery({)
         startTime,
-        endTime: now
+        endTime: now,
       }, authContext);
-
       if (!queryAuth.allowed) {
         setError('Analytics query access denied');
         return;
       }
-
       const filter = queryAuth.filteredQuery!;
-
       // Get dashboard statistics
       const [
         events,
         statistics
-      ] = await Promise.all([
-        eventRepository.findMany({
+      ] = await Promise.all([)
+        eventRepository.findMany({)
           filter,
           limit: config.maxEventsDisplay,
           sortBy: 'timestamp',
-          sortOrder: 'desc'
+          sortOrder: 'desc',
         }),
         eventRepository.getStatistics(filter)
       ]);
-
       // Calculate metrics
       const eventsPerSecond = statistics.totalEvents / (timeRange / 1000);
       const errorEvents = events.filter(e => e.severity === 'error' || e.severity === 'critical');
       const errorRate = events.length > 0 ? (errorEvents.length / events.length) * 100 : 0;
-      
       const uniqueUsers = new Set(events.map(e => e.userId).filter(Boolean)).size;
       const uniqueSessions = new Set(events.map(e => e.sessionId).filter(Boolean)).size;
-
       // Calculate top sources
       const sourceCounts = statistics.eventsBySource;
       const totalSourceEvents = Object.values(sourceCounts).reduce((sum, count) => sum + count, 0);
-      const topSources = Object.entries(sourceCounts)
-        .map(([source, count]) => ({
+      const topSources = Object.entries(sourceCounts);
+        .map(([source, count]) => ({)
           source,
           count,
           percentage: totalSourceEvents > 0 ? (count / totalSourceEvents) * 100 : 0
         }))
         .sort((a, b) => b.count - a.count)
         .slice(0, 10);
-
       // Calculate integration status
       const integrationEvents = events.filter(e => e.category === EventCategory.INTEGRATION);
       const integrationStatus: { [key: string]: 'healthy' | 'degraded' | 'failing' } = {};
-      
       const integrationSources = new Set(integrationEvents.map(e => e.source));
-      integrationSources.forEach(source => {
+      integrationSources.forEach(source => {)
         const sourceEvents = integrationEvents.filter(e => e.source === source);
         const errorCount = sourceEvents.filter(e => e.severity === 'error' || e.severity === 'critical').length;
         const errorRate = sourceEvents.length > 0 ? (errorCount / sourceEvents.length) * 100 : 0;
-        
         if (errorRate < 1) integrationStatus[source] = 'healthy';
         else if (errorRate < 10) integrationStatus[source] = 'degraded';
         else integrationStatus[source] = 'failing';
       });
-
       // Calculate system health score
       const systemHealth = Math.max(0, 100 - errorRate - (eventsPerSecond > 1000 ? 10 : 0));
-
       // Update dashboard metrics
-      setDashboardMetrics({
+      setDashboardMetrics({)
         totalEvents: statistics.totalEvents,
         eventsPerSecond: Math.round(eventsPerSecond * 100) / 100,
         activeUsers: uniqueUsers,
@@ -448,15 +397,12 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
         systemHealth: Math.round(systemHealth),
         integrationStatus,
         topSources,
-        recentEvents: events
+        recentEvents: events,
       });
-
       // Update time series data for widgets
       await updateWidgetTimeSeriesData(filter);
-
       setLastUpdate(now);
       setError(null);
-      
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to refresh dashboard data');
       if (onWidgetError) {
@@ -464,104 +410,92 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
       }
     }
   };
-
   /**
    * Update time series data for widgets
    */
   const updateWidgetTimeSeriesData = async (filter: EventFilter) => {
-    const timeSeriesPromises = widgets
-      .filter(widget => 
+    const timeSeriesPromises = widgets;
+      .filter(widget => )
         widget.type === WidgetType.TIME_SERIES_CHART ||
         widget.type === WidgetType.PERFORMANCE_METRICS ||
         widget.type === WidgetType.ERROR_RATE
       )
-      .map(async widget => {
+      .map(async widget => {)
         try {
           const widgetFilter = { ...filter, ...widget.filter };
-          const data = await eventRepository.getTimeSeriesData(
+          const data = await eventRepository.getTimeSeriesData(;)
             'count',
             widget.timeGranularity || 'hour',
             widgetFilter
           );
-          
           return {
             widgetId: widget.id,
-            data: data.map(point => ({
+            data: data.map(point => ({)
               timestamp: point.timestamp,
               value: point.value,
-              label: widget.title
+              label: widget.title,
             }))
           };
         } catch (err) {
-          console.error(`Failed to update time series for widget ${widget.id}:`, err);
+          console.error(`Failed to update time series for widget ${widget.id}:`, err);}
           return { widgetId: widget.id, data: [] };
         }
       });
-
     const results = await Promise.all(timeSeriesPromises);
-    
-    setTimeSeriesData(prev => {
+    setTimeSeriesData(prev => {)
       const updated = { ...prev };
-      results.forEach(result => {
+      results.forEach(result => {)
         updated[result.widgetId] = result.data;
       });
       return updated;
     });
   };
-
   /**
    * Auto-refresh effect
    */
   useEffect(() => {
     if (!config.enableAutoRefresh) return;
-
     const interval = setInterval(() => {
       refreshDashboardData();
     }, config.refreshInterval);
-
     return () => clearInterval(interval);
   }, [config.enableAutoRefresh, config.refreshInterval]);
-
   /**
    * Widget management functions
    */
   const toggleWidget = (widgetId: string) => {
-    setWidgets(prev => prev.map(widget =>
+    setWidgets(prev => prev.map(widget =>)
       widget.id === widgetId
         ? { ...widget, collapsed: !widget.collapsed }
         : widget
     ));
   };
-
   const removeWidget = (widgetId: string) => {
     setWidgets(prev => prev.filter(widget => widget.id !== widgetId));
   };
-
   const updateWidgetPosition = (widgetId: string, position: WidgetConfig['position']) => {
-    setWidgets(prev => prev.map(widget =>
+    setWidgets(prev => prev.map(widget =>)
       widget.id === widgetId
         ? { ...widget, position }
         : widget
     ));
   };
-
   /**
    * Render loading state
    */
   if (loading) {
-    return (
+    return ()
       <div className="dashboard-loading">
         <div className="loading-spinner" />
         <p>Loading dashboard...</p>
       </div>
     );
   }
-
   /**
    * Render error state
    */
   if (error) {
-    return (
+    return ()
       <div className="dashboard-error">
         <h3>Dashboard Error</h3>
         <p>{error}</p>
@@ -574,12 +508,11 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
       </div>
     );
   }
-
   /**
    * Main dashboard render
    */
-  return (
-    <div className={`real-time-dashboard theme-${config.theme}`}>
+  return ()
+    <div className={`real-time-dashboard theme-${config.theme}`}>}
       {/* Dashboard Header */}
       <DashboardHeader
         metrics={dashboardMetrics}
@@ -587,10 +520,9 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
         lastUpdate={lastUpdate}
         onRefresh={refreshDashboardData}
       />
-
       {/* Dashboard Grid */}
-      <div className={`dashboard-grid layout-${config.widgetLayout}`}>
-        {widgets.map(widget => (
+      <div className={`dashboard-grid layout-${config.widgetLayout}`}>}
+        {widgets.map(widget => ()
           <DashboardWidget
             key={widget.id}
             config={widget}
@@ -604,7 +536,6 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
           />
         ))}
       </div>
-
       {/* Dashboard Footer */}
       <DashboardFooter
         totalEvents={dashboardMetrics.totalEvents}
@@ -614,7 +545,6 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({
     </div>
   );
 };
-
 /**
  * Dashboard Header Component
  */
@@ -623,16 +553,15 @@ const DashboardHeader: React.FC<{
   isConnected: boolean;
   lastUpdate: number;
   onRefresh: () => void;
-}> = ({ metrics, isConnected, lastUpdate, onRefresh }) => (
+}> = ({ metrics, isConnected, lastUpdate, onRefresh }) => ()
   <div className="dashboard-header">
     <div className="header-left">
       <h1>Analytics Dashboard</h1>
       <div className="connection-status">
-        <span className={`status-indicator ${isConnected ? 'connected' : 'disconnected'}`} />
+        <span className={`status-indicator ${isConnected ? 'connected' : 'disconnected'}`} />}
         {isConnected ? 'Live' : 'Offline'}
       </div>
     </div>
-    
     <div className="header-center">
       <div className="metric-badges">
         <div className="metric-badge">
@@ -653,7 +582,6 @@ const DashboardHeader: React.FC<{
         </div>
       </div>
     </div>
-
     <div className="header-right">
       <div className="last-update">
         Last update: {lastUpdate ? new Date(lastUpdate).toLocaleTimeString() : 'Never'}
@@ -664,7 +592,6 @@ const DashboardHeader: React.FC<{
     </div>
   </div>
 );
-
 /**
  * Dashboard Widget Component
  */
@@ -683,35 +610,27 @@ const DashboardWidget: React.FC<{
       switch (config.type) {
         case WidgetType.EVENT_STREAM:
           return <EventStreamWidget events={metrics.recentEvents} />;
-          
         case WidgetType.METRICS_SUMMARY:
           return <MetricsSummaryWidget metrics={metrics} />;
-          
         case WidgetType.TIME_SERIES_CHART:
         case WidgetType.PERFORMANCE_METRICS:
         case WidgetType.ERROR_RATE:
           return <TimeSeriesWidget data={timeSeriesData} chartType={config.chartType} />;
-          
         case WidgetType.TOP_SOURCES:
           return <TopSourcesWidget sources={metrics.topSources} />;
-          
         case WidgetType.INTEGRATION_STATUS:
           return <IntegrationStatusWidget status={metrics.integrationStatus} />;
-          
         case WidgetType.SYSTEM_HEALTH:
           return <SystemHealthWidget health={metrics.systemHealth} />;
-          
         case WidgetType.USER_ACTIVITY:
           return <UserActivityWidget 
             activeUsers={metrics.activeUsers} 
             activeSessions={metrics.activeSessions} 
           />;
-          
         case WidgetType.SECURITY_EVENTS:
           return <SecurityEventsWidget 
             events={metrics.recentEvents.filter(e => e.category === EventCategory.SECURITY)} 
           />;
-          
         default:
           return <div className="widget-placeholder">Widget type not implemented</div>;
       }
@@ -720,13 +639,12 @@ const DashboardWidget: React.FC<{
       return <div className="widget-error">Error loading widget</div>;
     }
   };
-
-  return (
+  return ()
     <div 
       className={`dashboard-widget ${config.collapsed ? 'collapsed' : ''}`}
       style={{
-        gridColumn: `${config.position.x + 1} / span ${config.position.width}`,
-        gridRow: `${config.position.y + 1} / span ${config.position.height}`
+        gridColumn: `${config.position.x + 1} / span ${config.position.width}`,}
+        gridRow: `${config.position.y + 1} / span ${config.position.height}`}
       }}
     >
       <div className="widget-header">
@@ -738,8 +656,7 @@ const DashboardWidget: React.FC<{
           <button onClick={onRemove}>×</button>
         </div>
       </div>
-      
-      {!config.collapsed && (
+      {!config.collapsed && ()
         <div className="widget-content">
           {renderWidgetContent()}
         </div>
@@ -747,14 +664,13 @@ const DashboardWidget: React.FC<{
     </div>
   );
 };
-
 /**
  * Individual Widget Components
  */
-const EventStreamWidget: React.FC<{ events: UnifiedAnalyticsEvent[] }> = ({ events }) => (
+const EventStreamWidget: React.FC<{ events: UnifiedAnalyticsEvent[] }> = ({ events }) => ()
   <div className="event-stream">
-    {events.map(event => (
-      <div key={event.id} className={`event-item severity-${event.severity}`}>
+    {events.map(event => ()
+      <div key={event.id} className={`event-item severity-${event.severity}`}>}
         <div className="event-time">
           {new Date(event.timestamp).toLocaleTimeString()}
         </div>
@@ -767,8 +683,7 @@ const EventStreamWidget: React.FC<{ events: UnifiedAnalyticsEvent[] }> = ({ even
     ))}
   </div>
 );
-
-const MetricsSummaryWidget: React.FC<{ metrics: DashboardMetrics }> = ({ metrics }) => (
+const MetricsSummaryWidget: React.FC<{ metrics: DashboardMetrics }> = ({ metrics }) => ()
   <div className="metrics-summary">
     <div className="summary-grid">
       <div className="summary-item">
@@ -798,30 +713,28 @@ const MetricsSummaryWidget: React.FC<{ metrics: DashboardMetrics }> = ({ metrics
     </div>
   </div>
 );
-
 const TimeSeriesWidget: React.FC<{ 
   data: TimeSeriesData[]; 
   chartType?: 'line' | 'bar' | 'area' 
-}> = ({ data, chartType = 'line' }) => (
+}> = ({ data, chartType = 'line' }) => ()
   <div className="time-series-widget">
     <div className="chart-placeholder">
       {/* In production, this would use a charting library like Chart.js or D3 */}
       <div className="chart-info">
         <p>Chart Type: {chartType}</p>
         <p>Data Points: {data.length}</p>
-        {data.length > 0 && (
+        {data.length > 0 && ()
           <p>Latest Value: {data[data.length - 1]?.value}</p>
         )}
       </div>
     </div>
   </div>
 );
-
 const TopSourcesWidget: React.FC<{ 
   sources: Array<{ source: string; count: number; percentage: number }> 
-}> = ({ sources }) => (
+}> = ({ sources }) => ()
   <div className="top-sources">
-    {sources.map(source => (
+    {sources.map(source => ()
       <div key={source.source} className="source-item">
         <div className="source-name">{source.source}</div>
         <div className="source-bar">
@@ -835,36 +748,33 @@ const TopSourcesWidget: React.FC<{
     ))}
   </div>
 );
-
 const IntegrationStatusWidget: React.FC<{ 
   status: { [key: string]: 'healthy' | 'degraded' | 'failing' } 
-}> = ({ status }) => (
+}> = ({ status }) => ()
   <div className="integration-status">
-    {Object.entries(status).map(([integration, health]) => (
-      <div key={integration} className={`integration-item status-${health}`}>
+    {Object.entries(status).map(([integration, health]) => ()
+      <div key={integration} className={`integration-item status-${health}`}>}
         <span className="integration-name">{integration}</span>
-        <span className={`status-badge ${health}`}>{health}</span>
+        <span className={`status-badge ${health}`}>{health}</span>}
       </div>
     ))}
   </div>
 );
-
-const SystemHealthWidget: React.FC<{ health: number }> = ({ health }) => (
+const SystemHealthWidget: React.FC<{ health: number }> = ({ health }) => ()
   <div className="system-health">
     <div className="health-circle">
       <div className="health-percentage">{health}%</div>
       <div className="health-label">System Health</div>
     </div>
-    <div className={`health-status ${health > 90 ? 'healthy' : health > 70 ? 'warning' : 'critical'}`}>
+    <div className={`health-status ${health > 90 ? 'healthy' : health > 70 ? 'warning' : 'critical'}`}>}
       {health > 90 ? 'Healthy' : health > 70 ? 'Warning' : 'Critical'}
     </div>
   </div>
 );
-
 const UserActivityWidget: React.FC<{ 
   activeUsers: number; 
-  activeSessions: number 
-}> = ({ activeUsers, activeSessions }) => (
+  activeSessions: number ,
+}> = ({ activeUsers, activeSessions }) => ()
   <div className="user-activity">
     <div className="activity-metric">
       <span className="metric-number">{activeUsers}</span>
@@ -881,21 +791,20 @@ const UserActivityWidget: React.FC<{
     </div>
   </div>
 );
-
-const SecurityEventsWidget: React.FC<{ events: UnifiedAnalyticsEvent[] }> = ({ events }) => (
+const SecurityEventsWidget: React.FC<{ events: UnifiedAnalyticsEvent[] }> = ({ events }) => ()
   <div className="security-events">
-    {events.length === 0 ? (
+    {events.length === 0 ? ()
       <div className="no-events">No security events</div>
-    ) : (
-      events.slice(0, 5).map(event => (
-        <div key={event.id} className={`security-event severity-${event.severity}`}>
+    ) : ()
+      events.slice(0, 5).map(event => ()
+        <div key={event.id} className={`security-event severity-${event.severity}`}>}
           <div className="event-type">{event.type}</div>
           <div className="event-time">
             {new Date(event.timestamp).toLocaleTimeString()}
           </div>
           <div className="event-details">
-            {event.data.riskLevel && (
-              <span className={`risk-level ${event.data.riskLevel}`}>
+            {event.data.riskLevel && ()
+              <span className={`risk-level ${event.data.riskLevel}`}>}
                 {event.data.riskLevel}
               </span>
             )}
@@ -905,7 +814,6 @@ const SecurityEventsWidget: React.FC<{ events: UnifiedAnalyticsEvent[] }> = ({ e
     )}
   </div>
 );
-
 /**
  * Dashboard Footer Component
  */
@@ -913,7 +821,7 @@ const DashboardFooter: React.FC<{
   totalEvents: number;
   systemHealth: number;
   lastUpdate: number;
-}> = ({ totalEvents, systemHealth, lastUpdate }) => (
+}> = ({ totalEvents, systemHealth, lastUpdate }) => ()
   <div className="dashboard-footer">
     <div className="footer-info">
       <span>Total Events: {totalEvents.toLocaleString()}</span>

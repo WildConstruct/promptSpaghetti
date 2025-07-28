@@ -26,7 +26,7 @@ export {
 export 
 // Utility Functions
 export const createOperationId = (): string => {
-  return `op-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  return `op-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;}
 };
 
 export const calculateChecksum = (state: { nodes: any[]; edges: any[] }): string => {
@@ -41,7 +41,7 @@ export const calculateChecksum = (state: { nodes: any[]; edges: any[] }): string
 };
 
 // Factory Functions for Common Operations
-export   position: { x: number; y: number },
+export position: { x: number; y: number },
   userId?: string
 ): any => {
   return {
@@ -49,7 +49,7 @@ export   position: { x: number; y: number },
     type: 'NODE_ADD',
     timestamp: new Date(),
     userId,
-    payload: {
+    payload: {,
       node,
       position
     }
@@ -61,7 +61,7 @@ export   position: { x: number; y: number },
 
 // Error Types for Better Error Handling
 export class MutationEngineError extends Error {
-  constructor(
+  constructor()
     message: string,
     public operation?: any,
     public validationErrors?: any[]
@@ -72,7 +72,7 @@ export class MutationEngineError extends Error {
 }
 
 export class ValidationError extends Error {
-  constructor(
+  constructor()
     message: string,
     public field?: string,
     public nodeId?: string,
@@ -84,7 +84,7 @@ export class ValidationError extends Error {
 }
 
 export class ConflictError extends Error {
-  constructor(
+  constructor()
     message: string,
     public conflicts: any[],
     public operation?: any
@@ -95,18 +95,16 @@ export class ConflictError extends Error {
 }
 
 // Integration Helpers for Existing Codebase
-export   const engine = new GraphMutationEngine(finalConfig);
-  
+export const engine = new GraphMutationEngine(finalConfig);
   // Setup state synchronization
   engine.on('state_changed', (data) => {
     // Update the store with the new state
     if (store.setState) {
-      store.setState({
+      store.setState({)
         nodes: data.newState.nodes,
-        edges: data.newState.edges
+        edges: data.newState.edges,
       });
     }
   });
-  
   return engine;
 };

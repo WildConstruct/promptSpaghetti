@@ -34,7 +34,7 @@ export declare class ConstraintOverrideManager {
     /**
      * Create a new constraint override
      */
-    createOverride(constraintId: string, reason: OverrideReason, options?: {
+    createOverride(constraintId: string, reason: OverrideReason, options?: {)
         userId?: string;
         duration?: number;
         scope?: 'global' | 'era' | 'project' | 'session';
@@ -43,7 +43,7 @@ export declare class ConstraintOverrideManager {
     /**
      * Check if a constraint is currently overridden
      */
-    isConstraintOverridden(constraintId: string, context?: {
+    isConstraintOverridden(constraintId: string, context?: {)
         era?: Era;
         nodeTypes?: string[];
         socialClasses?: string[];
@@ -63,7 +63,7 @@ export declare class ConstraintOverrideManager {
     /**
      * Get override history for audit purposes
      */
-    getOverrideHistory(filters?: {
+    getOverrideHistory(filters?: {)
         constraintId?: string;
         userId?: string;
         fromDate?: string;
@@ -76,7 +76,7 @@ export declare class ConstraintOverrideManager {
     /**
      * Get suggested overrides for creative flexibility
      */
-    getSuggestedOverrides(constraints: HistoricalConstraint[], context: {
+    getSuggestedOverrides(constraints: HistoricalConstraint[], context: {)
         era?: Era;
         creativeGoals?: string[];
         narrativeNeeds?: string[];
@@ -95,7 +95,7 @@ export declare class ConstraintOverrideManager {
     /**
      * Import override configuration
      */
-    importOverrides(data: {
+    importOverrides(data: {)
         active: ConstraintOverride[];
         history?: ConstraintOverride[];
     }): void;

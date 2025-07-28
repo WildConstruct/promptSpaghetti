@@ -1,6 +1,5 @@
 // Epic 9.4.2 - Approval Statistics Component
 // Comprehensive statistics and analytics for approval workflows
-
 import React, { useState, useEffect } from 'react';
 import { 
   ChartBarIcon,
@@ -14,7 +13,6 @@ import {
   DocumentTextIcon,
   ArrowPathIcon
 } from '@heroicons/react/24/outline';
-
 interface ApprovalStatistics {
   total_requests: number;
   pending_requests: number;
@@ -25,7 +23,6 @@ interface ApprovalStatistics {
   by_status: Record<string, number>;
   top_reviewers: Array<{ reviewer_id: string; count: number }>;
 }
-
 interface PerformanceMetrics {
   avg_completion_time: number;
   avg_first_review_time: number;
@@ -36,14 +33,13 @@ interface PerformanceMetrics {
   rejected_count: number;
   escalated_count: number;
 }
-
 interface ApprovalStatisticsProps {
   workspaceId: string;
   period?: '7d' | '30d' | '90d' | '1y';
   refreshInterval?: number;
 }
 
-export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
+export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({)
   workspaceId,
   period = '30d',
   refreshInterval = 30000 // 30 seconds
@@ -53,32 +49,25 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-
   useEffect(() => {
     fetchStatistics();
-    
     const interval = setInterval(fetchStatistics, refreshInterval);
     return () => clearInterval(interval);
   }, [workspaceId, period, refreshInterval]);
-
   const fetchStatistics = async () => {
     try {
       setLoading(true);
       setError(null);
-
       // Fetch general statistics
-      const [statsResponse, performanceResponse] = await Promise.all([
-        fetch(`/api/approval/statistics/${workspaceId}`),
-        fetch(`/api/approval/statistics/${workspaceId}/performance?period=${period}`)
+      const [statsResponse, performanceResponse] = await Promise.all([)
+        fetch(`/api/approval/statistics/${workspaceId}`),}
+        fetch(`/api/approval/statistics/${workspaceId}/performance?period=${period}`)}
       ]);
-
       if (!statsResponse.ok || !performanceResponse.ok) {
         throw new Error('Failed to fetch statistics');
       }
-
       const stats = await statsResponse.json();
       const performance = await performanceResponse.json();
-
       setStatistics(stats);
       setPerformanceMetrics(performance);
       setLastUpdated(new Date());
@@ -88,17 +77,14 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
       setLoading(false);
     }
   };
-
   const formatDuration = (hours: number) => {
-    if (hours < 1) return `${Math.round(hours * 60)}m`;
-    if (hours < 24) return `${Math.round(hours)}h`;
-    return `${Math.round(hours / 24)}d`;
+    if (hours < 1) return `${Math.round(hours * 60)}m`;}
+    if (hours < 24) return `${Math.round(hours)}h`;}
+    return `${Math.round(hours / 24)}d`;}
   };
-
   const formatPercentage = (value: number) => {
-    return `${Math.round(value)}%`;
+    return `${Math.round(value)}%`;}
   };
-
       case 'in_review': return 'bg-blue-100 text-blue-800';
     case 'approved': return 'bg-green-100 text-green-800';
     case 'rejected': return 'bg-red-100 text-red-800';
@@ -106,7 +92,6 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
     case 'critical': return 'bg-red-500';
@@ -116,13 +101,11 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
     default: return 'bg-gray-500';
     }
   };
-
       } else if (current < previous) {
       return <TrendingDownIcon className="h-4 w-4 text-red-500" />;
     }
     return <div className="h-4 w-4" />;
   };
-
   const StatCard: React.FC<{
     title: string;
     value: string | number;
@@ -130,10 +113,10 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
     color: string;
     trend?: React.ReactNode;
     subtitle?: string;
-  }> = ({ title, value, icon, color, trend, subtitle }) => (
+  }> = ({ title, value, icon, color, trend, subtitle }) => ()
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex items-center">
-        <div className={`p-3 rounded-md ${color}`}>
+        <div className={`p-3 rounded-md ${color}`}>}
           {icon}
         </div>
         <div className="ml-4 flex-1">
@@ -142,25 +125,24 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
             {trend}
           </div>
           <p className="text-2xl font-bold text-gray-900">{value}</p>
-          {subtitle && (
+          {subtitle && ()
             <p className="text-sm text-gray-600">{subtitle}</p>
           )}
         </div>
       </div>
     </div>
   );
-
   const ChartCard: React.FC<{
     title: string;
     data: Record<string, number>;
     type: 'bar' | 'pie';
     colorMap?: (key: string) => string;
-  }> = ({ title, data, type, colorMap }) => (
+  }> = ({ title, data, type, colorMap }) => ()
     <div className="bg-white rounded-lg shadow p-6">
       <h3 className="text-lg font-medium text-gray-900 mb-4">{title}</h3>
-      {type === 'bar' ? (
+      {type === 'bar' ? ()
         <div className="space-y-3">
-          {Object.entries(data).map(([key, value]) => (
+          {Object.entries(data).map(([key, value]) => ()
             <div key={key} className="flex items-center justify-between">
               <span className="text-sm text-gray-600 capitalize">{key}</span>
               <div className="flex items-center space-x-2">
@@ -175,12 +157,12 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
             </div>
           ))}
         </div>
-      ) : (
+      ) : ()
         <div className="space-y-2">
-          {Object.entries(data).map(([key, value]) => (
+          {Object.entries(data).map(([key, value]) => ()
             <div key={key} className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className={`w-3 h-3 rounded-full ${colorMap ? colorMap(key) : 'bg-blue-500'}`} />
+                <div className={`w-3 h-3 rounded-full ${colorMap ? colorMap(key) : 'bg-blue-500'}`} />}
                 <span className="text-sm text-gray-600 capitalize">{key}</span>
               </div>
               <span className="text-sm font-medium text-gray-900">{value}</span>
@@ -190,17 +172,15 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
       )}
     </div>
   );
-
   if (loading && !statistics) {
-    return (
+    return ()
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <XCircleIcon className="h-5 w-5 text-red-400" />
@@ -212,8 +192,7 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -236,9 +215,8 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
           </button>
         </div>
       </div>
-
       {/* Key Metrics */}
-      {statistics && (
+      {statistics && ()
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
             title="Total Requests"
@@ -247,7 +225,6 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
             color="bg-blue-500"
             subtitle="All time"
           />
-          
           <StatCard
             title="Pending Reviews"
             value={statistics.pending_requests}
@@ -255,7 +232,6 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
             color="bg-yellow-500"
             subtitle="Awaiting action"
           />
-          
           <StatCard
             title="Approval Rate"
             value={formatPercentage(statistics.approval_rate)}
@@ -263,7 +239,6 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
             color="bg-green-500"
             subtitle="Success rate"
           />
-          
           <StatCard
             title="Avg. Review Time"
             value={formatDuration(statistics.avg_approval_time_hours)}
@@ -273,9 +248,8 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
           />
         </div>
       )}
-
       {/* Performance Metrics */}
-      {performanceMetrics && (
+      {performanceMetrics && ()
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
             title="First Review Time"
@@ -284,7 +258,6 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
             color="bg-indigo-500"
             subtitle="Time to first review"
           />
-          
           <StatCard
             title="Criteria Pass Rate"
             value={formatPercentage(performanceMetrics.avg_criteria_pass_rate)}
@@ -292,7 +265,6 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
             color="bg-green-500"
             subtitle="Quality metric"
           />
-          
           <StatCard
             title="Satisfaction Score"
             value={`${Math.round(performanceMetrics.avg_satisfaction_score * 10) / 10}/5`}
@@ -300,7 +272,6 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
             color="bg-pink-500"
             subtitle="User satisfaction"
           />
-          
           <StatCard
             title="Escalations"
             value={performanceMetrics.escalated_count}
@@ -310,11 +281,10 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
           />
         </div>
       )}
-
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Status Distribution */}
-        {statistics && (
+        {statistics && ()
           <ChartCard
             title="Requests by Status"
             data={statistics.by_status}
@@ -331,9 +301,8 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
             }}
           />
         )}
-
         {/* Urgency Distribution */}
-        {statistics && (
+        {statistics && ()
           <ChartCard
             title="Requests by Urgency"
             data={statistics.by_urgency}
@@ -342,13 +311,12 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
           />
         )}
       </div>
-
       {/* Top Reviewers */}
-      {statistics && statistics.top_reviewers.length > 0 && (
+      {statistics && statistics.top_reviewers.length > 0 && ()
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Top Reviewers</h3>
           <div className="space-y-3">
-            {statistics.top_reviewers.slice(0, 10).map((reviewer, index) => (
+            {statistics.top_reviewers.slice(0, 10).map((reviewer, index) => ()
               <div key={reviewer.reviewer_id} className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -368,7 +336,6 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
           </div>
         </div>
       )}
-
       {/* Recent Activity Summary */}
       <div className="bg-white rounded-lg shadow p-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">
@@ -395,7 +362,6 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
           </div>
         </div>
       </div>
-
       {/* Health Indicators */}
       <div className="bg-white rounded-lg shadow p-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">System Health</h3>
@@ -409,7 +375,6 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
               <p className="text-xs text-gray-600">{statistics?.overdue_requests || 0} overdue</p>
             </div>
           </div>
-          
           <div className="flex items-center space-x-3">
             <div className={`w-3 h-3 rounded-full ${
               statistics && statistics.avg_approval_time_hours < 48 ? 'bg-green-500' : 'bg-yellow-500'
@@ -421,7 +386,6 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
               </p>
             </div>
           </div>
-          
           <div className="flex items-center space-x-3">
             <div className={`w-3 h-3 rounded-full ${
               statistics && statistics.approval_rate > 80 ? 'bg-green-500' : 'bg-yellow-500'

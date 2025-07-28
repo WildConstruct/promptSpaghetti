@@ -2,7 +2,7 @@ export interface CrossModelTestResult {
     openai?: any;
     claude?: any;
     gemini?: any;
-    comparison: {
+    comparison: {,
         allSucceeded: boolean;
         successCount: number;
         totalAttempts: number;
@@ -35,7 +35,7 @@ export declare const testCases: {
     /**
      * Simple test case
      */
-    simpleGreeting: {
+    simpleGreeting: {,
         purpose: string;
         complexity: "simple";
         nodeCount: number;
@@ -47,7 +47,7 @@ export declare const testCases: {
     /**
      * Moderate complexity test case
      */
-    contentGenerator: {
+    contentGenerator: {,
         purpose: string;
         complexity: "moderate";
         nodeCount: number;
@@ -60,7 +60,7 @@ export declare const testCases: {
     /**
      * Complex test case with advanced features
      */
-    intelligentTutor: {
+    intelligentTutor: {,
         purpose: string;
         complexity: "complex";
         nodeCount: number;
@@ -74,7 +74,7 @@ export declare const testCases: {
     /**
      * Creative writing assistant
      */
-    storyGenerator: {
+    storyGenerator: {,
         purpose: string;
         complexity: "moderate";
         nodeCount: number;
@@ -88,7 +88,7 @@ export declare const testCases: {
     /**
      * Data processing pipeline
      */
-    dataProcessor: {
+    dataProcessor: {,
         purpose: string;
         complexity: "complex";
         nodeCount: number;
@@ -104,20 +104,20 @@ export declare const testCases: {
  */
 export declare function runCrossModelTests(): Promise<{
     testResults: Record<string, CrossModelTestResult>;
-    summary: {
+    summary: {,
         totalTests: number;
         successfulTests: number;
         averageConsistency: number;
-        modelPerformance: {
-            openai: {
+        modelPerformance: {,
+            openai: {,
                 successRate: number;
                 avgTime: number;
             };
-            claude: {
+            claude: {,
                 successRate: number;
                 avgTime: number;
             };
-            gemini: {
+            gemini: {,
                 successRate: number;
                 avgTime: number;
             };
@@ -127,7 +127,7 @@ export declare function runCrossModelTests(): Promise<{
 /**
  * Generate a comparative report
  */
-export declare function generateTestReport(results: {
+export declare function generateTestReport(results: {)
     testResults: Record<string, CrossModelTestResult>;
     summary: any;
 }): string;

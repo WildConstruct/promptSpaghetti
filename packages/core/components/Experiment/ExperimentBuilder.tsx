@@ -2,7 +2,6 @@
  * Epic 14 Story 14.1 - Experiment Design System
  * Visual Experiment Builder Component
  */
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -29,7 +28,6 @@ import {
   Copy,
   Shuffle
 } from 'lucide-react';
-
 import {
   Experiment,
   ExperimentVariant,
@@ -48,7 +46,6 @@ export interface ExperimentBuilderProps {
   onPause: (experimentId: string) => Promise<void>;
   className?: string;
 }
-
 interface BuilderState {
   experiment: Partial<Experiment>;
   activeTab: string;
@@ -59,7 +56,7 @@ interface BuilderState {
   estimatedDuration: number;
 }
 
-export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
+export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
   experiment,
   onSave,
   onPreview,
@@ -67,13 +64,13 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
   onPause,
   className = ''
 }) => {
-  const [state, setState] = useState<BuilderState>({
+  const [state, setState] = useState<BuilderState>({)
     experiment: experiment || {
       name: '',
       type: 'prompt' as ExperimentType,
       hypothesis: '',
       description: '',
-      variants: [
+      variants: [,
         { id: 'control', name: 'Control', description: 'Original version' },
         { id: 'variant-1', name: 'Variant 1', description: 'Test version' }
       ],
@@ -81,65 +78,58 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
       metrics: [],
       status: 'draft' as ExperimentStatus,
       schedule: {},
-      tags: []
+      tags: [],
     },
     activeTab: 'setup',
     validationErrors: [],
     previewResults: {},
     saving: false,
     estimatedSampleSize: 0,
-    estimatedDuration: 0
+    estimatedDuration: 0,
   });
-
   /**
    * Update experiment field
    */
   const updateExperiment = useCallback((field: string, value: unknown) => {
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
-      experiment: {
+      experiment: {,
         ...prev.experiment,
         [field]: value
       }
     }));
   }, []);
-
   /**
    * Add a new variant
    */
   const addVariant = useCallback(() => {
-    const newVariantId = `variant-${Date.now()}`;
+    const newVariantId = `variant-${Date.now()}`;}
     const newVariant: ExperimentVariant = {
       id: newVariantId,
-      name: `Variant ${state.experiment.variants?.length || 1}`,
-      description: ''
+      name: `Variant ${state.experiment.variants?.length || 1}`,}
+      description: '',
     };
-
     const updatedVariants = [...(state.experiment.variants || []), newVariant];
     const updatedAllocation = { ...state.experiment.trafficAllocation };
-    
     // Redistribute traffic equally
     const equalShare = Math.floor(100 / updatedVariants.length);
-    updatedVariants.forEach(variant => {
+    updatedVariants.forEach(variant => {)
       updatedAllocation[variant.id] = equalShare;
     });
-    
     // Handle remainder
     const remainder = 100 - (equalShare * updatedVariants.length);
     if (remainder > 0) {
       updatedAllocation[updatedVariants[0].id] += remainder;
     }
-
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
-      experiment: {
+      experiment: {,
         ...prev.experiment,
         variants: updatedVariants,
-        trafficAllocation: updatedAllocation
+        trafficAllocation: updatedAllocation,
       }
     }));
   }, [state.experiment.variants, state.experiment.trafficAllocation]);
-
   /**
    * Remove a variant
    */
@@ -147,49 +137,43 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
     const updatedVariants = state.experiment.variants?.filter(v => v.id !== variantId) || [];
     const updatedAllocation = { ...state.experiment.trafficAllocation };
     delete updatedAllocation[variantId];
-
     // Redistribute traffic equally among remaining variants
     if (updatedVariants.length > 0) {
       const equalShare = Math.floor(100 / updatedVariants.length);
-      updatedVariants.forEach(variant => {
+      updatedVariants.forEach(variant => {)
         updatedAllocation[variant.id] = equalShare;
       });
-      
       const remainder = 100 - (equalShare * updatedVariants.length);
       if (remainder > 0) {
         updatedAllocation[updatedVariants[0].id] += remainder;
       }
     }
-
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
-      experiment: {
+      experiment: {,
         ...prev.experiment,
         variants: updatedVariants,
-        trafficAllocation: updatedAllocation
+        trafficAllocation: updatedAllocation,
       }
     }));
   }, [state.experiment.variants, state.experiment.trafficAllocation]);
-
   /**
    * Update variant
    */
   const updateVariant = useCallback((variantId: string, field: string, value: unknown) => {
-    const updatedVariants = state.experiment.variants?.map(variant => 
+    const updatedVariants = state.experiment.variants?.map(variant => ;)
       variant.id === variantId 
         ? { ...variant, [field]: value }
         : variant
     ) || [];
-
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
-      experiment: {
+      experiment: {,
         ...prev.experiment,
-        variants: updatedVariants
+        variants: updatedVariants,
       }
     }));
   }, [state.experiment.variants]);
-
   /**
    * Update traffic allocation
    */
@@ -198,67 +182,61 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
       ...state.experiment.trafficAllocation,
       [variantId]: percentage
     };
-
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
-      experiment: {
+      experiment: {,
         ...prev.experiment,
-        trafficAllocation: updatedAllocation
+        trafficAllocation: updatedAllocation,
       }
     }));
   }, [state.experiment.trafficAllocation]);
-
   /**
    * Add metric
    */
   const addMetric = useCallback(() => {
     const newMetric: ExperimentMetric = {
-      id: `metric-${Date.now()}`,
+      id: `metric-${Date.now()}`,}
       name: '',
       type: 'conversion',
       isPrimary: state.experiment.metrics?.length === 0,
       isGuardrail: false,
-      expectedDirection: 'increase'
+      expectedDirection: 'increase',
     };
-
     const updatedMetrics = [...(state.experiment.metrics || []), newMetric];
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
-      experiment: {
+      experiment: {,
         ...prev.experiment,
-        metrics: updatedMetrics
+        metrics: updatedMetrics,
       }
     }));
   }, [state.experiment.metrics]);
-
   /**
    * Update metric
    */
   const updateMetric = useCallback((metricId: string, field: string, value: unknown) => {
-    const updatedMetrics = state.experiment.metrics?.map(metric => 
+    const updatedMetrics = state.experiment.metrics?.map(metric => ;)
       metric.id === metricId 
         ? { ...metric, [field]: value }
         : metric
     ) || [];
-
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
-      experiment: {
+      experiment: {,
         ...prev.experiment,
-        metrics: updatedMetrics
+        metrics: updatedMetrics,
       }
     }));
   }, [state.experiment.metrics]);
-
   /**
    * Preview variant
    */
   const previewVariant = useCallback(async (variant: ExperimentVariant) => {
     try {
       const result = await onPreview(variant);
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
-        previewResults: {
+        previewResults: {,
           ...prev.previewResults,
           [variant.id]: result
         }
@@ -267,29 +245,23 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
       console.error('Preview failed:', error);
     }
   }, [onPreview]);
-
   /**
    * Validate experiment
    */
   const validateExperiment = useCallback(() => {
     const errors: string[] = [];
-
     if (!state.experiment.name?.trim()) {
       errors.push('Experiment name is required');
     }
-
     if (!state.experiment.hypothesis?.trim()) {
       errors.push('Hypothesis is required');
     }
-
     if (!state.experiment.variants || state.experiment.variants.length < 2) {
       errors.push('At least 2 variants are required');
     }
-
     if (state.experiment.variants && state.experiment.variants.length > 12) {
       errors.push('Maximum 12 variants allowed');
     }
-
     // Validate traffic allocation
     if (state.experiment.trafficAllocation) {
       const total = Object.values(state.experiment.trafficAllocation).reduce((sum, pct) => sum + pct, 0);
@@ -297,27 +269,22 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
         errors.push('Traffic allocation must sum to 100%');
       }
     }
-
     // Validate metrics
     if (!state.experiment.metrics || state.experiment.metrics.length === 0) {
       errors.push('At least one success metric is required');
     }
-
     const primaryMetrics = state.experiment.metrics?.filter(m => m.isPrimary) || [];
     if (primaryMetrics.length !== 1) {
       errors.push('Exactly one primary metric is required');
     }
-
     setState(prev => ({ ...prev, validationErrors: errors }));
     return errors.length === 0;
   }, [state.experiment]);
-
   /**
    * Save experiment
    */
   const handleSave = useCallback(async () => {
     if (!validateExperiment()) return;
-
     setState(prev => ({ ...prev, saving: true }));
     try {
       await onSave(state.experiment);
@@ -327,16 +294,14 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
       setState(prev => ({ ...prev, saving: false }));
     }
   }, [state.experiment, validateExperiment, onSave]);
-
   /**
    * Start experiment
    */
   const handleStart = useCallback(async () => {
     if (!validateExperiment() || !state.experiment.id) return;
-
     try {
       await onStart(state.experiment.id);
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
         experiment: { ...prev.experiment, status: 'running' as ExperimentStatus }
       }));
@@ -344,7 +309,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
       console.error('Start failed:', error);
     }
   }, [state.experiment, validateExperiment, onStart]);
-
   /**
    * Calculate sample size estimation (simplified)
    */
@@ -352,24 +316,21 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
     const primaryMetric = state.experiment.metrics?.find(m => m.isPrimary);
     if (primaryMetric && primaryMetric.minimumDetectableEffect) {
       // Simplified sample size calculation
-      const baselineRate = 0.1; // 10% baseline assumption
+      const baselineRate = 0.1; // 10% baseline assumption;
       const mde = primaryMetric.minimumDetectableEffect;
-                  
       // Basic formula for proportions
-      const sampleSize = Math.ceil(
+      const sampleSize = Math.ceil(;)
         2 * Math.pow(1.96 + 0.84, 2) * baselineRate * (1 - baselineRate) / Math.pow(mde, 2)
       );
-      
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
         estimatedSampleSize: sampleSize,
         estimatedDuration: Math.ceil(sampleSize / 100) // Assume 100 users/hour
       }));
     }
   }, [state.experiment.metrics]);
-
-  return (
-    <div className={`experiment-builder ${className}`}>
+  return ()
+    <div className={`experiment-builder ${className}`}>}
       {/* Header */}
       <div className="builder-header">
         <div className="header-info">
@@ -380,7 +341,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
             {state.experiment.status || 'Draft'}
           </Badge>
         </div>
-        
         <div className="header-actions">
           <Button
             variant="outline"
@@ -391,15 +351,13 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
             <Save className="w-4 h-4 mr-2" />
             {state.saving ? 'Saving...' : 'Save'}
           </Button>
-          
-          {state.experiment.status === 'draft' && (
+          {state.experiment.status === 'draft' && ()
             <Button onClick={handleStart} disabled={state.validationErrors.length > 0}>
               <Play className="w-4 h-4 mr-2" />
               Start Experiment
             </Button>
           )}
-          
-          {state.experiment.status === 'running' && (
+          {state.experiment.status === 'running' && ()
             <Button 
               variant="outline" 
               onClick={() => state.experiment.id && onPause(state.experiment.id)}
@@ -410,21 +368,19 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
           )}
         </div>
       </div>
-
       {/* Validation Errors */}
-      {state.validationErrors.length > 0 && (
+      {state.validationErrors.length > 0 && ()
         <Alert variant="destructive" className="mb-4">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
             <ul className="list-disc list-inside">
-              {state.validationErrors.map((error, index) => (
+              {state.validationErrors.map((error, index) => ()
                 <li key={index}>{error}</li>
               ))}
             </ul>
           </AlertDescription>
         </Alert>
       )}
-
       {/* Main Content */}
       <Tabs value={state.activeTab} onValueChange={(tab) => setState(prev => ({ ...prev, activeTab: tab }))}>
         <TabsList className="grid w-full grid-cols-4">
@@ -433,7 +389,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
           <TabsTrigger value="metrics">Metrics</TabsTrigger>
           <TabsTrigger value="configuration">Configuration</TabsTrigger>
         </TabsList>
-
         {/* Setup Tab */}
         <TabsContent value="setup" className="space-y-4">
           <Card>
@@ -449,7 +404,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                   placeholder="Enter experiment name"
                 />
               </div>
-              
               <div>
                 <label className="block text-sm font-medium mb-2">Type</label>
                 <Select 
@@ -466,7 +420,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                   </SelectContent>
                 </Select>
               </div>
-              
               <div>
                 <label className="block text-sm font-medium mb-2">Hypothesis</label>
                 <Textarea
@@ -476,7 +429,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                   rows={3}
                 />
               </div>
-              
               <div>
                 <label className="block text-sm font-medium mb-2">Description (Optional)</label>
                 <Textarea
@@ -488,7 +440,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
               </div>
             </CardContent>
           </Card>
-
           {/* Sample Size Estimation */}
           <Card>
             <CardHeader>
@@ -511,7 +462,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
             </CardContent>
           </Card>
         </TabsContent>
-
         {/* Variants Tab */}
         <TabsContent value="variants" className="space-y-4">
           <div className="flex justify-between items-center">
@@ -521,16 +471,15 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
               Add Variant
             </Button>
           </div>
-
           <div className="space-y-4">
-            {state.experiment.variants?.map((variant, index) => (
+            {state.experiment.variants?.map((variant, index) => ()
               <Card key={variant.id}>
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-center">
                     <CardTitle className="text-base">
-                      {index === 0 ? (
+                      {index === 0 ? ()
                         <Badge variant="secondary" className="mr-2">Control</Badge>
-                      ) : (
+                      ) : ()
                         <Badge variant="outline" className="mr-2">Test</Badge>
                       )}
                       {variant.name}
@@ -543,7 +492,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                       >
                         Preview
                       </Button>
-                      {state.experiment.variants!.length > 2 && (
+                      {state.experiment.variants!.length > 2 && ()
                         <Button
                           variant="outline"
                           size="sm"
@@ -578,7 +527,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                       />
                     </div>
                   </div>
-                  
                   <div>
                     <label className="block text-sm font-medium mb-1">Description</label>
                     <Input
@@ -587,8 +535,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                       placeholder="Describe this variant"
                     />
                   </div>
-
-                  {state.experiment.type === 'prompt' && (
+                  {state.experiment.type === 'prompt' && ()
                     <div>
                       <label className="block text-sm font-medium mb-1">Prompt</label>
                       <Textarea
@@ -599,15 +546,14 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                       />
                     </div>
                   )}
-
                   {/* Preview Results */}
-                  {state.previewResults[variant.id] && (
+                  {state.previewResults[variant.id] && ()
                     <div className="bg-gray-50 p-3 rounded-lg">
                       <div className="text-sm font-medium mb-2">Preview Results:</div>
                       <div className="grid grid-cols-3 gap-4 text-sm">
                         <div>
                           <div className="font-medium">Cost</div>
-                          <div>${state.previewResults[variant.id].cost.toFixed(4)}</div>
+                          <div>${state.previewResults[variant.id].cost.toFixed(4)}</div>}
                         </div>
                         <div>
                           <div className="font-medium">Tokens</div>
@@ -624,7 +570,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
               </Card>
             ))}
           </div>
-
           {/* Traffic Allocation Visualization */}
           <Card>
             <CardHeader>
@@ -634,7 +579,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
               <div className="space-y-3">
                 {state.experiment.variants?.map((variant) => {
                   const percentage = state.experiment.trafficAllocation?.[variant.id] || 0;
-                  return (
+                  return ()
                     <div key={variant.id} className="flex items-center space-x-3">
                       <div className="w-24 text-sm font-medium">{variant.name}:</div>
                       <Progress value={percentage} className="flex-1" />
@@ -646,7 +591,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
             </CardContent>
           </Card>
         </TabsContent>
-
         {/* Metrics Tab */}
         <TabsContent value="metrics" className="space-y-4">
           <div className="flex justify-between items-center">
@@ -656,9 +600,8 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
               Add Metric
             </Button>
           </div>
-
           <div className="space-y-4">
-            {state.experiment.metrics?.map((metric) => (
+            {state.experiment.metrics?.map((metric) => ()
               <Card key={metric.id}>
                 <CardContent className="p-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -688,7 +631,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                       </Select>
                     </div>
                   </div>
-                  
                   <div className="mt-4 flex items-center space-x-4">
                     <label className="flex items-center">
                       <input
@@ -709,8 +651,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                       Guardrail Metric
                     </label>
                   </div>
-
-                  {metric.isPrimary && (
+                  {metric.isPrimary && ()
                     <div className="mt-4 grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-1">
@@ -749,7 +690,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
             ))}
           </div>
         </TabsContent>
-
         {/* Configuration Tab */}
         <TabsContent value="configuration" className="space-y-4">
           <Card>
@@ -766,7 +706,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                   <Input
                     type="datetime-local"
                     value={state.experiment.schedule?.startAt?.toISOString().slice(0, 16) || ''}
-                    onChange={(e) => updateExperiment('schedule', {
+                    onChange={(e) => updateExperiment('schedule', {)
                       ...state.experiment.schedule,
                       startAt: e.target.value ? new Date(e.target.value) : undefined
                     })}
@@ -777,7 +717,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                   <Input
                     type="datetime-local"
                     value={state.experiment.schedule?.endAt?.toISOString().slice(0, 16) || ''}
-                    onChange={(e) => updateExperiment('schedule', {
+                    onChange={(e) => updateExperiment('schedule', {)
                       ...state.experiment.schedule,
                       endAt: e.target.value ? new Date(e.target.value) : undefined
                     })}
@@ -786,7 +726,6 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
@@ -804,9 +743,9 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                     type="number"
                     min="0"
                     value={state.experiment.schedule?.autoStop?.minSampleSize || ''}
-                    onChange={(e) => updateExperiment('schedule', {
+                    onChange={(e) => updateExperiment('schedule', {)
                       ...state.experiment.schedule,
-                      autoStop: {
+                      autoStop: {,
                         ...state.experiment.schedule?.autoStop,
                         minSampleSize: parseInt(e.target.value) || undefined
                       }
@@ -824,9 +763,9 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({
                     max="1"
                     step="0.01"
                     value={state.experiment.schedule?.autoStop?.maxPValue || ''}
-                    onChange={(e) => updateExperiment('schedule', {
+                    onChange={(e) => updateExperiment('schedule', {)
                       ...state.experiment.schedule,
-                      autoStop: {
+                      autoStop: {,
                         ...state.experiment.schedule?.autoStop,
                         maxPValue: parseFloat(e.target.value) || undefined
                       }

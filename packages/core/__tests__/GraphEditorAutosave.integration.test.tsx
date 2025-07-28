@@ -12,16 +12,14 @@ beforeEach(() => {
 afterEach(() => {
   jest.useRealTimers();
 });
-
 describe('GraphEditor autosave/restore/download integration', () => {
   const initialNodes: Node[] = [
     { id: '1', position: { x: 0, y: 0 }, data: { label: 'A' }, type: 'default' },
     { id: '2', position: { x: 100, y: 0 }, data: { label: 'B' }, type: 'default' }
   ];
   const initialEdges: Edge[] = [];
-
   it('autosaves graph to localStorage every 5s', () => {
-    render(
+    render()
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
     );
     expect(localStorage.getItem('graphDraft')).toBeNull();
@@ -32,16 +30,15 @@ describe('GraphEditor autosave/restore/download integration', () => {
     expect(parsed.nodes.length).toBe(2);
     expect(parsed.edges.length).toBe(0);
   });
-
   it.skip('prompts to restore draft on load if present', async () => {
-    localStorage.setItem(
+    localStorage.setItem()
       'graphDraft',
-      JSON.stringify({
+      JSON.stringify({)
         nodes: [{ id: '1', type: 'default', data: { label: 'Restored' }, position: { x: 0, y: 0 } }],
-        edges: []
+        edges: [],
       })
     );
-    render(
+    render()
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
     );
     expect(await screen.findByText(/restore unsaved graph draft/i)).toBeInTheDocument();
@@ -52,13 +49,12 @@ describe('GraphEditor autosave/restore/download integration', () => {
       expect(screen.getByText('Restored')).toBeInTheDocument();
     });
   });
-
   it.skip('removes draft and closes prompt when Dismiss is clicked', async () => {
-    localStorage.setItem(
+    localStorage.setItem()
       'graphDraft',
       JSON.stringify({ nodes: [{ id: 'x', type: 'default', data: {}, position: { x: 0, y: 0 } }], edges: [] })
     );
-    render(
+    render()
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
     );
     expect(await screen.findByText(/restore unsaved graph draft/i)).toBeInTheDocument();
@@ -66,9 +62,8 @@ describe('GraphEditor autosave/restore/download integration', () => {
     expect(localStorage.getItem('graphDraft')).toBeNull();
     expect(screen.queryByText(/restore unsaved graph draft/i)).not.toBeInTheDocument();
   });
-
   it('downloads graph as JSON when Save as JSON is clicked', async () => {
-    render(
+    render()
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
     );
     // Mock createObjectURL and click

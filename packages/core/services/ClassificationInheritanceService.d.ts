@@ -48,13 +48,13 @@ export interface DataRelationship {
     metadata?: Record<string, any>;
 }
 export interface InheritanceContext {
-    parentElement: {
+    parentElement: {,
         id: string;
         type: string;
         classification?: DataClassification;
         metadata?: Record<string, any>;
     };
-    childElement: {
+    childElement: {,
         id: string;
         type: string;
         existingClassification?: DataClassification;

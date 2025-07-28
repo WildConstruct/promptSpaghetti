@@ -65,12 +65,12 @@ export interface ResultStats {
     averageRating: number;
     averageWordCount: number;
     totalExecutionTime: number;
-    topTags: Array<{
+    topTags: Array<{,
         tag: string;
         count: number;
     }>;
     contentTypeDistribution: Record<string, number>;
-    recentActivity: Array<{
+    recentActivity: Array<{,
         type: 'save' | 'rate' | 'tag' | 'export' | 'note';
         timestamp: Date;
         resultId: string;
@@ -118,7 +118,7 @@ interface ResultManagementState {
     getTopRatedResults: (limit?: number) => SavedResult[];
 }
 export declare const useResultManagementStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<ResultManagementState>, "persist"> & {
-    persist: {
+    persist: {,
         setOptions: (options: Partial<import("zustand/middleware").PersistOptions<ResultManagementState, ResultManagementState>>) => void;
         clearStorage: () => void;
         rehydrate: () => Promise<void> | void;

@@ -9,7 +9,7 @@ export interface TextAreaEditorProps extends EditorFieldProps {
   showWordCount?: boolean;
 }
 
-export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({
+export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({)
   label,
   value,
   fieldKey,
@@ -26,36 +26,30 @@ export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({
   const [localValue, setLocalValue] = React.useState(String(value ?? ''));
   const [isFocused, setIsFocused] = React.useState(false);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
-
   // Update local value when external value changes
   React.useEffect(() => {
     setLocalValue(String(value ?? ''));
   }, [value]);
-
   // Auto-resize functionality
   React.useEffect(() => {
     if (autoResize && textareaRef.current) {
       const textarea = textareaRef.current;
       textarea.style.height = 'auto';
-      textarea.style.height = `${textarea.scrollHeight}px`;
+      textarea.style.height = `${textarea.scrollHeight}px`;}
     }
   }, [localValue, autoResize]);
-
   const handleChange = (newValue: string) => {
     setLocalValue(newValue);
     onChange(newValue);
   };
-
   const getWordCount = (text: string): number => {
     return text.trim().split(/\s+/).filter(word => word.length > 0).length;
   };
-
-  const inputId = `field-${fieldKey}`;
-  
+  const inputId = `field-${fieldKey}`;}
   const textareaStyle = {
     width: '100%',
     padding: 8,
-    border: error 
+    border: error ,
       ? '1px solid #f56565' 
       : isFocused 
         ? '1px solid #4299e1' 
@@ -68,32 +62,28 @@ export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({
     outline: 'none',
     transition: 'border-color 0.2s ease',
     resize: autoResize ? 'none' as const : 'vertical' as const,
-    minHeight: autoResize ? `${rows * 1.5}em` : undefined
+    minHeight: autoResize ? `${rows * 1.5}em` : undefined}
   };
-
   const labelStyle = {
     display: 'block',
     fontWeight: 500,
     marginBottom: 4,
     color: '#e2e8f0',
     fontSize: 12,
-    letterSpacing: '0.025em'
+    letterSpacing: '0.025em',
   };
-
   const wordCount = getWordCount(localValue);
   const charCount = localValue.length;
-
-  return (
+  return ()
     <div style={{ marginBottom: 16 }}>
       <label htmlFor={inputId} style={labelStyle}>
         {label}
-        {error && (
+        {error && ()
           <span style={{ color: '#f56565', marginLeft: 4, fontSize: 10 }}>
             *
           </span>
         )}
       </label>
-      
       <textarea
         ref={textareaRef}
         id={inputId}
@@ -108,32 +98,29 @@ export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({
         minLength={minLength}
         style={textareaStyle}
       />
-      
-      {error && (
+      {error && ()
         <div style={{ 
           color: '#f56565', 
           fontSize: 11, 
           marginTop: 4,
-          fontWeight: 400
+          fontWeight: 400,
         }}>
           {error}
         </div>
       )}
-      
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         marginTop: 2,
         fontSize: 10,
-        color: '#a0aec0'
+        color: '#a0aec0',
       }}>
-        {showWordCount && (
+        {showWordCount && ()
           <span>
             {wordCount} word{wordCount !== 1 ? 's' : ''}
           </span>
         )}
-        
-        {maxLength && (
+        {maxLength && ()
           <span style={{ marginLeft: 'auto' }}>
             {charCount} / {maxLength}
           </span>

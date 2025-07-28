@@ -4,7 +4,6 @@
  * Comprehensive demonstration of all annotation tools working together
  * for professional VFX director workflows.
  */
-
 import React, { useState, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -19,7 +18,6 @@ import DrawingAnnotationsCanvas from './DrawingAnnotations';
 import RegionAnnotationSystem from './RegionAnnotations';
 
 // Import existing components for integration
-
 import { 
   MessageCircle,
   Pen,
@@ -68,7 +66,6 @@ interface MockNode {
   width: number;
   height: number;
 }
-
 interface MockConnection {
   id: string;
   source: string;
@@ -94,7 +91,6 @@ const SAMPLE_NODES: MockNode[] = [
   { id: 'node-007', name: 'Atmosphere', type: 'effect', x: 450, y: 250, width: 120, height: 80 },
   { id: 'node-008', name: 'Final Output', type: 'output', x: 650, y: 250, width: 120, height: 80 }
 ];
-
 const SAMPLE_CONNECTIONS: MockConnection[] = [
   { id: 'conn-001', source: 'node-001', target: 'node-002' },
   { id: 'conn-002', source: 'node-002', target: 'node-003' },
@@ -104,16 +100,14 @@ const SAMPLE_CONNECTIONS: MockConnection[] = [
   { id: 'conn-006', source: 'node-007', target: 'node-004' },
   { id: 'conn-007', source: 'node-004', target: 'node-008' }
 ];
-
 const DEFAULT_USER: VFXUser = {
   id: 'user-director',
   name: 'Sarah Director',
   role: 'director',
   email: 'sarah@vfxstudio.com',
   color: '#ff7c00',
-  avatar: '/avatars/director.jpg'
+  avatar: '/avatars/director.jpg',
 };
-
 const TEAM_MEMBERS: VFXUser[] = [
   DEFAULT_USER,
   {
@@ -122,7 +116,7 @@ const TEAM_MEMBERS: VFXUser[] = [
     role: 'vfx_supervisor',
     email: 'mike@vfxstudio.com',
     color: '#3b82f6',
-    avatar: '/avatars/vfx-supervisor.jpg'
+    avatar: '/avatars/vfx-supervisor.jpg',
   },
   {
     id: 'user-artist',
@@ -130,7 +124,7 @@ const TEAM_MEMBERS: VFXUser[] = [
     role: 'artist',
     email: 'alex@vfxstudio.com',
     color: '#10b981',
-    avatar: '/avatars/artist.jpg'
+    avatar: '/avatars/artist.jpg',
   },
   {
     id: 'user-pipeline',
@@ -138,11 +132,11 @@ const TEAM_MEMBERS: VFXUser[] = [
     role: 'pipeline_td',
     email: 'jordan@vfxstudio.com',
     color: '#8b5cf6',
-    avatar: '/avatars/pipeline-td.jpg'
+    avatar: '/avatars/pipeline-td.jpg',
   }
 ];
 
-export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
+export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
   className = '',
   title = 'VFX Annotation Tools Demonstration',
   showAllTools = true,
@@ -153,9 +147,8 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
   const [currentUser, setCurrentUser] = useState<VFXUser>(initialUser);
   const [selectedNode, setSelectedNode] = useState<string | null>('node-002');
   const [activeAnnotationTool, setActiveAnnotationTool] = useState<'node' | 'drawing' | 'region' | 'connection'>('node');
-  
   // Annotation data state
-  const [nodeAnnotations, setNodeAnnotations] = useState<NodeAnnotation[]>([
+  const [nodeAnnotations, setNodeAnnotations] = useState<NodeAnnotation[]>([)
     {
       id: 'node-ann-001',
       nodeId: 'node-002',
@@ -167,7 +160,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
       timestamp: '2025-07-22T09:00:00Z',
       lastModified: '2025-07-22T09:00:00Z',
       attachments: [],
-      replies: [
+      replies: [,
         {
           id: 'reply-001',
           content: 'I can reduce the blur amount by 30%. Will that work?',
@@ -179,7 +172,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
       tags: ['motion-blur', 'adjustment', 'character'],
       visibility: 'public',
       linkedAnnotations: [],
-      estimatedTime: 1
+      estimatedTime: 1,
     },
     {
       id: 'node-ann-002',
@@ -213,52 +206,51 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
       tags: ['performance', 'lighting', 'optimization'],
       visibility: 'public',
       linkedAnnotations: [],
-      estimatedTime: 3
+      estimatedTime: 3,
     }
   ]);
-
-  const [drawingAnnotations, setDrawingAnnotations] = useState<DrawingAnnotation[]>([
+  const [drawingAnnotations, setDrawingAnnotations] = useState<DrawingAnnotation[]>([)
     {
       id: 'draw-001',
       type: 'arrow',
       points: [{ x: 170, y: 140 }, { x: 250, y: 140 }],
-      style: {
+      style: {,
         color: '#ff7c00',
         thickness: 4,
         opacity: 1,
         lineCap: 'round',
-        lineJoin: 'round'
+        lineJoin: 'round',
       },
       layer: 1,
       author: DEFAULT_USER,
       timestamp: '2025-07-22T09:00:00Z',
       visible: true,
-      locked: false
+      locked: false,
     },
     {
       id: 'draw-002',
       type: 'circle',
       points: [{ x: 310, y: 140 }, { x: 340, y: 170 }],
-      style: {
+      style: {,
         color: '#ef4444',
         thickness: 3,
         opacity: 0.8,
         fillColor: '#ef4444',
         fillOpacity: 0.1,
         lineCap: 'round',
-        lineJoin: 'round'
+        lineJoin: 'round',
       },
       layer: 2,
       author: DEFAULT_USER,
       timestamp: '2025-07-22T09:05:00Z',
       visible: true,
-      locked: false
+      locked: false,
     },
     {
       id: 'draw-003',
       type: 'text',
       points: [{ x: 320, y: 200 }],
-      style: {
+      style: {,
         color: '#1f2937',
         thickness: 1,
         opacity: 1,
@@ -266,7 +258,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
         fontFamily: 'Arial',
         fontWeight: 'bold',
         lineCap: 'round',
-        lineJoin: 'round'
+        lineJoin: 'round',
       },
       layer: 3,
       author: DEFAULT_USER,
@@ -276,27 +268,26 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
       text: 'NEEDS ATTENTION'
     }
   ]);
-
-  const [regionAnnotations, setRegionAnnotations] = useState<RegionAnnotation[]>([
+  const [regionAnnotations, setRegionAnnotations] = useState<RegionAnnotation[]>([)
     {
       id: 'region-001',
       name: 'Character Pipeline',
       type: 'mars_zone',
       shape: 'rectangle',
-      area: {
+      area: {,
         shape: 'rectangle',
         bounds: { x: 30, y: 80, width: 360, height: 120 },
-        points: [
+        points: [,
           { x: 30, y: 80 },
           { x: 390, y: 200 }
         ]
       },
-      style: {
+      style: {,
         borderColor: '#8b5cf6',
         borderWidth: 3,
         borderStyle: 'dashed',
         fillColor: '#8b5cf6',
-        fillOpacity: 0.1
+        fillOpacity: 0.1,
       },
       description: 'Primary character processing pipeline - critical path for hero shots',
       author: TEAM_MEMBERS[1], // VFX Supervisor
@@ -309,12 +300,12 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
       marsZone: 'subject_focus',
       nodeIds: ['node-001', 'node-002', 'node-003'],
       tags: ['character', 'hero', 'critical-path'],
-      metadata: {
+      metadata: {,
         nodeCount: 3,
         totalComplexity: 240,
         estimatedRenderTime: 12.5,
         performanceImpact: 'high',
-        lastAnalysis: '2025-07-22T08:00:00Z'
+        lastAnalysis: '2025-07-22T08:00:00Z',
       }
     },
     {
@@ -322,20 +313,20 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
       name: 'Background Processing',
       type: 'optimization_zone',
       shape: 'rectangle',
-      area: {
+      area: {,
         shape: 'rectangle',
         bounds: { x: 30, y: 230, width: 360, height: 120 },
-        points: [
+        points: [,
           { x: 30, y: 230 },
           { x: 390, y: 350 }
         ]
       },
-      style: {
+      style: {,
         borderColor: '#10b981',
         borderWidth: 2,
         borderStyle: 'solid',
         fillColor: '#10b981',
-        fillOpacity: 0.08
+        fillOpacity: 0.08,
       },
       description: 'Background elements - optimization candidate for render performance',
       author: TEAM_MEMBERS[3], // Pipeline TD
@@ -347,105 +338,96 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
       status: 'active',
       nodeIds: ['node-005', 'node-006', 'node-007'],
       tags: ['background', 'optimization', 'performance'],
-      metadata: {
+      metadata: {,
         nodeCount: 3,
         totalComplexity: 180,
         estimatedRenderTime: 8.2,
         performanceImpact: 'medium',
-        lastAnalysis: '2025-07-22T08:30:00Z'
+        lastAnalysis: '2025-07-22T08:30:00Z',
       }
     }
   ]);
-
   // UI state
   const [showGrid, setShowGrid] = useState(true);
   const [showPerformanceMetrics, setShowPerformanceMetrics] = useState(true);
   const [showTeamPanel, setShowTeamPanel] = useState(false);
-  const [globalVisibility, setGlobalVisibility] = useState({
+  const [globalVisibility, setGlobalVisibility] = useState({)
     nodeAnnotations: true,
     drawingAnnotations: true,
     regionAnnotations: true,
-    connectionAnnotations: true
+    connectionAnnotations: true,
   });
-
   // Statistics calculations
   const stats = useMemo(() => {
     const totalAnnotations = nodeAnnotations.length + drawingAnnotations.length + regionAnnotations.length;
     const openIssues = nodeAnnotations.filter(a => ['open', 'in_progress'].includes(a.status)).length;
-    const criticalIssues = nodeAnnotations.filter(a => a.priority === 'critical').length + 
+    const criticalIssues = nodeAnnotations.filter(a => a.priority === 'critical').length + ;
                           regionAnnotations.filter(r => r.priority === 'critical').length;
-    const teamMembers = new Set([
+    const teamMembers = new Set([;)
       ...nodeAnnotations.map(a => a.author.id),
       ...drawingAnnotations.map(a => a.author.id),
       ...regionAnnotations.map(a => a.author.id)
     ]).size;
-    const avgRenderTime = regionAnnotations.reduce((sum, r) => 
+    const avgRenderTime = regionAnnotations.reduce((sum, r) => ;
       sum + (r.metadata.estimatedRenderTime || 0), 0
     ) / regionAnnotations.length || 0;
-
     return {
       totalAnnotations,
       openIssues,
       criticalIssues,
       teamMembers,
-      avgRenderTime: avgRenderTime.toFixed(1)
+      avgRenderTime: avgRenderTime.toFixed(1),
     };
   }, [nodeAnnotations, drawingAnnotations, regionAnnotations]);
-
   // Annotation handlers
-  const handleNodeAnnotationCreate = useCallback(
-    (annotation: Omit<NodeAnnotation,
+  const handleNodeAnnotationCreate = useCallback(;)
+    (annotation: Omit<NodeAnnotation,)
     'id' | 'timestamp' | 'lastModified' | 'replies'>
   ) => {
     const newAnnotation: NodeAnnotation = {
       ...annotation,
-      id: `node-ann-${Date.now()}`,
+      id: `node-ann-${Date.now()}`,}
       timestamp: new Date().toISOString(),
       lastModified: new Date().toISOString(),
-      replies: []
+      replies: [],
     };
     setNodeAnnotations(prev => [...prev, newAnnotation]);
   }, []);
-
   const handleNodeAnnotationUpdate = useCallback((annotationId: string, updates: Partial<NodeAnnotation>) => {
-    setNodeAnnotations(prev => 
-      prev.map(ann => 
+    setNodeAnnotations(prev => )
+      prev.map(ann => )
         ann.id === annotationId 
           ? { ...ann, ...updates, lastModified: new Date().toISOString() }
           : ann
       )
     );
   }, []);
-
   const handleNodeAnnotationDelete = useCallback((annotationId: string) => {
     setNodeAnnotations(prev => prev.filter(ann => ann.id !== annotationId));
   }, []);
-
-  const handleReplyCreate = useCallback(
-    (annotationId: string,
+  const handleReplyCreate = useCallback(;)
+    (annotationId: string,)
     reply: Omit<NodeAnnotation['replies'][0],
     'id' | 'timestamp' | 'reactions'>
   ) => {
     const newReply = {
       ...reply,
-      id: `reply-${Date.now()}`,
+      id: `reply-${Date.now()}`,}
       timestamp: new Date().toISOString(),
       reactions: {}
     };
-    
-    setNodeAnnotations(prev => 
-      prev.map(ann => 
+    setNodeAnnotations(prev => )
+      prev.map(ann => )
         ann.id === annotationId 
           ? { ...ann, replies: [...ann.replies, newReply], lastModified: new Date().toISOString() }
           : ann
       )
     );
   }, []);
-
   // Export all annotations
   const exportAnnotations = useCallback(() => {
     const exportData = {
-      metadata: {
+      metadata: {,
         exportedBy: currentUser,
         exportedAt: new Date().toISOString(),
         version: '1.0.0',
@@ -458,28 +440,24 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
       connections: SAMPLE_CONNECTIONS,
       stats
     };
-
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `vfx-annotations-${Date.now()}.json`;
+    link.download = `vfx-annotations-${Date.now()}.json`;}
     link.click();
     URL.revokeObjectURL(url);
   }, [nodeAnnotations, drawingAnnotations, regionAnnotations, currentUser, stats]);
-
   // Get annotations for selected node
   const selectedNodeAnnotations = useMemo(() => {
     return selectedNode ? nodeAnnotations.filter(ann => ann.nodeId === selectedNode) : [];
   }, [nodeAnnotations, selectedNode]);
-
   // Get selected node details
   const selectedNodeDetails = useMemo(() => {
     return selectedNode ? SAMPLE_NODES.find(node => node.id === selectedNode) : null;
   }, [selectedNode]);
-
-  return (
-    <div className={`annotation-tools-demo ${className}`}>
+  return ()
+    <div className={`annotation-tools-demo ${className}`}>}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
@@ -490,7 +468,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                 Professional VFX Workflow
               </Badge>
             </div>
-            
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -500,7 +477,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                 <Users className="w-4 h-4 mr-2" />
                 Team ({TEAM_MEMBERS.length})
               </Button>
-              
               <Select 
                 value={currentUser.id} 
                 onValueChange={(userId) => setCurrentUser(TEAM_MEMBERS.find(u => u.id === userId) || DEFAULT_USER)}
@@ -509,7 +485,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {TEAM_MEMBERS.map(user => (
+                  {TEAM_MEMBERS.map(user => ()
                     <SelectItem key={user.id} value={user.id}>
                       <div className="flex items-center gap-2">
                         <div 
@@ -525,7 +501,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                   ))}
                 </SelectContent>
               </Select>
-              
               <Button
                 variant="outline"
                 size="sm"
@@ -536,7 +511,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
               </Button>
             </div>
           </CardTitle>
-          
           {/* Statistics Dashboard */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-4">
             <div className="bg-blue-50 p-3 rounded-lg text-center">
@@ -560,22 +534,20 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
               <div className="text-xs text-purple-700">Avg Render Time</div>
             </div>
           </div>
-          
           {/* Team Panel */}
-          {showTeamPanel && (
+          {showTeamPanel && ()
             <Card className="mt-4">
               <CardHeader>
                 <CardTitle className="text-sm">Team Collaboration</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                  {TEAM_MEMBERS.map(user => {
+                  {TEAM_MEMBERS.map(user => {)
                     const userAnnotations = nodeAnnotations.filter(a => a.author.id === user.id).length;
                     const userDrawings = drawingAnnotations.filter(a => a.author.id === user.id).length;
                     const userRegions = regionAnnotations.filter(a => a.author.id === user.id).length;
                     const totalContributions = userAnnotations + userDrawings + userRegions;
-                    
-                    return (
+                    return ()
                       <div key={user.id} className="border rounded-lg p-3">
                         <div className="flex items-center gap-2 mb-2">
                           <div 
@@ -609,7 +581,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
             </Card>
           )}
         </CardHeader>
-
         <CardContent>
           <div className="space-y-6">
             {/* Visibility Controls */}
@@ -622,7 +593,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {Object.entries(globalVisibility).map(([key, visible]) => (
+                  {Object.entries(globalVisibility).map(([key, visible]) => ()
                     <div key={key} className="flex items-center gap-2">
                       <Switch
                         checked={visible}
@@ -636,7 +607,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                     </div>
                   ))}
                 </div>
-                
                 <div className="flex items-center gap-4 mt-4 pt-4 border-t">
                   <div className="flex items-center gap-2">
                     <Switch
@@ -645,7 +615,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                     />
                     <span className="text-sm">Show Grid</span>
                   </div>
-                  
                   <div className="flex items-center gap-2">
                     <Switch
                       checked={showPerformanceMetrics}
@@ -656,7 +625,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                 </div>
               </CardContent>
             </Card>
-
             {/* Main Annotation Interface */}
             <Tabs value={activeAnnotationTool} onValueChange={setActiveAnnotationTool}>
               <TabsList className="grid w-full grid-cols-4">
@@ -677,7 +645,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                   Connections
                 </TabsTrigger>
               </TabsList>
-
               <TabsContent value="node" className="space-y-4">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {/* Node Selection */}
@@ -687,7 +654,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {SAMPLE_NODES.map(node => (
+                        {SAMPLE_NODES.map(node => ()
                           <div
                             key={node.id}
                             className={`p-3 border rounded cursor-pointer transition-colors ${
@@ -705,10 +672,9 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                       </div>
                     </CardContent>
                   </Card>
-
                   {/* Node Annotations */}
                   <div className="lg:col-span-2">
-                    {selectedNodeDetails && (
+                    {selectedNodeDetails && ()
                       <NodeAnnotationSystem
                         nodeId={selectedNodeDetails.id}
                         nodeName={selectedNodeDetails.name}
@@ -721,8 +687,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                         onReplyCreate={handleReplyCreate}
                       />
                     )}
-                    
-                    {!selectedNode && (
+                    {!selectedNode && ()
                       <Card>
                         <CardContent className="flex flex-col items-center justify-center py-12">
                           <MessageCircle className="w-16 h-16 text-gray-400 mb-4" />
@@ -736,9 +701,8 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                   </div>
                 </div>
               </TabsContent>
-
               <TabsContent value="drawing" className="space-y-4">
-                {globalVisibility.drawingAnnotations && (
+                {globalVisibility.drawingAnnotations && ()
                   <DrawingAnnotationsCanvas
                     width={800}
                     height={400}
@@ -750,9 +714,8 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                   />
                 )}
               </TabsContent>
-
               <TabsContent value="region" className="space-y-4">
-                {globalVisibility.regionAnnotations && (
+                {globalVisibility.regionAnnotations && ()
                   <RegionAnnotationSystem
                     width={800}
                     height={400}
@@ -765,7 +728,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                   />
                 )}
               </TabsContent>
-
               <TabsContent value="connection" className="space-y-4">
                 <Card>
                   <CardHeader>
@@ -773,7 +735,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {SAMPLE_CONNECTIONS.map(conn => (
+                      {SAMPLE_CONNECTIONS.map(conn => ()
                         <div key={conn.id} className="flex items-center justify-between p-3 border rounded">
                           <div>
                             <div className="text-sm font-medium">
@@ -791,9 +753,8 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                 </Card>
               </TabsContent>
             </Tabs>
-
             {/* Performance Metrics Panel */}
-            {showPerformanceMetrics && (
+            {showPerformanceMetrics && ()
               <Card>
                 <CardHeader>
                   <CardTitle className="text-sm flex items-center gap-2">
@@ -824,7 +785,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                         </div>
                       </div>
                     </div>
-                    
                     <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg">
                       <div className="text-sm font-medium text-purple-900 mb-2">MARS Analysis</div>
                       <div className="space-y-2">
@@ -848,7 +808,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
                         </div>
                       </div>
                     </div>
-                    
                     <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg">
                       <div className="text-sm font-medium text-green-900 mb-2">Workflow Status</div>
                       <div className="space-y-2">
@@ -879,37 +838,30 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
           </div>
         </CardContent>
       </Card>
-
       <style>{`
         .annotation-tools-demo {
           max-width: 1400px;
           margin: 0 auto;
           padding: 1rem;
         }
-
         @media (max-width: 768px) {
           .annotation-tools-demo {
             padding: 0.5rem;
           }
         }
-
         .annotation-tools-demo .tabs-list {
           background-color: #f8fafc;
         }
-
         .annotation-tools-demo .tabs-trigger[data-state="active"] {
           background-color: white;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
         .trend-indicator.up {
           color: #10b981;
         }
-
         .trend-indicator.down {
           color: #ef4444;
         }
-
         .trend-indicator.stable {
           color: #6b7280;
         }

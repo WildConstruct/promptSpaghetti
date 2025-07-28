@@ -24,7 +24,7 @@ export interface GenerationResult {
     errors?: string[];
     warnings?: string[];
     attempts: number;
-    metadata: {
+    metadata: {,
         model: string;
         temperature: number;
         tokenCount: number;
@@ -67,7 +67,7 @@ export declare const defaultOpenAIConfig: OpenAIAgentConfig;
 /**
  * Utility function to create and use OpenAI agent
  */
-export declare function generateGraphWithOpenAI(
+export declare function generateGraphWithOpenAI()
   request: GraphGenerationRequest,
   config?: Partial<OpenAIAgentConfig>
 ): Promise<GenerationResult>;

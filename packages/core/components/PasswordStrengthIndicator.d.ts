@@ -33,7 +33,7 @@ export interface PasswordStrengthDisplayProps {
     theme: 'light' | 'dark';
 }
 export declare const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps>;
-export declare const usePasswordStrength: (
+export declare const usePasswordStrength: ()
   password: string,
   context?: PasswordValidationContext,
   validator?: PasswordComplexityValidator

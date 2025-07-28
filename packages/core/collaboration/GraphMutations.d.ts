@@ -40,7 +40,7 @@ export interface NodeAddOperation extends BaseMutationOperation {
     type: 'NODE_ADD';
     nodeId: string;
     nodeType: z.infer<typeof NodeTypeEnum>;
-    position: {
+    position: {,
         x: number;
         y: number;
     };
@@ -344,7 +344,7 @@ export declare const NodeAddOperationSchema: z.ZodObject<{
     documentId: z.ZodString;
     nodeId: z.ZodString;
     nodeType: z.ZodEnum<["WeightedChoice", "Concat", "Output", "Include", "SetVariable", "GetVariable", "WeightedAdvanced", "Conditional", "Sequential", "Markov", "PythonTransform"]>;
-    position: z.ZodObject<{
+    position: z.ZodObject<{,
         x: z.ZodNumber;
         y: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
@@ -364,7 +364,7 @@ export declare const NodeAddOperationSchema: z.ZodObject<{
     priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
 }, "strip", z.ZodTypeAny, {
     type: "NODE_ADD";
-    position: {
+    position: {,
         x: number;
         y: number;
     };
@@ -382,7 +382,7 @@ export declare const NodeAddOperationSchema: z.ZodObject<{
     operationVector?: Record<string, number> | undefined;
 }, {
     type: "NODE_ADD";
-    position: {
+    position: {,
         x: number;
         y: number;
     };
@@ -515,7 +515,7 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     documentId: z.ZodString;
     nodeId: z.ZodString;
     nodeType: z.ZodEnum<["WeightedChoice", "Concat", "Output", "Include", "SetVariable", "GetVariable", "WeightedAdvanced", "Conditional", "Sequential", "Markov", "PythonTransform"]>;
-    position: z.ZodObject<{
+    position: z.ZodObject<{,
         x: z.ZodNumber;
         y: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
@@ -535,7 +535,7 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
 }, "strip", z.ZodTypeAny, {
     type: "NODE_ADD";
-    position: {
+    position: {,
         x: number;
         y: number;
     };
@@ -553,7 +553,7 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     operationVector?: Record<string, number> | undefined;
 }, {
     type: "NODE_ADD";
-    position: {
+    position: {,
         x: number;
         y: number;
     };
@@ -658,13 +658,13 @@ declare const _default: {
     ConflictType: typeof ConflictType;
     ResolutionStrategy: typeof ResolutionStrategy;
     OperationPriority: typeof OperationPriority;
-    NodeAddOperationSchema: z.ZodObject<{
+    NodeAddOperationSchema: z.ZodObject<{,
         type: z.ZodLiteral<"NODE_ADD">;
         operationId: z.ZodString;
         documentId: z.ZodString;
         nodeId: z.ZodString;
         nodeType: z.ZodEnum<["WeightedChoice", "Concat", "Output", "Include", "SetVariable", "GetVariable", "WeightedAdvanced", "Conditional", "Sequential", "Markov", "PythonTransform"]>;
-        position: z.ZodObject<{
+        position: z.ZodObject<{,
             x: z.ZodNumber;
             y: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
@@ -684,7 +684,7 @@ declare const _default: {
         priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
     }, "strip", z.ZodTypeAny, {
         type: "NODE_ADD";
-        position: {
+        position: {,
             x: number;
             y: number;
         };
@@ -702,7 +702,7 @@ declare const _default: {
         operationVector?: Record<string, number> | undefined;
     }, {
         type: "NODE_ADD";
-        position: {
+        position: {,
             x: number;
             y: number;
         };
@@ -719,7 +719,7 @@ declare const _default: {
         clientId?: string | undefined;
         operationVector?: Record<string, number> | undefined;
     }>;
-    NodeUpdateOperationSchema: z.ZodObject<{
+    NodeUpdateOperationSchema: z.ZodObject<{,
         type: z.ZodLiteral<"NODE_UPDATE">;
         operationId: z.ZodString;
         documentId: z.ZodString;
@@ -768,7 +768,7 @@ declare const _default: {
         newValue?: unknown;
         validationSchema?: string | undefined;
     }>;
-    EdgeAddOperationSchema: z.ZodObject<{
+    EdgeAddOperationSchema: z.ZodObject<{,
         type: z.ZodLiteral<"EDGE_ADD">;
         operationId: z.ZodString;
         documentId: z.ZodString;
@@ -826,7 +826,7 @@ declare const _default: {
         documentId: z.ZodString;
         nodeId: z.ZodString;
         nodeType: z.ZodEnum<["WeightedChoice", "Concat", "Output", "Include", "SetVariable", "GetVariable", "WeightedAdvanced", "Conditional", "Sequential", "Markov", "PythonTransform"]>;
-        position: z.ZodObject<{
+        position: z.ZodObject<{,
             x: z.ZodNumber;
             y: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
@@ -846,7 +846,7 @@ declare const _default: {
         priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
     }, "strip", z.ZodTypeAny, {
         type: "NODE_ADD";
-        position: {
+        position: {,
             x: number;
             y: number;
         };
@@ -864,7 +864,7 @@ declare const _default: {
         operationVector?: Record<string, number> | undefined;
     }, {
         type: "NODE_ADD";
-        position: {
+        position: {,
             x: number;
             y: number;
         };
@@ -930,7 +930,7 @@ declare const _default: {
         validationSchema?: string | undefined;
     }>]>;
     VersionVectorSchema: z.ZodRecord<z.ZodString, z.ZodNumber>;
-    PositionSchema: z.ZodObject<{
+    PositionSchema: z.ZodObject<{,
         x: z.ZodNumber;
         y: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {

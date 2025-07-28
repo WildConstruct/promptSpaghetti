@@ -2,7 +2,6 @@
  * Deployment Approval Dashboard
  * Extension of the approval dashboard specifically for deployment approvals
  */
-
 import React, { useState, useEffect } from 'react';
 import { 
   RocketLaunchIcon,
@@ -22,7 +21,6 @@ import {
   ChevronRightIcon,
   ArrowTopRightOnSquareIcon
 } from '@heroicons/react/24/outline';
-
 interface DeploymentApprovalRequest {
   id: string;
   deployment_id: string;
@@ -38,9 +36,8 @@ interface DeploymentApprovalRequest {
   auto_approved?: boolean;
   deployment_url?: string;
   github_url: string;
-  
   // Deployment-specific metadata
-  metadata: {
+  metadata: {,
     repository: string;
     ref: string;
     changed_files: number;
@@ -51,14 +48,12 @@ interface DeploymentApprovalRequest {
     performance_regression: number;
     deployment_type: 'github_actions' | 'manual' | 'auto';
   };
-  
   // Approval criteria and progress
   criteria: DeploymentCriterion[];
   approvals: DeploymentApproval[];
   current_approvals: number;
   required_approvals: number;
 }
-
 interface DeploymentCriterion {
   type: 'security-review' | 'performance-impact' | 'business-approval';
   status: 'pending' | 'approved' | 'rejected';
@@ -67,7 +62,6 @@ interface DeploymentCriterion {
   description: string;
   validation_steps?: ValidationStep[];
 }
-
 interface DeploymentApproval {
   id: string;
   criterion_type: string;
@@ -77,14 +71,12 @@ interface DeploymentApproval {
   comments: string;
   reviewed_at: Date;
 }
-
 interface ValidationStep {
   name: string;
   status: 'passed' | 'failed' | 'pending';
   result?: unknown;
   automated: boolean;
 }
-
 interface DeploymentApprovalDashboardProps {
   workspaceId: string;
   currentUserId: string;
@@ -92,7 +84,7 @@ interface DeploymentApprovalDashboardProps {
   environment?: string;
 }
 
-export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardProps> = ({
+export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardProps> = ({)
   workspaceId,
   currentUserId,
   mode = 'reviewer',
@@ -103,44 +95,35 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
   const [error, setError] = useState<string | null>(null);
   const [selectedRequest, setSelectedRequest] = useState<DeploymentApprovalRequest | null>(null);
   const [activeTab, setActiveTab] = useState<'pending' | 'approved' | 'rejected' | 'all'>('pending');
-
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState({)
     environment: environment || '',
     status: '',
     urgency: '',
     auto_approved: false,
-    search: ''
+    search: '',
   });
-
   useEffect(() => {
     fetchDeploymentRequests();
-    
     // Set up polling for real-time updates
     const interval = setInterval(fetchDeploymentRequests, 30000);
     return () => clearInterval(interval);
   }, [workspaceId, currentUserId, mode, filters, activeTab]);
-
   const fetchDeploymentRequests = async () => {
     try {
       setLoading(true);
-      
       const queryParams = new URLSearchParams();
       queryParams.append('workspace_id', workspaceId);
       queryParams.append('deployment_type', 'true');
-      
       if (filters.environment) queryParams.append('environment', filters.environment);
       if (filters.status) queryParams.append('status', filters.status);
       if (filters.urgency) queryParams.append('urgency', filters.urgency);
       if (filters.auto_approved) queryParams.append('auto_approved', 'true');
       if (filters.search) queryParams.append('search', filters.search);
-      
-      const response = await fetch(`/api/approval/deployment-requests?${queryParams}`);
+      const response = await fetch(`/api/approval/deployment-requests?${queryParams}`);}
       const data = await response.json();
-      
       if (!response.ok) {
         throw new Error(data.message || 'Failed to fetch deployment requests');
       }
-      
       setDeploymentRequests(data.requests || []);
       setError(null);
     } catch (err) {
@@ -150,7 +133,6 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
       setLoading(false);
     }
   };
-
   const _____getEnvironmentIcon = (env: string) => {
     switch (env) {
     case 'production': return <ServerStackIcon className="h-4 w-4 text-red-500" />;
@@ -160,7 +142,6 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
     default: return <GlobeAltIcon className="h-4 w-4 text-gray-500" />;
     }
   };
-
   const _____getEnvironmentBadgeColor = (env: string) => {
     switch (env) {
     case 'production': return 'bg-red-100 text-red-800 border-red-200';
@@ -170,7 +151,6 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
     default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-
   const _____getStatusIcon = (status: string) => {
     switch (status) {
     case 'approved': 
@@ -185,7 +165,6 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
       return <ExclamationTriangleIcon className="h-5 w-5 text-gray-500" />;
     }
   };
-
   const _____getCriterionIcon = (type: string) => {
     switch (type) {
     case 'security-review': return <ShieldCheckIcon className="h-4 w-4 text-blue-500" />;
@@ -194,20 +173,16 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
     default: return <CheckCircleIcon className="h-4 w-4 text-gray-500" />;
     }
   };
-
-  const filteredRequests = deploymentRequests.filter(request => {
+  const filteredRequests = deploymentRequests.filter(request => {)
     if (activeTab === 'pending' && !['pending', 'in_review'].includes(request.status)) return false;
     if (activeTab === 'approved' && !['approved', 'auto_approved'].includes(request.status)) return false;
     if (activeTab === 'rejected' && request.status !== 'rejected') return false;
-    
     if (filters.search && !request.title.toLowerCase().includes(filters.search.toLowerCase()) &&
         !request.deployment_id.includes(filters.search)) return false;
-        
     return true;
   });
-
   if (loading && deploymentRequests.length === 0) {
-    return (
+    return ()
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2 text-gray-600">
           <ArrowTopRightOnSquareIcon className="h-5 w-5 animate-spin" />
@@ -216,9 +191,8 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="flex items-center">
           <XCircleIcon className="h-5 w-5 text-red-500 mr-2" />
@@ -227,19 +201,17 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <RocketLaunchIcon className="h-6 w-6 text-blue-600" />
           <h2 className="text-2xl font-semibold text-gray-900">Deployment Approvals</h2>
-          {loading && (
+          {loading && ()
             <ArrowTopRightOnSquareIcon className="h-4 w-4 text-gray-400 animate-spin" />
           )}
         </div>
-        
         <div className="flex items-center space-x-3">
           <span className="text-sm text-gray-600">
             {filteredRequests.length} requests
@@ -253,7 +225,6 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
           </button>
         </div>
       </div>
-
       {/* Tab Navigation */}
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8">
@@ -262,17 +233,16 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
             { id: 'approved', label: 'Approved', icon: CheckCircleIcon },
             { id: 'rejected', label: 'Rejected', icon: XCircleIcon },
             { id: 'all', label: 'All', icon: EyeIcon }
-          ].map(tab => {
+          ].map(tab => {)
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
-            const count = deploymentRequests.filter(req => {
+            const count = deploymentRequests.filter(req => {)
               if (tab.id === 'pending') return ['pending', 'in_review'].includes(req.status);
               if (tab.id === 'approved') return ['approved', 'auto_approved'].includes(req.status);
               if (tab.id === 'rejected') return req.status === 'rejected';
               return true;
             }).length;
-
-            return (
+            return ()
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
@@ -294,7 +264,6 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
           })}
         </nav>
       </div>
-
       {/* Filters */}
       <div className="bg-gray-50 p-4 rounded-lg">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -312,7 +281,6 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
               <option value="development">Development</option>
             </select>
           </div>
-          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
             <select
@@ -328,7 +296,6 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
               <option value="rejected">Rejected</option>
             </select>
           </div>
-          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Urgency</label>
             <select
@@ -343,7 +310,6 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
               <option value="critical">Critical</option>
             </select>
           </div>
-          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
             <input
@@ -356,22 +322,21 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
           </div>
         </div>
       </div>
-
       {/* Deployment Requests List */}
       <div className="space-y-4">
-        {filteredRequests.length === 0 ? (
+        {filteredRequests.length === 0 ? ()
           <div className="text-center py-12">
             <RocketLaunchIcon className="h-12 w-12 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">No deployment requests</h3>
             <p className="text-gray-600">
               {activeTab === 'pending' 
                 ? 'No pending deployments require approval at this time.'
-                : `No ${activeTab} deployment requests found.`
+                : `No ${activeTab} deployment requests found.`}
               }
             </p>
           </div>
-        ) : (
-          filteredRequests.map(request => (
+        ) : ()
+          filteredRequests.map(request => ()
             <DeploymentRequestCard
               key={request.id}
               request={request}
@@ -381,9 +346,8 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
           ))
         )}
       </div>
-
       {/* Detailed View Modal */}
-      {selectedRequest && (
+      {selectedRequest && ()
         <DeploymentRequestDetail
           request={selectedRequest}
           onClose={() => setSelectedRequest(null)}
@@ -410,7 +374,6 @@ const DeploymentRequestCard: React.FC<{
     default: return <GlobeAltIcon className="h-4 w-4 text-gray-500" />;
     }
   };
-
   const getEnvironmentBadgeColor = (env: string) => {
     switch (env) {
     case 'production': return 'bg-red-100 text-red-800 border-red-200';
@@ -420,7 +383,6 @@ const DeploymentRequestCard: React.FC<{
     default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-
   const getStatusIcon = (status: string) => {
     switch (status) {
     case 'approved': 
@@ -435,7 +397,6 @@ const DeploymentRequestCard: React.FC<{
       return <ExclamationTriangleIcon className="h-5 w-5 text-gray-500" />;
     }
   };
-
   const getCriterionIcon = (type: string) => {
     switch (type) {
     case 'security-review': return <ShieldCheckIcon className="h-4 w-4 text-blue-500" />;
@@ -444,15 +405,13 @@ const DeploymentRequestCard: React.FC<{
     default: return <CheckCircleIcon className="h-4 w-4 text-gray-500" />;
     }
   };
-
   const urgencyColors = {
     low: 'bg-blue-100 text-blue-800',
     medium: 'bg-yellow-100 text-yellow-800',
     high: 'bg-orange-100 text-orange-800',
     critical: 'bg-red-100 text-red-800'
   };
-
-  return (
+  return ()
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:border-gray-300 transition-colors cursor-pointer">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-3">
@@ -464,27 +423,23 @@ const DeploymentRequestCard: React.FC<{
             </p>
           </div>
         </div>
-        
         <div className="flex items-center space-x-2">
-          <span className={`px-2 py-1 text-xs font-medium rounded-full border ${urgencyColors[request.urgency]}`}>
+          <span className={`px-2 py-1 text-xs font-medium rounded-full border ${urgencyColors[request.urgency]}`}>}
             {request.urgency.toUpperCase()}
           </span>
-          
-          <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getEnvironmentBadgeColor(request.environment)}`}>
+          <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getEnvironmentBadgeColor(request.environment)}`}>}
             <div className="flex items-center space-x-1">
               {getEnvironmentIcon(request.environment)}
               <span>{request.environment.toUpperCase()}</span>
             </div>
           </span>
-          
-          {request.auto_approved && (
+          {request.auto_approved && ()
             <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 border border-green-200">
               AUTO
             </span>
           )}
         </div>
       </div>
-
       <div className="mb-4">
         <p className="text-gray-700 mb-2">{request.description}</p>
         <div className="flex items-center space-x-4 text-sm text-gray-600">
@@ -495,7 +450,6 @@ const DeploymentRequestCard: React.FC<{
           <span>{request.metadata.changed_files} files, {request.metadata.lines_changed} lines</span>
         </div>
       </div>
-
       {/* Approval Progress */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
@@ -506,21 +460,19 @@ const DeploymentRequestCard: React.FC<{
             {request.current_approvals}/{request.required_approvals}
           </span>
         </div>
-        
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="bg-blue-600 h-2 rounded-full transition-all"
             style={{
-              width: `${Math.min(100, (request.current_approvals / request.required_approvals) * 100)}%`
+              width: `${Math.min(100, (request.current_approvals / request.required_approvals) * 100)}%`}
             }}
           />
         </div>
       </div>
-
       {/* Criteria Status */}
       <div className="mb-4">
         <div className="flex flex-wrap gap-2">
-          {request.criteria.map(criterion => (
+          {request.criteria.map(criterion => ()
             <div
               key={criterion.type}
               className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs ${
@@ -539,17 +491,15 @@ const DeploymentRequestCard: React.FC<{
           ))}
         </div>
       </div>
-
       {/* Quality Metrics */}
       <div className="flex items-center justify-between text-xs text-gray-600 border-t pt-3">
         <div className="flex items-center space-x-4">
           <span>Coverage: {request.metadata.test_coverage}%</span>
           <span>Security: {request.metadata.security_scan_status}</span>
-          {request.metadata.breaking_changes && (
+          {request.metadata.breaking_changes && ()
             <span className="text-orange-600">⚠ Breaking Changes</span>
           )}
         </div>
-        
         <button
           onClick={() => onSelect(request)}
           className="flex items-center space-x-1 text-blue-600 hover:text-blue-800"
@@ -569,7 +519,7 @@ const DeploymentRequestDetail: React.FC<{
   currentUserId: string;
   onUpdate: () => void;
 }> = ({ request, onClose, currentUserId, onUpdate }) => {
-  return (
+  return ()
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
@@ -581,7 +531,6 @@ const DeploymentRequestDetail: React.FC<{
             <XCircleIcon className="h-6 w-6" />
           </button>
         </div>
-        
         <div className="p-6">
           <p className="text-gray-600">
             Detailed deployment approval interface would be implemented here with:

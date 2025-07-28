@@ -78,7 +78,7 @@ export interface VFXChecklistComment {
     timestamp: string;
     type: 'comment' | 'review' | 'approval' | 'rejection';
     mentions: string[];
-    reactions: {
+    reactions: {,
         [emoji: string]: VFXTeamMember[];
     };
 }

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { ConnectionState, ConnectionQuality } from '../../network-resilience/ConnectionStateManager';
 import { ReconnectionState } from '../../network-resilience/ReconnectionHandler';
 import { NetworkStatus } from '../../network-resilience/NetworkResilienceManager';
-
 interface ConnectionStatusIndicatorProps {
   status: NetworkStatus;
   showDetails?: boolean;
@@ -11,7 +10,7 @@ interface ConnectionStatusIndicatorProps {
   onClick?: () => void;
 }
 
-export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps> = ({
+export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps> = ({)
   status,
   showDetails = false,
   compact = false,
@@ -19,7 +18,6 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
   onClick
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
-
   useEffect(() => {
     if (status.reconnectionState === ReconnectionState.ATTEMPTING) {
       setIsAnimating(true);
@@ -27,12 +25,10 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
       setIsAnimating(false);
     }
   }, [status.reconnectionState]);
-
   const getConnectionIcon = () => {
     if (status.reconnectionState === ReconnectionState.ATTEMPTING) {
       return '🔄';
     }
-
     switch (status.connectionState) {
     case ConnectionState.CONNECTED:
       return status.connectionQuality === ConnectionQuality.EXCELLENT ? '🟢' :
@@ -50,15 +46,13 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
       return '❓';
     }
   };
-
   const getStatusText = () => {
     if (status.reconnectionState === ReconnectionState.ATTEMPTING) {
       return 'Reconnecting...';
     }
-
     switch (status.connectionState) {
     case ConnectionState.CONNECTED:
-      return `Connected (${status.connectionQuality})`;
+      return `Connected (${status.connectionQuality})`;}
     case ConnectionState.CONNECTING:
       return 'Connecting...';
     case ConnectionState.DISCONNECTED:
@@ -71,7 +65,6 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
       return 'Unknown';
     }
   };
-
   const getStatusColor = () => {
     if (status.isOnline) {
       switch (status.connectionQuality) {
@@ -90,21 +83,17 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
       return status.reconnectionState === ReconnectionState.ATTEMPTING ? '#3b82f6' : '#ef4444';
     }
   };
-
   const formatLastSync = () => {
     if (!status.lastSync) return 'Never';
-    
     const now = Date.now();
     const diff = now - status.lastSync;
-    
     if (diff < 60000) return 'Just now';
-    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
-    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
-    return `${Math.floor(diff / 86400000)}d ago`;
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;}
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;}
+    return `${Math.floor(diff / 86400000)}d ago`;}
   };
-
   if (compact) {
-    return (
+    return ()
       <div 
         className={`inline-flex items-center gap-1 cursor-pointer ${className}`}
         onClick={onClick}
@@ -116,7 +105,7 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
         >
           {getConnectionIcon()}
         </span>
-        {status.queueSize > 0 && (
+        {status.queueSize > 0 && ()
           <span className="text-xs bg-orange-100 text-orange-800 px-1 rounded">
             {status.queueSize}
           </span>
@@ -124,18 +113,17 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
       </div>
     );
   }
-
-  return (
+  return ()
     <div 
       className={`connection-status-indicator ${className}`}
       onClick={onClick}
       style={{
         padding: '8px 12px',
         backgroundColor: '#f8fafc',
-        border: `2px solid ${getStatusColor()}`,
+        border: `2px solid ${getStatusColor()}`,}
         borderRadius: '8px',
         cursor: onClick ? 'pointer' : 'default',
-        minWidth: '200px'
+        minWidth: '200px',
       }}
     >
       <div className="flex items-center justify-between">
@@ -150,8 +138,7 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
             {getStatusText()}
           </span>
         </div>
-        
-        {status.queueSize > 0 && (
+        {status.queueSize > 0 && ()
           <div className="flex items-center gap-1">
             <span className="text-xs text-gray-600">Queue:</span>
             <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">
@@ -160,8 +147,7 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
           </div>
         )}
       </div>
-
-      {showDetails && (
+      {showDetails && ()
         <div className="mt-2 pt-2 border-t border-gray-200">
           <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
             <div>
@@ -183,8 +169,7 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
           </div>
         </div>
       )}
-
-      {status.pendingSync && (
+      {status.pendingSync && ()
         <div className="mt-2 pt-2 border-t border-gray-200">
           <div className="flex items-center gap-2 text-xs text-blue-600">
             <div className="animate-spin">⚙️</div>

@@ -5,7 +5,6 @@
  * Manages overrides for historical constraints to provide creative flexibility
  * while maintaining historical accuracy tracking
  */
-
 import { HistoricalConstraint, Era } from '../types/UTDG';
 
 export interface ConstraintOverride {
@@ -36,26 +35,24 @@ export interface OverrideReason {
 export class ConstraintOverrideManager {
   private overrides: Map<string, ConstraintOverride> = new Map();
   private overrideHistory: ConstraintOverride[] = [];
-
   /**
    * Create a new constraint override
    */
-  createOverride(
+  createOverride()
     constraintId: string, 
     reason: OverrideReason,
-    options: {
+    options: {,
       userId?: string;
       duration?: number; // Duration in hours
       scope?: 'global' | 'era' | 'project' | 'session';
       conditions?: OverrideConditions;
     } = {}
   ): ConstraintOverride {
-    const overrideId = `override_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const overrideId = `override_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const now = new Date().toISOString();
-    const expiresAt = options.duration 
+    const expiresAt = options.duration ;
       ? new Date(Date.now() + options.duration * 60 * 60 * 1000).toISOString()
       : undefined;
-
     const override: ConstraintOverride = {
       id: overrideId,
       constraint_id: constraintId,
@@ -64,21 +61,18 @@ export class ConstraintOverrideManager {
       created_at: now,
       expires_at: expiresAt,
       scope: options.scope || 'session',
-      conditions: options.conditions
+      conditions: options.conditions,
     };
-
     this.overrides.set(overrideId, override);
     this.overrideHistory.push(override);
-
     return override;
   }
-
   /**
    * Check if a constraint is currently overridden
    */
-  isConstraintOverridden(
+  isConstraintOverridden()
     constraintId: string,
-    context: {
+    context: {,
       era?: Era;
       nodeTypes?: string[];
       socialClasses?: string[];
@@ -91,24 +85,20 @@ export class ConstraintOverrideManager {
           this.overrides.delete(override.id);
           continue;
         }
-
         // Check if override conditions match context
         if (this.matchesOverrideConditions(override, context)) {
           return true;
         }
       }
     }
-
     return false;
   }
-
   /**
    * Get all active overrides
    */
   getActiveOverrides(): ConstraintOverride[] {
     const now = new Date();
     const active: ConstraintOverride[] = [];
-
     for (const [id, override] of this.overrides.entries()) {
       if (override.expires_at && new Date(override.expires_at) < now) {
         this.overrides.delete(id);
@@ -116,17 +106,14 @@ export class ConstraintOverrideManager {
         active.push(override);
       }
     }
-
     return active;
   }
-
   /**
    * Remove a specific override
    */
   removeOverride(overrideId: string): boolean {
     return this.overrides.delete(overrideId);
   }
-
   /**
    * Remove all overrides for a specific constraint
    */
@@ -140,20 +127,18 @@ export class ConstraintOverrideManager {
     }
     return removed;
   }
-
   /**
    * Get override history for audit purposes
    */
-  getOverrideHistory(filters?: {
+  getOverrideHistory(filters?: {)
     constraintId?: string;
     userId?: string;
     fromDate?: string;
     toDate?: string;
   }): ConstraintOverride[] {
     let history = this.overrideHistory;
-
     if (filters) {
-      history = history.filter(override => {
+      history = history.filter(override => {)
         if (filters.constraintId && override.constraint_id !== filters.constraintId) {
           return false;
         }
@@ -169,17 +154,14 @@ export class ConstraintOverrideManager {
         return true;
       });
     }
-
     return history;
   }
-
   /**
    * Calculate the authenticity impact of current overrides
    */
   calculateAuthenticityImpact(constraintIds: string[]): number {
     let totalImpact = 0;
     const activeOverrides = this.getActiveOverrides();
-
     for (const constraintId of constraintIds) {
       const override = activeOverrides.find(o => o.constraint_id === constraintId);
       if (override?.conditions?.max_authenticity_impact) {
@@ -189,28 +171,24 @@ export class ConstraintOverrideManager {
         totalImpact += 0.1;
       }
     }
-
     return Math.min(totalImpact, 1.0); // Cap at 100% impact
   }
-
   /**
    * Get suggested overrides for creative flexibility
    */
-  getSuggestedOverrides(
+  getSuggestedOverrides()
     constraints: HistoricalConstraint[],
-    context: {
+    context: {,
       era?: Era;
       creativeGoals?: string[];
       narrativeNeeds?: string[];
     }
   ): { constraint: HistoricalConstraint, suggestedReason: OverrideReason }[] {
     const suggestions: { constraint: HistoricalConstraint, suggestedReason: OverrideReason }[] = [];
-
     for (const constraint of constraints) {
       // Suggest overrides for less critical constraints in creative contexts
       if (constraint.enforcement === 'suggestion' || constraint.enforcement === 'warning') {
         let suggestedReason: OverrideReason;
-
         if (context.creativeGoals?.includes('fantasy') && constraint.rule === 'material_availability') {
           suggestedReason = {
             category: 'creative',
@@ -235,21 +213,18 @@ export class ConstraintOverrideManager {
         } else {
           continue; // No suggestion for this constraint
         }
-
         suggestions.push({ constraint, suggestedReason });
       }
     }
-
     return suggestions;
   }
-
   /**
    * Export override configuration for sharing/backup
    */
   exportOverrides(): { 
     active: ConstraintOverride[], 
     history: ConstraintOverride[], 
-    export_date: string 
+    export_date: string ,
     } {
     return {
       active: this.getActiveOverrides(),
@@ -257,17 +232,15 @@ export class ConstraintOverrideManager {
       export_date: new Date().toISOString()
     };
   }
-
   /**
    * Import override configuration
    */
-  importOverrides(data: { 
+  importOverrides(data: { )
     active: ConstraintOverride[], 
     history?: ConstraintOverride[] 
   }): void {
     // Clear current overrides
     this.overrides.clear();
-    
     // Import active overrides
     for (const override of data.active) {
       // Check if override hasn't expired
@@ -275,19 +248,17 @@ export class ConstraintOverrideManager {
         this.overrides.set(override.id, override);
       }
     }
-
     // Import history if provided
     if (data.history) {
       this.overrideHistory = [...data.history];
     }
   }
-
   /**
    * Check if override conditions match the given context
    */
-  private matchesOverrideConditions(
+  private matchesOverrideConditions()
     override: ConstraintOverride,
-    context: {
+    context: {,
       era?: Era;
       nodeTypes?: string[];
       socialClasses?: string[];
@@ -296,12 +267,10 @@ export class ConstraintOverrideManager {
     if (!override.conditions) {
       return true; // No conditions means always matches
     }
-
     const { conditions } = override;
-
     // Check era conditions
     if (conditions.era && context.era) {
-      const eraMatch = conditions.era.some(era => 
+      const eraMatch = conditions.era.some(era => ;)
         era.name === context.era!.name ||
         this.erasOverlap(era, context.era!)
       );
@@ -309,47 +278,42 @@ export class ConstraintOverrideManager {
         return false;
       }
     }
-
     // Check node type conditions
     if (conditions.node_types && context.nodeTypes) {
-      const typeMatch = conditions.node_types.some(type =>
+      const typeMatch = conditions.node_types.some(type =>;)
         context.nodeTypes!.includes(type)
       );
       if (!typeMatch) {
         return false;
       }
     }
-
     // Check social class conditions
     if (conditions.social_classes && context.socialClasses) {
-      const classMatch = conditions.social_classes.some(cls =>
+      const classMatch = conditions.social_classes.some(cls =>;)
         context.socialClasses!.includes(cls)
       );
       if (!classMatch) {
         return false;
       }
     }
-
     return true;
   }
-
   /**
    * Check if two eras overlap temporally
    */
   private erasOverlap(era1: Era, era2: Era): boolean {
     return era1.period.start <= era2.period.end && era2.period.start <= era1.period.end;
   }
-
   /**
    * Format override reason for display and storage
    */
   private formatOverrideReason(reason: OverrideReason): string {
-    let formatted = `[${reason.category.toUpperCase()}] ${reason.description}`;
+    let formatted = `[${reason.category.toUpperCase()}] ${reason.description}`;}
     if (reason.justification) {
-      formatted += ` | Justification: ${reason.justification}`;
+      formatted += ` | Justification: ${reason.justification}`;}
     }
     if (reason.alternative_considered) {
-      formatted += ` | Alternative: ${reason.alternative_considered}`;
+      formatted += ` | Alternative: ${reason.alternative_considered}`;}
     }
     return formatted;
   }

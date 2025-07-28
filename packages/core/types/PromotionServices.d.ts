@@ -12,7 +12,7 @@ export interface IPromotionService {
     updatePromotion(promotionId: string, updates: UpdatePromotionRequest): Promise<PromotionServiceResponse<BasePromotion>>;
     deletePromotion(promotionId: string, deletedBy: string): Promise<PromotionServiceResponse<void>>;
     createPromotions(promotions: CreatePromotionRequest[]): Promise<PromotionServiceResponse<BasePromotion[]>>;
-    updatePromotions(updates: Array<{
+    updatePromotions(updates: Array<{)
         id: string;
         data: UpdatePromotionRequest;
     }>): Promise<PromotionServiceResponse<BasePromotion[]>>;
@@ -210,7 +210,7 @@ export interface ValidationWarning {
 }
 export interface PromotionConflictCheck {
     has_conflicts: boolean;
-    conflicts: Array<{
+    conflicts: Array<{,
         conflicting_promotion_id: string;
         conflict_type: 'time_overlap' | 'mutual_exclusion' | 'resource_conflict';
         description: string;
@@ -222,7 +222,7 @@ export interface BulkOperationResult {
     total_processed: number;
     successful: number;
     failed: number;
-    results: Array<{
+    results: Array<{,
         id: string;
         success: boolean;
         error?: string;
@@ -282,13 +282,13 @@ export interface PromotionPerformanceReport {
     promotion_name: string;
     date_range: DateRange;
     metrics: PromotionPerformanceMetrics;
-    time_series: Array<{
+    time_series: Array<{,
         date: string;
         usage_count: number;
         revenue_cents: number;
         conversion_rate: number;
     }>;
-    user_segments: Array<{
+    user_segments: Array<{,
         segment_name: string;
         usage_count: number;
         conversion_rate: number;
@@ -334,12 +334,12 @@ export interface RevenueAnalyticsReport {
     roi_percentage: number;
     payback_period_days?: number;
     break_even_usage_count: number;
-    revenue_by_segment: Array<{
+    revenue_by_segment: Array<{,
         segment: string;
         revenue_cents: number;
         percentage: number;
     }>;
-    daily_revenue: Array<{
+    daily_revenue: Array<{,
         date: string;
         revenue_cents: number;
         usage_count: number;

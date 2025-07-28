@@ -17,17 +17,17 @@ export declare class SkillLevelTaggingService implements SkillAssessmentEngine {
     updateUserSkillAssessment(userId: string, domain: SkillDomain, newLevel: SkillLevel, evidence: string[]): Promise<void>;
     recommendContent(userProfile: UserSkillProfile, learningGoals: LearningGoal[]): Promise<ContentRecommendation[]>;
     suggestNextContent(userId: string, currentContent: string): Promise<ContentSuggestion[]>;
-    recommendLearningPath(userId: string, targetSkills: Array<{
+    recommendLearningPath(userId: string, targetSkills: Array<{)
         domain: SkillDomain;
         level: SkillLevel;
     }>): Promise<string[]>;
     optimizeLearningPath(userId: string, pathId: string): Promise<OptimizedLearningPath>;
     incorporateCommunityFeedback(contentId: string, feedback: CommunitySkillFeedback): Promise<void>;
-    submitSkillFeedback(userId: string, contentId: string, feedback: {
+    submitSkillFeedback(userId: string, contentId: string, feedback: {)
         perceived_difficulty: number;
         level_appropriateness: 'too_easy' | 'just_right' | 'too_hard';
         suggested_level?: SkillLevel;
-        learning_effectiveness: {
+        learning_effectiveness: {,
             helped_learn_skill: boolean;
             clear_explanations: boolean;
             good_examples: boolean;
@@ -40,7 +40,7 @@ export declare class SkillLevelTaggingService implements SkillAssessmentEngine {
         total_content: number;
         classification_accuracy: number;
         community_consensus: number;
-        issues_found: Array<{
+        issues_found: Array<{,
             content_id: string;
             issue_type: string;
             severity: string;

@@ -14,7 +14,7 @@ export interface FormatProcessor {
     getMetadata(data: string | ArrayBuffer): Promise<any>;
 }
 export declare class JSONFormatProcessor implements FormatProcessor {
-    export(template: ProjectTemplate, version?: TemplateVersion, options?: {
+    export(template: ProjectTemplate, version?: TemplateVersion, options?: {)
         include_version_info?: boolean;
         pretty_print?: boolean;
         include_metadata?: boolean;
@@ -27,7 +27,7 @@ export declare class JSONFormatProcessor implements FormatProcessor {
     getMetadata(data: string): Promise<any>;
 }
 export declare class YAMLFormatProcessor implements FormatProcessor {
-    export(template: ProjectTemplate, version?: TemplateVersion, options?: {
+    export(template: ProjectTemplate, version?: TemplateVersion, options?: {)
         include_version_info?: boolean;
         include_metadata?: boolean;
     }): Promise<string>;
@@ -39,7 +39,7 @@ export declare class YAMLFormatProcessor implements FormatProcessor {
     getMetadata(data: string): Promise<any>;
 }
 export declare class BundleFormatProcessor implements FormatProcessor {
-    export(template: ProjectTemplate, version?: TemplateVersion, options?: {
+    export(template: ProjectTemplate, version?: TemplateVersion, options?: {)
         include_dependencies?: boolean;
         include_assets?: boolean;
         include_documentation?: boolean;
@@ -57,7 +57,7 @@ export declare class BundleFormatProcessor implements FormatProcessor {
     private calculateChecksum;
 }
 export declare class ZipFormatProcessor implements FormatProcessor {
-    export(template: ProjectTemplate, version?: TemplateVersion, options?: {
+    export(template: ProjectTemplate, version?: TemplateVersion, options?: {)
         include_version_history?: boolean;
         include_dependencies?: boolean;
         separate_files?: boolean;

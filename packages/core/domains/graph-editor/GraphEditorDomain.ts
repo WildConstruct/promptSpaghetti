@@ -4,7 +4,6 @@
  * 
  * Main interface and export for the graph editor domain
  */
-
 import React from 'react';
 import {
   GraphEditorState,
@@ -62,15 +61,14 @@ export interface IGraphStateService {
 // Main domain interface
 export interface IGraphEditorDomain {
   // React Components
-  components: {
+  components: {,
     GraphEditor: React.ComponentType<GraphEditorProps>;
     NodePalette: React.ComponentType<NodePaletteProps>;
     Inspector: React.ComponentType<InspectorProps>;
     Canvas: React.ComponentType<CanvasProps>;
   };
-
   // React Hooks
-  hooks: {
+  hooks: {,
     useGraphState: () => GraphEditorState;
     useNodeSelection: () => {
       selectedNodeIds: string[];
@@ -107,30 +105,26 @@ export interface IGraphEditorDomain {
       toggleAutosave: () => void;
     };
   };
-
   // Domain Services
-  services: {
+  services: {,
     validation: IGraphValidationService;
     operations: IGraphOperationsService;
     execution: IGraphExecutionService;
     state: IGraphStateService;
   };
-
   // Event System
   events: GraphDomainEvents & {
     subscribe: (event: keyof GraphDomainEvents, callback: Function) => () => void;
     emit: (event: keyof GraphDomainEvents, ...args: any[]) => void;
   };
-
   // Configuration
-  config: {
+  config: {,
     getConfig: () => GraphEditorConfig;
     updateConfig: (config: Partial<GraphEditorConfig>) => void;
     resetConfig: () => void;
   };
-
   // Utilities
-  utils: {
+  utils: {,
     createEmptyGraph: () => Graph;
     cloneGraph: (graph: Graph) => Graph;
     getNodeById: (graph: Graph, nodeId: string) => Node | undefined;
@@ -160,7 +154,7 @@ export const GRAPH_DOMAIN_EVENTS = {
   EXECUTION_ERROR: 'graph:execution:error',
   STATE_SAVED: 'graph:state:saved',
   STATE_LOADED: 'graph:state:loaded',
-  CONFIG_UPDATED: 'graph:config:updated'
+  CONFIG_UPDATED: 'graph:config:updated',
 } as const;
 
 export type GraphDomainEventType = typeof GRAPH_DOMAIN_EVENTS[keyof typeof GRAPH_DOMAIN_EVENTS];

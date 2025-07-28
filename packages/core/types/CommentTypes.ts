@@ -31,7 +31,7 @@ export interface CommentThread {
   reply_count: number;
   unread_count: number;
   last_activity: string;
-  participants: Array<{
+  participants: Array<{,
     user_id: string;
     user_name: string;
     user_avatar?: string;
@@ -43,7 +43,7 @@ export interface CommentStats {
   resolved: number;
   unresolved: number;
   by_author: Record<string, number>;
-  recent_activity: {
+  recent_activity: {,
     today: number;
     this_week: number;
     this_month: number;
@@ -110,7 +110,6 @@ export interface UseCommentsReturn {
   error: Error | null;
   stats: CommentStats | null;
   realTimeConnection: CommentRealTimeConnection | null;
-  
   // Actions
   createComment: (request: CommentCreateRequest) => Promise<Comment>;
   updateComment: (id: string, request: CommentUpdateRequest) => Promise<Comment>;
@@ -118,7 +117,6 @@ export interface UseCommentsReturn {
   resolveComment: (id: string) => Promise<Comment>;
   unresolveComment: (id: string) => Promise<Comment>;
   refreshComments: () => Promise<void>;
-  
   // Filters
   setFilter: (filter: CommentFilter) => void;
   clearFilter: () => void;

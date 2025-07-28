@@ -32,7 +32,7 @@ export interface NodeTag {
 export interface EraTag {
   id: string;
   name: string;
-  period: {
+  period: {,
     start: number;
     end: number;
   };
@@ -99,7 +99,6 @@ export interface TagTransformation {
   type: 'copy' | 'modify' | 'merge' | 'filter';
   config: Record<string, any>;
 }
-
 /**
  * NodeMetadataManager - Manages metadata and tagging for nodes
  */
@@ -110,19 +109,16 @@ export class NodeMetadataManager {
   private genreDefinitions = new Map<string, GenreTag>();
   private styleDefinitions = new Map<string, StyleTag>();
   private inheritanceRules = new Map<string, TagInheritanceRule>();
-
   public static getInstance(): NodeMetadataManager {
     if (!NodeMetadataManager.instance) {
       NodeMetadataManager.instance = new NodeMetadataManager();
     }
     return NodeMetadataManager.instance;
   }
-
   constructor() {
     this.initializeDefaultDefinitions();
     this.initializeDefaultInheritanceRules();
   }
-
   /**
    * Initialize default era, genre, and style definitions
    */
@@ -132,7 +128,6 @@ export class NodeMetadataManager {
     this.initializeGenreDefinitions();
     this.initializeStyleDefinitions();
   }
-
   private initializeEraDefinitions(): void {
     const eras: EraTag[] = [
       {
@@ -233,10 +228,8 @@ export class NodeMetadataManager {
         description: 'Modern historical period of the 20th century'
       }
     ];
-
     eras.forEach(era => this.eraDefinitions.set(era.id, era));
   }
-
   private initializeGenreDefinitions(): void {
     const genres: GenreTag[] = [
       {
@@ -280,10 +273,8 @@ export class NodeMetadataManager {
         relatedGenres: ['icon-painting', 'illuminated-manuscripts', 'church-architecture']
       }
     ];
-
     genres.forEach(genre => this.genreDefinitions.set(genre.id, genre));
   }
-
   private initializeStyleDefinitions(): void {
     const styles: StyleTag[] = [
       {
@@ -332,10 +323,8 @@ export class NodeMetadataManager {
         keyFeatures: ['trefoils', 'quatrefoils', 'crockets', 'finials', 'geometric patterns']
       }
     ];
-
     styles.forEach(style => this.styleDefinitions.set(style.id, style));
   }
-
   /**
    * Initialize default tag inheritance rules
    */
@@ -346,62 +335,58 @@ export class NodeMetadataManager {
         name: 'Era Tag Inheritance',
         sourceType: 'SetVariable',
         targetType: 'WeightedChoice',
-        conditions: [
+        conditions: [,
           { field: 'variableName', operator: 'contains', value: 'era' },
           { field: 'value', operator: 'in', value: ['medieval', 'renaissance', 'ancient'] }
         ],
-        transformations: [
+        transformations: [,
           { type: 'copy', config: { tagTypes: ['era'] } }
         ],
-        enabled: true
+        enabled: true,
       },
       {
         id: 'material-inheritance',
         name: 'Material Tag Inheritance',
         sourceType: 'WeightedChoice',
         targetType: 'Concat',
-        conditions: [
+        conditions: [,
           { field: 'choices', operator: 'contains', value: 'material' }
         ],
-        transformations: [
+        transformations: [,
           { type: 'copy', config: { tagTypes: ['material', 'era'] } }
         ],
-        enabled: true
+        enabled: true,
       },
       {
         id: 'social-class-inheritance',
         name: 'Social Class Tag Inheritance',
         sourceType: 'SetVariable',
         targetType: 'Output',
-        conditions: [
+        conditions: [,
           { field: 'variableName', operator: 'matches', value: /social|class|rank/i }
         ],
-        transformations: [
+        transformations: [,
           { type: 'copy', config: { tagTypes: ['social_class', 'era'] } }
         ],
-        enabled: true
+        enabled: true,
       }
     ];
-
     rules.forEach(rule => this.inheritanceRules.set(rule.id, rule));
   }
-
   /**
    * Get metadata for a specific node
    */
   public getNodeMetadata(nodeId: string): NodeMetadata | undefined {
     return this.nodeMetadata.get(nodeId);
   }
-
   /**
    * Set metadata for a node
    */
   public setNodeMetadata(nodeId: string, metadata: Partial<NodeMetadata>): void {
     const existing = this.nodeMetadata.get(nodeId);
     const now = new Date().toISOString();
-
     const updatedMetadata: NodeMetadata = {
-      id: existing?.id || `meta-${nodeId}-${Date.now()}`,
+      id: existing?.id || `meta-${nodeId}-${Date.now()}`,}
       nodeId,
       tags: metadata.tags || existing?.tags || [],
       era: metadata.era || existing?.era || [],
@@ -411,7 +396,7 @@ export class NodeMetadataManager {
         authenticity: 0.5,
         completeness: 0.5,
         sources: [],
-        verification: 'unverified'
+        verification: 'unverified',
       },
       historicalContext: metadata.historicalContext || existing?.historicalContext || {
         socialClass: 'unknown',
@@ -419,16 +404,14 @@ export class NodeMetadataManager {
         rarity: 'common',
         materials: [],
         productionMethod: [],
-        culturalSignificance: ''
+        culturalSignificance: '',
       },
       created: existing?.created || now,
       updated: now,
       author: metadata.author || existing?.author || 'system'
     };
-
     this.nodeMetadata.set(nodeId, updatedMetadata);
   }
-
   /**
    * Add tags to a node
    */
@@ -436,9 +419,8 @@ export class NodeMetadataManager {
     const metadata = this.getNodeMetadata(nodeId);
     if (metadata) {
       // Avoid duplicate tags
-      const existingTagValues = new Set(metadata.tags.map(t => `${t.type}:${t.value}`));
-      const newTags = tags.filter(tag => !existingTagValues.has(`${tag.type}:${tag.value}`));
-      
+      const existingTagValues = new Set(metadata.tags.map(t => `${t.type}:${t.value}`));}
+      const newTags = tags.filter(tag => !existingTagValues.has(`${tag.type}:${tag.value}`));}
       metadata.tags.push(...newTags);
       metadata.updated = new Date().toISOString();
       this.nodeMetadata.set(nodeId, metadata);
@@ -446,7 +428,6 @@ export class NodeMetadataManager {
       this.setNodeMetadata(nodeId, { tags });
     }
   }
-
   /**
    * Remove tags from a node
    */
@@ -458,16 +439,14 @@ export class NodeMetadataManager {
       this.nodeMetadata.set(nodeId, metadata);
     }
   }
-
   /**
    * Search nodes by tags
    */
   public searchNodesByTags(searchTags: Partial<NodeTag>[], operator: 'AND' | 'OR' = 'AND'): string[] {
     const results: string[] = [];
-
     for (const [nodeId, metadata] of this.nodeMetadata.entries()) {
-      const matches = searchTags.map(searchTag => {
-        return metadata.tags.some(nodeTag => {
+      const matches = searchTags.map(searchTag => {)
+        return metadata.tags.some(nodeTag => {)
           return Object.entries(searchTag).every(([key, value]) => {
             const nodeValue = (nodeTag as any)[key];
             if (key === 'confidence' && typeof value === 'number') {
@@ -477,171 +456,149 @@ export class NodeMetadataManager {
           });
         });
       });
-
-      const isMatch = operator === 'AND' 
+      const isMatch = operator === 'AND' ;
         ? matches.every(Boolean)
         : matches.some(Boolean);
-
       if (isMatch) {
         results.push(nodeId);
       }
     }
-
     return results;
   }
-
   /**
    * Get all available era definitions
    */
   public getEraDefinitions(): EraTag[] {
     return Array.from(this.eraDefinitions.values());
   }
-
   /**
    * Get era definition by ID
    */
   public getEraDefinition(id: string): EraTag | undefined {
     return this.eraDefinitions.get(id);
   }
-
   /**
    * Get eras by time period
    */
   public getErasByPeriod(year: number): EraTag[] {
-    return Array.from(this.eraDefinitions.values()).filter(era => 
+    return Array.from(this.eraDefinitions.values()).filter(era => )
       year >= era.period.start && year <= era.period.end
     );
   }
-
   /**
    * Get all available genre definitions
    */
   public getGenreDefinitions(): GenreTag[] {
     return Array.from(this.genreDefinitions.values());
   }
-
   /**
    * Get all available style definitions
    */
   public getStyleDefinitions(): StyleTag[] {
     return Array.from(this.styleDefinitions.values());
   }
-
   /**
    * Apply tag inheritance rules
    */
-  public applyTagInheritance(
+  public applyTagInheritance()
     sourceNodeId: string,
     targetNodeId: string,
     sourceNodeType: string,
-    targetNodeType: string
+    targetNodeType: string,
   ): void {
-    const applicableRules = Array.from(this.inheritanceRules.values()).filter(rule => 
+    const applicableRules = Array.from(this.inheritanceRules.values()).filter(rule => ;)
       rule.enabled && 
       rule.sourceType === sourceNodeType && 
       rule.targetType === targetNodeType
     );
-
     const sourceMetadata = this.getNodeMetadata(sourceNodeId);
     if (!sourceMetadata) return;
-
     for (const rule of applicableRules) {
       // Check conditions
       const conditionsMet = this.evaluateConditions(rule.conditions, sourceMetadata);
       if (!conditionsMet) continue;
-
       // Apply transformations
       for (const transformation of rule.transformations) {
         this.applyTagTransformation(sourceMetadata, targetNodeId, transformation);
       }
     }
   }
-
   /**
    * Evaluate inheritance rule conditions
    */
   private evaluateConditions(conditions: TagCondition[], metadata: NodeMetadata): boolean {
-    return conditions.every(condition => {
+    return conditions.every(condition => {)
       // This would need to be implemented based on the actual node data structure
       // For now, we'll return true to allow inheritance
       return true;
     });
   }
-
   /**
    * Apply tag transformation
    */
-  private applyTagTransformation(
+  private applyTagTransformation()
     sourceMetadata: NodeMetadata,
     targetNodeId: string,
-    transformation: TagTransformation
+    transformation: TagTransformation,
   ): void {
     switch (transformation.type) {
       case 'copy':
         const tagTypes = transformation.config.tagTypes as string[];
-        const tagsToInherit = sourceMetadata.tags.filter(tag => 
+        const tagsToInherit = sourceMetadata.tags.filter(tag => ;)
           tagTypes.includes(tag.type)
         );
-        
         if (tagsToInherit.length > 0) {
-          this.addNodeTags(targetNodeId, tagsToInherit.map(tag => ({
+          this.addNodeTags(targetNodeId, tagsToInherit.map(tag => ({)
             ...tag,
-            id: `inherited-${tag.id}-${Date.now()}`,
+            id: `inherited-${tag.id}-${Date.now()}`,}
             source: 'inferred' as const,
             confidence: Math.max(0.1, tag.confidence - 0.2) // Reduce confidence for inherited tags
           })));
         }
         break;
-      
       case 'modify':
         // Implement tag modification logic
         break;
-      
       case 'merge':
         // Implement tag merging logic
         break;
-      
       case 'filter':
         // Implement tag filtering logic
         break;
     }
   }
-
   /**
    * Infer tags from node content
    */
   public inferTagsFromContent(nodeId: string, content: string, nodeType: string): NodeTag[] {
     const inferredTags: NodeTag[] = [];
-
     // Era inference
     const eras = this.getEraDefinitions();
     for (const era of eras) {
       const eraKeywords = [era.name.toLowerCase(), era.id];
       if (eraKeywords.some(keyword => content.toLowerCase().includes(keyword))) {
-        inferredTags.push({
-          id: `inferred-era-${era.id}-${Date.now()}`,
+        inferredTags.push({)
+          id: `inferred-era-${era.id}-${Date.now()}`,}
           type: 'era',
           value: era.id,
           source: 'inferred',
-          confidence: 0.7
+          confidence: 0.7,
         });
       }
     }
-
     // Material inference
     const materialKeywords = ['silk', 'wool', 'linen', 'cotton', 'leather', 'iron', 'steel', 'gold', 'silver', 'stone', 'wood'];
     for (const material of materialKeywords) {
       if (content.toLowerCase().includes(material)) {
-        inferredTags.push({
-          id: `inferred-material-${material}-${Date.now()}`,
+        inferredTags.push({)
+          id: `inferred-material-${material}-${Date.now()}`,}
           type: 'material',
           value: material,
           source: 'inferred',
-          confidence: 0.8
+          confidence: 0.8,
         });
       }
     }
-
     // Social class inference
     const socialClassKeywords = {
       'noble': ['noble', 'lord', 'lady', 'duke', 'duchess', 'count', 'countess'],
@@ -650,29 +607,25 @@ export class NodeMetadataManager {
       'merchant': ['merchant', 'trader', 'shopkeeper', 'craftsman'],
       'royal': ['king', 'queen', 'prince', 'princess', 'royal']
     };
-
     for (const [socialClass, keywords] of Object.entries(socialClassKeywords)) {
       if (keywords.some(keyword => content.toLowerCase().includes(keyword))) {
-        inferredTags.push({
-          id: `inferred-social-${socialClass}-${Date.now()}`,
+        inferredTags.push({)
+          id: `inferred-social-${socialClass}-${Date.now()}`,}
           type: 'social_class',
           value: socialClass,
           source: 'inferred',
-          confidence: 0.75
+          confidence: 0.75,
         });
       }
     }
-
     return inferredTags;
   }
-
   /**
    * Validate tag compatibility
    */
   public validateTagCompatibility(tags: NodeTag[]): { valid: boolean; conflicts: string[]; warnings: string[] } {
     const conflicts: string[] = [];
     const warnings: string[] = [];
-
     // Check for era conflicts
     const eraTags = tags.filter(tag => tag.type === 'era');
     if (eraTags.length > 1) {
@@ -681,36 +634,31 @@ export class NodeMetadataManager {
         for (let j = i + 1; j < eras.length; j++) {
           const era1 = eras[i];
           const era2 = eras[j];
-          
           // Check for temporal overlap
           const overlap = Math.min(era1.period.end, era2.period.end) - Math.max(era1.period.start, era2.period.start);
           if (overlap <= 0) {
-            conflicts.push(`Era conflict: ${era1.name} and ${era2.name} do not overlap in time`);
+            conflicts.push(`Era conflict: ${era1.name} and ${era2.name} do not overlap in time`);}
           } else if (overlap < 100) {
-            warnings.push(`Era warning: ${era1.name} and ${era2.name} have minimal temporal overlap`);
+            warnings.push(`Era warning: ${era1.name} and ${era2.name} have minimal temporal overlap`);}
           }
         }
       }
     }
-
     // Check for material-era compatibility
     const materialTags = tags.filter(tag => tag.type === 'material');
     const materialEraConflicts = this.checkMaterialEraCompatibility(materialTags, eraTags);
     conflicts.push(...materialEraConflicts);
-
     return {
       valid: conflicts.length === 0,
       conflicts,
       warnings
     };
   }
-
   /**
    * Check material-era compatibility
    */
   private checkMaterialEraCompatibility(materialTags: NodeTag[], eraTags: NodeTag[]): string[] {
     const conflicts: string[] = [];
-    
     const anachronisticMaterials = {
       'plastic': { availableFrom: 1900 },
       'aluminum': { availableFrom: 1850 },
@@ -719,22 +667,19 @@ export class NodeMetadataManager {
       'paper': { availableFrom: 100 },
       'glass': { availableFrom: -1500 }
     };
-
     for (const materialTag of materialTags) {
       const material = anachronisticMaterials[materialTag.value as keyof typeof anachronisticMaterials];
       if (material) {
         for (const eraTag of eraTags) {
           const era = this.getEraDefinition(eraTag.value);
           if (era && era.period.end < material.availableFrom) {
-            conflicts.push(`Material "${materialTag.value}" not available during ${era.name}`);
+            conflicts.push(`Material "${materialTag.value}" not available during ${era.name}`);}
           }
         }
       }
     }
-
     return conflicts;
   }
-
   /**
    * Get tag statistics
    */
@@ -751,21 +696,17 @@ export class NodeMetadataManager {
     let totalTags = 0;
     const tagsByType: Record<string, number> = {};
     const tagCounts: Record<string, number> = {};
-
     for (const metadata of this.nodeMetadata.values()) {
       totalTags += metadata.tags.length;
-      
       for (const tag of metadata.tags) {
         tagsByType[tag.type] = (tagsByType[tag.type] || 0) + 1;
         tagCounts[tag.value] = (tagCounts[tag.value] || 0) + 1;
       }
     }
-
-    const topTags = Object.entries(tagCounts)
+    const topTags = Object.entries(tagCounts);
       .map(([value, count]) => ({ value, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
-
     return {
       totalNodes,
       taggedNodes,
@@ -775,7 +716,6 @@ export class NodeMetadataManager {
       topTags
     };
   }
-
   /**
    * Export metadata for external use
    */
@@ -785,23 +725,20 @@ export class NodeMetadataManager {
       .map(id => this.nodeMetadata.get(id))
       .filter(Boolean) as NodeMetadata[];
   }
-
   /**
    * Import metadata from external source
    */
   public importMetadata(metadataList: NodeMetadata[]): { imported: number; errors: string[] } {
     let imported = 0;
     const errors: string[] = [];
-
     for (const metadata of metadataList) {
       try {
         this.nodeMetadata.set(metadata.nodeId, metadata);
         imported++;
       } catch (error) {
-        errors.push(`Failed to import metadata for node ${metadata.nodeId}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        errors.push(`Failed to import metadata for node ${metadata.nodeId}: ${error instanceof Error ? error.message : 'Unknown error'}`);}
       }
     }
-
     return { imported, errors };
   }
 }

@@ -10,7 +10,7 @@ export interface TextFieldEditorProps extends EditorFieldProps {
   pattern?: string;
 }
 
-export const TextFieldEditor: React.FC<TextFieldEditorProps> = ({
+export const TextFieldEditor: React.FC<TextFieldEditorProps> = ({)
   label,
   value,
   fieldKey,
@@ -28,30 +28,24 @@ export const TextFieldEditor: React.FC<TextFieldEditorProps> = ({
 }) => {
   const [localValue, setLocalValue] = React.useState(String(value ?? ''));
   const [isFocused, setIsFocused] = React.useState(false);
-
   // Update local value when external value changes
   React.useEffect(() => {
     setLocalValue(String(value ?? ''));
   }, [value]);
-
   const handleChange = (newValue: string) => {
     setLocalValue(newValue);
-    
     // Convert to appropriate type
     let convertedValue: unknown = newValue;
     if (type === 'number' || (zodType as any)._def?.typeName === 'ZodNumber') {
       convertedValue = newValue === '' ? 0 : Number(newValue);
     }
-    
     onChange(convertedValue);
   };
-
-  const inputId = `field-${fieldKey}`;
-  
+  const inputId = `field-${fieldKey}`;}
   const inputStyle = {
     width: '100%',
     padding: 8,
-    border: error 
+    border: error ,
       ? '1px solid #f56565' 
       : isFocused 
         ? '1px solid #4299e1' 
@@ -65,28 +59,25 @@ export const TextFieldEditor: React.FC<TextFieldEditorProps> = ({
     transition: 'border-color 0.2s ease',
     resize: multiline ? 'vertical' as const : 'none' as const
   };
-
   const labelStyle = {
     display: 'block',
     fontWeight: 500,
     marginBottom: 4,
     color: '#e2e8f0',
     fontSize: 12,
-    letterSpacing: '0.025em'
+    letterSpacing: '0.025em',
   };
-
-  return (
+  return ()
     <div style={{ marginBottom: 16 }}>
       <label htmlFor={inputId} style={labelStyle}>
         {label}
-        {error && (
+        {error && ()
           <span style={{ color: '#f56565', marginLeft: 4, fontSize: 10 }}>
             *
           </span>
         )}
       </label>
-      
-      {multiline ? (
+      {multiline ? ()
         <textarea
           id={inputId}
           value={localValue}
@@ -100,7 +91,7 @@ export const TextFieldEditor: React.FC<TextFieldEditorProps> = ({
           minLength={minLength}
           style={inputStyle}
         />
-      ) : (
+      ) : ()
         <input
           id={inputId}
           type={type}
@@ -116,24 +107,22 @@ export const TextFieldEditor: React.FC<TextFieldEditorProps> = ({
           style={inputStyle}
         />
       )}
-      
-      {error && (
+      {error && ()
         <div style={{ 
           color: '#f56565', 
           fontSize: 11, 
           marginTop: 4,
-          fontWeight: 400
+          fontWeight: 400,
         }}>
           {error}
         </div>
       )}
-      
-      {maxLength && (
+      {maxLength && ()
         <div style={{
           color: '#a0aec0',
           fontSize: 10,
           marginTop: 2,
-          textAlign: 'right'
+          textAlign: 'right',
         }}>
           {localValue.length} / {maxLength}
         </div>

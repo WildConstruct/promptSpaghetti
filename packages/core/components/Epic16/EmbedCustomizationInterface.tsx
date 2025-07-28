@@ -4,7 +4,6 @@
  * Visual embed builder with drag-and-drop customization for template embeds.
  * Extends existing EmbeddableContent system with advanced customization capabilities.
  */
-
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { 
   PaintBrushIcon,
@@ -49,7 +48,6 @@ import {
   FlagIcon
 } from '@heroicons/react/24/outline';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
-
 import { Template } from './TemplatePreviewModal';
 import { EmbedCustomization, EmbedBranding, PREVIEW_SIZES, PreviewSize } from './EmbeddedTemplatePreview';
 
@@ -101,7 +99,7 @@ export interface CustomFont {
 export interface CustomTheme {
   id: string;
   name: string;
-  colors: {
+  colors: {,
     primary: string;
     secondary: string;
     accent: string;
@@ -115,21 +113,21 @@ export interface CustomTheme {
     error: string;
     info: string;
   };
-  fonts: {
+  fonts: {,
     heading: CustomFont;
     body: CustomFont;
     ui: CustomFont;
   };
-  spacing: {
+  spacing: {,
     unit: number;
     scale: number[];
   };
-  borderRadius: {
+  borderRadius: {,
     small: number;
     medium: number;
     large: number;
   };
-  shadows: {
+  shadows: {,
     small: string;
     medium: string;
     large: string;
@@ -145,10 +143,10 @@ const DEFAULT_PRESETS: EmbedPreset[] = [
     thumbnail: '/presets/social-card.png',
     category: 'social',
     popular: true,
-    customization: {
+    customization: {,
       size: { width: 600, height: 315, responsive: true },
       theme: { name: 'light', colors: {}, fonts: {} },
-      features: {
+      features: {,
         showPreview: true,
         showMetadata: true,
         showActions: true,
@@ -156,9 +154,9 @@ const DEFAULT_PRESETS: EmbedPreset[] = [
         enableInteraction: true,
         enableSharing: true,
         enablePurchase: false,
-        showRating: true
+        showRating: true,
       },
-      layout: {
+      layout: {,
         orientation: 'horizontal',
         showHeader: true,
         showFooter: false,
@@ -166,15 +164,15 @@ const DEFAULT_PRESETS: EmbedPreset[] = [
         contentAlignment: 'left',
         spacing: 'tight',
         borderRadius: 12,
-        shadow: 'md'
+        shadow: 'md',
       },
-      branding: {
+      branding: {,
         showLogo: false,
         showTitle: true,
         showAuthor: true,
-        showPoweredBy: false
+        showPoweredBy: false,
       },
-      social: {
+      social: {,
         showLikes: true,
         showShares: true,
         showComments: false,
@@ -182,7 +180,7 @@ const DEFAULT_PRESETS: EmbedPreset[] = [
         showDownloads: false,
         enableInteraction: true,
         showAuthorInfo: true,
-        showStats: true
+        showStats: true,
       }
     }
   },
@@ -193,10 +191,10 @@ const DEFAULT_PRESETS: EmbedPreset[] = [
     thumbnail: '/presets/blog-embed.png',
     category: 'blog',
     popular: true,
-    customization: {
+    customization: {,
       size: { width: 800, height: 400, responsive: true },
       theme: { name: 'light', colors: {}, fonts: {} },
-      features: {
+      features: {,
         showPreview: true,
         showMetadata: true,
         showActions: true,
@@ -204,9 +202,9 @@ const DEFAULT_PRESETS: EmbedPreset[] = [
         enableInteraction: true,
         enableSharing: true,
         enablePurchase: true,
-        showRating: true
+        showRating: true,
       },
-      layout: {
+      layout: {,
         orientation: 'vertical',
         showHeader: true,
         showFooter: true,
@@ -214,15 +212,15 @@ const DEFAULT_PRESETS: EmbedPreset[] = [
         contentAlignment: 'center',
         spacing: 'normal',
         borderRadius: 8,
-        shadow: 'lg'
+        shadow: 'lg',
       },
-      branding: {
+      branding: {,
         showLogo: true,
         showTitle: true,
         showAuthor: true,
-        showPoweredBy: true
+        showPoweredBy: true,
       },
-      social: {
+      social: {,
         showLikes: true,
         showShares: true,
         showComments: true,
@@ -230,7 +228,7 @@ const DEFAULT_PRESETS: EmbedPreset[] = [
         showDownloads: true,
         enableInteraction: true,
         showAuthorInfo: true,
-        showStats: true
+        showStats: true,
       }
     }
   },
@@ -241,10 +239,10 @@ const DEFAULT_PRESETS: EmbedPreset[] = [
     thumbnail: '/presets/sidebar-widget.png',
     category: 'blog',
     popular: false,
-    customization: {
+    customization: {,
       size: { width: 300, height: 400, responsive: true },
       theme: { name: 'light', colors: {}, fonts: {} },
-      features: {
+      features: {,
         showPreview: true,
         showMetadata: false,
         showActions: true,
@@ -252,9 +250,9 @@ const DEFAULT_PRESETS: EmbedPreset[] = [
         enableInteraction: true,
         enableSharing: false,
         enablePurchase: true,
-        showRating: false
+        showRating: false,
       },
-      layout: {
+      layout: {,
         orientation: 'vertical',
         showHeader: true,
         showFooter: false,
@@ -262,15 +260,15 @@ const DEFAULT_PRESETS: EmbedPreset[] = [
         contentAlignment: 'center',
         spacing: 'tight',
         borderRadius: 6,
-        shadow: 'sm'
+        shadow: 'sm',
       },
-      branding: {
+      branding: {,
         showLogo: false,
         showTitle: true,
         showAuthor: false,
-        showPoweredBy: false
+        showPoweredBy: false,
       },
-      social: {
+      social: {,
         showLikes: false,
         showShares: false,
         showComments: false,
@@ -278,7 +276,7 @@ const DEFAULT_PRESETS: EmbedPreset[] = [
         showDownloads: true,
         enableInteraction: true,
         showAuthorInfo: false,
-        showStats: false
+        showStats: false,
       }
     }
   }
@@ -293,7 +291,7 @@ const WIDGET_LIBRARY: Omit<EmbedWidget, 'position' | 'size' | 'visible' | 'confi
     description: 'Template title and branding',
     icon: TagIcon,
     configurable: true,
-    required: false
+    required: false,
   },
   {
     id: 'preview',
@@ -302,7 +300,7 @@ const WIDGET_LIBRARY: Omit<EmbedWidget, 'position' | 'size' | 'visible' | 'confi
     description: 'Template preview content',
     icon: PhotoIcon,
     configurable: true,
-    required: true
+    required: true,
   },
   {
     id: 'metadata',
@@ -311,7 +309,7 @@ const WIDGET_LIBRARY: Omit<EmbedWidget, 'position' | 'size' | 'visible' | 'confi
     description: 'Template description and details',
     icon: ListBulletIcon,
     configurable: true,
-    required: false
+    required: false,
   },
   {
     id: 'actions',
@@ -320,7 +318,7 @@ const WIDGET_LIBRARY: Omit<EmbedWidget, 'position' | 'size' | 'visible' | 'confi
     description: 'Like, share, purchase buttons',
     icon: BoltIcon,
     configurable: true,
-    required: false
+    required: false,
   },
   {
     id: 'stats',
@@ -329,7 +327,7 @@ const WIDGET_LIBRARY: Omit<EmbedWidget, 'position' | 'size' | 'visible' | 'confi
     description: 'Downloads, likes, ratings',
     icon: BarChart3,
     configurable: true,
-    required: false
+    required: false,
   },
   {
     id: 'author',
@@ -338,7 +336,7 @@ const WIDGET_LIBRARY: Omit<EmbedWidget, 'position' | 'size' | 'visible' | 'confi
     description: 'Template creator information',
     icon: UserIcon,
     configurable: true,
-    required: false
+    required: false,
   },
   {
     id: 'footer',
@@ -347,7 +345,7 @@ const WIDGET_LIBRARY: Omit<EmbedWidget, 'position' | 'size' | 'visible' | 'confi
     description: 'Powered by and additional links',
     icon: FlagIcon,
     configurable: true,
-    required: false
+    required: false,
   }
 ];
 
@@ -358,29 +356,25 @@ export const PresetSelector: React.FC<{
   onPresetSelect: (preset: EmbedPreset) => void;
 }> = ({ presets, selectedPreset, onPresetSelect }) => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
-
   const categories = useMemo(() => {
     const cats = ['all', ...new Set(presets.map(p => p.category))];
-    return cats.map(cat => ({
+    return cats.map(cat => ({)
       id: cat,
       label: cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1),
       count: cat === 'all' ? presets.length : presets.filter(p => p.category === cat).length
     }));
   }, [presets]);
-
   const filteredPresets = useMemo(() => {
     return activeCategory === 'all' 
       ? presets 
       : presets.filter(preset => preset.category === activeCategory);
   }, [presets, activeCategory]);
-
-  return (
+  return ()
     <div className="bg-white border border-gray-200 rounded-lg p-4">
       <h3 className="font-semibold text-gray-900 mb-4">Choose a Preset</h3>
-      
       {/* Category tabs */}
       <div className="flex items-center gap-2 mb-4 border-b border-gray-200">
-        {categories.map((category) => (
+        {categories.map((category) => ()
           <button
             key={category.id}
             onClick={() => setActiveCategory(category.id)}
@@ -394,10 +388,9 @@ export const PresetSelector: React.FC<{
           </button>
         ))}
       </div>
-
       {/* Preset grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredPresets.map((preset) => (
+        {filteredPresets.map((preset) => ()
           <button
             key={preset.id}
             onClick={() => onPresetSelect(preset)}
@@ -410,7 +403,7 @@ export const PresetSelector: React.FC<{
             </div>
             <div className="flex items-start justify-between mb-2">
               <h4 className="font-medium text-gray-900">{preset.name}</h4>
-              {preset.popular && (
+              {preset.popular && ()
                 <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">
                   Popular
                 </span>
@@ -437,63 +430,54 @@ export const VisualLayoutBuilder: React.FC<{
 }> = ({ widgets, onWidgetsChange, previewSize }) => {
   const [selectedWidget, setSelectedWidget] = useState<string | null>(null);
   const _____canvasRef = useRef<HTMLDivElement>(null);
-
   const handleDragEnd = useCallback((result: DropResult) => {
     if (!result.destination) return;
-
     const sourceIndex = result.source.index;
     const destIndex = result.destination.index;
-
     if (result.source.droppableId === 'widget-library' && result.destination.droppableId === 'canvas') {
       // Add widget from library to canvas
       const widgetTemplate = WIDGET_LIBRARY[sourceIndex];
       const newWidget: EmbedWidget = {
         ...widgetTemplate,
-        id: `${widgetTemplate.type}-${Date.now()}`,
+        id: `${widgetTemplate.type}-${Date.now()}`,}
         position: { x: 20, y: destIndex * 60 + 20 },
         size: { width: 200, height: 50 },
         visible: true,
         config: {}
       };
-      
       onWidgetsChange([...widgets, newWidget]);
     } else if (result.source.droppableId === result.destination.droppableId) {
       // Reorder widgets
       const items = Array.from(widgets);
       const [reorderedItem] = items.splice(sourceIndex, 1);
       items.splice(destIndex, 0, reorderedItem);
-      
       onWidgetsChange(items);
     }
   }, [widgets, onWidgetsChange]);
-
   const updateWidget = useCallback((widgetId: string, updates: Partial<EmbedWidget>) => {
-    onWidgetsChange(widgets.map(widget => 
+    onWidgetsChange(widgets.map(widget => )
       widget.id === widgetId ? { ...widget, ...updates } : widget
     ));
   }, [widgets, onWidgetsChange]);
-
   const removeWidget = useCallback((widgetId: string) => {
     onWidgetsChange(widgets.filter(widget => widget.id !== widgetId));
     if (selectedWidget === widgetId) {
       setSelectedWidget(null);
     }
   }, [widgets, onWidgetsChange, selectedWidget]);
-
-  return (
+  return ()
     <div className="bg-white border border-gray-200 rounded-lg">
       <div className="border-b border-gray-200 p-4">
         <h3 className="font-semibold text-gray-900">Visual Layout Builder</h3>
         <p className="text-sm text-gray-600">Drag widgets from the library to build your embed layout</p>
       </div>
-
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 p-4">
           {/* Widget Library */}
           <div className="lg:col-span-1">
             <h4 className="font-medium text-gray-700 mb-3">Widget Library</h4>
             <Droppable droppableId="widget-library" isDropDisabled={true}>
-              {(provided) => (
+              {(provided) => ()
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
@@ -501,9 +485,9 @@ export const VisualLayoutBuilder: React.FC<{
                 >
                   {WIDGET_LIBRARY.map((widget, index) => {
                     const Icon = widget.icon;
-                    return (
+                    return ()
                       <Draggable key={widget.id} draggableId={widget.id} index={index}>
-                        {(provided, snapshot) => (
+                        {(provided, snapshot) => ()
                           <div
                             ref={provided.innerRef}
                             {...provided.draggableProps}
@@ -527,7 +511,6 @@ export const VisualLayoutBuilder: React.FC<{
               )}
             </Droppable>
           </div>
-
           {/* Canvas */}
           <div className="lg:col-span-2">
             <div className="flex items-center justify-between mb-3">
@@ -536,9 +519,8 @@ export const VisualLayoutBuilder: React.FC<{
                 {previewSize.width} × {previewSize.height}
               </div>
             </div>
-            
             <Droppable droppableId="canvas">
-              {(provided) => (
+              {(provided) => ()
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
@@ -546,14 +528,14 @@ export const VisualLayoutBuilder: React.FC<{
                   style={{ 
                     width: Math.min(previewSize.width * 0.5, 400),
                     height: Math.min(previewSize.height * 0.5, 300),
-                    minHeight: '200px'
+                    minHeight: '200px',
                   }}
                 >
                   {widgets.map((widget, index) => {
                     const Icon = widget.icon;
-                    return (
+                    return ()
                       <Draggable key={widget.id} draggableId={widget.id} index={index}>
-                        {(provided, snapshot) => (
+                        {(provided, snapshot) => ()
                           <div
                             ref={provided.innerRef}
                             {...provided.draggableProps}
@@ -567,7 +549,7 @@ export const VisualLayoutBuilder: React.FC<{
                               width: widget.size.width * 0.5,
                               height: widget.size.height * 0.5,
                               minWidth: '80px',
-                              minHeight: '30px'
+                              minHeight: '30px',
                             }}
                             onClick={() => setSelectedWidget(widget.id)}
                           >
@@ -592,8 +574,7 @@ export const VisualLayoutBuilder: React.FC<{
                     );
                   })}
                   {provided.placeholder}
-                  
-                  {widgets.length === 0 && (
+                  {widgets.length === 0 && ()
                     <div className="absolute inset-0 flex items-center justify-center text-gray-400">
                       <div className="text-center">
                         <CubeIcon className="h-8 w-8 mx-auto mb-2" />
@@ -605,21 +586,17 @@ export const VisualLayoutBuilder: React.FC<{
               )}
             </Droppable>
           </div>
-
           {/* Widget Configuration */}
           <div className="lg:col-span-1">
             <h4 className="font-medium text-gray-700 mb-3">Widget Settings</h4>
-            
-            {selectedWidget ? (
+            {selectedWidget ? ()
               <div className="space-y-4">
                 {(() => {
                   const widget = widgets.find(w => w.id === selectedWidget);
                   if (!widget) return null;
-
-                  return (
+                  return ()
                     <div className="p-3 border border-gray-200 rounded-lg">
                       <h5 className="font-medium text-gray-900 mb-3">{widget.name}</h5>
-                      
                       <div className="space-y-3">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -632,7 +609,6 @@ export const VisualLayoutBuilder: React.FC<{
                             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                           />
                         </div>
-                        
                         <div className="grid grid-cols-2 gap-2">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -641,7 +617,7 @@ export const VisualLayoutBuilder: React.FC<{
                             <input
                               type="number"
                               value={widget.size.width}
-                              onChange={(e) => updateWidget(widget.id, { 
+                              onChange={(e) => updateWidget(widget.id, { )
                                 size: { ...widget.size, width: parseInt(e.target.value) } 
                               })}
                               className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
@@ -655,7 +631,7 @@ export const VisualLayoutBuilder: React.FC<{
                             <input
                               type="number"
                               value={widget.size.height}
-                              onChange={(e) => updateWidget(widget.id, { 
+                              onChange={(e) => updateWidget(widget.id, { )
                                 size: { ...widget.size, height: parseInt(e.target.value) } 
                               })}
                               className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
@@ -663,7 +639,6 @@ export const VisualLayoutBuilder: React.FC<{
                             />
                           </div>
                         </div>
-                        
                         <div className="grid grid-cols-2 gap-2">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -672,7 +647,7 @@ export const VisualLayoutBuilder: React.FC<{
                             <input
                               type="number"
                               value={widget.position.x}
-                              onChange={(e) => updateWidget(widget.id, { 
+                              onChange={(e) => updateWidget(widget.id, { )
                                 position: { ...widget.position, x: parseInt(e.target.value) } 
                               })}
                               className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
@@ -686,7 +661,7 @@ export const VisualLayoutBuilder: React.FC<{
                             <input
                               type="number"
                               value={widget.position.y}
-                              onChange={(e) => updateWidget(widget.id, { 
+                              onChange={(e) => updateWidget(widget.id, { )
                                 position: { ...widget.position, y: parseInt(e.target.value) } 
                               })}
                               className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
@@ -699,7 +674,7 @@ export const VisualLayoutBuilder: React.FC<{
                   );
                 })()}
               </div>
-            ) : (
+            ) : ()
               <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
                 <CubeIcon className="h-8 w-8 mx-auto mb-2" />
                 <p className="text-sm">Select a widget to configure its settings</p>
@@ -713,7 +688,7 @@ export const VisualLayoutBuilder: React.FC<{
 };
 
 // Main embed customization interface
-export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfaceProps> = ({
+export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfaceProps> = ({)
   template,
   initialCustomization,
   onCustomizationChange,
@@ -725,28 +700,24 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
   presets = DEFAULT_PRESETS
 }) => {
   const [activeTab, setActiveTab] = useState<'presets' | 'layout' | 'design' | 'features' | 'export'>('presets');
-  const [customization, setCustomization] = useState<EmbedCustomization>(
+  const [customization, setCustomization] = useState<EmbedCustomization>()
     initialCustomization || presets[0].customization
   );
   const [selectedPreset, setSelectedPreset] = useState<string>(presets[0].id);
   const [previewSize, _____setPreviewSize] = useState<PreviewSize>(PREVIEW_SIZES[1]);
   const [widgets, setWidgets] = useState<EmbedWidget[]>([]);
   const [isSaving, setIsSaving] = useState(false);
-
   // Update customization when it changes
   useEffect(() => {
     onCustomizationChange(customization);
   }, [customization, onCustomizationChange]);
-
   const handlePresetSelect = useCallback((preset: EmbedPreset) => {
     setSelectedPreset(preset.id);
     setCustomization(preset.customization);
   }, []);
-
   const updateCustomization = useCallback((updates: Partial<EmbedCustomization>) => {
     setCustomization(prev => ({ ...prev, ...updates }));
   }, []);
-
   const handleSave = useCallback(async () => {
     setIsSaving(true);
     try {
@@ -755,13 +726,11 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
       setIsSaving(false);
     }
   }, [customization, onSave]);
-
   const handleExport = useCallback((format: 'iframe' | 'javascript' | 'react') => {
     return onExport(customization, format);
   }, [customization, onExport]);
-
-  return (
-    <div className={`bg-gray-50 min-h-screen ${className}`}>
+  return ()
+    <div className={`bg-gray-50 min-h-screen ${className}`}>}
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -769,7 +738,6 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
             <h1 className="text-2xl font-bold text-gray-900">Embed Customization</h1>
             <p className="text-gray-600">Create a custom embed for "{template.title}"</p>
           </div>
-          
           <div className="flex items-center gap-3">
             <button
               onClick={() => onPreview(customization)}
@@ -789,12 +757,12 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
               disabled={isSaving}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-md disabled:opacity-50"
             >
-              {isSaving ? (
+              {isSaving ? ()
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   Saving...
                 </>
-              ) : (
+              ) : ()
                 <>
                   <CheckIcon className="h-5 w-5" />
                   Save Embed
@@ -803,7 +771,6 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
             </button>
           </div>
         </div>
-
         {/* Tab Navigation */}
         <div className="border-b border-gray-200 mb-6">
           <nav className="-mb-px flex space-x-8">
@@ -815,7 +782,7 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
               { id: 'export', label: 'Export', icon: CodeBracketIcon }
             ].map((tab) => {
               const Icon = tab.icon;
-              return (
+              return ()
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
@@ -832,31 +799,27 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
             })}
           </nav>
         </div>
-
         {/* Tab Content */}
         <div className="space-y-6">
-          {activeTab === 'presets' && (
+          {activeTab === 'presets' && ()
             <PresetSelector
               presets={presets}
               selectedPreset={selectedPreset}
               onPresetSelect={handlePresetSelect}
             />
           )}
-
-          {activeTab === 'layout' && (
+          {activeTab === 'layout' && ()
             <VisualLayoutBuilder
               widgets={widgets}
               onWidgetsChange={setWidgets}
               previewSize={previewSize}
             />
           )}
-
-          {activeTab === 'design' && (
+          {activeTab === 'design' && ()
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Theme & Colors */}
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">Theme & Colors</h3>
-                
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Theme</label>
@@ -867,10 +830,10 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                         { value: 'auto', label: 'Auto', icon: AutoIcon }
                       ].map((theme) => {
                         const Icon = theme.icon;
-                        return (
+                        return ()
                           <button
                             key={theme.value}
-                            onClick={() => updateCustomization({
+                            onClick={() => updateCustomization({)
                               theme: { ...customization.theme, name: theme.value as any }
                             })}
                             className={`flex items-center gap-2 px-4 py-2 border rounded-md ${
@@ -886,20 +849,19 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                       })}
                     </div>
                   </div>
-
-                  {customization.branding.customColors && (
+                  {customization.branding.customColors && ()
                     <div className="space-y-3">
                       <label className="block text-sm font-medium text-gray-700">Custom Colors</label>
-                      {Object.entries(customization.branding.customColors).map(([key, value]) => (
+                      {Object.entries(customization.branding.customColors).map(([key, value]) => ()
                         <div key={key} className="flex items-center gap-3">
                           <label className="w-20 text-sm text-gray-600 capitalize">{key}</label>
                           <input
                             type="color"
                             value={value}
-                            onChange={(e) => updateCustomization({
-                              branding: {
+                            onChange={(e) => updateCustomization({)
+                              branding: {,
                                 ...customization.branding,
-                                customColors: {
+                                customColors: {,
                                   ...customization.branding.customColors,
                                   [key]: e.target.value
                                 }
@@ -910,10 +872,10 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                           <input
                             type="text"
                             value={value}
-                            onChange={(e) => updateCustomization({
-                              branding: {
+                            onChange={(e) => updateCustomization({)
+                              branding: {,
                                 ...customization.branding,
-                                customColors: {
+                                customColors: {,
                                   ...customization.branding.customColors,
                                   [key]: e.target.value
                                 }
@@ -927,19 +889,17 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                   )}
                 </div>
               </div>
-
               {/* Typography & Spacing */}
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">Typography & Spacing</h3>
-                
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Spacing</label>
                     <div className="flex gap-2">
-                      {['tight', 'normal', 'loose'].map((spacing) => (
+                      {['tight', 'normal', 'loose'].map((spacing) => ()
                         <button
                           key={spacing}
-                          onClick={() => updateCustomization({
+                          onClick={() => updateCustomization({)
                             layout: { ...customization.layout, spacing: spacing as any }
                           })}
                           className={`px-4 py-2 border rounded-md capitalize ${
@@ -953,7 +913,6 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                       ))}
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Border Radius</label>
                     <input
@@ -961,7 +920,7 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                       min="0"
                       max="24"
                       value={customization.layout.borderRadius}
-                      onChange={(e) => updateCustomization({
+                      onChange={(e) => updateCustomization({)
                         layout: { ...customization.layout, borderRadius: parseInt(e.target.value) }
                       })}
                       className="w-full"
@@ -972,14 +931,13 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                       <span>24px</span>
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Shadow</label>
                     <div className="flex gap-2">
-                      {['none', 'sm', 'md', 'lg', 'xl'].map((shadow) => (
+                      {['none', 'sm', 'md', 'lg', 'xl'].map((shadow) => ()
                         <button
                           key={shadow}
-                          onClick={() => updateCustomization({
+                          onClick={() => updateCustomization({)
                             layout: { ...customization.layout, shadow: shadow as any }
                           })}
                           className={`px-3 py-2 border rounded-md text-sm ${
@@ -997,21 +955,19 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
               </div>
             </div>
           )}
-
-          {activeTab === 'features' && (
+          {activeTab === 'features' && ()
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <h3 className="font-semibold text-gray-900 mb-4">Feature Configuration</h3>
-              
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div>
                   <h4 className="font-medium text-gray-700 mb-3">Display Features</h4>
                   <div className="space-y-3">
-                    {Object.entries(customization.features).map(([key, value]) => (
+                    {Object.entries(customization.features).map(([key, value]) => ()
                       <label key={key} className="flex items-center gap-3">
                         <input
                           type="checkbox"
                           checked={value as boolean}
-                          onChange={(e) => updateCustomization({
+                          onChange={(e) => updateCustomization({)
                             features: { ...customization.features, [key]: e.target.checked }
                           })}
                           className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
@@ -1023,16 +979,15 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                     ))}
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-medium text-gray-700 mb-3">Social Features</h4>
                   <div className="space-y-3">
-                    {Object.entries(customization.social).map(([key, value]) => (
+                    {Object.entries(customization.social).map(([key, value]) => ()
                       <label key={key} className="flex items-center gap-3">
                         <input
                           type="checkbox"
                           checked={value as boolean}
-                          onChange={(e) => updateCustomization({
+                          onChange={(e) => updateCustomization({)
                             social: { ...customization.social, [key]: e.target.checked }
                           })}
                           className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
@@ -1044,18 +999,17 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                     ))}
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-medium text-gray-700 mb-3">Branding Options</h4>
                   <div className="space-y-3">
                     {Object.entries(customization.branding)
                       .filter(([key]) => typeof customization.branding[key as keyof EmbedBranding] === 'boolean')
-                      .map(([key, value]) => (
+                      .map(([key, value]) => ()
                         <label key={key} className="flex items-center gap-3">
                           <input
                             type="checkbox"
                             checked={value as boolean}
-                            onChange={(e) => updateCustomization({
+                            onChange={(e) => updateCustomization({)
                               branding: { ...customization.branding, [key]: e.target.checked }
                             })}
                             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
@@ -1070,12 +1024,10 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
               </div>
             </div>
           )}
-
-          {activeTab === 'export' && (
+          {activeTab === 'export' && ()
             <div className="space-y-6">
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">Export Your Embed</h3>
-                
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {[
                     { format: 'iframe', title: 'HTML Embed', description: 'Standard iframe embed code', icon: CodeBracketIcon },
@@ -1083,7 +1035,7 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                     { format: 'react', title: 'React Component', description: 'React component usage', icon: SparklesIcon }
                   ].map((option) => {
                     const Icon = option.icon;
-                    return (
+                    return ()
                       <button
                         key={option.format}
                         onClick={() => {
@@ -1106,17 +1058,15 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                   })}
                 </div>
               </div>
-
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">Share Your Embed</h3>
-                
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   {[
                     { platform: 'twitter', name: 'Twitter', color: 'bg-blue-400' },
                     { platform: 'linkedin', name: 'LinkedIn', color: 'bg-blue-600' },
                     { platform: 'facebook', name: 'Facebook', color: 'bg-blue-700' },
                     { platform: 'reddit', name: 'Reddit', color: 'bg-orange-500' }
-                  ].map((social) => (
+                  ].map((social) => ()
                     <button
                       key={social.platform}
                       className={`flex items-center justify-center gap-2 px-4 py-3 ${social.color} text-white rounded-lg hover:opacity-90 transition-opacity`}

@@ -17,7 +17,7 @@ export interface DependencyNode {
 }
 export interface DependencyGraph {
     nodes: Map<string, DependencyNode>;
-    edges: Array<{
+    edges: Array<{,
         from: string;
         to: string;
         optional: boolean;
@@ -28,7 +28,7 @@ export interface DependencyGraph {
 }
 export interface DependencyConflict {
     packageId: string;
-    requiredVersions: Array<{
+    requiredVersions: Array<{,
         requiredBy: string;
         versionRange: string;
     }>;

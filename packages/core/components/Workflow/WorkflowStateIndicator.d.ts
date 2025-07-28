@@ -10,7 +10,7 @@ interface WorkflowStateIndicatorProps {
 export declare const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps>;
 export declare const isCurrent: (stateId: WorkflowState) => boolean;
 interface WorkflowStateHistoryProps {
-    history: Array<{
+    history: Array<{,
         state: WorkflowState;
         stateConfig?: WorkflowStateConfig;
         timestamp: string;
