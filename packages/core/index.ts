@@ -41,6 +41,10 @@ export { MultiSelectionManager } from './components/CommandPalette/MultiSelectio
 export { AutosaveManager } from './components/CommandPalette/AutosaveManager';
 export { KeyboardShortcutsManager } from './components/CommandPalette/KeyboardShortcutsManager';
 
+// Epic 2: Menu Bar & Navigation Foundation
+export { ProfessionalMenuBar } from './components/MenuBar/ProfessionalMenuBar';
+export type { MenuBarProps } from './components/MenuBar/ProfessionalMenuBar';
+
 // Project Management System exports
 export { ProjectManager } from './projectManager';
 export { ServerProjectManager } from './serverProjectManager';

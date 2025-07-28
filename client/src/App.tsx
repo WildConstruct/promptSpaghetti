@@ -6,6 +6,7 @@ import './professional-theme.css';
 
 import EnhancedGraphEditor from './components/EnhancedGraphEditor';
 import { NodePrototypePage } from './components/NodePrototype';
+import { ProfessionalMenuBar } from '../../packages/core/components/MenuBar/ProfessionalMenuBar';
 
 interface GraphEditorProps {
   initialNodes?: unknown[];
@@ -92,6 +93,13 @@ function MainApp(): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
   const [generatedGraph, setGeneratedGraph] = useState<unknown>(null);
+  
+  // Menu bar state
+  const [theme, setTheme] = useState<'light' | 'dark' | 'cinema'>('cinema');
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [gridVisible, setGridVisible] = useState(true);
+  const [minimapVisible, setMinimapVisible] = useState(true);
+  const [inspectorVisible, setInspectorVisible] = useState(true);
 
   // Determine active tab based on current route (simplified, no auth)
   const getActiveTab = (): string => {
@@ -122,85 +130,209 @@ function MainApp(): React.ReactElement {
     alert(`Generation failed: ${error.message}`);
   }, []);
 
+  // Menu bar handlers
+  const menuBarHandlers = {
+    // File operations
+    onNew: useCallback(() => {
+      if (confirm('Create a new graph? Unsaved changes will be lost.')) {
+        setGeneratedGraph(null);
+        navigate('/');
+      }
+    }, [navigate]),
+    
+    onOpen: useCallback(() => {
+      // TODO: Integrate with file browser
+      console.log('Open file');
+    }, []),
+    
+    onSave: useCallback(() => {
+      // TODO: Integrate with save system
+      console.log('Save graph');
+    }, []),
+    
+    onSaveAs: useCallback(() => {
+      // TODO: Integrate with save system
+      console.log('Save as...');
+    }, []),
+    
+    onImport: useCallback(() => {
+      // TODO: Integrate with import system
+      console.log('Import');
+    }, []),
+    
+    onExport: useCallback((format: 'json' | 'png' | 'svg' | 'pdf') => {
+      // TODO: Integrate with export system
+      console.log('Export as', format);
+    }, []),
+    
+    // Edit operations
+    onUndo: useCallback(() => {
+      // TODO: Integrate with undo system
+      console.log('Undo');
+    }, []),
+    
+    onRedo: useCallback(() => {
+      // TODO: Integrate with redo system
+      console.log('Redo');
+    }, []),
+    
+    onSelectAll: useCallback(() => {
+      // TODO: Integrate with selection system
+      console.log('Select all');
+    }, []),
+    
+    // View operations
+    onZoomIn: useCallback(() => {
+      // TODO: Integrate with React Flow zoom
+      console.log('Zoom in');
+    }, []),
+    
+    onZoomOut: useCallback(() => {
+      // TODO: Integrate with React Flow zoom
+      console.log('Zoom out');
+    }, []),
+    
+    onFitView: useCallback(() => {
+      // TODO: Integrate with React Flow fit view
+      console.log('Fit view');
+    }, []),
+    
+    onToggleGrid: useCallback(() => {
+      setGridVisible(prev => !prev);
+    }, []),
+    
+    onToggleMinimap: useCallback(() => {
+      setMinimapVisible(prev => !prev);
+    }, []),
+    
+    onToggleInspector: useCallback(() => {
+      setInspectorVisible(prev => !prev);
+    }, []),
+    
+    onToggleFullscreen: useCallback(() => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        setIsFullscreen(true);
+      } else {
+        document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    }, []),
+    
+    onToggleTheme: useCallback((newTheme: 'light' | 'dark' | 'cinema') => {
+      setTheme(newTheme);
+    }, []),
+    
+    // Navigation handlers
+    onViewEditor: useCallback(() => handleTabChange('editor'), [handleTabChange]),
+    onViewRandomizer: useCallback(() => handleTabChange('randomizer'), [handleTabChange]),
+    onViewFiles: useCallback(() => handleTabChange('files'), [handleTabChange]),
+    onViewPrototype: useCallback(() => handleTabChange('prototype'), [handleTabChange]),
+    
+    // Help operations
+    onKeyboardShortcuts: useCallback(() => {
+      // TODO: Show keyboard shortcuts modal
+      console.log('Show keyboard shortcuts');
+    }, []),
+    
+    onAbout: useCallback(() => {
+      alert('Prompt Spaghetti - Professional Graph Editor\nVersion 1.0.0\nCinema 4D-inspired interface');
+    }, []),
+  };
+
 
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Header with Tab Navigation (Auth disabled) */}
+      {/* Professional Menu Bar */}
+      <ProfessionalMenuBar
+        {...menuBarHandlers}
+        theme={theme}
+        isFullscreen={isFullscreen}
+        gridVisible={gridVisible}
+        minimapVisible={minimapVisible}
+        inspectorVisible={inspectorVisible}
+        nodes={[]}
+        edges={[]}
+      />
+      
+      {/* Tab Content Area - now hidden behind menu bar */}
       <div style={{ 
         display: 'flex', 
         justifyContent: 'space-between',
         borderBottom: '1px solid var(--color-ui-border, #404040)', 
         backgroundColor: 'var(--color-bg-secondary, #2a2a2a)',
-        padding: '0'
+        padding: '0',
+        height: '40px',
+        alignItems: 'center'
       }}>
         <div style={{ display: 'flex' }}>
           <button
             onClick={() => handleTabChange('editor')}
             style={{
-              padding: '10px 20px',
+              padding: '8px 16px',
               border: 'none',
               backgroundColor: activeTab === 'editor' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
               borderBottom: activeTab === 'editor' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
               cursor: 'pointer',
-              fontSize: '14px',
+              fontSize: '12px',
               fontWeight: activeTab === 'editor' ? 'bold' : 'normal',
               color: 'var(--color-text-primary, #e8e8e8)'
             }}
           >
-            Graph Editor
+            📊 Graph Editor
           </button>
           <button
             onClick={() => handleTabChange('randomizer')}
             style={{
-              padding: '10px 20px',
+              padding: '8px 16px',
               border: 'none',
               backgroundColor: activeTab === 'randomizer' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
               borderBottom: activeTab === 'randomizer' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
               cursor: 'pointer',
-              fontSize: '14px',
+              fontSize: '12px',
               fontWeight: activeTab === 'randomizer' ? 'bold' : 'normal',
               color: 'var(--color-text-primary, #e8e8e8)'
             }}
           >
-            LLM Randomizer
+            🎲 LLM Randomizer
           </button>
           <button
             onClick={() => handleTabChange('files')}
             style={{
-              padding: '10px 20px',
+              padding: '8px 16px',
               border: 'none',
               backgroundColor: activeTab === 'files' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
               borderBottom: activeTab === 'files' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
               cursor: 'pointer',
-              fontSize: '14px',
+              fontSize: '12px',
               fontWeight: activeTab === 'files' ? 'bold' : 'normal',
               color: 'var(--color-text-primary, #e8e8e8)'
             }}
           >
-            Files
+            📁 Files
           </button>
           <button
             onClick={() => handleTabChange('prototype')}
             style={{
-              padding: '10px 20px',
+              padding: '8px 16px',
               border: 'none',
               backgroundColor: activeTab === 'prototype' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
               borderBottom: activeTab === 'prototype' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
               cursor: 'pointer',
-              fontSize: '14px',
+              fontSize: '12px',
               fontWeight: activeTab === 'prototype' ? 'bold' : 'normal',
               color: 'var(--color-text-primary, #e8e8e8)'
             }}
           >
-            Prototype
+            🔬 Prototype
           </button>
         </div>
           
-          {/* Status indicator */}
-          <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: 'var(--color-text-secondary, #666)', fontSize: '14px' }}>
-            {isEnhancedMode ? '🚀 Core Enhanced' : '🎨 Professional Mode'} | Cinema 4D Design
-          </div>
+        {/* Status indicator */}
+        <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: 'var(--color-text-secondary, #666)', fontSize: '12px' }}>
+          {isEnhancedMode ? '🚀 Core Enhanced' : '🎨 Professional Mode'} | {theme === 'cinema' ? '🎬 Cinema 4D' : theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
         </div>
+      </div>
 
       {/* Main Content */}
       <div style={{ flex: 1, overflow: 'hidden' }}>
