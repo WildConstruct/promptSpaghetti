@@ -132,7 +132,85 @@ export interface GraphState {
   getTemplateCompatibleData: () => GraphData;
 }
 
-export           if (!nodeToClone) return state;
+export const useGraphStore = create<GraphState>((set, get) => ({
+  // Initial state
+  nodes: [],
+  edges: [],
+  stickyNotes: [],
+  annotations: {
+    stickyNotes: [],
+    nodeLabelConfigs: {},
+    labelPreferences: DEFAULT_NODE_LABEL_PREFERENCES,
+    regionGroups: [],
+    regionGroupPreferences: DEFAULT_REGION_GROUP_PREFERENCES,
+    connectionLabels: [],
+    connectionAnnotations: [],
+    connectionAnnotationPreferences: DEFAULT_CONNECTION_ANNOTATION_PREFERENCES,
+    metadata: {
+      author: 'system',
+      created: new Date().toISOString(),
+      modified: new Date().toISOString(),
+      version: '1.0.0'
+    }
+  },
+  currentProject: null,
+  projectSettings: {
+    autoSave: true,
+    autoSaveInterval: 30000,
+    backupCount: 5,
+    compressionEnabled: true,
+    encryptionEnabled: false
+  },
+  hasUnsavedChanges: false,
+  isAutoSaveEnabled: true,
+
+  // Graph operations
+  setNodes: (nodes: Node[]) => set({ nodes, hasUnsavedChanges: true }),
+  setEdges: (edges: Edge[]) => set({ edges, hasUnsavedChanges: true }),
+  addNode: (node: Node) => set((state) => ({ 
+    nodes: [...state.nodes, node], 
+    hasUnsavedChanges: true 
+  })),
+  addEdge: (edge: Edge) => set((state) => ({ 
+    edges: [...state.edges, edge], 
+    hasUnsavedChanges: true 
+  })),
+  updateNode: (nodeId: string, partial: Record<string, unknown>) => 
+    set((state) => ({
+      nodes: state.nodes.map((node) =>
+        node.id === nodeId ? mergeNodeData(node, partial as Partial<NodeData>) : node
+      ),
+      hasUnsavedChanges: true
+    })),
+  
+  addVariation: (nodeId: string, variation: string) =>
+    set((state) => ({
+      nodes: addVariationToNode(state.nodes, nodeId, variation),
+      hasUnsavedChanges: true
+    })),
+    
+  removeVariation: (nodeId: string, variationIndex: number) =>
+    set((state) => ({
+      nodes: removeVariationFromNode(state.nodes, nodeId, variationIndex),
+      hasUnsavedChanges: true
+    })),
+    
+  updateVariation: (nodeId: string, variationIndex: number, newValue: string) =>
+    set((state) => ({
+      nodes: updateVariationInNode(state.nodes, nodeId, variationIndex, newValue),
+      hasUnsavedChanges: true
+    })),
+    
+  reorderVariations: (nodeId: string, fromIndex: number, toIndex: number) =>
+    set((state) => ({
+      nodes: reorderVariationsInNode(state.nodes, nodeId, fromIndex, toIndex),
+      hasUnsavedChanges: true
+    })),
+
+  duplicateNode: (nodeId: string) =>
+    set((state) => {
+      const nodeToClone = state.nodes.find((n) => n.id === nodeId);
+      if (!nodeToClone) return state;
       
       const newNode = {
         ...nodeToClone,
@@ -147,8 +225,8 @@ export           if (!nodeToClone) return state;
         }
       };
       
-          return { nodes: [...state.nodes, newNode], hasUnsavedChanges: true };
-        }),
+      return { nodes: [...state.nodes, newNode], hasUnsavedChanges: true };
+    }),
   
       deleteNode: (nodeId: string) =>
     set((state) => ({
