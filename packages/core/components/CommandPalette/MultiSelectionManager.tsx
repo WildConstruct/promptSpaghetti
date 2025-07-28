@@ -36,13 +36,13 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
   theme = 'cinema',
   disabled = false
 }) => {
-  const [selectionRect, setSelectionRect] = useState<SelectionRect>({)
-  startX: 0,
-  startY: 0,
-  currentX: 0,
-  currentY: 0,
-  active: false,
-});
+  const [selectionRect, setSelectionRect] = useState<SelectionRect>({
+    startX: 0,
+    startY: 0,
+    currentX: 0,
+    currentY: 0,
+    active: false,
+  });
   const [isSelecting, setIsSelecting] = useState(false);
   const [lastSelectedNode, setLastSelectedNode] = useState<Node | null>(null);
   const reactFlowInstance = useReactFlow();
