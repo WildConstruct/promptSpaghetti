@@ -38,9 +38,8 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
         onClick={onToggle}
         style={{
           background: professionalColors.ui.hover,
-          border: `1px solid ${professionalColors.ui.border}`}
-},
-  color: professionalColors.text.primary,
+          border: `1px solid ${professionalColors.ui.border}`,
+          color: professionalColors.text.primary,
           fontSize: 18,
           width: '100%',
           padding: '12px 0',
