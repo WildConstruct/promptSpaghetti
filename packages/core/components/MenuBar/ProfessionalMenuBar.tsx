@@ -265,6 +265,7 @@ const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) 
       )}
     </div>
   );
+};
 
 export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
   // File operations
