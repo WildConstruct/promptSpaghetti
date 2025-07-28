@@ -564,10 +564,7 @@ function MainApp(): React.ReactElement {
               padding: '8px 16px',
               border: 'none',
               backgroundColor: activeTab === 'editor' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
-              borderBottom: activeTab === 'editor' ? '2px solid var(
-                --color-accent-orange,
-                #ff7c00
-              )' : '2px solid transparent',
+              borderBottom: activeTab === 'editor' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
               cursor: 'pointer',
               fontSize: '12px',
               fontWeight: activeTab === 'editor' ? 'bold' : 'normal',
@@ -582,10 +579,7 @@ function MainApp(): React.ReactElement {
               padding: '8px 16px',
               border: 'none',
               backgroundColor: activeTab === 'randomizer' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
-              borderBottom: activeTab === 'randomizer' ? '2px solid var(
-                --color-accent-orange,
-                #ff7c00
-              )' : '2px solid transparent',
+              borderBottom: activeTab === 'randomizer' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
               cursor: 'pointer',
               fontSize: '12px',
               fontWeight: activeTab === 'randomizer' ? 'bold' : 'normal',
@@ -600,10 +594,7 @@ function MainApp(): React.ReactElement {
               padding: '8px 16px',
               border: 'none',
               backgroundColor: activeTab === 'files' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
-              borderBottom: activeTab === 'files' ? '2px solid var(
-                --color-accent-orange,
-                #ff7c00
-              )' : '2px solid transparent',
+              borderBottom: activeTab === 'files' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
               cursor: 'pointer',
               fontSize: '12px',
               fontWeight: activeTab === 'files' ? 'bold' : 'normal',
@@ -618,10 +609,7 @@ function MainApp(): React.ReactElement {
               padding: '8px 16px',
               border: 'none',
               backgroundColor: activeTab === 'prototype' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
-              borderBottom: activeTab === 'prototype' ? '2px solid var(
-                --color-accent-orange,
-                #ff7c00
-              )' : '2px solid transparent',
+              borderBottom: activeTab === 'prototype' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
               cursor: 'pointer',
               fontSize: '12px',
               fontWeight: activeTab === 'prototype' ? 'bold' : 'normal',
@@ -633,10 +621,7 @@ function MainApp(): React.ReactElement {
         </div>
           
         {/* Status indicator */}
-        <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: 'var(
-          --color-text-secondary,
-          #666
-        )', fontSize: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: 'var(--color-text-secondary, #666)', fontSize: '12px' }}>
           {isEnhancedMode ? '🚀 Core Enhanced' : '🎨 Professional Mode'} | {theme === 'cinema' ? '🎬 Cinema 4D' : theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
         </div>
       </div>
