@@ -202,6 +202,7 @@ function MainApp(): React.ReactElement {
       } else {
         document.exitFullscreen();
         setIsFullscreen(false);
+      }
     }, []),
     onToggleTheme: useCallback((newTheme: 'light' | 'dark' | 'cinema') => {
       setTheme(newTheme);
