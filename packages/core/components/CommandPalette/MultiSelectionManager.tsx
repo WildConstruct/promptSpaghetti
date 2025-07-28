@@ -55,14 +55,17 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
   if ((e.metaKey || e.ctrlKey) && e.key === 'a') {
   e.preventDefault();
   handleSelectAll();
+  }
   // Clear Selection (Escape)
   if (e.key === 'Escape') {
   e.preventDefault();
   handleClearSelection();
+  }
   // Invert Selection (Cmd/Ctrl + I)
   if ((e.metaKey || e.ctrlKey) && e.key === 'i') {
   e.preventDefault();
   handleInvertSelection();
+  }
 };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);

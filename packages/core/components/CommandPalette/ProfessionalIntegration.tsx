@@ -100,6 +100,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
   description: 'Generated dialogue samples',
   category: 'character',
 });
+    }
   }, [onNodeCreate, reactFlowInstance]);
   // Undo/Redo Actions
   const handleUndo = useCallback(() => {
@@ -108,6 +109,8 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
       if (state) {
         onNodesChange(state.nodes);
         onEdgesChange(state.edges);
+      }
+    }
   }, [onNodesChange, onEdgesChange]);
   const handleRedo = useCallback(() => {
     if (undoRedoRef.current) {
