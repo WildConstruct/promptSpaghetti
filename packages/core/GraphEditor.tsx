@@ -425,19 +425,19 @@ const NODE_TYPES: NodeMeta[] = [
     // Update the graph store
     updateNode(selectedNode.id, partial);
     // Also update local React state immediately for UI responsiveness
-    setNodes(prev => prev.map(n => )
+    setNodes(prev => prev.map(n =>
       n.id === selectedNode.id 
         ? { ...n, data: { ...n.data, ...partial } }
         : n
     ));
   };
   // Edge drag handler
-  const onConnect: OnConnect = useCallback()
+  const onConnect: OnConnect = useCallback(
     (connection: Connection) => {
       setEdges((eds) => addEdge(connection, eds));
       // Track progress for contextual help system
       helpContentManager.updateProgress('connectionsBuilt', 1);
-  }
+    },
     []
   );
   // Handle node drag from palette
@@ -446,7 +446,7 @@ const NODE_TYPES: NodeMeta[] = [
 };
   // Enhanced drop handler with smooth node creation animation
   const { addNode, updateNode } = useGraphStore();
-  const handleDrop = useCallback(;);
+  const handleDrop = useCallback(
     async (event: React.DragEvent) => {
       event.preventDefault();
       // Check if files are being dropped (Story 6.1 - drag and drop .psg files)
@@ -511,7 +511,7 @@ const NODE_TYPES: NodeMeta[] = [
         type: 'default',
         position,
         data: { ...params, nodeType: nodeType },
-        selected: false;
+        selected: false
   };
       // Add with animation
       globalAnimationManager.scheduleAnimation(() => {
@@ -524,7 +524,7 @@ const NODE_TYPES: NodeMeta[] = [
           setNodeCreationAnimation(null);
         }, 600);
       });
-  }
+    },
     [reactFlowInstance, addNode, hasUnsavedChanges, setNodes, setEdges, setStatusMessage]
   );
   // Allow drop on canvas

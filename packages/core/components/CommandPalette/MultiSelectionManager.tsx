@@ -49,7 +49,7 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
   const selectionRef = useRef<HTMLDivElement>(null);
   // Keyboard shortcuts for selection operations
   useEffect(() => {
-  const handleKeyDown = (e: KeyboardEvent) => {,
+  const handleKeyDown = (e: KeyboardEvent) => {
   if (disabled) return;
   // Select All (Cmd/Ctrl + A)
   if ((e.metaKey || e.ctrlKey) && e.key === 'a') {

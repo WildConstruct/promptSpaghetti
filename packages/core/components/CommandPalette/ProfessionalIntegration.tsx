@@ -64,11 +64,8 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
   const handleCommandPalette = useCallback(() => {
     setShowCommandPalette(true);
   }, []);
-  const handleGenerationStart = useCallback(;);
-    async (flow: { nodes: Node; edges: Edge })
-    params: Record<string,
-    unknown>
-  ) => {
+  const handleGenerationStart = useCallback(
+    async (flow: { nodes: Node; edges: Edge }, params: Record<string, unknown>) => {
     console.log('Starting generation flow:', flow.name, params);
     // Implementation would go here - this is a demo
     // Simulate graph generation
@@ -81,12 +78,10 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
       const centerX = viewport ? -viewport.x + 400 : 400;
       const centerY = viewport ? -viewport.y + 200 : 200;
       // Create character profile node
-      onNodeCreate('text', { x: centerX, y: centerY }, {)
-  label: `${characterName} Profile`}
-},
-  description: `${characterRole} character profile with traits and background`}
-},
-  category: 'character';
+      onNodeCreate('text', { x: centerX, y: centerY }, {
+  label: `${characterName} Profile`,
+  description: `${characterRole} character profile with traits and background`,
+  category: 'character'
   });
       // Create traits node
       onNodeCreate('logic', { x: centerX + 300, y: centerY }, {)

@@ -824,18 +824,4 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   );
 };
 
-// Add CSS animation for regenerating indicator
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-  }
-`;
-document.head.appendChild(style);
-
 export default PreviewModal;

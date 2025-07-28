@@ -229,11 +229,12 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   ...state.annotations,
   stickyNotes: [...state.annotations.stickyNotes, note],
   metadata: {
-  ...state.annotations.metadata,
-  modified: new Date().toISOString(),
-},
+    ...state.annotations.metadata,
+    modified: new Date().toISOString(),
+  },
+  },
   hasUnsavedChanges: true
-  })),
+})),
   updateStickyNote: (noteId: string, updates: Partial<StickyNote>) =>
     set((state) => {
       const updatedNotes = state.stickyNotes.map(note =>
@@ -247,6 +248,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
+},
 },
   hasUnsavedChanges: true
   };
@@ -263,6 +265,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
+},
   hasUnsavedChanges: true
   };
     }),
@@ -275,6 +278,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
+},
 },
   hasUnsavedChanges: true
   })),
@@ -289,6 +293,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
+},
 },
   hasUnsavedChanges: true
   })),
@@ -306,9 +311,11 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   ...updates,
   timestamp: new Date().toISOString(),
 },
+},
   metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
+},
 },
   hasUnsavedChanges: true
   };
