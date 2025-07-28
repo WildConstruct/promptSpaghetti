@@ -163,7 +163,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             title="Insert Variable"
             theme={theme}
           >
-            {{var}}
+            {'{{var}}'}
           </ToolbarButton>
           
           {nodeType === 'concat' && (
