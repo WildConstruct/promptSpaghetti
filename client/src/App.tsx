@@ -356,6 +356,7 @@ function MainApp(): React.ReactElement {
   setShowCommandPalette(false);
   menuBarHandlers.onExport('json');
 }
+    },
     // View operations
     {
   id: 'view-fit',
@@ -369,6 +370,7 @@ function MainApp(): React.ReactElement {
   setShowCommandPalette(false);
   menuBarHandlers.onFitView();
 }
+    },
     {
   id: 'view-fullscreen',
   title: 'Toggle Fullscreen',
@@ -381,6 +383,7 @@ function MainApp(): React.ReactElement {
   setShowCommandPalette(false);
   menuBarHandlers.onToggleFullscreen();
 }
+    },
     {
   id: 'theme-switch',
   title: 'Switch Theme',
@@ -393,6 +396,7 @@ function MainApp(): React.ReactElement {
   const nextTheme = theme === 'cinema' ? 'dark' : theme === 'dark' ? 'light' : 'cinema';
   menuBarHandlers.onToggleTheme(nextTheme);
 }
+    },
     // Navigation
     {
   id: 'nav-randomizer',
@@ -405,6 +409,7 @@ function MainApp(): React.ReactElement {
   setShowCommandPalette(false);
   menuBarHandlers.onViewRandomizer();
 }
+    },
     {
   id: 'nav-files',
   title: 'Go to Files',
@@ -416,6 +421,7 @@ function MainApp(): React.ReactElement {
   setShowCommandPalette(false);
   menuBarHandlers.onViewFiles();
 }
+    },
     // Help
     {
   id: 'help-shortcuts',
@@ -429,6 +435,7 @@ function MainApp(): React.ReactElement {
   setShowCommandPalette(false);
   menuBarHandlers.onKeyboardShortcuts();
 }
+    },
     {
       id: 'help-about',
       title: 'About',
@@ -439,8 +446,10 @@ function MainApp(): React.ReactElement {
       action: () => {
         setShowCommandPalette(false);
         menuBarHandlers.onAbout();
+      }
+    }
   ];
-  return;
+  return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Professional Menu Bar */}
       <ProfessionalMenuBar
@@ -599,7 +608,7 @@ function MainApp(): React.ReactElement {
  * Simplified version with authentication disabled.
  */
 export default function App(): React.ReactElement {
-  return;
+  return (
     <BrowserRouter>
       <Routes>
         {/* Main routes (no authentication) */}
