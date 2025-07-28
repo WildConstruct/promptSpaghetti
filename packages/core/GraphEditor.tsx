@@ -75,33 +75,26 @@ import '../../client/src/professional-theme.css';
 // SECURITY FIX: Safe CSS injection using controlled constants
 const ANIMATION_CSS = `;
   @keyframes nodeCreatePulse {
-    0% {
-      opacity: 0;
-      transform: scale(0.5);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1.2);
-    }
-    100% {
-      opacity: 0;
-      transform: scale(1);
-    }
-  }
+  0% {
+  opacity: 0;,
+  transform: scale(0.5);
+  50% {
+  opacity: 1;,
+  transform: scale(1.2);
+  100% {
+  opacity: 0;,
+  transform: scale(1);
   .animate-node-create-overlay {
-    animation: nodeCreatePulse 0.6s ease-out;
-  }
-`;
-
-// Safe style injection with ID check to prevent duplicates
-const injectSafeStyles = () => {
+  animation: nodeCreatePulse 0.6s ease-out;
+  `;
+  // Safe style injection with ID check to prevent duplicates
+  const injectSafeStyles = () => {
   const styleId = 'graph-editor-animations';
   if (!document.getElementById(styleId)) {
-    const style = document.createElement('style');
-    style.id = styleId;
-    style.textContent = ANIMATION_CSS; // Use predefined constant
-    document.head.appendChild(style);
-  }
+  const style = document.createElement('style');
+  style.id = styleId;
+  style.textContent = ANIMATION_CSS; // Use predefined constant
+  document.head.appendChild(style);
 };
 
 // Inject styles safely on module load
@@ -115,130 +108,126 @@ import {
   GetVariableIcon
 } from './icons';
 interface GraphEditorProps {
-  initialNodes: Node[];
-  initialEdges: Edge[];
-  validateConnection?: (edges: Edge[], nodes: Node[]) => ValidationError[];
-}
-const NODE_TYPES: NodeMeta[] = [
+  initialNodes: Node;,
+  initialEdges: Edge;
+  validateConnection?: (edges: Edge, nodes: Node) => ValidationError;
+  const NODE_TYPES: NodeMeta = [
   // Content Building Blocks
   {
-    id: 'Subject',
-    label: 'Character',
-    icon: '👤',
-    tooltip: 'Define characters, people, or entities in your content',
-    category: 'content',
-  },
+  id: 'Subject',
+  label: 'Character',
+  icon: '👤',
+  tooltip: 'Define characters, people, or entities in your content',
+  category: 'content',
+}
   {
-    id: 'Connector',
-    label: 'Link Words',
-    icon: '🔗',
-    tooltip: 'Connect different parts of your content naturally',
-    category: 'content',
-  },
+  id: 'Connector',
+  label: 'Link Words',
+  icon: '🔗',
+  tooltip: 'Connect different parts of your content naturally',
+  category: 'content',
+}
   {
-    id: 'Attribute',
-    label: 'Descriptors',
-    icon: '🏷️',
-    tooltip: 'Add qualities, colors, styles, or characteristics',
-    category: 'content',
-  },
+  id: 'Attribute',
+  label: 'Descriptors',
+  icon: '🏷️',
+  tooltip: 'Add qualities, colors, styles, or characteristics',
+  category: 'content',
+}
   {
-    id: 'Action',
-    label: 'Actions',
-    icon: '⚡',
-    tooltip: 'Verbs and activities that bring scenes to life',
-    category: 'content',
-  },
+  id: 'Action',
+  label: 'Actions',
+  icon: '⚡',
+  tooltip: 'Verbs and activities that bring scenes to life',
+  category: 'content',
+}
   // Content Flow Tools
   {
-    id: 'WeightedChoice',
-    label: 'Random Selection',
-    icon: WeightedChoiceIcon,
-    tooltip: 'Choose randomly from multiple options with different likelihood',
-    category: 'flow',
-  },
+  id: 'WeightedChoice',
+  label: 'Random Selection',
+  icon: WeightedChoiceIcon,
+  tooltip: 'Choose randomly from multiple options with different likelihood',
+  category: 'flow',
+}
   {
-    id: 'Concat',
-    label: 'Combine',
-    icon: ConcatIcon,
-    tooltip: 'Join multiple text elements together seamlessly',
-    category: 'flow',
-  },
+  id: 'Concat',
+  label: 'Combine',
+  icon: ConcatIcon,
+  tooltip: 'Join multiple text elements together seamlessly',
+  category: 'flow',
+}
   {
-    id: 'Output',
-    label: 'Result',
-    icon: OutputIcon,
-    tooltip: 'Final generated content ready for use',
-    category: 'output',
-  },
+  id: 'Output',
+  label: 'Result',
+  icon: OutputIcon,
+  tooltip: 'Final generated content ready for use',
+  category: 'output',
+}
   {
-    id: 'Include',
-    label: 'Reference',
-    icon: IncludeIcon,
-    tooltip: 'Include content from another template or package',
-    category: 'flow',
-  },
+  id: 'Include',
+  label: 'Reference',
+  icon: IncludeIcon,
+  tooltip: 'Include content from another template or package',
+  category: 'flow',
+}
   {
-    id: 'SetVariable',
-    label: 'Store Value',
-    icon: SetVariableIcon,
-    tooltip: 'Save a value to use later in your workflow',
-    category: 'memory',
-  },
+  id: 'SetVariable',
+  label: 'Store Value',
+  icon: SetVariableIcon,
+  tooltip: 'Save a value to use later in your workflow',
+  category: 'memory',
+}
   {
-    id: 'GetVariable',
-    label: 'Retrieve Value',
-    icon: GetVariableIcon,
-    tooltip: 'Get a previously saved value from memory',
-    category: 'memory',
-  },
+  id: 'GetVariable',
+  label: 'Retrieve Value',
+  icon: GetVariableIcon,
+  tooltip: 'Get a previously saved value from memory',
+  category: 'memory',
+}
   // Advanced Nodes
   {
-    id: 'WeightedAdvanced',
-    label: 'Smart Random',
-    icon: '🎲',
-    tooltip: 'Advanced random selection with custom distribution patterns',
-    category: 'advanced',
-  },
+  id: 'WeightedAdvanced',
+  label: 'Smart Random',
+  icon: '🎲',
+  tooltip: 'Advanced random selection with custom distribution patterns',
+  category: 'advanced',
+}
   {
-    id: 'Conditional',
-    label: 'If/Then',
-    icon: '🔀',
-    tooltip: 'Choose different creative paths based on conditions',
-    category: 'advanced',
-  },
+  id: 'Conditional',
+  label: 'If/Then',
+  icon: '🔀',
+  tooltip: 'Choose different creative paths based on conditions',
+  category: 'advanced',
+}
   // Transform & Logic
   {
-    id: 'Sequential',
-    label: 'Step by Step',
-    icon: '🔄',
-    tooltip: 'Process content in a specific creative sequence',
-    category: 'transform',
-  },
+  id: 'Sequential',
+  label: 'Step by Step',
+  icon: '🔄',
+  tooltip: 'Process content in a specific creative sequence',
+  category: 'transform',
+}
   {
-    id: 'Markov',
-    label: 'Chain Process',
-    icon: '🕸️',
-    tooltip: 'Generate content based on probability patterns and transitions',
-    category: 'transform',
-  },
+  id: 'Markov',
+  label: 'Chain Process',
+  icon: '🕸️',
+  tooltip: 'Generate content based on probability patterns and transitions',
+  category: 'transform',
+}
   {
-    id: 'PythonTransform',
-    label: 'Custom Script',
-    icon: '🐍',
-    tooltip: 'Apply custom processing logic to transform content',
-    category: 'process',
-  }
-];
-
-// Inner component that has access to React Flow instance
-const GraphEditorInner: React.FC<GraphEditorProps> = ({)
-  initialNodes,
-  initialEdges,
-  validateConnection
-}) => {
-  const [nodes, setNodes] = useState<Node[]>(initialNodes);
-  const [edges, setEdges] = useState<Edge[]>(initialEdges);
+  id: 'PythonTransform',
+  label: 'Custom Script',
+  icon: '🐍',
+  tooltip: 'Apply custom processing logic to transform content',
+  category: 'process'];
+  // Inner component that has access to React Flow instance
+  const GraphEditorInner: React.FC<GraphEditorProps> = ({
+    initialNodes,
+    initialEdges,
+    validateConnection
+  }) => {
+  const [nodes, setNodes] = useState<Node>(initialNodes);
+  const [edges, setEdges] = useState<Edge>(initialEdges);
   const [statusMessage, setStatusMessage] = useState<string>('');
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
@@ -246,15 +235,15 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
   const [statsOpen, setStatsOpen] = useState(false);
   const [extensionsOpen, setExtensionsOpen] = useState(false);
   const [showControls, setShowControls] = useState(false);
-  const [, setDragPreview] = useState<{node: Node, position: {x: number, y: number}} | null>(null);
+  const [ setDragPreview] = useState<{node: Node, position: {x: number, y: number}} | null>(null);
   // Canvas optimization and smooth animations
   const [isCreatingNode, setIsCreatingNode] = useState(false);
   const [nodeCreationAnimation, setNodeCreationAnimation] = useState<string | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const { optimizer, metrics, isPerformanceGood } = useCanvasOptimization({)
-    maxVisibleNodes: 150,
-    animationFrameThrottle: 16,
-  });
+  maxVisibleNodes: 150,
+  animationFrameThrottle: 16,
+});
   // Project dialog states
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [loadDialogOpen, setLoadDialogOpen] = useState(false);
@@ -273,15 +262,15 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
   const [graphAnalysisOpen, setGraphAnalysisOpen] = useState(false);
   const [optimizationMenuOpen, setOptimizationMenuOpen] = useState(false);
   const [optimizationSettings, setOptimizationSettings] = useState<OptimizationSettings>({)
-    deadCodeElimination: true,
-    constantPropagation: true,
-    resultCaching: true,
-    parallelExecution: false,
-    memoryOptimization: true,
-    precompilation: false,
-    performanceMonitoring: true,
-    debugMode: false,
-  });
+  deadCodeElimination: true,
+  constantPropagation: true,
+  resultCaching: true,
+  parallelExecution: false,
+  memoryOptimization: true,
+  precompilation: false,
+  performanceMonitoring: true,
+  debugMode: false,
+});
   // Graph store for project management
   const { 
     currentProject, 
@@ -293,9 +282,9 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
   } = useGraphStore();
   // Demo encryption state - in a real implementation, this would be managed by a security service
   const [encryptionState, setEncryptionState] = useState<EncryptionState>({)
-    status: 'not_encrypted',
-    dataSize: 1024 * 512 // 512KB demo graph,
-  });
+  status: 'not_encrypted',
+  dataSize: 1024 * 512 // 512KB demo graph,
+});
   const correctionsEnabled = useCorrectionsEnabled();
   const reactFlowInstance = useReactFlow();
   const viewport = useViewport();
@@ -304,30 +293,29 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
   const { showRestorePrompt, restoreDraft, setShowRestorePrompt } = useAutosave({ nodes, edges });
   // Unsaved changes management (Story 6.1)
   const {
-    showUnsavedDialog,
-    dialogAction,
-    confirmNavigation,
-    handleSave: handleUnsavedSave,
-    handleDontSave: handleUnsavedDontSave,
-    handleCancel: handleUnsavedCancel,
-  } = useUnsavedChanges({)
-    hasUnsavedChanges,
-    projectName: currentProject?.name,
-    onSave: async () => {,
-      // Trigger save dialog and wait for result
-      return new Promise((resolve) => {
-        setSaveDialogOpen(true);
-        // Note: This is a simplified implementation
-        // In practice, you'd need to wire this up with the actual save dialog result
-        resolve(true);
-      });
-    }
+  showUnsavedDialog,
+  dialogAction,
+  confirmNavigation,
+  handleSave: handleUnsavedSave,
+  handleDontSave: handleUnsavedDontSave,
+  handleCancel: handleUnsavedCancel,
+} = useUnsavedChanges({)
+  hasUnsavedChanges,
+  projectName: currentProject?.name,
+  onSave: async () => {,
+  // Trigger save dialog and wait for result
+  return new Promise((resolve) => {
+  setSaveDialogOpen(true);
+  // Note: This is a simplified implementation,
+  // In practice, you'd need to wire this up with the actual save dialog result
+  resolve(true);
+});
   });
   // Highlighted nodes & edges from preview result hover
   const [highlightNodeIds, setHighlightNodeIds] = useState<Set<string>>(new Set());
   const [highlightEdgeIds, setHighlightEdgeIds] = useState<Set<string>>(new Set());
   const { errors, styledEdges, styledNodes } = useValidation({)
-    edges,
+  edges,
     nodes,
     highlightNodeIds,
     highlightEdgeIds,
@@ -342,7 +330,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
       // Wrap with smooth animations if performance is good
       if (isPerformanceGood) {
         const InnerNode = shouldUseVariablePorts ? VariablePortNodeRenderer : NodeRenderer;
-        return ();
+        return;
           <SmoothNodeWrapper
             id={props.id}
             data={props.data}
@@ -361,10 +349,9 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
             />
           </SmoothNodeWrapper>
         );
-      }
       // Fallback to standard rendering for performance
       if (shouldUseVariablePorts) {
-        return ();
+        return;
           <VariablePortNodeRenderer
             id={props.id}
             data={props.data}
@@ -374,8 +361,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
             getCategoryColor={getCategoryColor}
           />
         );
-      }
-      return ();
+      return;
         <NodeRenderer
           id={props.id}
           data={props.data}
@@ -397,12 +383,12 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
   // Preview-5 modal state
   const [previewOpen, setPreviewOpen] = useState(false);
   const {
-    loading: previewLoading,
-    error: previewError,
-    results: previewResults,
-    runPreview,
-    cancelPreview
-  } = usePreviewSeeds();
+  loading: previewLoading,
+  error: previewError,
+  results: previewResults,
+  runPreview,
+  cancelPreview
+} = usePreviewSeeds();
   const lastChangeRef = useRef<number>(Date.now());
   const previewTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   // Selected node & schema for inspector
@@ -425,7 +411,6 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
       previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
     } else {
       run();
-    }
   }, [nodes, edges, runPreview]);
   const handleInspectorChange = (partial: Record<string, unknown>) => {
     if (!selectedNode) return;
@@ -444,13 +429,13 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
       setEdges((eds) => addEdge(connection, eds));
       // Track progress for contextual help system
       helpContentManager.updateProgress('connectionsBuilt', 1);
-    },
+  }
     []
   );
   // Handle node drag from palette
   const handlePaletteDragStart = () => {
-    // No-op: drag data set in Palette, handled on drop
-  };
+  // No-op: drag data set in Palette, handled on drop,
+};
   // Enhanced drop handler with smooth node creation animation
   const { addNode, updateNode } = useGraphStore();
   const handleDrop = useCallback(;);
@@ -465,15 +450,14 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
           if (hasUnsavedChanges) {
             const confirmed = confirm('You have unsaved changes. Load the dropped project anyway?');
             if (!confirmed) return;
-          }
           try {
             const content = await file.text();
             const { deserializeProject } = await import('./utils/projectSerialization');
             const result = deserializeProject(content, {)
-              skipValidation: false,
-              autoMigrate: true,
-              preserveIds: true,
-            });
+  skipValidation: false,
+  autoMigrate: true,
+  preserveIds: true,
+});
             if (result.success && result.data) {
               // Load the project data
               setNodes(result.data.graph.nodes);
@@ -486,32 +470,27 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
               setStatusMessage(`Project "${result.data.metadata.name}" loaded successfully!`);}
               setTimeout(() => setStatusMessage(''), 3000);
               if (result.warnings && result.warnings.length > 0) {
-                console.warn('Project load warnings:', result.warnings);
-              }
-            } else {
+  console.warn('Project load warnings:', result.warnings);
+} else {
               setStatusMessage(`Failed to load project: ${result.error}`);}
               setTimeout(() => setStatusMessage(''), 5000);
-            }
           } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
             setStatusMessage(`Failed to load project: ${errorMessage}`);}
             setTimeout(() => setStatusMessage(''), 5000);
-          }
           return; // Exit early for file drops
         } else {
-          setStatusMessage('Only .psg files are supported for drag and drop');
-          setTimeout(() => setStatusMessage(''), 3000);
-          return;
-        }
-      }
-      // Handle node type drops from palette (existing functionality)
-      const nodeType = event.dataTransfer.getData('application/node-type');
-      if (!nodeType || !(nodeType in nodeSchemas)) return;
-      // Use React Flow's screenToFlowPosition for accurate positioning
-      const position = reactFlowInstance.screenToFlowPosition({)
-        x: event.clientX,
-        y: event.clientY,
-      });
+  setStatusMessage('Only .psg files are supported for drag and drop');
+  setTimeout(() => setStatusMessage(''), 3000);
+  return;
+  // Handle node type drops from palette (existing functionality)
+  const nodeType = event.dataTransfer.getData('application/node-type');
+  if (!nodeType || !(nodeType in nodeSchemas)) return;
+  // Use React Flow's screenToFlowPosition for accurate positioning
+  const position = reactFlowInstance.screenToFlowPosition({)
+  x: event.clientX,
+  y: event.clientY,
+});
       // Smooth node creation animation
       setIsCreatingNode(true);
       const nodeId = `${nodeType}-${Date.now()}`;}
@@ -519,13 +498,13 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
       // Use Zod schema to get default params
       const schema = nodeSchemas[nodeType];
       const params = schema.parse({});
-      const newNode: Node = {
-        id: nodeId,
+      const newNode: Node = {,
+  id: nodeId,
         type: 'default',
         position,
         data: { ...params, nodeType: nodeType },
-        selected: false,
-      };
+        selected: false;
+  };
       // Add with animation
       globalAnimationManager.scheduleAnimation(() => {
         addNode(newNode);
@@ -537,7 +516,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
           setNodeCreationAnimation(null);
         }, 600);
       });
-    },
+  }
     [reactFlowInstance, addNode, hasUnsavedChanges, setNodes, setEdges, setStatusMessage]
   );
   // Allow drop on canvas
@@ -552,12 +531,12 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
   // Autosave and restore logic handled by useAutosave hook
   // Enhanced nodes change handler with canvas optimization
   const onNodesChange: OnNodesChange = useCallback()
-    (changes: NodeChange[]) => {
-      // Get canvas size for optimization
-      const canvasSize = canvasRef.current ? {
-        width: canvasRef.current.offsetWidth,
-        height: canvasRef.current.offsetHeight,
-      } : { width: 1920, height: 1080 };
+    (changes: NodeChange) => {
+  // Get canvas size for optimization
+  const canvasSize = canvasRef.current ? {
+  width: canvasRef.current.offsetWidth,
+  height: canvasRef.current.offsetHeight,
+} : { width: 1920, height: 1080 };
       setNodes((nds) => {
         let updatedNodes = nds.map((node) => {
           const change = changes.find((c) => 'id' in c && c.id === node.id);
@@ -566,21 +545,19 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
             setDragPreview({ node: {...node, ...change}, position: change.position || node.position });
           } else if (change && 'dragging' in change && !change.dragging) {
             setDragPreview(null);
-          }
           return change ? { ...node, ...change } : node;
         });
         // Apply canvas optimization for performance
         if (updatedNodes.length > 100) {
           updatedNodes = optimizer.optimizeNodeVisibility(updatedNodes, viewport, canvasSize);
-        }
         return updatedNodes;
       });
-    },
+  }
     [optimizer, viewport]
   );
   // Enhanced edges change handler with optimization
   const onEdgesChange: OnEdgesChange = useCallback()
-    (changes: EdgeChange[]) => {
+    (changes: EdgeChange) => {
       setEdges((eds) => {
         let updatedEdges = eds.map((edge) => {
           const change = changes.find((c) => 'id' in c && c.id === edge.id);
@@ -589,10 +566,9 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
         // Apply edge optimization for performance
         if (updatedEdges.length > 200) {
           updatedEdges = optimizer.optimizeEdges(updatedEdges, nodes, viewport);
-        }
         return updatedEdges;
       });
-    },
+  }
     [optimizer, nodes, viewport]
   );
   // Demo encryption handlers - in a real implementation, these would call actual encryption services
@@ -600,15 +576,15 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
     setEncryptionState(prev => ({ ...prev, status: 'encrypting' }));
     // Simulate encryption process
     setTimeout(() => {
-      setEncryptionState(prev => ({)
-        ...prev,
-        status: 'encrypted',
-        algorithm: 'AES-256-GCM',
-        keyId: 'demo-key-' + Date.now().toString(36),
-        lastEncrypted: Date.now(),
-        encryptionTime: 180,
-        strength: 'strong',
-      }));
+  setEncryptionState(prev => ({)
+  ...prev,
+  status: 'encrypted',
+  algorithm: 'AES-256-GCM',
+  keyId: 'demo-key-' + Date.now().toString(36),
+  lastEncrypted: Date.now(),
+  encryptionTime: 180,
+  strength: 'strong',
+}));
       setStatusMessage('Graph data encrypted successfully');
       setTimeout(() => setStatusMessage(''), 3000);
     }, 2000);
@@ -617,26 +593,26 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
     setEncryptionState(prev => ({ ...prev, status: 'decrypting' }));
     // Simulate decryption process
     setTimeout(() => {
-      setEncryptionState(prev => ({)
-        ...prev,
-        status: 'not_encrypted',
-        algorithm: undefined,
-        keyId: undefined,
-        lastDecrypted: Date.now(),
-        encryptionTime: 120,
-        strength: undefined,
-      }));
+  setEncryptionState(prev => ({)
+  ...prev,
+  status: 'not_encrypted',
+  algorithm: undefined,
+  keyId: undefined,
+  lastDecrypted: Date.now(),
+  encryptionTime: 120,
+  strength: undefined,
+}));
       setStatusMessage('Graph data decrypted successfully');
       setTimeout(() => setStatusMessage(''), 3000);
     }, 1500);
   }, []);
   const handleChangeAlgorithm = useCallback((algorithm: string) => {
-    setEncryptionState(prev => ({)
-      ...prev,
-      algorithm: algorithm as EncryptionAlgorithm,
-      strength: algorithm.includes('256') || algorithm.includes('4096') ? 'strong' :,
-        algorithm.includes('128') || algorithm.includes('2048') ? 'medium' : 'weak'
-    }));
+  setEncryptionState(prev => ({)
+  ...prev,
+  algorithm: algorithm as EncryptionAlgorithm,
+  strength: algorithm.includes('256') || algorithm.includes('4096') ? 'strong' :,
+  algorithm.includes('128') || algorithm.includes('2048') ? 'medium' : 'weak',
+}));
     setStatusMessage(`Encryption algorithm changed to ${algorithm}`);}
     setTimeout(() => setStatusMessage(''), 3000);
   }, []);
@@ -671,7 +647,6 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         setStatusMessage(`Failed to load recent project: ${errorMessage}`);}
         setTimeout(() => setStatusMessage(''), 5000);
-      }
     });
   }, [confirmNavigation]);
   const handleSaveSuccess = useCallback((result: { success: boolean; error?: string; projectName?: string; metadata?: unknown }) => {
@@ -698,15 +673,12 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
           //   fileSize
           // });
         } catch (error) {
-          console.warn('Failed to add project to recent list:', error);
-        }
-      }
-    } else {
+  console.warn('Failed to add project to recent list:', error);
+} else {
       setStatusMessage(`Save failed: ${result.error}`);}
       setTimeout(() => setStatusMessage(''), 5000);
-    }
   }, []);
-  const handleLoadSuccess = useCallback((result: { success: boolean; error?: string; warnings?: string[]; projectName?: string; metadata?: unknown }) => {
+  const handleLoadSuccess = useCallback((result: { success: boolean; error?: string; warnings?: string; projectName?: string; metadata?: unknown }) => {
     if (result.success) {
       // Sync with local state
       const graphData = useGraphStore.getState().getGraphData();
@@ -715,7 +687,6 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
       let message = 'Project loaded successfully!';
       if (result.warnings?.length) {
         message += ` (${result.warnings.length} warning${result.warnings.length > 1 ? 's' : ''})`;}
-      }
       setStatusMessage(message);
       setTimeout(() => setStatusMessage(''), 3000);
       // Add to recent projects if we have project info
@@ -737,13 +708,10 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
           //   fileSize
           // });
         } catch (error) {
-          console.warn('Failed to add project to recent list:', error);
-        }
-      }
-    } else {
+  console.warn('Failed to add project to recent list:', error);
+} else {
       setStatusMessage(`Load failed: ${result.error}`);}
       setTimeout(() => setStatusMessage(''), 5000);
-    }
   }, []);
   const handleExportBundle = useCallback(() => {
     setExportDialogOpen(true);
@@ -755,7 +723,6 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
     } else {
       setStatusMessage(`Export failed: ${result.error}`);}
       setTimeout(() => setStatusMessage(''), 5000);
-    }
   }, []);
   // Template handlers
   const handleSaveTemplate = useCallback(() => {
@@ -773,14 +740,12 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
       } else {
         setStatusMessage(`Template save failed: ${result.error}`);}
         setTimeout(() => setStatusMessage(''), 5000);
-      }
       return result;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       setStatusMessage(`Template save failed: ${errorMessage}`);}
       setTimeout(() => setStatusMessage(''), 5000);
       return { success: false, error: errorMessage };
-    }
   }, [saveAsTemplate]);
   const handleTemplateApply = useCallback(async (templateId: string, options: unknown) => {
     try {
@@ -795,12 +760,10 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
       } else {
         setStatusMessage(`Template apply failed: ${result.error}`);}
         setTimeout(() => setStatusMessage(''), 5000);
-      }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       setStatusMessage(`Template apply failed: ${errorMessage}`);}
       setTimeout(() => setStatusMessage(''), 5000);
-    }
   }, [applyTemplate]);
   // Optimization handlers
   const handleOptimizationOpen = useCallback(() => {
@@ -818,51 +781,46 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
   const isOptimizationEnabled = Object.values(optimizationSettings).some(value => value);
   // Close optimization menu when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest('[data-optimization-menu]') && !target.closest('[data-optimization-button]')) {
-        setOptimizationMenuOpen(false);
-      }
-    };
+  const handleClickOutside = (event: MouseEvent) => {,
+  const target = event.target as HTMLElement;
+  if (!target.closest('[data-optimization-menu]') && !target.closest('[data-optimization-button]')) {
+  setOptimizationMenuOpen(false);
+};
     if (optimizationMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
   }, [optimizationMenuOpen]);
   // Keyboard shortcuts (Epic 7.3 + Story 6.1)
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Alt+S opens settings modal
-      if (event.altKey && event.key === 's') {
-        event.preventDefault();
-        setSettingsModalOpen(true);
-        return;
-      }
-      // Ctrl+S/Cmd+S saves project (Story 6.1)
-      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
-        event.preventDefault();
-        handleSaveProject();
-        return;
-      }
-      // Ctrl+O/Cmd+O opens project (Story 6.1)
-      if ((event.ctrlKey || event.metaKey) && event.key === 'o') {
-        event.preventDefault();
-        handleLoadProject();
-        return;
-      }
-    };
+  const handleKeyDown = (event: KeyboardEvent) => {,
+  // Alt+S opens settings modal
+  if (event.altKey && event.key === 's') {
+  event.preventDefault();
+  setSettingsModalOpen(true);
+  return;
+  // Ctrl+S/Cmd+S saves project (Story 6.1)
+  if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+  event.preventDefault();
+  handleSaveProject();
+  return;
+  // Ctrl+O/Cmd+O opens project (Story 6.1)
+  if ((event.ctrlKey || event.metaKey) && event.key === 'o') {
+  event.preventDefault();
+  handleLoadProject();
+  return;
+};
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [handleSaveProject, handleLoadProject]);
-  return ();
+  return;
     <DemoModeManager
       initialConfig={{
-        brandingVisible: true,
-        debugElementsHidden: false,
-      }}
+  brandingVisible: true,
+  debugElementsHidden: false,
+}}
       onModeChange={(config) => {
-        console.log('Demo mode changed:', config);
-      }}
+  console.log('Demo mode changed:', config);
+}}
     >
       <div style={{ position: 'relative', width: '100%', height: '100%' }}>
         <RestorePrompt
@@ -943,32 +901,30 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
                 if (isFormElement || isInInspector) {
                 // Don't capture keyboard events for form elements or inspector
                   return;
-                }
                 // Only handle keyboard events for canvas interaction
                 e.stopPropagation();
               }}
               // Professional connection styling with performance optimization
-              connectionLineStyle={{ 
-                stroke: isPerformanceGood ? '#ff7c00' : '#4a5568', 
-                strokeWidth: isPerformanceGood ? 3 : 2,
-                filter: isPerformanceGood ? 'drop-shadow(0 0 6px rgba(255, 124, 0, 0.3))' : 'none'
-              }}
+              connectionLineStyle={{
+  stroke: isPerformanceGood ? '#ff7c00' : '#4a5568',
+  strokeWidth: isPerformanceGood ? 3 : 2,
+  filter: isPerformanceGood ? 'drop-shadow(0 0 6px rgba(255, 124, 0, 0.3))' : 'none',
+}}
               connectionLineType={viewport.zoom > 0.5 ? ConnectionLineType.SmoothStep : ConnectionLineType.Straight}
               // Dynamic edge options based on performance
               defaultEdgeOptions={{
-                type: viewport.zoom > 0.5 ? 'smoothstep' : 'straight',
-                style: { ,
-                  stroke: isPerformanceGood ? '#ff7c00' : '#666', 
-                  strokeWidth: isPerformanceGood ? 2.5 : 2,
-                  filter: isPerformanceGood ? 'drop-shadow(0 0 4px rgba(255, 124, 0, 0.2))' : 'none'
-                },
-                markerEnd: { ,
-                  type: 'arrow', 
-                  color: isPerformanceGood ? '#ff7c00' : '#666',
-                  width: isPerformanceGood ? 16 : 12,
-                  height: isPerformanceGood ? 16 : 12,
-                }
-              }}
+  type: viewport.zoom > 0.5 ? 'smoothstep' : 'straight',
+  style: {,
+  stroke: isPerformanceGood ? '#ff7c00' : '#666',
+  strokeWidth: isPerformanceGood ? 2.5 : 2,
+  filter: isPerformanceGood ? 'drop-shadow(0 0 4px rgba(255, 124, 0, 0.2))' : 'none',
+},
+  markerEnd: {,
+  type: 'arrow',
+  color: isPerformanceGood ? '#ff7c00' : '#666',
+  width: isPerformanceGood ? 16 : 12,
+  height: isPerformanceGood ? 16 : 12,
+}}
               // Professional zoom/pan settings with smooth transitions
               minZoom={0.05}
               maxZoom={6}
@@ -989,19 +945,18 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
                   nodeColor={() => isPerformanceGood ? '#ff7c00' : '#363a45'} 
                   maskColor="#181b21BB"
                   style={{
-                    backgroundColor: 'rgba(31, 41, 55, 0.8)',
-                    border: '1px solid rgba(55, 65, 81, 0.6)'
-                  }}
+  backgroundColor: 'rgba(31, 41, 55, 0.8)',
+  border: '1px solid rgba(55, 65, 81, 0.6)',
+}}
                 />
               )}
               <Controls 
                 style={{
-                  button: {,
-                    backgroundColor: 'rgba(31, 41, 55, 0.9)',
-                    border: '1px solid rgba(55, 65, 81, 0.6)',
-                    color: '#e5e7eb',
-                  }
-                }}
+  button: {,
+  backgroundColor: 'rgba(31, 41, 55, 0.9)',
+  border: '1px solid rgba(55, 65, 81, 0.6)',
+  color: '#e5e7eb',
+}}
               />
             </ReactFlow>
             {/* Professional UI Integration - Cinema 4D-inspired interface */}
@@ -1013,29 +968,30 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
               onNodesChange={(newNodes) => setNodes(newNodes)}
               onEdgesChange={(newEdges) => setEdges(newEdges)}
               onNodesSelect={(selectedNodes) => {
-                setNodes(prevNodes => )
-                  prevNodes.map(node => ({)
-                    ...node,
-                    selected: selectedNodes.some(s => s.id === node.id),
-                  }))
+  setNodes(prevNodes => )
+  prevNodes.map(node => ({)
+  ...node,
+  selected: selectedNodes.some(s => s.id === node.id),
+}))
                 );
               }}
               onEdgesSelect={(selectedEdges) => {
-                setEdges(prevEdges => )
-                  prevEdges.map(edge => ({)
-                    ...edge,
-                    selected: selectedEdges.some(s => s.id === edge.id),
-                  }))
+  setEdges(prevEdges => )
+  prevEdges.map(edge => ({)
+  ...edge,
+  selected: selectedEdges.some(s => s.id === edge.id),
+}))
                 );
               }}
               onNodeCreate={(nodeType, position, data) => {
-                const newNode: Node = {
-                  id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,}
-                  type: nodeType,
+                const newNode: Node = {,
+  id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
+},
+  type: nodeType,
                   position,
                   data: data || {},
-                  draggable: true,
-                };
+                  draggable: true;
+  };
                 setNodes(prevNodes => [...prevNodes, newNode]);
               }}
               onNodeDelete={(nodeIds) => {
@@ -1076,18 +1032,18 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
             />
             {/* Mouse Controls Help Overlay */}
             <div style={{
-              position: 'absolute',
-              bottom: 10,
-              right: 10,
-              background: 'rgba(42, 42, 42, 0.9)',
-              border: '1px solid #444',
-              borderRadius: 4,
-              padding: 8,
-              fontSize: 11,
-              color: '#a0aec0',
-              cursor: 'pointer',
-              userSelect: 'none',
-            }}
+  position: 'absolute',
+  bottom: 10,
+  right: 10,
+  background: 'rgba(42, 42, 42, 0.9)',
+  border: '1px solid #444',
+  borderRadius: 4,
+  padding: 8,
+  fontSize: 11,
+  color: '#a0aec0',
+  cursor: 'pointer',
+  userSelect: 'none',
+}}
             onClick={() => setShowControls(!showControls)}
             >
               <div style={{ fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }}>
@@ -1109,21 +1065,21 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
           {/* Smooth Panel Transition Container */}
           <div 
             style={{
-              transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
-              width: selectedNode ? 320 : 0,
-              opacity: selectedNode ? 1 : 0,
-              overflow: 'hidden',
-              borderLeft: selectedNode ? '1px solid rgba(55, 65, 81, 0.6)' : 'none'
-            }}
+  transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+  width: selectedNode ? 320 : 0,
+  opacity: selectedNode ? 1 : 0,
+  overflow: 'hidden',
+  borderLeft: selectedNode ? '1px solid rgba(55, 65, 81, 0.6)' : 'none',
+}}
           >
             {selectedNode && ()
               <div
                 style={{
-                  transform: selectedNode ? 'translateX(0)' : 'translateX(100%)',
-                  transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                  width: 320,
-                  height: '100%',
-                }}
+  transform: selectedNode ? 'translateX(0)' : 'translateX(100%)',
+  transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+  width: 320,
+  height: '100%',
+}}
               >
                 {isPerformanceGood ? ()
                   <SmoothInspectorPanel
@@ -1150,7 +1106,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
         .react-flow__node {
           background: linear-gradient(),
             145deg,
-            var(--color-bg-tertiary,)
+            var(--color-bg-tertiary)
             #404040
           ), var(--color-bg-secondary, #383838)) !important;
           border: 1px solid var(--color-ui-border, #4a4a4a) !important;
@@ -1159,17 +1115,15 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
           color: var(--color-text-primary, #e5e7eb) !important;
           transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
           backdrop-filter: blur(8px) !important;
-        }
-        .react-flow__node:hover {
-          transform: translateY(-3px) scale(1.03) !important;
+        .react-flow__node:hover {,
+  transform: translateY(-3px) scale(1.03) !important;
           box-shadow: var(--shadow-xl, 0 20px 25px rgba(0, 0, 0, 0.6)) !important;
           background: linear-gradient(),
             145deg,
-            var(--color-bg-quaternary,)
+            var(--color-bg-quaternary)
             #4a4a4a
           ), var(--color-bg-tertiary, #404040)) !important;
           border-color: var(--color-accent-orange, #ff7800) !important;
-        }
         .react-flow__node.selected {
           box-shadow: var(--shadow-lg, 0 10px 15px rgba(0, 0, 0, 0.5)), 
                      0 0 0 3px var(--color-accent-orange, #ff7800),
@@ -1177,54 +1131,46 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
           border-color: var(--color-accent-orange, #ff7800) !important;
           background: linear-gradient(),
             145deg,
-            var(--color-bg-quaternary,)
+            var(--color-bg-quaternary)
             #4a4a4a
           ), var(--color-bg-tertiary, #404040)) !important;
-        }
         /* Professional Edge Styling */
         .react-flow__edge path {
           stroke: var(--color-ui-border-light, #525252) !important;
-          stroke-width: 2px !important;
-          transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
-        }
-        .react-flow__edge:hover path {
-          stroke: var(--color-accent-orange, #ff7800) !important;
-          stroke-width: 4px !important;
-          filter: drop-shadow(0 0 12px rgba(255, 120, 0, 0.6)) !important;
-        }
+          stroke-width: 2px !important;,
+  transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
+        .react-flow__edge:hover path {,
+  stroke: var(--color-accent-orange, #ff7800) !important;
+          stroke-width: 4px !important;,
+  filter: drop-shadow(0 0 12px rgba(255, 120, 0, 0.6)) !important;
         .react-flow__edge.selected path {
           stroke: var(--color-accent-orange, #ff7800) !important;
-          stroke-width: 3px !important;
-          filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
-        }
+          stroke-width: 3px !important;,
+  filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
         /* Professional Handle Styling */
         .react-flow__handle {
           background: var(--color-bg-secondary, #383838) !important;
           border: 2px solid var(--color-ui-border, #4a4a4a) !important;
-          width: 12px !important;
-          height: 12px !important;
+          width: 12px !important;,
+  height: 12px !important;
           transition: all var(--transition-fast, 0.15s cubic-bezier(0.4, 0, 0.2, 1)) !important;
-        }
-        .react-flow__handle:hover {
-          transform: scale(1.6) !important;
+        .react-flow__handle:hover {,
+  transform: scale(1.6) !important;
           box-shadow: 0 0 20px rgba(255, 120, 0, 0.8) !important;
           background: var(--color-accent-orange, #ff7800) !important;
           border-color: var(--color-accent-orange, #ff7800) !important;
-        }
         .react-flow__handle.connectable {
           background: var(--color-accent-blue, #0ea5e9) !important;
-        }
         /* Professional Connection Line */
         .react-flow__connection-line {
           stroke: var(--color-accent-orange, #ff7800) !important;
-          stroke-width: 4px !important;
-          filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
-        }
+          stroke-width: 4px !important;,
+  filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
         /* Professional Controls */
         .react-flow__controls button {
           background: linear-gradient(),
             145deg,
-            var(--color-bg-tertiary,)
+            var(--color-bg-tertiary)
             #404040
           ), var(--color-bg-secondary, #383838)) !important;
           border: 1px solid var(--color-ui-border, #4a4a4a) !important;
@@ -1233,54 +1179,43 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
           backdrop-filter: blur(8px) !important;
           border-radius: 6px !important;
           box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.3)) !important;
-        }
-        .react-flow__controls button:hover {
-          background: linear-gradient(),
+        .react-flow__controls button:hover {,
+  background: linear-gradient(),
             145deg,
-            var(--color-bg-quaternary,)
+            var(--color-bg-quaternary)
             #4a4a4a
           ), var(--color-bg-tertiary, #404040)) !important;
           border-color: var(--color-accent-orange, #ff7800) !important;
           box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.4)), 
                      0 0 16px rgba(255, 120, 0, 0.3) !important;
           transform: scale(1.05) !important;
-        }
         /* Professional Minimap */
         .react-flow__minimap {
           background: linear-gradient(),
             145deg,
-            var(--color-bg-secondary,)
+            var(--color-bg-secondary)
             #383838
           ), var(--color-bg-primary, #2c2c2c)) !important;
           border: 1px solid var(--color-ui-border, #4a4a4a) !important;
           backdrop-filter: blur(12px) !important;
           border-radius: 8px !important;
           box-shadow: var(--shadow-lg, 0 10px 15px rgba(0, 0, 0, 0.5)) !important;
-        }
         .react-flow__minimap-node {
           fill: var(--color-accent-orange, #ff7800) !important;
           opacity: 0.8 !important;
-        }
         /* Professional Background */
         .react-flow__background {
           background: var(--color-bg-primary, #2c2c2c) !important;
-        }
         @keyframes glowPulse {
           0%, 100% {
             opacity: 0.6;
-          }
           50% {
             opacity: 1;
-          }
-        }
         @keyframes fadeIn {
           from {
             opacity: 0;
-          }
           to {
             opacity: 1;
-          }
-        }
       `}</style>
         {/* Epic 8.3 - Director Preview Toolbar Integration */}
         <DirectorPreviewToolbar
@@ -1304,8 +1239,6 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
                 previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
               } else {
                 run();
-              }
-            }
           }}
           onHighlightPath={(nodeIds, edgeIds) => {
           // Highlight execution path on the canvas
@@ -1327,9 +1260,9 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
             helpContentManager.markContentViewed(contentId);
           }}
           onUserLevelChange={(level) => {
-            console.log('User level changed to:', level);
-          // Could integrate with user profile management
-          }}
+  console.log('User level changed to:', level);
+  // Could integrate with user profile management
+}}
         />
         <StatusBar
           statusMessage={statusMessage}
@@ -1348,10 +1281,9 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
               previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
             } else {
               run();
-            }
           }}
           onSaveJson={() => {
-            const blob = new Blob([;);
+            const blob = new Blob([);
               JSON.stringify({ nodes, edges }, null, 2)
             ], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -1392,18 +1324,18 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
         {(previewLoading || isCreatingNode) && ()
           <div
             style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'rgba(0, 0, 0, 0.3)',
-              backdropFilter: 'blur(2px)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 9999,
-            }}
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: 'rgba(0, 0, 0, 0.3)',
+  backdropFilter: 'blur(2px)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 9999,
+}}
           >
             <ProfessionalSpinner 
               type="dots" 
@@ -1418,17 +1350,17 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
           <div
             className="development-only"
             style={{
-              position: 'fixed',
-              top: 10,
-              left: 10,
-              background: 'rgba(0, 0, 0, 0.8)',
-              color: 'white',
-              padding: 8,
-              borderRadius: 6,
-              fontFamily: 'monospace',
-              fontSize: 11,
-              zIndex: 10000,
-            }}
+  position: 'fixed',
+  top: 10,
+  left: 10,
+  background: 'rgba(0, 0, 0, 0.8)',
+  color: 'white',
+  padding: 8,
+  borderRadius: 6,
+  fontFamily: 'monospace',
+  fontSize: 11,
+  zIndex: 10000,
+}}
           >
             <div>FPS: {metrics.fps}</div>
             <div>Nodes: {metrics.visibleNodes}/{nodes.length}</div>
@@ -1453,12 +1385,10 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
               setHighlightEdgeIds(new Set(res.usedEdgeIds));
             } else {
               setHighlightEdgeIds(new Set());
-            }
             if (res?.usedNodeIds) {
               setHighlightNodeIds(new Set(res.usedNodeIds));
             } else {
               setHighlightNodeIds(new Set());
-            }
           }}
         />
         <ResponsiveCorrectionsPanel
@@ -1518,9 +1448,9 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
           isOpen={settingsModalOpen}
           onClose={() => setSettingsModalOpen(false)}
           onSettingsChange={(settings) => {
-            console.log('Settings updated:', settings);
-            // Settings changes are automatically handled by the SettingsManager
-          }}
+  console.log('Settings updated:', settings);
+  // Settings changes are automatically handled by the SettingsManager
+}}
         />
         {/* Epic 8.5 - Real-Time Preview Panels */}
         <RealTimePreviewPanel
@@ -1556,34 +1486,34 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
         {/* Optimization Menu */}
         {optimizationMenuOpen && ()
           <div data-optimization-menu style={{
-            position: 'fixed',
-            bottom: '60px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            backgroundColor: 'white',
-            border: '1px solid #ddd',
-            borderRadius: '8px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            padding: '8px',
-            zIndex: 1001,
-            display: 'flex',
-            gap: '8px',
-          }}>
+  position: 'fixed',
+  bottom: '60px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  backgroundColor: 'white',
+  border: '1px solid #ddd',
+  borderRadius: '8px',
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+  padding: '8px',
+  zIndex: 1001,
+  display: 'flex',
+  gap: '8px',
+}}>
             <button
               onClick={() => {
                 setGraphAnalysisOpen(true);
                 setOptimizationMenuOpen(false);
               }}
               style={{
-                padding: '12px 16px',
-                backgroundColor: '#17a2b8',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: '500',
-              }}
+  padding: '12px 16px',
+  backgroundColor: '#17a2b8',
+  color: 'white',
+  border: 'none',
+  borderRadius: '6px',
+  cursor: 'pointer',
+  fontSize: '14px',
+  fontWeight: '500',
+}}
             >
             📊 Analyze Graph
             </button>
@@ -1593,15 +1523,15 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
                 setOptimizationMenuOpen(false);
               }}
               style={{
-                padding: '12px 16px',
-                backgroundColor: '#28a745',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: '500',
-              }}
+  padding: '12px 16px',
+  backgroundColor: '#28a745',
+  color: 'white',
+  border: 'none',
+  borderRadius: '6px',
+  cursor: 'pointer',
+  fontSize: '14px',
+  fontWeight: '500',
+}}
             >
             ⚙️ Settings
             </button>
@@ -1611,15 +1541,15 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
                 setOptimizationMenuOpen(false);
               }}
               style={{
-                padding: '12px 16px',
-                backgroundColor: '#fd7e14',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: '500',
-              }}
+  padding: '12px 16px',
+  backgroundColor: '#fd7e14',
+  color: 'white',
+  border: 'none',
+  borderRadius: '6px',
+  cursor: 'pointer',
+  fontSize: '14px',
+  fontWeight: '500',
+}}
             >
             📈 Monitor
             </button>
@@ -1630,15 +1560,15 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
           <div
             className="animate-node-create-overlay"
             style={{
-              position: 'fixed',
-              pointerEvents: 'none',
-              zIndex: 1000,
-              width: 200,
-              height: 100,
-              background: 'radial-gradient(circle, rgba(255, 124, 0, 0.3), transparent)',
-              borderRadius: 12,
-              animation: 'nodeCreatePulse 0.6s ease-out',
-            }}
+  position: 'fixed',
+  pointerEvents: 'none',
+  zIndex: 1000,
+  width: 200,
+  height: 100,
+  background: 'radial-gradient(circle, rgba(255, 124, 0, 0.3), transparent)',
+  borderRadius: 12,
+  animation: 'nodeCreatePulse 0.6s ease-out',
+}}
           />
         )}
         {/* Demo Performance Tester (development only) */}
@@ -1649,7 +1579,6 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
               if (!result.passedThreshold) {
                 setStatusMessage(`Performance warning: ${result.recommendations[0]}`);}
                 setTimeout(() => setStatusMessage(''), 5000);
-              }
             }}
             onGraphGenerated={(testNodes, testEdges) => {
             // Replace current graph with test graph
@@ -1667,7 +1596,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
 
 // Wrapper component with ReactFlowProvider
 export const GraphEditor: React.FC<GraphEditorProps> = (props) => {
-  return ();
+  return;
     <ReactFlowProvider>
       <GraphEditorInner {...props} />
     </ReactFlowProvider>
