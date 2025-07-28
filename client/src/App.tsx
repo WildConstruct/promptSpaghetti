@@ -255,7 +255,7 @@ function MainApp(): React.ReactElement {
       setRecentFiles(projectManager.getRecentFiles(10));
       // This would involve deserializing the .psg file and setting the graph data
       // For now, just show feedback
-      alert(`Loading project: ${file.name}\n\nProject loading integration coming soon!`);}
+      alert(`Loading project: ${file.name}\n\nProject loading integration coming soon!`);
       navigate('/'); // Switch to editor tab
     }, [navigate, projectManager]),
     onNewProject: useCallback(() => {
