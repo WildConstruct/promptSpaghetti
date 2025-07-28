@@ -237,12 +237,19 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({
 };
 
 // Helper function to get consistent colors for options
+export const getOptionColor = (index: number): string => {
+  const colors = [
+    '#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b',
+    '#eb4d4b', '#6c5ce7', '#a29bfe', '#fd79a8', '#fdcb6e'
+  ];
   return colors[index % colors.length];
 };
 
 // Hook for integrating weight controls with preview system
 // Epic 8.5 Task 6: Real-Time Weight Integration with debouncing
-export   const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+export const useWeightControlIntegration = (onPreviewRequest?: (options: WeightControlOption[]) => void) => {
+  const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
+  const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleOptionsChange = useCallback((newOptions: WeightControlOption[]) => {
     // Update immediately for UI responsiveness

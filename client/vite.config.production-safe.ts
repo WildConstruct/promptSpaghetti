@@ -13,7 +13,7 @@ export default defineConfig({
       transformMixedEsModules: true // Help with mixed module formats
     },
     rollupOptions: {
-      external: ['uuid', '@juliuste/react-vimeo'],
+      external: ['uuid', '@juliuste/react-vimeo', 'vite-plugin-node-polyfills/shims/process'],
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],

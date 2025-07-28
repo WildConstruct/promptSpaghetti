@@ -26,7 +26,7 @@ export default defineConfig({
       include: [/zod/, /node_modules/]
     },
     rollupOptions: {
-      external: ['uuid', '@juliuste/react-vimeo'],
+      external: ['uuid', '@juliuste/react-vimeo', 'vite-plugin-node-polyfills/shims/process'],
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
