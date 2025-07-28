@@ -603,6 +603,7 @@ function MainApp(): React.ReactElement {
       </div>
     </div>
   );
+}
 /**
  * Root App component with routing.
  * Simplified version with authentication disabled.
