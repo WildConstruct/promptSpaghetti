@@ -18,8 +18,8 @@ export const nodeSchemas: Record<string, z.ZodSchema<any>> = {
   singularForm: z.string().default('subject'),
   pluralForm: z.string().default('subjects'),
 }),
-  Action: baseNodeSchema.extend({,)
-  type: z.literal('Action').default('Action'),
+  Action: baseNodeSchema.extend({
+    type: z.literal('Action').default('Action'),
   actions: z.array(z.string()).default(['action']),
   singularForm: z.string().default('action'),
   pluralForm: z.string().default('actions'),
