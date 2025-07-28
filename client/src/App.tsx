@@ -331,6 +331,7 @@ function MainApp(): React.ReactElement {
   setShowCommandPalette(false);
   menuBarHandlers.onOpen();
 }
+    },
     {
   id: 'file-save',
   title: 'Save Graph',
@@ -343,6 +344,7 @@ function MainApp(): React.ReactElement {
   setShowCommandPalette(false);
   menuBarHandlers.onSave();
 }
+    },
     {
   id: 'export-json',
   title: 'Export as JSON',
