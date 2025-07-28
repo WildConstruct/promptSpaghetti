@@ -818,27 +818,31 @@ const NODE_TYPES: NodeMeta[] = [
   }, [optimizationMenuOpen]);
   // Keyboard shortcuts (Epic 7.3 + Story 6.1)
   useEffect(() => {
-  const handleKeyDown = (event: KeyboardEvent) => {
-  // Alt+S opens settings modal
-  if (event.altKey && event.key === 's') {
-  event.preventDefault();
-  setSettingsModalOpen(true);
-  return;
-  // Ctrl+S/Cmd+S saves project (Story 6.1)
-  if ((event.ctrlKey || event.metaKey) && event.key === 's') {
-  event.preventDefault();
-  handleSaveProject();
-  return;
-  // Ctrl+O/Cmd+O opens project (Story 6.1)
-  if ((event.ctrlKey || event.metaKey) && event.key === 'o') {
-  event.preventDefault();
-  handleLoadProject();
-  return;
-};
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Alt+S opens settings modal
+      if (event.altKey && event.key === 's') {
+        event.preventDefault();
+        setSettingsModalOpen(true);
+        return;
+      }
+      // Ctrl+S/Cmd+S saves project (Story 6.1)
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        event.preventDefault();
+        handleSaveProject();
+        return;
+      }
+      // Ctrl+O/Cmd+O opens project (Story 6.1)
+      if ((event.ctrlKey || event.metaKey) && event.key === 'o') {
+        event.preventDefault();
+        handleLoadProject();
+        return;
+      }
+    };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [handleSaveProject, handleLoadProject]);
-  return;
+
+  return (
     <DemoModeManager
       initialConfig={{
   brandingVisible: true,
@@ -920,13 +924,14 @@ const NODE_TYPES: NodeMeta[] = [
               onKeyDown={(e) => {
               // Check if the event target is inside an input or textarea
                 const target = e.target as HTMLElement;
-                const isFormElement = target.tagName === 'INPUT' ||;
-                target.tagName === 'TEXTAREA' ||
-                target.tagName === 'SELECT';
+                const isFormElement = target.tagName === 'INPUT' ||
+                  target.tagName === 'TEXTAREA' ||
+                  target.tagName === 'SELECT';
                 const isInInspector = target.closest('aside') !== null;
                 if (isFormElement || isInInspector) {
-                // Don't capture keyboard events for form elements or inspector
+                  // Don't capture keyboard events for form elements or inspector
                   return;
+                }
                 // Only handle keyboard events for canvas interaction
                 e.stopPropagation();
               }}
